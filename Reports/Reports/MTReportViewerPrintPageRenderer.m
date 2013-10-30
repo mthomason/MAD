@@ -655,8 +655,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                 CGFloat originPointXPadding = originPointX + [[item paddingLeft] floatValue] + [[item marginLeft] floatValue];
                                 CGFloat originPointYPadding = originPointY + [[item paddingTop] floatValue] + [[item marginTop] floatValue];
 
-                                CGFloat sizeWidthPadding = originPointXPadding + [[item sizewidth] floatValue] + [[item paddingRight] floatValue] + [[item marginRight] floatValue];
-                                CGFloat sizeHeightPadding = originPointYPadding + [[item sizeheight] floatValue] + [[item paddingBottom] floatValue] + [[item marginBottom] floatValue];
+                                CGFloat sizeWidthPadding = [[item sizewidth] floatValue] + [[item paddingRight] floatValue] + [[item marginRight] floatValue];
+                                CGFloat sizeHeightPadding = [[item sizeheight] floatValue] + [[item paddingBottom] floatValue] + [[item marginBottom] floatValue];
 
                                 
                                 //CGRect paddingFrame = [item paddingViewFrame];
@@ -673,7 +673,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                     CGContextSaveGState(ctx);
                                     {
                                         CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
-                                        [displayString drawInRect:CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height) withAttributes:attributes];
+                                        CGRect drawingRect = CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height);
+                                        //NSAttributedString *as = [[NSAttributedString alloc] initWithString:displayString attributes:attributes];
+                                        //[as drawInRect:drawingRect];
+                                        [displayString drawWithRect:drawingRect options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
                                     }
                                     CGContextRestoreGState(ctx);
                                     
@@ -766,7 +769,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
     UIFont *customFont = [font font];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+
+    // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
     [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+
     [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
     switch ([[documentObject horizontalAlignment] integerValue]) {
         case MTHorizontalAlignmentLeft:

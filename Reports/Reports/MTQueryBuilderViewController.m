@@ -1260,7 +1260,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         case MTQuerySectionsLinks: {
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            RptqQueryLinks *links = [[[self fetchedResultsControllerLinks] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
+            RptqQueryLinks *links = [[[self fetchedResultsControllerLinks] objectAtIndexPath: indexPath] retain];
             
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
