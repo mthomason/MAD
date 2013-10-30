@@ -400,11 +400,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self designerScrollView] addGestureRecognizer:tapGestureDoubleTap];
     [tapGestureDoubleTap release];
     
-    [[self view] addConstraints:@[
-     [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeLeft   multiplier:1.0000f constant:0.0000f],
-     [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeRight  multiplier:1.0000f constant:0.0000f],
-     [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self toolbarTop]    attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f]
-     ]];
+    NSLayoutConstraint *lc1 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeLeft   multiplier:1.0000f constant:0.0000f];
+    NSLayoutConstraint *lc2 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeRight  multiplier:1.0000f constant:0.0000f];
+    NSLayoutConstraint *lc3 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self toolbarTop]    attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f];
+    NSArray *constraints = @[lc1, lc2, lc3];
+    [[self view] addConstraints:constraints];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
     
@@ -421,9 +421,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self setNavigationControllerSectionLayoutSettings:navigationController];
     [navigationController release];
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(hideToolbox:)];
-    [[[self viewControllerSectionLayoutSettings] navigationItem] setRightBarButtonItem:doneButton animated:NO];
-    [doneButton release];
+    if ([UIDevice isPad] == NO) {   //Don't need a done button in a popover.
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(hideToolbox:)];
+        [[[self viewControllerSectionLayoutSettings] navigationItem] setRightBarButtonItem:doneButton animated:NO];
+        [doneButton release];
+    }
 
     [viewControllerSectionLayoutSettings release];
 
@@ -439,19 +441,21 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
         NSLayoutConstraint *layoutConstraintToolbarTopHeight = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
         
-        [self setLayoutConstraintsToolboxVisiable:@[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight]];
+        NSArray *layoutToolboxVisiableConstraints = @[layoutConstraintToolboxHeight, layoutConstraintToolbarTopHeight];
+        [self setLayoutConstraintsToolboxVisiable:layoutToolboxVisiableConstraints];
         
         NSLayoutConstraint *layoutConstraintToolbarTopHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolbarTop] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarTop] attribute: NSLayoutAttributeHeight multiplier: 1.0000f constant: 0.0000f];
         NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
         
-        [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden]];
+        NSArray *layoutToolboxHiddenConstraints = @[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarTopHeightHidden];
+        [self setLayoutConstraintsToolboxHidden:layoutToolboxHiddenConstraints];
         
-        [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
-                                      [NSLayoutConstraint constraintWithItem: [self toolbarTop]         attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                      [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                      [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                      [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
-                                      ]];
+        NSLayoutConstraint *tbc1 = [NSLayoutConstraint constraintWithItem: [self toolbarTop]         attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *tbc2 = [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *tbc3 = [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
+        NSLayoutConstraint *tbc4 = [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f];
+        NSArray *toolbarConstraints = @[layoutConstraintToolboxHeightHidden, tbc1, tbc2, tbc3, tbc4];
+        [[self view] addConstraints:toolbarConstraints];
         
     } else if (skipTopBar) {
         
@@ -470,12 +474,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
             [self setLayoutConstraintsToolboxHidden:@[layoutConstraintToolboxHeightHidden, layoutConstraintToolbarBottomHeightHidden]];
             
-            [[self view] addConstraints:@[layoutConstraintToolboxHeightHidden,
-                                          [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                          [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                          [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f],
-                                          [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f]
-                                          ]];
+            NSLayoutConstraint *c1 = [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
+            NSLayoutConstraint *c2 = [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom]      attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
+            NSLayoutConstraint *c3 = [NSLayoutConstraint constraintWithItem: [self toolbarBottom]      attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self toolboxView]        attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
+            NSLayoutConstraint *c4 = [NSLayoutConstraint constraintWithItem: [self toolboxView]        attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual toItem: [self view]               attribute: NSLayoutAttributeBottom multiplier: 1.0000f constant: 0.0000f];
+            NSArray *constraints = @[layoutConstraintToolboxHeightHidden, c1, c2, c3, c4];
+            [[self view] addConstraints:constraints];
             
         }
         
@@ -627,7 +631,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [collectionView setDelegate:self];
             [collectionView setSectionDelegate:self];
             [collectionView setDataSource:self];
-            [collectionView setBackgroundColor:[UIColor whiteColor]];
+            BOOL visibility = [[reportSection visibility] boolValue];
+            UIColor *bgcolor = [MTReportDesignerViewController sectionBackgroundColor:visibility];
+            [collectionView setBackgroundColor:bgcolor];
             [collectionView setClipsToBounds:YES];
             [collectionView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
             [collectionView setAllowsSelection:YES];
@@ -906,6 +912,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return designerContentViewSize;
 }
 
++ (UIColor *)sectionBackgroundColor:(BOOL)isVisible {
+    return isVisible ? [UIColor whiteColor] : [[UIColor whiteColor] colorWithAlphaComponent:0.70000f];
+}
+
 - (void)updateViewConstraints {
     [super updateViewConstraints];
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
@@ -1088,10 +1098,21 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 
+    NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    RptqDocument *document = [activeDocument activeDocument];
     [RptqDocumentSection setVisibility: isVisible
-                       forSectionAtRow: [self lastSelectedSectionControlPanel]
-                inDocument:[activeDocument activeDocument]];
+                       forSectionAtRow: selectedSectionNumber
+                            inDocument: document];
+    
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: selectedSectionNumber
+                                                                                forQuery: query];
+    
+    UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
+    UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
+    [documentSectionView setBackgroundColor:color];
     [activeDocument saveContext];
     [activeDocument release];
 }
