@@ -48,7 +48,7 @@
     //[pinchGesture release];
 }
 */
-- (void)resizeHeight:(UIPinchGestureRecognizer *)gestureRecognizer {
+/*- (void)resizeHeight:(UIPinchGestureRecognizer *)gestureRecognizer {
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible: {    // MARK: UIPinchGestureRecognizer UIGestureRecognizerStatePossible
             break;
@@ -68,11 +68,10 @@
                 CGPoint locationStart0 = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
                 CGPoint locationStart1 = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
                 CGFloat differenceY = locationStart0.y - locationStart1.y;
-                //NSLog(@"Change difference y = %f", differenceY);
                 CGFloat newHeight = [self resizeHeightDifferenceInital] + differenceY - [self resizeHeightDifferenceInital];
                 CGRect newBounds = CGRectMake(CGPointZero.x, CGPointZero.y, [self bounds].size.width, newHeight);
                 [self setBounds: newBounds];
-                [[self sectionDelegate] didUpdateLayout:self];
+                //[[self sectionDelegate] didUpdateLayout:self];
             }
             break;
         }
@@ -86,7 +85,12 @@
             break;
         }
     }
-}
+    if ([gestureRecognizer state] == UIGestureRecognizerStateEnded ||
+        [gestureRecognizer state] == UIGestureRecognizerStateCancelled ||
+        [gestureRecognizer state] == UIGestureRecognizerStateFailed) {
+        [[self sectionDelegate] didUpdateLayout:self];
+    }
+}*/
 
 - (CGSize)intrinsicContentSize {
     CGSize intrinsicContentSize = [[self collectionViewLayout] collectionViewContentSize];

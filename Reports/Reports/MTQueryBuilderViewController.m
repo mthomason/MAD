@@ -73,6 +73,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [_viewTableHeaderQuerySectionsPredicate release];
     [_viewTableHeaderQuerySectionsSql release];
 
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+
     [_fetchedResultsControllerTables release];
     [_fetchedResultsControllerLinks release];
     [_fetchedResultsControllerGroups release];
@@ -948,6 +954,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                         [cellsToDelete addObject:groupIndexPath];
                                     }
                                 }
+                                [tableViewCellGroup release];
                             
                             }
                             
@@ -1258,10 +1265,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
         // MARK: Display the table links or joins that are used in the query.
         case MTQuerySectionsLinks: {
+
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryLink";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-            RptqQueryLinks *links = [[[self fetchedResultsControllerLinks] objectAtIndexPath: indexPath] retain];
+            RptqQueryLinks *links = [[self fetchedResultsControllerLinks] objectAtIndexPath: indexPath];
             
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
@@ -1276,7 +1284,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [[(UITableViewCellQueryLink *)result labelJoinDesc] setFont:fontCaption];
 
             [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
-            [links release];
             break;
         }
 
