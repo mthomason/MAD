@@ -223,7 +223,7 @@
         NSString *fontName = [documentObject fontname];
         CGFloat pointSize = [[documentObject fontsize] floatValue];
         
-        UIFont *displayFont;
+        UIFont *displayFont = nil;
         if ([fontName length] == 0) {
             displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
         } else {
@@ -238,6 +238,10 @@
                 displayFont = [stylizedDisplayFont font];
             }
             [stylizedDisplayFont release];
+        }
+        
+        if (displayFont == nil) {
+            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
         }
         
         NSString *string = [documentObject designerRepresentationText];

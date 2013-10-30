@@ -4143,6 +4143,9 @@
                                                 </label>
                                                 <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="gfI-4O-LkF">
                                                     <rect key="frame" x="196" y="7" width="94" height="29"/>
+                                                    <connections>
+                                                        <action selector="controlValueChanged:" destination="Wuv-x8-ixk" eventType="valueChanged" id="4TW-y7-zz4"/>
+                                                    </connections>
                                                 </stepper>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -4202,6 +4205,8 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="labelNumberOfDecimals" destination="inl-dX-P0k" id="3XX-f2-DdX"/>
+                        <outlet property="stepperNumberOfDecimals" destination="gfI-4O-LkF" id="1Mp-if-eLl"/>
                         <outlet property="tableViewCellCurrency" destination="VQO-qx-ciE" id="vct-hg-DTi"/>
                         <outlet property="tableViewCellCurrencyLocation" destination="Cgk-OS-Qnm" id="aGp-b0-R2Q"/>
                         <outlet property="tableViewCellDecimals" destination="yyi-jj-pAE" id="zqA-17-361"/>

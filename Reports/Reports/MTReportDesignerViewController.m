@@ -364,7 +364,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[self designerScrollView] setBouncesZoom:NO];
+    [[self designerScrollView] setBouncesZoom:YES];
     [[self designerScrollView] setScrollsToTop:YES];
     [self setToolbarBottomZero:YES];
 

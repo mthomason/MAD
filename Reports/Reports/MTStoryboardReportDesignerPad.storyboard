@@ -4087,6 +4087,9 @@
                                                 </label>
                                                 <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="YQh-hy-g8S">
                                                     <rect key="frame" x="416" y="7" width="94" height="29"/>
+                                                    <connections>
+                                                        <action selector="controlValueChanged:" destination="rdZ-CV-udg" eventType="valueChanged" id="OWP-2h-u8r"/>
+                                                    </connections>
                                                 </stepper>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -4149,6 +4152,8 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="labelNumberOfDecimals" destination="UEU-3k-qYu" id="3Sf-9L-UFZ"/>
+                        <outlet property="stepperNumberOfDecimals" destination="YQh-hy-g8S" id="knw-1X-SYN"/>
                         <outlet property="tableViewCellCurrency" destination="1Xf-Gn-4jU" id="TKH-rs-D44"/>
                         <outlet property="tableViewCellCurrencyLocation" destination="xlA-lP-fyP" id="yTa-Ke-zYw"/>
                         <outlet property="tableViewCellDecimals" destination="9Z7-D2-IhE" id="xk9-H7-sGV"/>
