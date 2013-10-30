@@ -18,9 +18,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.134";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.134";
-NSString * const MTGlobalBundleRev                                  = @"755";
+NSString * const MTGlobalBundleVersion                              = @"1.0.135";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.135";
+NSString * const MTGlobalBundleRev                                  = @"756";
 
 @interface AppDelegate()
 
@@ -238,7 +238,6 @@ const NSInteger MATagNewDocument = 3838;
     [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
     [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
     [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
-    //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
     [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [paragraphStyle release];
     return [attributedStringMadDesigner autorelease];

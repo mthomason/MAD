@@ -171,7 +171,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return @{
         MTFontNormal :          @"HelveticaNeue",
         MTFontBold :            @"HelveticaNeue-Bold",
-        MTFontItalic :          @"HelveticaNeue-Italic",
+        MTFontItalic :          @"HelveticaNeue-LightItalic",
         MTFontBoldItalic :      @"HelveticaNeue-BoldItalic",
         MTFontCondensedBold :   @"HelveticaNeue-CondensedBold",
         MTFontCondensedBlack :  @"HelveticaNeue-CondensedBlack",

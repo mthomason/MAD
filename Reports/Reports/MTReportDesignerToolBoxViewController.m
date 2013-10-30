@@ -95,9 +95,9 @@
     UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];
     [tableView setBounds: [[self contentView] bounds]];
     [tableView setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
-    CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
+    //CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
     
-    UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, -insetOffset, 0.0000f);
+    //UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, -insetOffset, 0.0000f);
     //[tableView setContentInset: tableInset];
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
     
@@ -116,7 +116,7 @@
             newHeight = 580.0000f;
         }
     } else if ([[self sceneSelector] selectedSegmentIndex] == 1) {
-        newHeight = 540.0000f;
+        newHeight = 320.0000f;
     }
     return newHeight;
 }
