@@ -84,8 +84,6 @@
     groupCount = (error) ? 0 : groupCount;
     
     [queryGroup setHasField:queryField];
-    //[queryGroup setField:[field name]];
-    //[queryGroup setTable:[[field inTable] name]];
     [queryGroup setSort:@(sortOrder)];
     [queryGroup setWeight:@(groupCount - 1)];
 
@@ -94,8 +92,10 @@
     NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
     
     RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
-    [dsHeader setType: [NSNumber numberWithInteger: MNSDocumentSectionTypeGroupHeader]];
+    NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
+    [dsHeader setType: HeaderType];
     [dsHeader setHasRows:hasRows];
+    [dsHeader setVisibility:@YES];
     [headerSectionRow setInSection:dsHeader];
     [queryGroup addHasSectionObject:dsHeader];
     [dsHeader release];
@@ -108,8 +108,10 @@
     hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
 
     RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
-    [dsFooter setType: [NSNumber numberWithInteger:MNSDocumentSectionTypeGroupFooter]];
+    NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
+    [dsFooter setType: type];
     [dsFooter setHasRows:hasRows];
+    [dsFooter setVisibility:@YES];
     [footerSectionRow setInSection:dsFooter];
     [queryGroup addHasSectionObject:dsFooter];
     [dsFooter release];
