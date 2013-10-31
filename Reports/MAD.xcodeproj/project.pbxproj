@@ -602,6 +602,8 @@
 		4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C5CD39B181EB435005FC6DD /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
 		4C5CD39C181EBCB6005FC6DD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
+		4C5CD3DB1821A0C8005FC6DD /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CD3D91821A0C8005FC6DD /* London.mad */; };
+		4C5CD3DC1821A0C8005FC6DD /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CD3DA1821A0C8005FC6DD /* Music.mad */; };
 		4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5E3C2417DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; };
@@ -2211,6 +2213,8 @@
 		4C5CD3A6181EC8AB005FC6DD /* iOS Simulator Screen shot Oct 28, 2013 12.19.22 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS Simulator Screen shot Oct 28, 2013 12.19.22 PM.png"; sourceTree = "<group>"; };
 		4C5CD3A7181EC8AB005FC6DD /* iOS Simulator Screen shot Oct 28, 2013 12.19.06 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS Simulator Screen shot Oct 28, 2013 12.19.06 PM.png"; sourceTree = "<group>"; };
 		4C5CD3A8181EC8AB005FC6DD /* iOS Simulator Screen shot Oct 28, 2013 12.18.50 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS Simulator Screen shot Oct 28, 2013 12.18.50 PM.png"; sourceTree = "<group>"; };
+		4C5CD3D91821A0C8005FC6DD /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = London.mad; sourceTree = "<group>"; };
+		4C5CD3DA1821A0C8005FC6DD /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = Music.mad; sourceTree = "<group>"; };
 		4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADUpgradeViewController.h; path = ../MADUpgradeViewController.h; sourceTree = "<group>"; };
 		4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADUpgradeViewController.m; path = ../MADUpgradeViewController.m; sourceTree = "<group>"; };
 		4C5F02DA14B9A47300C49BE9 /* Invoice.trvt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Invoice.trvt; sourceTree = "<group>"; };
@@ -3332,6 +3336,7 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C5CD3D81821A0AA005FC6DD /* Samples */,
 				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C9514F915126311004AF941 /* Reports.entitlements */,
 				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
@@ -3759,6 +3764,15 @@
 				4C0081DB1781D8C200874849 /* MTLog.m */,
 			);
 			name = Macros;
+			sourceTree = "<group>";
+		};
+		4C5CD3D81821A0AA005FC6DD /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				4C5CD3D91821A0C8005FC6DD /* London.mad */,
+				4C5CD3DA1821A0C8005FC6DD /* Music.mad */,
+			);
+			name = Samples;
 			sourceTree = "<group>";
 		};
 		4C5F02D914B9A42200C49BE9 /* Template Files */ = {
@@ -5827,6 +5841,7 @@
 				4CCD8D85150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png in Resources */,
 				4CCD8D86150385DA002B9E77 /* UIImagePatternKraftWaffle.png in Resources */,
 				4CCD8D87150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png in Resources */,
+				4C5CD3DB1821A0C8005FC6DD /* London.mad in Resources */,
 				4CCD8D88150385DA002B9E77 /* UIImagePatternLeaf.png in Resources */,
 				4CCD8D89150385DA002B9E77 /* UIImagePatternLeaf@2x.png in Resources */,
 				4CCD8D8A150385DA002B9E77 /* UIImagePatternLined.png in Resources */,
@@ -5916,6 +5931,7 @@
 				4CD98CE6163F7DE70096D7BC /* my_libwrap.h in Resources */,
 				4CD98CEA163F7DE70096D7BC /* my_list.h in Resources */,
 				4C4EBFAC17EDEA8D00D10622 /* carat-open.png in Resources */,
+				4C5CD3DC1821A0C8005FC6DD /* Music.mad in Resources */,
 				4CD98CEE163F7DE70096D7BC /* my_md5.h in Resources */,
 				4C94AA1217DCB3C9000F6FCF /* Images.xcassets in Resources */,
 				4CD98CF2163F7DE70096D7BC /* my_net.h in Resources */,
