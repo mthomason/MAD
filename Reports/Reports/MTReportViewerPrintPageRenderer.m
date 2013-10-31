@@ -67,13 +67,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     [_cachedDataByPage release];
     [_cachedDataByGroup release];
     [_cachedDataByReport release];
-    [_temporaryLayoutByPage release];
-    [_temporaryLayoutForPage release];
-    [_temporaryDataByPage release];
-    [_temporaryDataForPage release];
-    [_temporaryDataByGroup release];
-    [_temporaryDataByReport release];
-    [_sortedQueryGroups release];
+    [_temporaryLayoutByPage release]; _temporaryLayoutByPage = nil;
+    [_temporaryLayoutForPage release]; _temporaryLayoutForPage = nil;
+    [_temporaryDataByPage release]; _temporaryDataByPage = nil;
+    [_temporaryDataForPage release]; _temporaryDataForPage = nil;
+    [_temporaryDataByGroup release]; _temporaryDataByGroup = nil;
+    [_temporaryDataByReport release]; _temporaryDataByReport = nil;
+    [_sortedQueryGroups release]; _sortedQueryGroups = nil;
     [super dealloc];
 }
 
@@ -509,7 +509,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                     break;
                                                     
                                                 case MTAggregateFunctionTypeFirst:
-                                                    aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
+                                                    if ([dataForGroup count] >= 1) {
+                                                        aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
+                                                    } else {
+                                                        aggregateResult = @"";
+                                                    }
                                                     break;
                                                     
                                                 case MTAggregateFunctionTypeLast:
@@ -997,7 +1001,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSArray *pageData = [[self cachedDataByPage] objectAtIndex:page];
         if (row < [pageData count]) {
             NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
-            rowData = [[self cachedDataByReport] objectAtIndex:cachedDataIndex];
+            if (cachedDataIndex < [[self cachedDataByReport] count]) {
+                rowData = [[self cachedDataByReport] objectAtIndex:cachedDataIndex];
+            }
         }
     }
     return rowData;
