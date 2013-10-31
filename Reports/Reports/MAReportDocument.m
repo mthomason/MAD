@@ -90,6 +90,21 @@
     }
 }
 
++ (NSURL *)cachedDataFileUrlForFileUrl:(NSURL *)fileUrl {
+    NSString *name = [[[fileUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:@"cache"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cachesPath = [paths objectAtIndex:0];
+    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
+    NSURL *url = [[cachesUrl URLByAppendingPathComponent:name isDirectory:NO] retain];
+    return [url autorelease];
+}
+
+- (NSURL *)cachedDataUrl {
+    NSURL *fileUrl = [self fileURL];
+    NSURL *result = [[MAReportDocument cachedDataFileUrlForFileUrl:fileUrl] retain];
+    return [result autorelease];
+}
+
 - (void)emptyCache {
     RptqDocument *document = [self document];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -98,18 +113,13 @@
     NSError *error = nil;
     NSArray *emptyArray = @[];
     NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:emptyArray format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
-    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesPath = [paths lastObject];
-    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
-    NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
+    NSURL *url = [[self cachedDataUrl] retain];
     [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     if (error) {
         error = nil;
         [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     }
-    
+    [url release];
     [queryCache setCacheDate:[NSDate date]];
     [query setHasQueryCache:queryCache];
     [queryCache release];

@@ -616,12 +616,12 @@
                             </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="eeG-Zx-OZJ"/>
-                        <barButtonItem title="Print" id="KNd-LH-6lj">
+                        <barButtonItem title="Print" width="44" id="KNd-LH-6lj">
                             <connections>
                                 <action selector="print:" destination="xKW-ao-6Re" id="bDU-88-pdc"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="PDF" id="PWD-1N-ew9">
+                        <barButtonItem title="PDF" width="44" id="PWD-1N-ew9">
                             <connections>
                                 <action selector="sendToPdf:" destination="xKW-ao-6Re" id="e5M-nW-TGj"/>
                             </connections>

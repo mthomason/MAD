@@ -390,18 +390,13 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     NSError *error = nil;
     NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
 
-    NSString *name = [activeDocument name];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesPath = [paths lastObject];
-    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
-    NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
+    NSURL *url = [[activeDocument cachedDataUrl] retain];
     [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     if (error) {
         error = nil;
         [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     }
-
+    [url release];
     [queryCache setCacheDate:[NSDate date]];
     [query setHasQueryCache:queryCache];
     [queryCache release];
@@ -1495,7 +1490,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                             }
                             DBSETLSECURE(login);
                             if (error == nil) {
-                                if ((dbconn = dbopen(login, s)) == NULL) {
+                                dbconn = dbopen(login, s);
+                                if (dbconn == NULL) {
                                     NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
                                     NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
                                     error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];

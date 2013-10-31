@@ -120,7 +120,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                         [[MTActiveDocument sharedDocument] setActiveDocument:nil];
                         dispatch_sync(dispatch_get_main_queue(), ^{
                             [[blockSelf collectionView] setUserInteractionEnabled: YES];
-                            //                            [[blockSelf collectionView] reloadData];
                             [blockSelf setCellsHidden:NO];
                             [[blockSelf collectionView] reloadData];
                         });

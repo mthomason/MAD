@@ -378,6 +378,11 @@
 
 + (void)setDisplayActive:(MTReportViewerController *)controller {
 
+    NSArray *tabBarItems = [[[controller tabBarController] tabBar] items];
+    for (UITabBarItem *item in tabBarItems) {
+        [item setEnabled:YES];
+    }
+    
     [[controller barButtonItemRefresh] setEnabled:YES];
     [[controller barButtonItemDone] setEnabled:YES];
     [[controller barButtonItemPrint] setEnabled:YES];
@@ -395,6 +400,11 @@
 }
 
 + (void)setDisplayInactive:(MTReportViewerController *)controller {
+
+    NSArray *tabBarItems = [[[controller tabBarController] tabBar] items];
+    for (UITabBarItem *item in tabBarItems) {
+        [item setEnabled:NO];
+    }
 
     [controller setIsRefreshing:YES];
     [[controller barButtonItemRefresh] setEnabled:NO];

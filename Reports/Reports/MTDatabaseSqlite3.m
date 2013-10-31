@@ -189,11 +189,8 @@
 
     NSArray *results = [[self resultsForQueryString:queryString] retain];
     
-    NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesPath = [paths lastObject];
-    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
-    NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
+    MAReportDocument *rd = [[MTActiveDocument sharedDocument] activeDocument];
+    NSURL *url = [[rd cachedDataUrl] retain];
     NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:results
                                                                     format:NSPropertyListBinaryFormat_v1_0
                                                                    options:0
@@ -204,7 +201,7 @@
         error = nil;
         [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     }
-
+    [url release];
     [results release];
     
     NSManagedObjectContext *managedObjectContext = [document managedObjectContext];

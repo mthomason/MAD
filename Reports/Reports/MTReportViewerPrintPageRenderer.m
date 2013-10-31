@@ -1115,24 +1115,18 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         
         NSError *error = nil;
         NSArray *cachedResultsForReportSerialized = nil;
-        NSString *name = [[[MTActiveDocument sharedDocument] activeDocument] name];
 
-    
-        if (name) {
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-            NSString *cachesPath = [paths lastObject];
-            NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
-            NSURL *url = [cachesUrl URLByAppendingPathComponent:name isDirectory:NO];
-
-            error = nil;
-            NSPropertyListFormat format;
-            NSString *filePath = [url path];
-            NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:filePath];
-            [inputStream open];
-            cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
-
-        }
-    
+        NSURL *url = [[activeDocument cachedDataUrl] retain];
+        
+        error = nil;
+        NSPropertyListFormat format;
+        NSString *filePath = [[url path] retain];
+        NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:filePath];
+        [inputStream open];
+        cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
+        
+        [filePath release];
+        [url autorelease];
         
         NSSet *hasQueryGroups = [query hasQueryGroups];
         

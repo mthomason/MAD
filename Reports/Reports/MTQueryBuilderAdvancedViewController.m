@@ -333,8 +333,9 @@ typedef void(^MTBlockResultVoid)(void);
     }
 
     NSArray *constraints = nil;
-    
-    if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
+    NSMutableArray *bufferConstraints = [[NSMutableArray alloc] init];
+    Class schemaViewControllerClass = [MTQueryBuilderAdvancedSchemaViewController class];
+    if ([viewController isKindOfClass:schemaViewControllerClass]) {
         
         NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
         RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[(MTQueryBuilderAdvancedSchemaViewController *)viewController tableObjectId] fromObjectContext:managedObjectContext];
@@ -365,8 +366,28 @@ typedef void(^MTBlockResultVoid)(void);
         [topFrame setPriority:999];
         [(MTQueryBuilderAdvancedSchemaViewController *)viewController setLayoutConstraintX:leftFrame];
         [(MTQueryBuilderAdvancedSchemaViewController *)viewController setLayoutConstraintY:topFrame];
-        //constraints = @[rightBorder, width, height, leftFrame, topFrame];
-        //constraints = @[];
+
+        /*
+        for (MTQueryBuilderAdvancedSchemaViewController *tvc in [[self controllersForObjectIds] objectEnumerator]) {
+            if ([tvc isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
+                UIView *tableOne = [viewController view];
+                UIView *tableTwo = [tvc view];
+                NSLayoutConstraint *bufferTop = [NSLayoutConstraint constraintWithItem:tableOne attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationLessThanOrEqual toItem:tableTwo attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:5.0000f];
+                NSLayoutConstraint *bufferBottom = [NSLayoutConstraint constraintWithItem:tableOne attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:tableTwo attribute:NSLayoutAttributeTop multiplier:1.0000f constant:5.0000f];
+                NSLayoutConstraint *bufferLeft = [NSLayoutConstraint constraintWithItem:tableOne attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:tableTwo attribute:NSLayoutAttributeRight multiplier:1.0000f constant:5.0000f];
+                NSLayoutConstraint *bufferRight = [NSLayoutConstraint constraintWithItem:tableOne attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationLessThanOrEqual toItem:tableTwo attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:5.0000f];
+                NSArray *buffers = @[bufferTop, bufferBottom, bufferLeft, bufferRight];
+                NSInteger priorityCounter = 0;
+                for (NSLayoutConstraint *c in buffers) {
+                    [c setPriority:UILayoutPriorityDefaultHigh - priorityCounter];
+                    priorityCounter++;
+                }
+                [bufferConstraints addObjectsFromArray:buffers];
+                
+            }
+        }*/
+        
+        
         [[viewController view] setTranslatesAutoresizingMaskIntoConstraints:NO];
         constraints = @[bottomBorder, topBorder, leftBorder, rightBorder, width, height, leftFrame, topFrame];
 
@@ -392,7 +413,8 @@ typedef void(^MTBlockResultVoid)(void);
     [[self contentView] addSubview:[viewController view]];
     [viewController didMoveToParentViewController:self];
 
-    [[self contentView] addConstraints:constraints];
+    [bufferConstraints addObjectsFromArray:constraints];
+    [[self contentView] addConstraints:bufferConstraints];
     
     MTBlockResultVoid animateOne = ^() {
         [[viewController view] setFrame:desiredFrame];
@@ -430,7 +452,7 @@ typedef void(^MTBlockResultVoid)(void);
         default:
             break;
     }
-
+    [bufferConstraints release];
     [viewController release];
 }
 

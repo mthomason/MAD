@@ -9,11 +9,14 @@
 #import "MTCollectionViewCellDocument.h"
 #import "UIDevice+Hack.h"
 
+@interface MTCollectionViewCellDocument ()
+@property (nonatomic, retain) UIColor *bgColor;
+@end
+
 @implementation MTCollectionViewCellDocument
 
 - (void)dealloc {
-    //[_labelTitle release];
-    //[_imagePreview release];
+    [_bgColor release];
     [super dealloc];
 }
 
@@ -70,13 +73,17 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        UIColor *bgColor = [[[UIColor tintColor] colorWithAlphaComponent:0.70000f] retain];
+        [self setBgColor:bgColor];
+        [bgColor release];
+        
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
         if ([UIDevice isLagacyOS]) {
             [[selectedBackground layer] setCornerRadius: 1.0000f];
         }
         [selectedBackground setClipsToBounds:YES];
         if ([UIDevice isModernOS]) {
-            [selectedBackground setBackgroundColor:[UIColor edaBlackTwentyFivePercent]];
+            [selectedBackground setBackgroundColor:[self bgColor]];
         }
         
         [self setSelectedBackgroundView:selectedBackground];
@@ -128,11 +135,11 @@
 
 - (void)dimTint {
     [[self selectedBackgroundView] setBackgroundColor:[UIColor lightGrayColor]];
-    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    [[self labelTitle] setTextColor:[UIColor darkGrayColor]];
 }
 
 - (void)normalizeTint {
-    [[self selectedBackgroundView] setBackgroundColor:[UIColor tintColor]];
+    [[self selectedBackgroundView] setBackgroundColor:[self bgColor]];
     [[self labelTitle] setTextColor:[UIColor whiteColor]];
 }
 

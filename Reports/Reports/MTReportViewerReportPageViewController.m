@@ -48,58 +48,64 @@
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
         MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-        RptqDocument *document = [reportDocument activeDocument];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
-        RptqQueryCache *queryCache = [query hasQueryCache];
-        NSDate *lastD = [[queryCache cacheDate] retain];
-        [self setLastCacheDate: lastD];
-        [lastD release];
-        if ([self lastCacheDate] == nil) {  //I give up
-            [self setLastCacheDate:[NSDate date]];
+        NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
+        NSString *cachedDataPath = [cachedDataUrl path];
+        NSError *error = nil;
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
+        if (error == nil) {
+            NSDate *lastD = [[attributes fileModificationDate] retain];
+            [self setLastCacheDate: lastD];
+            [lastD release];
         }
     }
-    MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
-    [[self timeSinceRefrehLabel] setText:[dateStringAndInterval former]];
     
-    MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
-    
-    NSTimeInterval updateLabelInSeconds;
-    
-    switch (resolution) {
-        case MTDateResolutionDay:
-            updateLabelInSeconds = 86400.0;
-            break;
-        case MTDateResolutionHour:
-            updateLabelInSeconds = 3600.0;
-            break;
-        case MTDateResolutionMinute:
-            updateLabelInSeconds = 60.0;
-            break;
-        case MTDateResolutionSecond:
-            updateLabelInSeconds = 1.0;
-            break;
-        case MTDateResolutionMillisecond:
-            updateLabelInSeconds = 0.1;
-            break;
-        default:
-            updateLabelInSeconds = 86400;
-            break;
-    }
+    if ([self lastCacheDate] == nil) {
+        [[self timeSinceRefrehLabel] setText:@"No Cache"];
 
-    if ([self timerLabelTimeSinceRefreh] != nil) {
-        if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-            if ([[self timerLabelTimeSinceRefreh] isValid]) {
-                [[self timerLabelTimeSinceRefreh] invalidate];
-            }
+    } else {
+        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
+        NSString *display = [dateStringAndInterval former];
+        [[self timeSinceRefrehLabel] setText:display];
+        
+        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
+        
+        NSTimeInterval updateLabelInSeconds;
+        
+        switch (resolution) {
+            case MTDateResolutionDay:
+                updateLabelInSeconds = 86400.0;
+                break;
+            case MTDateResolutionHour:
+                updateLabelInSeconds = 3600.0;
+                break;
+            case MTDateResolutionMinute:
+                updateLabelInSeconds = 60.0;
+                break;
+            case MTDateResolutionSecond:
+                updateLabelInSeconds = 1.0;
+                break;
+            case MTDateResolutionMillisecond:
+                updateLabelInSeconds = 0.1;
+                break;
+            default:
+                updateLabelInSeconds = 86400;
+                break;
         }
-        [self setTimerLabelTimeSinceRefreh:nil];
+        
+        if ([self timerLabelTimeSinceRefreh] != nil) {
+            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+                if ([[self timerLabelTimeSinceRefreh] isValid]) {
+                    [[self timerLabelTimeSinceRefreh] invalidate];
+                }
+            }
+            [self setTimerLabelTimeSinceRefreh:nil];
+        }
+        
+        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
+                                                    selector: @selector(updateLateRefreshedLabel:) userInfo:nil
+                                                     repeats: NO];
+        [self setTimerLabelTimeSinceRefreh:t];
     }
-    
-    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
-                                                selector: @selector(updateLateRefreshedLabel:) userInfo:nil
-                                                 repeats: NO];
-    [self setTimerLabelTimeSinceRefreh:t];
 }
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {

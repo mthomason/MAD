@@ -44,6 +44,9 @@
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion;
 
++ (NSURL *)cachedDataFileUrlForFileUrl:(NSURL *)fileUrl;
+- (NSURL *)cachedDataUrl;
+
 @end
 
 #endif

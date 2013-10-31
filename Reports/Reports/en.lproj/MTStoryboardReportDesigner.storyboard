@@ -228,12 +228,12 @@
                             </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="8RI-IH-kqi"/>
-                        <barButtonItem title="Print" id="bhj-Wd-mzP">
+                        <barButtonItem title="Print" width="44" id="bhj-Wd-mzP">
                             <connections>
                                 <action selector="print:" destination="D89-Nb-LnQ" id="E4b-0f-YWB"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="PDF" id="m0Y-3f-wqU">
+                        <barButtonItem title="PDF" width="44" id="m0Y-3f-wqU">
                             <connections>
                                 <action selector="sendToPdf:" destination="D89-Nb-LnQ" id="BNY-5W-sqQ"/>
                             </connections>
@@ -1209,7 +1209,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="A4e-nG-poN">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="3306" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="A4e-nG-poN">
                                                     <rect key="frame" x="170" y="6" width="120" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="7G8-Ka-cBN"/>

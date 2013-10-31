@@ -54,12 +54,12 @@
                             </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Jhr-rH-4JW"/>
-                        <barButtonItem title="Print" id="gwx-Y6-Zca">
+                        <barButtonItem title="Print" width="66" id="gwx-Y6-Zca">
                             <connections>
                                 <action selector="print:" destination="Juv-tI-xhU" id="Xr1-UG-L9g"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="PDF" id="l6f-FP-Ywd">
+                        <barButtonItem title="PDF" width="66" id="l6f-FP-Ywd">
                             <connections>
                                 <action selector="sendToPdf:" destination="Juv-tI-xhU" id="12O-k1-T4X"/>
                             </connections>
@@ -197,7 +197,7 @@
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="-" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93f-Q2-DAx">
-                                                    <rect key="frame" x="274" y="331" width="86" height="21"/>
+                                                    <rect key="frame" x="130" y="331" width="230" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
@@ -285,7 +285,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1pq-L3-5YI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1384" y="731"/>
+            <point key="canvasLocation" x="1465" y="554"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mxx-NU-VRR">
@@ -551,7 +551,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FlF-Rx-sDc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1350" y="1673"/>
+            <point key="canvasLocation" x="1118" y="1580"/>
         </scene>
     </scenes>
     <resources>

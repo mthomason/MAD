@@ -820,6 +820,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self setScrollersEnabled:YES];
     if ([self shownAndHidden] && [self zoomScaleRestore] > 1.0001) {
         [[self designerScrollView] setZoomScale:[self zoomScaleRestore] animated:NO];
         [self scrollViewDidEndZooming:nil withView:nil atScale:[[self designerScrollView] zoomScale]];
@@ -997,7 +998,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - UIScrollViewDelegate
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return [self designerContentView];
+    UIView *result = [self designerContentView];
+    return result;
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
@@ -1488,7 +1490,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         CGFloat zoomScale = zoomIn ? 2.0000f : zoomIn2 ? 3.0000f : 1.0000f;
 
         [[self designerScrollView] setContentOffset:CGPointZero animated:NO];
-        [[self designerScrollView] setZoomScale:zoomScale animated:NO];
+        [[self designerScrollView] setZoomScale:zoomScale animated:YES];
         [self scrollViewDidEndZooming:[self designerScrollView] withView:[self designerContentView] atScale:zoomScale];
         
         __block UIScrollView *blockScrollView = [self designerScrollView];
