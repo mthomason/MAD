@@ -4076,7 +4076,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Decimals" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="UEU-3k-qYu">
-                                                    <rect key="frame" x="20" y="0.0" width="158" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="158" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="a7r-dn-D3U"/>
                                                         <constraint firstAttribute="width" constant="158" id="jiA-L2-soc"/>
@@ -4097,7 +4097,7 @@
                                             <constraint firstAttribute="trailing" secondItem="YQh-hy-g8S" secondAttribute="trailing" constant="30" id="5Xm-u4-Hyq"/>
                                             <constraint firstItem="YQh-hy-g8S" firstAttribute="centerY" secondItem="UEU-3k-qYu" secondAttribute="centerY" id="Gcy-PB-8ZR"/>
                                             <constraint firstItem="YQh-hy-g8S" firstAttribute="centerY" secondItem="9Z7-D2-IhE" secondAttribute="centerY" id="RlF-X1-SHc"/>
-                                            <constraint firstItem="UEU-3k-qYu" firstAttribute="leading" secondItem="9Z7-D2-IhE" secondAttribute="leading" constant="20" id="VSb-EP-o5B"/>
+                                            <constraint firstItem="UEU-3k-qYu" firstAttribute="leading" secondItem="9Z7-D2-IhE" secondAttribute="leading" constant="15" id="VSb-EP-o5B"/>
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="1CC-UF-DfC" style="IBUITableViewCellStyleDefault" id="1Xf-Gn-4jU">

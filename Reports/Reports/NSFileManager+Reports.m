@@ -13,7 +13,15 @@
 @implementation NSFileManager (Reports)
 
 + (NSArray *)schemaFilesOld {
-    return [NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive];
+    NSString *dataFile = [[NSFileManager applicationDocumentsDirectory] stringByAppendingPathComponent:@"Data"];
+    NSArray *results = nil;
+    BOOL directoryExist = [[NSFileManager defaultManager] fileExistsAtPath:dataFile];
+    if (directoryExist) {   //User documetns/Data
+        results = [[NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+    } else {
+        results = [@[] retain];
+    }
+    return [results autorelease];
 }
 
 + (NSArray *)madFiles {

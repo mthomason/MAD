@@ -6160,7 +6160,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\necho \"Updated version number to $versionnum\"\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\necho \"Updated build number to $currentvnum\"\n\n/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\necho \"Updated build number to $buildnum\"";
+			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\n#echo \"Updated version number to $versionnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\n#echo \"Updated build number to $currentvnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\n#echo \"Updated build number to $buildnum\"";
 		};
 		4C1B7A52163E0D9400E331AA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6212,7 +6212,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\necho \"Updated version number to $versionnum\"\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\necho \"Updated build number to $currentvnum\"\n\n/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\necho \"Updated build number to $buildnum\"";
+			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\n#echo \"Updated version number to $versionnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\n#echo \"Updated build number to $currentvnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\n#echo \"Updated build number to $buildnum\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -7352,8 +7352,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "MAD Viewer";
-				PROVISIONING_PROFILE = "A2074A20-5DBD-49D9-8B7B-8D27FDDC8E21";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A2074A20-5DBD-49D9-8B7B-8D27FDDC8E21";
+				PROVISIONING_PROFILE = "4FD7D19D-F5F1-48FF-B109-23EF1D24E018";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4FD7D19D-F5F1-48FF-B109-23EF1D24E018";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
@@ -7575,7 +7575,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7607,7 +7607,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7643,8 +7643,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "296083C6-9B3B-4CFA-99FC-9133D1DBE125";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "296083C6-9B3B-4CFA-99FC-9133D1DBE125";
+				PROVISIONING_PROFILE = "46E26BB2-ACCB-40C4-8F11-3636A1387639";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "46E26BB2-ACCB-40C4-8F11-3636A1387639";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;

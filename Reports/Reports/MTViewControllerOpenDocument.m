@@ -190,8 +190,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setPreviewLoadingOperations:d];
     [d release];
     
-    [self setEditModeEnabled:YES];
-    
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
     [self setBarButtonItemEditDone:barButtonItemEditDone];
     [barButtonItemEditDone release];
@@ -226,27 +224,25 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateBegan) {
-        CGPoint locationInView = [sender locationInView:[self collectionView]];
-        NSIndexPath *indexPath = [[self collectionView] indexPathForItemAtPoint:locationInView];
-        if (indexPath) {
-            UICollectionViewCell *cell = [[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
-            if ([self isEditing]) {
-                [cell startWobble];
-            }
-            [cell release];
-            [self setEditModeEnabled:YES];
-            [[[self collectionView] collectionViewLayout] invalidateLayout];
+    if ([sender state] == UIGestureRecognizerStateEnded) {
+        if ([self editModeEnabled] == NO) {
+            [self edit:self];
         }
     }
 }
 
 - (void)endEditMode:(UITapGestureRecognizer *)sender {
     if ([self editModeEnabled]) {
+        [self edit:self];
+
+        /*
+        [self setEditModeEnabled:NO];
+        [self setEditing:NO animated:YES];
+        [[self navigationItem] setRightBarButtonItem:[self barButtonItemEdit] animated:YES];
+
         CGPoint locationInView = [sender locationInView:[self collectionView]];
         NSIndexPath *indexPath = [[self collectionView] indexPathForItemAtPoint:locationInView];
         if (!indexPath) {
-            [self setEditModeEnabled:NO];
             [[[self collectionView] collectionViewLayout] invalidateLayout];
         }
         
@@ -260,11 +256,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+            if (image == nil) {
+                image = [[MTTableViewCellDocument defaultThumbnail] retain];
+            }
             [[cell imagePreview] setImage:image];
             [image release];
             
             [cell release];
-        }
+        }*/
+        
     }
 }
 
@@ -334,9 +334,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [labelMadDesigner release];
 
     [[self navigationItem] setHidesBackButton:YES];
+    [self setEditModeEnabled:NO];
     
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateEditMode:)];
     [longPressGestureRecognizer setDelegate: self];
+    [[self collectionView] addGestureRecognizer:longPressGestureRecognizer];
     [self setLongPressGestureRecognizer:longPressGestureRecognizer];
     [longPressGestureRecognizer release];
     
@@ -864,6 +866,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setEditing:startEdit animated:YES];
     
     if (startEdit) {
+        [self setEditModeEnabled:YES];
         [[self barButtonItemLicensing] setEnabled:NO];
         [[self barButtonItemAddNewDocument] setEnabled:NO];
         [[self barButtonItemAbout] setEnabled:NO];
@@ -884,6 +887,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             }
         }
     } else {
+        [self setEditModeEnabled:NO];
         [[self barButtonItemLicensing] setEnabled:YES];
         [[self barButtonItemAddNewDocument] setEnabled:YES];
         [[self barButtonItemAbout] setEnabled:YES];
@@ -906,6 +910,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+            if (image == nil) {
+                image = [[MTTableViewCellDocument defaultThumbnail] retain];
+            }
             [[cell imagePreview] setImage:image];
             [image release];
 
@@ -1317,10 +1324,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    if (image == nil) {
+        image = [[MTTableViewCellDocument defaultThumbnail] retain];
+    }
     [[cell imagePreview] setImage:image];
     [image release];
-    
-    [cell setNeedsDisplay];
+    //[cell setNeedsDisplay];
 
 
 }
@@ -1333,8 +1342,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    if (image == nil) {
+        image = [[MTTableViewCellDocument defaultThumbnail] retain];
+    }
     [[cell imagePreview] setImage:image];
     [image release];
+    //[cell setNeedsDisplay];
 
 }
 
@@ -1353,8 +1366,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    if (image == nil) {
+        image = [[MTTableViewCellDocument defaultThumbnail] retain];
+    }
     [[cell imagePreview] setImage:image];
     [image release];
+    //[cell setNeedsDisplay];
 
 }
 
@@ -1369,8 +1386,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    if (image == nil) {
+        image = [[MTTableViewCellDocument defaultThumbnail] retain];
+    }
     [[cell imagePreview] setImage:image];
     [image release];
+    //[cell setNeedsDisplay];
 
 }
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender { }
@@ -1408,7 +1429,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self loadCollectionViewPreviewImageForIndexPath:indexPath];
     } else {
         [result setText: @""];
-        //[[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
+        [[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
     }
     if ([self isEditing]) {
         [result startWobble];
@@ -1454,6 +1475,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image) {
                 [[visibleCell imagePreview] setImage: image];
+            } else {
+                UIImage *defaultThumbnail = [MTTableViewCellDocument defaultThumbnail];
+                [[visibleCell imagePreview] setImage: defaultThumbnail];
             }
             [image release];
             [visibleCell setNeedsLayout];

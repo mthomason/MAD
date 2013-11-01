@@ -33,16 +33,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
-	<array>
-		<string>Icon-29-Designer-Lagacy.png</string>
-		<string>Icon-29-Designer-Lagacy@2x.png</string>
-		<string>Icon-50-Designer-Lagacy.png</string>
-		<string>Icon-50-Designer-Lagacy@2x.png</string>
-		<string>Icon-57-Designer-Lagacy.png</string>
-		<string>Icon-57-Designer-Lagacy@2x.png</string>
-		<string>Icon-72-Designer-Lagacy.png</string>
-		<string>Icon-72-Designer-Lagacy@2x.png</string>
-	</array>
+	<array/>
 	<key>CFBundleIcons</key>
 	<dict/>
 	<key>CFBundleIcons~ipad</key>
@@ -56,15 +47,15 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.139</string>
+	<string>2.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.139</string>
+	<string>2.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MADRev</key>
-	<string>760</string>
+	<string>761</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2012-2013 EVERYDAY APPS LLC.  All rights reserved.</string>
 	<key>UIAppFonts</key>

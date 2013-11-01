@@ -468,7 +468,7 @@
                 [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:fontSizeHolder]];
                 break;
             default:
-                fontDisplayName = NSLocalizedString(@"Ambigious", @"Ambigious");
+                fontDisplayName = NSLocalizedString(@"Ambiguous", @"Ambiguous");
                 [[self labelFontSize] setAttributedText:[self boldSystemString:fontDisplayName ofSize:labelSize]];
                 [[self labelFontName] setAttributedText:[self boldSystemString:fontDisplayName ofSize:labelSize]];
                 break;

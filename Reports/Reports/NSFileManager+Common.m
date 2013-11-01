@@ -115,20 +115,16 @@
 }
 
 + (NSString *)applicationDocumentsDirectory {
-	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *result = nil;
+    if ([documentsDirectories count] >= 1) {
+        result = [[documentsDirectories objectAtIndex: 0] retain];
+    }
+	return [result autorelease];
 }
 
 + (NSURL *)localTemporaryDirectory {
     return  [[NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES] URLByAppendingPathComponent:@"tmp" isDirectory:YES];
-}
-
-+ (NSString *)applicationLibraryTemplatesDirectory {
-    NSString *applicationLibrary = [[[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:TEMPLATES] retain];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:applicationLibrary]) {
-        NSError *error;
-        [[NSFileManager defaultManager] createDirectoryAtPath:applicationLibrary withIntermediateDirectories:YES attributes:nil error:&error];   
-    }
-	return [applicationLibrary autorelease];
 }
 
 + (void)wrapFile:(NSURL *)fileToAttach withExtention:(NSString *)extention overwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion {

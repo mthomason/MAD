@@ -41,7 +41,7 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
         [button setFrame:CGRectMake(274.0000f, 0.0000f, 29.0000f, 29.0000f)];
         [button setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-        
+        [button setTintColor:[UIColor whiteColor]];
         [self setButtonAdd:button];
         [self setLabelTitle:label];
 
