@@ -1761,6 +1761,14 @@
 		4CD98D85163F7DE70096D7BC /* wqueue.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CD98C6C163F7DE60096D7BC /* wqueue.h */; };
 		4CD9CB0C14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0B14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m */; };
 		4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */; };
+		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
+		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
+		4CDA77651825EB2900E462F6 /* Barcodes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA77641825EB2900E462F6 /* Barcodes.h */; };
+		4CDA77661825EB2900E462F6 /* Barcodes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA77641825EB2900E462F6 /* Barcodes.h */; };
+		4CDA77681825FFC600E462F6 /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76FB1825E8D500E462F6 /* libBarcodes.a */; };
+		4CDA77691825FFCD00E462F6 /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76FB1825E8D500E462F6 /* libBarcodes.a */; };
+		4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
+		4CDA778B18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
 		4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; };
 		4CDB61F614E33BF400A5389E /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
@@ -1933,6 +1941,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4CD98B9B163F7CDD0096D7BC;
 			remoteInfo = MySqlClientObjectiveC;
+		};
+		4CDA76FA1825E8D500E462F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CDA76CC1825E8D400E462F6;
+			remoteInfo = Barcodes;
+		};
+		4CDA76FC1825E8D500E462F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CDA76DC1825E8D400E462F6;
+			remoteInfo = BarcodesTests;
 		};
 		4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2961,6 +2983,10 @@
 		4CD9CB0B14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddPredicateViewController.m; sourceTree = "<group>"; };
 		4CD9CB0D14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAddGroupViewController.h; sourceTree = "<group>"; };
 		4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddGroupViewController.m; sourceTree = "<group>"; };
+		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Barcodes.xcodeproj; path = Barcodes/Barcodes.xcodeproj; sourceTree = "<group>"; };
+		4CDA77641825EB2900E462F6 /* Barcodes.h */ = {isa = PBXFileReference; lastKnownFileType = file; name = Barcodes.h; path = Barcodes/Barcodes/Barcodes.h; sourceTree = "<group>"; };
+		4CDA778918275B5700E462F6 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTBarcodeView.h; path = Barcodes/Barcodes/MTBarcodeView.h; sourceTree = "<group>"; };
 		4CDB61ED14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderPredicateFormatViewController.h; sourceTree = "<group>"; };
 		4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderPredicateFormatViewController.m; sourceTree = "<group>"; };
 		4CDB61F414E33BF400A5389E /* UITableViewControllerEnterString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerEnterString.h; sourceTree = "<group>"; };
@@ -3067,6 +3093,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDA77691825FFCD00E462F6 /* libBarcodes.a in Frameworks */,
+				4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */,
 				4C502A4418189CBD00C88CD4 /* liblibSqlite3.8.a in Frameworks */,
 				4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */,
 				4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */,
@@ -3150,6 +3178,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDA77681825FFC600E462F6 /* libBarcodes.a in Frameworks */,
+				4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */,
 				4C502A461818A4F600C88CD4 /* liblibSqlite3.8.a in Frameworks */,
 				4C502A401818965D00C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */,
@@ -3336,6 +3366,8 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4CDA778918275B5700E462F6 /* MTBarcodeView.h */,
+				4CDA77641825EB2900E462F6 /* Barcodes.h */,
 				4C5CD3D81821A0AA005FC6DD /* Samples */,
 				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C9514F915126311004AF941 /* Reports.entitlements */,
@@ -3511,6 +3543,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CDA76AF18257E4A00E462F6 /* libz.dylib */,
 				4C502A4518189ED200C88CD4 /* libSqlite3_8.h */,
 				4C4A68B417E75D3F00FD6A73 /* CoreText.framework */,
 				4C2213AD17D7947800BD36F5 /* Accelerate.framework */,
@@ -3550,10 +3583,11 @@
 		4C3C17D6163F414400A77BA6 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				4CC72EBF17C5094200B3666C /* openssl */,
+				4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */,
 				4C502A2B1818931D00C88CD4 /* libSqlite3.8.xcodeproj */,
 				4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */,
 				4C8EEF891644EC5300FAB2F3 /* SalesforceCommonUtils */,
+				4CC72EBF17C5094200B3666C /* openssl */,
 				4C8EED071644EB7500FAB2F3 /* RestKit */,
 				4C8EED611644EB7500FAB2F3 /* SalesforceOAuth */,
 				4C8EED961644EB7500FAB2F3 /* SalesforceSDK */,
@@ -4781,6 +4815,15 @@
 			path = ../libMySqlClientObjectiveC/libMySqlClientObjectiveC/Headers;
 			sourceTree = "<group>";
 		};
+		4CDA76F61825E8D400E462F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CDA76FB1825E8D500E462F6 /* libBarcodes.a */,
+				4CDA76FD1825E8D500E462F6 /* BarcodesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4CDB624614E38B9600A5389E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -5165,6 +5208,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 4CDA76F61825E8D400E462F6 /* Products */;
+					ProjectRef = 4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */;
+				},
+				{
 					ProductGroup = 4C4C6F0E167635B8004A3B04 /* Products */;
 					ProjectRef = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
 				},
@@ -5222,6 +5269,20 @@
 			remoteRef = 4C9962F416401CF800B7BACC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		4CDA76FB1825E8D500E462F6 /* libBarcodes.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBarcodes.a;
+			remoteRef = 4CDA76FA1825E8D500E462F6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CDA76FD1825E8D500E462F6 /* BarcodesTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = BarcodesTests.xctest;
+			remoteRef = 4CDA76FC1825E8D500E462F6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -5276,6 +5337,7 @@
 				4C0E77CF163B5AEC003B951E /* UIImageWrench20@2x.png in Resources */,
 				4C0E77D0163B5AEC003B951E /* UIImageDocumentBlank.png in Resources */,
 				4C0E77D1163B5AEC003B951E /* UIImageDocumentBlank@2x.png in Resources */,
+				4CDA77661825EB2900E462F6 /* Barcodes.h in Resources */,
 				4C0E77D5163B5AEC003B951E /* UIImageDocuments20.png in Resources */,
 				4C0E77D6163B5AEC003B951E /* UIImageDocuments20@2x.png in Resources */,
 				4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */,
@@ -5403,6 +5465,7 @@
 				4CD98C83163F7DE70096D7BC /* x86-gcc.h in Resources */,
 				4CD98C87163F7DE70096D7BC /* base64.h in Resources */,
 				4CD98C8B163F7DE70096D7BC /* config-win.h in Resources */,
+				4CDA778B18275B5700E462F6 /* MTBarcodeView.h in Resources */,
 				4CD98C8F163F7DE70096D7BC /* decimal.h in Resources */,
 				4CD98C93163F7DE70096D7BC /* errmsg.h in Resources */,
 				4CD98C97163F7DE70096D7BC /* hash.h in Resources */,
@@ -5866,6 +5929,7 @@
 				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
+				4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */,
 				4CCD8D9D150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png in Resources */,
 				4CCD8D9E150385DA002B9E77 /* UIImagePatternPinkTextured.png in Resources */,
 				4C1BB6EF1813D5110027C508 /* UIBarButtonItemMadDesigner.png in Resources */,
@@ -5913,6 +5977,7 @@
 				4CD98CA2163F7DE70096D7BC /* m_ctype.h in Resources */,
 				4CD98CA6163F7DE70096D7BC /* m_string.h in Resources */,
 				4CD98CAA163F7DE70096D7BC /* my_aes.h in Resources */,
+				4CDA77651825EB2900E462F6 /* Barcodes.h in Resources */,
 				4CD98CAE163F7DE70096D7BC /* my_alarm.h in Resources */,
 				4CD98CB2163F7DE70096D7BC /* my_alloc.h in Resources */,
 				4CD98CB6163F7DE70096D7BC /* my_atomic.h in Resources */,
@@ -6160,7 +6225,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\n#echo \"Updated version number to $versionnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\n#echo \"Updated build number to $currentvnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\n#echo \"Updated build number to $buildnum\"";
+			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=`git describe | awk '{split($0,a,\"-\"); print a[1]}'`\ncurrentvnum=`git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}'`\nbuildnum=`git rev-list HEAD --count`\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\necho \"Updated version number to $versionnum\"\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\necho \"Updated build number to $currentvnum\"\n\n/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\necho \"Updated build number to $buildnum\"";
 		};
 		4C1B7A52163E0D9400E331AA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7338,14 +7403,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/openssl/lib\"",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/openssl/lib\\\"",
+					/Users/mthomason/Desktop/Reports/Reports,
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7377,14 +7443,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Reports\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/..\"",
-					"\"$(SRCROOT)/StaticLibraries\"",
-					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/../StaticLibraries\"",
-					"\"$(SRCROOT)/../StaticLibraries/RestKit\"",
-					"\"$(SRCROOT)/../StaticLibraries/openssl/lib\"",
+					"\\\"$(SRCROOT)/Reports\\\"",
+					"$(SRCROOT)",
+					"\\\"$(SRCROOT)/..\\\"",
+					"\\\"$(SRCROOT)/StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg/Build/Products/Debug-iphoneos\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/RestKit\\\"",
+					"\\\"$(SRCROOT)/../StaticLibraries/openssl/lib\\\"",
+					/Users/mthomason/Desktop/Reports/Reports,
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7620,7 +7687,7 @@
 		4C384E4914B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
@@ -7637,6 +7704,7 @@
 					/Users/mthomason/Desktop/Reports/StaticLibraries/,
 					/Users/mthomason/Desktop/Reports/StaticLibraries/RestKit/,
 					/Users/mthomason/Desktop/Reports/StaticLibraries/openssl/lib/,
+					/Users/mthomason/Desktop/Reports/Reports,
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7654,7 +7722,7 @@
 		4C384E4A14B29789007B4F48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
@@ -7671,6 +7739,7 @@
 					/Users/mthomason/Desktop/Reports/StaticLibraries/,
 					/Users/mthomason/Desktop/Reports/StaticLibraries/RestKit/,
 					/Users/mthomason/Desktop/Reports/StaticLibraries/openssl/lib/,
+					/Users/mthomason/Desktop/Reports/Reports,
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",

@@ -13,22 +13,21 @@
 #import "UIApplication+Extras.h"
 #import "evp.h"
 
+
 #import "VerifyStoreReceipt.h"
 
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"2.0.0";
-NSString * const MTGlobalBundleShortVersion                         = @"2.0.0";
-NSString * const MTGlobalBundleRev                                  = @"761";
+NSString * const MTGlobalBundleVersion                              = @"1.0.141";   //Should be 2.0.1
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.141";
+NSString * const MTGlobalBundleRev                                  = @"762";
 
 @interface AppDelegate()
 
 @end
 
 @implementation AppDelegate
-
-    UIView* _waitingHudView;
 
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
@@ -79,11 +78,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     [self setWindow: window];
     [window release];
 
-    //UIFont *font = [UIFont fontWithName:@"DestructoBeamBB" size:18.0000f];
-    //[[UINavigationBar appearance] setTitleTextAttributes:@{
-    //                                                       UITextAttributeFont            : font
-    //                                                       }];
-    
     //Startup strore kit.
     [MTStoreKitController sharedObject];
 
@@ -349,23 +343,6 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
             [openDocumentViewController respondsToSelector:@selector(updateFileList:)]) {
             [openDocumentViewController updateFileList:self];
         }
-    }
-}
-
-- (void)displayWaitingHud {
-    if (!_waitingHudView) {
-        _waitingHudView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-        _waitingHudView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
-        CGRect hudBounds = _waitingHudView.bounds;
-        UILabel* label = [[UILabel alloc] initWithFrame:CGRectZero];
-        label.backgroundColor = [UIColor clearColor];
-        label.text = NSLocalizedString(@"Waiting for iCloud setup...", @"Waiting for iCloud setup...");
-        [label sizeToFit];
-        CGSize labelSize = label.frame.size;
-        label.frame = CGRectMake((CGRectGetWidth(hudBounds) - labelSize.width) / 2.0, (CGRectGetHeight(hudBounds) - labelSize.height) / 2.0, labelSize.width, labelSize.height);
-        [_waitingHudView addSubview:label];
-        [[[UIApplication sharedApplication] keyWindow] addSubview:_waitingHudView];
-        [label release];
     }
 }
 
