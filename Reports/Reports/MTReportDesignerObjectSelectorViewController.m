@@ -16,6 +16,7 @@ NSString * const MTIdentiferDocumentObjectDataCollectionViewCell = @"MTIdentifer
 NSString * const MTIdentiferDocumentObjectImageCollectionViewCell = @"MTIdentiferDocumentObjectImageCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectGroupKeyCollectionViewCell = @"MTIdentiferDocumentObjectGroupKeyCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectWhitespaceCollectionViewCell = @"MTIdentiferDocumentObjectWhitespaceCollectionViewCell";
+NSString * const MTIdentiferDocumentObjectBarcodeCollectionViewCell = @"MTIdentiferDocumentObjectBarcodeCollectionViewCell";
 
 NSInteger const MTViewTagAggregateFunctions = 2003;
 NSInteger const MTViewTagGroupByOptions = 2011;
@@ -174,7 +175,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     tag = MTDocumentObjectTypeImage;
                     break;
                 }
-                case 6: {
+                case 7: {
                     cellIdentifier = MTIdentiferDocumentObjectChartCollectionViewCell;
                     tag = MTDocumentObjectTypeChart;
                     break;
@@ -197,6 +198,11 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                 case 4: {
                     cellIdentifier = MTIdentiferDocumentObjectWhitespaceCollectionViewCell;
                     tag = MTDocumentObjectTypeWhtiespace;
+                    break;
+                }
+                case 6: {
+                    cellIdentifier = MTIdentiferDocumentObjectBarcodeCollectionViewCell;
+                    tag = MTDocumentObjectTypeBarcode;
                     break;
                 }
                 default: {
@@ -226,7 +232,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     NSInteger result = 0;
     switch (section) {
         case 0:
-            result = 5;
+            result = 7;
             break;
         default:
             break;

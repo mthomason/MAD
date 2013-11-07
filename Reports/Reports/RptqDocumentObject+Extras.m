@@ -232,6 +232,10 @@ static NSNumberFormatter *currencyNumberFormatter;
         case MTDocumentObjectTypeWhtiespace:
             result = @"Whitespace";
             break;
+            
+            case MTDocumentObjectTypeBarcode:
+            result = @"Barcode";
+            break;
         
         default:
             result = @"";
@@ -377,6 +381,12 @@ static NSNumberFormatter *currencyNumberFormatter;
 
             break;
         }
+        case MTDocumentObjectTypeBarcode: {
+
+            [documentObject setType: @(MTDocumentObjectTypeBarcode)];
+
+            break;
+        }
         default:
             break;
     }
@@ -414,6 +424,9 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
         }
         case MTDocumentObjectTypeWhtiespace: {
+            break;
+        }
+        case MTDocumentObjectTypeBarcode: {
             break;
         }
         default:

@@ -119,7 +119,8 @@ typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
     MTDocumentObjectTypeAggregate = 5,
     MTDocumentObjectTypeGroupKey = 6,
     MTDocumentObjectTypeAggregateFunctionList = 7,
-    MTDocumentObjectTypeWhtiespace = 8
+    MTDocumentObjectTypeWhtiespace = 8,
+    MTDocumentObjectTypeBarcode = 9
 };
 
 typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
