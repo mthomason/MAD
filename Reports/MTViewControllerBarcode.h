@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTViewControllerBarcodePreview.h"
+#import "MTViewControllerBarcodeOptions.h"
 
 @interface MTViewControllerBarcode : UIViewController
+    <MTViewControllerBarcodePreviewDelegate, MTViewControllerBarcodeOptionsDelegate>
 
 @end

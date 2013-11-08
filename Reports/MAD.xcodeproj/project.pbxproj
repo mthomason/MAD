@@ -1052,6 +1052,10 @@
 		4C95CAB6182B6CCB00160E01 /* MTViewControllerBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAB5182B6CCB00160E01 /* MTViewControllerBarcode.m */; };
 		4C95CAC2182B6D3E00160E01 /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC1182B6D3E00160E01 /* MTViewControllerBarcodePreview.m */; };
 		4C95CAC5182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC4182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m */; };
+		4C95CACA182CB36000160E01 /* zint.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CAC9182CB36000160E01 /* zint.h */; };
+		4C95CACB182CB36000160E01 /* zint.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CAC9182CB36000160E01 /* zint.h */; };
+		4C95CACD182CCA3F00160E01 /* MTBarcode.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CACC182CCA3F00160E01 /* MTBarcode.h */; };
+		4C95CACE182CCA3F00160E01 /* MTBarcode.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CACC182CCA3F00160E01 /* MTBarcode.h */; };
 		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
@@ -1764,8 +1768,6 @@
 		4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */; };
 		4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
-		4CDA77651825EB2900E462F6 /* Barcodes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA77641825EB2900E462F6 /* Barcodes.h */; };
-		4CDA77661825EB2900E462F6 /* Barcodes.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA77641825EB2900E462F6 /* Barcodes.h */; };
 		4CDA77681825FFC600E462F6 /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76FB1825E8D500E462F6 /* libBarcodes.a */; };
 		4CDA77691825FFCD00E462F6 /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76FB1825E8D500E462F6 /* libBarcodes.a */; };
 		4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
@@ -2556,6 +2558,8 @@
 		4C95CAC1182B6D3E00160E01 /* MTViewControllerBarcodePreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodePreview.m; sourceTree = "<group>"; };
 		4C95CAC3182B6D5A00160E01 /* MTViewControllerBarcodeOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodeOptions.h; sourceTree = "<group>"; };
 		4C95CAC4182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeOptions.m; sourceTree = "<group>"; };
+		4C95CAC9182CB36000160E01 /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = zint.h; path = Barcodes/Barcodes/zint.h; sourceTree = "<group>"; };
+		4C95CACC182CCA3F00160E01 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTBarcode.h; path = Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UserInterface.h"; sourceTree = "<group>"; };
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
@@ -2992,7 +2996,6 @@
 		4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAddGroupViewController.m; sourceTree = "<group>"; };
 		4CDA76AF18257E4A00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Barcodes.xcodeproj; path = Barcodes/Barcodes.xcodeproj; sourceTree = "<group>"; };
-		4CDA77641825EB2900E462F6 /* Barcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Barcodes.h; path = Barcodes/Barcodes/Barcodes.h; sourceTree = "<group>"; };
 		4CDA778918275B5700E462F6 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeView.h; path = Barcodes/Barcodes/MTBarcodeView.h; sourceTree = "<group>"; };
 		4CDB61ED14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderPredicateFormatViewController.h; sourceTree = "<group>"; };
 		4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderPredicateFormatViewController.m; sourceTree = "<group>"; };
@@ -3373,8 +3376,9 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C95CAC9182CB36000160E01 /* zint.h */,
 				4CDA778918275B5700E462F6 /* MTBarcodeView.h */,
-				4CDA77641825EB2900E462F6 /* Barcodes.h */,
+				4C95CACC182CCA3F00160E01 /* MTBarcode.h */,
 				4C5CD3D81821A0AA005FC6DD /* Samples */,
 				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C9514F915126311004AF941 /* Reports.entitlements */,
@@ -5358,7 +5362,6 @@
 				4C0E77CF163B5AEC003B951E /* UIImageWrench20@2x.png in Resources */,
 				4C0E77D0163B5AEC003B951E /* UIImageDocumentBlank.png in Resources */,
 				4C0E77D1163B5AEC003B951E /* UIImageDocumentBlank@2x.png in Resources */,
-				4CDA77661825EB2900E462F6 /* Barcodes.h in Resources */,
 				4C0E77D5163B5AEC003B951E /* UIImageDocuments20.png in Resources */,
 				4C0E77D6163B5AEC003B951E /* UIImageDocuments20@2x.png in Resources */,
 				4C0E77D7163B5AEC003B951E /* UIImageDocumentsAlt20.png in Resources */,
@@ -5377,6 +5380,7 @@
 				4C0E77E6163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
 				4C0E77E7163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
 				4C0E77E8163B5AEC003B951E /* UIImagePatternBlackWeave.png in Resources */,
+				4C95CACB182CB36000160E01 /* zint.h in Resources */,
 				4C0E77E9163B5AEC003B951E /* UIImagePatternBlackWeave@2x.png in Resources */,
 				4C0E77EA163B5AEC003B951E /* UIImagePatternBlueCrepe.png in Resources */,
 				4C0E77EB163B5AEC003B951E /* UIImagePatternBlueCrepe@2x.png in Resources */,
@@ -5502,6 +5506,7 @@
 				4CD98CBF163F7DE70096D7BC /* my_base.h in Resources */,
 				4CD98CC3163F7DE70096D7BC /* my_bit.h in Resources */,
 				4CD98CC7163F7DE70096D7BC /* my_bitmap.h in Resources */,
+				4C95CACE182CCA3F00160E01 /* MTBarcode.h in Resources */,
 				4CD98CCB163F7DE70096D7BC /* my_charsets.h in Resources */,
 				4CD98CCF163F7DE70096D7BC /* my_config.h in Resources */,
 				4CD98CD3163F7DE70096D7BC /* my_config.h.in in Resources */,
@@ -5919,6 +5924,7 @@
 				4CCD8D7F150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4CCD8D80150385DA002B9E77 /* UIImagePatternKraftPaper.png in Resources */,
 				4CCD8D81150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png in Resources */,
+				4C95CACD182CCA3F00160E01 /* MTBarcode.h in Resources */,
 				4CCD8D82150385DA002B9E77 /* UIImagePatternKraftPaper2.png in Resources */,
 				4CCD8D83150385DA002B9E77 /* UIImagePatternKraftPaper2@2x.png in Resources */,
 				4CCD8D84150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png in Resources */,
@@ -5998,7 +6004,6 @@
 				4CD98CA2163F7DE70096D7BC /* m_ctype.h in Resources */,
 				4CD98CA6163F7DE70096D7BC /* m_string.h in Resources */,
 				4CD98CAA163F7DE70096D7BC /* my_aes.h in Resources */,
-				4CDA77651825EB2900E462F6 /* Barcodes.h in Resources */,
 				4CD98CAE163F7DE70096D7BC /* my_alarm.h in Resources */,
 				4CD98CB2163F7DE70096D7BC /* my_alloc.h in Resources */,
 				4CD98CB6163F7DE70096D7BC /* my_atomic.h in Resources */,
@@ -6026,6 +6031,7 @@
 				4CD98CFE163F7DE70096D7BC /* my_pthread.h in Resources */,
 				4CD98D02163F7DE70096D7BC /* my_stacktrace.h in Resources */,
 				4CD98D06163F7DE70096D7BC /* my_sys.h in Resources */,
+				4C95CACA182CB36000160E01 /* zint.h in Resources */,
 				4CD98D0A163F7DE70096D7BC /* my_time.h in Resources */,
 				4CD98D0E163F7DE70096D7BC /* my_tree.h in Resources */,
 				4CD98D12163F7DE70096D7BC /* my_trie.h in Resources */,

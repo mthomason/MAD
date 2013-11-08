@@ -7,22 +7,16 @@
 //
 
 #import "MTBarcodeView.h"
-#import "Barcodes.h"
+#import "MTBarcode.h"
 
 @interface MTBarcodeView ()
-
-@property (nonatomic, retain) NSString *errorMessage;
-@property (nonatomic, assign) struct zint_symbol *barcode;
-@property (nonatomic, assign) CGFloat pixelSize;
-@property (nonatomic, assign) CGFloat rotate;
 
 @end
 
 @implementation MTBarcodeView
 
 - (void)dealloc {
-    [_errorMessage release];
-    ZBarcode_Delete(_barcode);
+    [_barcode release];
     [super dealloc];
 }
 
@@ -34,6 +28,11 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
+/*
 - (id)initWithFrame:(CGRect)frame
                  type:(MTBarcodeType)barcodeType
           borderStyle:(MTBarcodeBorderStyle)borderStyle
@@ -112,77 +111,18 @@
     
     
 }
+ */
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    
-    struct zint_symbol *barcode = [self barcode];
-    int success = ZBarcode_Buffer(barcode, 0);
 
-    CGFloat skewValue;
-    BOOL portrait = barcode->bitmap_height > barcode->bitmap_width;
-    BOOL makeSmaller;
-    if (portrait) {
-        makeSmaller = barcode->bitmap_height > rect.size.height;
-        if (makeSmaller) {    //Make bigger
-            skewValue = rect.size.height / barcode->bitmap_height;
-        } else {
-            skewValue = barcode->bitmap_height / rect.size.height;
-        }
-    } else {
-        makeSmaller = barcode->bitmap_width > rect.size.width;
-        if (makeSmaller) {
-            skewValue = rect.size.width / barcode->bitmap_width;
-        } else {
-            skewValue = barcode->bitmap_width / rect.size.width;
-        }
+    if ([self barcode]) {
+        [[self barcode] setWidth:   rect.size.width];
+        [[self barcode] setHeight:  rect.size.height];
+        [[self barcode] encodeAndBuffer];
+        [[self barcode] drawInRect:rect];
     }
-    
-    CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
-    CGAffineTransform affineTransformMoveOriginCenter = CGAffineTransformMakeTranslation(rect.size.width / 2.0000f, rect.size.height / 2.0000f);
-    CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation([self rotate]);
-    CGAffineTransform affineTransformResetOrigin = CGAffineTransformMakeTranslation(-rect.size.width / 2.0000f, -rect.size.height / 2.0000f);
-    CGAffineTransform affineTransformMoveOffscreenTop = CGAffineTransformMakeTranslation(0, rect.size.height);
-    CGAffineTransform affineTransformReflectDown = CGAffineTransformMakeScale(1.0000f, -1.0000f);
-
-
-    //Scale to fit
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextConcatCTM(context, affineTransformMakeFit);
-
-    //Center, rotate, reset to origin
-    CGContextConcatCTM(context, affineTransformMoveOriginCenter);
-    CGContextConcatCTM(context, affineTransformRotate90);
-    CGContextConcatCTM(context, affineTransformResetOrigin);
-
-    //Move up and flip down
-    CGContextConcatCTM(context, affineTransformMoveOffscreenTop);
-    CGContextConcatCTM(context, affineTransformReflectDown);
-    
-    //Draw barcode
-    if (success == 0) {
-        int i = 0;
-        int red, blue, green;
-        for(int row = 0; row < barcode->bitmap_height; row++) {
-            for(int column = 0; column < barcode->bitmap_width; column++) {
-                red = barcode->bitmap[i++];
-                green = barcode->bitmap[i++];
-                blue = barcode->bitmap[i++];
-                if (blue != -1 || red != -1 || green != -1) {
-                    CGRect pixelToShade = CGRectMake(row, column, 1, 1);
-                    CGContextSetRGBFillColor(context, red, green, blue, 1.0);
-                    CGContextFillRect(context, pixelToShade);                       //Draw transparent background
-                } else {
-                    CGRect pixelToShade = CGRectMake(row, column, 1, 1);
-                    CGContextSetRGBFillColor(context, 1, 1, 1, 1.0);
-                    CGContextFillRect(context, pixelToShade);                       //Draw transparent background
-                }
-            }
-        }
-    }
-
-    
 }
 
 @end

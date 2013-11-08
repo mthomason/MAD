@@ -8,7 +8,7 @@
 
 #import "MTViewControllerOpenDocument.h"
 #import "MADWatermarkView.h"
-#import "Barcodes.h"
+#import "MTBarcode.h"
 #import "MTBarcodeView.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
@@ -320,19 +320,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     [self setLetterpressBackground];
     
-    NSDate *start = [NSDate date];
     
-    UIImage *image = [[Barcodes test2] retain];
-    UIImageView *iv = [[UIImageView alloc] initWithImage:image];
-    [[[self collectionView] backgroundView] addSubview:iv];
-    [iv release];
-    [image release];
+    //MTBarcodeView *bview = [[MTBarcodeView alloc] initWithFrame:CGRectMake(500.0000f, 100.0000f, 200.0000f, 200.0000f) type:MTBarcodeUpca borderStyle:MTBarcodeBorderStyleNone stringToEncode:@"72527270270" whitespaceWidth:10.0000f];
+    //[[[self collectionView] backgroundView] addSubview:bview];
+    //[bview release];
     
-    MTBarcodeView *bview = [[MTBarcodeView alloc] initWithFrame:CGRectMake(500.0000f, 100.0000f, 200.0000f, 200.0000f) type:MTBarcodeUpca borderStyle:MTBarcodeBorderStyleNone stringToEncode:@"72527270270" whitespaceWidth:10.0000f];
-    [[[self collectionView] backgroundView] addSubview:bview];
-    [bview release];
-    
-    NSTimeInterval timeInterval = [start timeIntervalSinceNow];
     
     UIColor *bgColor = [UIColor lightGrayColor];
     [[self collectionView] setBackgroundColor:bgColor];

@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTBarcode.h"
+
+@protocol MTViewControllerBarcodePreviewDelegate
+- (void)didChangeBarcodeType:(MTBarcodeType)type;
+@end
+
 
 @interface MTViewControllerBarcodePreview : UIViewController
+    <UIPickerViewDataSource, UIPickerViewDelegate>
+
+@property (nonatomic, assign) id <MTViewControllerBarcodePreviewDelegate> delegate;
+- (void)setBarcodeToPreview:(MTBarcode *)barcode;
+
+- (void)update;
 
 @end

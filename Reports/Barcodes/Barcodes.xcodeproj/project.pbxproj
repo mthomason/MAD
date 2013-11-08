@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		4C2D4A961827A8DB005A46C2 /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C2D4A971827A9D5005A46C2 /* libpng16u.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA775E1825EA9700E462F6 /* libpng16u.a */; };
+		4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC7182C1CD400160E01 /* MTBarcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CF1825E8D400E462F6 /* Foundation.framework */; };
-		4CDA76D51825E8D400E462F6 /* Barcodes.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CDA76D41825E8D400E462F6 /* Barcodes.h */; };
-		4CDA76D71825E8D400E462F6 /* Barcodes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA76D61825E8D400E462F6 /* Barcodes.m */; };
 		4CDA76DE1825E8D400E462F6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76DD1825E8D400E462F6 /* XCTest.framework */; };
 		4CDA76DF1825E8D400E462F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CF1825E8D400E462F6 /* Foundation.framework */; };
 		4CDA76E11825E8D400E462F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76E01825E8D400E462F6 /* UIKit.framework */; };
@@ -70,7 +69,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				4CDA76D51825E8D400E462F6 /* Barcodes.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,11 +77,11 @@
 /* Begin PBXFileReference section */
 		4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeView.h; sourceTree = "<group>"; };
 		4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeView.m; sourceTree = "<group>"; };
+		4C95CAC6182C1CD400160E01 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcode.h; sourceTree = "<group>"; };
+		4C95CAC7182C1CD400160E01 /* MTBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcode.m; sourceTree = "<group>"; };
 		4CDA76CC1825E8D400E462F6 /* libBarcodes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBarcodes.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA76CF1825E8D400E462F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CDA76D31825E8D400E462F6 /* Barcodes-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Barcodes-Prefix.pch"; sourceTree = "<group>"; };
-		4CDA76D41825E8D400E462F6 /* Barcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Barcodes.h; sourceTree = "<group>"; };
-		4CDA76D61825E8D400E462F6 /* Barcodes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Barcodes.m; sourceTree = "<group>"; };
 		4CDA76DC1825E8D400E462F6 /* BarcodesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarcodesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA76DD1825E8D400E462F6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4CDA76E01825E8D400E462F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -218,8 +216,8 @@
 				4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */,
 				4CDA775F1825EA9700E462F6 /* libpng */,
 				4CDA77561825EA3800E462F6 /* Zint */,
-				4CDA76D41825E8D400E462F6 /* Barcodes.h */,
-				4CDA76D61825E8D400E462F6 /* Barcodes.m */,
+				4C95CAC6182C1CD400160E01 /* MTBarcode.h */,
+				4C95CAC7182C1CD400160E01 /* MTBarcode.m */,
 				4CDA76D21825E8D400E462F6 /* Supporting Files */,
 			);
 			path = Barcodes;
@@ -432,10 +430,10 @@
 				4CDA77451825EA1F00E462F6 /* large.c in Sources */,
 				4CDA774D1825EA1F00E462F6 /* postal.c in Sources */,
 				4CDA773B1825EA1F00E462F6 /* code16k.c in Sources */,
+				4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */,
 				4CDA77461825EA1F00E462F6 /* library.c in Sources */,
 				4CDA77391825EA1F00E462F6 /* code.c in Sources */,
 				4CDA774F1825EA1F00E462F6 /* qr.c in Sources */,
-				4CDA76D71825E8D400E462F6 /* Barcodes.m in Sources */,
 				4CDA773E1825EA1F00E462F6 /* common.c in Sources */,
 				4CDA77371825EA1F00E462F6 /* auspost.c in Sources */,
 				4CDA77361825EA1F00E462F6 /* 2of5.c in Sources */,

@@ -7,14 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Barcodes.h"
+#import "MTBarcode.h"
 
 @interface MTBarcodeView : UIView
 
-- (id)initWithFrame:(CGRect)frame
-               type:(MTBarcodeType)barcodeType
-        borderStyle:(MTBarcodeBorderStyle)borderStyle
-     stringToEncode:(NSString *)stringToEncode
-    whitespaceWidth:(NSInteger)whitespaceWidth;
+@property (nonatomic, retain) MTBarcode *barcode;
 
 @end

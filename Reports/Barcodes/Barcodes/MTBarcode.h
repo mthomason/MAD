@@ -1,8 +1,8 @@
 //
-//  Barcodes.h
+//  MTBarcode.h
 //  Barcodes
 //
-//  Created by Michael Thomason on 11/2/13.
+//  Created by Michael Thomason on 11/7/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,7 +13,7 @@
 typedef NS_ENUM(NSUInteger, MTBarcodeBorderStyle) {
     MTBarcodeBorderStyleNone    = 0,
     MTBarcodeBorderStyleBind    = BARCODE_BIND,
-    MTBarcodeBorderStyleBox = BARCODE_BOX
+    MTBarcodeBorderStyleBox     = BARCODE_BOX
 };
 
 typedef NS_ENUM(NSUInteger, MTBarcodeDataInputType) {
@@ -115,15 +115,35 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
     MTBarcodeGridMatrix     = BARCODE_GRIDMATRIX,
 };
 
-@interface Barcodes : NSObject
+@interface MTBarcode : NSObject
 
-+ (void)barcodeForType:(MTBarcodeType)barcodeType
-                  size:(CGSize)barcodeSize
-           borderStyle:(MTBarcodeBorderStyle)borderStyle
-        stringToEncode:(NSString *)stringToEncode
-       whitespaceWidth:(NSInteger)whitespaceWidth
-                 scale:(CGFloat)scale
-            completion:(void(^)(UIImage *barcodeImage, BOOL success, NSError *error))completion;
+@property (nonatomic, retain) NSString *input;
+@property (nonatomic, assign) BOOL showErrorMessages;
+
+- (MTBarcodeType)barcodeType;
+- (void)setBarcodeType:(MTBarcodeType)barcodeType;
+
+- (NSInteger)height;
+- (void)setHeight:(NSInteger)height;
+
+- (NSInteger)width;
+- (void)setWidth:(NSInteger)width;
+
+- (NSInteger)borderWidth;
+- (void)setBorderWidth:(NSInteger)borderWidth;
+
+- (NSInteger)whitespaceWidth;
+- (void)setWhitespaceWidth:(NSInteger)whitespaceWidth;
+
+- (BOOL)humanReadable;
+- (void)setHumanReadable:(BOOL)humanReadable;
+
+- (MTBarcodeBorderStyle)borderStyle;
+- (void)setBorderStyle:(MTBarcodeBorderStyle)borderStyle;
+
+- (void)encodeAndBuffer;
+- (NSString *)errorMessage;
+- (void)drawInRect:(CGRect)rect;
 
 + (NSString *)barcodeNameForType:(MTBarcodeType)type;
 + (NSDictionary *)names;
