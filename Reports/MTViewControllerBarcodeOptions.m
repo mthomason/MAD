@@ -39,6 +39,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+
+    if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
+        [[segue destinationViewController] setDelegate:self];
+    }
+
+}
+
 - (void)setBarcodeType:(MTBarcodeType)barcodeType {
     _barcodeType = barcodeType;
     [[self tableView] reloadData];
@@ -195,6 +203,12 @@
     }
 }
 
+#pragma mark - MTQueryBuilderChooseFieldDelegate
+
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
+    [[self delegate] setSampleData:@[@"1234567890"]];
+}
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -239,11 +253,6 @@
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
 
  */
 

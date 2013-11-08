@@ -16,8 +16,9 @@
 @property (nonatomic, retain) MTViewControllerBarcodeOptions *optionsViewController;
 
 @property (nonatomic, retain) NSString *barcodeInput;
-
 @property (nonatomic, retain) MTBarcode *barcode;
+
+@property (nonatomic, retain) NSArray *cachedData;
 
 @end
 
@@ -28,6 +29,7 @@
     [_barcodeInput release];
     [_previewViewController release];
     [_optionsViewController release];
+    [_cachedData release];
     [super dealloc];
 }
 
@@ -69,37 +71,44 @@
 
 - (void)updateBarcode {
     [[self barcode] setInput:[self barcodeInput]];
-    [[self barcode] encodeAndBuffer];
     [[self previewViewController] update];
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate
 
+- (void)setSampleData:(NSArray *)sampleData {
+    [self setCachedData:sampleData];
+    if ([sampleData count] > 0) {
+        [self setBarcodeInput:[sampleData objectAtIndex:0]];
+    }
+    [self updateBarcode];
+}
+
 - (void)didToggleHumanReadable {
     BOOL humanReadable = [[self barcode] humanReadable];
     [[self barcode] setHumanReadable:!humanReadable];
-    [[self previewViewController] update];
+    [self updateBarcode];
 }
 
 - (void)didToggleShowErrorMessages {
     BOOL showErrorMessages = [[self barcode] showErrorMessages];
     [[self barcode] setShowErrorMessages:!showErrorMessages];
-    [[self previewViewController] update];
+    [self updateBarcode];
 }
 
 - (void)setBorderWidth:(CGFloat)borderWidth {
     [[self barcode] setBorderWidth:borderWidth];
-    [[self previewViewController] update];
+    [self updateBarcode];
 }
 
 - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle {
     [[self barcode] setBorderStyle:borderStyle];
-    [[self previewViewController] update];
+    [self updateBarcode];
 }
 
 - (void)setInput:(NSString *)barcodeInput {
     [self setBarcodeInput:barcodeInput];
-    [[self previewViewController] update];
+    [self updateBarcode];
 }
 
 #pragma mark - MTViewControllerBarcodePreviewDelegate
@@ -107,7 +116,7 @@
 - (void)didChangeBarcodeType:(MTBarcodeType)type {
     [[self barcode] setBarcodeType:type];
     [[self optionsViewController] setBarcodeType:type];
-    [[self previewViewController] update];
+    [self updateBarcode];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -123,6 +132,7 @@
         [pvc release];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
         MTViewControllerBarcodeOptions *ovc = [[segue destinationViewController] retain];
+        [ovc setDelegate:self];
         [self setOptionsViewController:ovc];
         [ovc release];
     }

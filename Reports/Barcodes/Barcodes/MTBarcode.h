@@ -118,31 +118,15 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 @interface MTBarcode : NSObject
 
 @property (nonatomic, retain) NSString *input;
+@property (nonatomic, assign) MTBarcodeType barcodeType;
+@property (nonatomic, assign) NSInteger height;
+@property (nonatomic, assign) NSInteger width;
+@property (nonatomic, assign) NSInteger borderWidth;
+@property (nonatomic, assign) NSInteger whitespaceWidth;
+@property (nonatomic, assign) BOOL humanReadable;
+@property (nonatomic, assign) MTBarcodeBorderStyle borderStyle;
 @property (nonatomic, assign) BOOL showErrorMessages;
 
-- (MTBarcodeType)barcodeType;
-- (void)setBarcodeType:(MTBarcodeType)barcodeType;
-
-- (NSInteger)height;
-- (void)setHeight:(NSInteger)height;
-
-- (NSInteger)width;
-- (void)setWidth:(NSInteger)width;
-
-- (NSInteger)borderWidth;
-- (void)setBorderWidth:(NSInteger)borderWidth;
-
-- (NSInteger)whitespaceWidth;
-- (void)setWhitespaceWidth:(NSInteger)whitespaceWidth;
-
-- (BOOL)humanReadable;
-- (void)setHumanReadable:(BOOL)humanReadable;
-
-- (MTBarcodeBorderStyle)borderStyle;
-- (void)setBorderStyle:(MTBarcodeBorderStyle)borderStyle;
-
-- (void)encodeAndBuffer;
-- (NSString *)errorMessage;
 - (void)drawInRect:(CGRect)rect;
 
 + (NSString *)barcodeNameForType:(MTBarcodeType)type;

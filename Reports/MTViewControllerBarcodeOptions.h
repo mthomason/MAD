@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MTBarcode.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
+
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 - (void)didToggleHumanReadable;
@@ -15,9 +17,11 @@
 - (void)setInput:(NSString *)input;
 - (void)setBorderWidth:(CGFloat)borderWidth;
 - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle;
+- (void)setSampleData:(NSArray *)sampleData;
 @end
 
 @interface MTViewControllerBarcodeOptions : UITableViewController
+    <MTQueryBuilderChooseFieldDelegate>
 
 - (void)setBarcodeType:(MTBarcodeType)barcodeType;
 

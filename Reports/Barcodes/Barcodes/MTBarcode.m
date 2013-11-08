@@ -10,8 +10,6 @@
 
 @interface MTBarcode ()
 
-@property (nonatomic, assign) struct zint_symbol *barcode;
-@property (nonatomic, assign) BOOL success;
 @property (nonatomic, assign) CGFloat rotate;
 
 @end
@@ -19,9 +17,6 @@
 @implementation MTBarcode
 
 - (void)dealloc {
-    if (self->_barcode != NULL) {
-        ZBarcode_Delete(_barcode);
-    }
     [_input release];
     [super dealloc];
 }
@@ -30,145 +25,78 @@
     self = [super init];
     if (self) {
 
-        struct zint_symbol *barcode;
-        barcode = ZBarcode_Create();
-        [self setBarcode:barcode];
-        
         [self setShowErrorMessages:YES];
+        [self setHumanReadable:YES];
+        [self setBorderWidth:0];
+        [self setWidth:0];
+        [self setHeight:0];
+        
         [self setRotate:(90 * M_PI / 180)];
         
     }
     return self;
 }
 
-- (MTBarcodeType)barcodeType {
-    return self->_barcode->symbology;
-}
-
-- (void)setBarcodeType:(MTBarcodeType)barcodeType {
-    if (self->_barcode != NULL) {
-        self->_barcode->symbology = barcodeType;
-    }
-}
-
-- (NSInteger)height {
-    return self->_barcode->height;
-}
-
-- (void)setHeight:(NSInteger)height {
-    if (self->_barcode != NULL) {
-        self->_barcode->height = height;
-    }
-}
-
-- (NSInteger)width {
-    return self->_barcode->height;
-}
-
-- (void)setWidth:(NSInteger)width {
-    if (self->_barcode != NULL) {
-        self->_barcode->width = width;
-    }
-}
-
-- (NSInteger)borderWidth {
-    return self->_barcode->height;
-}
-
-- (void)setBorderWidth:(NSInteger)borderWidth {
-    if (self->_barcode != NULL) {
-        self->_barcode->border_width = borderWidth;
-    }
-}
-
-
-- (NSInteger)whitespaceWidth {
-    return self->_barcode->whitespace_width;
-}
-
-- (void)setWhitespaceWidth:(NSInteger)whitespaceWidth {
-    if (self->_barcode != NULL) {
-        self->_barcode->whitespace_width = whitespaceWidth;
-    }
-}
-
-- (BOOL)humanReadable {
-    return self->_barcode->show_hrt;
-}
-
-- (void)setHumanReadable:(BOOL)humanReadable {
-    if (self->_barcode != NULL) {
-        self->_barcode->show_hrt = humanReadable;
-    }
-}
-
-- (MTBarcodeBorderStyle)borderStyle {
-    return self->_barcode->output_options;
-}
-
-- (void)setBorderStyle:(MTBarcodeBorderStyle)borderStyle {
-    if (self->_barcode != NULL) {
-        self->_barcode->output_options = borderStyle;
-    }
-}
-
-- (void)encodeAndBuffer {
-    if ([self barcode] != NULL) {
-        NSString *inputString = [[self input] length] > 0 ? [self input] : @"";
-        const char *input = [inputString UTF8String];
-        int inputLen = strlen(input);
-        BOOL success = ZBarcode_Encode_and_Buffer(self->_barcode, (unsigned char *)input, inputLen, 0);
-        [self setSuccess:success];
-    }
-}
-
-- (NSString *)errorMessage {
-    NSString *errorMessage = nil;
-    
-    switch ([self success]) {
-        case WARN_INVALID_OPTION:
-            errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
-            break;
-        case ERROR_TOO_LONG:
-            errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
-            break;
-        case ERROR_INVALID_DATA:
-            errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
-            break;
-        case ERROR_INVALID_CHECK:
-            errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
-            break;
-        case ERROR_ENCODING_PROBLEM:
-            errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
-            break;
-        case ERROR_FILE_ACCESS:
-            errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
-            break;
-        case ERROR_MEMORY:
-            errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
-            break;
-        default:
-            break;
-    }
-    return errorMessage;
-}
-
 - (void)drawInRect:(CGRect)rect {
-    struct zint_symbol *barcode = [self barcode];
+
+    struct zint_symbol *barcode = ZBarcode_Create();
+    
     if (barcode == NULL) {
         CGFloat midY = CGRectGetMidY(rect);
         [@"No barcode data." drawAtPoint:CGPointMake(CGPointZero.x, midY) withAttributes:nil];
         
     } else {
+
+        barcode->symbology = [self barcodeType];
+        barcode->height = [self height];
+        //barcode->width = [self width];
+        barcode->border_width = [self borderWidth];
+        barcode->whitespace_width = [self whitespaceWidth];
+        barcode->show_hrt = [self humanReadable];
+        barcode->output_options = [self borderStyle];
+        barcode->scale = 1.0000f;
+        barcode->input_mode = MTBarcodeDataTypeUnicode;
         
-        if ([self errorMessage]) {
-            CGFloat midY = CGRectGetMidY(rect);
-            [[self errorMessage] drawAtPoint:CGPointMake(CGPointZero.x, midY) withAttributes:nil];
+        NSInteger inputLength = [[self input] length];
+        NSString *inputString = inputLength > 0 ? [self input] : @"";
+        const char *input = [inputString UTF8String];
+        int inputLen = strlen(input);
+        int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
+        NSString *errorMessage = nil;
+        switch (success) {
+            case WARN_INVALID_OPTION:
+                errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
+                break;
+            case ERROR_TOO_LONG:
+                errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
+                break;
+            case ERROR_INVALID_DATA:
+                errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
+                break;
+            case ERROR_INVALID_CHECK:
+                errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
+                break;
+            case ERROR_ENCODING_PROBLEM:
+                errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
+                break;
+            case ERROR_FILE_ACCESS:
+                errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
+                break;
+            case ERROR_MEMORY:
+                errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
+                break;
+            default:
+                break;
         }
         
-        CGFloat skewValue;
+        if (errorMessage) {
+            CGFloat midY = CGRectGetMidY(rect);
+            [errorMessage drawAtPoint:CGPointMake(CGPointZero.x, midY) withAttributes:nil];
+        }
+        
+        CGFloat skewValue, skewValue2;
         BOOL portrait = barcode->bitmap_height > barcode->bitmap_width;
-        BOOL makeSmaller;
+        BOOL makeSmaller, makeSmaller2;
         if (portrait) {
             makeSmaller = barcode->bitmap_height > rect.size.height;
             if (makeSmaller) {    //Make bigger
@@ -176,6 +104,13 @@
             } else {
                 skewValue = barcode->bitmap_height / rect.size.height;
             }
+            makeSmaller2 = barcode->bitmap_width > rect.size.width;
+            if (makeSmaller2) {
+                skewValue2 = rect.size.width / barcode->bitmap_width;
+            } else {
+                skewValue2 = barcode->bitmap_width / rect.size.width;
+            }
+
         } else {
             makeSmaller = barcode->bitmap_width > rect.size.width;
             if (makeSmaller) {
@@ -183,6 +118,23 @@
             } else {
                 skewValue = barcode->bitmap_width / rect.size.width;
             }
+            makeSmaller2 = barcode->bitmap_height > rect.size.height;
+            if (makeSmaller2) {
+                skewValue2 = rect.size.height / barcode->bitmap_height;
+            } else {
+                skewValue2 = barcode->bitmap_height / rect.size.height;
+            }
+            
+        }
+        
+        if (makeSmaller && makeSmaller2) {
+            skewValue = MIN(skewValue, skewValue2);
+        } else if (makeSmaller) {
+            skewValue = skewValue;
+        } else if (makeSmaller2) {
+            skewValue = skewValue2;
+        } else {
+            skewValue = 1.0000f;
         }
         
         CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
@@ -207,7 +159,7 @@
         CGContextConcatCTM(context, affineTransformReflectDown);
         
         //Draw barcode
-        if ([self success] == 0) {
+        if (success == 0) {
             int i = 0;
             int red, blue, green;
             for(int row = 0; row < barcode->bitmap_height; row++) {
@@ -228,15 +180,15 @@
             }
         }
         
+        ZBarcode_Delete(barcode);
+        barcode = NULL;
     }
+    
 }
 
 + (NSDictionary *)names {
     
-    static NSDictionary *names;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        names = @{
+    NSDictionary *names = @{
                   @BARCODE_AUSREDIRECT      : @"Australia Post Redirect Code",
                    @BARCODE_AUSREPLY        : @"Australia Post Reply-Paid",
                    @BARCODE_AUSROUTE        : @"Australia Post Routing Code",
@@ -299,7 +251,6 @@
                    @BARCODE_UPCE            : @"Universal Product Code (UPC-E)",
                    @BARCODE_ONECODE         : @"USPS Intelligent Mail"
                    };
-    });
     return names;
 }
 

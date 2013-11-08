@@ -4993,7 +4993,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="04I-ar-gb9" kind="push" id="nKt-0N-TQe"/>
+                                    <segue destination="04I-ar-gb9" kind="push" identifier="MTIdentifierSegueBarcodeField" id="nKt-0N-TQe"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeType" textLabel="Jsy-yd-BL9" detailTextLabel="Ssi-gW-vWJ" style="IBUITableViewCellStyleValue1" id="roP-R2-znc">

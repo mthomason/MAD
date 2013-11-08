@@ -120,7 +120,6 @@
     if ([self barcode]) {
         [[self barcode] setWidth:   rect.size.width];
         [[self barcode] setHeight:  rect.size.height];
-        [[self barcode] encodeAndBuffer];
         [[self barcode] drawInRect:rect];
     }
 }
