@@ -4970,7 +4970,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeData" textLabel="5cq-bz-qSh" detailTextLabel="etZ-Ax-oxB" style="IBUITableViewCellStyleValue1" id="HKw-sn-5uJ">
-                                <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="99" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HKw-sn-5uJ" id="dGM-lc-9gl">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -4996,11 +4996,11 @@
                                     <segue destination="04I-ar-gb9" kind="push" identifier="MTIdentifierSegueBarcodeField" id="nKt-0N-TQe"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeType" textLabel="Jsy-yd-BL9" detailTextLabel="Ssi-gW-vWJ" style="IBUITableViewCellStyleValue1" id="roP-R2-znc">
-                                <rect key="frame" x="0.0" y="99" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeType" textLabel="Jsy-yd-BL9" detailTextLabel="Ssi-gW-vWJ" style="IBUITableViewCellStyleValue1" id="roP-R2-znc">
+                                <rect key="frame" x="0.0" y="143" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="roP-R2-znc" id="hNJ-wp-vqB">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jsy-yd-BL9">
@@ -5011,7 +5011,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Barcode Type" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ssi-gW-vWJ">
-                                            <rect key="frame" x="199" y="11" width="106" height="21"/>
+                                            <rect key="frame" x="179" y="11" width="106" height="21"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
@@ -5019,9 +5019,12 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="KJY-pg-h9b" kind="push" identifier="MTIdentifierSegueBarcodeType" id="M8r-Ur-ceL"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBorderNone" textLabel="4tj-DN-hAh" style="IBUITableViewCellStyleDefault" id="xT1-wm-9ua">
-                                <rect key="frame" x="0.0" y="143" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="187" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xT1-wm-9ua" id="cWh-Oz-gCd">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -5038,7 +5041,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBorder" textLabel="axl-7T-PNm" style="IBUITableViewCellStyleDefault" id="4tj-vs-phX">
-                                <rect key="frame" x="0.0" y="187" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="231" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4tj-vs-phX" id="miX-Rr-MtX">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -5055,7 +5058,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBorderOption2" textLabel="0n8-Mo-Efa" style="IBUITableViewCellStyleDefault" id="1eo-Nz-3T3">
-                                <rect key="frame" x="0.0" y="231" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="275" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1eo-Nz-3T3" id="jQE-QI-58X">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -5072,7 +5075,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBorderWidth" textLabel="Fkf-ni-hyK" style="IBUITableViewCellStyleDefault" id="O2X-Bz-0FX">
-                                <rect key="frame" x="0.0" y="275" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="319" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="O2X-Bz-0FX" id="ybg-0V-GMK">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -5089,7 +5092,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceForegroundColor" id="Fm8-3W-4uE">
-                                <rect key="frame" x="0.0" y="319" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="363" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fm8-3W-4uE" id="OIQ-dy-2je">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -5105,7 +5108,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBackgroundColor" id="lSz-IH-7uW">
-                                <rect key="frame" x="0.0" y="363" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="407" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lSz-IH-7uW" id="dDu-42-M63">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
@@ -5121,7 +5124,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeShowHumanReadableText" id="DvC-AJ-RGZ">
-                                <rect key="frame" x="0.0" y="407" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="451" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DvC-AJ-RGZ" id="V89-LL-K2q">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -5138,7 +5141,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeShowErrorMessages" id="rU2-0g-B9z">
-                                <rect key="frame" x="0.0" y="451" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="495" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rU2-0g-B9z" id="Lgh-Ga-PTr">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -5160,10 +5163,26 @@
                             <outlet property="delegate" destination="Ih4-6Y-PiS" id="no9-gx-fbP"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="58v-Cx-IVD"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UES-7N-SCU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3972" y="5394"/>
+            <point key="canvasLocation" x="4345" y="5429"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="SIG-mD-Mnv">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="Jed-ge-S8E" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="OK3-SC-e2Y">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Ih4-6Y-PiS" kind="relationship" relationship="rootViewController" id="DkP-b3-Tvy"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j29-c2-ApR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3972" y="5429"/>
         </scene>
         <!--View Controller Barcode-->
         <scene sceneID="pPS-1c-7aw">
@@ -5190,7 +5209,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
-                                    <segue destination="Ih4-6Y-PiS" kind="embed" identifier="MTIdentifierSegueBarcodeTable" id="0wY-f3-ovw"/>
+                                    <segue destination="Jed-ge-S8E" kind="embed" identifier="MTIdentifierSegueBarcodeTable" id="7Wg-Vq-icp"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -6500,7 +6519,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="04I-ar-gb9" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="TvG-HB-iQp">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="248"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="204"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -6549,7 +6568,43 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lsM-DX-Uio" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rHn-Hh-1VE" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4466" y="5394"/>
+            <point key="canvasLocation" x="4813" y="5429"/>
+        </scene>
+        <!--View Controller Barcode Type-->
+        <scene sceneID="Kov-n0-iNR">
+            <objects>
+                <viewController id="KJY-pg-h9b" customClass="MTViewControllerBarcodeType" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Abq-fE-rmH"/>
+                        <viewControllerLayoutGuide type="bottom" id="CyF-t0-Qdm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Dpl-b5-zU6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="248"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vC7-pl-yRn">
+                                <rect key="frame" x="0.0" y="66" width="320" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="KJY-pg-h9b" id="RUx-6W-PW1"/>
+                                    <outlet property="delegate" destination="KJY-pg-h9b" id="CLd-Eu-TCH"/>
+                                </connections>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Pa8-3g-9wA">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="hbH-F3-eN8">
+                            <connections>
+                                <segue destination="6v8-cc-a2Z" kind="unwind" unwindAction="unwindToBarcodeOptions:" id="gWC-dW-MHk"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8WQ-BL-ord" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="6v8-cc-a2Z" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4813" y="5823"/>
         </scene>
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="JFW-R7-mId">

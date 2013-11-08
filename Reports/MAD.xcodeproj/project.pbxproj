@@ -1056,6 +1056,8 @@
 		4C95CACB182CB36000160E01 /* zint.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CAC9182CB36000160E01 /* zint.h */; };
 		4C95CACD182CCA3F00160E01 /* MTBarcode.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CACC182CCA3F00160E01 /* MTBarcode.h */; };
 		4C95CACE182CCA3F00160E01 /* MTBarcode.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CACC182CCA3F00160E01 /* MTBarcode.h */; };
+		4C95CAD1182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */; };
+		4C95CAD2182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */; };
 		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
@@ -2560,6 +2562,8 @@
 		4C95CAC4182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeOptions.m; sourceTree = "<group>"; };
 		4C95CAC9182CB36000160E01 /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = zint.h; path = Barcodes/Barcodes/zint.h; sourceTree = "<group>"; };
 		4C95CACC182CCA3F00160E01 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTBarcode.h; path = Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
+		4C95CACF182D67CB00160E01 /* MTViewControllerBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodeType.h; sourceTree = "<group>"; };
+		4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeType.m; sourceTree = "<group>"; };
 		4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UserInterface.h"; sourceTree = "<group>"; };
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
@@ -4322,6 +4326,8 @@
 				4C95CAC1182B6D3E00160E01 /* MTViewControllerBarcodePreview.m */,
 				4C95CAC3182B6D5A00160E01 /* MTViewControllerBarcodeOptions.h */,
 				4C95CAC4182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m */,
+				4C95CACF182D67CB00160E01 /* MTViewControllerBarcodeType.h */,
+				4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */,
 			);
 			name = Barcode;
 			sourceTree = "<group>";
@@ -6392,6 +6398,7 @@
 				4CE17E391658F0A10002F8EA /* MTDatabaseTable.m in Sources */,
 				4CE17E3D1658F1100002F8EA /* MTDatabaseField.m in Sources */,
 				4C68B71516600245002682CB /* MTDatabaseConnection.m in Sources */,
+				4C95CAD2182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */,
 				4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
 				4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */,
 				4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
@@ -7044,6 +7051,7 @@
 				4C94AA5317DD8590000F6FCF /* MTStateButton.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */,
+				4C95CAD1182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9B1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
 				4C76B6AF1776191B004AA7F9 /* RptqQueryTable.m in Sources */,

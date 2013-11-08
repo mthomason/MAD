@@ -17,7 +17,6 @@
 
 @property (nonatomic, retain) NSDictionary *barcodeNamesByType;
 @property (nonatomic, retain) NSArray *barcodeNamesOrdered;
-@property (nonatomic, retain) NSArray *barcodeTypesOrdered;
 @property (nonatomic, retain) MTBarcode *barcode;
 
 @end

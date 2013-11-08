@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "MTBarcode.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-
+#import "MTViewControllerBarcodeType.h"
 
 @protocol MTViewControllerBarcodeOptionsDelegate
+- (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
 - (void)didToggleHumanReadable;
 - (void)didToggleShowErrorMessages;
 - (void)setInput:(NSString *)input;
@@ -21,7 +22,7 @@
 @end
 
 @interface MTViewControllerBarcodeOptions : UITableViewController
-    <MTQueryBuilderChooseFieldDelegate>
+    <MTQueryBuilderChooseFieldDelegate, MTViewControllerBarcodeTypeDelegate>
 
 - (void)setBarcodeType:(MTBarcodeType)barcodeType;
 

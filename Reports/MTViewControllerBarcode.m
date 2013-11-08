@@ -112,10 +112,9 @@
 }
 
 #pragma mark - MTViewControllerBarcodePreviewDelegate
-
-- (void)didChangeBarcodeType:(MTBarcodeType)type {
-    [[self barcode] setBarcodeType:type];
-    [[self optionsViewController] setBarcodeType:type];
+- (void)didChangeBarcodeType:(MTBarcodeType)barcodeType {
+    [[self barcode] setBarcodeType:barcodeType];
+    [[self optionsViewController] setBarcodeType:barcodeType];
     [self updateBarcode];
 }
 
@@ -131,7 +130,7 @@
         [self setPreviewViewController:pvc];
         [pvc release];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
-        MTViewControllerBarcodeOptions *ovc = [[segue destinationViewController] retain];
+        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[[segue destinationViewController] topViewController] retain];
         [ovc setDelegate:self];
         [self setOptionsViewController:ovc];
         [ovc release];
