@@ -118,8 +118,6 @@
 - (void)drawRect:(CGRect)rect {
 
     if ([self barcode]) {
-        [[self barcode] setWidth:   rect.size.width];
-        [[self barcode] setHeight:  rect.size.height];
         [[self barcode] drawInRect:rect];
     }
 }

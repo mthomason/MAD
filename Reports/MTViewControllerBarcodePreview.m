@@ -24,6 +24,7 @@
 @implementation MTViewControllerBarcodePreview
 
 - (void)dealloc {
+    [_barcode release];
     [_barcodeNamesOrdered release];
     [_barcodeNamesByType release];
     [_barcodePicker release];

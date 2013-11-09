@@ -84,15 +84,22 @@
     [self updateBarcode];
 }
 
-- (void)didToggleHumanReadable {
-    BOOL humanReadable = [[self barcode] humanReadable];
-    [[self barcode] setHumanReadable:!humanReadable];
+- (BOOL)didToggleHumanReadable {
+    BOOL humanReadable = ![[self barcode] humanReadable];
+    [[self barcode] setHumanReadable:humanReadable];
     [self updateBarcode];
+    return humanReadable;
 }
 
-- (void)didToggleShowErrorMessages {
-    BOOL showErrorMessages = [[self barcode] showErrorMessages];
-    [[self barcode] setShowErrorMessages:!showErrorMessages];
+- (BOOL)didToggleShowErrorMessages {
+    BOOL showErrorMessages = ![[self barcode] showErrorMessages];
+    [[self barcode] setShowErrorMessages:showErrorMessages];
+    [self updateBarcode];
+    return showErrorMessages;
+}
+
+- (void)didChangeSymbolHeight:(NSInteger)symbolHeight {
+    [[self barcode] setHeight:symbolHeight];
     [self updateBarcode];
 }
 
@@ -114,7 +121,7 @@
 #pragma mark - MTViewControllerBarcodePreviewDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType {
     [[self barcode] setBarcodeType:barcodeType];
-    [[self optionsViewController] setBarcodeType:barcodeType];
+    //[[self optionsViewController] setBarcodeType:barcodeType];
     [self updateBarcode];
 }
 
@@ -131,6 +138,7 @@
         [pvc release];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
         MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[[segue destinationViewController] topViewController] retain];
+        [ovc setBarcode:[self barcode]];
         [ovc setDelegate:self];
         [self setOptionsViewController:ovc];
         [ovc release];
