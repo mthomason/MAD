@@ -13,6 +13,11 @@
 @property (nonatomic, retain) NSArray *sampleBarcodeData;
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
 
+@property (nonatomic, retain) UIFont *mainFont;
+@property (nonatomic, retain) UIFont *detailFont;
+
+@property (nonatomic, assign) NSInteger borderWidth;
+
 @end
 
 @implementation MTViewControllerBarcodeOptions
@@ -33,6 +38,8 @@
     [self removeObserver:[self barcode] forKeyPath:showErrorMessages];
     [self removeObserver:[self barcode] forKeyPath:humanReadable];
     [_sampleBarcodeData release];
+    [_mainFont release];
+    [_detailFont release];
     [super dealloc];
 }
 
@@ -53,11 +60,14 @@
 }
 
 - (void)customInit {
+    [self setBorderWidth:5];
     [self setSampleBarcodeIndex: 0];
     NSArray *sampleBarcodeData = @[@{@"Sample Data" : @"Sample Data"}];
     [sampleBarcodeData retain];
     [self setSampleBarcodeData:sampleBarcodeData];
     [sampleBarcodeData release];
+    
+
 }
 
 - (void)viewDidLoad {
@@ -221,17 +231,25 @@
                     cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceSymbolHeight forIndexPath:indexPath] retain];
                     NSInteger symbolHeight = [[self barcode] height];
                     
-                    UIStepper *stepper = [[UIStepper alloc] init];
-                    [stepper setWraps:NO];
-                    [stepper setValue:symbolHeight];
-                    CGFloat centerY = CGRectGetMidY([[cell contentView] bounds]);
-                    CGFloat correctX = CGPointZero.x + [[cell contentView] bounds].size.width - ([stepper bounds].size.width / 2.0000f) - 20.0000f;
-                    [stepper addTarget:self action:@selector(didChangeSymbolHeight:) forControlEvents:UIControlEventValueChanged];
-                    [[cell contentView] addSubview:stepper];
-                    CGPoint newCenter = CGPointMake(correctX, centerY);
-                    [stepper setCenter:newCenter];
-                    [stepper release];
-                    
+                    static NSInteger tagWithStepper = 48584;
+                    if ([cell tag] != tagWithStepper) {
+                        
+                        UIStepper *stepper = [[UIStepper alloc] init];
+                        [stepper setWraps:NO];
+                        [stepper setValue:symbolHeight];
+                        CGFloat centerY = CGRectGetMidY([[cell contentView] bounds]);
+                        CGFloat correctX = CGPointZero.x + [[cell contentView] bounds].size.width - ([stepper bounds].size.width / 2.0000f) - 20.0000f;
+                        [stepper addTarget:self action:@selector(didChangeSymbolHeight:) forControlEvents:UIControlEventValueChanged];
+                        [[cell contentView] addSubview:stepper];
+                        CGPoint newCenter = CGPointMake(correctX, centerY);
+                        [stepper setCenter:newCenter];
+                        [stepper release];
+                        
+                        [cell setTag: tagWithStepper];
+                    }
+                    NSString *detail = [NSString stringWithFormat:@"%d", symbolHeight];
+                    NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
+                    [[cell textLabel] setAttributedText:attributedString];
                     
                 }
                 default:
@@ -253,17 +271,27 @@
                     break;
                 case 3:
                     cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderWidth forIndexPath:indexPath] retain];
-                    UIStepper *stepper = [[UIStepper alloc] init];
-                    [stepper setWraps:NO];
-                    [stepper setValue:1.0000f];
-                    CGFloat centerY = CGRectGetMidY([[cell contentView] bounds]);
-                    CGFloat correctX = CGPointZero.x + [[cell contentView] bounds].size.width - ([stepper bounds].size.width / 2.0000f) - 20.0000f;
-                    [stepper addTarget:self action:@selector(didChangeBorderWidth:) forControlEvents:UIControlEventValueChanged];
-                    [[cell contentView] addSubview:stepper];
-                    CGPoint newCenter = CGPointMake(correctX, centerY);
-                    [stepper setCenter:newCenter];
-                    [stepper release];
                     
+                    static NSInteger tagWithStepper = 34314;
+                    if ([cell tag] != tagWithStepper) {
+
+                        UIStepper *stepper = [[UIStepper alloc] init];
+                        [stepper setWraps:NO];
+                        [stepper setValue:[self borderWidth]];
+                        CGFloat centerY = CGRectGetMidY([[cell contentView] bounds]);
+                        CGFloat correctX = CGPointZero.x + [[cell contentView] bounds].size.width - ([stepper bounds].size.width / 2.0000f) - 20.0000f;
+                        [stepper addTarget:self action:@selector(didChangeBorderWidth:) forControlEvents:UIControlEventValueChanged];
+                        [[cell contentView] addSubview:stepper];
+                        CGPoint newCenter = CGPointMake(correctX, centerY);
+                        [stepper setCenter:newCenter];
+                        [stepper release];
+
+                        [cell setTag: tagWithStepper];
+                    }
+                    NSString *detail = [NSString stringWithFormat:@"%d", [self borderWidth]];
+                    NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Border width" withDetail:detail];
+                    [[cell textLabel] setAttributedText:attributedString];
+
                     break;
                 default:
                     break;
@@ -281,15 +309,44 @@
     return [cell autorelease];
 }
 
++ (NSAttributedString *)subject:(NSString *)subjectPart withDetail:(NSString *)detailPart {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    UIFont *boldFont = [[appDelegate mainFont] retain];
+    UIFont *systemFont = [[appDelegate detailFont] retain];
+    NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont, NSForegroundColorAttributeName : [UIColor blackColor]};
+    NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont, NSForegroundColorAttributeName : [UIColor lightGrayColor]};
+    
+    NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:subjectPart
+                                                                                                   attributes:boldAttributes];
+    NSString *pointsString = [@" " stringByAppendingString:detailPart];
+    NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
+    [localizedAttributedMessage appendAttributedString:messageSuffix];
+    [messageSuffix release];
+    [boldFont release]; [systemFont release];
+    return [localizedAttributedMessage autorelease];
+}
+
+
 - (void)didChangeBorderWidth:(UIStepper *)sender {
+    [self setBorderWidth:(NSInteger) [sender value]];
+    NSString *detail = [NSString stringWithFormat:@"%d", (NSInteger)[sender value]];
+    NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Border width" withDetail:detail];
+    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
+    [[cell textLabel] setAttributedText:attributedString];
     [[self delegate] setBorderWidth:[sender value]];
 }
 
 - (void)didChangeSymbolHeight:(UIStepper *)sender {
+    NSString *detail = [NSString stringWithFormat:@"%d", (NSInteger)[sender value]];
+    NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
+    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+    [[cell textLabel] setAttributedText:attributedString];
     [[self delegate] didChangeSymbolHeight:[sender value]];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     switch ([indexPath section]) {
         case 1:
             
@@ -297,7 +354,6 @@
 
                 case 0: {
                     BOOL humanReadable = [[self delegate] didToggleHumanReadable];
-                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
                     UITableViewCellAccessoryType accessory = humanReadable ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                     [cell setAccessoryType:accessory];
                     break;
@@ -305,7 +361,6 @@
                     
                 case 1: {
                     BOOL showErrorMessages = [[self delegate] didToggleShowErrorMessages];
-                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
                     UITableViewCellAccessoryType accessory = showErrorMessages ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                     [cell setAccessoryType:accessory];
                     break;
@@ -320,22 +375,37 @@
             case 2:
             
             switch ([indexPath row]) {
-                case 0:
+                case 0: {
 
                     [[self delegate] setBorderType:MTBarcodeBorderStyleNone];
-                    
+                    UITableViewCell *cellBox = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
+                    UITableViewCell *cellBind = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:2]];
+                    [cell setAccessoryType: UITableViewCellAccessoryCheckmark];
+                    [cellBox setAccessoryType:UITableViewCellAccessoryNone];
+                    [cellBind setAccessoryType:UITableViewCellAccessoryNone];
                     break;
-                    
-                case 1:
+                }
+                case 1: {
                     
                     [[self delegate] setBorderType:MTBarcodeBorderStyleBox];
-
+                    UITableViewCell *cellNone = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+                    UITableViewCell *cellBind = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:2]];
+                    [cell setAccessoryType: UITableViewCellAccessoryCheckmark];
+                    [cellNone setAccessoryType:UITableViewCellAccessoryNone];
+                    [cellBind setAccessoryType:UITableViewCellAccessoryNone];
                     break;
-                case 2:
+                }
+                    
+                case 2: {
                     
                     [[self delegate] setBorderType:MTBarcodeBorderStyleBind];
-
+                    UITableViewCell *cellNone = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+                    UITableViewCell *cellBox = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
+                    [cell setAccessoryType: UITableViewCellAccessoryCheckmark];
+                    [cellNone setAccessoryType:UITableViewCellAccessoryNone];
+                    [cellBox setAccessoryType:UITableViewCellAccessoryNone];
                     break;
+                }
 
                 default:
                     break;

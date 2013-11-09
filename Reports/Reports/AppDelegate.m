@@ -19,11 +19,14 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.148";   //Should be 2.0.1
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.148";
-NSString * const MTGlobalBundleRev                                  = @"769";
+NSString * const MTGlobalBundleVersion                              = @"1.0.149";   //Should be 2.0.1
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.149";
+NSString * const MTGlobalBundleRev                                  = @"770";
 
 @interface AppDelegate()
+
+@property (nonatomic, retain) UIFontDescriptor *mainFontDescriptor;
+@property (nonatomic, retain) UIFontDescriptor *detailFontDescriptor;
 
 @end
 
@@ -36,6 +39,8 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
+    [_mainFontDescriptor release];
+    [_detailFontDescriptor release];
     [_window release];
     [super dealloc];
 }
@@ -90,7 +95,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
     [defaultStore synchronize];
-
+    
     return YES;
 }
 
@@ -344,6 +349,36 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
             [openDocumentViewController updateFileList:self];
         }
     }
+}
+
+#pragma mark - Sigh...
+
+- (UIFont *)mainFont {
+    [self initFonts];
+    return [UIFont fontWithDescriptor:[self mainFontDescriptor] size:18.0000f];
+}
+
+- (UIFont *)detailFont {
+    [self initFonts];
+    return [UIFont fontWithDescriptor:[self detailFontDescriptor] size:12.0000f];
+}
+
+- (void)initFonts {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MTCellSkinner"];
+        
+        UIFont *detailFont = [[cell detailTextLabel] font];
+        UIFontDescriptor *detailFontDescriptor = [[detailFont fontDescriptor] retain];
+        [self setDetailFontDescriptor:detailFontDescriptor];
+        
+        UIFont *mainFont = [[cell textLabel] font];
+        UIFontDescriptor *mainFontDescriptor = [[mainFont fontDescriptor] retain];
+        [self setMainFontDescriptor:mainFontDescriptor];
+        [mainFontDescriptor release];
+        [detailFontDescriptor release];
+        [cell release];
+    });
 }
 
 @end

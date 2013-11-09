@@ -37,4 +37,7 @@ extern NSString * const MTGlobalBundleRev;
 + (NSAttributedString *)attributedStringMadViewer;
 + (NSAttributedString *)attributedStringMadQuery;
 
+- (UIFont *)mainFont;
+- (UIFont *)detailFont;
+
 @end
