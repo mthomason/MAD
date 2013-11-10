@@ -10,6 +10,8 @@
 
 @interface MTViewControllerBarcodeType ()
 
+@property (retain, nonatomic) IBOutlet UIPickerView *pickerView;
+
 @property (nonatomic, retain) NSDictionary *barcodeNamesByType;
 @property (nonatomic, retain) NSArray *barcodeNamesOrdered;
 
@@ -20,6 +22,7 @@
 - (void)dealloc {
     [_barcodeNamesByType release];
     [_barcodeNamesOrdered release];
+    [_pickerView release];
     [super dealloc];
 }
 
@@ -54,6 +57,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSString *barcodeName = [[self barcodeNamesByType] objectForKey:@([self initalKey])];
+    NSInteger index = [[self barcodeNamesOrdered] indexOfObject:barcodeName];
+    [[self pickerView] selectRow:index inComponent:0 animated:animated];
 }
 
 - (void)didReceiveMemoryWarning {

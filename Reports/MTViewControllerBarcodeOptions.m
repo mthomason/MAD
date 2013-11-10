@@ -91,9 +91,16 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
-    if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField"] ||
-        [[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
+    if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
+
         [[segue destinationViewController] setDelegate:self];
+
+    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
+
+        MTViewControllerBarcodeType *barcodeTypeViewController = [segue destinationViewController];
+        [barcodeTypeViewController setInitalKey:[[self barcode] barcodeType]];
+        [barcodeTypeViewController setDelegate:self];
+
     }
 
 }
