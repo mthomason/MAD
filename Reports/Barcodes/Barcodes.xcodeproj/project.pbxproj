@@ -10,6 +10,67 @@
 		4C2D4A961827A8DB005A46C2 /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C2D4A971827A9D5005A46C2 /* libpng16u.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA775E1825EA9700E462F6 /* libpng16u.a */; };
 		4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC7182C1CD400160E01 /* MTBarcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C95CB1F182F99B000160E01 /* MTBarcodeAusreDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB1E182F99B000160E01 /* MTBarcodeAusreDirect.m */; };
+		4C95CB22182F9CAC00160E01 /* MTBarcodeAusreply.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB21182F9CAC00160E01 /* MTBarcodeAusreply.m */; };
+		4C95CB25182FED5800160E01 /* MTBarcodeAusRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB24182FED5800160E01 /* MTBarcodeAusRoute.m */; };
+		4C95CB28182FED9C00160E01 /* MTBarcodeAztec.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB27182FED9C00160E01 /* MTBarcodeAztec.m */; };
+		4C95CB2B182FEDBD00160E01 /* MTBarcodeAztecRunes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB2A182FEDBC00160E01 /* MTBarcodeAztecRunes.m */; };
+		4C95CB2E182FEDCB00160E01 /* MTBarcodeChannelCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB2D182FEDCB00160E01 /* MTBarcodeChannelCode.m */; };
+		4C95CB31182FEDDC00160E01 /* MTBarcodeCodabar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB30182FEDDC00160E01 /* MTBarcodeCodabar.m */; };
+		4C95CB34182FEDEA00160E01 /* MTBarcodeCode11.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB33182FEDEA00160E01 /* MTBarcodeCode11.m */; };
+		4C95CB39182FEE2500160E01 /* MTBarcodeCode16k.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB38182FEE2500160E01 /* MTBarcodeCode16k.m */; };
+		4C95CB3C1830085B00160E01 /* MTBarcodeCode2of5DataLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB3B1830085B00160E01 /* MTBarcodeCode2of5DataLogic.m */; };
+		4C95CB3F1830087200160E01 /* MTBarcodeCode2of5Iata.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB3E1830087200160E01 /* MTBarcodeCode2of5Iata.m */; };
+		4C95CB421830088A00160E01 /* MTBarcodeCode2of5Industrial.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB411830088A00160E01 /* MTBarcodeCode2of5Industrial.m */; };
+		4C95CB45183008A100160E01 /* MTBarcodeCode2of5Interleaved.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB44183008A100160E01 /* MTBarcodeCode2of5Interleaved.m */; };
+		4C95CB48183008B400160E01 /* MTBarcodeCode2of5Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB47183008B400160E01 /* MTBarcodeCode2of5Matrix.m */; };
+		4C95CB4B183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB4A183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.m */; };
+		4C95CB4E183008E500160E01 /* MTBarcodeCode39Iso16388.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB4D183008E500160E01 /* MTBarcodeCode39Iso16388.m */; };
+		4C95CB51183008FB00160E01 /* MTBarcodeCode39Extended.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB50183008FB00160E01 /* MTBarcodeCode39Extended.m */; };
+		4C95CB541830091000160E01 /* MTBarcodeCode49.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB531830091000160E01 /* MTBarcodeCode49.m */; };
+		4C95CB571830091D00160E01 /* MTBarcodeCode93.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB561830091D00160E01 /* MTBarcodeCode93.m */; };
+		4C95CB5A1830092B00160E01 /* MTBarcodeCodeOne.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB591830092B00160E01 /* MTBarcodeCodeOne.m */; };
+		4C95CB5D1830093800160E01 /* MTBarcodeDatabar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB5C1830093800160E01 /* MTBarcodeDatabar.m */; };
+		4C95CB601830094D00160E01 /* MTBarcodeDatabarExpanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB5F1830094D00160E01 /* MTBarcodeDatabarExpanded.m */; };
+		4C95CB631830096300160E01 /* MTBarcodeDatabarExpandedStacked.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB621830096300160E01 /* MTBarcodeDatabarExpandedStacked.m */; };
+		4C95CB661830097000160E01 /* MTBarcodeDatabarLimited.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB651830097000160E01 /* MTBarcodeDatabarLimited.m */; };
+		4C95CB691830097E00160E01 /* MTBarcodeDatabarStacked.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB681830097E00160E01 /* MTBarcodeDatabarStacked.m */; };
+		4C95CB6C1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB6B1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.m */; };
+		4C95CB6F183009A700160E01 /* MTBarcodeDataMatrixIso16022.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB6E183009A700160E01 /* MTBarcodeDataMatrixIso16022.m */; };
+		4C95CB72183009B800160E01 /* MTBarcodeDeutschePostIdentcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB71183009B800160E01 /* MTBarcodeDeutschePostIdentcode.m */; };
+		4C95CB75183009D000160E01 /* MTBarcodeDeutschePostLeitcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB74183009D000160E01 /* MTBarcodeDeutschePostLeitcode.m */; };
+		4C95CB78183009E000160E01 /* MTBarcodeDutchPostKix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB77183009E000160E01 /* MTBarcodeDutchPostKix.m */; };
+		4C95CB7B183009EE00160E01 /* MTBarcodeEan14.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB7A183009EE00160E01 /* MTBarcodeEan14.m */; };
+		4C95CB7E18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB7D18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.m */; };
+		4C95CB8118300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB8018300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.m */; };
+		4C95CB8418300A3100160E01 /* MTBarcodeFlattermarken.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB8318300A3100160E01 /* MTBarcodeFlattermarken.m */; };
+		4C95CB8718300A3F00160E01 /* MTBarcodeGridMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB8618300A3F00160E01 /* MTBarcodeGridMatrix.m */; };
+		4C95CB8A18300A5000160E01 /* MTBarcodeItf14.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB8918300A5000160E01 /* MTBarcodeItf14.m */; };
+		4C95CB8D18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB8C18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.m */; };
+		4C95CB9018300A7500160E01 /* MTBarcodeJapanesePostalBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB8F18300A7500160E01 /* MTBarcodeJapanesePostalBarcode.m */; };
+		4C95CB9318300A8700160E01 /* MTBarcodeKoreanPostalBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB9218300A8700160E01 /* MTBarcodeKoreanPostalBarcode.m */; };
+		4C95CB9618300A9A00160E01 /* MTBarcodeLogmars.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB9518300A9A00160E01 /* MTBarcodeLogmars.m */; };
+		4C95CB9918300AAB00160E01 /* MTBarcodeMaxicodeIso16023.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB9818300AAB00160E01 /* MTBarcodeMaxicodeIso16023.m */; };
+		4C95CB9C18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB9B18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.m */; };
+		4C95CB9F18300AD200160E01 /* MTBarcodeMicroQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB9E18300AD200160E01 /* MTBarcodeMicroQrCode.m */; };
+		4C95CBA218300AE200160E01 /* MTBarcodeMsiPlessey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBA118300AE200160E01 /* MTBarcodeMsiPlessey.m */; };
+		4C95CBA518300AEE00160E01 /* MTBarcodeNve18.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBA418300AEE00160E01 /* MTBarcodeNve18.m */; };
+		4C95CBA818300B0200160E01 /* MTBarcodePdf417Iso15438.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBA718300B0200160E01 /* MTBarcodePdf417Iso15438.m */; };
+		4C95CBAB18300B0B00160E01 /* MTBarcodePharmacode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBAA18300B0B00160E01 /* MTBarcodePharmacode.m */; };
+		4C95CBAE18300B1A00160E01 /* MTBarcodePharmacode2Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBAD18300B1A00160E01 /* MTBarcodePharmacode2Track.m */; };
+		4C95CBB118300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBB018300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.m */; };
+		4C95CBB418300B3B00160E01 /* MTBarcodePlanet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBB318300B3B00160E01 /* MTBarcodePlanet.m */; };
+		4C95CBB718300B4400160E01 /* MTBarcodePostnet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBB618300B4400160E01 /* MTBarcodePostnet.m */; };
+		4C95CBBA18300B5700160E01 /* MTBarcodeQrCodeIso18004.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBB918300B5700160E01 /* MTBarcodeQrCodeIso18004.m */; };
+		4C95CBBD18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBBC18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.m */; };
+		4C95CBC018300B7B00160E01 /* MTBarcodeTelepen.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBBF18300B7B00160E01 /* MTBarcodeTelepen.m */; };
+		4C95CBC318300B8700160E01 /* MTBarcodeTelepenNumeric.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBC218300B8700160E01 /* MTBarcodeTelepenNumeric.m */; };
+		4C95CBC618300B9400160E01 /* MTBarcodeUkPlessey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBC518300B9400160E01 /* MTBarcodeUkPlessey.m */; };
+		4C95CBC918300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBC818300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.m */; };
+		4C95CBCC18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBCB18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.m */; };
+		4C95CBCF18300BD100160E01 /* MTBarcodeUspsIntelligentMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBCE18300BD100160E01 /* MTBarcodeUspsIntelligentMail.m */; };
+		4C95CBD21830107900160E01 /* MTBarcodeAusPostStandardCustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBD11830107900160E01 /* MTBarcodeAusPostStandardCustomer.m */; };
+		4C95CBD51830149E00160E01 /* MTBarcodeCode128Iso15417.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBD41830149E00160E01 /* MTBarcodeCode128Iso15417.m */; };
 		4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CF1825E8D400E462F6 /* Foundation.framework */; };
 		4CDA76DE1825E8D400E462F6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76DD1825E8D400E462F6 /* XCTest.framework */; };
 		4CDA76DF1825E8D400E462F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CF1825E8D400E462F6 /* Foundation.framework */; };
@@ -79,6 +140,128 @@
 		4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeView.m; sourceTree = "<group>"; };
 		4C95CAC6182C1CD400160E01 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcode.h; sourceTree = "<group>"; };
 		4C95CAC7182C1CD400160E01 /* MTBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcode.m; sourceTree = "<group>"; };
+		4C95CB1D182F99B000160E01 /* MTBarcodeAusreDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAusreDirect.h; sourceTree = "<group>"; };
+		4C95CB1E182F99B000160E01 /* MTBarcodeAusreDirect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeAusreDirect.m; sourceTree = "<group>"; };
+		4C95CB20182F9CAC00160E01 /* MTBarcodeAusreply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAusreply.h; sourceTree = "<group>"; };
+		4C95CB21182F9CAC00160E01 /* MTBarcodeAusreply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeAusreply.m; sourceTree = "<group>"; };
+		4C95CB23182FED5800160E01 /* MTBarcodeAusRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAusRoute.h; sourceTree = "<group>"; };
+		4C95CB24182FED5800160E01 /* MTBarcodeAusRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeAusRoute.m; sourceTree = "<group>"; };
+		4C95CB26182FED9C00160E01 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAztec.h; sourceTree = "<group>"; };
+		4C95CB27182FED9C00160E01 /* MTBarcodeAztec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeAztec.m; sourceTree = "<group>"; };
+		4C95CB29182FEDBC00160E01 /* MTBarcodeAztecRunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAztecRunes.h; sourceTree = "<group>"; };
+		4C95CB2A182FEDBC00160E01 /* MTBarcodeAztecRunes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeAztecRunes.m; sourceTree = "<group>"; };
+		4C95CB2C182FEDCB00160E01 /* MTBarcodeChannelCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeChannelCode.h; sourceTree = "<group>"; };
+		4C95CB2D182FEDCB00160E01 /* MTBarcodeChannelCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeChannelCode.m; sourceTree = "<group>"; };
+		4C95CB2F182FEDDC00160E01 /* MTBarcodeCodabar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCodabar.h; sourceTree = "<group>"; };
+		4C95CB30182FEDDC00160E01 /* MTBarcodeCodabar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCodabar.m; sourceTree = "<group>"; };
+		4C95CB32182FEDEA00160E01 /* MTBarcodeCode11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode11.h; sourceTree = "<group>"; };
+		4C95CB33182FEDEA00160E01 /* MTBarcodeCode11.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode11.m; sourceTree = "<group>"; };
+		4C95CB37182FEE2500160E01 /* MTBarcodeCode16k.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode16k.h; sourceTree = "<group>"; };
+		4C95CB38182FEE2500160E01 /* MTBarcodeCode16k.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode16k.m; sourceTree = "<group>"; };
+		4C95CB3A1830085B00160E01 /* MTBarcodeCode2of5DataLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode2of5DataLogic.h; sourceTree = "<group>"; };
+		4C95CB3B1830085B00160E01 /* MTBarcodeCode2of5DataLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode2of5DataLogic.m; sourceTree = "<group>"; };
+		4C95CB3D1830087200160E01 /* MTBarcodeCode2of5Iata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode2of5Iata.h; sourceTree = "<group>"; };
+		4C95CB3E1830087200160E01 /* MTBarcodeCode2of5Iata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode2of5Iata.m; sourceTree = "<group>"; };
+		4C95CB401830088A00160E01 /* MTBarcodeCode2of5Industrial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode2of5Industrial.h; sourceTree = "<group>"; };
+		4C95CB411830088A00160E01 /* MTBarcodeCode2of5Industrial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode2of5Industrial.m; sourceTree = "<group>"; };
+		4C95CB43183008A100160E01 /* MTBarcodeCode2of5Interleaved.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode2of5Interleaved.h; sourceTree = "<group>"; };
+		4C95CB44183008A100160E01 /* MTBarcodeCode2of5Interleaved.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode2of5Interleaved.m; sourceTree = "<group>"; };
+		4C95CB46183008B400160E01 /* MTBarcodeCode2of5Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode2of5Matrix.h; sourceTree = "<group>"; };
+		4C95CB47183008B400160E01 /* MTBarcodeCode2of5Matrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode2of5Matrix.m; sourceTree = "<group>"; };
+		4C95CB49183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode32ItalianPharmacode.h; sourceTree = "<group>"; };
+		4C95CB4A183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode32ItalianPharmacode.m; sourceTree = "<group>"; };
+		4C95CB4C183008E500160E01 /* MTBarcodeCode39Iso16388.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode39Iso16388.h; sourceTree = "<group>"; };
+		4C95CB4D183008E500160E01 /* MTBarcodeCode39Iso16388.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode39Iso16388.m; sourceTree = "<group>"; };
+		4C95CB4F183008FB00160E01 /* MTBarcodeCode39Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode39Extended.h; sourceTree = "<group>"; };
+		4C95CB50183008FB00160E01 /* MTBarcodeCode39Extended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode39Extended.m; sourceTree = "<group>"; };
+		4C95CB521830091000160E01 /* MTBarcodeCode49.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode49.h; sourceTree = "<group>"; };
+		4C95CB531830091000160E01 /* MTBarcodeCode49.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode49.m; sourceTree = "<group>"; };
+		4C95CB551830091D00160E01 /* MTBarcodeCode93.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode93.h; sourceTree = "<group>"; };
+		4C95CB561830091D00160E01 /* MTBarcodeCode93.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode93.m; sourceTree = "<group>"; };
+		4C95CB581830092B00160E01 /* MTBarcodeCodeOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCodeOne.h; sourceTree = "<group>"; };
+		4C95CB591830092B00160E01 /* MTBarcodeCodeOne.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCodeOne.m; sourceTree = "<group>"; };
+		4C95CB5B1830093800160E01 /* MTBarcodeDatabar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDatabar.h; sourceTree = "<group>"; };
+		4C95CB5C1830093800160E01 /* MTBarcodeDatabar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDatabar.m; sourceTree = "<group>"; };
+		4C95CB5E1830094D00160E01 /* MTBarcodeDatabarExpanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDatabarExpanded.h; sourceTree = "<group>"; };
+		4C95CB5F1830094D00160E01 /* MTBarcodeDatabarExpanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDatabarExpanded.m; sourceTree = "<group>"; };
+		4C95CB611830096300160E01 /* MTBarcodeDatabarExpandedStacked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDatabarExpandedStacked.h; sourceTree = "<group>"; };
+		4C95CB621830096300160E01 /* MTBarcodeDatabarExpandedStacked.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDatabarExpandedStacked.m; sourceTree = "<group>"; };
+		4C95CB641830097000160E01 /* MTBarcodeDatabarLimited.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDatabarLimited.h; sourceTree = "<group>"; };
+		4C95CB651830097000160E01 /* MTBarcodeDatabarLimited.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDatabarLimited.m; sourceTree = "<group>"; };
+		4C95CB671830097E00160E01 /* MTBarcodeDatabarStacked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDatabarStacked.h; sourceTree = "<group>"; };
+		4C95CB681830097E00160E01 /* MTBarcodeDatabarStacked.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDatabarStacked.m; sourceTree = "<group>"; };
+		4C95CB6A1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDatabarStackedOmnidirectional.h; sourceTree = "<group>"; };
+		4C95CB6B1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDatabarStackedOmnidirectional.m; sourceTree = "<group>"; };
+		4C95CB6D183009A700160E01 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
+		4C95CB6E183009A700160E01 /* MTBarcodeDataMatrixIso16022.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDataMatrixIso16022.m; sourceTree = "<group>"; };
+		4C95CB70183009B800160E01 /* MTBarcodeDeutschePostIdentcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDeutschePostIdentcode.h; sourceTree = "<group>"; };
+		4C95CB71183009B800160E01 /* MTBarcodeDeutschePostIdentcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDeutschePostIdentcode.m; sourceTree = "<group>"; };
+		4C95CB73183009D000160E01 /* MTBarcodeDeutschePostLeitcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDeutschePostLeitcode.h; sourceTree = "<group>"; };
+		4C95CB74183009D000160E01 /* MTBarcodeDeutschePostLeitcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDeutschePostLeitcode.m; sourceTree = "<group>"; };
+		4C95CB76183009E000160E01 /* MTBarcodeDutchPostKix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeDutchPostKix.h; sourceTree = "<group>"; };
+		4C95CB77183009E000160E01 /* MTBarcodeDutchPostKix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeDutchPostKix.m; sourceTree = "<group>"; };
+		4C95CB79183009EE00160E01 /* MTBarcodeEan14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeEan14.h; sourceTree = "<group>"; };
+		4C95CB7A183009EE00160E01 /* MTBarcodeEan14.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeEan14.m; sourceTree = "<group>"; };
+		4C95CB7C18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeEuropeanArticleNumberEan.h; sourceTree = "<group>"; };
+		4C95CB7D18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeEuropeanArticleNumberEan.m; sourceTree = "<group>"; };
+		4C95CB7F18300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeFacingIdentificationMarkFim.h; sourceTree = "<group>"; };
+		4C95CB8018300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeFacingIdentificationMarkFim.m; sourceTree = "<group>"; };
+		4C95CB8218300A3100160E01 /* MTBarcodeFlattermarken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeFlattermarken.h; sourceTree = "<group>"; };
+		4C95CB8318300A3100160E01 /* MTBarcodeFlattermarken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeFlattermarken.m; sourceTree = "<group>"; };
+		4C95CB8518300A3F00160E01 /* MTBarcodeGridMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeGridMatrix.h; sourceTree = "<group>"; };
+		4C95CB8618300A3F00160E01 /* MTBarcodeGridMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeGridMatrix.m; sourceTree = "<group>"; };
+		4C95CB8818300A5000160E01 /* MTBarcodeItf14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeItf14.h; sourceTree = "<group>"; };
+		4C95CB8918300A5000160E01 /* MTBarcodeItf14.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeItf14.m; sourceTree = "<group>"; };
+		4C95CB8B18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeInternationalStandardBookNumberIsbn.h; sourceTree = "<group>"; };
+		4C95CB8C18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeInternationalStandardBookNumberIsbn.m; sourceTree = "<group>"; };
+		4C95CB8E18300A7500160E01 /* MTBarcodeJapanesePostalBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeJapanesePostalBarcode.h; sourceTree = "<group>"; };
+		4C95CB8F18300A7500160E01 /* MTBarcodeJapanesePostalBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeJapanesePostalBarcode.m; sourceTree = "<group>"; };
+		4C95CB9118300A8700160E01 /* MTBarcodeKoreanPostalBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeKoreanPostalBarcode.h; sourceTree = "<group>"; };
+		4C95CB9218300A8700160E01 /* MTBarcodeKoreanPostalBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeKoreanPostalBarcode.m; sourceTree = "<group>"; };
+		4C95CB9418300A9A00160E01 /* MTBarcodeLogmars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeLogmars.h; sourceTree = "<group>"; };
+		4C95CB9518300A9A00160E01 /* MTBarcodeLogmars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeLogmars.m; sourceTree = "<group>"; };
+		4C95CB9718300AAB00160E01 /* MTBarcodeMaxicodeIso16023.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeMaxicodeIso16023.h; sourceTree = "<group>"; };
+		4C95CB9818300AAB00160E01 /* MTBarcodeMaxicodeIso16023.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeMaxicodeIso16023.m; sourceTree = "<group>"; };
+		4C95CB9A18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeMicroPdf417Iso24728.h; sourceTree = "<group>"; };
+		4C95CB9B18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeMicroPdf417Iso24728.m; sourceTree = "<group>"; };
+		4C95CB9D18300AD200160E01 /* MTBarcodeMicroQrCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeMicroQrCode.h; sourceTree = "<group>"; };
+		4C95CB9E18300AD200160E01 /* MTBarcodeMicroQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeMicroQrCode.m; sourceTree = "<group>"; };
+		4C95CBA018300AE200160E01 /* MTBarcodeMsiPlessey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeMsiPlessey.h; sourceTree = "<group>"; };
+		4C95CBA118300AE200160E01 /* MTBarcodeMsiPlessey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeMsiPlessey.m; sourceTree = "<group>"; };
+		4C95CBA318300AEE00160E01 /* MTBarcodeNve18.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeNve18.h; sourceTree = "<group>"; };
+		4C95CBA418300AEE00160E01 /* MTBarcodeNve18.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeNve18.m; sourceTree = "<group>"; };
+		4C95CBA618300B0200160E01 /* MTBarcodePdf417Iso15438.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodePdf417Iso15438.h; sourceTree = "<group>"; };
+		4C95CBA718300B0200160E01 /* MTBarcodePdf417Iso15438.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodePdf417Iso15438.m; sourceTree = "<group>"; };
+		4C95CBA918300B0B00160E01 /* MTBarcodePharmacode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodePharmacode.h; sourceTree = "<group>"; };
+		4C95CBAA18300B0B00160E01 /* MTBarcodePharmacode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodePharmacode.m; sourceTree = "<group>"; };
+		4C95CBAC18300B1A00160E01 /* MTBarcodePharmacode2Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodePharmacode2Track.h; sourceTree = "<group>"; };
+		4C95CBAD18300B1A00160E01 /* MTBarcodePharmacode2Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodePharmacode2Track.m; sourceTree = "<group>"; };
+		4C95CBAF18300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodePharmaZentralnummerPzn.h; sourceTree = "<group>"; };
+		4C95CBB018300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodePharmaZentralnummerPzn.m; sourceTree = "<group>"; };
+		4C95CBB218300B3B00160E01 /* MTBarcodePlanet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodePlanet.h; sourceTree = "<group>"; };
+		4C95CBB318300B3B00160E01 /* MTBarcodePlanet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodePlanet.m; sourceTree = "<group>"; };
+		4C95CBB518300B4400160E01 /* MTBarcodePostnet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodePostnet.h; sourceTree = "<group>"; };
+		4C95CBB618300B4400160E01 /* MTBarcodePostnet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodePostnet.m; sourceTree = "<group>"; };
+		4C95CBB818300B5700160E01 /* MTBarcodeQrCodeIso18004.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeQrCodeIso18004.h; sourceTree = "<group>"; };
+		4C95CBB918300B5700160E01 /* MTBarcodeQrCodeIso18004.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeQrCodeIso18004.m; sourceTree = "<group>"; };
+		4C95CBBB18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeRoyalMail4StateBarcode.h; sourceTree = "<group>"; };
+		4C95CBBC18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeRoyalMail4StateBarcode.m; sourceTree = "<group>"; };
+		4C95CBBE18300B7B00160E01 /* MTBarcodeTelepen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeTelepen.h; sourceTree = "<group>"; };
+		4C95CBBF18300B7B00160E01 /* MTBarcodeTelepen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeTelepen.m; sourceTree = "<group>"; };
+		4C95CBC118300B8700160E01 /* MTBarcodeTelepenNumeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeTelepenNumeric.h; sourceTree = "<group>"; };
+		4C95CBC218300B8700160E01 /* MTBarcodeTelepenNumeric.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeTelepenNumeric.m; sourceTree = "<group>"; };
+		4C95CBC418300B9400160E01 /* MTBarcodeUkPlessey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeUkPlessey.h; sourceTree = "<group>"; };
+		4C95CBC518300B9400160E01 /* MTBarcodeUkPlessey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeUkPlessey.m; sourceTree = "<group>"; };
+		4C95CBC718300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeUniversalProductCodeUpca.h; sourceTree = "<group>"; };
+		4C95CBC818300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeUniversalProductCodeUpca.m; sourceTree = "<group>"; };
+		4C95CBCA18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeUniversalProductCodeUpce.h; sourceTree = "<group>"; };
+		4C95CBCB18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeUniversalProductCodeUpce.m; sourceTree = "<group>"; };
+		4C95CBCD18300BD100160E01 /* MTBarcodeUspsIntelligentMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeUspsIntelligentMail.h; sourceTree = "<group>"; };
+		4C95CBCE18300BD100160E01 /* MTBarcodeUspsIntelligentMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeUspsIntelligentMail.m; sourceTree = "<group>"; };
+		4C95CBD01830107900160E01 /* MTBarcodeAusPostStandardCustomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAusPostStandardCustomer.h; sourceTree = "<group>"; };
+		4C95CBD11830107900160E01 /* MTBarcodeAusPostStandardCustomer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeAusPostStandardCustomer.m; sourceTree = "<group>"; };
+		4C95CBD31830149E00160E01 /* MTBarcodeCode128Iso15417.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeCode128Iso15417.h; sourceTree = "<group>"; };
+		4C95CBD41830149E00160E01 /* MTBarcodeCode128Iso15417.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeCode128Iso15417.m; sourceTree = "<group>"; };
 		4CDA76CC1825E8D400E462F6 /* libBarcodes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBarcodes.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA76CF1825E8D400E462F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CDA76D31825E8D400E462F6 /* Barcodes-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Barcodes-Prefix.pch"; sourceTree = "<group>"; };
@@ -219,6 +402,128 @@
 				4C95CAC6182C1CD400160E01 /* MTBarcode.h */,
 				4C95CAC7182C1CD400160E01 /* MTBarcode.m */,
 				4CDA76D21825E8D400E462F6 /* Supporting Files */,
+				4C95CB1D182F99B000160E01 /* MTBarcodeAusreDirect.h */,
+				4C95CB1E182F99B000160E01 /* MTBarcodeAusreDirect.m */,
+				4C95CB20182F9CAC00160E01 /* MTBarcodeAusreply.h */,
+				4C95CB21182F9CAC00160E01 /* MTBarcodeAusreply.m */,
+				4C95CB23182FED5800160E01 /* MTBarcodeAusRoute.h */,
+				4C95CB24182FED5800160E01 /* MTBarcodeAusRoute.m */,
+				4C95CBD01830107900160E01 /* MTBarcodeAusPostStandardCustomer.h */,
+				4C95CBD11830107900160E01 /* MTBarcodeAusPostStandardCustomer.m */,
+				4C95CB26182FED9C00160E01 /* MTBarcodeAztec.h */,
+				4C95CB27182FED9C00160E01 /* MTBarcodeAztec.m */,
+				4C95CB29182FEDBC00160E01 /* MTBarcodeAztecRunes.h */,
+				4C95CB2A182FEDBC00160E01 /* MTBarcodeAztecRunes.m */,
+				4C95CB2C182FEDCB00160E01 /* MTBarcodeChannelCode.h */,
+				4C95CB2D182FEDCB00160E01 /* MTBarcodeChannelCode.m */,
+				4C95CB2F182FEDDC00160E01 /* MTBarcodeCodabar.h */,
+				4C95CB30182FEDDC00160E01 /* MTBarcodeCodabar.m */,
+				4C95CB32182FEDEA00160E01 /* MTBarcodeCode11.h */,
+				4C95CB33182FEDEA00160E01 /* MTBarcodeCode11.m */,
+				4C95CBD31830149E00160E01 /* MTBarcodeCode128Iso15417.h */,
+				4C95CBD41830149E00160E01 /* MTBarcodeCode128Iso15417.m */,
+				4C95CB37182FEE2500160E01 /* MTBarcodeCode16k.h */,
+				4C95CB38182FEE2500160E01 /* MTBarcodeCode16k.m */,
+				4C95CB3A1830085B00160E01 /* MTBarcodeCode2of5DataLogic.h */,
+				4C95CB3B1830085B00160E01 /* MTBarcodeCode2of5DataLogic.m */,
+				4C95CB3D1830087200160E01 /* MTBarcodeCode2of5Iata.h */,
+				4C95CB3E1830087200160E01 /* MTBarcodeCode2of5Iata.m */,
+				4C95CB401830088A00160E01 /* MTBarcodeCode2of5Industrial.h */,
+				4C95CB411830088A00160E01 /* MTBarcodeCode2of5Industrial.m */,
+				4C95CB43183008A100160E01 /* MTBarcodeCode2of5Interleaved.h */,
+				4C95CB44183008A100160E01 /* MTBarcodeCode2of5Interleaved.m */,
+				4C95CB46183008B400160E01 /* MTBarcodeCode2of5Matrix.h */,
+				4C95CB47183008B400160E01 /* MTBarcodeCode2of5Matrix.m */,
+				4C95CB49183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.h */,
+				4C95CB4A183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.m */,
+				4C95CB4C183008E500160E01 /* MTBarcodeCode39Iso16388.h */,
+				4C95CB4D183008E500160E01 /* MTBarcodeCode39Iso16388.m */,
+				4C95CB4F183008FB00160E01 /* MTBarcodeCode39Extended.h */,
+				4C95CB50183008FB00160E01 /* MTBarcodeCode39Extended.m */,
+				4C95CB521830091000160E01 /* MTBarcodeCode49.h */,
+				4C95CB531830091000160E01 /* MTBarcodeCode49.m */,
+				4C95CB551830091D00160E01 /* MTBarcodeCode93.h */,
+				4C95CB561830091D00160E01 /* MTBarcodeCode93.m */,
+				4C95CB581830092B00160E01 /* MTBarcodeCodeOne.h */,
+				4C95CB591830092B00160E01 /* MTBarcodeCodeOne.m */,
+				4C95CB5B1830093800160E01 /* MTBarcodeDatabar.h */,
+				4C95CB5C1830093800160E01 /* MTBarcodeDatabar.m */,
+				4C95CB5E1830094D00160E01 /* MTBarcodeDatabarExpanded.h */,
+				4C95CB5F1830094D00160E01 /* MTBarcodeDatabarExpanded.m */,
+				4C95CB611830096300160E01 /* MTBarcodeDatabarExpandedStacked.h */,
+				4C95CB621830096300160E01 /* MTBarcodeDatabarExpandedStacked.m */,
+				4C95CB641830097000160E01 /* MTBarcodeDatabarLimited.h */,
+				4C95CB651830097000160E01 /* MTBarcodeDatabarLimited.m */,
+				4C95CB671830097E00160E01 /* MTBarcodeDatabarStacked.h */,
+				4C95CB681830097E00160E01 /* MTBarcodeDatabarStacked.m */,
+				4C95CB6A1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.h */,
+				4C95CB6B1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.m */,
+				4C95CB6D183009A700160E01 /* MTBarcodeDataMatrixIso16022.h */,
+				4C95CB6E183009A700160E01 /* MTBarcodeDataMatrixIso16022.m */,
+				4C95CB70183009B800160E01 /* MTBarcodeDeutschePostIdentcode.h */,
+				4C95CB71183009B800160E01 /* MTBarcodeDeutschePostIdentcode.m */,
+				4C95CB73183009D000160E01 /* MTBarcodeDeutschePostLeitcode.h */,
+				4C95CB74183009D000160E01 /* MTBarcodeDeutschePostLeitcode.m */,
+				4C95CB76183009E000160E01 /* MTBarcodeDutchPostKix.h */,
+				4C95CB77183009E000160E01 /* MTBarcodeDutchPostKix.m */,
+				4C95CB79183009EE00160E01 /* MTBarcodeEan14.h */,
+				4C95CB7A183009EE00160E01 /* MTBarcodeEan14.m */,
+				4C95CB7C18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.h */,
+				4C95CB7D18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.m */,
+				4C95CB7F18300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.h */,
+				4C95CB8018300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.m */,
+				4C95CB8218300A3100160E01 /* MTBarcodeFlattermarken.h */,
+				4C95CB8318300A3100160E01 /* MTBarcodeFlattermarken.m */,
+				4C95CB8518300A3F00160E01 /* MTBarcodeGridMatrix.h */,
+				4C95CB8618300A3F00160E01 /* MTBarcodeGridMatrix.m */,
+				4C95CB8818300A5000160E01 /* MTBarcodeItf14.h */,
+				4C95CB8918300A5000160E01 /* MTBarcodeItf14.m */,
+				4C95CB8B18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.h */,
+				4C95CB8C18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.m */,
+				4C95CB8E18300A7500160E01 /* MTBarcodeJapanesePostalBarcode.h */,
+				4C95CB8F18300A7500160E01 /* MTBarcodeJapanesePostalBarcode.m */,
+				4C95CB9118300A8700160E01 /* MTBarcodeKoreanPostalBarcode.h */,
+				4C95CB9218300A8700160E01 /* MTBarcodeKoreanPostalBarcode.m */,
+				4C95CB9418300A9A00160E01 /* MTBarcodeLogmars.h */,
+				4C95CB9518300A9A00160E01 /* MTBarcodeLogmars.m */,
+				4C95CB9718300AAB00160E01 /* MTBarcodeMaxicodeIso16023.h */,
+				4C95CB9818300AAB00160E01 /* MTBarcodeMaxicodeIso16023.m */,
+				4C95CB9A18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.h */,
+				4C95CB9B18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.m */,
+				4C95CB9D18300AD200160E01 /* MTBarcodeMicroQrCode.h */,
+				4C95CB9E18300AD200160E01 /* MTBarcodeMicroQrCode.m */,
+				4C95CBA018300AE200160E01 /* MTBarcodeMsiPlessey.h */,
+				4C95CBA118300AE200160E01 /* MTBarcodeMsiPlessey.m */,
+				4C95CBA318300AEE00160E01 /* MTBarcodeNve18.h */,
+				4C95CBA418300AEE00160E01 /* MTBarcodeNve18.m */,
+				4C95CBA618300B0200160E01 /* MTBarcodePdf417Iso15438.h */,
+				4C95CBA718300B0200160E01 /* MTBarcodePdf417Iso15438.m */,
+				4C95CBA918300B0B00160E01 /* MTBarcodePharmacode.h */,
+				4C95CBAA18300B0B00160E01 /* MTBarcodePharmacode.m */,
+				4C95CBAC18300B1A00160E01 /* MTBarcodePharmacode2Track.h */,
+				4C95CBAD18300B1A00160E01 /* MTBarcodePharmacode2Track.m */,
+				4C95CBAF18300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.h */,
+				4C95CBB018300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.m */,
+				4C95CBB218300B3B00160E01 /* MTBarcodePlanet.h */,
+				4C95CBB318300B3B00160E01 /* MTBarcodePlanet.m */,
+				4C95CBB518300B4400160E01 /* MTBarcodePostnet.h */,
+				4C95CBB618300B4400160E01 /* MTBarcodePostnet.m */,
+				4C95CBB818300B5700160E01 /* MTBarcodeQrCodeIso18004.h */,
+				4C95CBB918300B5700160E01 /* MTBarcodeQrCodeIso18004.m */,
+				4C95CBBB18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.h */,
+				4C95CBBC18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.m */,
+				4C95CBBE18300B7B00160E01 /* MTBarcodeTelepen.h */,
+				4C95CBBF18300B7B00160E01 /* MTBarcodeTelepen.m */,
+				4C95CBC118300B8700160E01 /* MTBarcodeTelepenNumeric.h */,
+				4C95CBC218300B8700160E01 /* MTBarcodeTelepenNumeric.m */,
+				4C95CBC418300B9400160E01 /* MTBarcodeUkPlessey.h */,
+				4C95CBC518300B9400160E01 /* MTBarcodeUkPlessey.m */,
+				4C95CBC718300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.h */,
+				4C95CBC818300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.m */,
+				4C95CBCA18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.h */,
+				4C95CBCB18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.m */,
+				4C95CBCD18300BD100160E01 /* MTBarcodeUspsIntelligentMail.h */,
+				4C95CBCE18300BD100160E01 /* MTBarcodeUspsIntelligentMail.m */,
 			);
 			path = Barcodes;
 			sourceTree = "<group>";
@@ -405,39 +710,100 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C95CBAE18300B1A00160E01 /* MTBarcodePharmacode2Track.m in Sources */,
+				4C95CBA518300AEE00160E01 /* MTBarcodeNve18.m in Sources */,
 				4CDA77531825EA1F00E462F6 /* svg.c in Sources */,
 				4CDA77551825EA1F00E462F6 /* upcean.c in Sources */,
 				4CDA77521825EA1F00E462F6 /* rss.c in Sources */,
+				4C95CB75183009D000160E01 /* MTBarcodeDeutschePostLeitcode.m in Sources */,
+				4C95CBAB18300B0B00160E01 /* MTBarcodePharmacode.m in Sources */,
+				4C95CBCF18300BD100160E01 /* MTBarcodeUspsIntelligentMail.m in Sources */,
 				4CDA77431825EA1F00E462F6 /* gs1.c in Sources */,
+				4C95CB631830096300160E01 /* MTBarcodeDatabarExpandedStacked.m in Sources */,
 				4CDA774B1825EA1F00E462F6 /* plessey.c in Sources */,
+				4C95CB8A18300A5000160E01 /* MTBarcodeItf14.m in Sources */,
+				4C95CB541830091000160E01 /* MTBarcodeCode49.m in Sources */,
 				4CDA773D1825EA1F00E462F6 /* code128.c in Sources */,
+				4C95CB421830088A00160E01 /* MTBarcodeCode2of5Industrial.m in Sources */,
 				4CDA774C1825EA1F00E462F6 /* png.c in Sources */,
+				4C95CB28182FED9C00160E01 /* MTBarcodeAztec.m in Sources */,
+				4C95CBA218300AE200160E01 /* MTBarcodeMsiPlessey.m in Sources */,
+				4C95CB34182FEDEA00160E01 /* MTBarcodeCode11.m in Sources */,
 				4CDA77501825EA1F00E462F6 /* reedsol.c in Sources */,
 				4CDA77541825EA1F00E462F6 /* telepen.c in Sources */,
+				4C95CB661830097000160E01 /* MTBarcodeDatabarLimited.m in Sources */,
+				4C95CB8718300A3F00160E01 /* MTBarcodeGridMatrix.m in Sources */,
+				4C95CB22182F9CAC00160E01 /* MTBarcodeAusreply.m in Sources */,
+				4C95CB1F182F99B000160E01 /* MTBarcodeAusreDirect.m in Sources */,
+				4C95CB39182FEE2500160E01 /* MTBarcodeCode16k.m in Sources */,
+				4C95CB9318300A8700160E01 /* MTBarcodeKoreanPostalBarcode.m in Sources */,
+				4C95CB6F183009A700160E01 /* MTBarcodeDataMatrixIso16022.m in Sources */,
+				4C95CBC618300B9400160E01 /* MTBarcodeUkPlessey.m in Sources */,
+				4C95CBC018300B7B00160E01 /* MTBarcodeTelepen.m in Sources */,
+				4C95CB601830094D00160E01 /* MTBarcodeDatabarExpanded.m in Sources */,
 				4CDA773A1825EA1F00E462F6 /* code1.c in Sources */,
+				4C95CB45183008A100160E01 /* MTBarcodeCode2of5Interleaved.m in Sources */,
 				4CDA77511825EA1F00E462F6 /* render.c in Sources */,
+				4C95CB48183008B400160E01 /* MTBarcodeCode2of5Matrix.m in Sources */,
+				4C95CBB118300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.m in Sources */,
+				4C95CB9618300A9A00160E01 /* MTBarcodeLogmars.m in Sources */,
 				4CDA77411825EA1F00E462F6 /* dmatrix.c in Sources */,
+				4C95CB72183009B800160E01 /* MTBarcodeDeutschePostIdentcode.m in Sources */,
+				4C95CB7E18300A0600160E01 /* MTBarcodeEuropeanArticleNumberEan.m in Sources */,
+				4C95CB3F1830087200160E01 /* MTBarcodeCode2of5Iata.m in Sources */,
+				4C95CB8418300A3100160E01 /* MTBarcodeFlattermarken.m in Sources */,
 				4CDA77481825EA1F00E462F6 /* maxicode.c in Sources */,
 				4CDA774E1825EA1F00E462F6 /* ps.c in Sources */,
+				4C95CB571830091D00160E01 /* MTBarcodeCode93.m in Sources */,
 				4CDA77491825EA1F00E462F6 /* medical.c in Sources */,
+				4C95CBCC18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.m in Sources */,
 				4CDA774A1825EA1F00E462F6 /* pdf417.c in Sources */,
+				4C95CB78183009E000160E01 /* MTBarcodeDutchPostKix.m in Sources */,
+				4C95CBC918300BAE00160E01 /* MTBarcodeUniversalProductCodeUpca.m in Sources */,
 				4CDA77441825EA1F00E462F6 /* imail.c in Sources */,
+				4C95CB4E183008E500160E01 /* MTBarcodeCode39Iso16388.m in Sources */,
+				4C95CB8118300A2200160E01 /* MTBarcodeFacingIdentificationMarkFim.m in Sources */,
+				4C95CBD21830107900160E01 /* MTBarcodeAusPostStandardCustomer.m in Sources */,
+				4C95CB25182FED5800160E01 /* MTBarcodeAusRoute.m in Sources */,
 				4CDA773F1825EA1F00E462F6 /* composite.c in Sources */,
+				4C95CBB418300B3B00160E01 /* MTBarcodePlanet.m in Sources */,
+				4C95CBB718300B4400160E01 /* MTBarcodePostnet.m in Sources */,
+				4C95CBC318300B8700160E01 /* MTBarcodeTelepenNumeric.m in Sources */,
 				4CDA77401825EA1F00E462F6 /* dllversion.c in Sources */,
+				4C95CB691830097E00160E01 /* MTBarcodeDatabarStacked.m in Sources */,
 				4CDA77421825EA1F00E462F6 /* gridmtx.c in Sources */,
+				4C95CB3C1830085B00160E01 /* MTBarcodeCode2of5DataLogic.m in Sources */,
+				4C95CB5A1830092B00160E01 /* MTBarcodeCodeOne.m in Sources */,
+				4C95CB9918300AAB00160E01 /* MTBarcodeMaxicodeIso16023.m in Sources */,
 				4CDA773C1825EA1F00E462F6 /* code49.c in Sources */,
 				4C2D4A961827A8DB005A46C2 /* MTBarcodeView.m in Sources */,
+				4C95CBD51830149E00160E01 /* MTBarcodeCode128Iso15417.m in Sources */,
 				4CDA77451825EA1F00E462F6 /* large.c in Sources */,
+				4C95CBBA18300B5700160E01 /* MTBarcodeQrCodeIso18004.m in Sources */,
+				4C95CB9018300A7500160E01 /* MTBarcodeJapanesePostalBarcode.m in Sources */,
 				4CDA774D1825EA1F00E462F6 /* postal.c in Sources */,
 				4CDA773B1825EA1F00E462F6 /* code16k.c in Sources */,
+				4C95CB4B183008CA00160E01 /* MTBarcodeCode32ItalianPharmacode.m in Sources */,
+				4C95CB2B182FEDBD00160E01 /* MTBarcodeAztecRunes.m in Sources */,
+				4C95CB6C1830099200160E01 /* MTBarcodeDatabarStackedOmnidirectional.m in Sources */,
+				4C95CB51183008FB00160E01 /* MTBarcodeCode39Extended.m in Sources */,
+				4C95CB5D1830093800160E01 /* MTBarcodeDatabar.m in Sources */,
+				4C95CB7B183009EE00160E01 /* MTBarcodeEan14.m in Sources */,
 				4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */,
 				4CDA77461825EA1F00E462F6 /* library.c in Sources */,
 				4CDA77391825EA1F00E462F6 /* code.c in Sources */,
 				4CDA774F1825EA1F00E462F6 /* qr.c in Sources */,
+				4C95CB8D18300A6700160E01 /* MTBarcodeInternationalStandardBookNumberIsbn.m in Sources */,
+				4C95CBBD18300B6800160E01 /* MTBarcodeRoyalMail4StateBarcode.m in Sources */,
+				4C95CBA818300B0200160E01 /* MTBarcodePdf417Iso15438.m in Sources */,
+				4C95CB31182FEDDC00160E01 /* MTBarcodeCodabar.m in Sources */,
 				4CDA773E1825EA1F00E462F6 /* common.c in Sources */,
+				4C95CB2E182FEDCB00160E01 /* MTBarcodeChannelCode.m in Sources */,
 				4CDA77371825EA1F00E462F6 /* auspost.c in Sources */,
 				4CDA77361825EA1F00E462F6 /* 2of5.c in Sources */,
 				4CDA77381825EA1F00E462F6 /* aztec.c in Sources */,
+				4C95CB9F18300AD200160E01 /* MTBarcodeMicroQrCode.m in Sources */,
+				4C95CB9C18300AC300160E01 /* MTBarcodeMicroPdf417Iso24728.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

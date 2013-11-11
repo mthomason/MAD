@@ -25,6 +25,13 @@
 @implementation MTViewControllerBarcode
 
 - (void)dealloc {
+    NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
+    NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
+    NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
+    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:barcodeTypeString];
+    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:showErrorMessages];
+    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
+
     [_barcode release];
     [_barcodeInput release];
     [_previewViewController release];
@@ -53,7 +60,7 @@
     
     [self setEditModeBarcodeType:NO];
 
-    MTBarcode *barcode = [[MTBarcode alloc] init];
+    MTBarcode *barcode = [[MTBarcode barcodeWithType:MTBarcodeTypeAztec] retain];
     [barcode setShowErrorMessages:YES];
     [self setBarcode:barcode];
     [barcode release];
@@ -75,6 +82,10 @@
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate
+
+- (MTBarcode *)barcodeToDisplay {
+    return [self barcode];
+}
 
 - (void)setSampleData:(NSArray *)sampleData {
     [self setCachedData:sampleData];
@@ -120,7 +131,22 @@
 
 #pragma mark - MTViewControllerBarcodePreviewDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType {
-    [[self barcode] setBarcodeType:barcodeType];
+    MTBarcode *barcode = [[MTBarcode barcodeWithType:barcodeType] retain];
+    
+    NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
+    NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
+    NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
+    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:barcodeTypeString];
+    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:showErrorMessages];
+    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
+    [[self optionsViewController] addObserver:barcode forKeyPath:barcodeTypeString options:NSKeyValueObservingOptionNew context:NULL];
+    [[self optionsViewController] addObserver:barcode forKeyPath:showErrorMessages options:NSKeyValueObservingOptionNew context:NULL];
+    [[self optionsViewController] addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
+    [[self previewViewController] setBarcodeToPreview:barcode];
+    [self setBarcode:barcode];
+    [barcode release];
+    
+    //[[self barcode] setBarcodeType:barcodeType];
     //[[self optionsViewController] setBarcodeType:barcodeType];
     [self updateBarcode];
 }
@@ -138,7 +164,8 @@
         [pvc release];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
         MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[[segue destinationViewController] topViewController] retain];
-        [ovc setBarcode:[self barcode]];
+        
+
         [ovc setDelegate:self];
         [self setOptionsViewController:ovc];
         [ovc release];

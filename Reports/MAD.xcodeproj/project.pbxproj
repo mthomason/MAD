@@ -1058,6 +1058,8 @@
 		4C95CACE182CCA3F00160E01 /* MTBarcode.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CACC182CCA3F00160E01 /* MTBarcode.h */; };
 		4C95CAD1182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */; };
 		4C95CAD2182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */; };
+		4C95CAD7182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD6182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m */; };
+		4C95CAD8182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD6182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m */; };
 		4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */; };
@@ -2564,6 +2566,8 @@
 		4C95CACC182CCA3F00160E01 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = MTBarcode.h; path = Barcodes/Barcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C95CACF182D67CB00160E01 /* MTViewControllerBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodeType.h; sourceTree = "<group>"; };
 		4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcodeType.m; sourceTree = "<group>"; };
+		4C95CAD5182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBarcodeCompositCode.h; sourceTree = "<group>"; };
+		4C95CAD6182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBarcodeCompositCode.m; sourceTree = "<group>"; };
 		4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+UserInterface.h"; sourceTree = "<group>"; };
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
@@ -4320,6 +4324,7 @@
 		4C95CABF182B6D1F00160E01 /* Barcode */ = {
 			isa = PBXGroup;
 			children = (
+				4C95CAD3182F0D0E00160E01 /* Table View Cells */,
 				4C95CAB4182B6CCB00160E01 /* MTViewControllerBarcode.h */,
 				4C95CAB5182B6CCB00160E01 /* MTViewControllerBarcode.m */,
 				4C95CAC0182B6D3E00160E01 /* MTViewControllerBarcodePreview.h */,
@@ -4330,6 +4335,15 @@
 				4C95CAD0182D67CB00160E01 /* MTViewControllerBarcodeType.m */,
 			);
 			name = Barcode;
+			sourceTree = "<group>";
+		};
+		4C95CAD3182F0D0E00160E01 /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4C95CAD5182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.h */,
+				4C95CAD6182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m */,
+			);
+			name = "Table View Cells";
 			sourceTree = "<group>";
 		};
 		4C9962F116401CF800B7BACC /* Products */ = {
@@ -6330,6 +6344,7 @@
 				4C0E7736163B5AEC003B951E /* MTSettingsViewController.m in Sources */,
 				4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */,
 				4C0E773D163B5AEC003B951E /* MTViewControllerOpenDocument.m in Sources */,
+				4C95CAD8182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C0E773E163B5AEC003B951E /* MTDatabaseDriverSelectorViewController.m in Sources */,
 				4CD2FDC317F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
 				4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
@@ -6938,6 +6953,7 @@
 				4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */,
 				4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */,
 				4C88A99214E7AB640069A0AF /* RptqDocumentSection+Extras.m in Sources */,
+				4C95CAD7182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C88A99914EA22F90069A0AF /* SectionEnumerator.m in Sources */,
 				4C88A9B014ECDE560069A0AF /* MTElementView.m in Sources */,
 				4C88A9C714EE23D00069A0AF /* MTResizeHandleView.m in Sources */,

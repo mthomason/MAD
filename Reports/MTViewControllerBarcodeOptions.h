@@ -12,6 +12,7 @@
 #import "MTViewControllerBarcodeType.h"
 
 @protocol MTViewControllerBarcodeOptionsDelegate
+- (MTBarcode *)barcodeToDisplay;
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
 - (BOOL)didToggleHumanReadable;
 - (BOOL)didToggleShowErrorMessages;
@@ -25,8 +26,7 @@
 @interface MTViewControllerBarcodeOptions : UITableViewController
     <MTQueryBuilderChooseFieldDelegate, MTViewControllerBarcodeTypeDelegate>
 
-//@property (nonatomic, assign) MTBarcodeType barcodeType;
-@property (nonatomic, retain) MTBarcode *barcode;
+//@property (nonatomic, retain) MTBarcode *barcode;
 @property (nonatomic, assign) id <MTViewControllerBarcodeOptionsDelegate> delegate;
 
 @end

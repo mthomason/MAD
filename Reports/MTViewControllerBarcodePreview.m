@@ -65,46 +65,6 @@
     [[self barcodeView] setBarcode:barcode];
 }
 
-#pragma mark - UIPickerView Data Source
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
-}
-
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return [[self barcodeNamesOrdered] count];
-}
-
-#pragma mark - UIPickerView Delegate
-
-- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    NSArray *names = [self barcodeNamesOrdered];
-    NSString *tableName = [names objectAtIndex:row];
-    UIColor *strokeColor = [UIColor whiteColor];
-    UIColor *forgroundColor = [UIColor blackColor];
-    NSMutableParagraphStyle *paragraph = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [paragraph setAlignment:NSTextAlignmentCenter];
-    NSDictionary *attributes = @{
-                                 NSStrokeColorAttributeName : strokeColor,
-                                 NSForegroundColorAttributeName : forgroundColor,
-                                 NSParagraphStyleAttributeName : paragraph,
-                                 };
-    [paragraph release];
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:tableName attributes:attributes];
-    return  [attributedString autorelease];
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    NSString *barcodeName = [[self barcodeNamesOrdered] objectAtIndex:row];
-    NSArray *keys = [[self barcodeNamesByType] allKeysForObject:barcodeName];
-    if ([keys count] > 0) {
-        NSNumber *key = [keys objectAtIndex:0];
-        MTBarcodeType resultType = [key integerValue];
-        [[self delegate] didChangeBarcodeType:resultType];
-    }
-}
-
 - (void)update {
     if ([[self barcodeView] barcode] == nil) {
         [[self barcodeView] setBarcode:[self barcode]];

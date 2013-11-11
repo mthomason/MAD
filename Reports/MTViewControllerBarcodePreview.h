@@ -15,7 +15,6 @@
 
 
 @interface MTViewControllerBarcodePreview : UIViewController
-    <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, assign) id <MTViewControllerBarcodePreviewDelegate> delegate;
 - (void)setBarcodeToPreview:(MTBarcode *)barcode;
