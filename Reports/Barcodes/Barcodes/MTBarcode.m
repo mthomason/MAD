@@ -76,12 +76,18 @@
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+@property (nonatomic, assign, readwrite) NSInteger option1;
+@property (nonatomic, assign, readwrite) NSInteger option2;
+@property (nonatomic, assign, readwrite) NSInteger option3;
+@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
 
 @end
 
 @implementation MTBarcode
 
 - (void)dealloc {
+    [_name release];
+    [_detailsSegueIdentifer release];
     [_input release];
     [super dealloc];
 }
@@ -272,6 +278,9 @@
     [self setHeight:50];
     [self setBorderWidth:5];
     [self setRotate:(90.0000f * M_PI / 180.0000f)];
+    [self setOption1: NO];
+    [self setOption2: NO];
+    [self setOption3: NO];
 }
 
 - (void)drawInRect:(CGRect)rect {

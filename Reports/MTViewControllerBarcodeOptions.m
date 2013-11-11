@@ -401,10 +401,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    NSInteger row = [indexPath row];
     switch ([indexPath section]) {
+        case 0:
+            switch (row) {
+                case 2: {
+                    MTBarcode *barcode = [[self delegate] barcodeToDisplay];
+                    if ([barcode has2dComponent]) {
+                        
+                    } else if ([barcode hasOptionalInput]) {
+                        [self performSegueWithIdentifier:[barcode detailsSegueIdentifer] sender:self];
+                    }
+                    
+                    break;
+                }
+                case 3: {
+                    MTBarcode *barcode = [[self delegate] barcodeToDisplay];
+                    [self performSegueWithIdentifier:[barcode detailsSegueIdentifer] sender:self];
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
         case 1:
             
-            switch ([indexPath row]) {
+            switch (row) {
 
                 case 0: {
                     BOOL humanReadable = [[self delegate] didToggleHumanReadable];
@@ -428,7 +450,7 @@
             
             case 2:
             
-            switch ([indexPath row]) {
+            switch (row) {
                 case 0: {
 
                     [[self delegate] setBorderType:MTBarcodeBorderStyleNone];
