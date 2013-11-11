@@ -32,7 +32,7 @@
         [self setName: @"Aztec Code (ISO 24778)"];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: YES];
-        [self setDetailsSegueIdentifer: @"MTIdentiferSegueBarcodeAztecExtras"];
+        [self setDetailsSegueIdentifer: @"MTIdentiferSegueBarcodeExtrasAztec"];
         
     }
     return self;

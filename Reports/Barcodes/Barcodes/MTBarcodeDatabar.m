@@ -11,6 +11,7 @@
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
+
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;

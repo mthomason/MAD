@@ -88,6 +88,7 @@
 - (void)dealloc {
     [_name release];
     [_detailsSegueIdentifer release];
+    [_primaryData release];
     [_input release];
     [super dealloc];
 }

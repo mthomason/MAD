@@ -120,6 +120,8 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
 @property (nonatomic, retain, readonly) NSString *name;
 @property (nonatomic, retain, readonly) NSString *detailsSegueIdentifer;
+@property (nonatomic, retain, readonly) NSString *primaryData;
+
 @property (nonatomic, assign, readonly) BOOL has2dComponent;
 @property (nonatomic, assign, readonly) BOOL hasOptionalInput;
 

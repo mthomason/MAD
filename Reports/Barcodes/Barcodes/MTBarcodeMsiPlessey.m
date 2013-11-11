@@ -11,9 +11,12 @@
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+
+@property (nonatomic, assign, readwrite) NSInteger option2;
 
 @end
 
@@ -24,6 +27,7 @@
     if (self) {
         
         [self setBarcodeType:[MTBarcodeMsiPlessey type]];
+        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"];
         [self setName: @"MSI Plessey"];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: YES];
@@ -34,6 +38,11 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeMsiPlessey;
+}
+
+- (void)setCheckDigit:(NSInteger)checkDigit {
+    NSAssert(checkDigit == 0 || checkDigit == 1 || checkDigit == 2 || checkDigit == 3 || checkDigit == 4, @"Incorrect barcode check digit.");
+    [self setOption2: checkDigit];
 }
 
 @end

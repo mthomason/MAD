@@ -11,9 +11,12 @@
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+
+@property (nonatomic, assign, readwrite) NSInteger option2;
 
 @end
 
@@ -24,6 +27,7 @@
     if (self) {
         
         [self setBarcodeType:[MTBarcodeMicroPdf417Iso24728 type]];
+        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"];
         [self setName: @"MicroPDF417 (ISO 24728)"];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: YES];
@@ -34,6 +38,10 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeMicroPdf417;
+}
+
+- (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns {
+    [self setOption2:numberOfDataColumns];
 }
 
 @end

@@ -11,6 +11,8 @@
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
+
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -25,6 +27,7 @@
         
         [self setBarcodeType:[MTBarcodeQrCodeIso18004 type]];
         [self setName: @"QR Code (ISO 18004)"];
+        [self setDetailsSegueIdentifer: @"MTIdentiferSegueBarcodeExtrasQrCode"];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: YES];
         

@@ -11,6 +11,8 @@
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
+@property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
+
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -24,6 +26,7 @@
     if (self) {
         
         [self setBarcodeType:[MTBarcodeDatabarExpandedStacked type]];
+        [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"];
         [self setName: @"Databar Expanded Stacked"];
         [self setHas2dComponent: YES];
         [self setHasOptionalInput: YES];
