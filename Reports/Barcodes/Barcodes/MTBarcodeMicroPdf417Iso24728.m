@@ -40,6 +40,10 @@
     return MTBarcodeTypeMicroPdf417;
 }
 
+- (NSInteger)numberOfDataColumns {
+    return [self option2];
+}
+
 - (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns {
     [self setOption2:numberOfDataColumns];
 }

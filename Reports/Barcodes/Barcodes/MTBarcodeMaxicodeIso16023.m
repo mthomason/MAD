@@ -12,13 +12,13 @@
 
 @property (nonatomic, retain, readwrite) NSString *name;
 @property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
-@property (nonatomic, retain, readwrite) NSString *primaryData;
+//@property (nonatomic, retain, readwrite) NSString *primaryData;
 
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
-@property (nonatomic, assign, readwrite) NSInteger option2;
+@property (nonatomic, assign, readwrite) NSInteger option1;
 
 @end
 
@@ -33,6 +33,7 @@
         [self setName: @"Maxicode (ISO 16023)"];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: YES];
+        [self setOption1:-1];
         
     }
     return self;
@@ -42,8 +43,26 @@
     return MTBarcodeTypeMaxicode;
 }
 
-- (void)setPrimaryData:(NSString *)primaryData {
+- (void)setPrimaryDataString:(NSString *)primaryData {
+    if (primaryData) {
+        [self setPrimaryData:primaryData];
+    } else {
+        [self setPrimaryData:@""];
+    }
+}
 
+- (void)setEncodingMode:(NSInteger)encodingMode {
+    if (encodingMode == -1 || encodingMode == 2 || encodingMode == 3 || encodingMode == 4 || encodingMode == 5 || encodingMode == 6) {
+        [self setOption1:encodingMode];
+    }
+}
+
+- (NSInteger)encodingMode {
+    return [self option1];
+}
+
+- (NSString *)primaryDataString {
+    return [self primaryData];
 }
 
 @end

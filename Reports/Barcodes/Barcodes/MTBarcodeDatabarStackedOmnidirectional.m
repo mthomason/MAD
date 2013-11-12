@@ -33,7 +33,7 @@
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeRss14OmniCc;
+    return MTBarcodeTypeRss14StackOmni;
 }
 
 @end

@@ -10,4 +10,7 @@
 
 @interface MTBarcodeCodeOne : MTBarcode
 
+- (NSInteger)size;
+- (void)setSize:(NSInteger)size;
+
 @end

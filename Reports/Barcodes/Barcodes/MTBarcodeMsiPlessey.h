@@ -10,4 +10,7 @@
 
 @interface MTBarcodeMsiPlessey : MTBarcode
 
+- (NSInteger)checkpointDigit;
+- (void)setCheckDigit:(NSInteger)checkDigit;
+
 @end

@@ -10,6 +10,12 @@
 #import <UIKit/UIKit.h>
 #import "zint.h"
 
+typedef NS_ENUM(NSUInteger, MTBarcodeSizingMode) {
+    MTBarcodeSizingModeAutomaticResizing     = 1,
+    MTBarcodeSizingModeSpecificSize          = 2,
+    MTBarcodeSizingModeSpecificErrorLevel    = 3
+};
+
 typedef NS_ENUM(NSUInteger, MTBarcodeBorderStyle) {
     MTBarcodeBorderStyleNone    = 0,
     MTBarcodeBorderStyleBind    = BARCODE_BIND,
@@ -120,7 +126,7 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
 @property (nonatomic, retain, readonly) NSString *name;
 @property (nonatomic, retain, readonly) NSString *detailsSegueIdentifer;
-@property (nonatomic, retain, readonly) NSString *primaryData;
+@property (nonatomic, retain) NSString *primaryData;
 
 @property (nonatomic, assign, readonly) BOOL has2dComponent;
 @property (nonatomic, assign, readonly) BOOL hasOptionalInput;

@@ -17,6 +17,10 @@
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
+@property (nonatomic, assign, readwrite) NSInteger option1;
+@property (nonatomic, assign, readwrite) NSInteger option2;
+@property (nonatomic, assign, readwrite) NSInteger option3;
+
 @end
 
 @implementation MTBarcodeGridMatrix
@@ -37,6 +41,40 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeGridMatrix;
+}
+
+- (MTBarcodeSizingMode)sizingMode {
+    MTBarcodeSizingMode result = MTBarcodeSizingModeAutomaticResizing;
+    if ([self option1] == NO && [self option2] == NO && [self option3] == NO) {
+        result = MTBarcodeSizingModeAutomaticResizing;
+    } else if ([self option1] != NO) {
+        result = MTBarcodeSizingModeSpecificErrorLevel;
+    } else if ([self option2] != NO) {
+        result = MTBarcodeSizingModeSpecificSize;
+    }
+    return result;
+}
+
+- (void)enableAutomaticResizing {
+    [self setOption1:NO];
+    [self setOption2:NO];
+    [self setOption3:NO];
+}
+- (void)setSize:(NSInteger)size {
+    [self setOption1:NO];
+    [self setOption2:size];
+    [self setOption3:NO];
+}
+- (void)setMinmumErrorCorrection:(NSInteger)minmumErrorCorrection {
+    [self setOption1:minmumErrorCorrection];
+    [self setOption2:NO];
+    [self setOption3:NO];
+}
+- (NSInteger)size {
+    return [self option2];
+}
+- (NSInteger)errorCorrection {
+    return [self option1];
 }
 
 @end

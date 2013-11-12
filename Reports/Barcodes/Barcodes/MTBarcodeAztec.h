@@ -67,4 +67,7 @@ typedef NS_ENUM(NSUInteger, MTBarcodeAztecErrorCorrection) {
 - (void)setSize:(MTBarcodeAztecSpecificSize)size;
 - (void)setMinmumErrorCorrection:(MTBarcodeAztecErrorCorrection)minmumErrorCorrection;
 
+- (NSInteger)size;
+- (NSInteger)errorCorrection;
+
 @end

@@ -10,4 +10,12 @@
 
 @interface MTBarcodeQrCodeIso18004 : MTBarcode
 
+- (MTBarcodeSizingMode)sizingMode;
+- (void)enableAutomaticResizing;
+- (void)setSize:(NSInteger)size;
+- (void)setErrorCorrection:(NSInteger)errorCorrection;
+
+- (NSInteger)size;
+- (NSInteger)errorCorrection;
+
 @end

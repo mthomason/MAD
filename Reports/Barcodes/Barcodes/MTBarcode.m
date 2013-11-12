@@ -266,6 +266,27 @@
         case MTBarcodeTypeOneCode:
             result = [[MTBarcodeUspsIntelligentMail alloc] init];
             break;
+        case MTBarcodeTypeRss14:
+            result = [[MTBarcodeDatabar alloc] init];
+            break;
+        case MTBarcodeTypeRssLtd:
+            result = [[MTBarcodeDatabarLimited alloc] init];
+            break;
+        case MTBarcodeTypeRssExp:
+            result = [[MTBarcodeDatabarExpanded alloc] init];
+            break;
+        case MTBarcodeTypeRss14Stack:
+            result = [[MTBarcodeDatabarStacked alloc] init];
+            break;
+        case MTBarcodeTypeRss14StackOmni:
+            result = [[MTBarcodeDatabarStackedOmnidirectional alloc] init];
+            break;
+        case MTBarcodeTypeRssExpstack:
+            result = [[MTBarcodeDatabarExpandedStacked alloc] init];
+            break;
+        case MTBarcodeTypeKix:
+            result = [[MTBarcodeDutchPostKix alloc] init];
+            break;
         default:
             break;
     }
@@ -303,6 +324,20 @@
         barcode->output_options = [self borderStyle];
         barcode->scale = 1.0000f;
         barcode->input_mode = MTBarcodeDataTypeUnicode;
+        
+        if (barcode->symbology != MTBarcodeTypeMaxicode) {
+            barcode->option_1 = [self option1];
+            barcode->option_2 = [self option2];
+            barcode->option_3 = [self option3];
+        } else {
+            barcode->option_1 = [self option1];
+            if ([self primaryData] == nil) {
+                strcpy(barcode->primary, "");
+            } else {
+                const char *primaryData = [[self primaryData] UTF8String];
+                strcpy(barcode->primary, primaryData);
+            }
+        }
         
         NSInteger inputLength = [[self input] length];
         NSString *inputString = inputLength > 0 ? [self input] : @"";
@@ -450,76 +485,6 @@
     
 }
 
-+ (NSArray *)barcodeData {
-   return @[
-            @{@"type"                  : @BARCODE_AUSREDIRECT,
-              @"name"                  : @"Australia Post Redirect Code",
-              @"2d-component"          : @NO,
-              @"additional-options"    : @NO
-              },
-            @{@BARCODE_AUSREPLY        : @"Australia Post Reply-Paid"},
-            @{@BARCODE_AUSROUTE        : @"Australia Post Routing Code"},
-            @{@BARCODE_AUSPOST         : @"Australia Post Standard Customer"},
-            @{@BARCODE_AZTEC           : @"Aztec Code (ISO 24778)"},
-            @{@BARCODE_AZRUNE          : @"Aztec Runes"},
-            @{@BARCODE_CHANNEL         : @"Channel Code"},
-            @{@BARCODE_CODABAR         : @"Codabar"},
-            @{@BARCODE_CODE11          : @"Code 11"},
-            @{@BARCODE_CODE128         : @"Code 128 (ISO 15417)"},
-            @{@BARCODE_CODE16K         : @"Code 16k"},
-            @{@BARCODE_C25LOGIC        : @"Code 2 of 5 Data Logic"},
-            @{@BARCODE_C25IATA         : @"Code 2 of 5 IATA"},
-            @{@BARCODE_C25IND          : @"Code 2 of 5 Industrial"},
-            @{@BARCODE_C25INTER        : @"Code 2 of 5 Interleaved"},
-            @{@BARCODE_C25MATRIX       : @"Code 2 of 5 Matrix"},
-            @{@BARCODE_CODE32          : @"Code 32 (Italian Pharmacode)"},
-            @{@BARCODE_CODE39          : @"Code 39 (ISO 16388)"},
-            @{@BARCODE_EXCODE39        : @"Code 39 Extended"},
-            @{@BARCODE_CODE49          : @"Code 49"},
-            @{@BARCODE_CODE93          : @"Code 93"},
-            @{@BARCODE_CODEONE         : @"Code One"},
-            @{@BARCODE_RSS14           : @"Databar"},
-            @{@BARCODE_RSS_EXP         : @"Databar Expanded"},
-            @{@BARCODE_RSS_EXPSTACK_CC : @"Databar Expanded Stacked"},
-            @{@BARCODE_RSS_LTD_CC      : @"Databar Limited"},
-            @{@BARCODE_RSS14STACK_CC   : @"Databar Stacked"},
-            @{@BARCODE_RSS14_OMNI_CC   : @"Databar Stacked Omnidirectional"},
-            @{@BARCODE_DATAMATRIX      : @"Data Matrix (ISO 16022)"},
-            @{@BARCODE_DPIDENT         : @"Deutsche Post Identcode"},
-            @{@BARCODE_DPLEIT          : @"Deutsche Post Leitcode"},
-            @{@BARCODE_KIX             : @"Dutch Post KIX"},
-            @{@BARCODE_EAN14           : @"EAN-14"},
-            @{@BARCODE_EANX            : @"European Article Number (EAN)"},
-            @{@BARCODE_FIM             : @"Facing Identification Mark (FIM)"},
-            @{@BARCODE_FLAT            : @"Flattermarken"},
-            @{@BARCODE_GRIDMATRIX      : @"Grid Matrix"},
-            @{@BARCODE_ITF14           : @"ITF-14"},
-            @{@BARCODE_ISBNX           : @"International Standard Book Number (ISBN)"},
-            @{@BARCODE_JAPANPOST       : @"Japanese Postal Barcode"},
-            @{@BARCODE_KOREAPOST       : @"Korean Postal Barcode"},
-            @{@BARCODE_LOGMARS         : @"LOGMARS"},
-            @{@BARCODE_MAXICODE        : @"Maxicode (ISO 16023)"},
-            @{@BARCODE_MICROPDF417     : @"MicroPDF417 (ISO 24728)"},
-            @{@BARCODE_MICROQR         : @"Micro QR Code"},
-            @{@BARCODE_MSI_PLESSEY     : @"MSI Plessey"},
-            @{@BARCODE_NVE18           : @"NVE-18"},
-            @{@BARCODE_PDF417          : @"PDF417 (ISO 15438)"},
-            @{@BARCODE_PHARMA          : @"Pharmacode"},
-            @{@BARCODE_PHARMA_TWO      : @"Pharmacode 2-track"},
-            @{@BARCODE_PZN             : @"Pharma Zentralnummer (PZN)"},
-            @{@BARCODE_PLANET          : @"PLANET"},
-            @{@BARCODE_POSTNET         : @"Postnet"},
-            @{@BARCODE_QRCODE          : @"QR Code (ISO 18004)"},
-            @{@BARCODE_RM4SCC          : @"Royal Mail 4-state Barcode"},
-            @{@BARCODE_TELEPEN         : @"Telepen"},
-            @{@BARCODE_TELEPEN_NUM     : @"Telepen Numeric"},
-            @{@BARCODE_PLESSEY         : @"UK Plessey"},
-            @{@BARCODE_UPCA            : @"Universal Product Code (UPC-A)"},
-            @{@BARCODE_UPCE            : @"Universal Product Code (UPC-E)"},
-            @{@BARCODE_ONECODE         : @"USPS Intelligent Mail"}
-                                          ];
-}
-
 + (NSDictionary *)names {
     
     NSDictionary *names = @{
@@ -547,10 +512,10 @@
                    @BARCODE_CODEONE         : @"Code One",
                    @BARCODE_RSS14           : @"Databar",
                    @BARCODE_RSS_EXP         : @"Databar Expanded",
-                   @BARCODE_RSS_EXPSTACK_CC : @"Databar Expanded Stacked",
-                   @BARCODE_RSS_LTD_CC      : @"Databar Limited",
-                   @BARCODE_RSS14STACK_CC   : @"Databar Stacked",
-                   @BARCODE_RSS14_OMNI_CC   : @"Databar Stacked Omnidirectional",
+                   @BARCODE_RSS_EXPSTACK    : @"Databar Expanded Stacked",
+                   @BARCODE_RSS_LTD         : @"Databar Limited",
+                   @BARCODE_RSS14STACK      : @"Databar Stacked",
+                   @BARCODE_RSS14STACK_OMNI : @"Databar Stacked Omnidirectional",
                    @BARCODE_DATAMATRIX      : @"Data Matrix (ISO 16022)",
                    @BARCODE_DPIDENT         : @"Deutsche Post Identcode",
                    @BARCODE_DPLEIT          : @"Deutsche Post Leitcode",

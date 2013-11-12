@@ -10,4 +10,12 @@
 
 @interface MTBarcodeMicroQrCode : MTBarcode
 
+- (MTBarcodeSizingMode)sizingMode;
+- (void)enableAutomaticResizing;
+- (void)setSize:(NSInteger)size;
+- (void)setMinmumErrorCorrection:(NSInteger)minmumErrorCorrection;
+
+- (NSInteger)size;
+- (NSInteger)errorCorrection;
+
 @end

@@ -10,4 +10,7 @@
 
 @interface MTBarcodeMicroPdf417Iso24728 : MTBarcode
 
+- (NSInteger)numberOfDataColumns;
+- (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns;
+
 @end

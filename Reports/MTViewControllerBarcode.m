@@ -7,7 +7,11 @@
 //
 
 #import "MTViewControllerBarcode.h"
-#import "zint.h"
+#import "MTBarcodeAztec.h"
+#import "MTBarcodeQrCodeIso18004.h"
+#import "MTBarcodeMicroQrCode.h"
+#import "MTBarcodeGridMatrix.h"
+#import "MTBarcodeMaxicodeIso16023.h"
 
 @interface MTViewControllerBarcode ()
 
@@ -19,6 +23,7 @@
 @property (nonatomic, retain) MTBarcode *barcode;
 
 @property (nonatomic, retain) NSArray *cachedData;
+@property (nonatomic, retain) NSArray *cachedDataMaxicode;
 
 @end
 
@@ -31,12 +36,12 @@
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:barcodeTypeString];
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:showErrorMessages];
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
-
+    [_cachedData release];
+    [_cachedDataMaxicode release];
     [_barcode release];
     [_barcodeInput release];
     [_previewViewController release];
     [_optionsViewController release];
-    [_cachedData release];
     [super dealloc];
 }
 
@@ -73,7 +78,8 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-
+    [_cachedData release]; _cachedData = nil;
+    [_cachedDataMaxicode release]; _cachedDataMaxicode = nil;
 }
 
 - (void)updateBarcode {
@@ -126,6 +132,99 @@
 
 - (void)setInput:(NSString *)barcodeInput {
     [self setBarcodeInput:barcodeInput];
+    [self updateBarcode];
+}
+
+#pragma mark Aztec
+
+- (void)barcodeAztecDidEnableAutomaticResizing {
+    MTBarcodeAztec *barcode = (MTBarcodeAztec *)[self barcode];
+    [barcode enableAutomaticResizing];
+    [self updateBarcode];
+}
+
+- (void)barcodeAztecDidSetSize:(NSInteger)size {
+    MTBarcodeAztec *barcode = (MTBarcodeAztec *)[self barcode];
+    [barcode setSize:size];
+    [self updateBarcode];
+}
+
+- (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection {
+    MTBarcodeAztec *barcode = (MTBarcodeAztec *)[self barcode];
+    [barcode setMinmumErrorCorrection:errorCorrection];
+    [self updateBarcode];
+}
+
+#pragma mark Qr Code
+
+- (void)barcodeQrCodeDidEnableAutomaticResizing {
+    MTBarcodeQrCodeIso18004 *barcode = (MTBarcodeQrCodeIso18004 *)[self barcode];
+    [barcode enableAutomaticResizing];
+    [self updateBarcode];
+}
+
+- (void)barcodeQrCodeDidSetSize:(NSInteger)size {
+    MTBarcodeQrCodeIso18004 *barcode = (MTBarcodeQrCodeIso18004 *)[self barcode];
+    [barcode setSize:size];
+    [self updateBarcode];
+}
+
+- (void)barcodeQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection {
+    MTBarcodeQrCodeIso18004 *barcode = (MTBarcodeQrCodeIso18004 *)[self barcode];
+    [barcode setErrorCorrection:errorCorrection];
+    [self updateBarcode];
+}
+
+#pragma mark Maxicode
+
+- (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode {
+    MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)[self barcode];
+    [barcode setEncodingMode:encodingMode];
+    [self updateBarcode];
+}
+- (void)barcodeMaxicodeDidSetPrimaryData:(NSString *)primaryData {
+    MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)[self barcode];
+    [barcode setPrimaryDataString:primaryData];
+    [self updateBarcode];
+}
+
+#pragma mark Micro Qr Code
+
+- (void)barcodeMicroQrCodeDidEnableAutomaticResizing {
+    MTBarcodeMicroQrCode *barcode = (MTBarcodeMicroQrCode *)[self barcode];
+    [barcode enableAutomaticResizing];
+    [self updateBarcode];
+}
+
+- (void)barcodeMicroQrCodeDidSetSize:(NSInteger)size {
+    MTBarcodeMicroQrCode *barcode = (MTBarcodeMicroQrCode *)[self barcode];
+    [barcode setSize:size];
+    [self updateBarcode];
+}
+
+- (void)barcodeMicroQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection {
+    MTBarcodeMicroQrCode *barcode = (MTBarcodeMicroQrCode *)[self barcode];
+    [barcode setMinmumErrorCorrection:errorCorrection];
+    [self updateBarcode];
+}
+
+#pragma mark GridMatrix
+
+- (void)barcodeGridMatrixDidEnableAutomaticResizing {
+    MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)[self barcode];
+    [barcode enableAutomaticResizing];
+    [self updateBarcode];
+}
+
+- (void)barcodeGridMatrixDidSetSize:(NSInteger)size {
+    MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)[self barcode];
+    [barcode setSize:size];
+    [self updateBarcode];
+}
+
+- (void)barcodeGridMatrixDidSetErrorCorrection:(NSInteger)errorCorrection {
+    MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)[self barcode];
+    [barcode setMinmumErrorCorrection:errorCorrection];
     [self updateBarcode];
 }
 

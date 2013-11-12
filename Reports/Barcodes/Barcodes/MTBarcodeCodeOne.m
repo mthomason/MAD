@@ -43,6 +43,7 @@
 - (void)setSize:(NSInteger)size {
     [self setOption2:size];
 }
+
 - (NSInteger)size {
     return [self option2];
 }

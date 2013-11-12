@@ -7,11 +7,23 @@
 //
 
 #import "MTViewControllerBarcodeOptions.h"
+#import "MTBarcodeAztec.h"
+#import "MTBarcodeGridMatrix.h"
+#import "MTBarcodeMicroQrCode.h"
+#import "MTBarcodeQrCodeIso18004.h"
+#import "MTBarcodeCodeOne.h"
+#import "MTBarcodeMsiPlessey.h"
+#import "MTBarcodeDatabarExpandedStacked.h"
+#import "MTBarcodeMicroPdf417Iso24728.h"
+#import "MTBarcodeMaxicodeIso16023.h"
 
 @interface MTViewControllerBarcodeOptions ()
 
 @property (nonatomic, retain) NSArray *sampleBarcodeData;
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
+
+@property (nonatomic, retain) NSArray *sampleBarcodeDataMaxicode;
+@property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
 
 @property (nonatomic, retain) UIFont *mainFont;
 @property (nonatomic, retain) UIFont *detailFont;
@@ -24,19 +36,12 @@
 
 - (IBAction)unwindToBarcodeOptions:(UIStoryboardSegue *)action {
     if ([[action identifier] isEqualToString:@"MTIdentifierSegueBarcodeFieldUnwind"]) {
-        //[[self tableView] reloadData];
     } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueBarcodeTypeUnwind"]) {
-        //[[self tableView] reloadData];
     }
 }
 
 - (void)dealloc {
-    //NSString *barcodeType = NSStringFromSelector(@selector(barcodeType));
-    //NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
-    //NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
-    //[self removeObserver:[self barcode] forKeyPath:barcodeType];
-    //[self removeObserver:[self barcode] forKeyPath:showErrorMessages];
-    //[self removeObserver:[self barcode] forKeyPath:humanReadable];
+    [_sampleBarcodeDataMaxicode release];
     [_sampleBarcodeData release];
     [_mainFont release];
     [_detailFont release];
@@ -63,9 +68,13 @@
     [self setBorderWidth:5];
     [self setSampleBarcodeIndex: 0];
     NSArray *sampleBarcodeData = @[@{@"Sample Data" : @"Sample Data"}];
+    NSArray *sampleBarcodeDataMaxicode = @[@{@"" : @"" }];
     [sampleBarcodeData retain];
+    [sampleBarcodeDataMaxicode retain];
     [self setSampleBarcodeData:sampleBarcodeData];
+    [self setSampleBarcodeDataMaxicode:sampleBarcodeDataMaxicode];
     [sampleBarcodeData release];
+    [sampleBarcodeDataMaxicode release];
     
 
 }
@@ -103,6 +112,28 @@
         [barcodeTypeViewController setInitalKey:[barcode barcodeType]];
         [barcodeTypeViewController setDelegate:self];
 
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasCodeOne"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrix"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCode"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasPdf417"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
+        [[segue destinationViewController] setDelegate:self];
+    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBar"]) {
+        [[segue destinationViewController] setDelegate:self];
     }
 
 }
@@ -520,6 +551,67 @@
     [[self delegate] didChangeBarcodeType:barcodeType];
 }
 
+#pragma mark - MTTableViewControllerStaticSelectRowDelegate
+
+- (NSInteger)initalRow {
+    NSInteger result;
+    MTBarcode *barcode = [[self delegate] barcodeToDisplay];
+    switch ([barcode barcodeType]) {
+
+        case MTBarcodeTypeCodeOne:
+            result = [(MTBarcodeCodeOne *)barcode size];
+            break;
+            
+        case MTBarcodeTypeMsiPlessey:
+            result = [(MTBarcodeMsiPlessey *)barcode checkpointDigit];
+            break;
+
+        case MTBarcodeTypeRssExpstack:
+            result = [(MTBarcodeDatabarExpandedStacked *)barcode numberOfDataColumns];
+            break;
+            
+        case MTBarcodeTypeMicroPdf417:
+            result = [(MTBarcodeMicroPdf417Iso24728 *)barcode numberOfDataColumns];
+            break;
+
+
+        default:
+            result = 0;
+            break;
+    }
+    return result;
+}
+
+- (void)didSelectTag:(NSInteger)tag {
+    MTBarcode *barcode = [[self delegate] barcodeToDisplay];
+    switch ([barcode barcodeType]) {
+            
+        case MTBarcodeTypeCodeOne:
+            [(MTBarcodeCodeOne *)barcode setSize:tag];
+            [[self delegate] updateBarcode];
+            break;
+            
+        case MTBarcodeTypeMsiPlessey:
+            [(MTBarcodeMsiPlessey *)barcode setCheckDigit:tag];
+            [[self delegate] updateBarcode];
+            break;
+            
+        case MTBarcodeTypeRssExpstack:
+            [(MTBarcodeDatabarExpandedStacked *)barcode setNumberOfDataColumns:tag];
+            [[self delegate] updateBarcode];
+            break;
+            
+        case MTBarcodeTypeMicroPdf417:
+            [(MTBarcodeMicroPdf417Iso24728 *)barcode setNumberOfDataColumns:tag];
+            [[self delegate] updateBarcode];
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
@@ -537,6 +629,171 @@
             [[self tableView] reloadData];
         }
     }];
+}
+
+#pragma mark - MTTableViewControllerBarcodeExtraAztecDelegate
+
+- (void)barcodeAztecDidEnableAutomaticResizing {
+    [[self delegate] barcodeAztecDidEnableAutomaticResizing];
+}
+
+- (void)barcodeAztecDidSetSize:(NSInteger)size {
+    [[self delegate] barcodeAztecDidSetSize:size];
+}
+
+- (void)barcodeAztecDidSetErrorCorrection:(NSInteger)errorCorrection {
+    [[self delegate] barcodeAztecDidSetErrorCorrection:errorCorrection];
+}
+
+- (BOOL)barcodeAztecAutomaticResizing {
+    BOOL result = NO;
+    MTBarcodeAztec *aztec = (MTBarcodeAztec *)[[self delegate] barcodeToDisplay];
+    MTBarcodeAztecSizingMode sizingMode = [aztec sizingMode];
+    result = sizingMode == MTBarcodeAztecSizingModeAutomaticResizing;
+    return result;
+}
+
+- (NSInteger)barcodeAztecInitalSize {
+    MTBarcodeAztec *aztec = (MTBarcodeAztec *)[[self delegate] barcodeToDisplay];
+    NSInteger size = [aztec size];
+    return size;
+}
+
+- (NSInteger)barcodeAztecInitalErrorCorrection {
+    MTBarcodeAztec *aztec = (MTBarcodeAztec *)[[self delegate] barcodeToDisplay];
+    NSInteger errorCorrection = [aztec errorCorrection];
+    return errorCorrection;
+}
+
+#pragma mark - MTTableViewControllerBarcodeExtraMaxiCodeDelegate
+
+- (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode {
+    [[self delegate] barcodeMaxicodeDidSetEncodingMode:encodingMode];
+}
+- (void)barcodeMaxicodeDidSetPrimaryData:(NSString *)primaryData {
+    [[self delegate] barcodeMaxicodeDidSetPrimaryData:primaryData];
+}
+
+- (NSInteger)initalEncodingMode {
+    MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)[[self delegate] barcodeToDisplay];
+    return [barcode encodingMode];
+}
+- (NSString *)initalPrimaryData {
+    MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)[[self delegate] barcodeToDisplay];
+    return [[[barcode primaryData] retain] autorelease];
+}
+
+- (void)barcodeMaxicodeDidChooseSampleData:(NSArray *)sampleData {
+    [self setSampleBarcodeDataMaxicode:sampleData];
+    if ([sampleData count] > 0) {
+        id result = [[[sampleData objectAtIndex:0] allObjects] lastObject];
+        [[self delegate] barcodeMaxicodeDidSetPrimaryData:result];
+    } else {
+        [[self delegate] barcodeMaxicodeDidSetPrimaryData:nil];
+    }
+}
+
+
+#pragma mark - MTTableViewControllerBarcodeExtraGridMatrixDelegate
+
+- (void)barcodeGridMatrixDidEnableAutomaticResizing {
+    [[self delegate] barcodeGridMatrixDidEnableAutomaticResizing];
+}
+
+- (void)barcodeGridMatrixDidSetSize:(NSInteger)size {
+    [[self delegate] barcodeGridMatrixDidSetSize:size];
+}
+
+- (void)barcodeGridMatrixDidSetErrorCorrection:(NSInteger)errorCorrection {
+    [[self delegate] barcodeGridMatrixDidSetErrorCorrection:errorCorrection];
+}
+
+- (BOOL)barcodeGridMatrixAutomaticResizing {
+    BOOL result = NO;
+    MTBarcodeGridMatrix *gridMatrix = (MTBarcodeGridMatrix *)[[self delegate] barcodeToDisplay];
+    MTBarcodeSizingMode sizingMode = [gridMatrix sizingMode];
+    result = sizingMode == MTBarcodeSizingModeAutomaticResizing;
+    return result;
+}
+
+- (NSInteger)barcodeGridMatrixInitalSize {
+    MTBarcodeGridMatrix *gridMatrix = (MTBarcodeGridMatrix *)[[self delegate] barcodeToDisplay];
+    NSInteger size = [gridMatrix size];
+    return size;
+}
+
+- (NSInteger)barcodeGridMatrixInitalErrorCorrection {
+    MTBarcodeGridMatrix *gridMatrix = (MTBarcodeGridMatrix *)[[self delegate] barcodeToDisplay];
+    NSInteger errorCorrection = [gridMatrix errorCorrection];
+    return errorCorrection;
+}
+
+#pragma mark - MTTableViewControllerBarcodeExtraMicroQrCodeDelegate
+
+- (void)barcodeMicroQrCodeDidEnableAutomaticResizing {
+    [[self delegate] barcodeMicroQrCodeDidEnableAutomaticResizing];
+}
+
+- (void)barcodeMicroQrCodeDidSetSize:(NSInteger)size {
+    [[self delegate] barcodeMicroQrCodeDidSetSize:size];
+}
+
+- (void)barcodeMicroQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection {
+    [[self delegate] barcodeMicroQrCodeDidSetErrorCorrection:errorCorrection];
+}
+
+- (BOOL)barcodeMicroQrCodeAutomaticResizing {
+    BOOL result = NO;
+    MTBarcodeMicroQrCode *microQrCode = (MTBarcodeMicroQrCode *)[[self delegate] barcodeToDisplay];
+    MTBarcodeSizingMode sizingMode = [microQrCode sizingMode];
+    result = sizingMode == MTBarcodeSizingModeAutomaticResizing;
+    return result;
+}
+
+- (NSInteger)barcodeMicroQrCodeInitalSize {
+    MTBarcodeMicroQrCode *microQrCode = (MTBarcodeMicroQrCode *)[[self delegate] barcodeToDisplay];
+    NSInteger size = [microQrCode size];
+    return size;
+}
+
+- (NSInteger)barcodeMicroQrCodeInitalErrorCorrection {
+    MTBarcodeMicroQrCode *microQrCode = (MTBarcodeMicroQrCode *)[[self delegate] barcodeToDisplay];
+    NSInteger errorCorrection = [microQrCode errorCorrection];
+    return errorCorrection;
+}
+
+#pragma mark - MTTableViewControllerBarcodeExtraQrCodeDelegate
+
+- (void)barcodeQrCodeDidEnableAutomaticResizing {
+    [[self delegate] barcodeQrCodeDidEnableAutomaticResizing];
+}
+
+- (void)barcodeQrCodeDidSetSize:(NSInteger)size {
+    [[self delegate] barcodeQrCodeDidSetSize:size];
+}
+
+- (void)barcodeQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection {
+    [[self delegate] barcodeQrCodeDidSetErrorCorrection:errorCorrection];
+}
+
+- (BOOL)barcodeQrCodeAutomaticResizing {
+    BOOL result = NO;
+    MTBarcodeQrCodeIso18004 *qrCode = (MTBarcodeQrCodeIso18004 *)[[self delegate] barcodeToDisplay];
+    MTBarcodeSizingMode sizingMode = [qrCode sizingMode];
+    result = sizingMode == MTBarcodeSizingModeAutomaticResizing;
+    return result;
+}
+
+- (NSInteger)barcodeQrCodeInitalSize {
+    MTBarcodeQrCodeIso18004 *qrCode = (MTBarcodeQrCodeIso18004 *)[[self delegate] barcodeToDisplay];
+    NSInteger size = [qrCode size];
+    return size;
+}
+
+- (NSInteger)barcodeQrCodeInitalErrorCorrection {
+    MTBarcodeQrCodeIso18004 *qrCode = (MTBarcodeQrCodeIso18004 *)[[self delegate] barcodeToDisplay];
+    NSInteger errorCorrection = [qrCode errorCorrection];
+    return errorCorrection;
 }
 
 @end

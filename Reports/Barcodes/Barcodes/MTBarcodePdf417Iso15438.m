@@ -50,8 +50,16 @@
     [self setOption1:errorCorrectionCapacity];
 }
 
+- (NSInteger)errorCorrectionCapacity {
+    return [self option1];
+}
+
 - (void)setMaximumCodewordLength:(NSInteger)codewordLength {
-    
+    [self setOption3:codewordLength];
+}
+
+- (NSInteger)codewordLength {
+    return [self option3];
 }
 
 @end

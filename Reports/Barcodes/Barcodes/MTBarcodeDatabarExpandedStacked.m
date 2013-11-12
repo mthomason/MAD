@@ -17,6 +17,8 @@
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
+@property (nonatomic, assign, readwrite) NSInteger option2;
+
 @end
 
 @implementation MTBarcodeDatabarExpandedStacked
@@ -36,7 +38,15 @@
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeRssExpstackCc;
+    return MTBarcodeTypeRssExpstack;
+}
+
+- (NSInteger)numberOfDataColumns {
+    return [self option2];
+}
+
+- (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns {
+    [self setOption2:numberOfDataColumns];
 }
 
 @end

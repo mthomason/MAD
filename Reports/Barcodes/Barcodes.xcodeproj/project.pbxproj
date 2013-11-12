@@ -361,47 +361,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4CDA76C31825E8D400E462F6 = {
+		4C95CBD618312D6300160E01 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				4CDA76D11825E8D400E462F6 /* Barcodes */,
-				4CDA76E51825E8D400E462F6 /* BarcodesTests */,
-				4CDA76CE1825E8D400E462F6 /* Frameworks */,
-				4CDA76CD1825E8D400E462F6 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		4CDA76CD1825E8D400E462F6 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4CDA76CC1825E8D400E462F6 /* libBarcodes.a */,
-				4CDA76DC1825E8D400E462F6 /* BarcodesTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		4CDA76CE1825E8D400E462F6 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				4CDA77621825EB0D00E462F6 /* libz.dylib */,
-				4CDA77601825EB0200E462F6 /* libm.dylib */,
-				4CDA76CF1825E8D400E462F6 /* Foundation.framework */,
-				4CDA76DD1825E8D400E462F6 /* XCTest.framework */,
-				4CDA76E01825E8D400E462F6 /* UIKit.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		4CDA76D11825E8D400E462F6 /* Barcodes */ = {
-			isa = PBXGroup;
-			children = (
-				4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */,
-				4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */,
-				4CDA775F1825EA9700E462F6 /* libpng */,
-				4CDA77561825EA3800E462F6 /* Zint */,
-				4C95CAC6182C1CD400160E01 /* MTBarcode.h */,
-				4C95CAC7182C1CD400160E01 /* MTBarcode.m */,
-				4CDA76D21825E8D400E462F6 /* Supporting Files */,
 				4C95CB1D182F99B000160E01 /* MTBarcodeAusreDirect.h */,
 				4C95CB1E182F99B000160E01 /* MTBarcodeAusreDirect.m */,
 				4C95CB20182F9CAC00160E01 /* MTBarcodeAusreply.h */,
@@ -524,6 +486,52 @@
 				4C95CBCB18300BC200160E01 /* MTBarcodeUniversalProductCodeUpce.m */,
 				4C95CBCD18300BD100160E01 /* MTBarcodeUspsIntelligentMail.h */,
 				4C95CBCE18300BD100160E01 /* MTBarcodeUspsIntelligentMail.m */,
+			);
+			name = Subclasses;
+			sourceTree = "<group>";
+		};
+		4CDA76C31825E8D400E462F6 = {
+			isa = PBXGroup;
+			children = (
+				4CDA76D11825E8D400E462F6 /* Barcodes */,
+				4CDA76E51825E8D400E462F6 /* BarcodesTests */,
+				4CDA76CE1825E8D400E462F6 /* Frameworks */,
+				4CDA76CD1825E8D400E462F6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CDA76CD1825E8D400E462F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CDA76CC1825E8D400E462F6 /* libBarcodes.a */,
+				4CDA76DC1825E8D400E462F6 /* BarcodesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CDA76CE1825E8D400E462F6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4CDA77621825EB0D00E462F6 /* libz.dylib */,
+				4CDA77601825EB0200E462F6 /* libm.dylib */,
+				4CDA76CF1825E8D400E462F6 /* Foundation.framework */,
+				4CDA76DD1825E8D400E462F6 /* XCTest.framework */,
+				4CDA76E01825E8D400E462F6 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CDA76D11825E8D400E462F6 /* Barcodes */ = {
+			isa = PBXGroup;
+			children = (
+				4C95CAC6182C1CD400160E01 /* MTBarcode.h */,
+				4C95CAC7182C1CD400160E01 /* MTBarcode.m */,
+				4C95CBD618312D6300160E01 /* Subclasses */,
+				4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */,
+				4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */,
+				4CDA775F1825EA9700E462F6 /* libpng */,
+				4CDA77561825EA3800E462F6 /* Zint */,
+				4CDA76D21825E8D400E462F6 /* Supporting Files */,
 			);
 			path = Barcodes;
 			sourceTree = "<group>";
@@ -917,11 +925,13 @@
 				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/mthomason/Desktop/Reports/Reports,
+					"\"$(SRCROOT)\"",
+					"\"/Users/mthomason/Desktop/Reports/Reports\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -933,11 +943,13 @@
 				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/mthomason/Desktop/Reports/Reports,
+					"\"/Users/mthomason/Desktop/Reports/Reports\"",
+					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

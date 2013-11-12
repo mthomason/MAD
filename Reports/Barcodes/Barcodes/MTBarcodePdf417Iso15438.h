@@ -10,4 +10,10 @@
 
 @interface MTBarcodePdf417Iso15438 : MTBarcode
 
+- (void)setNumberOfColumns:(NSInteger)numberOfColumns;
+- (void)setErrorCorrectionCapacity:(NSInteger)errorCorrectionCapacity;
+- (NSInteger)errorCorrectionCapacity;
+- (void)setMaximumCodewordLength:(NSInteger)codewordLength;
+- (NSInteger)codewordLength;
+
 @end

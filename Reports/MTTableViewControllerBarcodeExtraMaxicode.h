@@ -1,0 +1,26 @@
+//
+//  MTViewControllerBarcodeExtraMaxicode.h
+//  MAD
+//
+//  Created by Michael Thomason on 11/12/13.
+//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "MTQueryBuilderChooseFieldViewController.h"
+
+@protocol MTTableViewControllerBarcodeExtraMaxicodeDelegate
+- (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode;
+- (void)barcodeMaxicodeDidSetPrimaryData:(NSString *)primaryData;
+- (void)barcodeMaxicodeDidChooseSampleData:(NSArray *)sampleData;
+
+- (NSInteger)initalEncodingMode;
+- (NSString *)initalPrimaryData;
+@end
+
+@interface MTTableViewControllerBarcodeExtraMaxicode : UITableViewController
+    <MTQueryBuilderChooseFieldDelegate>
+
+@property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraMaxicodeDelegate> delegate;
+
+@end

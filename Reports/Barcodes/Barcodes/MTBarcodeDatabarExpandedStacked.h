@@ -10,4 +10,7 @@
 
 @interface MTBarcodeDatabarExpandedStacked : MTBarcode
 
+- (NSInteger)numberOfDataColumns;
+- (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns;
+
 @end

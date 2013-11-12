@@ -44,11 +44,14 @@
 
 - (MTBarcodeAztecSizingMode)sizingMode {
     MTBarcodeAztecSizingMode result = MTBarcodeAztecSizingModeAutomaticResizing;
-    if ([self option1] != NO) {
+    if ([self option1] == NO && [self option2] == NO && [self option3] == NO) {
+        result = MTBarcodeAztecSizingModeAutomaticResizing;
+    } else if ([self option1] != NO) {
         result = MTBarcodeAztecSizingModeSpecificErrorLevel;
     } else if ([self option2] != NO) {
         result = MTBarcodeAztecSizingModeSpecificSize;
     }
+    
     return result;
 }
 
@@ -66,6 +69,12 @@
     [self setOption1:minmumErrorCorrection];
     [self setOption2:NO];
     [self setOption3:NO];
+}
+- (NSInteger)size {
+    return [self option2];
+}
+- (NSInteger)errorCorrection {
+    return [self option1];
 }
 
 @end

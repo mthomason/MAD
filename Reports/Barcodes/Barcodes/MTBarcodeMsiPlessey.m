@@ -40,6 +40,10 @@
     return MTBarcodeTypeMsiPlessey;
 }
 
+- (NSInteger)checkpointDigit {
+    return [self option2];
+}
+
 - (void)setCheckDigit:(NSInteger)checkDigit {
     NSAssert(checkDigit == 0 || checkDigit == 1 || checkDigit == 2 || checkDigit == 3 || checkDigit == 4, @"Incorrect barcode check digit.");
     [self setOption2: checkDigit];
