@@ -24,6 +24,8 @@
 
 @property (nonatomic, retain) NSArray *cachedData;
 @property (nonatomic, retain) NSArray *cachedDataMaxicode;
+@property (nonatomic, retain) NSArray *cachedData2dComponent;
+
 
 @end
 
@@ -38,6 +40,7 @@
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
     [_cachedData release];
     [_cachedDataMaxicode release];
+    [_cachedData2dComponent release];
     [_barcode release];
     [_barcodeInput release];
     [_previewViewController release];
@@ -72,22 +75,32 @@
 
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    [_cachedData release]; _cachedData = nil;
-    [_cachedDataMaxicode release]; _cachedDataMaxicode = nil;
-}
-
 - (void)updateBarcode {
     [[self barcode] setInput:[self barcodeInput]];
     [[self previewViewController] update];
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate
+
+- (void)barcode2dComponentSetEnabled:(BOOL)enabled {
+    [[self barcode] setHas2dComponentEnabled:enabled];
+    [self updateBarcode];
+}
+
+- (void)barcode2dComponentSetType:(NSInteger)type {
+    [[self barcode] setHas2dComponentType:type];
+    [self updateBarcode];
+}
+
+- (void)barcode2dComponentsetSampleData:(NSArray *)sampleData {
+ 
+    [self setCachedData2dComponent:sampleData];
+    if ([sampleData count] > 0) {
+        [[self barcode] setPrimaryData: [sampleData objectAtIndex:0]];
+    }
+    [self updateBarcode];
+
+}
 
 - (MTBarcode *)barcodeToDisplay {
     return [self barcode];

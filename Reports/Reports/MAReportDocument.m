@@ -254,9 +254,12 @@
 
         MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
         
-        NSNumber *migratePersistentStoresAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
-        NSNumber *inferMappingModelAutomaticallyOption = [[NSNumber alloc] initWithBool:YES];
-        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:migratePersistentStoresAutomaticallyOption, NSMigratePersistentStoresAutomaticallyOption, inferMappingModelAutomaticallyOption, NSInferMappingModelAutomaticallyOption, nil];
+        NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
+        NSNumber *inferMappingModelAutomaticallyOption = @YES;
+        NSDictionary *options = @{
+                    NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+                    NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
+                    };
         
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
@@ -276,9 +279,6 @@
                 completionHandler(managedDocumentAtUrl, success);
             }];
         }
-        [options release];
-        [managedDocumentAtUrl release];
-        [migratePersistentStoresAutomaticallyOption release];
         [inferMappingModelAutomaticallyOption release];
     }
     [urlToOpen release];

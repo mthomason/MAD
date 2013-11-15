@@ -11,9 +11,12 @@
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
+
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+
+@property (nonatomic, assign, readwrite) NSInteger option2;
 
 @end
 
@@ -34,6 +37,39 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeCODE39;
+}
+
+- (void)setMod43CheckDigitEnabled:(BOOL)enabled {
+    if (enabled) {
+        [self setOption2:1];
+    } else {
+        [self setOption2:0];
+    }
+}
+
+- (BOOL)mod43CheckDigitEnabled {
+    return [self option2] == 1;
+}
+
+@end
+
+@implementation MTBarcodeCode39Hbic
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        
+        [self setBarcodeType:[MTBarcodeCode39Iso16388 type]];
+        [self setName: @"Code 39 (HBIC)"];
+        [self setHas2dComponent: NO];
+        [self setHasOptionalInput: NO];
+        
+    }
+    return self;
+}
+
++ (MTBarcodeType)type {
+    return MTBarcodeTypeHibc39;
 }
 
 @end

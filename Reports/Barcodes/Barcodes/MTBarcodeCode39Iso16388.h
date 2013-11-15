@@ -10,4 +10,10 @@
 
 @interface MTBarcodeCode39Iso16388 : MTBarcode
 
+- (void)setMod43CheckDigitEnabled:(BOOL)enabled;
+- (BOOL)mod43CheckDigitEnabled;
+
+@end
+
+@interface MTBarcodeCode39Hbic : MTBarcode
 @end

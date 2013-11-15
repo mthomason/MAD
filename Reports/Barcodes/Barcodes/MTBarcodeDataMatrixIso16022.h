@@ -10,4 +10,9 @@
 
 @interface MTBarcodeDataMatrixIso16022 : MTBarcode
 
+- (void)setSymbolSize:(NSInteger)symbolSize;
+- (NSInteger)symbolSize;
+- (void)suppressRectangularSymbolsInAutomaticMode:(BOOL)suppress;
+- (BOOL)suppressRectangularSymbols;
+
 @end

@@ -26,7 +26,7 @@
         [self setBarcodeType:[MTBarcodeCode16k type]];
         [self setName: @"Code 16k"];
         [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        [self setHasOptionalInput: NO];
         
     }
     return self;

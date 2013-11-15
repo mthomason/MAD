@@ -45,12 +45,20 @@
     [self setOption2:symbolSize];
 }
 
+- (NSInteger)symbolSize {
+    return [self option2];
+}
+
 - (void)suppressRectangularSymbolsInAutomaticMode:(BOOL)suppress {
     if (suppress) {
         [self setOption3: DM_SQUARE];
     } else {
         [self setOption3: 0];
     }
+}
+
+- (BOOL)suppressRectangularSymbols {
+    return [self option3] == DM_SQUARE;
 }
 
 @end

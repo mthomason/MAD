@@ -144,6 +144,9 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 @property (nonatomic, assign) MTBarcodeBorderStyle borderStyle;
 @property (nonatomic, assign) BOOL showErrorMessages;
 
+@property (nonatomic, assign) BOOL has2dComponentEnabled;
+@property (nonatomic, assign) NSInteger has2dComponentType;
+
 - (void)drawInRect:(CGRect)rect;
 
 + (NSString *)barcodeNameForType:(MTBarcodeType)type;

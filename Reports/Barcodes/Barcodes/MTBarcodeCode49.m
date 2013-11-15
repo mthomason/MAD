@@ -26,7 +26,7 @@
         [self setBarcodeType:[MTBarcodeCode49 type]];
         [self setName: @"Code 49"];
         [self setHas2dComponent: NO];
-        [self setHasOptionalInput: YES];
+        [self setHasOptionalInput: NO];
         
     }
     return self;

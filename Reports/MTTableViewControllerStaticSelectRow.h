@@ -14,7 +14,6 @@
 - (void)didSelectTag:(NSInteger)tag;
 @end
 
-
 @interface MTTableViewControllerStaticSelectRow : UITableViewController
     <UITableViewDelegate>
 

@@ -152,6 +152,21 @@
         case MTBarcodeTypeCODE128:
             result = [[MTBarcodeCode128Iso15417 alloc] init];
             break;
+        case MTBarcodeTypeCode128b:
+            result = [[MTBarcodeCode128SubsetB alloc] init];
+            break;
+        case MTBarcodeTypeEan14:
+            result = [[MTBarcodeCode128Ean14 alloc] init];
+            break;
+        case MTBarcodeTypeNve18:
+            result = [[MTBarcodeCode128Nve18 alloc] init];
+            break;
+        case MTBarcodeTypeHibc128:
+            result = [[MTBarcodeCode128Hibc alloc] init];
+            break;
+        case MTBarcodeTypeEAN128:
+            result = [[MTBarcodeCode128Ean128 alloc] init];
+            break;
         case MTBarcodeTypeCODE16K:
             result = [[MTBarcodeCode16k alloc] init];
             break;
@@ -160,6 +175,9 @@
             break;
         case MTBarcodeTypeCODE39:
             result = [[MTBarcodeCode39Iso16388 alloc] init];
+            break;
+        case MTBarcodeTypeHibc39:
+            result = [[MTBarcodeCode39Hbic alloc] init];
             break;
         case MTBarcodeTypeCODE49:
             result = [[MTBarcodeCode49 alloc] init];
@@ -176,9 +194,9 @@
         case MTBarcodeTypeDPLEIT:
             result = [[MTBarcodeDeutschePostLeitcode alloc] init];
             break;
-        case MTBarcodeTypeEan14:
-            result = [[MTBarcodeEan14 alloc] init];
-            break;
+        //case MTBarcodeTypeEan14:
+        //    result = [[MTBarcodeEan14 alloc] init];
+        //    break;
         case MTBarcodeTypeEANX:
             result = [[MTBarcodeEuropeanArticleNumberEan alloc] init];
             break;
@@ -221,9 +239,9 @@
         case MTBarcodeTypeMsiPlessey:
             result = [[MTBarcodeMsiPlessey alloc] init];
             break;
-        case MTBarcodeTypeNve18:
-            result = [[MTBarcodeNve18 alloc] init];
-            break;
+        //case MTBarcodeTypeNve18:
+        //    result = [[MTBarcodeNve18 alloc] init];
+        //    break;
         case MTBarcodeTypePdf417:
             result = [[MTBarcodePdf417Iso15438 alloc] init];
             break;
@@ -306,6 +324,12 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
+    
+#warning debugging mode
+    if (YES) {
+        [self setInput:@"[43]8349"];
+        [self setPrimaryData:@"[55]8344"];
+    }
 
     struct zint_symbol *barcode = ZBarcode_Create();
     
@@ -315,7 +339,47 @@
         
     } else {
 
-        barcode->symbology = [self barcodeType];
+        if ([self has2dComponentEnabled] == NO) {
+            barcode->symbology = [self barcodeType];
+        } else {
+            switch ([self barcodeType]) {
+                case MTBarcodeTypeEANX:
+                    barcode->symbology = MTBarcodeTypeEanxCc;
+                    break;
+                case MTBarcodeTypeEAN128:
+                    barcode->symbology = MTBarcodeTypeEan128Cc;
+                    break;
+                case MTBarcodeTypeCODE128:
+                    barcode->symbology = MTBarcodeTypeCode128b;
+                    break;
+                case MTBarcodeTypeRss14:
+                    barcode->symbology = MTBarcodeTypeRss14Cc;
+                    break;
+                case MTBarcodeTypeRssLtd:
+                    barcode->symbology = MTBarcodeTypeRssLtdCc;
+                    break;
+                case MTBarcodeTypeRssExp:
+                    barcode->symbology = MTBarcodeTypeRssExpCc;
+                    break;
+                case MTBarcodeTypeUpca:
+                    barcode->symbology = MTBarcodeTypeUpcaCc;
+                    break;
+                case MTBarcodeTypeRss14Stack:
+                    barcode->symbology = MTBarcodeTypeRss14StackCc;
+                    break;
+                case MTBarcodeTypeRss14StackOmni:
+                    barcode->symbology = MTBarcodeTypeRss14OmniCc;
+                    break;
+                case MTBarcodeTypeRssExpstack:
+                    barcode->symbology = MTBarcodeTypeRssExpstackCc;
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        
         barcode->height = [self height];
         //barcode->width = [self width];
         barcode->border_width = [self borderWidth];
@@ -330,17 +394,27 @@
             barcode->option_2 = [self option2];
             barcode->option_3 = [self option3];
         } else {
-            barcode->option_1 = [self option1];
-            if ([self primaryData] == nil) {
-                strcpy(barcode->primary, "");
-            } else {
-                const char *primaryData = [[self primaryData] UTF8String];
-                strcpy(barcode->primary, primaryData);
-            }
         }
         
-        NSInteger inputLength = [[self input] length];
-        NSString *inputString = inputLength > 0 ? [self input] : @"";
+        NSString *primaryInput = nil;
+        if ([self has2dComponentEnabled]) {
+            
+            primaryInput = [self primaryData];
+            barcode->option_1 = [self has2dComponentType];
+            
+            if ([[self input] length] > 0) {
+                const char *primaryData = [[self input] UTF8String];
+                strcpy(barcode->primary, primaryData);
+            } else {
+                strcpy(barcode->primary, "");
+            }
+
+        } else {
+            primaryInput = [self input];
+        }
+        
+        NSInteger inputLength = [primaryInput length];
+        NSString *inputString = inputLength > 0 ? primaryInput : @"";
         const char *input = [inputString UTF8String];
         int inputLen = strlen(input);
         int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
@@ -421,19 +495,19 @@
             skewValue = 1.0000f;
         }
         
-        CGSize bitmapFinalSize = CGSizeMake(skewValue * barcode->bitmap_width, skewValue * barcode->bitmap_height);
+        //CGSize bitmapFinalSize = CGSizeMake(skewValue * barcode->bitmap_width, skewValue * barcode->bitmap_height);
         
         CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
         CGAffineTransform affineTransformMoveOriginCenter = CGAffineTransformMakeTranslation(rect.size.width / 2.0000f, rect.size.height / 2.0000f);
         CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation([self rotate]);
         
         
-        CGFloat tx = (rect.size.width / 2.0000f) - (bitmapFinalSize.width / 2.0000f);
-        CGFloat ty = (rect.size.height / 2.0000f) - (bitmapFinalSize.height / 2.0000f);
+        //CGFloat tx = (rect.size.width / 2.0000f) - (bitmapFinalSize.width / 2.0000f);
+        //CGFloat ty = (rect.size.height / 2.0000f) - (bitmapFinalSize.height / 2.0000f);
         //tx = (rect.size.width / 2.0000f) - (barcode->bitmap_width / 2.0000f);
         //ty = (rect.size.height / 2.0000f) - (barcode->bitmap_height / 2.0000f);
         //CGAffineTransform affineTransformCenter = CGAffineTransformMakeTranslation(tx, ty);
-        CGAffineTransform affineTransformCenter = CGAffineTransformMakeTranslation(tx, ty);
+        //CGAffineTransform affineTransformCenter = CGAffineTransformMakeTranslation(tx, ty);
         
         //Scale to fit
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -498,6 +572,10 @@
                    @BARCODE_CODABAR         : @"Codabar",
                    @BARCODE_CODE11          : @"Code 11",
                    @BARCODE_CODE128         : @"Code 128 (ISO 15417)",
+                   @(MTBarcodeTypeCode128b) : @"Code 128 (Subset C Suppression)",
+                   @(MTBarcodeTypeEan14)    : @"Code 128 (EAN-14)",
+                   @(MTBarcodeTypeHibc128)  : @"Code 128 (HBIC)",
+                   @(MTBarcodeTypeEAN128)   : @"Code 128 (HBIC)",
                    @BARCODE_CODE16K         : @"Code 16k",
                    @BARCODE_C25LOGIC        : @"Code 2 of 5 Data Logic",
                    @BARCODE_C25IATA         : @"Code 2 of 5 IATA",
@@ -506,7 +584,8 @@
                    @BARCODE_C25MATRIX       : @"Code 2 of 5 Matrix",
                    @BARCODE_CODE32          : @"Code 32 (Italian Pharmacode)",
                    @BARCODE_CODE39          : @"Code 39 (ISO 16388)",
-                   @BARCODE_EXCODE39        : @"Code 39 Extended",
+                   @BARCODE_EXCODE39        : @"Code 39 (Extended)",
+                   @(MTBarcodeTypeHibc39)   : @"Code 39 (HBIC)",
                    @BARCODE_CODE49          : @"Code 49",
                    @BARCODE_CODE93          : @"Code 93",
                    @BARCODE_CODEONE         : @"Code One",

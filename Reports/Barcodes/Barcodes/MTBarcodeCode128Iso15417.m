@@ -26,7 +26,7 @@
         [self setBarcodeType:[MTBarcodeCode128Iso15417 type]];
         [self setName: @"Code 128 (ISO 15417)"];
         [self setHas2dComponent: YES];
-        [self setHasOptionalInput: YES];
+        [self setHasOptionalInput: NO];
         
     }
     return self;
@@ -34,6 +34,111 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeCODE128;
+}
+
+@end
+
+@implementation MTBarcodeCode128SubsetB
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        
+        [self setBarcodeType:[MTBarcodeCode128SubsetB type]];
+        [self setName: @"Code 128 (Subset C Suppression)"];
+        [self setHas2dComponent: YES];
+        [self setHasOptionalInput: NO];
+        
+    }
+    return self;
+}
+
++ (MTBarcodeType)type {
+    return MTBarcodeTypeCode128b;
+}
+
+@end
+
+@implementation MTBarcodeCode128Ean14
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        
+        [self setBarcodeType:[MTBarcodeCode128Ean14 type]];
+        [self setName: @"Code 128 (EAN-14)"];
+        [self setHas2dComponent: YES];
+        [self setHasOptionalInput: NO];
+        
+    }
+    return self;
+}
+
++ (MTBarcodeType)type {
+    return MTBarcodeTypeEan14;
+}
+
+@end
+
+@implementation MTBarcodeCode128Nve18
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        
+        [self setBarcodeType:[MTBarcodeCode128Nve18 type]];
+        [self setName: @"Code 128 (HBIC)"];
+        [self setHas2dComponent: YES];
+        [self setHasOptionalInput: NO];
+        
+    }
+    return self;
+}
+
++ (MTBarcodeType)type {
+    return MTBarcodeTypeNve18;
+}
+
+@end
+
+@implementation MTBarcodeCode128Hibc
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        
+        [self setBarcodeType:[MTBarcodeCode128Hibc type]];
+        [self setName: @"Code 128 (GS1-128)"];
+        [self setHas2dComponent: YES];
+        [self setHasOptionalInput: NO];
+        
+    }
+    return self;
+}
+
++ (MTBarcodeType)type {
+    return MTBarcodeTypeHibc128;
+}
+
+@end
+
+@implementation MTBarcodeCode128Ean128
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        
+        [self setBarcodeType:[MTBarcodeCode128Hibc type]];
+        [self setName: @"Code 128 (GS1-128)"];
+        [self setHas2dComponent: YES];
+        [self setHasOptionalInput: NO];
+        
+    }
+    return self;
+}
+
++ (MTBarcodeType)type {
+    return MTBarcodeTypeEAN128;
 }
 
 @end

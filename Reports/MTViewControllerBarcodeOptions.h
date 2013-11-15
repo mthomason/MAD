@@ -15,6 +15,7 @@
 #import "MTTableViewControllerBarcodeExtraMicroQrCode.h"
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
+#import "MTTableViewControllerBarcodeExtraDataMatrix.h"
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 - (MTBarcode *)barcodeToDisplay;
@@ -47,6 +48,10 @@
 - (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode;
 - (void)barcodeMaxicodeDidSetPrimaryData:(NSString *)primaryData;
 
+- (void)barcode2dComponentSetEnabled:(BOOL)enabled;
+- (void)barcode2dComponentSetType:(NSInteger)type;
+- (void)barcode2dComponentsetSampleData:(NSArray *)sampleData;
+
 @end
 
 @interface MTViewControllerBarcodeOptions : UITableViewController
@@ -56,7 +61,8 @@
         MTTableViewControllerBarcodeExtraGridMatrixDelegate,
         MTTableViewControllerBarcodeExtraMicroQrCodeDelegate,
         MTTableViewControllerBarcodeExtraQrCodeDelegate,
-        MTTableViewControllerBarcodeExtraMaxicodeDelegate>
+        MTTableViewControllerBarcodeExtraMaxicodeDelegate,
+        MTTableViewControllerBarcodeExtraDataMatrixDelegate>
 
 @property (nonatomic, assign) id <MTViewControllerBarcodeOptionsDelegate> delegate;
 

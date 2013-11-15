@@ -15,6 +15,8 @@
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
+@property (nonatomic, assign, readwrite) NSInteger option2;
+
 @end
 
 @implementation MTBarcodeCode39Extended
@@ -34,6 +36,18 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeEXCODE39;
+}
+
+- (void)setMod43CheckDigitEnabled:(BOOL)enabled {
+    if (enabled) {
+        [self setOption2:1];
+    } else {
+        [self setOption2:0];
+    }
+}
+
+- (BOOL)mod43CheckDigitEnabled {
+    return [self option2] == 1;
 }
 
 @end

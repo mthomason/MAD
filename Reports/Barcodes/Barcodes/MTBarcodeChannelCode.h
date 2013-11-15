@@ -10,4 +10,7 @@
 
 @interface MTBarcodeChannelCode : MTBarcode
 
+- (void)setNumberOfChannels:(NSInteger)numberOfChannels;
+- (NSInteger)numberOfChannels;
+
 @end

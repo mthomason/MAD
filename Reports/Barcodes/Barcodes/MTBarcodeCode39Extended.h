@@ -10,4 +10,7 @@
 
 @interface MTBarcodeCode39Extended : MTBarcode
 
+- (void)setMod43CheckDigitEnabled:(BOOL)enabled;
+- (BOOL)mod43CheckDigitEnabled;
+
 @end
