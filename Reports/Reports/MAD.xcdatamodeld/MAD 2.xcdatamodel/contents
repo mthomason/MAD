@@ -238,8 +238,8 @@
         <attribute name="identifier" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <relationship name="databaseSchemaField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaField" inverseName="inQueryField" inverseEntity="RptqDatabaseSchemaField" syncable="YES"/>
         <relationship name="inAggregateObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentObjectAggregate" inverseName="aggregateField" inverseEntity="RptqDocumentObjectAggregate" syncable="YES"/>
-        <relationship name="inBarcodeField1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectBarcode" inverseName="referencesField1" inverseEntity="RptqDocumentObjectBarcode" syncable="YES"/>
-        <relationship name="inBarcodeField2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectBarcode" inverseName="referencesField2" inverseEntity="RptqDocumentObjectBarcode" syncable="YES"/>
+        <relationship name="inBarcodeField1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentObjectBarcode" inverseName="referencesField1" inverseEntity="RptqDocumentObjectBarcode" syncable="YES"/>
+        <relationship name="inBarcodeField2" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentObjectBarcode" inverseName="referencesField2" inverseEntity="RptqDocumentObjectBarcode" syncable="YES"/>
         <relationship name="inDataObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentObjectLabelDataField" inverseName="referencesQueryField" inverseEntity="RptqDocumentObjectLabelDataField" syncable="YES"/>
         <relationship name="inQueryGroup" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="hasField" inverseEntity="RptqQueryGroup" syncable="YES"/>
         <relationship name="inQueryLinkLeft" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="hasLeftField" inverseEntity="RptqQueryLinks" syncable="YES"/>
@@ -335,8 +335,8 @@
         <element name="RptqDocumentObjectAggregate" positionX="117" positionY="903" width="198" height="150"/>
         <element name="RptqDocumentObjectBarcode" positionX="594" positionY="954" width="290" height="433"/>
         <element name="RptqDocumentObjectChart" positionX="567" positionY="510" width="200" height="75"/>
-        <element name="RptqDocumentObjectFormula" positionX="-11" positionY="648" width="191" height="178"/>
-        <element name="RptqDocumentObjectGroupKey" positionX="504" positionY="765" width="173" height="90"/>
+        <element name="RptqDocumentObjectFormula" positionX="34" positionY="578" width="191" height="178"/>
+        <element name="RptqDocumentObjectGroupKey" positionX="585" positionY="828" width="173" height="90"/>
         <element name="RptqDocumentObjectImage" positionX="522" positionY="621" width="189" height="90"/>
         <element name="RptqDocumentObjectLabel" positionX="639" positionY="261" width="191" height="90"/>
         <element name="RptqDocumentObjectLabelDataField" positionX="189" positionY="1098" width="218" height="135"/>
@@ -345,7 +345,7 @@
         <element name="RptqDocumentSectionRows" positionX="-225" positionY="-786" width="189" height="120"/>
         <element name="RptqQuery" positionX="-1163" positionY="-351" width="128" height="225"/>
         <element name="RptqQueryCache" positionX="-1206" positionY="-90" width="128" height="120"/>
-        <element name="RptqQueryField" positionX="-1289" positionY="189" width="128" height="238"/>
+        <element name="RptqQueryField" positionX="-1289" positionY="207" width="128" height="238"/>
         <element name="RptqQueryGroup" positionX="-864" positionY="315" width="128" height="135"/>
         <element name="RptqQueryLinks" positionX="-1244" positionY="486" width="128" height="270"/>
         <element name="RptqQueryPredicate" positionX="-1467" positionY="-42" width="128" height="150"/>

@@ -86,11 +86,15 @@
 }
 
 - (void)didSetField1:(RptqQueryField *)field {
+    [field retain];
     [self setQueryField1:field];
+    [field release];
 }
 
 - (void)didSetField2:(RptqQueryField *)field {
+    [field retain];
     [self setQueryField2:field];
+    [field release];
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate

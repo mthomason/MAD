@@ -696,6 +696,11 @@
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
 
     [[self navigationController] popViewControllerAnimated:YES];
+    if  ([self selectingField1]) {
+        [[self delegate] didSetField1:field];
+    } else if ([self selectingField2]) {
+        [[self delegate] didSetField2:field];
+    }
     
     RptqDocument *document = [RptqDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];

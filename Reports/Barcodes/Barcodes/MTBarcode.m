@@ -322,9 +322,10 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
+    CGRect originalRect = rect;
     
 #warning debugging mode
-    if (YES) {
+    if (NO) {
         [self setInput:@"[43]8349"];
         [self setPrimaryData:@"[55]8344"];
     }
@@ -332,8 +333,7 @@
     struct zint_symbol *barcode = ZBarcode_Create();
     
     if (barcode == NULL) {
-        CGFloat midY = CGRectGetMidY(rect);
-        [@"No barcode data." drawAtPoint:CGPointMake(CGPointZero.x, midY) withAttributes:nil];
+        [@"No barcode data." drawInRect:rect withAttributes:nil];
         
     } else {
 
@@ -377,9 +377,7 @@
             }
         }
         
-        
         barcode->height = [self height];
-        //barcode->width = [self width];
         barcode->border_width = [self borderWidth];
         barcode->whitespace_width = [self whitespaceWidth];
         barcode->show_hrt = [self humanReadable];
@@ -445,8 +443,7 @@
         
         if (errorMessage) {
             if ([self showErrorMessages]) {
-                CGFloat midY = CGRectGetMidY(rect);
-                [errorMessage drawAtPoint:CGPointMake(CGPointZero.x, midY) withAttributes:nil];
+                [errorMessage drawInRect:rect withAttributes:nil];
             }
         }
         
@@ -493,27 +490,16 @@
             skewValue = [self scale];
         }
         
-        //CGSize bitmapFinalSize = CGSizeMake(skewValue * barcode->bitmap_width, skewValue * barcode->bitmap_height);
-        
         CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
         CGAffineTransform affineTransformMoveOriginCenter = CGAffineTransformMakeTranslation(rect.size.width / 2.0000f, rect.size.height / 2.0000f);
         CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation([self rotate]);
         
-        
-        //CGFloat tx = (rect.size.width / 2.0000f) - (bitmapFinalSize.width / 2.0000f);
-        //CGFloat ty = (rect.size.height / 2.0000f) - (bitmapFinalSize.height / 2.0000f);
-        //tx = (rect.size.width / 2.0000f) - (barcode->bitmap_width / 2.0000f);
-        //ty = (rect.size.height / 2.0000f) - (barcode->bitmap_height / 2.0000f);
-        //CGAffineTransform affineTransformCenter = CGAffineTransformMakeTranslation(tx, ty);
-        //CGAffineTransform affineTransformCenter = CGAffineTransformMakeTranslation(tx, ty);
-        
         //Scale to fit
         CGContextRef context = UIGraphicsGetCurrentContext();
-        
+
         CGContextSaveGState(context);
-        
-        CGContextConcatCTM(context, affineTransformMakeFit);
-        
+        //CGContextClipToRect(context, originalRect);
+
         //Center, rotate, reset to origin
         CGContextConcatCTM(context, affineTransformMoveOriginCenter);
         CGContextConcatCTM(context, affineTransformRotate90);
@@ -529,9 +515,14 @@
         CGContextConcatCTM(context, affineTransformMoveOffscreenTop);
         CGContextConcatCTM(context, affineTransformReflectDown);
         
-        //Move to center
-        //CGContextConcatCTM(context, affineTransformCenter);
+        //Right now we are at zero point.  Move to rect.org
+        CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(originalRect.origin.y, originalRect.origin.x);
+        CGContextConcatCTM(context, affineTransformOrigin);
 
+        //Skew that bitch
+        CGContextConcatCTM(context, affineTransformMakeFit);
+        
+        
         //Draw barcode
         if (success == 0) {
             int i = 0;
@@ -558,6 +549,8 @@
         barcode = NULL;
         
         CGContextRestoreGState(context);
+        
+
     }
 }
 

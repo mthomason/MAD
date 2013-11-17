@@ -387,8 +387,10 @@ static NSNumberFormatter *currencyNumberFormatter;
         case MTDocumentObjectTypeBarcode: {
             
             MTBarcode *barcode = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
-            RptqQueryField *field1 = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField1];
-            RptqQueryField *field2 = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField2];
+            NSManagedObjectID *field1ObjectId = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField1];
+            NSManagedObjectID *field2ObjectId = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField2];
+            RptqQueryField *field1 = [RptqQueryField getQueryFieldForObjectID:field1ObjectId fromObjectContext:mangedObjectContext];
+            RptqQueryField *field2 = [RptqQueryField getQueryFieldForObjectID:field2ObjectId fromObjectContext:mangedObjectContext];
 
             entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectBarcode class])
                                                                  inManagedObjectContext: mangedObjectContext];
@@ -437,6 +439,7 @@ static NSNumberFormatter *currencyNumberFormatter;
             [documentObject setIsBarcode:reportObject];
             [documentObject setType: @(MTDocumentObjectTypeBarcode)];
 
+            [reportObject release];
             break;
         }
         default:
@@ -447,7 +450,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     [hasObjects insertObject:documentObject atIndex:0];
     [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
     [hasObjects release];
-    
+    //[[document managedObjectContext] save:nil];
     return [documentObject autorelease];
 }
 

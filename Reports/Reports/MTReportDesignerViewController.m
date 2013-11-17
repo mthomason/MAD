@@ -292,15 +292,18 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
         [defination setObject:@(MTDocumentObjectTypeBarcode)        forKey:MTDocumentObjectDefinationType];
         [defination setObject:[barcodeViewController barcode]       forKey:MTDocumentObjectDefinationObject];
-        RptqQueryField *queryField1 = [barcodeViewController queryField1];
-        RptqQueryField *queryField2 = [barcodeViewController queryField2];
+        RptqQueryField *queryField1 = [[barcodeViewController queryField1] retain];
+        RptqQueryField *queryField2 = [[barcodeViewController queryField2] retain];
         if (queryField1 != nil) {
-            [defination setObject:queryField1   forKey:MTDocumentObjectDefinationField1];
+            NSManagedObjectID *objectId = [queryField1 objectID];
+            [defination setObject:objectId   forKey:MTDocumentObjectDefinationField1];
         }
         if (queryField2 != nil) {
-            [defination setObject:queryField2   forKey:MTDocumentObjectDefinationField2];
+            NSManagedObjectID *objectId = [queryField2 objectID];
+            [defination setObject:objectId   forKey:MTDocumentObjectDefinationField2];
         }
-        
+        [queryField1 release];
+        [queryField2 release];
         [self insertDocumentObjectWithDefination:defination];
         
         
@@ -2478,18 +2481,18 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
 
     [detailSection performBatchUpdates:^{
-        MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-        NSManagedObjectContext *managedObjectContextBlock = [activeDocument managedObjectContext];
+        //MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+        //NSManagedObjectContext *managedObjectContextBlock = [activeDocument managedObjectContext];
         
         
         RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination
                                                                         toDocument:document];
         [documentObject obtainPermanentID];
         
-        NSError *error = nil;
-        [managedObjectContextBlock save:&error];
+        //NSError *error = nil;
+        //[managedObjectContextBlock save:&error];
         [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-        [activeDocument release];
+        //[activeDocument release];
         
     } completion:^(BOOL finished) {
         

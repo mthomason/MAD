@@ -592,8 +592,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         }
                                         case MTDocumentObjectTypeBarcode: {
                                             RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
-                                            RptqQueryField *queryField1 = [barcodeObject referencesField1];
-                                            RptqQueryField *queryField2 = [barcodeObject referencesField2];
+                                            RptqQueryField *queryField1 = [[barcodeObject referencesField1] retain];
+                                            RptqQueryField *queryField2 = [[barcodeObject referencesField2] retain];
                                             
                                             NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
                                             NSInteger pageIndex = index;
@@ -630,7 +630,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             if ([input2 isEqualToString:@"(null)"]) {
                                                 input2 = @"";
                                             }
-                                            MTBarcode *barcode = [MTBarcode barcodeWithType:[[barcodeObject type] integerValue]];
+                                            MTBarcodeType type = [[barcodeObject type] integerValue];
+                                            MTBarcode *barcode = [[MTBarcode barcodeWithType:type] retain];
                                             [barcode setHas2dComponentEnabled:[[barcodeObject add2dComponent] boolValue]];
                                             [barcode setBorderStyle:        [[barcodeObject borderStyle] integerValue]];
                                             [barcode setBorderWidth:        [[barcodeObject borderWidth] integerValue]];
@@ -645,6 +646,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             [barcode setInput:              input1];
                                             [barcode setPrimaryData:        input2];
                                             drawingObject = [barcode retain];
+                                            [barcode release];
+                                            [queryField1 release];
+                                            [queryField2 release];
                                             break;
                                         }
                                         case MTDocumentObjectTypeLabelDynamic: {
