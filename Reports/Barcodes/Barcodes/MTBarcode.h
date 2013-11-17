@@ -135,6 +135,8 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 @property (nonatomic, assign) NSInteger option2;
 @property (nonatomic, assign) NSInteger option3;
 
+@property (nonatomic, assign) BOOL center;
+
 @property (nonatomic, retain) NSString *input;
 @property (nonatomic, assign) NSInteger height;
 @property (nonatomic, assign) NSInteger width;

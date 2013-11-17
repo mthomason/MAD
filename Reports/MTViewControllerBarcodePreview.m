@@ -52,6 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[self barcodeView] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
 	// Do any additional setup after loading the view.
 }
 

@@ -318,6 +318,7 @@
     [self setOption1: NO];
     [self setOption2: NO];
     [self setOption3: NO];
+    [self setCenter: NO];
     [self setScale:1.0000f];
 }
 
@@ -499,6 +500,21 @@
 
         CGContextSaveGState(context);
         //CGContextClipToRect(context, originalRect);
+        
+        if ([self center]) {
+            CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
+            CGFloat mx = CGRectGetMidX(bitmapRect);
+            CGFloat my = CGRectGetMidY(bitmapRect);
+            CGPoint bitmapCenter = CGPointMake(mx, my);
+            mx = CGRectGetMidX(originalRect);
+            my = CGRectGetMidY(originalRect);
+            CGPoint origionalCenter = CGPointMake(mx, my);
+            mx = origionalCenter.x - bitmapCenter.x;
+            my = origionalCenter.y - bitmapCenter.y;
+            CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(mx, my);
+            CGContextConcatCTM(context, affineTransformOrigin);
+            
+        }
 
         //Center, rotate, reset to origin
         CGContextConcatCTM(context, affineTransformMoveOriginCenter);
@@ -515,12 +531,25 @@
         CGContextConcatCTM(context, affineTransformMoveOffscreenTop);
         CGContextConcatCTM(context, affineTransformReflectDown);
         
-        //Right now we are at zero point.  Move to rect.org
-        CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(originalRect.origin.y, originalRect.origin.x);
-        CGContextConcatCTM(context, affineTransformOrigin);
-
+            //Right now we are at zero point.  Move to rect.org
+            CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(originalRect.origin.y, originalRect.origin.x);
+            CGContextConcatCTM(context, affineTransformOrigin);
+            /*
+            CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
+            CGFloat mx = CGRectGetMidX(bitmapRect);
+            CGFloat my = CGRectGetMidY(bitmapRect);
+            CGPoint bitmapCenter = CGPointMake(mx, my);
+            mx = CGRectGetMidX(originalRect);
+            my = CGRectGetMidY(originalRect);
+            CGPoint origionalCenter = CGPointMake(mx, my);
+            mx = origionalCenter.x - bitmapCenter.x;
+            my = origionalCenter.y - bitmapCenter.y;
+            CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(mx, my);
+            CGContextConcatCTM(context, affineTransformMoveOriginCenter);*/
         //Skew that bitch
         CGContextConcatCTM(context, affineTransformMakeFit);
+
+        
         
         
         //Draw barcode
