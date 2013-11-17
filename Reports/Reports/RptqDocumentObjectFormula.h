@@ -1,8 +1,8 @@
 //
 //  RptqDocumentObjectFormula.h
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 8/4/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,8 +13,12 @@
 
 @interface RptqDocumentObjectFormula : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * functionScope;
+@property (nonatomic, retain) NSNumber * functionType;
 @property (nonatomic, retain) NSNumber * identifier;
+@property (nonatomic, retain) NSNumber * inputType;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * resultType;
 @property (nonatomic, retain) NSString * source;
 @property (nonatomic, retain) RptqDocumentObjectAggregate *includedInAggregateObject;
 @property (nonatomic, retain) RptqDocumentObject *parentObjectFormula;

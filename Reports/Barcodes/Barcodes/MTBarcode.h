@@ -131,9 +131,9 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 @property (nonatomic, assign, readonly) BOOL has2dComponent;
 @property (nonatomic, assign, readonly) BOOL hasOptionalInput;
 
-@property (nonatomic, assign, readonly) NSInteger option1;
-@property (nonatomic, assign, readonly) NSInteger option2;
-@property (nonatomic, assign, readonly) NSInteger option3;
+@property (nonatomic, assign) NSInteger option1;
+@property (nonatomic, assign) NSInteger option2;
+@property (nonatomic, assign) NSInteger option3;
 
 @property (nonatomic, retain) NSString *input;
 @property (nonatomic, assign) NSInteger height;
@@ -146,6 +146,8 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 
 @property (nonatomic, assign) BOOL has2dComponentEnabled;
 @property (nonatomic, assign) NSInteger has2dComponentType;
+
+@property (nonatomic, assign) CGFloat scale;
 
 - (void)drawInRect:(CGRect)rect;
 

@@ -109,14 +109,16 @@
         <relationship name="aggregateFunction" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObjectFormula" inverseName="includedInAggregateObject" inverseEntity="RptqDocumentObjectFormula" syncable="YES"/>
         <relationship name="parentObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentObject" inverseName="isAggregate" inverseEntity="RptqDocumentObject" syncable="YES"/>
     </entity>
-    <entity name="RptqDocumentObjectBarcode" syncable="YES">
+    <entity name="RptqDocumentObjectBarcode" representedClassName="RptqDocumentObjectBarcode" syncable="YES">
         <attribute name="add2dComponent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="borderStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="borderType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="borderWidth" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
         <attribute name="colorBackground" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="colorForeground" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="humanReadable" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="inputField1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="inputField2" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="inputMode" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -331,6 +333,7 @@
         <element name="RptqDocument" positionX="-594" positionY="-828" width="128" height="285"/>
         <element name="RptqDocumentObject" positionX="358" positionY="-450" width="128" height="748"/>
         <element name="RptqDocumentObjectAggregate" positionX="117" positionY="903" width="198" height="150"/>
+        <element name="RptqDocumentObjectBarcode" positionX="594" positionY="954" width="290" height="433"/>
         <element name="RptqDocumentObjectChart" positionX="567" positionY="510" width="200" height="75"/>
         <element name="RptqDocumentObjectFormula" positionX="-11" positionY="648" width="191" height="178"/>
         <element name="RptqDocumentObjectGroupKey" positionX="504" positionY="765" width="173" height="90"/>
@@ -349,6 +352,5 @@
         <element name="RptqQuerySort" positionX="-1089" positionY="99" width="128" height="120"/>
         <element name="RptqQueryTable" positionX="-893" positionY="990" width="128" height="210"/>
         <element name="RptqUserCredentals" positionX="-387" positionY="-450" width="128" height="360"/>
-        <element name="RptqDocumentObjectBarcode" positionX="594" positionY="954" width="290" height="403"/>
     </elements>
 </model>

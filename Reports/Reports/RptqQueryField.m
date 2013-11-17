@@ -1,8 +1,8 @@
 //
 //  RptqQueryField.m
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 6/22/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -22,6 +22,8 @@
 @dynamic identifier;
 @dynamic databaseSchemaField;
 @dynamic inAggregateObject;
+@dynamic inBarcodeField1;
+@dynamic inBarcodeField2;
 @dynamic inDataObject;
 @dynamic inQueryGroup;
 @dynamic inQueryLinkLeft;

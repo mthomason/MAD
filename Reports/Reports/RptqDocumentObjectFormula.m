@@ -1,8 +1,8 @@
 //
 //  RptqDocumentObjectFormula.m
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 8/4/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -13,8 +13,12 @@
 
 @implementation RptqDocumentObjectFormula
 
+@dynamic functionScope;
+@dynamic functionType;
 @dynamic identifier;
+@dynamic inputType;
 @dynamic name;
+@dynamic resultType;
 @dynamic source;
 @dynamic includedInAggregateObject;
 @dynamic parentObjectFormula;

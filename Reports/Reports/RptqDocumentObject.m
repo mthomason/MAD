@@ -1,13 +1,14 @@
 //
 //  RptqDocumentObject.m
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 8/4/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectChart.h"
 #import "RptqDocumentObjectFormula.h"
 #import "RptqDocumentObjectGroupKey.h"
@@ -59,6 +60,7 @@
 @dynamic wrappingStyle;
 @dynamic inSectionRow;
 @dynamic isAggregate;
+@dynamic isBarcode;
 @dynamic isChart;
 @dynamic isFormula;
 @dynamic isGroupKey;

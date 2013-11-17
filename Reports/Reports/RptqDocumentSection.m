@@ -1,8 +1,8 @@
 //
 //  RptqDocumentSection.m
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 8/4/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -33,9 +33,9 @@
 @dynamic hasRows;
 @dynamic inGroup;
 @dynamic inReport;
-@dynamic inReportReportHeader;
+@dynamic inReportPageFooter;
 @dynamic inReportPageHeader;
 @dynamic inReportReportFooter;
-@dynamic inReportPageFooter;
+@dynamic inReportReportHeader;
 
 @end

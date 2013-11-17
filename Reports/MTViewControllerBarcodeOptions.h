@@ -52,6 +52,9 @@
 - (void)barcode2dComponentSetType:(NSInteger)type;
 - (void)barcode2dComponentsetSampleData:(NSArray *)sampleData;
 
+- (void)didSetField1:(RptqQueryField *)field;
+- (void)didSetField2:(RptqQueryField *)field;
+
 @end
 
 @interface MTViewControllerBarcodeOptions : UITableViewController

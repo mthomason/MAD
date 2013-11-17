@@ -13,12 +13,11 @@
 - (void)didChangeBarcodeType:(MTBarcodeType)type;
 @end
 
-
 @interface MTViewControllerBarcodePreview : UIViewController
 
 @property (nonatomic, assign) id <MTViewControllerBarcodePreviewDelegate> delegate;
-- (void)setBarcodeToPreview:(MTBarcode *)barcode;
 
+- (void)setBarcodeToPreview:(MTBarcode *)barcode;
 - (void)update;
 
 @end

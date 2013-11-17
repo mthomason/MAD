@@ -76,9 +76,6 @@
 @property (nonatomic, assign, readwrite) MTBarcodeType barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
-@property (nonatomic, assign, readwrite) NSInteger option1;
-@property (nonatomic, assign, readwrite) NSInteger option2;
-@property (nonatomic, assign, readwrite) NSInteger option3;
 @property (nonatomic, retain, readwrite) NSString *detailsSegueIdentifer;
 
 @end
@@ -321,6 +318,7 @@
     [self setOption1: NO];
     [self setOption2: NO];
     [self setOption3: NO];
+    [self setScale:1.0000f];
 }
 
 - (void)drawInRect:(CGRect)rect {
@@ -492,7 +490,7 @@
         } else if (makeSmaller2) {
             skewValue = skewValue2;
         } else {
-            skewValue = 1.0000f;
+            skewValue = [self scale];
         }
         
         //CGSize bitmapFinalSize = CGSizeMake(skewValue * barcode->bitmap_width, skewValue * barcode->bitmap_height);
@@ -511,6 +509,9 @@
         
         //Scale to fit
         CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        CGContextSaveGState(context);
+        
         CGContextConcatCTM(context, affineTransformMakeFit);
         
         //Center, rotate, reset to origin
@@ -555,8 +556,9 @@
         
         ZBarcode_Delete(barcode);
         barcode = NULL;
+        
+        CGContextRestoreGState(context);
     }
-    
 }
 
 + (NSDictionary *)names {

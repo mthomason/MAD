@@ -1,15 +1,15 @@
 //
 //  RptqDocumentObject.h
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 8/4/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class RptqDocumentObjectAggregate, RptqDocumentObjectChart, RptqDocumentObjectFormula, RptqDocumentObjectGroupKey, RptqDocumentObjectImage, RptqDocumentObjectLabel, RptqDocumentObjectLabelDataField, RptqDocumentObjectLabelLink, RptqDocumentSectionRows;
+@class RptqDocumentObjectAggregate, RptqDocumentObjectBarcode, RptqDocumentObjectChart, RptqDocumentObjectFormula, RptqDocumentObjectGroupKey, RptqDocumentObjectImage, RptqDocumentObjectLabel, RptqDocumentObjectLabelDataField, RptqDocumentObjectLabelLink, RptqDocumentSectionRows;
 
 @interface RptqDocumentObject : NSManagedObject
 
@@ -52,6 +52,7 @@
 @property (nonatomic, retain) NSNumber * wrappingStyle;
 @property (nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
 @property (nonatomic, retain) RptqDocumentObjectAggregate *isAggregate;
+@property (nonatomic, retain) RptqDocumentObjectBarcode *isBarcode;
 @property (nonatomic, retain) RptqDocumentObjectChart *isChart;
 @property (nonatomic, retain) RptqDocumentObjectFormula *isFormula;
 @property (nonatomic, retain) RptqDocumentObjectGroupKey *isGroupKey;

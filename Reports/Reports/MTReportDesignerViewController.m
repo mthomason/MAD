@@ -8,6 +8,7 @@
 
 #import "MTReportDesignerViewController.h"
 #import "DesignerSectionLabel.h"
+#import "MTViewControllerBarcode.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
@@ -281,8 +282,30 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 insert(action);
             }];
         }
+        
+    } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
 
+        MTViewControllerBarcode *barcodeViewController = [action sourceViewController];
+        
+        [[self barButtonItemObjects] setEnabled:YES];
+
+        NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
+        [defination setObject:@(MTDocumentObjectTypeBarcode)        forKey:MTDocumentObjectDefinationType];
+        [defination setObject:[barcodeViewController barcode]       forKey:MTDocumentObjectDefinationObject];
+        RptqQueryField *queryField1 = [barcodeViewController queryField1];
+        RptqQueryField *queryField2 = [barcodeViewController queryField2];
+        if (queryField1 != nil) {
+            [defination setObject:queryField1   forKey:MTDocumentObjectDefinationField1];
+        }
+        if (queryField2 != nil) {
+            [defination setObject:queryField2   forKey:MTDocumentObjectDefinationField2];
+        }
+        
+        [self insertDocumentObjectWithDefination:defination];
+        
+        
     } else if ([[action identifier] isEqualToString:@"MTStoryboardSegueUnwindToDesigner"]) {
+
     }
 
 }
@@ -2423,15 +2446,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                              groupNumber:(NSNumber *)groupNumber {
     [[self barButtonItemObjects] setEnabled:YES];
 
+    NSDictionary *documentObject = @{MTDocumentObjectDefinationAggregateType : @(functionType),
+                                     MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
+                                     MTDocumentObjectDefinationAggregatePivotType : @(groupType),
+                                     MTDocumentObjectDefinationAggregateObjectId : inputObject,
+                                     MTDocumentObjectDefinationAggregateFunctionInputType : @(inputType)};
     NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
-                                               MTDocumentObjectDefinationObject :  @{MTDocumentObjectDefinationAggregateType : @(functionType),
-                                                                                     MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
-                                                                                     MTDocumentObjectDefinationAggregatePivotType : @(groupType),
-                                                                                     MTDocumentObjectDefinationAggregateObjectId : inputObject,
-                                                                                     MTDocumentObjectDefinationAggregateFunctionInputType : @(inputType)}};
+                                               MTDocumentObjectDefinationObject :  documentObject};
 
     [self insertDocumentObjectWithDefination: documentObjectDefination];
 }
+
 
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText {
     [[self barButtonItemObjects] setEnabled:YES];

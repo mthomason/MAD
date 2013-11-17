@@ -7,6 +7,7 @@
 //
 
 #import "RptqDocumentObject+Extras.h"
+#import "MTBarcode.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
@@ -16,6 +17,9 @@ NSString * const MTDocumentObjectDefinationAggregatePivotNumber = @"MTDocumentOb
 NSString * const MTDocumentObjectDefinationAggregatePivotType = @"MTDocumentObjectDefinationAggregatePivotType";
 NSString * const MTDocumentObjectDefinationAggregateObjectId = @"MTDocumentObjectDefinationAggregateObjectId";
 NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocumentObjectDefinationAggregateFunctionInputType";
+
+NSString * const MTDocumentObjectDefinationField1 = @"MTDocumentObjectDefinationField1";
+NSString * const MTDocumentObjectDefinationField2 = @"MTDocumentObjectDefinationField2";
 
 static NSNumberFormatter *currencyNumberFormatter;
 
@@ -364,9 +368,8 @@ static NSNumberFormatter *currencyNumberFormatter;
             
             RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                      insertIntoManagedObjectContext: mangedObjectContext];
-            
+            [reportObject setImage:image];
             [documentObject setIsImage: reportObject];
-            [[documentObject isImage] setImage: image];
             [documentObject setSizeheight:@([image size].height)];
             [documentObject setSizewidth:@([image size].width)];
             [documentObject setType: @(MTDocumentObjectTypeImage)];
@@ -382,7 +385,56 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
         }
         case MTDocumentObjectTypeBarcode: {
+            
+            MTBarcode *barcode = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+            RptqQueryField *field1 = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField1];
+            RptqQueryField *field2 = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField2];
 
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectBarcode class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+
+            RptqDocumentObjectBarcode *reportObject = [[RptqDocumentObjectBarcode alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                     insertIntoManagedObjectContext: mangedObjectContext];
+            
+
+            NSNumber *componentEnabled = @([barcode has2dComponentEnabled]);
+            NSNumber *borderStyle = @([barcode borderStyle]);
+            NSNumber *borderWidth = @([barcode borderWidth]);
+            NSData *colorBackground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor whiteColor]];
+            NSData *colorForeground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blackColor]];
+            
+            NSNumber *height = @([barcode height]);
+            NSNumber *humanReadable = @([barcode humanReadable]);
+            NSNumber *option1 = @([barcode option1]);
+            NSNumber *option2 = @([barcode option2]);
+            NSNumber *option3 = @([barcode option3]);
+            NSNumber *showErrorMessage = @([barcode showErrorMessages]);
+            NSNumber *barcodeType = @([barcode barcodeType]);
+            NSNumber *whitespaceWidth = @([barcode whitespaceWidth]);
+            NSNumber *useStaticInput1 = @(NO);
+            NSNumber *useStaticInput2 = @(NO);
+            NSNumber *scale = @([barcode scale]);
+            
+            [reportObject setAdd2dComponent:componentEnabled];
+            [reportObject setBorderStyle:borderStyle];
+            [reportObject setBorderWidth:borderWidth];
+            [reportObject setColorBackground:colorBackground];
+            [reportObject setColorForeground:colorForeground];
+            [reportObject setHeight:height];
+            [reportObject setHumanReadable:humanReadable];
+            [reportObject setReferencesField1: field1];
+            [reportObject setReferencesField2: field2];
+            [reportObject setOption1: option1];
+            [reportObject setOption2: option2];
+            [reportObject setOption3: option3];
+            [reportObject setShowErrorMessage: showErrorMessage];
+            [reportObject setType:barcodeType];
+            [reportObject setWhitespaceWidth:whitespaceWidth];
+            [reportObject setUseStaticInput1:useStaticInput1];
+            [reportObject setUseStaticInput2:useStaticInput2];
+            [reportObject setScale:scale];
+            
+            [documentObject setIsBarcode:reportObject];
             [documentObject setType: @(MTDocumentObjectTypeBarcode)];
 
             break;
@@ -396,8 +448,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
     [hasObjects release];
     
-    //[[document managedObjectContext] save:nil];
-
     return [documentObject autorelease];
 }
 
@@ -427,6 +477,7 @@ static NSNumberFormatter *currencyNumberFormatter;
             break;
         }
         case MTDocumentObjectTypeBarcode: {
+            [managedObjectContext deleteObject:[documentObject isBarcode]];
             break;
         }
         default:

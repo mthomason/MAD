@@ -16,16 +16,19 @@
 @interface MTViewControllerBarcode ()
 
 @property (nonatomic, assign) BOOL editModeBarcodeType;
+
 @property (nonatomic, retain) MTViewControllerBarcodePreview *previewViewController;
 @property (nonatomic, retain) MTViewControllerBarcodeOptions *optionsViewController;
 
 @property (nonatomic, retain) NSString *barcodeInput;
-@property (nonatomic, retain) MTBarcode *barcode;
+
+@property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
+@property (nonatomic, retain, readwrite) RptqQueryField *queryField2;
+@property (nonatomic, retain, readwrite) MTBarcode *barcode;
 
 @property (nonatomic, retain) NSArray *cachedData;
 @property (nonatomic, retain) NSArray *cachedDataMaxicode;
 @property (nonatomic, retain) NSArray *cachedData2dComponent;
-
 
 @end
 
@@ -45,6 +48,8 @@
     [_barcodeInput release];
     [_previewViewController release];
     [_optionsViewController release];
+    [_queryField1 release];
+    [_queryField2 release];
     [super dealloc];
 }
 
@@ -78,6 +83,14 @@
 - (void)updateBarcode {
     [[self barcode] setInput:[self barcodeInput]];
     [[self previewViewController] update];
+}
+
+- (void)didSetField1:(RptqQueryField *)field {
+    [self setQueryField1:field];
+}
+
+- (void)didSetField2:(RptqQueryField *)field {
+    [self setQueryField2:field];
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate

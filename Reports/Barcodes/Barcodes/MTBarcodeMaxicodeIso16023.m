@@ -18,8 +18,6 @@
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
-@property (nonatomic, assign, readwrite) NSInteger option1;
-
 @end
 
 @implementation MTBarcodeMaxicodeIso16023

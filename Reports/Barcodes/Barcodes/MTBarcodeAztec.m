@@ -16,10 +16,6 @@
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
-@property (nonatomic, assign, readwrite) NSInteger option1;
-@property (nonatomic, assign, readwrite) NSInteger option2;
-@property (nonatomic, assign, readwrite) NSInteger option3;
-
 @end
 
 @implementation MTBarcodeAztec

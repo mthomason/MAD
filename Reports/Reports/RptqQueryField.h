@@ -1,8 +1,8 @@
 //
 //  RptqQueryField.h
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 6/22/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -16,6 +16,8 @@
 @property (nonatomic, retain) NSNumber * identifier;
 @property (nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;
 @property (nonatomic, retain) NSSet *inAggregateObject;
+@property (nonatomic, retain) NSManagedObject *inBarcodeField1;
+@property (nonatomic, retain) NSManagedObject *inBarcodeField2;
 @property (nonatomic, retain) NSSet *inDataObject;
 @property (nonatomic, retain) NSSet *inQueryGroup;
 @property (nonatomic, retain) NSSet *inQueryLinkLeft;

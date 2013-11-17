@@ -9,6 +9,7 @@
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
 #import "UIColor+EverydayApps.h"
+#import "MTBarcode.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -417,7 +418,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     }
                     NSDictionary *nextRowData = [self rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
                     
-                    
                     [groupLevelKeys removeAllObjects];
                     [nextGroupLevelKeys removeAllObjects];
                     if (rowData != nil) {
@@ -590,9 +590,68 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             displayString = @"";
                                             break;
                                         }
+                                        case MTDocumentObjectTypeBarcode: {
+                                            RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
+                                            RptqQueryField *queryField1 = [barcodeObject referencesField1];
+                                            RptqQueryField *queryField2 = [barcodeObject referencesField2];
                                             
+                                            NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
+                                            NSInteger pageIndex = index;
+                                            
+                                            NSNumber *sectionType = [documentSection type];
+                                            BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
+                                            if (useNextRowData) {
+                                                NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                                                NSInteger numberOfItemsOnPage = [pageData count];
+                                                if (rowToPrint < numberOfItemsOnPage - 1) {
+                                                    rowToPrint++;
+                                                } else {
+                                                    rowToPrint = 0;
+                                                    pageIndex++;
+                                                }
+                                            }
+                                            NSDictionary *rd = useNextRowData ? nextRowData : rowData;
+
+                                            NSString *tableFieldKey1 = [database safeQueryField:queryField1];
+                                            NSString *tableFieldKey2 = [database safeQueryField:queryField2];
+                                            id value1 = [rd objectForKey: tableFieldKey1];
+                                            id value2 = [rd objectForKey: tableFieldKey2];
+                                            RptqDatabaseSchemaField *schemaField1 = [queryField1 databaseSchemaField];
+                                            RptqDatabaseSchemaField *schemaField2 = [queryField2 databaseSchemaField];
+                                            NSNumber *dataTypeNumber1 = [schemaField1 dataType];
+                                            NSNumber *dataTypeNumber2 = [schemaField2 dataType];
+                                            MTDataType dataType1 = [dataTypeNumber1 integerValue];
+                                            MTDataType dataType2 = [dataTypeNumber2 integerValue];
+                                            NSString *input1 = [item formattedString:dataType1 forValue:value1];
+                                            if ([input1 isEqualToString:@"(null)"]) {
+                                                input1 = @"";
+                                            }
+                                            NSString *input2 = [item formattedString:dataType2 forValue:value2];
+                                            if ([input2 isEqualToString:@"(null)"]) {
+                                                input2 = @"";
+                                            }
+                                            MTBarcode *barcode = [MTBarcode barcodeWithType:[[barcodeObject type] integerValue]];
+                                            [barcode setHas2dComponentEnabled:[[barcodeObject add2dComponent] boolValue]];
+                                            [barcode setBorderStyle:        [[barcodeObject borderStyle] integerValue]];
+                                            [barcode setBorderWidth:        [[barcodeObject borderWidth] integerValue]];
+                                            [barcode setHeight:             [[barcodeObject height] integerValue]];
+                                            [barcode setHumanReadable:      [[barcodeObject humanReadable] integerValue]];
+                                            [barcode setOption1:            [[barcodeObject option1] integerValue]];
+                                            [barcode setOption2:            [[barcodeObject option2] integerValue]];
+                                            [barcode setOption3:            [[barcodeObject option3] integerValue]];
+                                            [barcode setShowErrorMessages:  [[barcodeObject showErrorMessage] boolValue]];
+                                            [barcode setWhitespaceWidth:    [[barcodeObject whitespaceWidth] boolValue]];
+                                            [barcode setScale:              [[barcodeObject scale] floatValue]];
+                                            [barcode setInput:              input1];
+                                            [barcode setPrimaryData:        input2];
+                                            drawingObject = [barcode retain];
+                                            break;
+                                        }
                                         case MTDocumentObjectTypeLabelDynamic: {
                                             if (rowData != nil) {
+                                                RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
+                                                RptqQueryField *queryField = [labelDataField referencesQueryField];
+
                                                 NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
                                                 NSInteger pageIndex = index;
                                                 
@@ -608,17 +667,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                         pageIndex++;
                                                     }
                                                 }
-                                                
                                                 NSDictionary *rd = useNextRowData ? nextRowData : rowData;
-                                                RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
-                                                RptqQueryField *queryField = [labelDataField referencesQueryField];
+                                                
                                                 NSString *tableFieldKey = [database safeQueryField:queryField];
                                                 id value = [rd objectForKey: tableFieldKey];
                                                 RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
                                                 NSNumber *dataTypeNumber = [schemaField dataType];
                                                 MTDataType dataType = [dataTypeNumber integerValue];
-                                                displayString = [item formattedString:dataType
-                                                                             forValue:value];
+                                                displayString = [item formattedString:dataType forValue:value];
                                                 if ([displayString isEqualToString:@"(null)"]) {
                                                     displayString = @"";
                                                 }
@@ -670,9 +726,13 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         CGContextRestoreGState(ctx);
                                         
                                     } else {
-                                        
+                                        /*if ([drawingObject isKindOfClass:[MTBarcode class]]) {
+                                            MTBarcode *d = (MTBarcode *)drawingObject;
+                                            [d drawInRect:elementCanvasRect];
+                                        } else {
+                                            [drawingObject drawInRect:elementCanvasRect];
+                                        }*/
                                         [drawingObject drawInRect:elementCanvasRect];
-                                        
                                     }
                                     
                                     [drawingObject release];

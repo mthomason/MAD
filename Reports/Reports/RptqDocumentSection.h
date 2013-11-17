@@ -1,8 +1,8 @@
 //
 //  RptqDocumentSection.h
-//  Reports
+//  MAD
 //
-//  Created by Michael Thomason on 8/4/13.
+//  Created by Michael Thomason on 11/16/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -32,10 +32,10 @@
 @property (nonatomic, retain) NSOrderedSet *hasRows;
 @property (nonatomic, retain) RptqQueryGroup *inGroup;
 @property (nonatomic, retain) RptqDocument *inReport;
-@property (nonatomic, retain) RptqDocument *inReportReportHeader;
+@property (nonatomic, retain) RptqDocument *inReportPageFooter;
 @property (nonatomic, retain) RptqDocument *inReportPageHeader;
 @property (nonatomic, retain) RptqDocument *inReportReportFooter;
-@property (nonatomic, retain) RptqDocument *inReportPageFooter;
+@property (nonatomic, retain) RptqDocument *inReportReportHeader;
 @end
 
 @interface RptqDocumentSection (CoreDataGeneratedAccessors)

@@ -5477,10 +5477,15 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="MAD Barcodes" id="iib-Jv-Gg4">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="yjj-A1-7wh"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="yjj-A1-7wh">
+                            <connections>
+                                <segue destination="gf6-g1-Uje" kind="unwind" identifier="MTSegueNewDocumentObjectBarcodeSaveIdentifer" unwindAction="unwindToDesigner:" id="M1M-OR-bCe"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CtM-1W-VX1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="gf6-g1-Uje" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3496" y="5002"/>
         </scene>

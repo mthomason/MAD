@@ -16,8 +16,6 @@
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
-@property (nonatomic, assign, readwrite) NSInteger option2;
-
 @end
 
 @implementation MTBarcodeCode39Iso16388

@@ -26,6 +26,7 @@
 #import "RptqDocumentObjectGroupKey+Extras.h"
 #import "RptqDocumentObjectImage+Extras.h"
 #import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
 #import <CoreData/CoreData.h>
 
 extern NSString * const MTDocumentObjectDefinationType;
@@ -36,6 +37,8 @@ extern NSString * const MTDocumentObjectDefinationAggregatePivotNumber;
 extern NSString * const MTDocumentObjectDefinationAggregatePivotType;
 extern NSString * const MTDocumentObjectDefinationAggregateObjectId;
 extern NSString * const MTDocumentObjectDefinationAggregateFunctionInputType;
+extern NSString * const MTDocumentObjectDefinationField1;
+extern NSString * const MTDocumentObjectDefinationField2;
 
 @interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
 
