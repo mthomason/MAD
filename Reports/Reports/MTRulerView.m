@@ -9,12 +9,29 @@
 #import "MTRulerView.h"
 #import "UIDevice+Hack.h"
 
+@interface MTRulerView ()
+
+@property (nonatomic, retain) NSDictionary *attributes;
+@property (nonatomic, retain) NSDictionary *attributesMetric;
+@property (nonatomic, assign) CGFloat thinLineWidth;
+@property (nonatomic, assign) CGFloat lineWidth;
+@property (nonatomic, assign) CGFloat eigthInchInPoints;
+@property (nonatomic, assign) CGFloat cmInPoints;
+
+@end
+
 @implementation MTRulerView
+
+- (void)dealloc{
+    [_attributesMetric release];
+    [_attributes release];
+    [super dealloc];
+}
 
 - (id)init {
     self = [super init];
     if (self) {
-        [self setBackgroundColor:[UIColor whiteColor]];
+        [self commonInit];
     }
     return self;
 }
@@ -22,9 +39,38 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundColor:[UIColor whiteColor]];
+        [self commonInit];
     }
     return self;
+}
+
+- (void)commonInit {
+    [self setBackgroundColor:[UIColor whiteColor]];
+    UIFont *font = [UIFont systemFontOfSize: 5.0000f];
+    UIFont *font2 = [UIFont systemFontOfSize: 4.0000f];
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName : font,
+                                 NSParagraphStyleAttributeName : paragraphStyle
+                                     };
+    NSDictionary *attributes2 = @{
+                                 NSFontAttributeName : font2,
+                                 NSParagraphStyleAttributeName : paragraphStyle
+                                 };
+    [self setAttributes:attributes];
+    [self setAttributesMetric:attributes2];
+    [paragraphStyle release];
+    
+    CGFloat thinLineWidth = 1.0000f / [[UIScreen mainScreen] scale];
+    [self setThinLineWidth:thinLineWidth];
+    [self setLineWidth:1.0000f];
+    
+    [self setEigthInchInPoints: 72.0000f / 8.0000f];
+    [self setCmInPoints:(72.0000f / 1.0000f) / 2.5400f];
+
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -32,33 +78,25 @@
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGMutablePathRef pathInchMarks = CGPathCreateMutable();
     
-    CGFloat thinLineWidth = 1.0000f / [[UIScreen mainScreen] scale];
-    CGFloat lineWidth = 1.0000f;
-
-    CGFloat eigthInchInPoints = 72.0000f / 8.0000f;
-    CGFloat cmInPoints = (72.0000f / 1.0000f) / 2.5400f;
-    for (NSInteger i = CGPointZero.x; i < rect.size.width / eigthInchInPoints; i++) {
+    for (NSInteger i = CGPointZero.x; i < rect.size.width / [self eigthInchInPoints]; i++) {
         @autoreleasepool {
-            CGFloat xPoint = i * eigthInchInPoints;
+            CGFloat xPoint = i * [self eigthInchInPoints];
             CGFloat length = 0.0000f;
             if ((i % 8) == 0) {
                 CGRect locationRect = CGRectMake(xPoint - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
                 NSString *s = [NSString stringWithFormat:@"%d", i / 8];
-                [s drawInRect: locationRect
-                     withFont: [UIFont systemFontOfSize: 6.0000f]
-                lineBreakMode: NSLineBreakByClipping
-                    alignment: NSTextAlignmentCenter];
+                [s drawInRect:locationRect withAttributes:[self attributes]];
                 length = 1.0000f;
-                CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
+                CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
             } else if (i % 2) {
                 length = 4.0000f;
-                CGContextSetLineWidth(currentContext, thinLineWidth);
+                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
             } else if (i % 4) {
                 length = 3.0000f;
-                CGContextSetLineWidth(currentContext, thinLineWidth);
+                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
             } else {
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, thinLineWidth);
+                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
             }
             CGPathMoveToPoint(pathInchMarks, NULL, xPoint, rect.size.height);
             CGPathAddLineToPoint(pathInchMarks, NULL, xPoint, rect.size.height - length);
@@ -70,23 +108,19 @@
     for (NSInteger i = CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
         @autoreleasepool {
             CGFloat length = 0.0000f;
-            CGFloat xPointC = i * (cmInPoints / 10.0000f);
+            CGFloat xPointC = i * ([self cmInPoints] / 10.0000f);
             if ((i % 10) == 0) {
                 CGRect locationRect = CGRectMake(xPointC - 5.000f, 1.0000f, 10.0000f, 5.0000f);
                 NSString *s = [NSString stringWithFormat:@"%d", i / 10];
-                [s drawInRect: locationRect
-                     withFont: [UIFont systemFontOfSize: 5.0000f]
-                lineBreakMode: NSLineBreakByClipping
-                    alignment: NSTextAlignmentCenter];
-                
+                [s drawInRect:locationRect withAttributes:[self attributesMetric]];
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, lineWidth * 2.0000f);
+                CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
             } else if (i % 5) {
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, thinLineWidth);
+                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
             } else {
                 length = 3.0000f;
-                CGContextSetLineWidth(currentContext, thinLineWidth);
+                CGContextSetLineWidth(currentContext, [self thinLineWidth]);
             }
             CGFloat xPoint = i * offsetInPoints;
             CGPathMoveToPoint(pathCmMarks, NULL, xPoint, CGPointZero.y);
