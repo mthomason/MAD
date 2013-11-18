@@ -98,11 +98,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
-
-//@property (nonatomic, retain) MAReportDocument *activeDocument;
-
-@property (nonatomic, retain) IBOutlet DocumentStatusView *documentStatusView;
-
 @property (nonatomic, retain) NSMutableArray *widthConstraints;
 
 @property (nonatomic, retain) MTDocumentSectionView *reportFooterView;
@@ -169,7 +164,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_toolbarTop release];
     [_toolboxView release];
     [_layoutConstraintsToRemove release];
-    [_documentStatusView release];
     [_layoutConstraintDesignerContentViewHeight release];
     [_layoutConstraintContainerToDesignerVertSpace release];
     [_layoutConstraintContainerToDesignerCenterY release];
@@ -372,24 +366,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [[[self navigationItem] titleView] sizeToFit];
-    if ([self documentStatusView] != nil) {
-        CGRect statusViewBounds;
-        if ([[self toolbarBottom] frame].size.height < 40.0000f) {
-            if ([UIDevice isModernOS]) {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 24.0000f, 24.0000f);
-            } else {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 28.0000f, 28.0000f);
-            }
-        } else {
-            if ([UIDevice isModernOS]) {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 32.0000f, 32.0000f);
-            } else {
-                statusViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, 40.0000f, 40.0000f);
-            }
-        }
-        [[self documentStatusView] setBounds:statusViewBounds];
-        [[self documentStatusView] setNeedsDisplay];
-    }
 }
 
 - (void)viewDidLoad {
@@ -1060,9 +1036,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - Document State
 
 - (void)documentStateChanged {
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
     UIDocumentState state = [activeDocument documentState];
-    switch ([activeDocument documentState]) {
+    switch (state) {
         case UIDocumentStateClosed:
             [self enableUserInteraction:[self view]];
             break;
@@ -1080,8 +1056,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [self enableUserInteraction:[self view]];
             break;
     }
-    [[self documentStatusView] setDocumentState: state];
-    [activeDocument release];
 }
 
 - (void)enableUserInteraction:(id)sender {

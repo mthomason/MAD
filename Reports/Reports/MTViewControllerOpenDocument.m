@@ -306,7 +306,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     */
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -332,6 +331,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setCellsHidden:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+
     NSAttributedString *attributedString = nil;
     if ([AppDelegate isMadDesigner]) {
         attributedString = [AppDelegate attributedStringMadDesigner];

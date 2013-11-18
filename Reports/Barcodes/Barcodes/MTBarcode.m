@@ -324,12 +324,6 @@
 
 - (void)drawInRect:(CGRect)rect {
     CGRect originalRect = rect;
-    
-#warning debugging mode
-    if (NO) {
-        [self setInput:@"[43]8349"];
-        [self setPrimaryData:@"[55]8344"];
-    }
 
     struct zint_symbol *barcode = ZBarcode_Create();
     

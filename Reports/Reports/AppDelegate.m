@@ -19,9 +19,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.158";   //Should be 2.0.1
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.158";
-NSString * const MTGlobalBundleRev                                  = @"779";
+NSString * const MTGlobalBundleVersion                              = @"1.0.159";   //Should be 2.0.1
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.159";
+NSString * const MTGlobalBundleRev                                  = @"780";
 
 @interface AppDelegate()
 
@@ -188,6 +188,12 @@ const NSInteger MATagNewDocument = 3838;
     NSString *title = @"MAD Designer";
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
+/*    UIFontDescriptor *helveticaNeueFamily = [UIFontDescriptor fontDescriptorWithFontAttributes: @{
+                                                          UIFontDescriptorNameAttribute: @"HelveticaNeue-Light",
+                                                          UIFontDescriptorSizeAttribute: @(20.0000f),
+                                                          }];
+    NSArray *matches = [helveticaNeueFamily matchingFontDescriptorsWithMandatoryKeys: nil];*/
+    
     UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
     UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     NSRange range = NSMakeRange(0, length);

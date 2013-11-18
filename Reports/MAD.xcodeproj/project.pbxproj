@@ -1344,11 +1344,6 @@
 		4CC182CE16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
 		4CC182CF16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
 		4CC24AA51503E3AB00C4EE98 /* MTGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */; };
-		4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
-		4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
-		4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
-		4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
-		4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D62175E4A4800865CCA /* DocumentStatusView.m */; };
 		4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
 		4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
 		4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
@@ -6643,7 +6638,6 @@
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C94AA5417DD8590000F6FCF /* MTStateButton.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
-				4CC39D64175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9C1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
 				4CABE4801837DF7D007EDD9D /* RptqDocument.m in Sources */,
@@ -6823,7 +6817,6 @@
 				4C5625F31759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F81759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626061759865A00433E88 /* NSData+AES256.m in Sources */,
-				4CC39D66175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6F175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9E1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
 				4CE9F31F177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
@@ -6992,7 +6985,6 @@
 				4C5625F21759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F71759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626051759865A00433E88 /* NSData+AES256.m in Sources */,
-				4CC39D65175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9D1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
 				4CE9F31E177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
@@ -7208,7 +7200,6 @@
 				4CABE4BF1837E1D1007EDD9D /* RptqDocumentObject.m in Sources */,
 				4C94AA5317DD8590000F6FCF /* MTStateButton.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
-				4CC39D63175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4C95CAD1182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9B1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
@@ -7384,7 +7375,6 @@
 				4C5625F41759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F91759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C5626071759865A00433E88 /* NSData+AES256.m in Sources */,
-				4CC39D67175E4A4800865CCA /* DocumentStatusView.m in Sources */,
 				4CC39D70175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9F1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
 				4CE9F320177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
