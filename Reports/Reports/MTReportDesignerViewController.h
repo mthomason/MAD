@@ -46,7 +46,7 @@
         UINavigationControllerDelegate,
         UIScrollViewDelegate,
         UIImagePickerControllerDelegate,
-        UITabBarDelegate,
+        UITabBarControllerDelegate,
         MTReportDesignerToolBoxDelegate,
         MTElementViewDelegate,
         MTCollectionViewCellElementDelegate,

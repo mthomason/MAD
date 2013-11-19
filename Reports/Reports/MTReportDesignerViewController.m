@@ -371,6 +371,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[self tabBarController] setDelegate:self];
+    
     [self setInsetsSetup:NO];
     [[self designerScrollView] setBouncesZoom:YES];
     [[self designerScrollView] setScrollsToTop:YES];
@@ -1479,10 +1481,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self barButtonItemObjects] setEnabled:YES];
 }
 
-#pragma mark - UITabBarDelegate
+#pragma mark - UITabBarControllerDelegate
 
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    if ([item tag] != MTTabBarItemTagDesigner) {
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if ([viewController isEqual:[self navigationController]] == NO) {
         [self hideToolbox];
     }
 }
