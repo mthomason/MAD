@@ -1357,7 +1357,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
         if ([UIDevice isPad] == NO) {
             if (![self dismissAllPopovers]) {
-                [self showToolbox:MTToolboxTypeElement];
+                if (sender != nil) {
+                    if ([sender isEqual:[self lastElementViewToShowMenu]]) {
+                        
+                    } else {
+                        [self showToolbox:MTToolboxTypeElement];
+                    }
+                } else {
+                    [self showToolbox:MTToolboxTypeElement];
+                }
             }
         }
         
@@ -1425,7 +1433,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
         [self removeBorderFromView: elementView];
         [elementView setDisplaySelected:NO];
-        [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+        //[[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
         if ([UIDevice isPad]) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
