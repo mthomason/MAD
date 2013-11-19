@@ -80,7 +80,7 @@
 - (void)customInit {
     [self setBorderWidth:5];
     [self setSampleBarcodeIndex: 0];
-    NSArray *sampleBarcodeData = @[@{@"Sample Data" : @"Sample Data"}];
+    NSArray *sampleBarcodeData = @[@{@"Set Datasource" : @"Set Datasource"}];
     NSArray *sampleBarcodeDataMaxicode = @[@{@"" : @""}];
     NSArray *sampleBarcodeData2dComponent = @[@{@"" : @""}];
     [sampleBarcodeData retain];

@@ -1479,6 +1479,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self barButtonItemObjects] setEnabled:YES];
 }
 
+#pragma mark - UITabBarDelegate
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    if ([item tag] != MTTabBarItemTagDesigner) {
+        [self hideToolbox];
+    }
+}
+
 #pragma mark - Actions
 
 - (void)doubleTapZoom:(UITapGestureRecognizer *)sender {

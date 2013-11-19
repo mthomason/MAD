@@ -98,6 +98,44 @@
     return self;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder {
+    
+    [coder encodeFloat:[self rotate]                forKey:@""];
+    [coder encodeObject:[self name]                 forKey:@""];
+    [coder encodeInteger:[self barcodeType]         forKey:@""];
+    [coder encodeBool:[self has2dComponent]         forKey:@""];
+    [coder encodeBool:[self hasOptionalInput]       forKey:@""];
+    [coder encodeObject:[self detailsSegueIdentifer]    forKey:@""];
+    [coder encodeObject:[self primaryData]          forKey:@""];
+    [coder encodeInteger:[self option1]             forKey:@""];
+    [coder encodeInteger:[self option2]             forKey:@""];
+    [coder encodeInteger:[self option3]             forKey:@""];
+    [coder encodeBool:[self center]                 forKey:@""];
+    [coder encodeObject:[self input]                forKey:@""];
+
+    [coder encodeInteger:[self height]              forKey:@""];
+    [coder encodeInteger:[self width]               forKey:@""];
+    [coder encodeInteger:[self borderWidth]         forKey:@""];
+    [coder encodeInteger:[self whitespaceWidth]     forKey:@""];
+    [coder encodeBool:[self humanReadable]          forKey:@""];
+    [coder encodeInteger:[self borderStyle]         forKey:@""];
+    [coder encodeBool:[self showErrorMessages]      forKey:@""];
+    [coder encodeBool:[self has2dComponentEnabled]  forKey:@""];
+    [coder encodeInteger:[self has2dComponentType]  forKey:@""];
+    [coder encodeFloat:[self scale]                 forKey:@""];
+}
+
+- (id)initWithCoder:(NSCoder *)coder {
+    self = [super init];
+    if (self) {
+
+
+
+        
+    }
+    return self;
+}
+
 + (id)barcodeWithType :(MTBarcodeType)type {
     id result = nil;
     switch (type) {

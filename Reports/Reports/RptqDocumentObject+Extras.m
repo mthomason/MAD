@@ -237,10 +237,13 @@ static NSNumberFormatter *currencyNumberFormatter;
             result = @"Whitespace";
             break;
             
-            case MTDocumentObjectTypeBarcode:
-            result = @"Barcode";
+        case MTDocumentObjectTypeBarcode: {
+            //MTBarcode *barcode = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+            MTBarcodeType type = [[[self isBarcode] type] integerValue];
+            NSString *barcodeName = [MTBarcode barcodeNameForType:type];
+            result = [NSString stringWithFormat:@"Barcode (%@)", barcodeName];
             break;
-        
+        }
         default:
             result = @"";
             break;
@@ -391,55 +394,13 @@ static NSNumberFormatter *currencyNumberFormatter;
             NSManagedObjectID *field2ObjectId = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField2];
             RptqQueryField *field1 = [RptqQueryField getQueryFieldForObjectID:field1ObjectId fromObjectContext:mangedObjectContext];
             RptqQueryField *field2 = [RptqQueryField getQueryFieldForObjectID:field2ObjectId fromObjectContext:mangedObjectContext];
-
-            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectBarcode class])
-                                                                 inManagedObjectContext: mangedObjectContext];
-
-            RptqDocumentObjectBarcode *reportObject = [[RptqDocumentObjectBarcode alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-                                                                     insertIntoManagedObjectContext: mangedObjectContext];
+            RptqDocumentObjectBarcode *reportObject = [[RptqDocumentObjectBarcode barcodeWithMtBarcode:barcode queryFieldOne:field1 queryFieldTwo:field2] retain];
             
-
-            NSNumber *componentEnabled = @([barcode has2dComponentEnabled]);
-            NSNumber *borderStyle = @([barcode borderStyle]);
-            NSNumber *borderWidth = @([barcode borderWidth]);
-            NSData *colorBackground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor whiteColor]];
-            NSData *colorForeground = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blackColor]];
-            
-            NSNumber *height = @([barcode height]);
-            NSNumber *humanReadable = @([barcode humanReadable]);
-            NSNumber *option1 = @([barcode option1]);
-            NSNumber *option2 = @([barcode option2]);
-            NSNumber *option3 = @([barcode option3]);
-            NSNumber *showErrorMessage = @([barcode showErrorMessages]);
-            NSNumber *barcodeType = @([barcode barcodeType]);
-            NSNumber *whitespaceWidth = @([barcode whitespaceWidth]);
-            NSNumber *useStaticInput1 = @(NO);
-            NSNumber *useStaticInput2 = @(NO);
-            NSNumber *scale = @([barcode scale]);
-            
-            [reportObject setAdd2dComponent:componentEnabled];
-            [reportObject setBorderStyle:borderStyle];
-            [reportObject setBorderWidth:borderWidth];
-            [reportObject setColorBackground:colorBackground];
-            [reportObject setColorForeground:colorForeground];
-            [reportObject setHeight:height];
-            [reportObject setHumanReadable:humanReadable];
-            [reportObject setReferencesField1: field1];
-            [reportObject setReferencesField2: field2];
-            [reportObject setOption1: option1];
-            [reportObject setOption2: option2];
-            [reportObject setOption3: option3];
-            [reportObject setShowErrorMessage: showErrorMessage];
-            [reportObject setType:barcodeType];
-            [reportObject setWhitespaceWidth:whitespaceWidth];
-            [reportObject setUseStaticInput1:useStaticInput1];
-            [reportObject setUseStaticInput2:useStaticInput2];
-            [reportObject setScale:scale];
-            
-            [documentObject setIsBarcode:reportObject];
+            [documentObject setIsBarcode: reportObject];
             [documentObject setType: @(MTDocumentObjectTypeBarcode)];
 
             [reportObject release];
+            
             break;
         }
         default:

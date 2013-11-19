@@ -14,6 +14,7 @@
 #import "MTBarcodeMaxicodeIso16023.h"
 
 @interface MTViewControllerBarcode ()
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @property (nonatomic, assign) BOOL editModeBarcodeType;
 
@@ -50,6 +51,7 @@
     [_optionsViewController release];
     [_queryField1 release];
     [_queryField2 release];
+    [_barButtonItemSave release];
     [super dealloc];
 }
 
@@ -69,6 +71,11 @@
     return self;
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self barButtonItemSave] setEnabled:NO];
+}
+
 - (void)commonInit {
     
     [self setEditModeBarcodeType:NO];
@@ -86,6 +93,9 @@
 }
 
 - (void)didSetField1:(RptqQueryField *)field {
+    if (field != nil) {
+        [[self barButtonItemSave] setEnabled:YES];
+    }
     [field retain];
     [self setQueryField1:field];
     [field release];
@@ -293,8 +303,6 @@
         [pvc release];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
         MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[[segue destinationViewController] topViewController] retain];
-        
-
         [ovc setDelegate:self];
         [self setOptionsViewController:ovc];
         [ovc release];

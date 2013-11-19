@@ -26,7 +26,6 @@ struct MTMargin {
 };
 typedef struct MTMargin MTMargin;
 
-
 CG_INLINE MTMargin
 MTMarginMake(CGFloat top, CGFloat right, CGFloat bottom, CGFloat left) {
     MTMargin margin;
@@ -76,6 +75,12 @@ MTPaddingMakeQuick(CGFloat p) {
     padding.left = p;
     return padding;
 }
+
+typedef NS_ENUM(NSUInteger, MTTabBarItemTag) {
+	MTTabBarItemTagQuery = 1,
+	MTTabBarItemTagDesigner = 2,
+    MTTabBarItemTagViewer = 3
+};
 
 typedef NS_ENUM(NSUInteger, MNSSortOrder) {
 	MNSSortOrderAccending = 0,

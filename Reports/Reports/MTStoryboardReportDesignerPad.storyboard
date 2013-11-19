@@ -76,7 +76,7 @@
         <scene sceneID="yOK-hf-Fsm">
             <objects>
                 <navigationController definesPresentationContext="YES" id="OXh-cm-FbU" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="MAD Designer" image="UIBarButtonItemMadDesigner.png" id="vln-o5-mR0"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="MAD Designer" image="UIBarButtonItemMadDesigner.png" id="vln-o5-mR0"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="SOc-Mt-cKQ">
@@ -171,7 +171,7 @@
         <scene sceneID="xYb-0i-Y1Q">
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" toolbarHidden="NO" id="E4Y-T0-TTM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="MAD Viewer" image="UIBarButtonItemMadViewer.png" id="nW6-9u-Uf9"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="MAD Viewer" image="UIBarButtonItemMadViewer.png" id="nW6-9u-Uf9"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" id="bhh-jh-62h">
@@ -374,7 +374,7 @@
         <scene sceneID="BXL-cc-djF">
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" toolbarHidden="NO" id="xGC-NN-HDb" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="MAD Query" image="UIBarButtonItemDatabase.png" id="dBv-cR-kZp"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="MAD Query" image="UIBarButtonItemDatabase.png" id="dBv-cR-kZp"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="zA5-qI-e9N">

@@ -79,7 +79,6 @@
     
     MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
-    //[[reportDesignerFontSelectorViewController tableView] setBackgroundColor:[UIColor redColor]];
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
     
 }
@@ -95,18 +94,7 @@
     UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];
     [tableView setBounds: [[self contentView] bounds]];
     [tableView setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
-    //CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
-    
-    //UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, -insetOffset, 0.0000f);
-    //[tableView setContentInset: tableInset];
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
-    
-    //UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[[self view] frame]];
-    //[[self view] setClipsToBounds:YES];
-    //[[self view] setBackgroundColor:[UIColor clearColor]];
-    //[[[self view] layer] insertSublayer:[toolbar layer] atIndex:0];
-    //[toolbar release];
-
 }
 
 - (CGFloat)contentHeight {
@@ -124,10 +112,6 @@
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds {
     [self setSelectedObjectIds:objectIds];
     [[self tableViewControllerTextLayoutSettings] setSelectedDocumentObjects:objectIds];
-}
-
-- (void)hideToolbox {
-    
 }
 
 - (IBAction)userDidRequestFinish:(id)sender {
@@ -159,7 +143,7 @@
     
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Format", @"Format")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
-        //[newViewController setDelegate:self];
+
     } else if ([sender selectedSegmentIndex] == 3) {
     
         [[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Grouping", @"Grouping")];
