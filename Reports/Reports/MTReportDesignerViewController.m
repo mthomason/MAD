@@ -1530,7 +1530,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [self hideToolbox];
         } else {
             
-            
             if ([self isBorderAppliedToView:[sender view]]) {
                 
                 [self removeBorderFromView:[sender view]];

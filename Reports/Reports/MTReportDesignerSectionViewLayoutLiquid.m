@@ -120,7 +120,6 @@
 
 - (void)prepareLayout {
     [super prepareLayout];
-    
     NSInteger numberOfSections = 1;
     
     NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] initWithCapacity: numberOfSections];
@@ -175,6 +174,8 @@
                         //Try every placement option to the bottom-right of existing items, while
                         //  checking for overlap with every already placed item.  The shortest
                         //  path to the drop path wins.
+                        
+                        
                         MTCollectionViewLayoutLiquidAttributes *updatedLayout = [[self placeLayouts:layoutAttributesForSection forLayout:itemAttributes] retain];
                         
                         [layoutAttributesForSection addObject:updatedLayout];

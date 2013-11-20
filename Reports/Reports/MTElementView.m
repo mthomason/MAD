@@ -35,6 +35,14 @@
 @property (assign) BOOL displayHighlighted;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) UIFont *displayFont;
+@property (nonatomic, retain) NSParagraphStyle *paragraphStyle;
+@property (nonatomic, retain) NSString *displayText;
+@property (nonatomic, retain) NSNumber *underlineStyle;
+@property (nonatomic, retain) NSNumber *strikeThroughStyle;
+@property (nonatomic, retain) NSAttributedString *displayStringAttributed;
+@property (nonatomic, assign) CGRect drawingRect;
+@property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
 
 @end
 
@@ -46,7 +54,13 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:_managedObjectContext];
+    [_underlineStyle release];
+    [_strikeThroughStyle release];
     [_managedObjectContext release];
+    [_displayFont release];
+    [_displayText release];
+    [_paragraphStyle release];
+    [_displayStringAttributed release];
 	[super dealloc];
 }
 
@@ -180,51 +194,7 @@
         if (displayFont == nil) {
             displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
         }
-        
-        
-        
-        
-        [self setNeedsLayout];
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)drawRect:(CGRect)rect {
-
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    
-    if (documentObject != nil) {
-        
-        NSString *fontName = [documentObject fontname];
-        CGFloat pointSize = [[documentObject fontsize] floatValue];
-        
-        UIFont *displayFont = nil;
-        if ([fontName length] == 0) {
-            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        } else {
-            MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
-            if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
-                displayFont = [stylizedDisplayFont boldItalicFont];
-            } else if ([[documentObject bold] boolValue]) {
-                displayFont = [stylizedDisplayFont boldFont];
-            } else if ([[documentObject italic] boolValue]) {
-                displayFont = [stylizedDisplayFont italicFont];
-            } else {
-                displayFont = [stylizedDisplayFont font];
-            }
-            [stylizedDisplayFont release];
-        }
-        
-        if (displayFont == nil) {
-            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        }
-        
-        NSString *string = [documentObject designerRepresentationText];
-        
-        NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-        NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-        
-        [displayFont retain];
+        [self setDisplayFont:displayFont];
         
         NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         
@@ -247,27 +217,43 @@
                 textAlignment = NSTextAlignmentLeft;
                 break;
         }
-
+        
         [paragraphStyle setAlignment:textAlignment];
-        NSDictionary *attributes = @{
-                                     NSFontAttributeName : displayFont,
-                                     NSStrikethroughStyleAttributeName : strikeThroughStyle,
-                                     NSUnderlineStyleAttributeName : underlineStyle
-                                     };
-        [displayFont release];
-        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+        [self setParagraphStyle:paragraphStyle];
+        [paragraphStyle release];
 
+        NSString *string = [[documentObject designerRepresentationText] retain];
+        [self setDisplayText:string];
+        [string release];
+        
+        NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+        [self setUnderlineStyle:underlineStyle];
+        
+        NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+        [self setStrikeThroughStyle:strikeThroughStyle];
+        
+        NSDictionary *attributes = @{
+                                     NSParagraphStyleAttributeName : [self paragraphStyle],
+                                     NSFontAttributeName : [self displayFont],
+                                     NSStrikethroughStyleAttributeName : [self underlineStyle],
+                                     NSUnderlineStyleAttributeName : [self strikeThroughStyle]
+                                     };
+        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:[self displayText] attributes:attributes];
+        [self setDisplayStringAttributed:attributtedString];
+        [attributtedString release];
+        
+        
+        
         CGSize sizeContentView = [documentObject sizeContentView];
-        CGRect boundsContentView = [documentObject boundsContentView];
-        CGRect boundingRect = [attributtedString boundingRectWithSize:sizeContentView options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+        CGRect boundsContentView = [documentObject boundsContentView]; //x1
+        NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
+        [self setDrawingOptions:drawingOptions];
+        CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize:sizeContentView options:drawingOptions context:nil]; //x35
         CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
         
-        CGFloat contentViewX = rect.origin.x + documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
-        CGFloat contentViewY = rect.origin.x + documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
-        //CGRect contentViewFrame = CGRectMake(contentViewX, contentViewY, sizeContentView.width, sizeContentView.height);
-
+        
         MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-
+        
         switch (verticalAlignment) {
             case MTVerticalAlignmentCenter: {
                 CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
@@ -285,13 +271,26 @@
             default:
                 break;
         }
-        
+
+        CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
+        CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
         CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
         drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
+        [self setDrawingRect:drawingBounds];
+        
+        //NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
 
-        [attributtedString drawInRect:drawingBounds];
-        [attributtedString release];
+        
+        [self setNeedsLayout];
+        [self setNeedsDisplay];
     }
+}
+
+- (void)drawRect:(CGRect)rect {
+
+    CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
+    CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
+    [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
     
 }
 
