@@ -281,7 +281,7 @@
             CGFloat originPointX        = [[element dropPointX] floatValue];
             CGFloat originPointY        = [[element dropPointY] floatValue];
             
-            CGSize marginSize           = [element marginViewSize];
+            CGSize marginSize           = [element size];
             CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, marginSize.width, marginSize.height);
 
             CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;

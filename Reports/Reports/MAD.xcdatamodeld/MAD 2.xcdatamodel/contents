@@ -54,7 +54,18 @@
     <entity name="RptqDocumentObject" representedClassName="RptqDocumentObject" syncable="YES">
         <attribute name="binary" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="bold" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="borderHeightBottom" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="borderHeightTop" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="borderStyleBottom" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="borderStyleLeft" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="borderStyleRight" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="borderStyleTop" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="borderWidthLeft" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="borderWidthRight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="color" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="colorBackground" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="colorBorder" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="colorForeground" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" syncable="YES"/>
         <attribute name="dropPointX" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="dropPointY" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -331,7 +342,7 @@
         <element name="RptqDatabaseSchemaField" positionX="-630" positionY="-54" width="180" height="225"/>
         <element name="RptqDatabaseSchemaTable" positionX="-666" positionY="-288" width="198" height="165"/>
         <element name="RptqDocument" positionX="-594" positionY="-828" width="128" height="285"/>
-        <element name="RptqDocumentObject" positionX="358" positionY="-450" width="128" height="748"/>
+        <element name="RptqDocumentObject" positionX="358" positionY="-450" width="128" height="913"/>
         <element name="RptqDocumentObjectAggregate" positionX="117" positionY="903" width="198" height="150"/>
         <element name="RptqDocumentObjectBarcode" positionX="594" positionY="954" width="290" height="433"/>
         <element name="RptqDocumentObjectChart" positionX="567" positionY="510" width="200" height="75"/>

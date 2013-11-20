@@ -43,17 +43,14 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
 
 - (MTDocumentObjectType)getType;
-- (CGSize)elementViewSize;
-- (CGSize)viewSize;
+- (CGSize)size;
 - (NSString *)designerRepresentationText;
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
 - (CGRect)paddingViewFrame;
-- (CGRect)marginViewFrame;
+- (CGRect)boundsContentView;
 - (CGRect)elementViewFrame;
-
-- (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin;
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
-- (CGSize)marginViewSize;
+- (CGSize)sizeContentView;
 
 @end
 

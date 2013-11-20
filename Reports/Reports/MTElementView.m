@@ -26,11 +26,10 @@
 @interface MTElementView ()
 
 // This element view is made of four total views.
-@property (nonatomic, readwrite, retain) UIImageView *imageView;   //Display image preview for image objects
-@property (nonatomic, readwrite, retain) UILabel *displayLabel;    //Display label floats in the padding
-@property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
-@property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
-//@property (nonatomic, retain) UIView *marginView;       //[self view]
+//@property (nonatomic, readwrite, retain) UIImageView *imageView;   //Display image preview for image objects
+//@property (nonatomic, readwrite, retain) UILabel *displayLabel;    //Display label floats in the padding
+//@property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
+//@property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
@@ -47,10 +46,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:_managedObjectContext];
-    [_visibleView release];
-    [_displayLabel release];
-    [_paddingView release];
-    [_imageView release];
     [_managedObjectContext release];
 	[super dealloc];
 }
@@ -69,27 +64,20 @@
                                  userInfo: nil];
 }
 
-- (void)setNeedsDisplay {
-    [super setNeedsDisplay];
-    [[self paddingView] setNeedsDisplay];
-    [[self displayLabel] setNeedsDisplay];
-    [[self visibleView] setNeedsDisplay];
-}
-
 - (void)setAlpha:(CGFloat)alpha {
     [super setAlpha:alpha];
     UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
     [self setBackgroundColor:labelBackgroundColor];
     [labelBackgroundColor release];
-    [[self visibleView] setAlpha:alpha];
-    [[self paddingView] setAlpha:alpha];
 }
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-    CGSize viewSize = [documentObject viewSize];
+    CGSize viewSize = [documentObject size];
     CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height);
     self = [super initWithFrame:frame];
+
     if (self) {
         
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSelection:)];
@@ -103,8 +91,6 @@
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
         [self setManagedObjectContext:managedObjectContext];
-        
-        //CGRect frame = [self marginViewBounds];
 
         [self setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self setDisplayWobbling: NO];
@@ -116,51 +102,6 @@
             [self setBackgroundColor:[UIColor clearColor]];
         }
         [self setClipsToBounds:YES];
-        
-        UIView *visibleView = [[UIView alloc] initWithFrame:CGRectZero];
-        [visibleView setClipsToBounds:YES];
-        if ([UIDevice isLagacyOS]) {
-            [[visibleView layer] setBorderWidth:1.0000f];
-            [[visibleView layer] setBorderColor:[[UIColor greenColor] CGColor]];
-            [visibleView setBackgroundColor:[UIColor whiteColor]];
-        } else {
-            [visibleView setBackgroundColor:[UIColor clearColor]];
-        }
-        [visibleView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [self addSubview: visibleView];
-        [self setVisibleView:visibleView];
-        [visibleView release];
-        
-        UIView *labelBackground = [[UIView alloc] initWithFrame:CGRectZero];
-        [labelBackground setClipsToBounds:YES];
-        if ([UIDevice isLagacyOS]) {
-            [[labelBackground layer] setBorderColor:[[UIColor blackColor] CGColor]];
-            [[labelBackground layer] setBorderWidth:1.0000f];
-            [labelBackground setBackgroundColor:[UIColor whiteColor]];
-        } else {
-            [labelBackground setBackgroundColor:[UIColor clearColor]];
-        }
-        [labelBackground setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [[self visibleView] addSubview:labelBackground];
-        [self setPaddingView:labelBackground];
-        [labelBackground release];
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:[[self paddingView] frame]];
-        [imageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [[self paddingView] addSubview:imageView];
-        [self setImageView:imageView];
-        [imageView release];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-        if ([UIDevice isLagacyOS]) {
-            [label setBackgroundColor:[UIColor whiteColor]];
-        } else {
-            [label setBackgroundColor:[UIColor clearColor]];
-        }
-        [label setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [[self paddingView] addSubview:label];
-        [self setDisplayLabel:label];
-        [label release];
 
         [self initalDisplaySettings];
                 
@@ -198,7 +139,7 @@
     
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
     if (documentObject != nil) {
-        [[self imageView] setImage:[[documentObject isImage] image]];
+        //[[self imageView] setImage:[[documentObject isImage] image]];
     }
     
     [self updateDisplayLabel];
@@ -212,14 +153,48 @@
     
     if (documentObject != nil) {
 
-        CGRect marginViewFrame = [documentObject marginViewFrame];
-        CGRect paddingViewFrame = [documentObject paddingViewFrame];
-        CGRect elementViewFrame = [documentObject elementViewFrame];
-        
-        [self setFrame: marginViewFrame];
-        [[self visibleView] setFrame: paddingViewFrame];
-        [[self paddingView] setFrame: elementViewFrame];
+        CGRect marginViewFrame = [documentObject boundsContentView];
 
+        [self setFrame: marginViewFrame];
+
+        NSString *fontName = [documentObject fontname];
+        CGFloat pointSize = [[documentObject fontsize] floatValue];
+        
+        UIFont *displayFont = nil;
+        if ([fontName length] == 0) {
+            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+        } else {
+            MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
+            if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
+                displayFont = [stylizedDisplayFont boldItalicFont];
+            } else if ([[documentObject bold] boolValue]) {
+                displayFont = [stylizedDisplayFont boldFont];
+            } else if ([[documentObject italic] boolValue]) {
+                displayFont = [stylizedDisplayFont italicFont];
+            } else {
+                displayFont = [stylizedDisplayFont font];
+            }
+            [stylizedDisplayFont release];
+        }
+        
+        if (displayFont == nil) {
+            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+        }
+        
+        
+        
+        
+        [self setNeedsLayout];
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)drawRect:(CGRect)rect {
+
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
+    
+    if (documentObject != nil) {
+        
         NSString *fontName = [documentObject fontname];
         CGFloat pointSize = [[documentObject fontsize] floatValue];
         
@@ -250,14 +225,8 @@
         NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
         
         [displayFont retain];
-        NSDictionary *attributes = @{NSFontAttributeName : displayFont,
-                                     NSStrikethroughStyleAttributeName : strikeThroughStyle,
-                                     NSUnderlineStyleAttributeName : underlineStyle
-                                     };
-        [displayFont release];
-        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
         
-        [[self displayLabel] setAttributedText:attributtedString];
+        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         
         MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
         NSTextAlignment textAlignment;
@@ -278,54 +247,52 @@
                 textAlignment = NSTextAlignmentLeft;
                 break;
         }
-        [[self displayLabel] setTextAlignment:textAlignment];
+
+        [paragraphStyle setAlignment:textAlignment];
+        NSDictionary *attributes = @{
+                                     NSFontAttributeName : displayFont,
+                                     NSStrikethroughStyleAttributeName : strikeThroughStyle,
+                                     NSUnderlineStyleAttributeName : underlineStyle
+                                     };
+        [displayFont release];
+        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+
+        CGSize sizeContentView = [documentObject sizeContentView];
+        CGRect boundsContentView = [documentObject boundsContentView];
+        CGRect boundingRect = [attributtedString boundingRectWithSize:sizeContentView options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+        CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
         
+        CGFloat contentViewX = rect.origin.x + documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
+        CGFloat contentViewY = rect.origin.x + documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
+        //CGRect contentViewFrame = CGRectMake(contentViewX, contentViewY, sizeContentView.width, sizeContentView.height);
+
         MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-        UIBaselineAdjustment baselineAdjustment;
+
         switch (verticalAlignment) {
-            case MTVerticalAlignmentTop: {
-                
-                [[self displayLabel] sizeToFit];
-                CGFloat originX = [[self paddingView] frame].origin.x;
-                CGFloat originY = [[self paddingView] frame].origin.y;
-                CGFloat sizeWidth = [[self paddingView] frame].size.width;
-                CGFloat sizeHeight = [[self displayLabel] frame].size.height;
-                
-                [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-                //baselineAdjustment = UIBaselineAdjustmentNone;
-                break;
-            }
             case MTVerticalAlignmentCenter: {
-                [[self displayLabel] setFrame:[[self paddingView] frame]];
-                //baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+                CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
+                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
                 break;
             }
             case MTVerticalAlignmentBottom: {
-                [[self displayLabel] sizeToFit];
-                
-                CGFloat originX = [[self paddingView] frame].origin.x;
-                CGFloat originY = [[self paddingView] frame].origin.y + [[self paddingView] frame].size.height - [[self displayLabel] frame].size.height;
-                CGFloat sizeWidth = [[self paddingView] frame].size.width;
-                CGFloat sizeHeight = [[self displayLabel] frame].size.height;
-                [[self displayLabel] setFrame:CGRectMake(originX, originY, sizeWidth, sizeHeight)];
-                //baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+                CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
+                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
                 break;
             }
+            case MTVerticalAlignmentTop:
             default:
-                baselineAdjustment = UIBaselineAdjustmentNone;
                 break;
         }
-        [attributtedString release];
-    
+        
+        CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
+        drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
 
-        [self setNeedsLayout];
-        [self setNeedsDisplay];
-//        [[self visibleView] setNeedsLayout];
-//        [[self paddingView] setNeedsLayout];
-//        [[self displayLabel] setNeedsLayout];
-//        [[self displayLabel] setNeedsDisplay];
+        [attributtedString drawInRect:drawingBounds];
+        [attributtedString release];
     }
-//    [self setNeedsDisplay];
+    
 }
 
 #pragma mark - Members

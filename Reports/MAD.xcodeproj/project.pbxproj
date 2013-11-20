@@ -1318,8 +1318,6 @@
 		4CABE4B81837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CABE4B61837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.m */; };
 		4CABE4BB1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CABE4BA1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m */; };
 		4CABE4BC1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CABE4BA1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m */; };
-		4CABE4BF1837E1D1007EDD9D /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CABE4BE1837E1D1007EDD9D /* RptqDocumentObject.m */; };
-		4CABE4C01837E1D1007EDD9D /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CABE4BE1837E1D1007EDD9D /* RptqDocumentObject.m */; };
 		4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4CAE00CD1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
@@ -1335,6 +1333,8 @@
 		4CB4575F1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */; };
 		4CB46B6517C3EC26000D3F3C /* MTTableViewControllerAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */; };
 		4CB46B6617C3EC26000D3F3C /* MTTableViewControllerAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */; };
+		4CB4A47B183C7290008D52B5 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */; };
+		4CB4A47C183C7290008D52B5 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */; };
 		4CB53B4B17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */; };
 		4CB53B4C17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */; };
 		4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
@@ -2673,8 +2673,6 @@
 		4CABE4B61837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectBarcode+Extras.m"; sourceTree = "<group>"; };
 		4CABE4B91837E1D0007EDD9D /* RptqDocumentObjectBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectBarcode.h; sourceTree = "<group>"; };
 		4CABE4BA1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectBarcode.m; sourceTree = "<group>"; };
-		4CABE4BD1837E1D1007EDD9D /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
-		4CABE4BE1837E1D1007EDD9D /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationControllerHideBottomBarUnlicensed.h; sourceTree = "<group>"; };
 		4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationControllerHideBottomBarUnlicensed.m; sourceTree = "<group>"; };
 		4CB0FF6416F4B7A800B88626 /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
@@ -2692,6 +2690,8 @@
 		4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSectionRows+Extras.m"; sourceTree = "<group>"; };
 		4CB46B6317C3EC26000D3F3C /* MTTableViewControllerAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewControllerAbout.h; sourceTree = "<group>"; };
 		4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewControllerAbout.m; sourceTree = "<group>"; };
+		4CB4A479183C7290008D52B5 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
+		4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CB53B4917396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewLayoutLiquidAttributes.h; sourceTree = "<group>"; };
 		4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewLayoutLiquidAttributes.m; sourceTree = "<group>"; };
 		4CB6525E1648D5F70050CD03 /* SFOAuthCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFOAuthCoordinator.h; sourceTree = "<group>"; };
@@ -3978,8 +3978,8 @@
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
 			isa = PBXGroup;
 			children = (
-				4CABE4BD1837E1D1007EDD9D /* RptqDocumentObject.h */,
-				4CABE4BE1837E1D1007EDD9D /* RptqDocumentObject.m */,
+				4CB4A479183C7290008D52B5 /* RptqDocumentObject.h */,
+				4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */,
 				4CABE4B91837E1D0007EDD9D /* RptqDocumentObjectBarcode.h */,
 				4CABE4BA1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m */,
 				4CABE4B11837DF81007EDD9D /* RptqQueryCache.h */,
@@ -6473,7 +6473,6 @@
 				4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */,
 				4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */,
 				4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */,
-				4CABE4C01837E1D1007EDD9D /* RptqDocumentObject.m in Sources */,
 				4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */,
 				4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */,
 				4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */,
@@ -6525,6 +6524,7 @@
 				4C0E7796163B5AEC003B951E /* RptqQueryGroup+Extras.m in Sources */,
 				4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */,
 				4C0E7799163B5AEC003B951E /* MTRulerView.m in Sources */,
+				4CB4A47C183C7290008D52B5 /* RptqDocumentObject.m in Sources */,
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
 				4C9F94BE1642280500A562B9 /* MTViewController.m in Sources */,
 				4C9F94C316423D7300A562B9 /* MTTableViewController.m in Sources */,
@@ -7112,6 +7112,7 @@
 				4CA16334167CAD6400540A14 /* RptqDocumentObjectLabel+Extras.m in Sources */,
 				4CABE4631837DF7A007EDD9D /* RptqDocumentObjectLabel.m in Sources */,
 				4CA1633A167CAD9D00540A14 /* RptqDocumentObjectLabelLink+Extras.m in Sources */,
+				4CB4A47B183C7290008D52B5 /* RptqDocumentObject.m in Sources */,
 				4CA16340167CAE2F00540A14 /* RptqQueryCache+Extras.m in Sources */,
 				4CA16346167CAE7600540A14 /* RptqQuerySort+Extras.m in Sources */,
 				4CA1634C167CAEA900540A14 /* RptqRelationship+Extras.m in Sources */,
@@ -7197,7 +7198,6 @@
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
-				4CABE4BF1837E1D1007EDD9D /* RptqDocumentObject.m in Sources */,
 				4C94AA5317DD8590000F6FCF /* MTStateButton.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4C95CAD1182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */,

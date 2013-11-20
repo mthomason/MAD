@@ -2,7 +2,7 @@
 //  RptqDocumentObject.h
 //  MAD
 //
-//  Created by Michael Thomason on 11/16/13.
+//  Created by Michael Thomason on 11/19/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -50,6 +50,17 @@
 @property (nonatomic, retain) NSNumber * underline;
 @property (nonatomic, retain) NSNumber * verticalAlignment;
 @property (nonatomic, retain) NSNumber * wrappingStyle;
+@property (nonatomic, retain) NSNumber * borderWidthLeft;
+@property (nonatomic, retain) NSNumber * borderWidthRight;
+@property (nonatomic, retain) NSData * colorBackground;
+@property (nonatomic, retain) NSData * colorBorder;
+@property (nonatomic, retain) NSData * colorForeground;
+@property (nonatomic, retain) NSNumber * borderStyleTop;
+@property (nonatomic, retain) NSNumber * borderStyleBottom;
+@property (nonatomic, retain) NSNumber * borderStyleLeft;
+@property (nonatomic, retain) NSNumber * borderStyleRight;
+@property (nonatomic, retain) NSNumber * borderHeightBottom;
+@property (nonatomic, retain) NSNumber * borderHeightTop;
 @property (nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
 @property (nonatomic, retain) RptqDocumentObjectAggregate *isAggregate;
 @property (nonatomic, retain) RptqDocumentObjectBarcode *isBarcode;

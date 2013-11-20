@@ -1018,11 +1018,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     NSSet *elementViews = [[self elementViews] retain];
     for (MTElementView *elementView in elementViews) {
-        if ([[[elementView displayLabel] text] length] > 0) {
-            [[elementView displayLabel] setContentScaleFactor:scale];
-        } else if ([elementView imageView] != nil) {
-            [[elementView imageView] setContentScaleFactor:scale];
-        }
+        [elementView setContentScaleFactor:scale];
+    //    if ([[[elementView displayLabel] text] length] > 0) {
+    //        [[elementView displayLabel] setContentScaleFactor:scale];
+    //    } else if ([elementView imageView] != nil) {
+    //        [[elementView imageView] setContentScaleFactor:scale];
+    //    }
     }
     [elementViews release];
     elementViews = nil;
@@ -2024,7 +2025,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        result = [documentObject viewSize];
+        result = [documentObject size];
     } else {
         result = CGSizeZero;
     }
@@ -2050,7 +2051,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([objects count] > [indexPath item]) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath item]];
         [result setDropPoint: CGPointMake([[documentObject dropPointX] floatValue], [[documentObject dropPointY] floatValue])];
-        [result setFrame:CGRectMake(result.dropPoint.x, result.dropPoint.y, documentObject.viewSize.width, documentObject.viewSize.height)];
+        CGSize documentObjectSize = documentObject.size;
+        [result setFrame:CGRectMake(result.dropPoint.x, result.dropPoint.y, documentObjectSize.width, documentObjectSize.height)];
 
         [result setLastTouchPoint: result.dropPoint];
         [result setDropIndex: [[documentObject dropIndex] integerValue]];
@@ -2134,7 +2136,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
     
-        CGSize documentObjectSize = [documentObject viewSize];
+        CGSize documentObjectSize = [documentObject size];
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
         
         switch ([documentObject getType]) {
@@ -2209,9 +2211,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         [blockCell setContentScaleFactor:contextScale];
                         [[blockCell contentView] setContentScaleFactor:contextScale];
                         [blockElementView setContentScaleFactor:contextScale];
-                        [[blockElementView displayLabel] setContentScaleFactor:contextScale];
-                        [[blockElementView imageView] setContentScaleFactor:contextScale];
-                        [[blockElementView displayLabel] setNeedsDisplay];
+                        //[[blockElementView displayLabel] setContentScaleFactor:contextScale];
+                        //[[blockElementView imageView] setContentScaleFactor:contextScale];
+                        //[[blockElementView displayLabel] setNeedsDisplay];
                     });
                 });
                 

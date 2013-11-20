@@ -31,9 +31,8 @@
 
 @property (nonatomic, assign) BOOL displaySelected;
 
-@property (nonatomic, readonly, retain) UIImageView *imageView;   //Display image preview for image objects
-@property (nonatomic, readonly, retain) UILabel *displayLabel;    //Display label floats in the padding
-
+//@property (nonatomic, readonly, retain) UIImageView *imageView;   //Display image preview for image objects
+//@property (nonatomic, readonly, retain) UILabel *displayLabel;    //Display label floats in the padding
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;

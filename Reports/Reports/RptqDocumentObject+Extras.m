@@ -65,6 +65,12 @@ static NSNumberFormatter *currencyNumberFormatter;
     [self setPaddingTop:@(CGSizeZero.height)];
     [self setPaddingLeft:@(CGSizeZero.width)];
     [self setPaddingRight:@(CGSizeZero.width)];
+
+    [self setBorderHeightBottom:@(CGSizeZero.width)];
+    [self setBorderWidthLeft:@(CGSizeZero.width)];
+    [self setBorderWidthRight:@(CGSizeZero.width)];
+    [self setBorderHeightTop:@(CGSizeZero.width)];
+    
     [self setVerticalAlignment:@(MTVerticalAlignmentTop)];
     [self setHorizontalAlignment:@(MTHorizontalAlignmentLeft)];
     [self setSectionRowNumber:@(1)];
@@ -98,56 +104,25 @@ static NSNumberFormatter *currencyNumberFormatter;
     }
 }
 
-- (CGSize)elementViewSize {
-    return CGSizeMake([[self sizewidth] floatValue], [[self sizeheight] floatValue]);
+- (CGSize)size {
+    CGFloat width = self.paddingLeft.floatValue + self.borderWidthLeft.floatValue + self.marginLeft.floatValue + self.sizewidth.floatValue + self.marginRight.floatValue + self.borderWidthRight.floatValue + self.paddingRight.floatValue;
+    CGFloat height = self.paddingTop.floatValue + self.borderHeightTop.floatValue + self.marginTop.floatValue + self.sizeheight.floatValue + self.marginBottom.floatValue + self.borderHeightBottom.floatValue + self.paddingBottom.floatValue;
+    return CGSizeMake(width, height);
 }
 
-- (CGSize)paddingViewSize {
-    CGSize elementSize = [self elementViewSize];
-    return CGSizeMake(elementSize.width + [[self paddingLeft] floatValue] + [[self paddingRight] floatValue],
-                      elementSize.height + [[self paddingTop] floatValue] + [[self paddingBottom] floatValue]);
+- (CGSize)sizeContentView {
+    return CGSizeMake(self.sizewidth.floatValue, self.sizeheight.floatValue);
 }
 
-- (CGSize)marginViewSize {
-    CGSize paddingSize = [self paddingViewSize];
-    return CGSizeMake(paddingSize.width + [[self marginLeft] floatValue] + [[self marginRight] floatValue],
-                      paddingSize.height + [[self marginTop] floatValue] + [[self marginBottom] floatValue]);
-}
-
-- (CGSize)viewSize {
-    return [self marginViewSize];
-}
-
-- (CGRect)marginViewBounds {
-    CGFloat marginBoundsSizeWidth = [[self marginLeft] floatValue] +
-    [[self marginRight] floatValue] +
-    [[self paddingLeft] floatValue] +
-    [[self paddingRight] floatValue] +
-    [[self sizewidth] floatValue];
-    CGFloat marginBoundsSizeHeight = [[self marginTop] floatValue] +
-    [[self marginBottom] floatValue] +
-    [[self paddingTop] floatValue] +
-    [[self paddingBottom] floatValue] +
-    [[self sizeheight] floatValue];
-    return CGRectMake(CGPointZero.x, CGPointZero.y, marginBoundsSizeWidth, marginBoundsSizeHeight);
-}
-
-- (CGRect)marginViewFrame {
-    return [self marginViewBounds];
-}
-
-- (CGRect)paddingViewBounds {
-    CGFloat paddingBoundsSizeWidth = [[self paddingLeft] floatValue] +
-    [[self paddingRight] floatValue] +
-    [[self sizewidth] floatValue];
-    CGFloat paddingBoundsSizeHeight = [[self paddingTop] floatValue] +
-    [[self paddingBottom] floatValue] +
-    [[self sizeheight] floatValue];
-    return CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
+- (CGRect)boundsContentView {
+    CGSize size = [self size];
+    return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
 }
 
 - (CGRect)paddingViewFrame {
-    CGRect paddingViewBounds = [self paddingViewBounds];
+    CGFloat paddingBoundsSizeWidth = self.paddingLeft.floatValue + self.paddingRight.floatValue + self.sizewidth.floatValue;
+    CGFloat paddingBoundsSizeHeight = self.paddingTop.floatValue + self.paddingBottom.floatValue + self.sizeheight.floatValue;
+    CGRect paddingViewBounds = CGRectMake(CGPointZero.x, CGPointZero.y, paddingBoundsSizeWidth, paddingBoundsSizeHeight);
     CGFloat originX = CGPointZero.x + [[self marginLeft] floatValue];
     CGFloat originY = CGPointZero.y + [[self marginTop] floatValue];
     CGFloat sizeWidth = paddingViewBounds.size.width;
@@ -156,9 +131,7 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 - (CGRect)elementViewBounds {
-    return CGRectMake(CGPointZero.x, CGPointZero.y,
-                      [[self sizewidth] floatValue],
-                      [[self sizeheight] floatValue]);
+    return CGRectMake(CGPointZero.x, CGPointZero.y, self.sizewidth.floatValue, self.sizeheight.floatValue);
 }
 
 - (CGRect)elementViewFrame {
@@ -168,18 +141,6 @@ static NSNumberFormatter *currencyNumberFormatter;
     CGFloat sizeWidth = elementViewBounds.size.width;
     CGFloat sizeHeight = elementViewBounds.size.height;
     return CGRectMake(originX, originY, sizeWidth, sizeHeight);
-}
-
-
-- (CGRect)frameInSectionForDrawingWithOriginPoint:(CGPoint)origin {
-
-    CGRect result               = [self paddingViewFrame];
-    CGFloat x                   = [[self paddingLeft] floatValue] + result.origin.x + [[self dropPointX] floatValue];
-    CGFloat y                   = [[self paddingTop] floatValue] + result.origin.y + [[self dropPointY] floatValue] + origin.y;
-    CGFloat width               = result.size.width;
-    CGFloat height              = result.size.height;
-    return                      CGRectMake(x, y, width, height);
-    
 }
 
 #pragma mark - Member

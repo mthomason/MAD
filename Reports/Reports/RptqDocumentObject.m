@@ -2,7 +2,7 @@
 //  RptqDocumentObject.m
 //  MAD
 //
-//  Created by Michael Thomason on 11/16/13.
+//  Created by Michael Thomason on 11/19/13.
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
@@ -58,6 +58,17 @@
 @dynamic underline;
 @dynamic verticalAlignment;
 @dynamic wrappingStyle;
+@dynamic borderWidthLeft;
+@dynamic borderWidthRight;
+@dynamic colorBackground;
+@dynamic colorBorder;
+@dynamic colorForeground;
+@dynamic borderStyleTop;
+@dynamic borderStyleBottom;
+@dynamic borderStyleLeft;
+@dynamic borderStyleRight;
+@dynamic borderHeightBottom;
+@dynamic borderHeightTop;
 @dynamic inSectionRow;
 @dynamic isAggregate;
 @dynamic isBarcode;
