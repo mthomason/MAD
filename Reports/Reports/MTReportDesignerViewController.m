@@ -2128,6 +2128,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                             fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
+    
     MTCollectionViewCellElement *cell = [[collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath] retain];
     [cell setDelegate:self];
@@ -2524,6 +2525,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
                                     completion:(void (^)(BOOL finished))completion {
+    
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
@@ -2707,11 +2709,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
             CGPoint gestureLocation = [gestureRecognizer locationInView:window];
-            [[gestureRecognizer view] setCenter: gestureLocation];
-            [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:nil];
+            
             CGPoint newCenter = [[self designerScrollView] convertPoint:gestureLocation fromView:window];
-            [[gestureRecognizer view] setCenter: newCenter];
+            
+            [[gestureRecognizer view] setAlpha:0.0000f];
             [[self designerScrollView] addSubview: [gestureRecognizer view]];
+            [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:nil];
+            [[gestureRecognizer view] setCenter: newCenter];
+            [[gestureRecognizer view] setAlpha:1.0000f];
+            NSLog(@"New Center (%@)", NSStringFromCGPoint(newCenter));
+
             break;
         }
         case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
