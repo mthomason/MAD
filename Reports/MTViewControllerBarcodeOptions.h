@@ -55,6 +55,9 @@
 - (void)didSetField1:(RptqQueryField *)field;
 - (void)didSetField2:(RptqQueryField *)field;
 
+- (RptqQueryField *)barcodeQueryField1;
+- (RptqQueryField *)barcodeQueryField2;
+
 @end
 
 @interface MTViewControllerBarcodeOptions : UITableViewController
@@ -68,5 +71,9 @@
         MTTableViewControllerBarcodeExtraDataMatrixDelegate>
 
 @property (nonatomic, assign) id <MTViewControllerBarcodeOptionsDelegate> delegate;
+
+@property (nonatomic, retain) NSArray *sampleBarcodeData;
+@property (nonatomic, retain) NSArray *sampleBarcodeData2dComponent;
+@property (nonatomic, retain) NSArray *sampleBarcodeDataMaxicode;
 
 @end

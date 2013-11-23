@@ -137,6 +137,11 @@
                 [self updateDisplayLabel];
                 break;
             }
+        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
+            if ([[self objectIdTag] isEqual:[[updatedObject parentObjectLabel] objectID]]) {
+                [self updateDisplayLabel];
+                break;
+            }
         }
     }
 

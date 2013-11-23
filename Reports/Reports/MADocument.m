@@ -269,10 +269,7 @@ NSString * MTDocumentParentContextName          = @"moc";
     [self setWeMustSave:YES];
     if ([self managedObjectContext] != nil) {
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
-            __block MADocument *blockSelf = self;
-            [error presentErrorToUserWithContinue:^(BOOL success) {
-                [blockSelf saveContext];
-            }];
+            [[self managedObjectContext] save:nil]; //Try again!?!?!?!
         }
     }
 }

@@ -7,10 +7,15 @@
 //
 
 #import "RptqDocumentObjectBarcode.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqQueryField+Extras.h"
 #import "MTBarcode.h"
 
 @interface RptqDocumentObjectBarcode (Extras)
 
+- (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo;
+
 + (RptqDocumentObjectBarcode *)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo;
++ (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject;
 
 @end

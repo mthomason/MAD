@@ -10,6 +10,7 @@
 #import <CoreText/CoreText.h>
 #import "UIColor+EverydayApps.h"
 #import "MTBarcode.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -630,19 +631,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             if ([input2 isEqualToString:@"(null)"]) {
                                                 input2 = @"";
                                             }
-                                            MTBarcodeType type = [[barcodeObject type] integerValue];
-                                            MTBarcode *barcode = [[MTBarcode barcodeWithType:type] retain];
-                                            [barcode setHas2dComponentEnabled:[[barcodeObject add2dComponent] boolValue]];
-                                            [barcode setBorderStyle:        [[barcodeObject borderStyle] integerValue]];
-                                            [barcode setBorderWidth:        [[barcodeObject borderWidth] integerValue]];
-                                            [barcode setHeight:             [[barcodeObject height] integerValue]];
-                                            [barcode setHumanReadable:      [[barcodeObject humanReadable] integerValue]];
-                                            [barcode setOption1:            [[barcodeObject option1] integerValue]];
-                                            [barcode setOption2:            [[barcodeObject option2] integerValue]];
-                                            [barcode setOption3:            [[barcodeObject option3] integerValue]];
-                                            [barcode setShowErrorMessages:  [[barcodeObject showErrorMessage] boolValue]];
-                                            [barcode setWhitespaceWidth:    [[barcodeObject whitespaceWidth] boolValue]];
-                                            [barcode setScale:              [[barcodeObject scale] floatValue]];
+                                            MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject] retain];
+                                            
                                             [barcode setInput:              input1];
                                             [barcode setPrimaryData:        input2];
                                             drawingObject = [barcode retain];

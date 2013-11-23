@@ -36,6 +36,63 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     [super dealloc];
 }
 
+- (void)updateDisplay {
+    
+    [self updateField];
+    [self updateFunctionType];
+    [self updateGroupType];
+    
+}
+
+- (void)updateField {
+
+    NSManagedObjectContext *objectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    RptqQueryField *queryField = (RptqQueryField *)[objectContext objectWithID:[self fieldObjectId]];
+    NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+    NSString *detailtext = [NSString stringWithFormat:formatString, [queryField display]];
+    [[[self tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+
+}
+
+- (void)updateFunctionType {
+
+    NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:[self aggregateFunctionType]];
+    NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
+    [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+
+}
+
+- (void)updateGroupType {
+    switch ([self aggregateGroupByType]) {
+        case MTAggregateGroupByTypeSection: {
+            
+            NSUInteger group = [self groupTypeSectionNumber];
+            NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
+            NSString *detail = [NSString stringWithFormat:format, group];
+            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
+            break;
+            
+        }
+        case MTAggregateGroupByTypeReport: {
+            
+            NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport];
+            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+            break;
+            
+        }
+        case MTAggregateGroupByTypePage: {
+            
+            NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage];
+            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+            break;
+            
+        }
+        default:
+            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+            break;
+    }
+}
+
 - (IBAction)unwindToNewAggregateFunction:(UIStoryboardSegue *)action {
 
     MTAggregateFunctionType aggregateFunctionType = MTAggregateFunctionTypeNotSet;
@@ -145,7 +202,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
+        [self setEditmode:NO];
     }
     return self;
 }
@@ -167,6 +224,10 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if ([self editmode]) {
+        [self setEditmode:NO];
+        [self updateDisplay];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

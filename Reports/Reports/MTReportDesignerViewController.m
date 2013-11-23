@@ -119,6 +119,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, assign) BOOL insetsSetup;
 
+@property (nonatomic, retain) UIAlertView *alertViewEdit;
+@property (nonatomic, retain) NSManagedObjectID *objectIdEditStaticLabel;
+@property (nonatomic, retain) NSManagedObjectID *objectIdEditDynamicLabel;
+
+@property (nonatomic, retain) NSManagedObjectID *objectIdEditAggregateFunction;
+@property (nonatomic, retain) NSManagedObjectID *objectIdEditBarcode;
+@property (nonatomic, retain) NSManagedObjectID *objectIdEditImage;
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -126,6 +134,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_objectIdEditImage release];
+    [_objectIdEditBarcode release];
+    [_objectIdEditAggregateFunction release];
+    [_objectIdEditDynamicLabel release];
+    [_objectIdEditStaticLabel release];
+    [_alertViewEdit release];
     [_sectionViewsArray release];
     [_sectionControlViewsArray release];
     [_rulerConstraints release];
@@ -227,6 +241,25 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 insert(action);
             }];
         }
+    } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
+        
+        MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
+        RptqQueryField *queryField = [dynamicFieldController queryField];
+
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+        NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+        [[documentObject isLabelDataField] setReferencesQueryField:queryField];
+        [managedObjectContext save:nil];
+        
+    } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueEditFieldCancel"]) {
+
+    } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcodeCancel"]) {
+        
+    } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
+        
+        
     } else if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         
         __block MTReportDesignerViewController *reportDesigner = self;
@@ -280,26 +313,42 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
 
         MTViewControllerBarcode *barcodeViewController = [action sourceViewController];
+
+        if ([self objectIdEditBarcode]  != nil) {
+            
+            MTBarcode *barcode = [barcodeViewController barcode];
+            MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+            NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+            NSManagedObjectID *objectId = [self objectIdEditBarcode];
+            RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+            RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
+            [barcodeObject updateWithBarcode:barcode fieldOne:[barcodeViewController queryField1] fieldTwo:[barcodeViewController queryField2]];
+            NSError *error = nil;
+            [managedObjectContext save:&error];
+//            [activeDocument saveContext];
+        } else {
+            
+            NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
+            [defination setObject:@(MTDocumentObjectTypeBarcode)        forKey:MTDocumentObjectDefinationType];
+            [defination setObject:[barcodeViewController barcode]       forKey:MTDocumentObjectDefinationObject];
+            RptqQueryField *queryField1 = [[barcodeViewController queryField1] retain];
+            RptqQueryField *queryField2 = [[barcodeViewController queryField2] retain];
+            if (queryField1 != nil) {
+                NSManagedObjectID *objectId = [queryField1 objectID];
+                [defination setObject:objectId forKey:MTDocumentObjectDefinationField1];
+            }
+            if (queryField2 != nil) {
+                NSManagedObjectID *objectId = [queryField2 objectID];
+                [defination setObject:objectId forKey:MTDocumentObjectDefinationField2];
+            }
+            [queryField1 release];
+            [queryField2 release];
+            [self insertDocumentObjectWithDefination:defination];
+
+        }
         
         [[self barButtonItemObjects] setEnabled:YES];
 
-        NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
-        [defination setObject:@(MTDocumentObjectTypeBarcode)        forKey:MTDocumentObjectDefinationType];
-        [defination setObject:[barcodeViewController barcode]       forKey:MTDocumentObjectDefinationObject];
-        RptqQueryField *queryField1 = [[barcodeViewController queryField1] retain];
-        RptqQueryField *queryField2 = [[barcodeViewController queryField2] retain];
-        if (queryField1 != nil) {
-            NSManagedObjectID *objectId = [queryField1 objectID];
-            [defination setObject:objectId   forKey:MTDocumentObjectDefinationField1];
-        }
-        if (queryField2 != nil) {
-            NSManagedObjectID *objectId = [queryField2 objectID];
-            [defination setObject:objectId   forKey:MTDocumentObjectDefinationField2];
-        }
-        [queryField1 release];
-        [queryField2 release];
-        [self insertDocumentObjectWithDefination:defination];
-        
         
     } else if ([[action identifier] isEqualToString:@"MTStoryboardSegueUnwindToDesigner"]) {
 
@@ -633,8 +682,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [collectionView setBackgroundView:backgroundView];
             [collectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
             
-            
-            
             // MARK: Create label to identify document section.
             DesignerSectionLabel *sectionControlView = [[DesignerSectionLabel alloc] initWithDisplayText:[reportSection localizedDisplayName]];
             [sectionControlView setBackgroundColor:[UIColor clearColor]];
@@ -679,7 +726,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             [[self designerContentView] addSubview:collectionView];
             
-            
             /*
             if ([UIDevice isModernOS]) {
                 UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
@@ -704,7 +750,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             } */
             
             [[self designerContentView] addSubview:sectionControlView];
-            
             
             NSLayoutConstraint *lc1a = [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical];
             NSLayoutConstraint *lc1b = [NSLayoutConstraint constraintWithItem: collectionView     attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationGreaterThanOrEqual toItem: nil             attribute: NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant: reportSectionHeight];
@@ -801,7 +846,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self designerScrollView] setDelegate:self];
     [[self designerScrollView] setUserInteractionEnabled:YES];
     [[self designerScrollView] setBackgroundColor:[UIColor lightGrayColor]];
-    [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
+    [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
     [[self designerScrollView] flashScrollIndicators];
     
     [activeDocument release];
@@ -994,7 +1039,47 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
 
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
+    
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
+
+    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
+
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+        NSManagedObjectID *objectId = [self objectIdEditBarcode];
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+        RptqDocumentObjectBarcode *barcodeObject = [[documentObject isBarcode] retain];
+        MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject] retain];
+        
+        MTViewControllerBarcode *barcodeViewController = [segue destinationViewController];
+        [barcodeViewController setBarcode:barcode];
+        RptqQueryField *field1 = [barcodeObject referencesField1];
+        RptqQueryField *field2 = [barcodeObject referencesField2];
+        [barcodeViewController setQueryField1:field1];
+        [barcodeViewController setQueryField2:field2];
+        [barcodeViewController setEditmode:YES];
+        
+        [barcodeObject release];
+        [barcode release];
+
+        
+    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
+        
+        MTDocumentObjectNewAggregateViewController *aggregateViewController = [segue destinationViewController];
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+        NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
+        RptqDocumentObject *documentObject = [(RptqDocumentObject *)[managedObjectContext objectWithID:objectId] retain];
+        RptqDocumentObjectAggregate *aggregateObject =  [[documentObject isAggregate] retain];
+        
+        [aggregateViewController setAggregateFunctionType:[[aggregateObject function] integerValue]];
+        [aggregateViewController setAggregateGroupByType:[[aggregateObject groupType] integerValue]];
+        [aggregateViewController setGroupTypeSectionNumber:[[aggregateObject groupNumber] integerValue]];
+        [aggregateViewController setFieldObjectId:[[aggregateObject aggregateField] objectID]];
+        [aggregateViewController setEditmode:YES];
+        
+        [aggregateObject release];
+        [documentObject release];
     }
 }
 
@@ -1854,8 +1939,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     }
 
                     if (CGRectIntersectsRect(rectToShow, self.designerScrollView.frame) == NO) {
-                        
-                        CGFloat offsetPointY = rectToShow.origin.y + rectToShow.size.height + 5.0000f - [[self designerScrollView] frame].size.height;
+                        CGFloat offsetPointY = (rectToShow.origin.y - [[self designerScrollView] bounds].size.height) - (rectToShow.size.height - 44.0000f);
                         CGPoint offsetPoint = CGPointMake(CGPointZero.x, offsetPointY);
                         [[reportDesigner designerScrollView] setContentOffset:offsetPoint animated:YES];
                         
@@ -1992,8 +2076,143 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
-    //NSManagedObjectID *objectId = [cell objectIdTag];
+    NSManagedObjectID *elementViewId = [cell objectIdTag];
+    
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
+    
+    RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
+    UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
+    
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
+    
+    BOOL found = NO;
+    //NSUInteger deleteSection = 0;
+    
+    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+        
+        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
+        NSUInteger deleteIndex = 0;
+        
+        
+        for (RptqDocumentObject *object in hasObjects) {
+            
+            if ([[object objectID] isEqual: elementViewId]) {
+                found = YES;
+                break;
+            }
+            
+            deleteIndex++;
+        }
+        
+        if (found) {
+            
+            RptqDocumentObject *objectToEdit = [hasObjects objectAtIndex:deleteIndex];
+            
+            switch ([[objectToEdit type] integerValue]) {
+                case MTDocumentObjectTypeAggregate:
+                    
+                    [self setObjectIdEditAggregateFunction:[objectToEdit objectID]];
+                    [self performSegueWithIdentifier:@"MTIdentifierSegueDocumentObjectEditAggregate" sender:self];
+                    
+                    break;
+                case MTDocumentObjectTypeBarcode:
+                    
+                    [self setObjectIdEditBarcode:[objectToEdit objectID]];
+                    [self performSegueWithIdentifier:@"MTIdentifierSegueDocumentObjectEditBarcode" sender:self];
+                    
+                    break;
+                case MTDocumentObjectTypeImage:
+                    
+                    [self setObjectIdEditImage:[objectToEdit objectID]];
+
+                    break;
+                case MTDocumentObjectTypeLabelDynamic: {
+                    
+                    [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
+                    [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
+                    
+                    break;
+                }
+                case MTDocumentObjectTypeLabelStatic: {
+                    
+                    [self setObjectIdEditStaticLabel:[objectToEdit objectID]];
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Edit Label", @"Edit Label")
+                                                                        message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
+                                                                       delegate: self
+                                                              cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel")
+                                                              otherButtonTitles: NSLocalizedString(@"Change", @"Change"), nil
+                                              ];
+                    [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
+                    [alertView setDelegate:self];
+                    UITextField *textField = [[alertView textFieldAtIndex:0] retain];
+                    [textField setClearButtonMode:UITextFieldViewModeAlways];
+                    [textField setDelegate:self];
+                    NSString *textFieldText = [[[objectToEdit isLabel] text] retain];
+                    [textField setText:textFieldText];
+                    [alertView setTag:MTDocumentObjectTypeLabelStatic];
+                    [self setAlertViewEdit:alertView];
+                    [[self alertViewEdit] show];
+                    [alertView release];
+                    [textField release];
+                    
+                    break;
+                }
+                case MTDocumentObjectTypeWhtiespace:
+                    
+                    
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+    }
+    
 }
+
+#pragma mark -
+#pragma mark - MTQueryBuilderChooseFieldDelegate
+
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
+    
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+    [[documentObject isLabelDataField] setReferencesQueryField:field];
+    [managedObjectContext save:nil];
+    
+}
+
+#pragma mark -
+#pragma mark - UIAlertView delegate protocol
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([alertView cancelButtonIndex] != buttonIndex) {
+        
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+        NSManagedObjectID *objectId = [self objectIdEditStaticLabel];
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+
+        UITextField *textField = [[alertView textFieldAtIndex:0] retain];
+        [[documentObject isLabel] setText:[textField text]];
+        [managedObjectContext save:nil];
+    }
+}
+
+#pragma mark -
+#pragma mark Text Field Delegate Protocol
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self alertView:[self alertViewEdit] clickedButtonAtIndex:1];
+    [[self alertViewEdit] dismissWithClickedButtonIndex:1 animated:YES];
+    return YES;
+}
+
 
 #pragma mark -
 #pragma mark Collection View Layout Delegate
@@ -2348,7 +2567,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     BOOL result = NO;
-    if (action == @selector(delete:)) {
+    if (action == @selector(delete:) || action == @selector(edit:)) {
         result = YES;
     }
     return result;
@@ -2712,12 +2931,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             CGPoint newCenter = [[self designerScrollView] convertPoint:gestureLocation fromView:window];
             
-            [[gestureRecognizer view] setAlpha:0.0000f];
             [[self designerScrollView] addSubview: [gestureRecognizer view]];
             [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:nil];
             [[gestureRecognizer view] setCenter: newCenter];
-            [[gestureRecognizer view] setAlpha:1.0000f];
-            NSLog(@"New Center (%@)", NSStringFromCGPoint(newCenter));
 
             break;
         }

@@ -13,8 +13,13 @@
 @interface MTViewControllerBarcode : UIViewController
     <MTViewControllerBarcodePreviewDelegate, MTViewControllerBarcodeOptionsDelegate>
 
-@property (nonatomic, retain, readonly) RptqQueryField *queryField1;
-@property (nonatomic, retain, readonly) RptqQueryField *queryField2;
-@property (nonatomic, retain, readonly) MTBarcode *barcode;
+@property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
+@property (nonatomic, retain, readwrite) RptqQueryField *queryField2;
+@property (nonatomic, retain, readwrite) MTBarcode *barcode;
+@property (nonatomic, retain, readonly) MTViewControllerBarcodeOptions *optionsViewController;
+
+@property (nonatomic, assign) BOOL editmode;
+
+- (void)updateBarcode;
 
 @end

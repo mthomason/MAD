@@ -19,13 +19,13 @@
 @property (nonatomic, assign) BOOL editModeBarcodeType;
 
 @property (nonatomic, retain) MTViewControllerBarcodePreview *previewViewController;
-@property (nonatomic, retain) MTViewControllerBarcodeOptions *optionsViewController;
+@property (nonatomic, retain, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
 
 @property (nonatomic, retain) NSString *barcodeInput;
 
-@property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
-@property (nonatomic, retain, readwrite) RptqQueryField *queryField2;
-@property (nonatomic, retain, readwrite) MTBarcode *barcode;
+//@property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
+//@property (nonatomic, retain, readwrite) RptqQueryField *queryField2;
+//@property (nonatomic, retain, readwrite) MTBarcode *barcode;
 
 @property (nonatomic, retain) NSArray *cachedData;
 @property (nonatomic, retain) NSArray *cachedDataMaxicode;
@@ -52,6 +52,7 @@
     [_queryField1 release];
     [_queryField2 release];
     [_barButtonItemSave release];
+    [self setEditmode:NO];
     [super dealloc];
 }
 
@@ -74,6 +75,46 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[self barButtonItemSave] setEnabled:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    if ([self editmode]) {
+        [[self barButtonItemSave] setEnabled:YES];
+
+        RptqDocument *document = [RptqDocument activeDocument];
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+        MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
+        
+        __block MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
+        if ([self queryField1] != nil) {
+            [mnsDatabase sampleDataForSchemaField:[[self queryField1] databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+                if (success) {
+                    [optionsViewController setSampleBarcodeData:resultStrings];
+                    [[optionsViewController tableView] reloadData];
+                }
+            }];
+        }
+        
+        if ([self queryField2] != nil) {
+            [mnsDatabase sampleDataForSchemaField:[[self queryField2] databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+                if (success) {
+                    [optionsViewController setSampleBarcodeData2dComponent:resultStrings];
+                    [[optionsViewController tableView] reloadData];
+                }
+            }];
+        }
+
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if ([self editmode]) {
+        [self setEditmode:NO];
+        [self updateBarcode];
+    }
 }
 
 - (void)commonInit {
@@ -105,6 +146,14 @@
     [field retain];
     [self setQueryField2:field];
     [field release];
+}
+
+- (RptqQueryField *)barcodeQueryField1 {
+    return [[[self queryField1] retain] autorelease];
+}
+
+- (RptqQueryField *)barcodeQueryField2 {
+    return [[[self queryField2] retain] autorelease];
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate

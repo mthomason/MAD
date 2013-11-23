@@ -177,6 +177,9 @@
                         <outlet property="toolbarBottomHeightConstraint" destination="ZWu-fI-nqK" id="KS8-0u-bRP"/>
                         <outlet property="toolboxView" destination="XNt-T0-zvD" id="H84-bL-bjA"/>
                         <outlet property="view" destination="lLt-so-kJY" id="nov-Zf-9lU"/>
+                        <segue destination="faV-0N-dYq" kind="push" identifier="MTIdentifierSegueEditField" id="am3-aZ-0MA"/>
+                        <segue destination="Dt2-Py-qG0" kind="push" identifier="MTIdentifierSegueDocumentObjectEditBarcode" id="pCi-yT-77G"/>
+                        <segue destination="DqB-KB-PyC" kind="push" identifier="MTIdentifierSegueDocumentObjectEditAggregate" id="PPx-4T-brk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dta-0E-vs3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1322,7 +1325,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M4a-1x-QI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="mO6-aK-SBy" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="600" y="2953"/>
+            <point key="canvasLocation" x="600" y="3051"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ccn-3q-IDa">
@@ -2100,7 +2103,7 @@
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="upS-Pr-eds">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseField" id="wlp-wD-qxw" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldMulti" id="wlp-wD-qxw" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="QRb-br-u92">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2564,7 +2567,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XYL-Lp-DPD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2626" y="3559"/>
+            <point key="canvasLocation" x="2518" y="5002"/>
         </scene>
         <!--Query Builder Add Link Second Table View Controller - Select Second Table-->
         <scene sceneID="fjW-dB-j3p">
@@ -4192,7 +4195,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4FE-hR-Scw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="fmR-5o-cXk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3012" y="3559"/>
+            <point key="canvasLocation" x="2904" y="5002"/>
         </scene>
         <!--Report Designer Document Object Format-->
         <scene sceneID="kMN-fL-Oq2">
@@ -4370,7 +4373,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="kfc-Go-Hl2" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2003" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="YsU-4W-W8h">
-                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="436"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -4792,7 +4795,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewAggregateViewControllerIdentifier" id="DqB-KB-PyC" customClass="MTDocumentObjectNewAggregateViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2017" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="S6h-xk-UdQ">
-                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="436"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -4965,7 +4968,7 @@
             <objects>
                 <tableViewController id="Ih4-6Y-PiS" customClass="MTViewControllerBarcodeOptions" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Len-4m-NGE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -5303,7 +5306,9 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Barcode Designer" id="58v-Cx-IVD"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="view" destination="Len-4m-NGE" id="Atm-o6-EbU"/>
                         <segue destination="uqe-Wy-lNl" kind="push" identifier="MTIdentiferSegueBarcodeExtrasAztec" id="WNk-Az-FYv"/>
                         <segue destination="3X0-NO-3rO" kind="push" identifier="MTIdentiferSegueBarcodeExtrasCodeOne" id="dcK-eO-ocY"/>
                         <segue destination="xEA-ld-JJG" kind="push" identifier="MTIdentiferSegueBarcodeExtrasGridMatrix" id="eb4-Yt-SaE"/>
@@ -5326,7 +5331,7 @@
             <objects>
                 <tableViewController id="RW9-eC-l1N" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="vnK-Zn-jVl">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -5409,15 +5414,17 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Type" id="Apn-Cd-dUC"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k08-7t-CMT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4924" y="5446"/>
+            <point key="canvasLocation" x="4924" y="5383"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SIG-mD-Mnv">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Jed-ge-S8E" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="Jed-ge-S8E" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OK3-SC-e2Y">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
@@ -5437,7 +5444,7 @@
         <!--View Controller Barcode - MAD Barcodes-->
         <scene sceneID="pPS-1c-7aw">
             <objects>
-                <viewController id="Dt2-Py-qG0" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="Dt2-Py-qG0" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ch7-dd-kES"/>
                         <viewControllerLayoutGuide type="bottom" id="iIi-1Y-Zru"/>
@@ -5446,16 +5453,19 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <containerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SQu-hU-gH7">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="264"/>
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SQu-hU-gH7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="z1C-6V-gAr"/>
+                                </constraints>
                                 <connections>
                                     <segue destination="04X-WT-Sri" kind="embed" identifier="MTIdentifierSegueBarcodePreview" id="zOQ-cM-ZbQ"/>
                                 </connections>
                             </containerView>
-                            <containerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lhW-Ku-pv0">
-                                <rect key="frame" x="0.0" y="264" width="320" height="240"/>
+                            <containerView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lhW-Ku-pv0">
+                                <rect key="frame" x="0.0" y="200" width="320" height="304"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
@@ -5466,7 +5476,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="SQu-hU-gH7" firstAttribute="top" secondItem="Hea-BC-LBd" secondAttribute="top" id="3dS-P6-XHg"/>
-                            <constraint firstItem="iIi-1Y-Zru" firstAttribute="top" secondItem="lhW-Ku-pv0" secondAttribute="bottom" id="C5N-rh-hRR"/>
                             <constraint firstItem="ch7-dd-kES" firstAttribute="top" secondItem="SQu-hU-gH7" secondAttribute="bottom" constant="-200" id="JFg-lx-cU2"/>
                             <constraint firstItem="lhW-Ku-pv0" firstAttribute="leading" secondItem="Hea-BC-LBd" secondAttribute="leading" id="Qim-vE-EhF"/>
                             <constraint firstAttribute="trailing" secondItem="lhW-Ku-pv0" secondAttribute="trailing" id="T0t-sX-0yu"/>
@@ -5483,6 +5492,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="barButtonItemSave" destination="yjj-A1-7wh" id="rwK-Gy-nUn"/>
                     </connections>
@@ -5501,7 +5513,7 @@
                         <viewControllerLayoutGuide type="bottom" id="k3X-9z-jbB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="W2Q-73-4QF" customClass="MTBarcodeView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="264"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -5519,7 +5531,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="ZKJ-dl-Aik" customClass="MTGroupByViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" tag="2011" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="RuD-x0-UW6">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -5854,7 +5866,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n7F-0w-CHY" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Utf-Uw-bzx" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="600" y="3600"/>
+            <point key="canvasLocation" x="600" y="3698"/>
         </scene>
         <!--Upgrade View Controller-->
         <scene sceneID="ocR-IZ-11w">
@@ -6605,7 +6617,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="Ibv-MJ-tzZ" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dU3-fL-Oq6">
-                        <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="436"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -6759,9 +6771,9 @@
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="1ua-4b-GQK">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="04I-ar-gb9" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseField2dComponent" id="04I-ar-gb9" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="TvG-HB-iQp">
-                        <rect key="frame" x="0.0" y="44" width="320" height="196"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="260"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -6801,10 +6813,11 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Field" id="KTa-lX-4PG"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lsM-DX-Uio" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4924" y="4809"/>
+            <point key="canvasLocation" x="4924" y="4619"/>
         </scene>
         <!--View Controller Barcode Type - Barcode Type-->
         <scene sceneID="Kov-n0-iNR">
@@ -6815,7 +6828,7 @@
                         <viewControllerLayoutGuide type="bottom" id="CyF-t0-Qdm"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Dpl-b5-zU6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vC7-pl-yRn">
@@ -6836,6 +6849,8 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="pickerView" destination="vC7-pl-yRn" id="N1D-sB-36Z"/>
                     </connections>
@@ -6850,7 +6865,7 @@
             <objects>
                 <tableViewController id="uqe-Wy-lNl" customClass="MTTableViewControllerBarcodeExtraAztec" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="qFt-MW-QyZ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6935,6 +6950,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Aztec Code" id="D1S-Vx-fdc"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SF4-0E-Nyv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -6945,7 +6962,7 @@
             <objects>
                 <tableViewController id="3X0-NO-3rO" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="0dG-q3-fwJ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -7147,6 +7164,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Code One" id="HuM-vu-S5d"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I8D-er-TSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -7157,7 +7176,7 @@
             <objects>
                 <tableViewController id="tmo-gd-LYF" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9md-jY-qCd">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -7783,6 +7802,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Size" id="Jtx-fJ-rJY"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QZB-Bd-N3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -7793,7 +7814,7 @@
             <objects>
                 <tableViewController id="Iix-BQ-5Ht" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="xf6-ZQ-Bde">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -7876,73 +7897,19 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Minimum Error Correction" id="dTp-1b-iEc"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0v-QK-Uzr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5427" y="6282"/>
-        </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
-        <scene sceneID="JFW-R7-mId">
-            <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldDataObject" id="eFz-dg-qxp" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1Rb-VW-PMu">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="f82-TC-Xj5" detailTextLabel="tDC-hW-KRE" style="IBUITableViewCellStyleValue1" id="zh1-kr-Yuh">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zh1-kr-Yuh" id="3Fe-un-OYe">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="f82-TC-Xj5">
-                                            <rect key="frame" x="15" y="11" width="34" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="tDC-hW-KRE">
-                                            <rect key="frame" x="261" y="11" width="44" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="aKe-sF-JnO" kind="unwind" identifier="MTSegueNewDocumentObjectDynamicLabelSaveIdentifer" unwindAction="unwindToDesigner:" id="Mif-Gf-RGS"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="eFz-dg-qxp" id="LAh-IT-wxC"/>
-                            <outlet property="delegate" destination="eFz-dg-qxp" id="kvw-9E-PX5"/>
-                        </connections>
-                    </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Select Field" id="bj3-ZG-UCg">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="u8Y-x7-aNd">
-                            <connections>
-                                <segue destination="aKe-sF-JnO" kind="unwind" unwindAction="unwindToDesigner:" id="Zvo-ln-vD0"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pAW-Gr-792" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="aKe-sF-JnO" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="3692" y="2240"/>
         </scene>
         <!--Table View Controller Barcode Extra Grid Matrix - Grid Matrix-->
         <scene sceneID="9ql-Ci-GBG">
             <objects>
                 <tableViewController id="xEA-ld-JJG" customClass="MTTableViewControllerBarcodeExtraGridMatrix" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Q4S-ZO-4Sm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8028,6 +7995,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Grid Matrix" id="gHp-CP-HyQ"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XaV-fx-Q6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8038,7 +8007,7 @@
             <objects>
                 <tableViewController id="euy-4h-WEU" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="OpH-nE-q1b">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8274,6 +8243,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Size" id="bJD-ao-Kne"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mgq-Rh-IOA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8284,7 +8255,7 @@
             <objects>
                 <tableViewController id="lQd-qr-6vo" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ELc-A8-lOx">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8384,6 +8355,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Minimum Error Correction" id="0Ez-ua-BdW"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O5K-NM-JD6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8394,7 +8367,7 @@
             <objects>
                 <tableViewController id="gud-5h-raB" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="WLD-32-9KR">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -8528,6 +8501,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Channel Code" id="GFO-8x-G5o"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bfO-gG-Lbs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8538,7 +8513,7 @@
             <objects>
                 <tableViewController id="OR8-hN-POz" customClass="MTTableViewControllerBarcodeExtraQrCode" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="6xe-Pz-UK5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8624,6 +8599,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="QR Code" id="VlH-ZP-CwU"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aps-6c-VK3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -8634,7 +8611,7 @@
             <objects>
                 <tableViewController id="xlX-sk-Xuu" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="mep-80-3G8">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9329,6 +9306,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Size" id="pVz-P6-K3w"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zBr-t1-r9k" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -9339,7 +9318,7 @@
             <objects>
                 <tableViewController id="cjd-eq-G1Z" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="kVy-rm-L4G">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9422,6 +9401,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Minimum Error Correction" id="miG-Il-3PG"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aoo-jP-Qdk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -9432,7 +9413,7 @@
             <objects>
                 <tableViewController id="ZZx-Yz-U7z" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="3vz-3Q-SNv">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9525,6 +9506,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="PDF417" id="WcA-Bd-5nL"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eMp-S7-aPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -9535,7 +9518,7 @@
             <objects>
                 <tableViewController id="iLP-oW-ynR" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="VzO-dM-Q12">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9907,6 +9890,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Number of Data Columns" id="qBV-ab-Vmu"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XIq-7K-mrN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -9917,7 +9902,7 @@
             <objects>
                 <tableViewController id="1LO-ot-od6" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="dXD-Hq-sId">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10017,6 +10002,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="MSI Plessey" id="FB9-de-DxK"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ba1-mE-l5b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10027,7 +10014,7 @@
             <objects>
                 <tableViewController id="CN6-xd-Ffs" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="BAi-NM-fYn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10110,6 +10097,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Maximum Codeword Length" id="q2V-z8-7Lg"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="prg-86-ais" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10120,7 +10109,7 @@
             <objects>
                 <tableViewController id="MSe-Mi-G6r" customClass="MTTableViewControllerBarcodeExtraMicroQrCode" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="com-k0-AeE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10206,6 +10195,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Micro QR Code" id="B2Q-ki-mWz"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Bo-46-wBW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10216,7 +10207,7 @@
             <objects>
                 <tableViewController id="PSJ-7v-0UL" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="a6L-Zh-s9F">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10299,6 +10290,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Size" id="gpW-Xg-tkG"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Od-Iu-hRD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10309,7 +10302,7 @@
             <objects>
                 <tableViewController id="Ag2-Y7-sPd" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Hjt-UC-ffv">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10375,6 +10368,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Error Correction" id="w7X-8J-iCk"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8rF-tw-fVK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10385,7 +10380,7 @@
             <objects>
                 <tableViewController id="SNs-mK-6EJ" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="FXr-h1-bap">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10485,6 +10480,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Micro Pdf417" id="Q3x-cI-miZ"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Ho-hV-zNR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10495,7 +10492,7 @@
             <objects>
                 <tableViewController id="fDh-S9-we7" customClass="MTTableViewControllerBarcodeExtraMaxicode" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="SoY-48-4l9">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10609,6 +10606,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Maxicode" id="4dX-dg-HkA"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="duN-H2-jZ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10617,9 +10616,9 @@
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="kOi-QY-LXj">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="he0-nz-VV7" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldMaxicode" id="he0-nz-VV7" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="t2i-r2-PjV">
-                        <rect key="frame" x="0.0" y="44" width="320" height="196"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="260"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -10656,6 +10655,7 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Field" id="yEN-XC-ngT"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F3f-sl-gwd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -10666,7 +10666,7 @@
             <objects>
                 <tableViewController id="2IL-4f-091" customClass="MTTableViewControllerBarcodeExtraDataMatrix" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="yaI-NG-X9e">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -11212,6 +11212,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Data Matrix" id="wF9-4S-qOM"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="11X-K1-Lol" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -11222,7 +11224,7 @@
             <objects>
                 <tableViewController id="AKX-A9-Qgu" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="jSF-CQ-wZn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -11407,6 +11409,8 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Databar Expanded Stacked" id="YRM-S8-peS"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rUj-bL-5ii" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -11415,9 +11419,9 @@
         <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="Yif-Wu-Oia">
             <objects>
-                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="sWB-rr-6Oh" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldBarcode" id="sWB-rr-6Oh" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5MJ-De-hPQ">
-                        <rect key="frame" x="0.0" y="44" width="320" height="196"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="260"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -11454,10 +11458,67 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Field" id="bbe-SE-kUa"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wzQ-a8-RLq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4924" y="5121"/>
+            <point key="canvasLocation" x="4924" y="5009"/>
+        </scene>
+        <!--Query Builder Choose Field View Controller - Select Field-->
+        <scene sceneID="1qY-89-V3U">
+            <objects>
+                <tableViewController storyboardIdentifier="MTTableViewControllerChooseFieldEditDynamicLabel" id="faV-0N-dYq" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="jea-3M-vo6">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="wfG-Zv-5LQ" detailTextLabel="Nun-cF-x1E" style="IBUITableViewCellStyleValue1" id="HgY-Rg-eg4">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HgY-Rg-eg4" id="703-IM-UHs">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="wfG-Zv-5LQ">
+                                            <rect key="frame" x="15" y="11" width="34" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" id="Nun-cF-x1E">
+                                            <rect key="frame" x="261" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="0FV-qc-Jlo" kind="unwind" identifier="MTIdentifierSegueEditFieldExit" unwindAction="unwindToDesigner:" id="Qd3-ls-VvH"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="faV-0N-dYq" id="JsL-tF-0Kr"/>
+                            <outlet property="delegate" destination="faV-0N-dYq" id="ZE8-Je-wcE"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <navigationItem key="navigationItem" title="Select Field" id="Wgl-dM-r5d">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="2Mb-6d-rsR">
+                            <connections>
+                                <segue destination="0FV-qc-Jlo" kind="unwind" identifier="MTIdentifierSegueEditFieldCancel" unwindAction="unwindToDesigner:" id="b3p-tz-2JR"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NFu-Kc-oxF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="0FV-qc-Jlo" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1728" y="1467"/>
         </scene>
     </scenes>
     <resources>
@@ -11483,8 +11544,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="tIb-WS-gen"/>
+        <segue reference="PPx-4T-brk"/>
+        <segue reference="pCi-yT-77G"/>
         <segue reference="pfP-rZ-fVf"/>
-        <segue reference="G3D-As-8XI"/>
+        <segue reference="kPX-hH-DKi"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

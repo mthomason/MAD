@@ -51,7 +51,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"] ||
-        [[segue identifier] isEqualToString:@"MTSegueAggregateFieldSave"]) {
+        [[segue identifier] isEqualToString:@"MTSegueAggregateFieldSave"] ||
+        [[segue identifier] isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
         
         UITableViewCell *cell = sender;
         NSIndexPath *indexPath = [[self tableView] indexPathForCell: cell];
@@ -277,7 +278,7 @@
 	
 	[sectionInfo setOpen: NO];
 
-    NSInteger countOfRowsToDelete = [self.tableView numberOfRowsInSection:sectionClosed];
+    NSInteger countOfRowsToDelete = [[self tableView] numberOfRowsInSection:sectionClosed];
     
     if (countOfRowsToDelete > 0) {
         NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];

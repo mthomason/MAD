@@ -47,6 +47,7 @@
         UIScrollViewDelegate,
         UIImagePickerControllerDelegate,
         UITabBarControllerDelegate,
+        UITextFieldDelegate,
         MTReportDesignerToolBoxDelegate,
         MTElementViewDelegate,
         MTCollectionViewCellElementDelegate,
@@ -54,7 +55,8 @@
         MTReportDesignerObjectSelectorDelegate,
         MTViewControllerProtocol,
         MTDocumentSectionViewDelegate,
-        MTReportDesignerSectionLayoutSettingsDelegate>
+        MTReportDesignerSectionLayoutSettingsDelegate,
+        MTQueryBuilderChooseFieldDelegate>
 
 - (IBAction)doneReports:(id)sender;
 - (IBAction)done:(id)sender;

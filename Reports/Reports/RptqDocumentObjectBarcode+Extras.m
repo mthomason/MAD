@@ -54,6 +54,50 @@
     }
 }
 
+- (void)updateWithBarcode:(MTBarcode *)barcode fieldOne:(RptqQueryField *)fieldOne fieldTwo:(RptqQueryField *)fieldTwo {
+
+    [self setAdd2dComponent:    @([barcode has2dComponent])];
+    [self setBorderStyle:       @([barcode borderStyle])];
+    [self setBorderWidth:       @([barcode borderWidth])];
+    [self setType:              @([barcode barcodeType])];
+    [self setHeight:            @([barcode height])];
+    [self setHumanReadable:     @([barcode humanReadable])];
+    [self setOption1:           @([barcode option1])];
+    [self setOption2:           @([barcode option2])];
+    [self setOption3:           @([barcode option3])];
+    [self setShowErrorMessage:  @([barcode showErrorMessages])];
+    [self setWhitespaceWidth:   @([barcode whitespaceWidth])];
+    [self setScale:             @([barcode scale])];
+    [self setReferencesField1:  fieldOne];
+    [self setReferencesField2:  fieldTwo];
+}
+
++ (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject {
+    
+    RptqQueryField *queryField1 = [[documentObject referencesField1] retain];
+    RptqQueryField *queryField2 = [[documentObject referencesField2] retain];
+
+    MTBarcodeType type = [[documentObject type] integerValue];
+    MTBarcode *barcode = [[MTBarcode barcodeWithType:type] retain];
+
+    [barcode setHas2dComponentEnabled:[[documentObject add2dComponent] boolValue]];
+    [barcode setBorderStyle:        [[documentObject borderStyle] integerValue]];
+    [barcode setBorderWidth:        [[documentObject borderWidth] integerValue]];
+    [barcode setHeight:             [[documentObject height] integerValue]];
+    [barcode setHumanReadable:      [[documentObject humanReadable] integerValue]];
+    [barcode setOption1:            [[documentObject option1] integerValue]];
+    [barcode setOption2:            [[documentObject option2] integerValue]];
+    [barcode setOption3:            [[documentObject option3] integerValue]];
+    [barcode setShowErrorMessages:  [[documentObject showErrorMessage] boolValue]];
+    [barcode setWhitespaceWidth:    [[documentObject whitespaceWidth] boolValue]];
+    [barcode setScale:              [[documentObject scale] floatValue]];
+    [barcode setInput:              @"Sample data"];
+    [barcode setPrimaryData:        @""];
+    [queryField1 release];
+    [queryField2 release];
+    return [barcode autorelease];
+}
+
 + (RptqDocumentObjectBarcode *)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo {
     
     RptqDocumentObjectBarcode *reportObject = nil;

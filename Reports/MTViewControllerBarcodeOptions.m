@@ -23,13 +23,8 @@
 
 @interface MTViewControllerBarcodeOptions ()
 
-@property (nonatomic, retain) NSArray *sampleBarcodeData;
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
-
-@property (nonatomic, retain) NSArray *sampleBarcodeDataMaxicode;
 @property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
-
-@property (nonatomic, retain) NSArray *sampleBarcodeData2dComponent;
 @property (nonatomic, assign) NSUInteger sampleBarcodeData2dComponentIndex;
 
 @property (nonatomic, retain) UIFont *mainFont;
@@ -75,6 +70,10 @@
         [self customInit];
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 }
 
 - (void)customInit {
@@ -270,9 +269,11 @@
                 
                 NSDictionary *sampleItem = [[self sampleBarcodeData] objectAtIndex:[self sampleBarcodeIndex]];
                 NSString *sampleText = [NSString stringWithFormat:@"%@", [[sampleItem allValues] lastObject]];
-                //[self setSampleBarcodeIndex: [self sampleBarcodeIndex] + 1];
                 [[self delegate] setInput:sampleText];
-                [[cell detailTextLabel] setText:sampleText];
+                
+                NSString *fieldOneName = [[[self delegate] barcodeQueryField1] toStringHumanReadable];
+                [[cell detailTextLabel] setText:fieldOneName];
+                
                 break;
             }
             case 1:
@@ -421,8 +422,9 @@
                 NSDictionary *sampleItem = [[self sampleBarcodeData2dComponent] objectAtIndex:[self sampleBarcodeData2dComponentIndex]];
                 NSString *sampleText = [NSString stringWithFormat:@"%@", [[sampleItem allValues] lastObject]];
                 [[self delegate] barcode2dComponentsetSampleData:@[sampleText]];
-//                [self setSampleBarcodeIndex: [self sampleBarcodeData2dComponentIndex] + 1];
-                [[cell detailTextLabel] setText:sampleText];
+
+                NSString *fieldTwoName = [[[self delegate] barcodeQueryField2] toStringHumanReadable];
+                [[cell detailTextLabel] setText:fieldTwoName];
                 
                 break;
             default:

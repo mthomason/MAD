@@ -24,5 +24,7 @@ extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 @property (nonatomic, assign) NSInteger groupTypeSectionNumber;
 @property (nonatomic, retain) NSManagedObjectID *fieldObjectId;
 
+@property (nonatomic, assign) BOOL editmode;
+
 
 @end
