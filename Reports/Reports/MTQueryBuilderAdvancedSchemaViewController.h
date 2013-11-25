@@ -21,14 +21,25 @@
 @end
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
-    <MTSchemaFieldCellDelegate>
+    <MTSchemaFieldCellDelegate, UIDynamicItem>
 
 @property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
 @property (nonatomic, assign) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintX;
-@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintY;
+//@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintX;
+//@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintY;
+
+//@property (nonatomic, readwrite) CGRect bounds;
+//@property (nonatomic, readwrite) CGPoint center;
+//@property (nonatomic, readwrite) CGAffineTransform transform;
+
+- (void)setCenter:(CGPoint)center;
+- (void)setBounds:(CGRect)bounds;
+- (void)setTransform:(CGAffineTransform)transform;
+- (CGPoint)center;
+- (CGRect)bounds;
+- (CGAffineTransform)transform;
 
 - (NSManagedObjectID *)tableObjectId;
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId;

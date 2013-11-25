@@ -279,7 +279,6 @@
                 completionHandler(managedDocumentAtUrl, success);
             }];
         }
-        [inferMappingModelAutomaticallyOption release];
     }
     [urlToOpen release];
     

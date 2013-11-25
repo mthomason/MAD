@@ -22,8 +22,8 @@
 @implementation MTQueryBuilderAdvancedSchemaViewController
 
 - (void)dealloc {
-    [_layoutConstraintX release];
-    [_layoutConstraintY release];
+    //[_layoutConstraintX release];
+    //[_layoutConstraintY release];
     [_cachedTableObjectId release];
     [_schemaTableViewController release];
     [_hasFieldsObjectIds release];
@@ -31,6 +31,36 @@
     [_toolbar release];
     [_containerView release];
     [super dealloc];
+}
+
+- (void)setCenter:(CGPoint)center {
+    NSLog(@"Set Center :%@", NSStringFromCGPoint(center));
+    NSLog(@"View %@)", [self view]);
+    [[self view] setCenter:center];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    [[self view] setBounds:bounds];
+}
+
+- (void)setTransform:(CGAffineTransform)transform {
+    [[self view] setTransform:transform];
+}
+
+- (CGPoint)center {
+    
+    NSLog(@"Get Center :%@", NSStringFromCGPoint([[self view] center]));
+        return [[self view] center];
+//    return [[self view] convertPoint:[[self view] center] toView:[self containerView]]; ;
+}
+
+- (CGRect)bounds {
+    return [[self view] bounds];
+//    return [[self view] convertRect:[[self view] bounds] toView:[self containerView]]; ;
+}
+
+- (CGAffineTransform)transform {
+    return [[self view] transform];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -166,8 +196,13 @@
 
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView {
     NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
-    NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
-    CGRect rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
+    CGRect rectForRow;
+    if (row == NSNotFound) {
+        rectForRow = CGRectZero;
+    } else {
+        NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
+        rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
+    }
     return [[self schemaTableViewController] convertRect:rectForRow toView:containerView];
 }
 

@@ -158,7 +158,7 @@
             MTGraph *graph = [[MTGraph alloc] init];
             NSSet *hasTables = [query hasQueryTables];
             
-            //Add a vertex to the graph for each edge.
+            //Add a vertex to the graph for each table.
             for (RptqDatabaseSchemaTable *table in hasTables) {
                 [graph addVertexWithObject:[table objectID]];
             }

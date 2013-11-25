@@ -333,6 +333,8 @@
 		4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; };
+		4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3138E9184331500019ED4C /* MTViewControllerDynamicItem.m */; };
+		4C3138EB184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3138E9184331500019ED4C /* MTViewControllerDynamicItem.m */; };
 		4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C3727B5168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
 		4C3727B6168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */; };
@@ -2119,6 +2121,8 @@
 		4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeAppEngine@2x.png"; path = "Reports/UIImageExportTypeAppEngine@2x.png"; sourceTree = "<group>"; };
 		4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeRSS.png; path = Reports/UIImageExportTypeRSS.png; sourceTree = "<group>"; };
 		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeRSS@2x.png"; path = "Reports/UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
+		4C3138E8184331500019ED4C /* MTViewControllerDynamicItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerDynamicItem.h; sourceTree = "<group>"; };
+		4C3138E9184331500019ED4C /* MTViewControllerDynamicItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerDynamicItem.m; sourceTree = "<group>"; };
 		4C3727B2168A38A7007DA7C3 /* UICollectionViewCell+Reuse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionViewCell+Reuse.h"; sourceTree = "<group>"; };
 		4C3727B3168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionViewCell+Reuse.m"; sourceTree = "<group>"; };
 		4C3727B9168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionReuseableViewDefault.h; sourceTree = "<group>"; };
@@ -5192,6 +5196,8 @@
 				4C1A585C14DE348200184445 /* MTQueryBuilderSortTypeViewController.m */,
 				4C1A586814E240BF00184445 /* MTQueryBuilderChooseFieldViewController.h */,
 				4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */,
+				4C3138E8184331500019ED4C /* MTViewControllerDynamicItem.h */,
+				4C3138E9184331500019ED4C /* MTViewControllerDynamicItem.m */,
 			);
 			name = "Query Builder";
 			path = Reports;
@@ -6601,6 +6607,7 @@
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
 				4CABE4A81837DF80007EDD9D /* RptqDocumentObjectFormula.m in Sources */,
 				4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */,
+				4C3138EB184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4CE9BC2616EF59CC00B0808C /* MTActiveDocument.m in Sources */,
 				4CE9BC8216EF702600B0808C /* RptqQueryTable+Extras.m in Sources */,
 				4CB0FF6716F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
@@ -7165,6 +7172,7 @@
 				4CE9BC2516EF59CC00B0808C /* MTActiveDocument.m in Sources */,
 				4CE9BC8116EF702600B0808C /* RptqQueryTable+Extras.m in Sources */,
 				4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
+				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 				4C80A5EF18317B6800242703 /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,

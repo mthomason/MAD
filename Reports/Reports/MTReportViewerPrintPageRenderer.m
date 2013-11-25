@@ -1097,6 +1097,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [subData release];
         } else {
             resultData = @[];
+            [resultData retain];
         }
     }
     return [resultData autorelease];

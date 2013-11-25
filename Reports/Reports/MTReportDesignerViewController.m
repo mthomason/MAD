@@ -1202,6 +1202,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
     UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
     [documentSectionView setBackgroundColor:color];
+    [documentSectionView release];
     [activeDocument saveContext];
     [activeDocument release];
 }
@@ -2157,6 +2158,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     [[self alertViewEdit] show];
                     [alertView release];
                     [textField release];
+                    [textFieldText release];
                     
                     break;
                 }
@@ -2169,7 +2171,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             }
             
         }
+        
+        [hasObjects release];
     }
+    
+    [activeDocument release];
     
 }
 
@@ -2201,6 +2207,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         UITextField *textField = [[alertView textFieldAtIndex:0] retain];
         [[documentObject isLabel] setText:[textField text]];
         [managedObjectContext save:nil];
+        [textField release];
     }
 }
 
