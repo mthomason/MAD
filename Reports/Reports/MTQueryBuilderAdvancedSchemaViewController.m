@@ -34,29 +34,28 @@
 }
 
 - (void)setCenter:(CGPoint)center {
-    NSLog(@"Set Center :%@", NSStringFromCGPoint(center));
-    NSLog(@"View %@)", [self view]);
+    //NSLog(@"Set Center :%@", NSStringFromCGPoint(center));
+    //NSLog(@"View %@)", [self view]);
     [[self view] setCenter:center];
+    [[self delegate] didMoveFieldRect:self animated:NO];
 }
 
 - (void)setBounds:(CGRect)bounds {
     [[self view] setBounds:bounds];
+    [[self delegate] didMoveFieldRect:self animated:NO];
 }
 
 - (void)setTransform:(CGAffineTransform)transform {
     [[self view] setTransform:transform];
+    [[self delegate] didMoveFieldRect:self animated:NO];
 }
 
 - (CGPoint)center {
-    
-    NSLog(@"Get Center :%@", NSStringFromCGPoint([[self view] center]));
-        return [[self view] center];
-//    return [[self view] convertPoint:[[self view] center] toView:[self containerView]]; ;
+    return [[self view] center];
 }
 
 - (CGRect)bounds {
     return [[self view] bounds];
-//    return [[self view] convertRect:[[self view] bounds] toView:[self containerView]]; ;
 }
 
 - (CGAffineTransform)transform {
@@ -209,7 +208,7 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [[self delegate] didMoveFieldRect:self animated:YES];
+    [[self delegate] didMoveFieldRect:self animated:NO];
 }
 
 @end

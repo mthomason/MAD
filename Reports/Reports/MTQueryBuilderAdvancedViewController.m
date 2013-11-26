@@ -12,6 +12,11 @@
 #import "MTQueryBuilderAdvancedViewController.h"
 #import "MTViewControllerDynamicItem.h"
 
+NSString * const MTIdentifierCollisionBoundryLandscapeTop = @"MTIdentifierCollisionBoundryLandscapeTop";
+NSString * const MTIdentifierCollisionBoundryLandscapeRight = @"MTIdentifierCollisionBoundryLandscapeRight";
+NSString * const MTIdentifierCollisionBoundryLandscapeBottom = @"MTIdentifierCollisionBoundryLandscapeBottom";
+NSString * const MTIdentifierCollisionBoundryLandscapeLeft = @"MTIdentifierCollisionBoundryLandscapeLeft";
+
 typedef void(^MTBlockResultVoid)(void);
 
 @interface MTQueryBuilderAdvancedViewController ()
@@ -120,9 +125,43 @@ typedef void(^MTBlockResultVoid)(void);
     return self;
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+
+    
+//    [[self dynamicAnimator] updateItemUsingCurrentState:[self contentView]];
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self layoutContent];
+    /*
+    [[self collisionBehavior] removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeBottom];
+    [[self collisionBehavior] removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeTop];
+    [[self collisionBehavior] removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeLeft];
+    [[self collisionBehavior] removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeRight];
+    
+    CGPoint fromPoint = [self contentView].frame.origin;
+    CGPoint toPoint = CGPointMake([self contentView].frame.origin.x + [self contentView].frame.size.width, [self contentView].frame.origin.y);
+    [[self collisionBehavior] addBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeTop fromPoint:fromPoint toPoint:toPoint];
+    
+    fromPoint = toPoint;
+    toPoint = CGPointMake(toPoint.x, [self contentView].frame.origin.y + self.contentView.frame.size.height);
+    [[self collisionBehavior] addBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeRight fromPoint:fromPoint toPoint:toPoint];
+    
+    fromPoint = toPoint;
+    toPoint = CGPointMake([self contentView].frame.origin.x, toPoint.y);
+    [[self collisionBehavior] addBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeBottom fromPoint:fromPoint toPoint:toPoint];
+    
+    fromPoint = toPoint;
+    toPoint = [self contentView].frame.origin;
+    [[self collisionBehavior] addBoundaryWithIdentifier:MTIdentifierCollisionBoundryLandscapeLeft fromPoint:fromPoint toPoint:toPoint];
+*/
 }
 
 - (void)layoutContent {
@@ -210,38 +249,28 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [[self contentView] setBackgroundColor:[UIColor redColor]];
+    [[self contentView] setBackgroundColor:[UIColor lightGrayColor]];
     
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:[self contentView]];
+    
     UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[]];
-    
-    CGPoint fromPoint = [self contentView].frame.origin;
-    CGPoint toPoint = CGPointMake([self contentView].frame.origin.x + [self contentView].frame.size.width, [self contentView].frame.origin.y);
-    [collisionBehavior addBoundaryWithIdentifier:@"MTIdentifierCollisionBoundryTop" fromPoint:fromPoint toPoint:toPoint];
-
-    fromPoint = toPoint;
-    toPoint = CGPointMake(toPoint.x, [self contentView].frame.origin.y + self.contentView.frame.size.height);
-    [collisionBehavior addBoundaryWithIdentifier:@"MTIdentifierCollisionBoundryRight" fromPoint:fromPoint toPoint:toPoint];
-
-    fromPoint = toPoint;
-    toPoint = CGPointMake([self contentView].frame.origin.x, toPoint.y);
-    [collisionBehavior addBoundaryWithIdentifier:@"MTIdentifierCollisionBoundryBottom" fromPoint:fromPoint toPoint:toPoint];
-    
-    fromPoint = toPoint;
-    toPoint = [self contentView].frame.origin;
-    [collisionBehavior addBoundaryWithIdentifier:@"MTIdentifierCollisionBoundryLeft" fromPoint:fromPoint toPoint:toPoint];
     [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
     [collisionBehavior setCollisionMode:UICollisionBehaviorModeEverything];
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
+    [gravity setMagnitude:1.0000f];
     UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
-    [dynamicItemBehavior setAngularResistance:100.0000f];
+    [dynamicItemBehavior setAllowsRotation:NO];
+    [dynamicItemBehavior setElasticity:1.0000f];
+    [dynamicItemBehavior setResistance:0.5000f];
     [self setDynamicItemBehavior: dynamicItemBehavior];
     [animator addBehavior:dynamicItemBehavior];
+
     
 
     [animator addBehavior:collisionBehavior];
     [animator addBehavior:gravity];
     [self setDynamicAnimator:animator];
+    [self setGravityBeahvior:gravity];
     [self setCollisionBehavior:collisionBehavior];
     [collisionBehavior release];
     [dynamicItemBehavior release];
@@ -356,12 +385,6 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 #pragma mark - View Controller Container Data
-
-- (void)addViewControllers:(NSSet *)viewControllers {
-    for (UIViewController *viewController in viewControllers) {
-        [self addViewController:viewController animated:NO];
-    }
-}
 
 - (CGRect)rectForDesiredRect:(CGRect)desiredFrame {
     CGRect viewControllerBounds = [[self contentView] bounds];
@@ -592,6 +615,7 @@ typedef void(^MTBlockResultVoid)(void);
     }
 
 }
+
 - (void)viewControllerDidFinish:(id)sender {
     if ([UIDevice isPad] && [self showSqlIsVisable]) {
         [[self showSqlPopoverController] dismissPopoverAnimated:YES];
@@ -635,7 +659,7 @@ typedef void(^MTBlockResultVoid)(void);
     if ([[table designerInitalLayout] boolValue]) {
         CGFloat originX = 50.0000f * ((([self tableDisplayCounter] + 1) - 9) % 9) + CGPointZero.x;
         CGFloat originY = originX;
-        subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
+        subviewRect = CGRectMake(originX, originY, 90.0000f, 100.0000f);
         [table setDesignerSizeHeight:@(subviewRect.size.height)];
         [table setDesignerSizeWidth:@(subviewRect.size.width)];
         [table setDesignerOriginY:@(subviewRect.origin.x)];
@@ -674,18 +698,6 @@ typedef void(^MTBlockResultVoid)(void);
     [[[self scrollView] panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
     [tapGesture requireGestureRecognizerToFail:panGesture];
     [[viewController view] addGestureRecognizer:panGesture];
-    [self updateSchemaDetils:viewController];
-    /*
-     UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToAnchor:[viewController view].center];
-     [attachmentBehavior setFrequency:1.0];
-     [attachmentBehavior setDamping:0.1];
-     [attachmentBehavior setLength:20.0000f];
-     */
-    //[[self dynamicAnimator] addBehavior:attachmentBehavior];
-    //[[self collisionBehavior] addItem:viewController];
-    //[[self gravityBeahvior] addItem:viewController];
-    //[[self attachmentBehaviors] setObject:attachmentBehavior forKey:[[viewController view] objectIdTag]];
-    //[attachmentBehavior release];
     [panGesture release];
     
     [self addViewController:viewController animated:animated];
@@ -897,14 +909,12 @@ typedef void(^MTBlockResultVoid)(void);
     [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
 
     [self setTableDisplayCounter:0];
-
-    __block MTQueryBuilderAdvancedViewController *viewController = self;
     
-    dispatch_queue_t queuePriorityMain = dispatch_get_main_queue();
-    dispatch_queue_t queuePriorityNormal = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    //dispatch_queue_t queuePriorityMain = dispatch_get_main_queue();
+    //dispatch_queue_t queuePriorityNormal = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
-    dispatch_async(queuePriorityNormal, ^{
-        dispatch_async(queuePriorityMain, ^{
+    //dispatch_async(queuePriorityNormal, ^{
+      //  dispatch_async(queuePriorityMain, ^{
             
             RptqQuery *query = [RptqDocument queryForActiveDocument];
 
@@ -918,7 +928,7 @@ typedef void(^MTBlockResultVoid)(void);
             }
 
             //Create an edge in the graph for each query link.
-            NSSet *hasQueryLinks = [query hasQueryLinks];
+            NSSet *hasQueryLinks = [[query hasQueryLinks] retain];
             for (RptqQueryLinks *queryLink in hasQueryLinks) {
                 
                 RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
@@ -988,6 +998,7 @@ typedef void(^MTBlockResultVoid)(void);
             NSInteger topLevelTableCounter = 0;
             CGFloat segLength = (self.contentView.bounds.size.width / (numberOfStartingPoints + 1));
 
+            // Display tables
             for (MTPair *pair in tableIds) {
                 MTVertex *tableIdVertext = [pair former];
                 NSManagedObjectID *objectId = [tableIdVertext object];
@@ -1006,7 +1017,7 @@ typedef void(^MTBlockResultVoid)(void);
                     
                     [[self tableIds] addObject:[table objectID]];
                     [[self controllersForObjectIds] setObject:viewController forKey:[table objectID]];
-                    CGFloat originX = 50.0000f * ((([self tableDisplayCounter] + 1) - 9) % 9) + CGPointZero.x;
+                    CGFloat originX = 10.0000f * ([self tableDisplayCounter] + 1) + CGPointZero.x;
                     CGFloat originY = originX;
                     subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
                     [table setDesignerSizeHeight:@(subviewRect.size.height)];
@@ -1032,7 +1043,6 @@ typedef void(^MTBlockResultVoid)(void);
                     [[viewController view] addGestureRecognizer:panGesture];
                     [panGesture release];
                     
-                    
                     [viewController retain];
                     CGRect desiredFrame = [[viewController view] frame];
                     CGAffineTransform swingTransform = CGAffineTransformIdentity;
@@ -1041,13 +1051,7 @@ typedef void(^MTBlockResultVoid)(void);
                     }
                     
                     NSArray *constraints = nil;
-                    //NSMutableArray *bufferConstraints = [[NSMutableArray alloc] init];
-                    
                     desiredFrame = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
-                    
-                   // UIAttachmentBehavior *ab = [[self attachmentBehaviors] objectForKey:[[(MTQueryBuilderAdvancedViewController *)viewController view] objectIdTag]];
-                    
-                    //[ab setAnchorPoint:[self contentView].frame.origin];
                     desiredFrame = [self rectForDesiredRect:desiredFrame];
                     
                     NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.width];
@@ -1065,33 +1069,26 @@ typedef void(^MTBlockResultVoid)(void);
                         [[self viewControllers] addObject:viewController];
                     }
                     
-                    
                     [[self contentView] addSubview:[viewController view]];
                     [viewController didMoveToParentViewController:self];
                     
-                    
-                    //[bufferConstraints addObjectsFromArray:constraints];
                     [[self contentView] addConstraints:constraints];
                     
                     if (animated) {
-                        MTQueryBuilderAdvancedSchemaViewController *svc = (MTQueryBuilderAdvancedSchemaViewController *)viewController;
+                        //MTQueryBuilderAdvancedSchemaViewController *svc = (MTQueryBuilderAdvancedSchemaViewController *)viewController;
                         
-                        //[svc setCenter:center];
-                        //[svc setTransform:[[svc view] transform]];
-                        //CGSize size = [[svc view] bounds].size;
-                        //                CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
-                        //[svc setBounds:bounds];
-                        
-                        NSManagedObjectID *objectIDView = [[[svc view] objectIdTag] retain];
+                        NSManagedObjectID *objectIDView = [[[viewController view] objectIdTag] retain];
                         if (topLevel) {
                             CGFloat attachmentPointX = segLength * (topLevelTableCounter + 1);
                              CGPoint attachmentPoint = CGPointMake(attachmentPointX, CGPointZero.y);
-                            UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:svc attachedToAnchor:attachmentPoint];
+                            //UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:svc attachedToAnchor:attachmentPoint];
+                            UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToAnchor:attachmentPoint];
+
                             [attachmentBehavior setFrequency:4.0];
                             [attachmentBehavior setDamping:0.5];
                             [[self dynamicAnimator] addBehavior:attachmentBehavior];
                             [[self attachmentBehaviors] setObject:attachmentBehavior forKey:objectIDView];
-                            [attachmentBehavior setLength:220.0000f];
+                            [attachmentBehavior setLength:100.0000f];
 
                             [attachmentBehavior release];
                             topLevelTableCounter++;
@@ -1108,16 +1105,16 @@ typedef void(^MTBlockResultVoid)(void);
                                     MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[[self controllersForObjectIds] objectForKey:[leftTable objectID]] retain];
                                     NSManagedObjectID *objectIDLink = [[link objectID] retain];
 
-                                    MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [viewController retain];
+                                    //MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [viewController retain];
                                     
-                                    UIAttachmentBehavior *attachmentBehaviorLeft = [[UIAttachmentBehavior alloc] initWithItem:rightTableViewController attachedToItem:leftTableViewController];
+                                    UIAttachmentBehavior *attachmentBehaviorLeft = [[UIAttachmentBehavior alloc] initWithItem:viewController attachedToItem:leftTableViewController];
                                     [attachmentBehaviorLeft setFrequency:4.0];
                                     [attachmentBehaviorLeft setDamping:0.5];
                                     [[self dynamicAnimator] addBehavior:attachmentBehaviorLeft];
                                     [[self attachmentBehaviors] setObject:attachmentBehaviorLeft forKey:objectIDLink];
-                                    [attachmentBehaviorLeft setLength:240.0000f];
+                                    [attachmentBehaviorLeft setLength:100.0000f];
                                     [leftTableViewController release];
-                                    [rightTableViewController release];
+                                    //[rightTableViewController release];
                                     [attachmentBehaviorLeft release];
                                     [objectIDLink release];
                                     
@@ -1126,14 +1123,14 @@ typedef void(^MTBlockResultVoid)(void);
                             
                         }
                         
-                        UIPushBehavior *pushBehavior = [[UIPushBehavior alloc] initWithItems:@[svc] mode:UIPushBehaviorModeInstantaneous];
+                        UIPushBehavior *pushBehavior = [[UIPushBehavior alloc] initWithItems:@[viewController] mode:UIPushBehaviorModeInstantaneous];
                         [[self dynamicAnimator] addBehavior:pushBehavior];
                         [[self pushBehaviors] setObject:pushBehavior forKey:objectIDView];
                         [pushBehavior release];
 
-                        [[self collisionBehavior] addItem:svc];
-                        [[self gravityBeahvior] addItem:svc];
-                        [[self dynamicItemBehavior] addItem:svc];
+                        [[self collisionBehavior] addItem:viewController];
+                        [[self gravityBeahvior] addItem:viewController];
+                        [[self dynamicItemBehavior] addItem:viewController];
                         [objectIDView release];
 
                         tableCounter++;
@@ -1147,10 +1144,16 @@ typedef void(^MTBlockResultVoid)(void);
                 }
             }
             
+            // Display links
+            for (RptqQueryLinks *queryLink in hasQueryLinks) {
+                [self addLinkViewControllerForQueryLink:queryLink animated:YES];
+            }
+            
+            [hasQueryLinks release];
             [layoutDetails release];
 
-        });
-    });
+//        });
+//    });
 
 }
 
@@ -1172,33 +1175,18 @@ typedef void(^MTBlockResultVoid)(void);
     NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
     UIPushBehavior *pushBehavior = [[[self pushBehaviors] objectForKey:objectId] retain];
     [pushBehavior setActive:YES];
+    
     // If we're starting the gesture then create a drag force
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-    }
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) { }
     
     // Set the force to be proportional to distance the gesture has moved
     CGPoint velocity = [gestureRecognizer velocityInView:[self contentView]];
     pushBehavior.pushDirection = CGVectorMake(velocity.x / 10.0000f, velocity.y / 10.0000f);
 
     // If we're finishing then cancel the behavior to 'let-go' of the ball
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        //[pushBehavior setMagnitude:velocity];
-    }
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) { }
     
     [pushBehavior release];
-}
-
-- (void)updateSchemaDetils:(MTQueryBuilderAdvancedSchemaViewController *)item {
-    //CGPoint center = [[item view] convertPoint:[[item view] center] toView:[self contentView]];
-    
-    //UIAttachmentBehavior *ab = [[self attachmentBehaviors] objectForKey:[[item view] objectIdTag]];
-    //[ab setAnchorPoint:center];
-//    [[item attachmentBehavior] setAnchorPoint:center];
-    //[item setCenter:center];
-    //[item setTransform:[[item view] transform]];
-    //CGSize size = [[item view] bounds].size;
-    //CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
-    //[item setBounds:bounds];
 }
 
 #pragma mark - UIScrollViewDelegate
