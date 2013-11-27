@@ -1261,31 +1261,33 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Scroll view helper
 
 - (void)resizeScrollViewContentArea {
-    CGFloat maxX = CGPointZero.x;
-    CGFloat maxY = CGPointZero.y;
-
-    for (UIViewController *viewController in [self childViewControllers]) {
-        Class schemaClass = [MTQueryBuilderAdvancedSchemaViewController class];
-        if ([viewController isKindOfClass:schemaClass]) {
-            UIView *view = [viewController view];
-            CGRect frame = view.frame;//[[self contentView] convertRect:view.frame fromView:view];
-            CGFloat tmaxX = frame.origin.x + frame.size.width;
-            CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
-            CGFloat tmaxY = frame.origin.y + frame.size.height;
-            CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
-            tmaxX += tminX;
-            tmaxX += tminY;
-            maxX = MAX(maxX, tmaxX);
-            maxY = MAX(maxY, tmaxY);
+    if ([[self scrollView] isZooming] == NO) {
+        CGFloat maxX = CGPointZero.x;
+        CGFloat maxY = CGPointZero.y;
+        
+        for (UIViewController *viewController in [self childViewControllers]) {
+            Class schemaClass = [MTQueryBuilderAdvancedSchemaViewController class];
+            if ([viewController isKindOfClass:schemaClass]) {
+                UIView *view = [viewController view];
+                CGRect frame = view.frame;//[[self contentView] convertRect:view.frame fromView:view];
+                CGFloat tmaxX = frame.origin.x + frame.size.width;
+                CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
+                CGFloat tmaxY = frame.origin.y + frame.size.height;
+                CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
+                tmaxX += tminX;
+                tmaxX += tminY;
+                maxX = MAX(maxX, tmaxX);
+                maxY = MAX(maxY, tmaxY);
+            }
         }
+        CGRect bounds = self.view.bounds;
+        maxX = MAX(maxX, bounds.size.width);
+        maxY = MAX(maxY, bounds.size.height);
+        CGSize contentSize = CGSizeMake(maxX, maxY);
+        CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, contentSize.width, contentSize.height);
+        [[self contentView] setFrame: frame];
+        [[self scrollView] setContentSize: contentSize];
     }
-    CGRect bounds = self.view.bounds;
-    maxX = MAX(maxX, bounds.size.width);
-    maxY = MAX(maxY, bounds.size.height);
-    CGSize contentSize = CGSizeMake(maxX, maxY);
-    CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, contentSize.width, contentSize.height);
-    [[self contentView] setFrame: frame];
-    [[self scrollView] setContentSize: contentSize];
 }
 
 #pragma mark - UICollisionBehaviorDelegate
