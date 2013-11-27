@@ -9,7 +9,6 @@
 #import "MTDatabase.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
-//#import "MTDatabaseSalesForce.h"
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
@@ -48,14 +47,6 @@
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
         
-        //id username = [[userCredentals mysql_username] copy];
-        //[databaseConnection setUsername:    username];
-        //[username release];
-        
-        //id password = [[userCredentals mysql_password] copy];
-        //[databaseConnection setPassword:    password];
-        //[password release];
-        
         NSString *mysqlHost = [[NSString alloc] initWithString:[userCredentals mysql_host]];
         [databaseConnection setServer:      mysqlHost];
         [mysqlHost release];
@@ -75,13 +66,6 @@
     } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
 
         MTDatabaseConnection *databaseConnection = [[MTDatabaseConnection alloc] init];
-        //id username = [[userCredentals tds_username] copy];
-        //[databaseConnection setUsername:    username];
-        //[username release];
-        
-        //id password = [[userCredentals tds_password] copy];
-        //[databaseConnection setPassword:    password];
-        //[password release];
         
         NSString *server = [[NSString alloc] initWithString:[userCredentals tds_server]];
         [databaseConnection setServer:      server];
