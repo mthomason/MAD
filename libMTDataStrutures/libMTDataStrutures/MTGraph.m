@@ -199,6 +199,8 @@
     return [resultEdges autorelease];
 }
 
+
+
 - (MTLinkedList *)topologicalSortWithError:(NSError **)anError {
     
     NSNumber *counter = @(0);
@@ -238,7 +240,7 @@
     [resultVertices reverse];
     
     [resultVertices autorelease];
-    return isDirectedAcyclicGraph ? resultVertices : nil;
+    return resultVertices;
 
 }
 

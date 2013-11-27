@@ -20,7 +20,12 @@
 #import "MTViewController.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
-    <UIGestureRecognizerDelegate, UIScrollViewDelegate, UIPopoverControllerDelegate, MTQueryBuilderAdvancedSchemaDelegate, MTViewControllerProtocol>
+    <UIGestureRecognizerDelegate,
+        UIScrollViewDelegate,
+        UIPopoverControllerDelegate,
+        UICollisionBehaviorDelegate,
+        MTQueryBuilderAdvancedSchemaDelegate,
+        MTViewControllerProtocol>
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
 

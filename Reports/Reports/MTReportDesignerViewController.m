@@ -554,7 +554,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [super viewWillAppear:animated];
     
     [self setZoomScaleRestore:[[self designerScrollView] zoomScale]];
-    [[self designerScrollView] setZoomScale:1 animated:NO];
+    [[self designerScrollView] setZoomScale:1.0000f animated:NO];
 
     MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
     
