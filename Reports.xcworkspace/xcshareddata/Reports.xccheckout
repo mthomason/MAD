@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>D7BB45DC-F08E-4B9B-AFC7-24D203F7163C</string>
+	<string>9A8647DC-5247-4BEB-B394-A955664B6694</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Reports</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>21DA4FA5-5979-41DD-B62D-E2681E8BCB80</key>
+		<key>287BF243-8627-4FCE-B6CE-34C31BF83167</key>
 		<string>https://github.com/EverydayApps/Reports.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Reports.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>21DA4FA5-5979-41DD-B62D-E2681E8BCB80</key>
+		<key>287BF243-8627-4FCE-B6CE-34C31BF83167</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>21DA4FA5-5979-41DD-B62D-E2681E8BCB80</string>
+	<string>287BF243-8627-4FCE-B6CE-34C31BF83167</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>21DA4FA5-5979-41DD-B62D-E2681E8BCB80</string>
+			<string>287BF243-8627-4FCE-B6CE-34C31BF83167</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Reports</string>
 		</dict>
