@@ -166,3 +166,9 @@ xcuserdata
 .DS_Store
 
 StaticLibraries/.DS_Store
+
+*.tar.gz
+*.tgz
+Connectors/source/*
+Connectors/build/*
+
