@@ -180,7 +180,7 @@ extract_source() {
    echo "Extracting source"
    local archive=$1
    local destination=$2
-   sudo rm -rf -- "${destination}"
+   rm -rf -- "${destination}"
    mkdir -p "${destination}"
    tar zxf ${archive} -C ${destination}
 }
@@ -550,14 +550,16 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 
    pushd ${path_source_mysql_native}/${archive_name_mysql}
    mkdir -p "${path_build_mysql}"
+   rm -rf -- "${path_build_mysql}"
+   mkdir -p "${path_build_mysql}"
    log_build_mysql="${path_build_mysql}/build-mysql-native-release.log"
 
    cmake -Wno-dev -GXcode >> $log_build_mysql &
    spinner $!
 
-   sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
+   #sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
 
-   xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk macosx${version_macosx} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_macosx}" >> $log_build_mysql &
+   xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk macosx${version_macosx} >> $log_build_mysql &
    spinner $!
 
 
@@ -569,10 +571,10 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
       if [ "${platform}" == "${platform_iphoneos}" ]
       then
          sdk_build=${sdk_iphoneos}
-         archs_to_build="armv7 armv7s arm64"
+         archs_to_build=$archs_ios
       else
          sdk_build=${sdk_simulator}
-         archs_to_build="i386 x86_64"
+         archs_to_build=$archs_macosx
       fi
 
 
@@ -652,10 +654,13 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 
     done
 
-   exit 0
+   printf "%s\n" "${path_library_mysql}"
 
-    mkdir -p "${path_library_mysql}"
-    cp -R "${path_source_mysql}/include" "${path_library_mysql}"
+   mkdir -p "${path_library_mysql}"
+
+   printf "%s\n" "${path_source_mysql}/include\" \"${path_library_mysql}"
+
+   cp -R "${path_source_mysql}/include" "${path_library_mysql}"
 
     path_library_mysql="${path_library_mysql}/libmysqlclient.a"
     command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
