@@ -119,6 +119,7 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
     MTBarcodeTypeChannel        = BARCODE_CHANNEL,
     MTBarcodeTypeCodeOne        = BARCODE_CODEONE,
     MTBarcodeTypeGridMatrix     = BARCODE_GRIDMATRIX,
+    
 };
 
 @interface MTBarcode : NSObject
