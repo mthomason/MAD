@@ -117,6 +117,17 @@ print_building() {
    printf "Building %s version %s for architecture %s.\n" "$1" "$2" "$3"
 }
 
+platform_for_architecture() {
+   local architecture=$1
+   local result="iPhoneOS"
+   if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
+   then
+      result="iPhoneSimulator"
+   fi
+   echo $result
+}
+
+
 #
 # Process flags
 #
@@ -177,7 +188,6 @@ download_archive() { # $1=archive name; $2=archive url
 #
 
 extract_source() {
-   echo "Extracting source"
    local archive=$1
    local destination=$2
    rm -rf -- "${destination}"
@@ -205,14 +215,15 @@ path_sdk_root_iPhoneOS=$( xcodebuild -version -sdk iphoneos Path 2>/dev/null )
 path_sdk_root_iPhoneSimulator=$( xcodebuild -version -sdk iphonesimulator Path 2>/dev/null )
 path_sdk_root_MacOSX=$( xcodebuild -version -sdk macosx Path 2>/dev/null )
 
-config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additional_config $5=path_make $6=addtional_work
+config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additional_config $5=path_make
 
    local version_sdk=$1
    local version_sdk_min=$2
    local architecture=$3
    local additional_config=$4
    local path_make=$5
-   local addtional_work=$6
+   local log=$6
+   local additional_work=$7
 
    local architecture_host_part=$( uname -p )
    local architecture_host="${architecture_host_part}-apple-darwin"
@@ -244,25 +255,47 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
       $( "${addtional_work} $path_make" )
    fi
 
+   export DEVROOT="${platform_root}/Developer"
+   export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
+   export CC=$( xcrun -find gcc )
+   export CFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min}"
+   export LD=$( xcrun -find ld )
+   export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min}"
+   export CPPFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include"
+
+   echo "Configure"
    if [[ "${#additional_config}" > 0 ]];
    then
-      ./configure --host=${architecture_host} --build=${architecture_target} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config} >> log  &
+#./configure --host=${architecture_host_part} --target=${architecture} --enable-static --disable-shared --prefix=${path_make} ${additional_config} >> log 2>> "${log}.error.log" &
+      echo ""
+      echo "./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config}"
+      echo ""
+
+      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config} >> log 2>> "${log}.error.log" &
       spinner $!
    else
-      ./configure --host=${architecture_host} --build=${architecture_target} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} >> log  &
+#./configure --host=${architecture_host_part} --target=${architecture} --enable-static --disable-shared --prefix=${path_make} >> log  2>> "${log}.error.log" &
+      echo ""
+      echo "./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make}"
+      echo ""
+      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} >> log  2>> "${log}.error.log" &
       spinner $!
    fi
 
-   printf "\nmake clean"
-   make clean >> log 2>&1 &
+   printf "make clean"
+   make clean >> log 2>>"${log}.error.log" &
    spinner $!
 
    printf "\nmake"
-   make >> log &
+   make >> log 2>"${log}.error.log" &
    spinner $!
 
-   make install >> log 2>&1 &
+   printf "\nmake install"
+
+   make install >> log 2>>"${log}.error.log" &
    spinner $!
+
+   printf "\n"
 
 }
 
@@ -361,7 +394,7 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
        mkdir -p "${path_build}"
        mkdir -p "${path_build_openssl}"
        mkdir -p "${path_build_openssl_arch}"
-       sudo rm -rf -- "${path_build_openssl_arch}"
+       rm -rf -- "${path_build_openssl_arch}"
        mkdir -p "${path_build_openssl_arch}"
 
        log_build_openssl="${path_build_openssl_arch}/build-openssl-${version_openssl}.log"
@@ -456,7 +489,7 @@ if [[ $build_mysql == $true  && $show_help == $false ]]; then
 
        printf "\n%s\n" "$formatting_divider"
        printf "Extracting MySQL source code.\n"
-       sudo rm -rf -- "${path_source_mysql}"
+       rm -rf -- "${path_source_mysql}"
        mkdir -p "${path_source_mysql}"
        tar zxf ${path_media_mysql} -C ${path_source}
 
@@ -468,7 +501,7 @@ if [[ $build_mysql == $true  && $show_help == $false ]]; then
 
        printf "Configuring MySQL\n"
 
-       sudo cmake -GXcode >> $log_build_mysql &
+       cmake -GXcode >> $log_build_mysql &
        spinner $!
 
        if [ "$version_mysql" == "$version_mysql_6_0" ]
@@ -499,7 +532,7 @@ if [[ $build_mysql == $true  && $show_help == $false ]]; then
 
       print_building "MySQL" $version_mysql $arch
 
-      sudo xcodebuild -project libmysql.xcodeproj -target mysqlclient -configuration Release -sdk "${sdk_build}" ONLY_ACTIVE_ARCH=NO ARCHS="$arch" VALID_ARCHS="${archs_valid}" PRODUCT_NAME=${product_name_mysql} >> $log_build_mysql &
+      xcodebuild -project libmysql.xcodeproj -target mysqlclient -configuration Release -sdk "${sdk_build}" ONLY_ACTIVE_ARCH=NO ARCHS="$arch" VALID_ARCHS="${archs_valid}" PRODUCT_NAME=${product_name_mysql} >> $log_build_mysql &
       spinner $!
 
       path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
@@ -535,8 +568,6 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
    #  The comp_error must run for error messages to be generated for
    #  the libs, but since the libs are armv, we need to do a native
    #  generation of this helper application.
-
-
 
    command_lipo_mysql="lipo -create "
    path_library_mysql="${path_library}/libmysql-${version_mysql}-iphoneos${version_ios}"
@@ -703,7 +734,7 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
       path_build_png_arch="${path_build_png}/$platform_version_arch.sdk"
 
       mkdir -p "${path_build_png_arch}"
-      sudo rm -rf -- "${path_build_png_arch}"
+      rm -rf -- "${path_build_png_arch}"
       log_build_png="${path_build_png}/build-libpng-${version_png}-${arch}.log"
       > "$log_build_png"
 
@@ -716,11 +747,8 @@ if [[ $build_png == $true  && $show_help == $false ]]; then
 
       command_lipo_png="${command_lipo_png} ${path_build_png_arch}/lib/libpng.a"
 
-
-
       config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_png_arch $log_build_png # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
 
-      unset $additional_config
    done
 
    mkdir -p "${path_library_png}"
@@ -740,22 +768,25 @@ fi
 
 if [[ $build_tds == $true  && $show_help == $false ]]; then
 
-   command_lipo_tdstds="lipo -create "
+   set -e
+
+   command_lipo_tds="lipo -create "
+   command_lipo_ct="lipo -create "
+   path_library_tds="${path_library}/freetds-${version_freetds}-iphoneos${version_ios}"
 
    for arch in ${archs}
    do
-      if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-      then
-         platform="iPhoneSimulator"
-      else
-         platform="iPhoneOS"
-      fi
+      platform=$( platform_for_architecture arch )
+
+      printf "\n\nBuilding Freetds for %s %s." "${arch}" "${platform}"
 
       platform_version_arch="${platform}${version_ios}-${arch}"
       path_build_tds_arch="${path_build_tds}/$platform_version_arch.sdk"
 
+#printf "mkdir %s\n" "${path_build_tds_arch}"
+
       mkdir -p "${path_build_tds_arch}"
-      sudo rm -rf -- "${path_build_tds_arch}"
+      rm -rf -- "${path_build_tds_arch}"
       mkdir -p "${path_build_tds_arch}"
       log_build_tds="${path_build_tds}/build-tds-${version_freetds}-${arch}.log"
       > "$log_build_tds"
@@ -767,21 +798,35 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
       cd "${path_source_tds}"
 
-      command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsysdb.a"
-      additional_config=" -with-tdsver=${TDS_VER} "
+      command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
+      command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
+      additional_config=" -with-tdsver=${version_tds} "
 
-      config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
-
+      config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds
 
    done
+
+   printf "mkdir %s\n" "${path_library_tds}"
 
    mkdir -p "${path_library_tds}"
    rm -rf -- "${path_library_tds}"
    mkdir -p "${path_library_tds}"
 
-   cp -R "${path_build_tds_arch}/include" "${path_library_tds}"
-   command_lipo_tds="${command_lipo_tds} -output ${path_library_tds}/libsysdb.a"
+   printf "cp -R %s\n" "${path_build_tds_arch}/include\" \"${path_library_tds}"
+
+   cp -R $path_build_tds_arch/include $path_library_tds
+
+   command_lipo_tds="${command_lipo_tds} -output ${path_library_tds}/libsybdb.a"
+   command_lipo_ct="${command_lipo_ct} -output ${path_library_tds}/libct.a"
+
+   echo ""
+   echo "${command_lipo_tds}"
+   echo ""
+   echo "${command_lipo_ct}"
+   echo ""
+
    $command_lipo_tds
+   $command_lipo_ct
 
 fi
 
@@ -793,15 +838,7 @@ if [[ $build_zint == $true  && $show_help == $false ]]; then
 
    command_lipo_zint="lipo -create "
 
-   for arch in ${archs}
-   do
-      if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-      then
-         platform="iPhoneSimulator"
-      else
-         platform="iPhoneOS"
-      fi
-   done
+   platform=$( platform_for_architecture arch )
 
    printf "Extracting Zint source code.\n"
    rm -rf -- "${path_source_zint}"
@@ -812,7 +849,7 @@ if [[ $build_zint == $true  && $show_help == $false ]]; then
    path_build_zint_arch="${path_build_zint}/$platform_version_arch.sdk"
 
    mkdir -p "${path_build_zint_arch}"
-   sudo rm -rf -- "${path_build_zint_arch}"
+   rm -rf -- "${path_build_zint_arch}"
    mkdir -p "${path_build_zint_arch}"
    log_build_zint="${path_build_zint}/build-zint-${version_zint}-${arch}.log"
    > "$log_build_zint"
@@ -829,10 +866,9 @@ if [[ $build_zint == $true  && $show_help == $false ]]; then
 
    config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_zint_arch $log_build_zint # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
 
-
 fi
 
-sudo rm -rf -- "${path_build}"
-sudo rm -rf -- "${path_source}"
+rm -rf -- "${path_build}"
+rm -rf -- "${path_source}"
 
 printf "Compressor is done.\n"
