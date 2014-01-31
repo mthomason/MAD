@@ -859,7 +859,6 @@
 		4C860B46167EDE7000AC1904 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C860B47167EDE7000AC1904 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C860B48167EDE7000AC1904 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EED601644EB7500FAB2F3 /* libRestKit.a */; };
-		4C860B49167EDE7000AC1904 /* libSalesforceCommonUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EEFA31644EC5300FAB2F3 /* libSalesforceCommonUtils.a */; };
 		4C860B4A167EDE7000AC1904 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1A586B14E247C700184445 /* QuartzCore.framework */; };
 		4C860B4B167EDE7000AC1904 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B414C5C50B007FB629 /* Security.framework */; };
 		4C860B4C167EDE7000AC1904 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B214C5C4FC007FB629 /* SystemConfiguration.framework */; };
@@ -869,10 +868,6 @@
 		4C860B50167EDE7000AC1904 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4C860B51167EDE7000AC1904 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4C860B53167EDE7000AC1904 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
-		4C860B54167EDE7000AC1904 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
-		4C860B55167EDE7000AC1904 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652621648D5F70050CD03 /* libSalesforceOAuth.a */; };
-		4C860B56167EDE7000AC1904 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB653561648D6F30050CD03 /* libSalesforceSDK.a */; };
-		4C860B57167EDE7000AC1904 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652971648D5F70050CD03 /* libSalesforceOAuth.a */; };
 		4C860B5A167EDE7000AC1904 /* gcc_builtins.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CD98C26163F7DE60096D7BC /* gcc_builtins.h */; };
 		4C860B5B167EDE7000AC1904 /* generic-msvc.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CD98C27163F7DE60096D7BC /* generic-msvc.h */; };
 		4C860B5C167EDE7000AC1904 /* nolock.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CD98C28163F7DE60096D7BC /* nolock.h */; };
@@ -1017,8 +1012,6 @@
 		4C8EEDFE1644EB7500FAB2F3 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EED601644EB7500FAB2F3 /* libRestKit.a */; };
 		4C8EEDFF1644EB7500FAB2F3 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EED601644EB7500FAB2F3 /* libRestKit.a */; };
 		4C8EEE001644EB7500FAB2F3 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EED601644EB7500FAB2F3 /* libRestKit.a */; };
-		4C8EEFA61644EC5300FAB2F3 /* libSalesforceCommonUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EEFA31644EC5300FAB2F3 /* libSalesforceCommonUtils.a */; };
-		4C8EEFA71644EC5300FAB2F3 /* libSalesforceCommonUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8EEFA31644EC5300FAB2F3 /* libSalesforceCommonUtils.a */; };
 		4C8F7CE314CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */; };
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
@@ -1228,14 +1221,6 @@
 		4CA16461167EB9EB00540A14 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4CA16462167EB9F100540A14 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B614C5C524007FB629 /* libxml2.dylib */; };
 		4CA16464167EBA0300540A14 /* libmysqlclient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD98C25163F7DE60096D7BC /* libmysqlclient.a */; };
-		4CA16469167EBAD700540A14 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
-		4CA1646A167EBAD800540A14 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652EF1648D6F20050CD03 /* libSalesforceSDK.a */; };
-		4CA1646B167EBAE000540A14 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652621648D5F70050CD03 /* libSalesforceOAuth.a */; };
-		4CA1646C167EBAE100540A14 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652621648D5F70050CD03 /* libSalesforceOAuth.a */; };
-		4CA1646D167EBBFF00540A14 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB653561648D6F30050CD03 /* libSalesforceSDK.a */; };
-		4CA1646E167EBC0000540A14 /* libSalesforceSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB653561648D6F30050CD03 /* libSalesforceSDK.a */; };
-		4CA1646F167EBC2400540A14 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652971648D5F70050CD03 /* libSalesforceOAuth.a */; };
-		4CA16470167EBC2500540A14 /* libSalesforceOAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB652971648D5F70050CD03 /* libSalesforceOAuth.a */; };
 		4CA16471167EBE2100540A14 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
 		4CA16472167EBE2100540A14 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
 		4CA16473167EBE3100540A14 /* UIManagedDocument+FileOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */; };
@@ -1261,6 +1246,13 @@
 		4CA2391917AF660C0066FEAF /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2391617AF660C0066FEAF /* MTKeyChain.m */; };
 		4CA2391A17AF660C0066FEAF /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2391617AF660C0066FEAF /* MTKeyChain.m */; };
 		4CA2391B17AF660C0066FEAF /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2391617AF660C0066FEAF /* MTKeyChain.m */; };
+		4CA54D3318938266006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
+		4CA54D341893828B006B301A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
+		4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
+		4CA54D4218939A79006B301A /* MTBarcodeCode39Iso16388.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CA54D4018939A79006B301A /* MTBarcodeCode39Iso16388.h */; };
+		4CA54D4318939A79006B301A /* MTBarcodeCode39Iso16388.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CA54D4018939A79006B301A /* MTBarcodeCode39Iso16388.h */; };
+		4CA54D4418939A79006B301A /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CA54D4118939A79006B301A /* MTBarcodeCode39Extended.h */; };
+		4CA54D4518939A79006B301A /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CA54D4118939A79006B301A /* MTBarcodeCode39Extended.h */; };
 		4CA57A5B179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
 		4CA57A5C179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
 		4CA57A5D179FD46300B58871 /* DesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */; };
@@ -2620,6 +2612,12 @@
 		4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentSectionView.m; sourceTree = "<group>"; };
 		4CA2391517AF660C0066FEAF /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTKeyChain.h; sourceTree = "<group>"; };
 		4CA2391617AF660C0066FEAF /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTKeyChain.m; sourceTree = "<group>"; };
+		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		4CA54D35189382FF006B301A /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = usr/lib/libpthread.dylib; sourceTree = SDKROOT; };
+		4CA54D371893830E006B301A /* libsystem_pthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsystem_pthread.dylib; path = usr/lib/system/libsystem_pthread.dylib; sourceTree = SDKROOT; };
+		4CA54D3D18938801006B301A /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
+		4CA54D4018939A79006B301A /* MTBarcodeCode39Iso16388.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Iso16388.h; path = Barcodes/Barcodes/MTBarcodeCode39Iso16388.h; sourceTree = "<group>"; };
+		4CA54D4118939A79006B301A /* MTBarcodeCode39Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Extended.h; path = Barcodes/Barcodes/MTBarcodeCode39Extended.h; sourceTree = "<group>"; };
 		4CA57A59179FD46200B58871 /* DesignerSectionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerSectionLabel.h; sourceTree = "<group>"; };
 		4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerSectionLabel.m; sourceTree = "<group>"; };
 		4CA96E8D17BD94460076F66A /* MTViewControllerAsyncProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerAsyncProtocol.h; sourceTree = "<group>"; };
@@ -3193,6 +3191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA54D3318938266006B301A /* libc++.dylib in Frameworks */,
 				4CA1644B167EB9BC00540A14 /* libxml2.dylib in Frameworks */,
 				4CA16448167EB98F00540A14 /* libMTDataStrutures.a in Frameworks */,
 				4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */,
@@ -3208,11 +3207,6 @@
 				4CA16458167EB9EA00540A14 /* UIKit.framework in Frameworks */,
 				4CA16459167EB9EA00540A14 /* Foundation.framework in Frameworks */,
 				4CA1645A167EB9EA00540A14 /* CoreGraphics.framework in Frameworks */,
-				4C8EEFA71644EC5300FAB2F3 /* libSalesforceCommonUtils.a in Frameworks */,
-				4CA16469167EBAD700540A14 /* libSalesforceSDK.a in Frameworks */,
-				4CA1646B167EBAE000540A14 /* libSalesforceOAuth.a in Frameworks */,
-				4CA1646D167EBBFF00540A14 /* libSalesforceSDK.a in Frameworks */,
-				4CA1646F167EBC2400540A14 /* libSalesforceOAuth.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3226,7 +3220,6 @@
 				4C502A3D1818960200C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C202133163DD4090058F869 /* Foundation.framework in Frameworks */,
 				4C8EEDFF1644EB7500FAB2F3 /* libRestKit.a in Frameworks */,
-				4C8EEFA61644EC5300FAB2F3 /* libSalesforceCommonUtils.a in Frameworks */,
 				4CA1645B167EB9EB00540A14 /* QuartzCore.framework in Frameworks */,
 				4CA1645C167EB9EB00540A14 /* Security.framework in Frameworks */,
 				4CA1645D167EB9EB00540A14 /* SystemConfiguration.framework in Frameworks */,
@@ -3236,10 +3229,6 @@
 				4CA16461167EB9EB00540A14 /* CoreGraphics.framework in Frameworks */,
 				4CA16462167EB9F100540A14 /* libxml2.dylib in Frameworks */,
 				4CA16464167EBA0300540A14 /* libmysqlclient.a in Frameworks */,
-				4CA1646A167EBAD800540A14 /* libSalesforceSDK.a in Frameworks */,
-				4CA1646C167EBAE100540A14 /* libSalesforceOAuth.a in Frameworks */,
-				4CA1646E167EBC0000540A14 /* libSalesforceSDK.a in Frameworks */,
-				4CA16470167EBC2500540A14 /* libSalesforceOAuth.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3247,6 +3236,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA54D3E18938801006B301A /* libSystem.dylib in Frameworks */,
+				4CA54D341893828B006B301A /* libc++.dylib in Frameworks */,
 				4CDA77681825FFC600E462F6 /* libBarcodes.a in Frameworks */,
 				4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */,
 				4C502A461818A4F600C88CD4 /* liblibSqlite3.8.a in Frameworks */,
@@ -3285,7 +3276,6 @@
 				4C502A3F1818960400C88CD4 /* libMySqlClientObjectiveC.a in Frameworks */,
 				4C860B47167EDE7000AC1904 /* Foundation.framework in Frameworks */,
 				4C860B48167EDE7000AC1904 /* libRestKit.a in Frameworks */,
-				4C860B49167EDE7000AC1904 /* libSalesforceCommonUtils.a in Frameworks */,
 				4C860B4A167EDE7000AC1904 /* QuartzCore.framework in Frameworks */,
 				4C860B4B167EDE7000AC1904 /* Security.framework in Frameworks */,
 				4C860B4C167EDE7000AC1904 /* SystemConfiguration.framework in Frameworks */,
@@ -3295,10 +3285,6 @@
 				4C860B50167EDE7000AC1904 /* CoreGraphics.framework in Frameworks */,
 				4C860B51167EDE7000AC1904 /* libxml2.dylib in Frameworks */,
 				4C860B53167EDE7000AC1904 /* libmysqlclient.a in Frameworks */,
-				4C860B54167EDE7000AC1904 /* libSalesforceSDK.a in Frameworks */,
-				4C860B55167EDE7000AC1904 /* libSalesforceOAuth.a in Frameworks */,
-				4C860B56167EDE7000AC1904 /* libSalesforceSDK.a in Frameworks */,
-				4C860B57167EDE7000AC1904 /* libSalesforceOAuth.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3620,6 +3606,10 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CA54D3D18938801006B301A /* libSystem.dylib */,
+				4CA54D371893830E006B301A /* libsystem_pthread.dylib */,
+				4CA54D35189382FF006B301A /* libpthread.dylib */,
+				4CA54D3218938266006B301A /* libc++.dylib */,
 				4CDA76AF18257E4A00E462F6 /* libz.dylib */,
 				4C502A4518189ED200C88CD4 /* libSqlite3_8.h */,
 				4C4A68B417E75D3F00FD6A73 /* CoreText.framework */,
@@ -4388,6 +4378,8 @@
 			isa = PBXGroup;
 			children = (
 				4C95CAD3182F0D0E00160E01 /* Table View Cells */,
+				4CA54D4018939A79006B301A /* MTBarcodeCode39Iso16388.h */,
+				4CA54D4118939A79006B301A /* MTBarcodeCode39Extended.h */,
 				4C80A5DE183145F600242703 /* MTBarcodeAztec.h */,
 				4C80A5F11831859700242703 /* MTBarcodeGridMatrix.h */,
 				4C80A5F4183185B000242703 /* MTBarcodeMicroQrCode.h */,
@@ -5466,6 +5458,7 @@
 				4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */,
 				4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */,
 				4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */,
+				4CA54D4518939A79006B301A /* MTBarcodeCode39Extended.h in Resources */,
 				4C0E77C9163B5AEC003B951E /* UIImageStrikethrough20@2x.png in Resources */,
 				4C0E77CA163B5AEC003B951E /* UIImageUnderline20.png in Resources */,
 				4C0E77CB163B5AEC003B951E /* UIImageUnderline20@2x.png in Resources */,
@@ -5712,6 +5705,7 @@
 				4C6DAA791761AEE000FF770A /* syberror.h in Resources */,
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4C80A6071831F28200242703 /* MTBarcodePdf417Iso15438.h in Resources */,
+				4CA54D4318939A79006B301A /* MTBarcodeCode39Iso16388.h in Resources */,
 				4C6DAA7E1761AEE000FF770A /* sybfront.h in Resources */,
 				4C6DAA831761AEE000FF770A /* tds_sysdep_public.h in Resources */,
 				4C6DAA881761AEE000FF770A /* libsybdb.a in Resources */,
@@ -5960,6 +5954,7 @@
 				4C76F0C214B529E6005DCE49 /* UIImagePictureFrame@2x.png in Resources */,
 				4C76F0C514B52ABE005DCE49 /* UIImageLandscape.png in Resources */,
 				4C76F0C614B52ABE005DCE49 /* UIImageLandscape@2x.png in Resources */,
+				4CA54D4218939A79006B301A /* MTBarcodeCode39Iso16388.h in Resources */,
 				4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
@@ -6087,6 +6082,7 @@
 				4CCD8D98150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png in Resources */,
 				4CCD8D99150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
 				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
+				4CA54D4418939A79006B301A /* MTBarcodeCode39Extended.h in Resources */,
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
 				4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */,
@@ -7777,15 +7773,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -7804,7 +7800,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -7816,15 +7812,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -7866,6 +7862,7 @@
 					/Users/mthomason/Desktop/Reports/StaticLibraries/RestKit/,
 					/Users/mthomason/Desktop/Reports/StaticLibraries/openssl/lib/,
 					/Users/mthomason/Desktop/Reports/Reports,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7901,6 +7898,7 @@
 					/Users/mthomason/Desktop/Reports/StaticLibraries/RestKit/,
 					/Users/mthomason/Desktop/Reports/StaticLibraries/openssl/lib/,
 					/Users/mthomason/Desktop/Reports/Reports,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
