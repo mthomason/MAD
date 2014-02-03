@@ -19,9 +19,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.174";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.174";
-NSString * const MTGlobalBundleRev                                  = @"795";
+NSString * const MTGlobalBundleVersion                              = @"1.0.183";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.183";
+NSString * const MTGlobalBundleRev                                  = @"804";
 
 @interface AppDelegate()
 
@@ -66,7 +66,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
     
-	NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
+    NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
 	NSCAssert([[AppDelegate bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
     NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
     NSCAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");

@@ -2,6 +2,8 @@
 
 # Created Michael Thomason for Everyday Apps LLC on Jan 24, 2014.
 
+set -e
+
 print_help() {
    printf "  %s\n"  "Usage: compressor [options] ..."
    printf "  %s\n" "--openssl                Build OpenSSL.\n"
@@ -135,6 +137,8 @@ platform_for_architecture() {
 if [[ $# == 0 ]];
 then
    show_help=$true
+else
+   show_help=$false
 fi
 
 while [[ $# > 0 ]]
@@ -169,7 +173,8 @@ done
 
 if [ $show_help == $true ];
 then
-   print_help
+    print_help
+    exit 0
 fi
 
 
@@ -215,6 +220,13 @@ path_sdk_root_iPhoneOS=$( xcodebuild -version -sdk iphoneos Path 2>/dev/null )
 path_sdk_root_iPhoneSimulator=$( xcodebuild -version -sdk iphonesimulator Path 2>/dev/null )
 path_sdk_root_MacOSX=$( xcodebuild -version -sdk macosx Path 2>/dev/null )
 
+addtional_work_libsybdb() {
+    local path_make=$1
+    printf "Additional work for libsybdb. $path_make"
+    sed -i '' 's/#define HAVE_ICONV 1/#define HAVE_ICONV 0/g' include/config.h
+}
+
+
 config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additional_config $5=path_make
 
    local version_sdk=$1
@@ -250,11 +262,6 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    developer_root=$( xcode-select -print-path )
    platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
 
-   if [[ "${#additional_word}" > 0 ]];
-   then
-      $( "${addtional_work} $path_make" )
-   fi
-
    export DEVROOT="${platform_root}/Developer"
    export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
    export CC=$( xcrun -find gcc )
@@ -267,42 +274,43 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    if [[ "${#additional_config}" > 0 ]];
    then
 #./configure --host=${architecture_host_part} --target=${architecture} --enable-static --disable-shared --prefix=${path_make} ${additional_config} >> log 2>> "${log}.error.log" &
-      echo ""
+      echo "CONFIG"
       echo "./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config}"
       echo ""
 
-      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config} >> log 2>> "${log}.error.log" &
+      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config} >> "${log}.error.log" &
       spinner $!
    else
 #./configure --host=${architecture_host_part} --target=${architecture} --enable-static --disable-shared --prefix=${path_make} >> log  2>> "${log}.error.log" &
-      echo ""
+      echo "CONFIG"
       echo "./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make}"
       echo ""
-      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} >> log  2>> "${log}.error.log" &
+      ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} >> "${log}.error.log" &
       spinner $!
    fi
 
-   printf "make clean"
-   make clean >> log 2>>"${log}.error.log" &
-   spinner $!
+   if [[ "${#additional_work}" > 0 ]];
+   then
+        printf "Additional work found: %s - %s\n" "${additional_work}" "${path_make}"
+${additional_work} "${path_make}"
+#      $( "${additional_work} \$path_make" )
+   fi
 
-   printf "\nmake"
-   make >> log 2>"${log}.error.log" &
-   spinner $!
+    printf "make clean"
+    make clean >> "${log}.error.log" &
+    spinner $!
 
-   printf "\nmake install"
+    printf "\nmake\n"
+    make >> "${log}.error.log"
+    spinner $!
 
-   make install >> log 2>>"${log}.error.log" &
-   spinner $!
+    printf "\nmake install"
+
+    make install >> "${log}.error.log" &
+    spinner $!
 
    printf "\n"
 
-}
-
-addtional_work_libsybdb() {
-   local path_make=$1
-
-   sed -i '' 's/#define HAVE_ICONV 1/#define HAVE_ICONV 0/g' ${path_make}/include/config.h
 }
 
 path_source_openssl="$path_source/$archive_name_openssl"
@@ -336,6 +344,8 @@ platform="iphoneos"
 #
 # OpenSSL
 #
+
+path_library_openssl="${path_library}/openssl"
 
 if [[ $build_openssl == $true && $show_help == $false ]]; then
 
@@ -436,10 +446,7 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
 
    done
 
-   path_library_openssl="${path_library}/openssl-${version_openssl}-iphoneos${version_ios}"
-
    rm -rf "${path_library_openssl}"
-
    mkdir -p "${path_library_openssl}"
 
    command_lipo_libcrypto="${command_lipo_libcrypto} -output ${path_library_openssl}/libcrypto.a"
@@ -454,16 +461,306 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
 
    cp -R $path_build_openssl_arch_include $path_library_openssl
 
+    sed -ie 's/# include <openssl/opensslconf.h>/# include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+
+    sed -ie 's/#include <openssl/objects.h>/#include "objects.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/bn.h'
+
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/bn.h'
+    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/bn.h'
+
+    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+
+    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie 's/#include <openssl/safestack.h>/#include "safestack.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+
+    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/e_os2.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/bio.h'
+    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/bio.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+
+    sed -ie 's/#include <openssl/safestack.h>/#include "safestack.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+    sed -ie 's/#include <openssl/opensslv.h>/#include "opensslv.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/ossl_typ.h'
+
+    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/safestack.h'
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/symhacks.h'
+
+    sed -ie 's/#include <openssl/obj_mac.h>/#include "obj_mac.h"/g' '${path_build_openssl_arch_include}/openssl/objects.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/objects.h'
+    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/objects.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/sha.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/buffer.h>/#include "buffer.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/evp.h>/#include "evp.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/safestack.h>/#include "safestack.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/ec.h>/#include "ec.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/ecdsa.h>/#include "ecdsa.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/ecdh.h>/#include "ecdh.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/rsa.h>/#include "rsa.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/dsa.h>/#include "dsa.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/dh.h>/#include "dh.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/sha.h>/#include "sha.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/x509_vfy.h>/#include "x509_vfy.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie 's/#include <openssl/pkcs7.h>/#include "pkcs7.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+
+    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+    sed -ie 's/#include <openssl/lhash.h>/#include "lhash.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+
+    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
+    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
+    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
+
+    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
+    sed -ie 's/#include <openssl/ec.h>/#include "ec.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
+
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
+
+    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
+    sed -ie 's/#include <openssl/ec.h>/#include "ec.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
+
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/buffer.h'
+
+    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
+    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
+
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/bio.h'
+    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
+    sed -ie 's/# include <openssl/dh.h>/# include "dh.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
+
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
+    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/lhash.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/lhash.h'
+
+    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
+    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
+    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
+    sed -ie 's/#include <openssl/lhash.h>/#include "lhash.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
+
 fi
 
 #
-# MySQL Connector (OS X Hack)
+# MySQL Connector - Comp_err OS X swizzle
+#
+
+mysql_custom_openssl=$true
+
+if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
+
+    echo "Building libmysqlclient"
+
+   # Build for native platform, so we can get the comp_err program.
+   #  The comp_error must run for error messages to be generated for
+   #  the libs, but since the libs are armv, we need to do a native
+   #  generation of this helper application.
+
+   command_lipo_mysql="lipo -create "
+   path_library_mysql="${path_library}/libmysqlclient"
+
+   path_source_mysql_native="${path_source}/native"
+
+   mkdir -p "${path_source_mysql_native}"
+   rm -rf -- "${path_source_mysql_native}"
+   mkdir -p "${path_source_mysql_native}"
+   tar zxf ${path_media_mysql} -C ${path_source_mysql_native}
+
+   pushd ${path_source_mysql_native}/${archive_name_mysql}
+   mkdir -p "${path_build_mysql}"
+   rm -rf -- "${path_build_mysql}"
+   mkdir -p "${path_build_mysql}"
+   log_build_mysql="${path_build_mysql}/build-mysql-native-release.log"
+
+   cmake -Wno-dev -GXcode >> $log_build_mysql &
+   spinner $!
+
+   #sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
+
+   xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk macosx${version_macosx} >> $log_build_mysql &
+   spinner $!
+
+
+   popd
+
+    for platform in $platform_iphoneos $platform_simulator
+    do
+
+        if [ "${platform}" == "${platform_iphoneos}" ]
+        then
+            sdk_build=${sdk_iphoneos}
+            archs_to_build=$archs_ios
+        else
+            sdk_build=${sdk_simulator}
+            archs_to_build=$archs_macosx
+        fi
+
+
+        platform_version_arch="${platform}${version_ios}"
+        path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_mysql_arch}"
+        log_build_mysql="${path_build_mysql}/build-mysql-${version_mysql}-${platform}.log"
+        > "$log_build_mysql"
+
+        cd "${path_base}"
+
+        printf "\n%s\n" "$formatting_divider"
+        printf "Extracting MySQL source code.\n"
+        rm -rf -- "${path_source_mysql}"
+        mkdir -p "${path_source_mysql}"
+        tar zxf ${path_media_mysql} -C ${path_source}
+
+        printf "CD %s\n" "${path_source_mysql}"
+        cd "${path_source_mysql}"
+
+        archs_cmake=$(echo $archs | sed -e "s/ /\\;/g")
+
+
+
+
+
+
+        if [ $mysql_custom_openssl == $true ]
+        then
+            cmake -DWITH_SSL=$path_library_openssl -Wno-dev -GXcode # >> $log_build_mysql &
+            spinner $!
+        else
+            cmake -Wno-dev -GXcode >> $log_build_mysql &
+            spinner $!
+        fi
+
+
+        sed -ie "s/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\$(EFFECTIVE_PLATFORM_NAME)\\\"'\"/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\\\"'\"/g" "LibMySQL.xcodeproj/project.pbxproj"
+        sed -ie "s/\"-Wl,-search_paths_first\",//g" "LibMySQL.xcodeproj/project.pbxproj"
+        sed -ie "s/\"-Wl,-headerpad_max_install_names\",//g" "LibMySQL.xcodeproj/project.pbxproj"
+        sed -ie "s/\"-dynamiclib\",//g" "LibMySQL.xcodeproj/project.pbxproj"
+        sed -ie "s/com.apple.product-type.library.dynamic/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
+        sed -ie "s/com.apple.product-type.tool/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
+        sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
+        sed -ie 's/\/* #undef WORDS_BIGENDIAN *\\/define WORDS_BIGENDIAN 1/g' 'include/my_config.h'
+        sed -ie 's/-Wl,-search_paths_first//g' 'LibMySQL.xcodeproj/project.pbxproj'
+        sed -ie 's/-Wl,-headerpad_max_install_names//g' 'LibMySQL.xcodeproj/project.pbxproj'
+
+        product_name_mysql="mysqlclient"
+
+        if xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
+        then
+            echo "Fuck, is unexpected success really success?"
+            exit 6
+        else
+            echo "First build failed as expected."
+            cp -r mysys/Release-$platform mysys/Release
+            cp -r mysys/Release-$platform mysys/Release
+            cp -r mysys_ssl/Release-$platform mysys_ssl/Release
+            cp -r dbug/Release-$platform dbug/Release
+            cp -r strings/Release-$platform strings/Release
+            cp -r zlib/Release-$platform zlib/Release
+            if [ $mysql_custom_openssl != $true ]
+            then
+                cp -r extra/yassl/Release-$platform extra/yassl/Release
+                cp -r extra/yassl/taocrypt/Release-$platform extra/yassl/taocrypt/Release
+            fi
+            cp -r ../native/${archive_name_mysql}/extra/Release extra/Release
+
+            if xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
+            then
+                echo "All Good"
+                build_result="${path_source_mysql}/libmysql/Release-${platform}/lib${product_name_mysql}.a"
+                if [ -e "$build_result" ]
+                then
+                    path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
+                    command_lipo_mysql="${command_lipo_mysql} ${path_to_libmysql}"
+                    cp "${build_result}" "${path_to_libmysql}"
+                else
+                    echo "Can't find build result: %s" "${build_result}"
+                    exit 4
+                fi
+
+            else
+                echo "Build two failed.  This one should work."
+                exit 5
+            fi
+        fi
+    done
+
+    printf "%s\n" "${path_library_mysql}"
+
+    mkdir -p "${path_library_mysql}"
+
+    printf "%s\n" "${path_source_mysql}/include\" \"${path_library_mysql}"
+
+    cp -R "${path_source_mysql}/include" "${path_library_mysql}"
+
+    sed -ie 's/#include <mysql\/plugin_auth_common.h>/#include "plugin_auth_common.h"/g' '${path_source_mysql}/include/mysql/client_plugin.h'
+    sed -ie 's/#include <mysql/psi/psi_memory.h>/#include "mysql/psi/psi_memory.h"/g' '${path_source_mysql}/include/mysql/psi/psi_memory.h'
+
+    path_library_mysql="${path_library_mysql}/libmysqlclient.a"
+    command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
+
+    $command_lipo_mysql
+
+fi
+
+#
+# MySQL Connector - OS X Hack
 #
 
 if [[ $build_mysql == $true  && $show_help == $false ]]; then
 
    command_lipo_mysql="lipo -create "
-   path_library_mysql="${path_library}/libmysql-${version_mysql}-iphoneos${version_ios}"
+   path_library_mysql="${path_library}/libmysqlclient"
 
    mkdir -p "${path_build_mysql}"
    for arch in ${archs}
@@ -558,156 +855,13 @@ if [[ $build_mysql == $true  && $show_help == $false ]]; then
 fi
 
 #
-# MySQL Connector - Michael Thomason build
-#
-
-if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
-
-
-   # Build for native platform, so we can get the comp_err program.
-   #  The comp_error must run for error messages to be generated for
-   #  the libs, but since the libs are armv, we need to do a native
-   #  generation of this helper application.
-
-   command_lipo_mysql="lipo -create "
-   path_library_mysql="${path_library}/libmysql-${version_mysql}-iphoneos${version_ios}"
-
-   path_source_mysql_native="${path_source}/native"
-
-   mkdir -p "${path_source_mysql_native}"
-   rm -rf -- "${path_source_mysql_native}"
-   mkdir -p "${path_source_mysql_native}"
-   tar zxf ${path_media_mysql} -C ${path_source_mysql_native}
-
-   pushd ${path_source_mysql_native}/${archive_name_mysql}
-   mkdir -p "${path_build_mysql}"
-   rm -rf -- "${path_build_mysql}"
-   mkdir -p "${path_build_mysql}"
-   log_build_mysql="${path_build_mysql}/build-mysql-native-release.log"
-
-   cmake -Wno-dev -GXcode >> $log_build_mysql &
-   spinner $!
-
-   #sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
-
-   xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk macosx${version_macosx} >> $log_build_mysql &
-   spinner $!
-
-
-   popd
-
-   for platform in $platform_iphoneos $platform_simulator
-   do
-
-      if [ "${platform}" == "${platform_iphoneos}" ]
-      then
-         sdk_build=${sdk_iphoneos}
-         archs_to_build=$archs_ios
-      else
-         sdk_build=${sdk_simulator}
-         archs_to_build=$archs_macosx
-      fi
-
-
-       platform_version_arch="${platform}${version_ios}"
-       path_build_mysql_arch="${path_build_mysql}/$platform_version_arch.sdk"
-
-       mkdir -p "${path_build_mysql_arch}"
-       log_build_mysql="${path_build_mysql}/build-mysql-${version_mysql}-${platform}.log"
-       > "$log_build_mysql"
-
-       cd "${path_base}"
-
-      printf "\n%s\n" "$formatting_divider"
-      printf "Extracting MySQL source code.\n"
-      rm -rf -- "${path_source_mysql}"
-      mkdir -p "${path_source_mysql}"
-      tar zxf ${path_media_mysql} -C ${path_source}
-
-      printf "CD %s\n" "${path_source_mysql}"
-      cd "${path_source_mysql}"
-
-      archs_cmake=$(echo $archs | sed -e "s/ /\\;/g")
-
-      cmake -Wno-dev -GXcode >> $log_build_mysql &
-      spinner $!
-
-      sed -ie "s/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\$(EFFECTIVE_PLATFORM_NAME)\\\"'\"/"'CMAKE_INTDIR=\\\"\$(CONFIGURATION)\\\"'\"/g" "LibMySQL.xcodeproj/project.pbxproj"
-      sed -ie "s/\"-Wl,-search_paths_first\",//g" "LibMySQL.xcodeproj/project.pbxproj"
-      sed -ie "s/\"-Wl,-headerpad_max_install_names\",//g" "LibMySQL.xcodeproj/project.pbxproj"
-      sed -ie "s/\"-dynamiclib\",//g" "LibMySQL.xcodeproj/project.pbxproj"
-      sed -ie "s/com.apple.product-type.library.dynamic/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
-      sed -ie "s/com.apple.product-type.tool/com.apple.product-type.library.static/g" "LibMySQL.xcodeproj/project.pbxproj"
-      sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
-      sed -ie 's/\/* #undef WORDS_BIGENDIAN *\\/define WORDS_BIGENDIAN 1/g' 'include/my_config.h'
-      sed -ie 's/-Wl,-search_paths_first//g' 'LibMySQL.xcodeproj/project.pbxproj'
-      sed -ie 's/-Wl,-headerpad_max_install_names//g' 'LibMySQL.xcodeproj/project.pbxproj'
-
-      product_name_mysql="mysqlclient"
-
-      if xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
-      then
-         echo "Fuck, is unexpected success really success?"
-         exit 6
-      else
-         echo "First build failed as expected."
-         cp -r mysys/Release-$platform mysys/Release
-         cp -r mysys/Release-$platform mysys/Release
-         cp -r mysys_ssl/Release-$platform mysys_ssl/Release
-         cp -r dbug/Release-$platform dbug/Release
-         cp -r strings/Release-$platform strings/Release
-         cp -r zlib/Release-$platform zlib/Release
-         cp -r extra/yassl/Release-$platform extra/yassl/Release
-         cp -r extra/yassl/taocrypt/Release-$platform extra/yassl/taocrypt/Release
-         cp -r ../native/${archive_name_mysql}/extra/Release extra/Release
-
-         if xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk ${sdk_build} ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> $log_build_mysql
-         then
-            echo "All Good"
-
-            build_result="${path_source_mysql}/libmysql/Release-${platform}/lib${product_name_mysql}.a"
-            if [ -e "$build_result" ]
-            then
-               path_to_libmysql="${path_build_mysql_arch}/lib${product_name_mysql}.a"
-               command_lipo_mysql="${command_lipo_mysql} ${path_to_libmysql}"
-               cp "${build_result}" "${path_to_libmysql}"
-            else
-               echo "Can't find build result: %s" "${build_result}"
-               exit 4
-            fi
-
-         else
-            echo "Build two failed.  This one should work."
-            exit 5
-         fi
-
-      fi
-
-    done
-
-   printf "%s\n" "${path_library_mysql}"
-
-   mkdir -p "${path_library_mysql}"
-
-   printf "%s\n" "${path_source_mysql}/include\" \"${path_library_mysql}"
-
-   cp -R "${path_source_mysql}/include" "${path_library_mysql}"
-
-    path_library_mysql="${path_library_mysql}/libmysqlclient.a"
-    command_lipo_mysql="${command_lipo_mysql} -output ${path_library_mysql}"
-
-    $command_lipo_mysql
-
-fi
-
-#
 # PNG
 #
 
 if [[ $build_png == $true  && $show_help == $false ]]; then
 
    command_lipo_png="lipo -create "
-   path_library_png="${path_library}/libpng-${version_png}-iphoneos${version_ios}"
+   path_library_png="${path_library}/libpng"
 
    for arch in ${archs}
    do
@@ -772,7 +926,7 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
    command_lipo_tds="lipo -create "
    command_lipo_ct="lipo -create "
-   path_library_tds="${path_library}/freetds-${version_freetds}-iphoneos${version_ios}"
+   path_library_tds="${path_library}/libsybdb"
 
    for arch in ${archs}
    do
@@ -801,8 +955,9 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
       command_lipo_tds="${command_lipo_tds} ${path_build_tds_arch}/lib/libsybdb.a"
       command_lipo_ct="${command_lipo_ct} ${path_build_tds_arch}/lib/libct.a"
       additional_config=" -with-tdsver=${version_tds} "
+        additional_work="addtional_work_libsybdb"
 
-      config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds
+      config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
 
    done
 

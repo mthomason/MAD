@@ -87,8 +87,8 @@
                                         break;
                                     case MYSQL_TYPE_GEOMETRY:
                                         break;
-                                    case MAX_NO_FIELD_TYPES:
-                                        break;
+                                    //case MAX_NO_FIELD_TYPES:
+                                    //    break;
                                     case MYSQL_TYPE_TINY:
                                         break;
                                     case MYSQL_TYPE_LONG:

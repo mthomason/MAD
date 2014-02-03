@@ -216,9 +216,9 @@
 + (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {
     MTDataType result;
     switch (nativeType) {
-        case MAX_NO_FIELD_TYPES:
-            result = MTDataTypeString;
-            break;
+        //case MAX_NO_FIELD_TYPES:
+        //    result = MTDataTypeString;
+        //    break;
         case MYSQL_TYPE_BIT:
             result = MTDataTypeBit;
             break;

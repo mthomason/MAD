@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C2D4A961827A8DB005A46C2 /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4C2D4A971827A9D5005A46C2 /* libpng16u.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA775E1825EA9700E462F6 /* libpng16u.a */; };
+		4C5CB71E189D1A1700BB5AF8 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB71C189D1A1700BB5AF8 /* libpng.a */; };
 		4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC7182C1CD400160E01 /* MTBarcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C95CB1F182F99B000160E01 /* MTBarcodeAusreDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB1E182F99B000160E01 /* MTBarcodeAusreDirect.m */; };
 		4C95CB22182F9CAC00160E01 /* MTBarcodeAusreply.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB21182F9CAC00160E01 /* MTBarcodeAusreply.m */; };
@@ -138,6 +138,13 @@
 /* Begin PBXFileReference section */
 		4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeView.h; sourceTree = "<group>"; };
 		4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeView.m; sourceTree = "<group>"; };
+		4C5CB716189D1A1700BB5AF8 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		4C5CB717189D1A1700BB5AF8 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		4C5CB718189D1A1700BB5AF8 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
+		4C5CB719189D1A1700BB5AF8 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
+		4C5CB71A189D1A1700BB5AF8 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
+		4C5CB71B189D1A1700BB5AF8 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
+		4C5CB71C189D1A1700BB5AF8 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng.a; sourceTree = "<group>"; };
 		4C95CAC6182C1CD400160E01 /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcode.h; sourceTree = "<group>"; };
 		4C95CAC7182C1CD400160E01 /* MTBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcode.m; sourceTree = "<group>"; };
 		4C95CB1D182F99B000160E01 /* MTBarcodeAusreDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeAusreDirect.h; sourceTree = "<group>"; };
@@ -323,14 +330,6 @@
 		4CDA77331825EA1F00E462F6 /* telepen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = telepen.c; sourceTree = "<group>"; };
 		4CDA77341825EA1F00E462F6 /* upcean.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upcean.c; sourceTree = "<group>"; };
 		4CDA77351825EA1F00E462F6 /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zint.h; sourceTree = "<group>"; };
-		4CDA77571825EA9700E462F6 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
-		4CDA77581825EA9700E462F6 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
-		4CDA77591825EA9700E462F6 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
-		4CDA775A1825EA9700E462F6 /* pngdebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngdebug.h; sourceTree = "<group>"; };
-		4CDA775B1825EA9700E462F6 /* pnginfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnginfo.h; sourceTree = "<group>"; };
-		4CDA775C1825EA9700E462F6 /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngpriv.h; sourceTree = "<group>"; };
-		4CDA775D1825EA9700E462F6 /* pngstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngstruct.h; sourceTree = "<group>"; };
-		4CDA775E1825EA9700E462F6 /* libpng16u.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng16u.a; sourceTree = "<group>"; };
 		4CDA77601825EB0200E462F6 /* libm.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libm.dylib; path = usr/lib/libm.dylib; sourceTree = SDKROOT; };
 		4CDA77621825EB0D00E462F6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -342,8 +341,8 @@
 			files = (
 				4CDA77631825EB0D00E462F6 /* libz.dylib in Frameworks */,
 				4CDA77611825EB0200E462F6 /* libm.dylib in Frameworks */,
-				4C2D4A971827A9D5005A46C2 /* libpng16u.a in Frameworks */,
 				4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */,
+				4C5CB71E189D1A1700BB5AF8 /* libpng.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +360,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C5CB713189D1A1700BB5AF8 /* libpng */ = {
+			isa = PBXGroup;
+			children = (
+				4C5CB714189D1A1700BB5AF8 /* include */,
+				4C5CB71C189D1A1700BB5AF8 /* libpng.a */,
+			);
+			name = libpng;
+			path = ../../Compressor/library/libpng;
+			sourceTree = "<group>";
+		};
+		4C5CB714189D1A1700BB5AF8 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4C5CB715189D1A1700BB5AF8 /* libpng16 */,
+				4C5CB719189D1A1700BB5AF8 /* png.h */,
+				4C5CB71A189D1A1700BB5AF8 /* pngconf.h */,
+				4C5CB71B189D1A1700BB5AF8 /* pnglibconf.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		4C5CB715189D1A1700BB5AF8 /* libpng16 */ = {
+			isa = PBXGroup;
+			children = (
+				4C5CB716189D1A1700BB5AF8 /* png.h */,
+				4C5CB717189D1A1700BB5AF8 /* pngconf.h */,
+				4C5CB718189D1A1700BB5AF8 /* pnglibconf.h */,
+			);
+			path = libpng16;
+			sourceTree = "<group>";
+		};
 		4C95CBD618312D6300160E01 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -512,6 +542,7 @@
 		4CDA76CE1825E8D400E462F6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C5CB713189D1A1700BB5AF8 /* libpng */,
 				4CDA77621825EB0D00E462F6 /* libz.dylib */,
 				4CDA77601825EB0200E462F6 /* libm.dylib */,
 				4CDA76CF1825E8D400E462F6 /* Foundation.framework */,
@@ -529,7 +560,6 @@
 				4C95CBD618312D6300160E01 /* Subclasses */,
 				4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */,
 				4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */,
-				4CDA775F1825EA9700E462F6 /* libpng */,
 				4CDA77561825EA3800E462F6 /* Zint */,
 				4CDA76D21825E8D400E462F6 /* Supporting Files */,
 			);
@@ -619,22 +649,6 @@
 				4CDA77351825EA1F00E462F6 /* zint.h */,
 			);
 			name = Zint;
-			sourceTree = "<group>";
-		};
-		4CDA775F1825EA9700E462F6 /* libpng */ = {
-			isa = PBXGroup;
-			children = (
-				4CDA77571825EA9700E462F6 /* png.h */,
-				4CDA77581825EA9700E462F6 /* pnglibconf.h */,
-				4CDA77591825EA9700E462F6 /* pngconf.h */,
-				4CDA775A1825EA9700E462F6 /* pngdebug.h */,
-				4CDA775B1825EA9700E462F6 /* pnginfo.h */,
-				4CDA775C1825EA9700E462F6 /* pngpriv.h */,
-				4CDA775D1825EA9700E462F6 /* pngstruct.h */,
-				4CDA775E1825EA9700E462F6 /* libpng16u.a */,
-			);
-			name = libpng;
-			path = ../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -925,8 +939,9 @@
 				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"/Users/mthomason/Desktop/Reports/Reports\"",
+					"$(SRCROOT)",
+					/Users/mthomason/Desktop/Reports/Reports,
+					/Users/mthomason/Desktop/Reports/Compressor/library/libpng,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -943,8 +958,9 @@
 				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Users/mthomason/Desktop/Reports/Reports\"",
-					"\"$(SRCROOT)\"",
+					/Users/mthomason/Desktop/Reports/Reports,
+					"$(SRCROOT)",
+					/Users/mthomason/Desktop/Reports/Compressor/library/libpng,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
