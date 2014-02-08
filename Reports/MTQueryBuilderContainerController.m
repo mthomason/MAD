@@ -193,6 +193,9 @@
     }
     [[self delegate] viewControllerDidFinish:self animated:YES];
 }
+- (IBAction)redrawQueryVisualization:(id)sender {
+    [[self queryBuilderControllerAdvanced] redraw];
+}
 
 - (IBAction)toggleEditModeQueryDesigner:(id)sender {
     

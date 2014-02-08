@@ -28,5 +28,6 @@
         MTViewControllerProtocol>
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
+- (void)redraw;
 
 @end

@@ -11,13 +11,12 @@
 #import "MAReportDocument.h"
 #import "CGAffineTransform+Common.h"
 
-static NSString *keyIsTopLevel = @"MTKeyIsTopLevel";
+NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
 NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundryLandscapeTop";
 NSString * const MTIdentifierCollisionBoundryRight = @"MTIdentifierCollisionBoundryLandscapeRight";
 NSString * const MTIdentifierCollisionBoundryBottom = @"MTIdentifierCollisionBoundryLandscapeBottom";
 NSString * const MTIdentifierCollisionBoundryLeft = @"MTIdentifierCollisionBoundryLandscapeLeft";
-
 NSString * const MTQueryBuilderAdvancedSchemaViewControllerIdentifier = @"MTQueryBuilderAdvancedSchemaViewControllerIdentifier";
 
 typedef void(^MTBlockResultVoid)(void);
@@ -327,6 +326,28 @@ typedef void(^MTBlockResultVoid)(void);
     [self setShowSqlIsVisable:NO];
 }
 
+#pragma mark - Setup Notifications
+
++ (void)removeNotificationsFromObserver:(id<MTQueryBuilderAdvancedSchemaDelegate>)observer forObjectContext:(NSManagedObjectContext *)objectContext {
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter removeObserver:observer name:NSManagedObjectContextWillSaveNotification object:objectContext];
+    [defaultCenter removeObserver:observer name:NSManagedObjectContextDidSaveNotification object:objectContext];
+    
+}
+
++ (void)addNotificationsToObserver:(id<MTQueryBuilderAdvancedSchemaDelegate>)observer forObjectContext:(NSManagedObjectContext *)objectContext {
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [MTQueryBuilderAdvancedViewController removeNotificationsFromObserver:observer forObjectContext:objectContext];
+    
+    [defaultCenter addObserver:observer selector:@selector(managedObjectContextWillSave:) name:NSManagedObjectContextWillSaveNotification object:objectContext];
+    [defaultCenter addObserver:observer selector:@selector(managedObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:objectContext];
+    
+}
+
 #pragma mark - NSManagedObjectContext observer
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
@@ -381,7 +402,9 @@ typedef void(^MTBlockResultVoid)(void);
         } else {
 
             UIViewController *viewController = [[[self controllersForObjectIds] objectForKey:[updatedTable objectID]] retain];
+            
             if ([viewController isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
+
                 [[self tableStartingPoints] removeObject:updatedTable];
                 
                 // Reposition existing tables
@@ -430,10 +453,9 @@ typedef void(^MTBlockResultVoid)(void);
                 
                 //loop though each link here, and do as above if the link contains the table... but will it be there?... check the updated query
 
-                
             } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
+                
                 UIViewController *viewController = [[[self controllersForObjectIds] objectForKey:[updatedTable objectID]] retain];
-
                 CGAffineTransform swingTransform = CGAffineTransformSwing();
                 CGPoint center = [viewController view].center;
                 CGFloat animationDuration = 0.3000f;
@@ -447,6 +469,7 @@ typedef void(^MTBlockResultVoid)(void);
                     [viewController removeFromParentViewController];
                 }];
             }
+            
             [viewController release];
         }
     }
@@ -489,48 +512,6 @@ typedef void(^MTBlockResultVoid)(void);
     }
 }
 
-#pragma mark Reload document view controllers
-
-- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated {
- 
-    [documentReport retain];
-    [self setReportDocument:documentReport];
-    [documentReport release];
-    
-    [[self tableStartingPoints] removeAllObjects];
-    
-    NSManagedObjectContext *objectContext = [[[self reportDocument] managedObjectContext] retain];
-    [MTQueryBuilderAdvancedViewController addNotificationsToObserver:self forObjectContext:objectContext];
-
-    [self clearScreen];
-    
-    RptqQuery *query = [[RptqDocument queryForActiveDocument] retain];
-    [self displayQuery:query animated:animated];
-    [query release];
-    
-
-}
-
-+ (void)removeNotificationsFromObserver:(id<MTQueryBuilderAdvancedSchemaDelegate>)observer forObjectContext:(NSManagedObjectContext *)objectContext {
-
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter removeObserver:observer name:NSManagedObjectContextWillSaveNotification object:objectContext];
-    [defaultCenter removeObserver:observer name:NSManagedObjectContextDidSaveNotification object:objectContext];
-
-}
-
-+ (void)addNotificationsToObserver:(id<MTQueryBuilderAdvancedSchemaDelegate>)observer forObjectContext:(NSManagedObjectContext *)objectContext {
-    
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [MTQueryBuilderAdvancedViewController removeNotificationsFromObserver:observer forObjectContext:objectContext];
-    
-    [defaultCenter addObserver:observer selector:@selector(managedObjectContextWillSave:) name:NSManagedObjectContextWillSaveNotification object:objectContext];
-    [defaultCenter addObserver:observer selector:@selector(managedObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:objectContext];
-    
-}
-
 #pragma mark - Gesture recognizer actions
 
 - (void)tapPiece:(UITapGestureRecognizer *)gestureRecognizer {
@@ -544,7 +525,6 @@ typedef void(^MTBlockResultVoid)(void);
         }
     }
 }
-
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
@@ -585,7 +565,6 @@ typedef void(^MTBlockResultVoid)(void);
         }
 }
 
-
 - (void)pushPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     UIPushBehavior *pushBehavior = [[self pushBehaviorForItem:[gestureRecognizer view]] retain];
@@ -604,65 +583,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     [pushBehavior release];
 }
-/*
-- (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
-    
-    //Adjust the anchor point
-    
-    CGPoint result = CGPointZero;
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
-        gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        
-        CGPoint locationInView = [gestureRecognizer locationInView:[self contentView]];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:[self contentView].superview];
-        
-        CGPoint anchorPoint = CGPointMake(locationInView.x / [self contentView].bounds.size.width, locationInView.y / [self contentView].bounds.size.height);
-        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-            [self contentView].layer.anchorPoint = anchorPoint;
-            [self contentView].center = locationInSuperview;
-        }
-        result = locationInSuperview;
-    }
-    
-    
-    [UIGestureRecognizer adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-    
-    CGFloat halfWidth = [gestureRecognizer view].bounds.size.width / 2.0000f;
-    CGFloat halfHeight = [gestureRecognizer view].bounds.size.height / 2.0000f;
-    
-    MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:[[gestureRecognizer view] objectIdTag]];
-    
-    switch ([gestureRecognizer state]) {
-            
-        case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
-            UIView *gestureRecognizerView = [gestureRecognizer view];
-            CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
-            [[viewController view] setCenter:newOrigin];
-        }
-        case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
-            CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
-            [[viewController view] setCenter:newOrigin];
-            break;
-        }
-        case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
-            break;
-        case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
-        case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
-        case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
-            
-            
-            CGPoint newOrigin = [gestureRecognizer locationInView:[self contentView]];
-            [[viewController view] setCenter:newOrigin];
-            
-            break;
-        }
-        default:
-            break;
-    }
-    [[self dynamicAnimator] updateItemUsingCurrentState:viewController];
-}
-*/
-    
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
@@ -701,38 +622,6 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return [[[self contentView] retain] autorelease];
-}
-
-#pragma mark Scroll view helper
-
-- (void)resizeScrollViewContentArea {
-    if ([[self scrollView] isZooming] == NO) {
-        CGFloat maxX = CGPointZero.x;
-        CGFloat maxY = CGPointZero.y;
-        
-        for (UIViewController *viewController in [self childViewControllers]) {
-            Class schemaClass = [MTQueryBuilderAdvancedSchemaViewController class];
-            if ([viewController isKindOfClass:schemaClass]) {
-                UIView *view = [viewController view];
-                CGRect frame = view.frame;//[[self contentView] convertRect:view.frame fromView:view];
-                CGFloat tmaxX = frame.origin.x + frame.size.width;
-                CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
-                CGFloat tmaxY = frame.origin.y + frame.size.height;
-                CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
-                tmaxX += tminX;
-                tmaxX += tminY;
-                maxX = MAX(maxX, tmaxX);
-                maxY = MAX(maxY, tmaxY);
-            }
-        }
-        CGRect bounds = self.view.bounds;
-        maxX = MAX(maxX, bounds.size.width);
-        maxY = MAX(maxY, bounds.size.height);
-        CGSize contentSize = CGSizeMake(maxX, maxY);
-        CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, contentSize.width, contentSize.height);
-        [[self contentView] setFrame: frame];
-        [[self scrollView] setContentSize: contentSize];
-    }
 }
 
 #pragma mark - UICollisionBehaviorDelegate
@@ -813,10 +702,43 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSError *error = nil;
     MTLinkedList *tableIds = [[graph topologicalSortWithError:&error] retain];
+    
     [hasQueryLinks release];
     [graph release];
     return [tableIds autorelease];
 
+}
+
+#pragma mark Reload document view controllers
+
+- (void)redraw {
+    [self reloadDocument:[self reportDocument] animated:YES];
+}
+
+- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated {
+    
+    [documentReport retain];
+    [self setReportDocument:documentReport];
+    [documentReport release];
+    
+    NSManagedObjectContext *objectContext = [[[self reportDocument] managedObjectContext] retain];
+    [MTQueryBuilderAdvancedViewController addNotificationsToObserver:self forObjectContext:objectContext];
+    
+    [self clearScreen];
+    
+    [[self tableStartingPoints] removeAllObjects];
+    [[self pushBehaviors] removeAllObjects];
+    [[self viewControllers] removeAllObjects];  //May track child view controllers since iOS 7.
+    [[self tableIds] removeAllObjects];
+    [[self controllersForObjectIds] removeAllObjects];     //Tables and links
+    [[self controllersForObjectIdsLink] removeAllObjects];
+    
+    RptqDocument *document = [[self reportDocument] activeDocument];
+    RptqQuery *query = [[RptqDocument queryForDocument:document] retain];
+    [self displayQuery:query animated:animated];
+    [query release];
+    
+    
 }
 
 - (void)displayQuery:(RptqQuery *)query animated:(BOOL)animated {
@@ -847,7 +769,7 @@ typedef void(^MTBlockResultVoid)(void);
             }
             
             NSDictionary *layout = @{
-                                     keyIsTopLevel : @(topLevel)
+                                     MTKeyIsTopLevel : @(topLevel)
                                      };
             
             [layoutDetails setObject:layout forKey:[tableIdVertext object]];
@@ -873,7 +795,7 @@ typedef void(^MTBlockResultVoid)(void);
             RptqQueryTable *table = (RptqQueryTable *)[[[self reportDocument] managedObjectContext] objectWithID:objectId];
             
             NSDictionary *layout = [layoutDetails objectForKey:[tableIdVertext object]];
-            BOOL topLevel = [[layout objectForKey:keyIsTopLevel] boolValue];
+            BOOL topLevel = [[layout objectForKey:MTKeyIsTopLevel] boolValue];
             
             MTQueryBuilderAdvancedSchemaViewController *viewController = [[self addSchemaViewControllerForTable:table animated:animated] retain];
             
@@ -969,10 +891,7 @@ typedef void(^MTBlockResultVoid)(void);
         [viewController removeFromParentViewController];
         
         [viewController release];
-        
     }
-
-
 }
 
 - (void)deleteQueryLink:(RptqQueryLinks *)deletedQueryLinks {
@@ -1000,12 +919,12 @@ typedef void(^MTBlockResultVoid)(void);
     NSSet *startingPoints = [NSSet setWithArray:[self tableStartingPoints]];
     [orphanedQueryTables minusSet:startingPoints];  // Should only be one newly orphaned table.
     
+    NSManagedObjectID *deletedLinkObjectId = [deletedQueryLinks objectID];
+    RptqQueryLinks *deletedLink = (RptqQueryLinks *)[managedObjectContext objectWithID:deletedLinkObjectId];
+    UIAttachmentBehavior *attachmentBehavior = [[self attachmentBehaviors] objectForKey:deletedLinkObjectId];
     
     for (RptqQueryTable *table in orphanedQueryTables) {
         
-        NSManagedObjectID *deletedLinkObjectId = [deletedQueryLinks objectID];
-        RptqQueryLinks *deletedLink = (RptqQueryLinks *)[managedObjectContext objectWithID:deletedLinkObjectId];
-        UIAttachmentBehavior *attachmentBehavior = [[self attachmentBehaviors] objectForKey:deletedLinkObjectId];
         RptqQueryTable *tableRightDeletedLink = table;
         MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:[tableRightDeletedLink objectID]];
         
@@ -1015,20 +934,13 @@ typedef void(^MTBlockResultVoid)(void);
         CGFloat x = CGPointZero.x + [[self contentView] frame].size.width;
         CGFloat y = CGPointZero.y + [[self contentView] frame].size.height / 2.0000f;
         CGPoint attachmentPoint = CGPointMake(x, y);
-        //MTQueryBuilderAdvancedSchemaViewController *viewController = [[self controllersForObjectIds] objectForKey:tableRightDeletedLink];
-        UIAttachmentBehavior *attachmentBehaviorNew = [[MTQueryBuilderAdvancedViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint] retain];
-        
-        [[self dynamicAnimator] addBehavior:attachmentBehaviorNew];
-        NSManagedObjectID *tableObjectId = [tableRightDeletedLink objectID];
-        [[self attachmentBehaviors] setObject:attachmentBehaviorNew forKey:tableObjectId];
-        
+ 
+        UIAttachmentBehavior *anchorBehaviorNew = [[MTQueryBuilderAdvancedViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint] retain];
+        [[self dynamicAnimator] addBehavior:anchorBehaviorNew];
+        [[self attachmentBehaviors] setObject:anchorBehaviorNew forKey: [tableRightDeletedLink objectID]];
         [[self tableStartingPoints] addObject: tableRightDeletedLink];
         
-        [[self dynamicAnimator] removeBehavior:attachmentBehavior];
-        [[self attachmentBehaviors] removeObjectForKey:deletedLinkObjectId];
-        
         // Disable collision behaviors before reposition
-        
         // Reposition existing tables
         CGFloat segHeight = (self.contentView.bounds.size.height / ([[self tableStartingPoints] count] + 1));
         NSUInteger counter = 0;
@@ -1040,16 +952,20 @@ typedef void(^MTBlockResultVoid)(void);
             counter++;
         }
         
-        UIViewController *linkViewController = [[[self controllersForObjectIdsLink] objectForKey: [deletedLink objectID]] retain];
-        if (linkViewController != nil) {
-            [self removeViewController:linkViewController];
-        }
-        [linkViewController release];
         [tableRightDeletedLink release];
-        [attachmentBehaviorNew release];
+        [anchorBehaviorNew release];
         // Enable collision behaviors before reposition
         
     }
+    
+    [[self dynamicAnimator] removeBehavior:attachmentBehavior];
+    [[self attachmentBehaviors] removeObjectForKey:deletedLinkObjectId];
+    
+    UIViewController *linkViewController = [[[self controllersForObjectIdsLink] objectForKey: [deletedLink objectID]] retain];
+    if (linkViewController != nil) {
+        [self removeViewController:linkViewController];
+    }
+    [linkViewController release];
     
     [orphanedQueryTables release];
 
@@ -1133,7 +1049,7 @@ typedef void(^MTBlockResultVoid)(void);
             }
             
             NSDictionary *layout = @{
-                                     keyIsTopLevel : @(topLevel)
+                                     MTKeyIsTopLevel : @(topLevel)
                                      };
             
             [layoutDetails setObject:layout forKey:[table objectID]];
@@ -1153,7 +1069,7 @@ typedef void(^MTBlockResultVoid)(void);
         RptqQueryTable *removeableTable = nil;
 
         NSDictionary *layout = [layoutDetails objectForKey:[queryTable objectID]];
-        NSNumber *isTopLevel = [layout objectForKey:keyIsTopLevel];
+        NSNumber *isTopLevel = [layout objectForKey:MTKeyIsTopLevel];
         if ([isTopLevel boolValue] == NO) {
             if ([[leftTable objectID] isEqual:[queryTable objectID]]) {
                 removeableTable = queryTable;
@@ -1318,6 +1234,38 @@ typedef void(^MTBlockResultVoid)(void);
     [panGesture release];
 }
 
+#pragma mark Scroll view helper
+
+- (void)resizeScrollViewContentArea {
+    if ([[self scrollView] isZooming] == NO) {
+        CGFloat maxX = CGPointZero.x;
+        CGFloat maxY = CGPointZero.y;
+        
+        for (UIViewController *viewController in [self childViewControllers]) {
+            Class schemaClass = [MTQueryBuilderAdvancedSchemaViewController class];
+            if ([viewController isKindOfClass:schemaClass]) {
+                UIView *view = [viewController view];
+                CGRect frame = view.frame;//[[self contentView] convertRect:view.frame fromView:view];
+                CGFloat tmaxX = frame.origin.x + frame.size.width;
+                CGFloat tminX = frame.origin.x < CGPointZero.x ? fabs(frame.origin.x) : CGSizeZero.width;
+                CGFloat tmaxY = frame.origin.y + frame.size.height;
+                CGFloat tminY = frame.origin.y < CGPointZero.y ? fabs(frame.origin.y) : CGSizeZero.height;
+                tmaxX += tminX;
+                tmaxX += tminY;
+                maxX = MAX(maxX, tmaxX);
+                maxY = MAX(maxY, tmaxY);
+            }
+        }
+        CGRect bounds = self.view.bounds;
+        maxX = MAX(maxX, bounds.size.width);
+        maxY = MAX(maxY, bounds.size.height);
+        CGSize contentSize = CGSizeMake(maxX, maxY);
+        CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, contentSize.width, contentSize.height);
+        [[self contentView] setFrame: frame];
+        [[self scrollView] setContentSize: contentSize];
+    }
+}
+
 #pragma mark - View Controller Container Data
 
 - (void)removeViewControllers:(NSSet *)viewControllers {
@@ -1406,39 +1354,6 @@ typedef void(^MTBlockResultVoid)(void);
     [[viewController view] setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     constraints = @[width, height];
-    
-    /*
-     desiredFrame = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
-     desiredFrame = [MTQueryBuilderAdvancedViewController rectForDesiredRect:desiredFrame inBounds:viewControllerBounds];
-     [[viewController view] setTranslatesAutoresizingMaskIntoConstraints:NO];
-     constraints = @[width, height];
-     MTBlockResultVoid animateOne = ^() {
-     [[viewController view] setFrame:desiredFrame];
-     };
-     if (animated) {
-     __block MTQueryBuilderAdvancedSchemaViewController *svc = (MTQueryBuilderAdvancedSchemaViewController *)viewController;
-     
-     CGPoint center = [[self contentView] center];
-     //[svc setCenter:center];
-     //[svc setTransform:[[svc view] transform]];
-     //CGSize size = [[svc view] bounds].size;
-     //                CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
-     //[svc setBounds:bounds];
-     
-     UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:svc attachedToAnchor:center];
-     [attachmentBehavior setFrequency:1.0];
-     [attachmentBehavior setDamping:0.1];
-     [attachmentBehavior setLength:20.0000f];
-     [[self dynamicAnimator] addBehavior:attachmentBehavior];
-     [[self collisionBehavior] addItem:svc];
-     [[self gravityBeahvior] addItem:svc];
-     [[self attachmentBehaviors] setObject:attachmentBehavior forKey:[[svc view] objectIdTag]];
-     [attachmentBehavior release];
-     
-     } else {
-     animateOne();
-     }
-     */
     
     [self addChildViewController:viewController];
     if ([[self viewControllers] containsObject:viewController] == NO) {

@@ -270,7 +270,9 @@
             }
         }
         
-        [*listOfEdges add:[MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)]];
+        MTPair *pairEdge = [[MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)] retain];
+        [*listOfEdges add:pairEdge];
+        [pairEdge release];
         
         if ([neighborVertex dfsVertexColor] == MTColorWhite) {
             [neighborVertex setDfsPredecessor: vertex];
@@ -283,7 +285,9 @@
     [vertex setDfsTimestampFinished:*counter];
     [vertex setDfsFoundCounter:*counter];
     
-    [*listOfVertices add:[MTPair pairWithFormer:vertex andLatter:*counter]];
+    MTPair *pairVertices = [[MTPair pairWithFormer:vertex andLatter:*counter] retain];
+    [*listOfVertices add:pairVertices];
+    [pairVertices release];
 }
 
 #pragma mark - MTProtocolLog

@@ -679,6 +679,8 @@
 		4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */; };
 		4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
+		4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
+		4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C752E1316EE7F55001FDAA3 /* MTAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C752E1216EE7F55001FDAA3 /* MTAlertView.m */; };
 		4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C752E1216EE7F55001FDAA3 /* MTAlertView.m */; };
 		4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
@@ -1991,6 +1993,8 @@
 		4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewCellDocument.m; sourceTree = "<group>"; };
 		4C6DF38716D4C6C400BDC0C1 /* UIView+Animations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animations.h"; sourceTree = "<group>"; };
 		4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animations.m"; sourceTree = "<group>"; };
+		4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGAffineTransform+Common.h"; sourceTree = "<group>"; };
+		4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGAffineTransform+Common.m"; sourceTree = "<group>"; };
 		4C752E0C16EA3A0C001FDAA3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		4C752E1116EE7F55001FDAA3 /* MTAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAlertView.h; sourceTree = "<group>"; };
 		4C752E1216EE7F55001FDAA3 /* MTAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAlertView.m; sourceTree = "<group>"; };
@@ -4031,6 +4035,8 @@
 				4C5626021759865A00433E88 /* NSData+AES256.m */,
 				4C84EEB3178B43F20028BF49 /* UIImage+Border.h */,
 				4C84EEB4178B43F20028BF49 /* UIImage+Border.m */,
+				4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */,
+				4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -5226,6 +5232,7 @@
 				4CABE4A41837DF80007EDD9D /* RptqQueryGroup.m in Sources */,
 				4C8BA98E174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
+				4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4CF2F2741754F8F300DC34E3 /* MTPaper.m in Sources */,
 				4CABE4781837DF7C007EDD9D /* RptqDocumentObjectLabelLink.m in Sources */,
@@ -5690,6 +5697,7 @@
 				4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */,
 				4CFF3E81164CD7DE0070E880 /* MTDatabase.m in Sources */,
 				4CFF3E85164CD86E0070E880 /* MTDatabaseMySql.m in Sources */,
+				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4CFF3F21164D76270070E880 /* NSURL+Document.m in Sources */,
 				4CABE4B31837DF81007EDD9D /* RptqQueryCache.m in Sources */,
 				4C95CAC5182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m in Sources */,
