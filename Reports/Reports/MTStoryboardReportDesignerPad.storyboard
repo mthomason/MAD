@@ -5341,13 +5341,6 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="aFx-Lk-vHG"/>
-                        <barButtonItem title="Licensing" id="36d-7R-hsR">
-                            <connections>
-                                <segue destination="zzw-py-TKX" kind="popover" identifier="MTSegueLicensing" popoverAnchorBarButtonItem="36d-7R-hsR" id="3m5-qn-5vx">
-                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                </segue>
-                            </connections>
-                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Designer" id="l5S-Zb-1OK">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="YQ8-FP-cM9">
@@ -5371,7 +5364,6 @@
                         <outlet property="barButtonItemAddNewDocument" destination="YQ8-FP-cM9" id="4Sy-dl-INf"/>
                         <outlet property="barButtonItemEdit" destination="2wM-rP-7Tw" id="g1s-hv-0v1"/>
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
-                        <outlet property="barButtonItemLicensing" destination="36d-7R-hsR" id="LCB-nY-30v"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
                         <outlet property="collectionViewFlowLayout" destination="DM4-DJ-I6a" id="uth-rM-LWr"/>
                     </connections>

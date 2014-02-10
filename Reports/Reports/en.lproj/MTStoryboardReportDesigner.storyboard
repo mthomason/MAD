@@ -6006,11 +6006,6 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Sc8-ba-vJs"/>
-                        <barButtonItem title="Licensing" id="zMO-ce-SKv">
-                            <connections>
-                                <segue destination="ud1-d1-Ret" kind="modal" identifier="MTSegueLicensing" id="Bd9-GB-Ymm"/>
-                            </connections>
-                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Designer" id="a4d-fw-yba">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="iyD-6j-8TM">
@@ -6033,7 +6028,6 @@
                         <outlet property="barButtonItemAddNewDocument" destination="iyD-6j-8TM" id="qaf-Q3-gwY"/>
                         <outlet property="barButtonItemEdit" destination="MR3-Cm-fCw" id="2vC-3B-cCR"/>
                         <outlet property="barButtonItemInformation" destination="QdH-8u-UcV" id="IJk-FO-fE8"/>
-                        <outlet property="barButtonItemLicensing" destination="zMO-ce-SKv" id="lpS-wK-Gpv"/>
                         <outlet property="barButtonItemTrash" destination="HJd-Zb-f53" id="p19-Xf-I4v"/>
                         <outlet property="collectionViewFlowLayout" destination="WHw-lv-Vkd" id="nl2-ee-AvB"/>
                     </connections>
