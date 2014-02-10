@@ -9,6 +9,11 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "VerifyStoreReceipt.h"
 
+//On future versions of the software, we will enable subscription based purchase.  For now, it's free once
+//  they get a download.
+
+#define SUBSCRIPTION FALSE
+
 const NSTimeInterval MTTimeIntervalHour = 60 /*secs*/ * 60 /*minutes*/;
 const NSTimeInterval MTTimeIntervalDay = MTTimeIntervalHour * 24 /*hours*/;
 const NSTimeInterval MTTimeIntervalMonth = MTTimeIntervalDay * 30.4368 /*days*/;
@@ -18,8 +23,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 @implementation MTStoreKitController (NonRenewableLicensing)
 
 - (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
-    if (YES) {
+#if SUBSCRIPTION == TRUE
+    if (YES) {    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
 
         MTVerificationController *verificationController = [MTVerificationController sharedInstance];
         NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
@@ -32,11 +37,18 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     } else {
         completion(NO, nil);
     }
-
+#else
+    NSDate *now = [NSDate date];
+    NSDate *experationDate = [now dateByAddingTimeInterval:MTTimeIntervalYear*10];//Expires ten years from now
+    completion(YES, experationDate);
+#endif
+    
 }
 
 + (BOOL)licensedUser {
+    
     BOOL result = NO;
+#if SUBSCRIPTION == TRUE
     if (YES) {
         
         MTVerificationController *verificationController = [MTVerificationController sharedInstance];
@@ -48,14 +60,17 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
         result = licensedUser;
         
     }
+#else
+    result = YES;
+#endif
     return result;
 
 }
 
 + (void)licensedUser:(MTStoreKitNonRenewableLicensedUser)completion {
-    
-    //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
-    if (YES) {
+#if SUBSCRIPTION == TRUE
+
+    if (YES) {  //#warning Set to NO to test as unlicensed.  Don't ship as NO.  SHIP AS YES!
         
         MTVerificationController *verificationController = [MTVerificationController sharedInstance];
         NSDate *experationDate = [verificationController modernReceiptProcessExperationDate];
@@ -68,6 +83,11 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     } else {
         completion(NO, nil);
     }
+#else
+    NSDate *now = [NSDate date];
+    NSDate *experationDate = [now dateByAddingTimeInterval:MTTimeIntervalYear*10];//Expires ten years from now
+    completion(YES, experationDate);
+#endif
 
 }
 
@@ -85,6 +105,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
 - (NSDate *)experationDateIOS7 {
     
     NSDate *experationDate = nil;
+    
+#if SUBSCRIPTION == TRUE
     
     if ([[MTVerificationController sharedInstance] modernReceiptIsValid]) {
         NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
@@ -192,6 +214,10 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
         }
         [inAppPurchases release];
     }
+#else
+    NSDate *now = [NSDate date];
+    experationDate = [now dateByAddingTimeInterval:MTTimeIntervalYear*10];//Expires ten years from now
+#endif
     return experationDate;
 }
 
@@ -199,6 +225,8 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     
     NSDate *experationDate = nil;
     
+#if SUBSCRIPTION == TRUE
+
     NSMutableArray *transactions = [[NSMutableArray alloc] initWithArray:[MTStoreKitController transactions]];
     NSPredicate *canceledReceipts = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         NSDictionary *transactionData = evaluatedObject;
@@ -302,6 +330,11 @@ const NSTimeInterval MTTimeIntervalYear = MTTimeIntervalDay * 365.242 /*days*/;
     }
     
     [transactions release];
+    
+#else
+    NSDate *now = [NSDate date];
+    experationDate = [now dateByAddingTimeInterval:MTTimeIntervalYear*10];//Expires ten years from now
+#endif
     
     return experationDate;
     
