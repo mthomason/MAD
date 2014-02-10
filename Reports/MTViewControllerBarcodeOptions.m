@@ -205,7 +205,6 @@
     return [barcode has2dComponent] ? 1 : -1;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger result = 0;
 

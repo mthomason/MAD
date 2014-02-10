@@ -4149,7 +4149,7 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A barcode generator." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="110" translatesAutoresizingMaskIntoConstraints="NO" id="vYB-Db-UQf">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Render data as a barcode." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="110" translatesAutoresizingMaskIntoConstraints="NO" id="vYB-Db-UQf">
                                             <rect key="frame" x="20" y="30" width="110" height="37"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="37" id="O9G-Bq-F1P"/>
@@ -11544,10 +11544,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="tIb-WS-gen"/>
-        <segue reference="PPx-4T-brk"/>
         <segue reference="pCi-yT-77G"/>
-        <segue reference="pfP-rZ-fVf"/>
+        <segue reference="PPx-4T-brk"/>
         <segue reference="kPX-hH-DKi"/>
+        <segue reference="pfP-rZ-fVf"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

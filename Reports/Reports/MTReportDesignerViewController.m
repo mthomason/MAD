@@ -84,6 +84,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 @property (nonatomic, retain) NSMutableDictionary *collectionViewReuseIdentifiers;
 
+@property (nonatomic, retain) NSMutableDictionary *elementViewsForDocumentObjectId;
+
 @property (nonatomic, retain) IBOutlet UIView *toolboxView;
 
 @property (nonatomic, retain) IBOutlet UIButton *informationButton;
@@ -134,6 +136,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_elementViewsForDocumentObjectId release];
     [_objectIdEditImage release];
     [_objectIdEditBarcode release];
     [_objectIdEditAggregateFunction release];
@@ -191,6 +194,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        
+        NSMutableDictionary *elementViewsForDocumentObjectId = [[NSMutableDictionary alloc] init];
+        [self setElementViewsForDocumentObjectId:elementViewsForDocumentObjectId];
+        [elementViewsForDocumentObjectId release];
         
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
         if ([UIDevice isLagacyOS]) {
@@ -1043,7 +1050,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self designerScrollView] scrollRectToVisible:CGRectZero animated:NO];
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
-
+        
         MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditBarcode];
@@ -2416,19 +2423,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
                 
                 [elementView setFrame:cellFrame];
+                NSUInteger hash = [[documentObject objectID] hash];
+                [elementView setTag: hash];
                 
-                
-                //[elementView setContainer: cell];
-                //[elementView setContainerGroup: collectionView];
-                                
-                [cell setTag:[[documentObject identifier] integerValue] + 3838];
+                [cell setTag:hash];
                 [cell setObjectIdTag:[documentObject objectID]];
                 [cell setUserInteractionEnabled:YES];
                 
-                //UIView *contentView = [cell contentView];
-                
-
-                        [[cell contentView] addSubview:elementView];
+                [[cell contentView] addSubview:elementView];
                 
                 __block UICollectionViewCell *blockCell = cell;
                 __block MTElementView *blockElementView = elementView;
