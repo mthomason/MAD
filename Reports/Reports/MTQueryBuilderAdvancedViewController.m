@@ -23,6 +23,8 @@ typedef void(^MTBlockResultVoid)(void);
 
 @interface MTQueryBuilderAdvancedViewController ()
 
+    @property (nonatomic, assign) BOOL uidynamicsSetup;
+
     @property (nonatomic, retain) IBOutlet UIToolbar *toolbarBottom;
     @property (nonatomic, retain) IBOutlet UIView *backgroundContainer;
 
@@ -92,6 +94,8 @@ typedef void(^MTBlockResultVoid)(void);
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        
+        [self setUidynamicsSetup:NO];
         
         NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
         [self setViewControllers:viewControllers];
@@ -190,34 +194,40 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:[self contentView]];
-    
-    UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[]];
-    [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
-    [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
-    [collisionBehavior setCollisionDelegate:self];
-    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
-    [gravity setMagnitude:1.0000f];
-    CGVector gravityDirection = CGVectorMake(1, 0);
-    [gravity setGravityDirection:gravityDirection];
-    UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
-    [dynamicItemBehavior setAllowsRotation:NO];
-    [dynamicItemBehavior setElasticity:0.0000f];
-    [dynamicItemBehavior setResistance:1.0000f];
-    [self setDynamicItemBehavior: dynamicItemBehavior];
-    [animator addBehavior:dynamicItemBehavior];
-    
-    
-    
-    [animator addBehavior:collisionBehavior];
-    [animator addBehavior:gravity];
-    [self setDynamicAnimator:animator];
-    [self setGravityBeahvior:gravity];
-    [self setCollisionBehavior:collisionBehavior];
-    [collisionBehavior release];
-    [dynamicItemBehavior release];
-    [gravity release];
-    [animator release];
+    if ([self uidynamicsSetup] == NO) {
+        
+        [self setUidynamicsSetup:YES];
+
+        UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:[self contentView]];
+        
+        UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[]];
+        [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
+        [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
+        [collisionBehavior setCollisionDelegate:self];
+        UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
+        [gravity setMagnitude:1.0000f];
+        CGVector gravityDirection = CGVectorMake(1, 0);
+        [gravity setGravityDirection:gravityDirection];
+        UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
+        [dynamicItemBehavior setAllowsRotation:NO];
+        [dynamicItemBehavior setElasticity:0.0000f];
+        [dynamicItemBehavior setResistance:1.0000f];
+        [self setDynamicItemBehavior: dynamicItemBehavior];
+        [animator addBehavior:dynamicItemBehavior];
+        
+        
+        
+        [animator addBehavior:collisionBehavior];
+        [animator addBehavior:gravity];
+        [self setDynamicAnimator:animator];
+        [self setGravityBeahvior:gravity];
+        [self setCollisionBehavior:collisionBehavior];
+        [collisionBehavior release];
+        [dynamicItemBehavior release];
+        [gravity release];
+        [animator release];
+
+    }
     
 }
 
