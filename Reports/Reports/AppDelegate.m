@@ -19,9 +19,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.189";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.189";
-NSString * const MTGlobalBundleRev                                  = @"810";
+NSString * const MTGlobalBundleVersion                              = @"1.0.191";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.191";
+NSString * const MTGlobalBundleRev                                  = @"812";
 
 @interface AppDelegate()
 
@@ -56,6 +56,12 @@ void uncaughtExceptionHandler(NSException *exception) {
     //    NSArray *fontNames = [UIFont fontNamesForFamilyName:[fontFamilies objectAtIndex:i]];
     //    NSLog (@"%@: %@", fontFamily, fontNames);
     //}
+    
+    UIColor *titleTextColor = [UIColor whiteColor];
+    NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName : titleTextColor};
+
+    [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes
+                                             forState:UIControlStateNormal];
     
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
