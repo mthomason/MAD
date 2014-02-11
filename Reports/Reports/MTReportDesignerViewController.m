@@ -84,8 +84,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 @property (nonatomic, retain) NSMutableDictionary *collectionViewReuseIdentifiers;
 
-@property (nonatomic, retain) NSMutableDictionary *elementViewsForDocumentObjectId;
-
 @property (nonatomic, retain) IBOutlet UIView *toolboxView;
 
 @property (nonatomic, retain) IBOutlet UIButton *informationButton;
@@ -136,7 +134,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - NSObject
 
 - (void)dealloc {
-    [_elementViewsForDocumentObjectId release];
     [_objectIdEditImage release];
     [_objectIdEditBarcode release];
     [_objectIdEditAggregateFunction release];
@@ -194,10 +191,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
-        NSMutableDictionary *elementViewsForDocumentObjectId = [[NSMutableDictionary alloc] init];
-        [self setElementViewsForDocumentObjectId:elementViewsForDocumentObjectId];
-        [elementViewsForDocumentObjectId release];
         
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
         if ([UIDevice isLagacyOS]) {
@@ -1798,24 +1791,40 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (NSSet *)selectedElementViews {
 
     NSMutableSet *results = [[NSMutableSet alloc] init];
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
-    for (RptqDocumentSection *documentSection in enumerator) {
-        MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
+    
+    //Try quick hash method...
+    BOOL quickHashWorks = YES;
+    for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
+        NSUInteger hash = [selectedObjectId hash];
+        UIView *selectedView = [[self designerContentView] viewWithTag:hash];
+        if (selectedView != nil) {
+            [results addObject:selectedView];
+        } else {
+            quickHashWorks = NO;
+        }
+    }
+    
+    if (quickHashWorks == NO) {
+        MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
         
-        for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
-            for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
-                MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:documentSectionView];
-                if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
-                    [results addObject:elementView];
+        SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
+        for (RptqDocumentSection *documentSection in enumerator) {
+            MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
+            
+            for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+                for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
+                    MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:documentSectionView];
+                    if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
+                        [results addObject:elementView];
+                    }
                 }
             }
+            [documentSectionView release];
         }
-        [documentSectionView release];
+        [enumerator release];
+        [activeDocument release];
     }
-    [enumerator release];
-    [activeDocument release];
+
     return [results autorelease];
 
 }
@@ -2534,44 +2543,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     return [result autorelease];
 
-}
-
-- (NSSet *)selectedObjectIdsInCollectionView:(UICollectionView *)collectionView {
-
-    NSMutableSet *result = [[NSMutableSet alloc] init];
-    
-    for (NSUInteger section = 0; section < [collectionView numberOfSections]; section++) {
-    
-        for (NSUInteger item = 0; item < [collectionView numberOfItemsInSection:section]; item++) {
-        
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
-            UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-            
-            if ([cell isSelected]) {
-                MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
-                [result addObject:[elementView objectIdTag]];
-            }
-        }
-    }
-
-    return [result autorelease];
-
-}
-
-- (NSSet *)selectedObjectIdsCalculated {
-    NSMutableSet *results = [[NSMutableSet alloc] init];
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[activeDocument managedObjectContext]];
-    for (RptqDocumentSection *documentSection in enumerator) {
-        MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
-        
-        NSArray *selectedObjects = [[self selectedObjectIdsInCollectionView:documentSectionView] allObjects];
-        [results addObjectsFromArray: selectedObjects];
-        [documentSectionView release];
-    }
-    [enumerator release];
-    [activeDocument release];
-    return [results autorelease];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {

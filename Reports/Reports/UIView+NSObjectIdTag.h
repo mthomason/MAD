@@ -13,6 +13,6 @@
 
 @property (nonatomic, retain) NSManagedObjectID *objectIdTag;
 
-- (UIView *)viewWithTagObjectId:(NSManagedObjectID *)object;
+//- (UIView *)viewWithTagObjectId:(NSManagedObjectID *)object;
 
 @end

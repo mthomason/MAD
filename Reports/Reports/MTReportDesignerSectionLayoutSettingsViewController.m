@@ -40,23 +40,9 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[[self tableView] frame]];
-//    [[self view] setClipsToBounds:YES];
-//    [[self tableView] setBackgroundColor:[UIColor clearColor]];
-//    [[self tableView] setBackgroundView:nil];
-//    [[[self tableView] layer] insertSublayer:[toolbar layer] atIndex:0];
-//    [toolbar release];
-    //UIViewTableSectionHeaderQueryBuilder *gradentView = [[UIViewTableSectionHeaderQueryBuilder alloc] initWithFrame:[[self tableView] frame]];
-    //[[self tableView] setBackgroundView: gradentView];
-    //[gradentView release];
-    
-
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackOpaque];
     [self updateDisplay];
 }
 

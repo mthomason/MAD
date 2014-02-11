@@ -21,7 +21,7 @@ static char const * const StringTagKey = "ObjectIdTag";
 - (void)setObjectIdTag:(id)newObjectTag {
     objc_setAssociatedObject(self, StringTagKey, newObjectTag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-
+/*
 - (UIView *)viewWithTagObjectId:(NSManagedObjectID *)object {
     
     if (object == nil) {
@@ -40,6 +40,6 @@ static char const * const StringTagKey = "ObjectIdTag";
     }
     return nil;
 }
-
+*/
 
 @end
