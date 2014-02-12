@@ -19,9 +19,9 @@
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.194";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.194";
-NSString * const MTGlobalBundleRev                                  = @"815";
+NSString * const MTGlobalBundleVersion                              = @"1.0.195";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.195";
+NSString * const MTGlobalBundleRev                                  = @"816";
 
 @interface AppDelegate()
 
@@ -57,7 +57,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     //    NSLog (@"%@: %@", fontFamily, fontNames);
     //}
     
-    UIColor *titleTextColor = [UIColor whiteColor];
+    UIColor *titleTextColor = [UIColor tintColor2];
     NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName : titleTextColor};
 
     [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes

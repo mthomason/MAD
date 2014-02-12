@@ -31,6 +31,9 @@
 @property (nonatomic, retain) NSArray *cachedDataMaxicode;
 @property (nonatomic, retain) NSArray *cachedData2dComponent;
 
+@property (nonatomic, retain) IBOutlet UIView *topView;
+@property (nonatomic, retain) IBOutlet UIView *bottomView;
+
 @end
 
 @implementation MTViewControllerBarcode
@@ -53,6 +56,8 @@
     [_queryField2 release];
     [_barButtonItemSave release];
     [self setEditmode:NO];
+    [_topView release];
+    [_bottomView release];
     [super dealloc];
 }
 
@@ -75,6 +80,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[self barButtonItemSave] setEnabled:NO];
+    
+    UIView *topView = [self topView];
+    UIView *bottomView = [self bottomView];
+    
+    NSString *barcodeViewerHeight = @"200.0000";
+    if ([UIDevice isPad]) {
+        barcodeViewerHeight = @"250.0000";
+    }
+    NSString *asciiArtVertConstraint = @"V:|-(==0.0000)-[topView(==%@)]-(==0.0000)-[bottomView]-(==0.0000)-|";
+    NSString *asciiArtVert = [NSString stringWithFormat: asciiArtVertConstraint, barcodeViewerHeight];
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(topView, bottomView);
+    NSArray *constraintsVert = [NSLayoutConstraint constraintsWithVisualFormat:asciiArtVert
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:viewsDictionary];
+    [[self view] addConstraints:constraintsVert];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -6773,6 +6773,8 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemSave" destination="IaD-kV-jat" id="shs-46-m33"/>
+                        <outlet property="bottomView" destination="vRo-Io-0Xe" id="Dg7-kO-6s3"/>
+                        <outlet property="topView" destination="tiv-yB-fhj" id="ood-wS-3dz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oJa-Wr-kft" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -5497,6 +5497,8 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="barButtonItemSave" destination="yjj-A1-7wh" id="rwK-Gy-nUn"/>
+                        <outlet property="bottomView" destination="lhW-Ku-pv0" id="IqV-EJ-Lur"/>
+                        <outlet property="topView" destination="SQu-hU-gH7" id="gYC-2a-qVo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CtM-1W-VX1" userLabel="First Responder" sceneMemberID="firstResponder"/>
