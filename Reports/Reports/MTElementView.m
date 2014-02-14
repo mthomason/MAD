@@ -142,6 +142,21 @@
                 [self updateDisplayLabel];
                 break;
             }
+        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
+            if ([[self objectIdTag] isEqual:[[updatedObject parentObjectBarcode] objectID]]) {
+                [self updateDisplayLabel];
+                break;
+            }
+        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectAggregate class]]) {
+            if ([[self objectIdTag] isEqual:[[updatedObject parentObject] objectID]]) {
+                [self updateDisplayLabel];
+                break;
+            }
+        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
+            if ([[self objectIdTag] isEqual:[[updatedObject parentObjectLabelDataField] objectID]]) {
+                [self updateDisplayLabel];
+                break;
+            }
         }
     }
 

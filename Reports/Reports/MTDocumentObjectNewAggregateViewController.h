@@ -11,9 +11,21 @@
 #import "MTAggregateFunctionsViewController.h"
 
 extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
+extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;
+extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
+
+@protocol MTViewControllerAggregateDelegate
+- (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
+                                inputType:(MTAggregateFunctionInputType)inputType
+                              inputObject:(NSManagedObject *)inputObject
+                                groupType:(MTAggregateGroupByType)groupType
+                              groupNumber:(NSNumber *)groupNumber;
+@end
 
 @interface MTDocumentObjectNewAggregateViewController : UITableViewController
     <UITableViewDelegate>
+
+@property (nonatomic, assign) id <MTViewControllerAggregateDelegate> delegate;
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateInput;
@@ -23,8 +35,10 @@ extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSInteger groupTypeSectionNumber;
 @property (nonatomic, retain) NSManagedObjectID *fieldObjectId;
+@property (nonatomic, retain) RptqQueryField *fieldObject;
 
 @property (nonatomic, assign) BOOL editmode;
 
+- (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject;
 
 @end

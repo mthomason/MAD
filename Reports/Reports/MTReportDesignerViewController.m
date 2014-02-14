@@ -30,6 +30,11 @@ CGFloat MTReportDesignerCornerRadius                =  5.0000f;
 const CGFloat previousScaleWeight                   =  0.6666f;
 
 @interface MTReportDesignerViewController()
+    <MTViewControllerBarcodeDelegate,
+        MTViewControllerAggregateDelegate>
+
+@property (nonatomic, assign) BOOL editAggregate;
+@property (nonatomic, assign) BOOL editDynamicField;
 
 @property (nonatomic, retain) NSArray *sectionViewsArray;
 @property (nonatomic, retain) NSArray *sectionControlViewsArray;
@@ -55,6 +60,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) UIPopoverController *popoverControllerObjectSelector;
 @property (nonatomic, retain) UIPopoverController *popoverControllerSectionSettings;
 
+@property (nonatomic, retain) UIPopoverController *popoverControllerEditBarcode;
+@property (nonatomic, retain) UIPopoverController *popoverControllerEditDataLabel;
+@property (nonatomic, retain) UIPopoverController *popoverControllerEditAggregate;
+
 @property (nonatomic, assign) BOOL toolboxIsVisible;
 @property (nonatomic, retain) MTElementView *lastElementViewToShowMenu;
 @property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
@@ -78,9 +87,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) NSArray *toolbarTopItems;
 @property (nonatomic, retain) NSArray *toolbarBottomItems;
 
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *layoutConstraintContainerToDesignerVertSpace;
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *layoutConstraintContainerToDesignerCenterY;
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *layoutConstraintContainerToDesignerCenterX;
 @property (nonatomic, retain) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
 @property (nonatomic, retain) NSMutableDictionary *collectionViewReuseIdentifiers;
 
@@ -127,6 +133,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) NSManagedObjectID *objectIdEditBarcode;
 @property (nonatomic, retain) NSManagedObjectID *objectIdEditImage;
 
+@property (nonatomic, retain) RptqDocumentObjectBarcode *barcodeToEdit;
+@property (nonatomic, retain) RptqDocumentObjectAggregate *aggregateToEdit;
+@property (nonatomic, retain) RptqDocumentObjectLabelDataField *dataFieldToEdit;
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -134,6 +144,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - NSObject
 
 - (void)dealloc {
+    [_dataFieldToEdit release];
+    [_aggregateToEdit release];
+    [_barcodeToEdit release];
     [_objectIdEditImage release];
     [_objectIdEditBarcode release];
     [_objectIdEditAggregateFunction release];
@@ -179,9 +192,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_toolboxView release];
     [_layoutConstraintsToRemove release];
     [_layoutConstraintDesignerContentViewHeight release];
-    [_layoutConstraintContainerToDesignerVertSpace release];
-    [_layoutConstraintContainerToDesignerCenterY release];
-    [_layoutConstraintContainerToDesignerCenterX release];
     [_toolbarBottomHeightConstraint release];
     [_collectionViewReuseIdentifiers release];
     [_widthConstraints release];
@@ -282,12 +292,23 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
         
-        MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
-        [self insertDocumentObjectNewAggregateFunctionWithType:[aggregateViewController aggregateFunctionType]
-                                                     inputType:MTAggregateFunctionInputTypeField
-                                                   inputObject:[aggregateViewController fieldObjectId]
-                                                     groupType:[aggregateViewController aggregateGroupByType]
-                                                   groupNumber:@([aggregateViewController groupTypeSectionNumber])];
+        if ([self aggregateToEdit] && [self editAggregate]) {
+            MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
+            [[self aggregateToEdit] updateAggregateFunctionWithFunctionType:[aggregateViewController aggregateFunctionType]
+                                                                  inputType:MTAggregateFunctionInputTypeField
+                                                                  groupType:[aggregateViewController aggregateGroupByType]
+                                                            aggregateObject:[aggregateViewController fieldObject]
+                                                                groupNumber:[aggregateViewController groupTypeSectionNumber]];
+            
+        } else {
+            MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
+            [self insertDocumentObjectNewAggregateFunctionWithType:[aggregateViewController aggregateFunctionType]
+                                                         inputType:MTAggregateFunctionInputTypeField
+                                                       inputObject:[aggregateViewController fieldObjectId]
+                                                         groupType:[aggregateViewController aggregateGroupByType]
+                                                       groupNumber:@([aggregateViewController groupTypeSectionNumber])];
+        }
+        
 
     } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
         
@@ -325,6 +346,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [barcodeObject updateWithBarcode:barcode fieldOne:[barcodeViewController queryField1] fieldTwo:[barcodeViewController queryField2]];
             NSError *error = nil;
             [managedObjectContext save:&error];
+
+            [self setObjectIdEditBarcode:nil];
 //            [activeDocument saveContext];
         } else {
             
@@ -419,6 +442,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setEditAggregate:NO];
     
     [[self tabBarController] setDelegate:self];
     
@@ -834,12 +859,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [viewDidAppearDesignerContentViewConstraints release];
     [viewDidAppearDesignerScrollViewConstraints release];
     
-    if ([self layoutConstraintContainerToDesignerCenterY] != nil && [self layoutConstraintContainerToDesignerCenterX] != nil && [self layoutConstraintContainerToDesignerVertSpace] != nil) {
-        
-        NSArray *someCenterConstraints = @[[self layoutConstraintContainerToDesignerCenterY], [self layoutConstraintContainerToDesignerCenterX], [self layoutConstraintContainerToDesignerVertSpace]];
-        
-        [[self designerScrollView] removeConstraints: someCenterConstraints];
-    }
     [[self designerScrollView] setScrollEnabled:YES];
     [[self designerScrollView] setMaximumZoomScale:4.0000f];
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
@@ -1001,12 +1020,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [popoverSegue popoverController];
             [popoverController setDelegate:self];
-            //UINavigationController *nav = (UINavigationController *)[popoverController contentViewController];
-            //[[nav toolbar] setBarTintColor:[UIColor greenColor]];
             CGSize popoverSize = CGSizeMake(320.0000f, 420.0000);
             [popoverController setPopoverContentSize:popoverSize animated:NO];
             [self setPopoverControllerObjectSelector:popoverController];
         }
+        
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
             UINavigationController *d = [segue destinationViewController];
             MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)[d topViewController];
@@ -1016,19 +1034,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = [segue destinationViewController];
             [viewControllerObjectSelector setObjectSelectorDelegate:self];
         }
+
     } else if ([[segue identifier] isEqualToString:@"MTSegueShowReportViewer"]) {
 
-        //MTReportViewerController *viewControllerReportViewer;
-        //if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            //UINavigationController *d = [segue destinationViewController];
-            //viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
-        //} else {
-            //viewControllerReportViewer = [segue destinationViewController];
-        //}
-        //[viewControllerReportViewer setViewControllerDelegate:self];
-        //[viewControllerReportViewer setDocumentReport:activeDocument];
-        
-        
         // Page sheet and form sheet don't seem to unwind using segues.
         if ([UIDevice isPad]) {
             MTReportViewerController *viewControllerReportViewer;
@@ -1044,43 +1052,78 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
         
+        
+        MTViewControllerBarcode *barcodeViewController = [[segue destinationViewController] retain];
         MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditBarcode];
         RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
         RptqDocumentObjectBarcode *barcodeObject = [[documentObject isBarcode] retain];
-        MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject] retain];
-        
-        MTViewControllerBarcode *barcodeViewController = [segue destinationViewController];
-        [barcodeViewController setBarcode:barcode];
-        RptqQueryField *field1 = [barcodeObject referencesField1];
-        RptqQueryField *field2 = [barcodeObject referencesField2];
-        [barcodeViewController setQueryField1:field1];
-        [barcodeViewController setQueryField2:field2];
-        [barcodeViewController setEditmode:YES];
-        
+        [barcodeViewController setBarcodeToEdit: barcodeObject];
         [barcodeObject release];
-        [barcode release];
 
-        
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
         
-        MTDocumentObjectNewAggregateViewController *aggregateViewController = [segue destinationViewController];
+        MTDocumentObjectNewAggregateViewController *aggregateViewController = [[segue destinationViewController] retain];
         MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
         NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
         RptqDocumentObject *documentObject = [(RptqDocumentObject *)[managedObjectContext objectWithID:objectId] retain];
         RptqDocumentObjectAggregate *aggregateObject =  [[documentObject isAggregate] retain];
-        
-        [aggregateViewController setAggregateFunctionType:[[aggregateObject function] integerValue]];
-        [aggregateViewController setAggregateGroupByType:[[aggregateObject groupType] integerValue]];
-        [aggregateViewController setGroupTypeSectionNumber:[[aggregateObject groupNumber] integerValue]];
-        [aggregateViewController setFieldObjectId:[[aggregateObject aggregateField] objectID]];
-        [aggregateViewController setEditmode:YES];
-        
+        [aggregateViewController setAggregateObjectToEdit:aggregateObject];
         [aggregateObject release];
         [documentObject release];
+        [aggregateViewController release];
+        
     }
+}
+
+/*
+- (id)viewControllerForSegue:(UIStoryboardSegue *)segue toDocumentObjectBarcode:(id)sender {
+    
+    MTViewControllerBarcode *barcodeViewController;
+    
+    if (segue != nil) {
+        NSAssert([[segue identifier] isEqualToString:MTIdentifierSegueDocumentObjectEditBarcode], @"");
+        barcodeViewController = [[segue destinationViewController] retain];
+    } else {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+        barcodeViewController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewBarcodeViewControllerIdentifier] retain] ;
+    }
+
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    NSManagedObjectID *objectId = [self objectIdEditBarcode];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+    RptqDocumentObjectBarcode *barcodeObject = [[documentObject isBarcode] retain];
+    [barcodeViewController setBarcodeToEdit: barcodeObject];
+    [barcodeObject release];
+
+    return [barcodeViewController autorelease];
+}
+*/
+
+- (id)viewControllerForSegue:(UIStoryboardSegue *)segue toDocumentObjectAggregate:(id)sender {
+    MTDocumentObjectNewAggregateViewController *aggregateViewController;
+    if (segue != nil) {
+        NSAssert([[segue identifier] isEqualToString:MTIdentifierSegueDocumentObjectEditAggregate], @"");
+        aggregateViewController = [[segue destinationViewController] retain];
+    } else {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+        aggregateViewController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier] retain] ;
+    }
+    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
+    RptqDocumentObject *documentObject = [(RptqDocumentObject *)[managedObjectContext objectWithID:objectId] retain];
+    RptqDocumentObjectAggregate *aggregateObject =  [[documentObject isAggregate] retain];
+    
+    [aggregateViewController setAggregateObjectToEdit:aggregateObject];
+    
+    [aggregateObject release];
+    [documentObject release];
+    
+    return [aggregateViewController autorelease];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -1366,6 +1409,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 }
             }
 
+        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
+            //NSUInteger hash = [[[updatedObject parentObjectBarcode] objectID] hash];
+            //UIView *view = [[self designerContentView] viewWithTag:hash];
+            //[view setNeedsDisplay];
         }
     }
 }
@@ -1549,6 +1596,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    
+    // FIXME: Add ability to edit image fields.  84848422
     
     BOOL editedImageExist = [info objectForKey:UIImagePickerControllerEditedImage] != nil;
     UIImage *selectedImage = nil;
@@ -2124,31 +2174,176 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
         
         if (found) {
+
             
             RptqDocumentObject *objectToEdit = [hasObjects objectAtIndex:deleteIndex];
             
             switch ([[objectToEdit type] integerValue]) {
-                case MTDocumentObjectTypeAggregate:
+
+                case MTDocumentObjectTypeAggregate: {
+
+                    [self setAggregateToEdit: [objectToEdit isAggregate]];
+                    [self setEditAggregate: YES];
                     
-                    [self setObjectIdEditAggregateFunction:[objectToEdit objectID]];
-                    [self performSegueWithIdentifier:@"MTIdentifierSegueDocumentObjectEditAggregate" sender:self];
+                    if ([UIDevice isPad]) {
+                        
+                        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
+                        NSManagedObjectID *objectId = [objectToEdit objectID];
+                        NSUInteger hash = [objectId hash];
+                        UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
+                    
+                        if (viewToEdit != nil) {
+                            
+                            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                            
+                            UINavigationController *navigationController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier] retain];
+                            MTDocumentObjectNewAggregateViewController *aggregateViewController = [[[navigationController viewControllers] firstObject] retain];
+                            [aggregateViewController setDelegate:self];
+                            MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                            NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+                            RptqDocumentObject *documentObject = [(RptqDocumentObject *)[managedObjectContext objectWithID:objectId] retain];
+                            RptqDocumentObjectAggregate *aggregateObject =  [[documentObject isAggregate] retain];
+                            [aggregateViewController setAggregateObjectToEdit:aggregateObject];
+                            [aggregateObject release];
+                            [documentObject release];
+                            
+                            CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:[self designerContentView]];
+                            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
+                            [popoverController setDelegate:self];
+                            [popoverController setPopoverContentSize:popoverSize animated:NO];
+                            [popoverController presentPopoverFromRect:popoverRect
+                                                               inView:[self designerContentView]
+                                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                             animated:YES];
+                            
+                            [self setPopoverControllerEditBarcode: popoverController];
+                            
+                            [popoverController release];
+                            
+                            [aggregateViewController release];
+                            [navigationController release];
+                            
+                            
+                        } else {
+
+                            [self setObjectIdEditAggregateFunction:[objectToEdit objectID]];
+                            [self performSegueWithIdentifier:MTIdentifierSegueDocumentObjectEditAggregate sender:self];
+
+                        }
+                        
+                    } else {
+
+                        [self setObjectIdEditAggregateFunction:[objectToEdit objectID]];
+                        [self performSegueWithIdentifier:MTIdentifierSegueDocumentObjectEditAggregate sender:self];
+                        
+                    }
+                    
                     
                     break;
-                case MTDocumentObjectTypeBarcode:
                     
-                    [self setObjectIdEditBarcode:[objectToEdit objectID]];
-                    [self performSegueWithIdentifier:@"MTIdentifierSegueDocumentObjectEditBarcode" sender:self];
+                }
+                    
+                case MTDocumentObjectTypeBarcode: {
+                  
+                    if ([UIDevice isPad]) {
+                        
+                        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
+                        NSManagedObjectID *objectId = [objectToEdit objectID];
+                        NSUInteger hash = [objectId hash];
+                        UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
+                        
+                        if (viewToEdit != nil) {
+                            
+                            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                            MTViewControllerBarcode *barcodeViewController = [[storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier] retain];
+                            [barcodeViewController setDelegate:self];
+                            
+                            MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+                            NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+                            RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+                            RptqDocumentObjectBarcode *barcodeObject = [[documentObject isBarcode] retain];
+                            [self setBarcodeToEdit: barcodeObject];
+                            [barcodeViewController setBarcodeToEdit: barcodeObject];
+                            
+                            [barcodeObject release];
+
+                            CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:[self designerContentView]];
+                            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:barcodeViewController];
+                            [popoverController setDelegate:self];
+                            [popoverController setPopoverContentSize:popoverSize animated:NO];
+                            [popoverController presentPopoverFromRect:popoverRect
+                                                               inView:[self designerContentView]
+                                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                             animated:YES];
+                            
+                            [self setPopoverControllerEditBarcode: popoverController];
+                            
+                            [popoverController release];
+                            [barcodeViewController release];
+
+                        } else {
+                            [self setObjectIdEditBarcode:[objectToEdit objectID]];
+                            [self performSegueWithIdentifier:MTIdentifierSegueDocumentObjectEditBarcode sender:self];
+                        }
+                        
+                        
+                        
+                    } else {
+                        [self setObjectIdEditBarcode:[objectToEdit objectID]];
+                        [self performSegueWithIdentifier:MTIdentifierSegueDocumentObjectEditBarcode sender:self];
+                    }
                     
                     break;
+                }
                 case MTDocumentObjectTypeImage:
                     
                     [self setObjectIdEditImage:[objectToEdit objectID]];
 
                     break;
                 case MTDocumentObjectTypeLabelDynamic: {
+
+                    [self setDataFieldToEdit:[objectToEdit isLabelDataField]];
+                    [self setEditDynamicField:YES];
                     
-                    [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
-                    [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
+                    if ([UIDevice isPad]) {
+                        
+                        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
+                        NSManagedObjectID *objectId = [objectToEdit objectID];
+                        NSUInteger hash = [objectId hash];
+                        UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
+                        
+                        if (viewToEdit != nil) {
+                            
+                            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                            MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier: @"UITableViewControllerChooseFieldDataObject"] retain];
+                            
+                            [chooseFieldViewController setDelegate:self];
+                            
+                            CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:[self designerContentView]];
+                            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:chooseFieldViewController];
+                            [popoverController setDelegate:self];
+                            [popoverController setPopoverContentSize:popoverSize animated:NO];
+                            [popoverController presentPopoverFromRect:popoverRect
+                                                               inView:[self designerContentView]
+                                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                             animated:YES];
+                            
+                            [self setPopoverControllerEditDataLabel: popoverController];
+                            
+                            [popoverController release];
+
+                            [chooseFieldViewController release];
+
+                            
+                        } else {
+                            [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
+                            [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
+                        }
+                    } else {
+                        [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
+                        [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
+
+                    }
                     
                     break;
                 }
@@ -2196,17 +2391,61 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 #pragma mark -
+#pragma mark - MTViewControllerBarcodeDelegate
+
+- (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo {
+
+    if ([self barcodeToEdit] != nil) {
+        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+        RptqDocumentObjectBarcode *barcodeObject = [self barcodeToEdit];
+        [barcodeObject updateWithBarcode:barcode fieldOne:fieldOne fieldTwo:fieldTwo];
+        NSError *error = nil;
+        [managedObjectContext save:&error];
+        if (error != nil) {
+            NSLog(@"Error: %@", error);
+        }
+    }
+    
+}
+
+#pragma mark -
+#pragma mark - MTViewControllerAggregateDelegate
+
+- (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
+                                inputType:(MTAggregateFunctionInputType)inputType
+                              inputObject:(NSManagedObject *)inputObject
+                                groupType:(MTAggregateGroupByType)groupType
+                              groupNumber:(NSNumber *)groupNumber {
+
+    RptqDocumentObjectAggregate *aggregateToEdit = [[self aggregateToEdit] retain];
+    [aggregateToEdit updateAggregateFunctionWithFunctionType:functionType
+                                                          inputType:MTAggregateFunctionInputTypeField
+                                                          groupType:groupType
+                                                    aggregateObject:(RptqQueryField *)inputObject
+                                                        groupNumber:abs([groupNumber integerValue])];
+    [aggregateToEdit release];
+}
+
+#pragma mark -
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
     
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
-    [[documentObject isLabelDataField] setReferencesQueryField:field];
+    NSManagedObjectContext *managedObjectContext = [field managedObjectContext];
+    [[self dataFieldToEdit] setReferencesQueryField:field];
+/*
+    if ([self dataFieldToEdit] && [self editDynamicField]) {
+        [[self dataFieldToEdit] setReferencesQueryField:field];
+    } else {
+
+        NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
+        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+        [[documentObject isLabelDataField] setReferencesQueryField:field];
+
+    }
+    */
     [managedObjectContext save:nil];
-    
 }
 
 #pragma mark -
@@ -2674,18 +2913,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
 
     [detailSection performBatchUpdates:^{
-        //MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-        //NSManagedObjectContext *managedObjectContextBlock = [activeDocument managedObjectContext];
-        
-        
+
         RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination
                                                                         toDocument:document];
         [documentObject obtainPermanentID];
         
-        //NSError *error = nil;
-        //[managedObjectContextBlock save:&error];
         [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-        //[activeDocument release];
         
     } completion:^(BOOL finished) {
         
@@ -2713,9 +2946,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    
     return [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO  &&
             [[gestureRecognizer view] isEqual:[self designerScrollView]] == NO &&
             [[otherGestureRecognizer view] isEqual:[self designerScrollView]] == NO;
+
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {

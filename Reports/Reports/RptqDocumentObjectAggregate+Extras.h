@@ -18,6 +18,12 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
 
 + (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType;
 + (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType;
+
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value;
+- (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
+                                      inputType:(MTAggregateFunctionInputType)inputType
+                                      groupType:(MTAggregateGroupByType)groupType
+                                aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
+                                    groupNumber:(NSUInteger)groupNumber;
 
 @end

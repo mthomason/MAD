@@ -134,4 +134,39 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 }
 
+- (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
+                                      inputType:(MTAggregateFunctionInputType)inputType
+                                      groupType:(MTAggregateGroupByType)groupType
+                                aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
+                                    groupNumber:(NSUInteger)groupNumber {
+    
+    NSNumber *function = @(functionType);
+    [self setFunction: function];
+    
+    NSNumber *group = @(groupNumber);
+    [self setGroupNumber: group];
+    
+    NSNumber *gType = @(groupType);
+    [self setGroupType:gType];
+    
+    switch (inputType) {
+        case MTAggregateFunctionInputTypeField: {
+            [self setAggregateField:(RptqQueryField *)aggregateObject];
+            [self setAggregateFunction:nil];
+            break;
+        }
+        case MTAggregateFunctionInputTypeFormula: {
+            [self setAggregateField:nil];
+            [self setAggregateFunction:(RptqDocumentObjectFormula *)aggregateObject];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    NSError *error = nil;
+    [[self managedObjectContext] save:&error];
+    
+}
+
 @end

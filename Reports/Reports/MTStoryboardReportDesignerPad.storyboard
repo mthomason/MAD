@@ -2480,7 +2480,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XYP-mp-mw4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3620" y="-164"/>
+            <point key="canvasLocation" x="3644" y="-524"/>
         </scene>
         <!--Query Builder Add Link Second Table View Controller - Select Second Table-->
         <scene sceneID="gUm-bp-iX5">
@@ -4209,6 +4209,21 @@
             </objects>
             <point key="canvasLocation" x="404" y="6580"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="zjV-CC-5UJ">
+            <objects>
+                <navigationController storyboardIdentifier="MTDocumentObjectNewAggregateNavigationControllerIdentifier" definesPresentationContext="YES" id="kI9-NN-3QQ" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JS2-0u-CNr">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="lu5-Jf-OXi" kind="relationship" relationship="rootViewController" id="hpj-RX-bhb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HYD-Sm-jTx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4454" y="907"/>
+        </scene>
         <!--Document Object New Static Label View Controller - New Static Label-->
         <scene sceneID="olE-tX-aFS">
             <objects>
@@ -4265,7 +4280,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REi-jA-lJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="JKq-sU-kX9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5578" y="1498"/>
+            <point key="canvasLocation" x="5578" y="-326"/>
         </scene>
         <!--Aggregate Functions View Controller - Aggregate Functions-->
         <scene sceneID="eU5-mo-pmJ">
@@ -4856,7 +4871,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYQ-m9-KBd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Otc-ZF-Iy5" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5562" y="284"/>
+            <point key="canvasLocation" x="5546" y="724"/>
         </scene>
         <!--Group By View Controller - Group By-->
         <scene sceneID="S0o-o3-0nb">
@@ -6695,7 +6710,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0KA-nS-tJZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4924" y="5383"/>
+            <point key="canvasLocation" x="6008" y="4227"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bos-JY-kao">
@@ -6718,10 +6733,25 @@
             </objects>
             <point key="canvasLocation" x="3972" y="5429"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="mo3-n6-VAd">
+            <objects>
+                <navigationController storyboardIdentifier="MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier" definesPresentationContext="YES" id="0Pi-Dh-I28" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="U1O-Tv-7Cx">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="FeM-9P-hhf" kind="relationship" relationship="rootViewController" id="nE4-pf-aqf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HP5-Md-06v" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1902" y="4625"/>
+        </scene>
         <!--View Controller Barcode - MAD Barcodes-->
         <scene sceneID="Z0w-vS-nb6">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="FeM-9P-hhf" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MTDocumentObjectNewBarcodeViewControllerIdentifier" extendedLayoutIncludesOpaqueBars="YES" id="FeM-9P-hhf" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dCq-ZP-ImI"/>
                         <viewControllerLayoutGuide type="bottom" id="i6V-SM-ko6"/>
@@ -6735,13 +6765,13 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="Vux-mk-Sj2"/>
+                                    <constraint firstAttribute="height" constant="200" placeholder="YES" id="Vux-mk-Sj2"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="nmF-hf-amK" kind="embed" identifier="MTIdentifierSegueBarcodePreview" id="cg3-Cw-d59"/>
                                 </connections>
                             </containerView>
-                            <containerView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vRo-Io-0Xe">
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vRo-Io-0Xe">
                                 <rect key="frame" x="0.0" y="200" width="768" height="760"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -6755,16 +6785,18 @@
                             <constraint firstItem="vRo-Io-0Xe" firstAttribute="top" secondItem="tiv-yB-fhj" secondAttribute="bottom" id="EvF-uD-BrK"/>
                             <constraint firstItem="tiv-yB-fhj" firstAttribute="leading" secondItem="nP9-s7-gw1" secondAttribute="leading" id="PcJ-kV-wNt"/>
                             <constraint firstItem="vRo-Io-0Xe" firstAttribute="leading" secondItem="nP9-s7-gw1" secondAttribute="leading" id="Xvb-7B-La1"/>
+                            <constraint firstAttribute="bottom" secondItem="vRo-Io-0Xe" secondAttribute="bottom" id="eGW-pU-n99"/>
                             <constraint firstAttribute="trailing" secondItem="tiv-yB-fhj" secondAttribute="trailing" id="gNH-ZI-tjM"/>
                             <constraint firstAttribute="trailing" secondItem="vRo-Io-0Xe" secondAttribute="trailing" id="k12-GO-5tU"/>
                             <constraint firstItem="tiv-yB-fhj" firstAttribute="top" secondItem="nP9-s7-gw1" secondAttribute="top" id="lpr-sT-BYR"/>
-                            <constraint firstItem="dCq-ZP-ImI" firstAttribute="top" secondItem="tiv-yB-fhj" secondAttribute="bottom" constant="-200" id="rDd-Sm-Pg5"/>
+                            <constraint firstItem="dCq-ZP-ImI" firstAttribute="top" secondItem="tiv-yB-fhj" secondAttribute="bottom" constant="-200" placeholder="YES" id="rDd-Sm-Pg5"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="MAD Barcodes" id="031-b2-ScY">
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="IaD-kV-jat">
                             <connections>
+                                <action selector="save:" destination="FeM-9P-hhf" id="etn-zQ-jrp"/>
                                 <segue destination="6t0-Kv-yyd" kind="unwind" identifier="MTSegueNewDocumentObjectBarcodeSaveIdentifer" unwindAction="unwindToDesigner:" id="fbo-XD-3gJ"/>
                             </connections>
                         </barButtonItem>
@@ -6894,7 +6926,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cCv-3R-5hq" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="dbC-su-fMZ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4924" y="5767"/>
+            <point key="canvasLocation" x="5942" y="5067"/>
         </scene>
         <!--Table View Controller Barcode Extra Aztec - Aztec Code-->
         <scene sceneID="RQB-cJ-SG9">
@@ -11579,11 +11611,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="nE4-pf-aqf"/>
         <segue reference="IEs-Ya-JFk"/>
         <segue reference="7pZ-CD-6UY"/>
-        <segue reference="204-Pu-Gdz"/>
-        <segue reference="rbO-qj-gE4"/>
-        <segue reference="zUp-ku-ep4"/>
+        <segue reference="YFs-Yk-PnB"/>
         <segue reference="glj-Nb-BHS"/>
+        <segue reference="zUp-ku-ep4"/>
     </inferredMetricsTieBreakers>
 </document>

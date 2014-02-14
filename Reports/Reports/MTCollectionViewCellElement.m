@@ -7,6 +7,9 @@
 //
 
 #import "MTCollectionViewCellElement.h"
+#import <CoreData/CoreData.h>
+#import "MTActiveDocument.h"
+#import "MAReportDocument.h"
 
 @implementation MTCollectionViewCellElement
 
@@ -61,9 +64,53 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
-    if (action == @selector(delete:) || action == @selector(edit:) || action == @selector(format:)) {
-        result = YES;
+    
+    NSManagedObjectID *objectId = [self objectIdTag];
+    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+    [[documentObject type] integerValue];
+    
+    MTDocumentObjectType objectType = [[documentObject type] integerValue];
+
+    BOOL deleteAction = action == @selector(delete:);
+    BOOL editAction = action == @selector(edit:);
+    BOOL formatAction = action == @selector(format:);
+    
+    switch (objectType) {
+
+        case MTDocumentObjectTypeLabelDynamic: {
+            result = deleteAction || editAction || formatAction;
+            break;
+        }
+        
+        case MTDocumentObjectTypeLabelStatic: {
+            result = deleteAction || editAction || formatAction;
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+            result = deleteAction || editAction || formatAction;
+            break;
+        }
+            
+        // FIXME: Add ability to edit image fields.  84848422
+
+        case MTDocumentObjectTypeImage: {
+            result = deleteAction || /*editAction ||*/ formatAction;
+            break;
+        }
+        case MTDocumentObjectTypeWhtiespace: {
+            result = deleteAction || formatAction;
+            break;
+        }
+        case MTDocumentObjectTypeBarcode: {
+            result = deleteAction || editAction || formatAction;
+            break;
+        }
+        default:
+            break;
     }
+
     return result;
 }
 

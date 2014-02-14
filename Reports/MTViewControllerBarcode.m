@@ -13,7 +13,13 @@
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMaxicodeIso16023.h"
 
+NSString * const MTIdentifierSegueDocumentObjectEditBarcode = @"MTIdentifierSegueDocumentObjectEditBarcode";
+NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
+
+NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
+
 @interface MTViewControllerBarcode ()
+
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @property (nonatomic, assign) BOOL editModeBarcodeType;
@@ -90,6 +96,7 @@
     }
     NSString *asciiArtVertConstraint = @"V:|-(==0.0000)-[topView(==%@)]-(==0.0000)-[bottomView]-(==0.0000)-|";
     NSString *asciiArtVert = [NSString stringWithFormat: asciiArtVertConstraint, barcodeViewerHeight];
+    NSLog(@"%@", asciiArtVert);
     NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(topView, bottomView);
     NSArray *constraintsVert = [NSLayoutConstraint constraintsWithVisualFormat:asciiArtVert
                                                                              options:0
@@ -152,6 +159,13 @@
 - (void)updateBarcode {
     [[self barcode] setInput:[self barcodeInput]];
     [[self previewViewController] update];
+
+    if ([self delegate] != nil) {
+        [[self delegate] didUpdateBarcode:[self barcode]
+                             withFieldOne:[self queryField1]
+                              andFieldTwo:[self queryField2]];
+    }
+    
 }
 
 - (void)didSetField1:(RptqQueryField *)field {
@@ -175,6 +189,18 @@
 
 - (RptqQueryField *)barcodeQueryField2 {
     return [[[self queryField2] retain] autorelease];
+}
+
+- (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject {
+    MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject] retain];
+    
+    [self setBarcode:barcode];
+    RptqQueryField *field1 = [barcodeDocumentObject referencesField1];
+    RptqQueryField *field2 = [barcodeDocumentObject referencesField2];
+    [self setQueryField1:field1];
+    [self setQueryField2:field2];
+    [self setEditmode:YES];
+
 }
 
 #pragma mark - MTViewControllerBarcodeOptionsDelegate
@@ -378,5 +404,9 @@
         [ovc release];
     }
 }
+
+//- (IBAction)save:(id)sender {
+
+//}
 
 @end

@@ -5444,7 +5444,7 @@
         <!--View Controller Barcode - MAD Barcodes-->
         <scene sceneID="pPS-1c-7aw">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="Dt2-Py-qG0" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MTDocumentObjectNewBarcodeViewControllerIdentifier" extendedLayoutIncludesOpaqueBars="YES" id="Dt2-Py-qG0" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ch7-dd-kES"/>
                         <viewControllerLayoutGuide type="bottom" id="iIi-1Y-Zru"/>
@@ -5458,13 +5458,13 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="z1C-6V-gAr"/>
+                                    <constraint firstAttribute="height" constant="200" placeholder="YES" id="z1C-6V-gAr"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="04X-WT-Sri" kind="embed" identifier="MTIdentifierSegueBarcodePreview" id="zOQ-cM-ZbQ"/>
                                 </connections>
                             </containerView>
-                            <containerView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lhW-Ku-pv0">
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lhW-Ku-pv0">
                                 <rect key="frame" x="0.0" y="200" width="320" height="304"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -5476,11 +5476,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="SQu-hU-gH7" firstAttribute="top" secondItem="Hea-BC-LBd" secondAttribute="top" id="3dS-P6-XHg"/>
-                            <constraint firstItem="ch7-dd-kES" firstAttribute="top" secondItem="SQu-hU-gH7" secondAttribute="bottom" constant="-200" id="JFg-lx-cU2"/>
+                            <constraint firstItem="ch7-dd-kES" firstAttribute="top" secondItem="SQu-hU-gH7" secondAttribute="bottom" constant="-200" placeholder="YES" id="JFg-lx-cU2"/>
                             <constraint firstItem="lhW-Ku-pv0" firstAttribute="leading" secondItem="Hea-BC-LBd" secondAttribute="leading" id="Qim-vE-EhF"/>
                             <constraint firstAttribute="trailing" secondItem="lhW-Ku-pv0" secondAttribute="trailing" id="T0t-sX-0yu"/>
                             <constraint firstItem="lhW-Ku-pv0" firstAttribute="top" secondItem="SQu-hU-gH7" secondAttribute="bottom" id="Tsq-8c-mc6"/>
                             <constraint firstItem="SQu-hU-gH7" firstAttribute="leading" secondItem="Hea-BC-LBd" secondAttribute="leading" id="UYY-RA-KhD"/>
+                            <constraint firstAttribute="bottom" secondItem="lhW-Ku-pv0" secondAttribute="bottom" id="qZg-Es-Y7x"/>
                             <constraint firstAttribute="trailing" secondItem="SQu-hU-gH7" secondAttribute="trailing" id="sZp-zL-SAi"/>
                         </constraints>
                     </view>
@@ -11539,11 +11540,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="VR5-fd-wm2"/>
         <segue reference="tIb-WS-gen"/>
-        <segue reference="pCi-yT-77G"/>
-        <segue reference="PPx-4T-brk"/>
-        <segue reference="kPX-hH-DKi"/>
         <segue reference="pfP-rZ-fVf"/>
+        <segue reference="kPX-hH-DKi"/>
+        <segue reference="PPx-4T-brk"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

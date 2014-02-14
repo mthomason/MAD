@@ -19,16 +19,20 @@ NSString * const MTSegueAggregateFunctionMinimum    = @"MTSegueAggregateFunction
 NSString * const MTSegueAggregateFunctionSum        = @"MTSegueAggregateFunctionSum";
 NSString * const MTSegueAggregateGroupTypeSave      = @"MTSegueAggregateGroupTypeSave";
 NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSave";
-
+NSString * const MTIdentifierSegueDocumentObjectEditAggregate = @"MTIdentifierSegueDocumentObjectEditAggregate";
 NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
+NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
 
 @interface MTDocumentObjectNewAggregateViewController ()
+
+@property(nonatomic, retain) RptqDocumentObjectAggregate *aggregateDocumentObject;
 
 @end
 
 @implementation MTDocumentObjectNewAggregateViewController
 
 - (void)dealloc {
+    [_fieldObject release];
     [_fieldObjectId release];
     [_tableViewCellAggrageFunction release];
     [_tableViewCellAggregateInput release];
@@ -42,15 +46,24 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     [self updateFunctionType];
     [self updateGroupType];
     
+    if ([self delegate]) {
+
+        NSNumber *groupNumber = @([self groupTypeSectionNumber]);
+        [[self delegate] didUpdateggregateFunctionWithType:[self aggregateFunctionType]
+                                                 inputType:MTAggregateFunctionInputTypeField
+                                               inputObject:[self fieldObject]
+                                                 groupType:[self aggregateGroupByType]
+                                               groupNumber:groupNumber];
+    }
+    
 }
 
 - (void)updateField {
 
-    NSManagedObjectContext *objectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    RptqQueryField *queryField = (RptqQueryField *)[objectContext objectWithID:[self fieldObjectId]];
     NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
-    NSString *detailtext = [NSString stringWithFormat:formatString, [queryField display]];
+    NSString *detailtext = [NSString stringWithFormat:formatString, [[self fieldObject] display]];
     [[[self tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+    //[self updateDisplay];
 
 }
 
@@ -59,6 +72,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
     NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:[self aggregateFunctionType]];
     NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
     [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+    //[self updateDisplay];
 
 }
 
@@ -91,6 +105,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
             [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
             break;
     }
+    //[self updateDisplay];
+
 }
 
 - (IBAction)unwindToNewAggregateFunction:(UIStoryboardSegue *)action {
@@ -165,6 +181,7 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         
         MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
         RptqQueryField *queryField = [dynamicFieldController queryField];
+        [self setFieldObject:queryField];
         [self setFieldObjectId: [queryField objectID]];
         
         NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
@@ -179,6 +196,8 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
         NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
         [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
     }
+    
+    [self updateDisplay];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -209,6 +228,19 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject {
+    
+    [self setAggregateFunctionType:[[aggregateDocumentObject function] integerValue]];
+    [self setAggregateGroupByType:[[aggregateDocumentObject groupType] integerValue]];
+    [self setGroupTypeSectionNumber:[[aggregateDocumentObject groupNumber] integerValue]];
+    [self setFieldObjectId:[[aggregateDocumentObject aggregateField] objectID]];
+    [self setFieldObject:[aggregateDocumentObject aggregateField]];
+    [self setEditmode:YES];
+
+    [self setAggregateDocumentObject:aggregateDocumentObject];
+
 }
 
 #pragma mark - View lifecycle
