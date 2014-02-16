@@ -60,7 +60,7 @@ const NSInteger currentMajorVersion = 2;
         self.installChinook = NO;
     }
     
-    if ([AppDelegate isMadDesigner]) {
+    if ([MTApplicaitonInstance isMadDesigner]) {
         NSNumber *samplesInstalled = [standardUserDefault objectForKey:MADUpgradeInstalledSamples];
         if (samplesInstalled == nil) {
             self.installSamples = YES;

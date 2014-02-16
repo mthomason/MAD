@@ -127,7 +127,7 @@ typedef void(^MTBlockResultVoid)(void);
         
         [self setTableDisplayCounter:0];
 
-        UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+        UIStoryboard *sb = [[MTApplicaitonInstance storyboard] retain];
         [self setStoryboardDefault:sb];
         [sb release];
     }
@@ -1326,7 +1326,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (MTQueryBuilderAdvancedSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
     
-    UIStoryboard *sb = [[UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil] retain];
+    UIStoryboard *sb = [[MTApplicaitonInstance storyboard] retain];
     MTQueryBuilderAdvancedSchemaViewController *viewController = [[sb instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier] retain];
     [viewController setDelegate:self];
     [viewController setTableObjectId:[table objectID]];

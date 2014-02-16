@@ -130,7 +130,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }];
             };
         }];
-        
     });
 }
 
@@ -145,14 +144,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [self updateFileList:self];
     
-    if ([AppDelegate isMadViewer] && [UIDevice isPad]) {
+    if ([MTApplicaitonInstance isMadViewer] && [UIDevice isPad]) {
 
-    } else if ([AppDelegate isMadViewer] && ![UIDevice isPad]) {
+    } else if ([MTApplicaitonInstance isMadViewer] && ![UIDevice isPad]) {
     
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
-    if ([AppDelegate isMadViewer]) {
+    if ([MTApplicaitonInstance isMadViewer]) {
         [self setReportViewer:nil];
     }
 
@@ -333,10 +332,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 
     NSAttributedString *attributedString = nil;
-    if ([AppDelegate isMadDesigner]) {
-        attributedString = [AppDelegate attributedStringMadDesigner];
-    } else if ([AppDelegate isMadViewer]) {
-        attributedString = [AppDelegate attributedStringMadViewer];
+    if ([MTApplicaitonInstance isMadDesigner]) {
+        attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadDesigner];
+    } else if ([MTApplicaitonInstance isMadViewer]) {
+        attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadViewer];
     }
     NSAssert(attributedString != nil, @"Navigation title is not set.");
     [labelMadDesigner setAttributedText:attributedString];
@@ -514,7 +513,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         if ([UIDevice isPad]) {
             if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
-                if ([AppDelegate isMadViewer]) {
+                if ([MTApplicaitonInstance isMadViewer]) {
                     [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
                 } else {
                     [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 480.0000f)];
@@ -700,7 +699,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     __block MTQueryBuilderAdvancedViewController *advanced = nil;
     __block MTQueryBuilderViewController *standard = nil;
 
-    if ([AppDelegate isMadDesigner]) {
+    if ([MTApplicaitonInstance isMadDesigner]) {
         UIViewController *childController = [contentController retain];
         if ([contentController isKindOfClass:[UINavigationController class]]) {
             UINavigationController *childNavigationController = (UINavigationController *)contentController;
@@ -737,7 +736,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
         }
         [childController release];
-    } else if ([AppDelegate isMadViewer]) {
+    } else if ([MTApplicaitonInstance isMadViewer]) {
         __block __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
         
         [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {

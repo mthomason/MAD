@@ -25,7 +25,7 @@
     static BOOL isMadDesigner;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        isMadDesigner = [[AppDelegate bundleId] isEqualToString:MTBundleIdDesigner];
+        isMadDesigner = [[MTApplicaitonInstance bundleId] isEqualToString:MTBundleIdDesigner];
     });
     return isMadDesigner;
 }
@@ -34,7 +34,7 @@
     static BOOL isMadViewer;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        isMadViewer = [[AppDelegate bundleId] isEqualToString:MTBundleIdViewer];
+        isMadViewer = [[MTApplicaitonInstance bundleId] isEqualToString:MTBundleIdViewer];
     });
     return isMadViewer;
 }

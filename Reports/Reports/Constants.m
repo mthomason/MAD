@@ -16,9 +16,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 #pragma mark Bundle Ids
 
-NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
-NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
-
 // in your project define those two somewhere as such:
 
 #pragma mark Product Ids
@@ -64,17 +61,6 @@ NSString * const MNSStringInterfaceButtonTitleAbortDesc             = @"Abort Bu
 const CGFloat MTDefaultFingerSizeWidth = 44.0000f;
 const CGFloat MTDefaultFingerSizeHeight = 44.0000f;
 // MARK: Storyboard Identifiers
-
-NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
-NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
-
-NSString * const MTStoryboardReportDesignerLagacy                   = @"MTStoryboardReportDesignerOS6";
-NSString * const MTStoryboardReportDesignerPadLagacy                = @"MTStoryboardReportDesignerPadOS6";
-
-NSString * const MTStoryboardReportViewer                           = @"MTStoryboardReportViewer";
-NSString * const MTStoryboardReportViewerPad                        = @"MTStoryboardReportViewerPad";
-NSString * const MTStoryboardReportViewerLagacy                     = @"MTStoryboardReportViewerOS6";
-NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryboardReportViewerPadOS6";
 
 CGFloat const MNSAnimationDurationShowFromBottom = 0.7000f;
 CGFloat const MNSAnimationDurationShowFromBottomHalf = 0.3500f;

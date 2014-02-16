@@ -591,6 +591,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             displayString = @"";
                                             break;
                                         }
+                                            
                                         case MTDocumentObjectTypeBarcode: {
                                             
                                             RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
@@ -642,6 +643,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             [queryField2 release];
                                             break;
                                         }
+                                            
                                         case MTDocumentObjectTypeLabelDynamic: {
                                             if (rowData != nil) {
                                                 RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
@@ -721,12 +723,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                         CGContextRestoreGState(ctx);
                                         
                                     } else {
-                                        /*if ([drawingObject isKindOfClass:[MTBarcode class]]) {
-                                            MTBarcode *d = (MTBarcode *)drawingObject;
-                                            [d drawInRect:elementCanvasRect];
-                                        } else {
-                                            [drawingObject drawInRect:elementCanvasRect];
-                                        }*/
                                         [drawingObject drawInRect:elementCanvasRect];
                                     }
                                     

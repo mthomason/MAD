@@ -12,16 +12,7 @@
 #import "UIManagedDocument+FileOperations.h"
 #import "UIApplication+Extras.h"
 #import "evp.h"
-
-
 #import "VerifyStoreReceipt.h"
-
-NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
-NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
-NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.198";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.198";
-NSString * const MTGlobalBundleRev                                  = @"819";
 
 @interface AppDelegate()
 
@@ -73,16 +64,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
     
     NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
-	NSCAssert([[AppDelegate bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
+	NSCAssert([[MTApplicaitonInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
     NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
-    NSCAssert([[AppDelegate bundleId] isEqualToString:MTBundleIdMadDesigner] || [[AppDelegate bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
-    NSCAssert([[AppDelegate bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
+    NSCAssert([[MTApplicaitonInstance bundleId] isEqualToString:MTBundleIdMadDesigner] || [[MTApplicaitonInstance bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
+    NSCAssert([[MTApplicaitonInstance bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
     NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
 
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName: [AppDelegate storyboardName]
-                                                         bundle: nil];
+    UIStoryboard *storyBoard = [MTApplicaitonInstance storyboard];
     [window setTintColor:[UIColor tintColor]];
     [window setRootViewController:[storyBoard instantiateInitialViewController]];
     [window makeKeyAndVisible];
@@ -113,9 +103,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
-}
+- (void)applicationDidBecomeActive:(UIApplication *)application { }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
@@ -143,9 +131,9 @@ const NSInteger MATagNewDocument = 3838;
         /*
         MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] topViewController];
         if (openDocumentViewController != nil) {
-            if ([AppDelegate isMadDesigner]) {
+            if ([MTApplicaitonInstance isMadDesigner]) {
                 [openDocumentViewController performSegueWithIdentifier:MTSegueShowOpenDocument sender:destinationUrl];
-            } else if ([AppDelegate isMadViewer]) {
+            } else if ([MTApplicaitonInstance isMadViewer]) {
                 [openDocumentViewController performSegueWithIdentifier:MTSegueOpenInViewer sender:destinationUrl];
             }
         }
@@ -176,152 +164,6 @@ const NSInteger MATagNewDocument = 3838;
 
 - (void)keyValueStoreDidChange:(NSNotification *)notification {
     //MTLog(@"%@", notification);
-}
-
-#pragma mark - Actions
-
-+ (NSParagraphStyle *)paragraphStyleTitleBar {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
-    return [paragraphStyle autorelease];
-}
-
-+ (NSAttributedString *)attributedStringMadDesigner {
-
-    NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
-    NSString *title = @"MAD Designer";
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
-    NSInteger length = [[attributedStringMadDesigner string] length];
-/*    UIFontDescriptor *helveticaNeueFamily = [UIFontDescriptor fontDescriptorWithFontAttributes: @{
-                                                          UIFontDescriptorNameAttribute: @"HelveticaNeue-Light",
-                                                          UIFontDescriptorSizeAttribute: @(20.0000f),
-                                                          }];
-    NSArray *matches = [helveticaNeueFamily matchingFontDescriptorsWithMandatoryKeys: nil];*/
-    
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
-    NSRange range = NSMakeRange(0, length);
-    UIColor *foregroundColor = [UIColor tintColor2];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
-    
-    //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
-    [paragraphStyle release];
-    return [attributedStringMadDesigner autorelease];
-
-}
-
-+ (NSAttributedString *)attributedStringMadViewer {
-
-    NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Viewer"];
-    NSInteger length = [[attributedStringMadDesigner string] length];
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
-    NSRange range = NSMakeRange(0, length);
-    UIColor *foregroundColor = [UIColor tintColor2];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
-    //[attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
-    [paragraphStyle release];
-    return [attributedStringMadDesigner autorelease];
-
-}
-
-+ (NSAttributedString *)attributedStringMadQuery {
-
-    NSParagraphStyle *paragraphStyle = [[AppDelegate paragraphStyleTitleBar] retain];
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD Query"];
-    NSInteger length = [[attributedStringMadDesigner string] length];
-    UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
-    NSRange range = NSMakeRange(0, length);
-    UIColor *foregroundColor = [UIColor tintColor2];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:NSMakeRange(0, 3)];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:NSMakeRange(4, length - 4)];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
-    [paragraphStyle release];
-    return [attributedStringMadDesigner autorelease];
-
-}
-
-+ (NSString *)storyboardName {
-    static NSString *_storyboardName;
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if ([AppDelegate isMadDesigner]) {
-            if ([UIDevice isModernOS]) {
-                _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-            } else {
-                _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
-            }
-        } else if ([AppDelegate isMadViewer]) {
-            if ([UIDevice isModernOS]) {
-                _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportViewerPad : MTStoryboardReportViewer;
-            } else {
-                _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
-            }
-        }
-    });
-    
-    return _storyboardName;
-}
-
-+ (BOOL)isMadViewer {
-    static BOOL _isMadViewer;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-        _isMadViewer = [bundleId isEqualToString:MTBundleIdMadViewer];
-    });
-    return _isMadViewer;
-}
-
-+ (BOOL)isMadDesigner {
-    static BOOL _isMadDesigner;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-        _isMadDesigner = [bundleId isEqualToString:MTBundleIdMadDesigner];
-    });
-    return _isMadDesigner;
-}
-
-+ (NSString *)bundleId {
-    static NSString *_bundleId;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if ([AppDelegate isMadDesigner]) {
-            _bundleId = MTBundleIdMadDesigner;
-        } else if ([AppDelegate isMadViewer]) {
-            _bundleId = MTBundleIdMadViewer;
-        }
-    });
-    return _bundleId;
-}
-
-+ (NSString *)bundleVersion {
-    static NSString *_bundleVersion;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _bundleVersion = MTGlobalBundleVersion;
-    });
-    return _bundleVersion;
 }
 
 #pragma mark - Document Interaction Controller Delegate

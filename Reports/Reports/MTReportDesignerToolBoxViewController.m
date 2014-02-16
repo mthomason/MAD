@@ -71,7 +71,7 @@
 }
 
 - (void)initialize {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+    UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
     
     MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
@@ -122,7 +122,7 @@
 
 - (IBAction)valueChanged:(id)sender {
     [sender setEnabled:NO];
-    UIStoryboard *sbFontTableView = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+    UIStoryboard *sbFontTableView = [MTApplicaitonInstance storyboard];
 
     id newViewController = nil;
 

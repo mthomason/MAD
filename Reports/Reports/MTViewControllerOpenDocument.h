@@ -39,13 +39,13 @@ extern NSString * const MTSegueShowOpenDocument;
         MTViewControllerAsyncProtocol>
 
 @property (nonatomic, assign) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
+@property (nonatomic, retain, readonly) UIPopoverController *aboutPopoverController;
 
 - (IBAction)updateFileList:(id)sender;
 
 - (IBAction)add:(id)sender;
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
-@property (nonatomic, retain, readonly) UIPopoverController *aboutPopoverController;
 
 @end
 

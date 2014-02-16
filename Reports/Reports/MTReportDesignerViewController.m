@@ -9,6 +9,7 @@
 #import "MTReportDesignerViewController.h"
 #import "DesignerSectionLabel.h"
 #import "MTViewControllerBarcode.h"
+#import "MTApplicaitonInstance.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
@@ -41,12 +42,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, assign) CGFloat zoomScaleRestore;
 @property (nonatomic, assign) CGRect boundsOnDisappear;
-@property (nonatomic, assign) BOOL shownAndHidden;
+@property (nonatomic, assign) BOOL shownAndHidden;      //True if it's the second time this view is shown
 
-@property (nonatomic, retain) NSArray *viewDidAppearDesignerScrollViewConstraints;
-@property (nonatomic, retain) NSArray *viewDidAppearDesignerContentViewConstraints;
-
-@property (nonatomic, retain) NSArray *rulerConstraints;
+@property (nonatomic, retain) NSArray *viewDidAppearDesignerScrollViewConstraints;  //These are removed on disapear
+@property (nonatomic, retain) NSArray *viewDidAppearDesignerContentViewConstraints; //These are removed on disapear
 
 @property (nonatomic, retain) MTReportDesignerToolBoxViewController *viewControllerToolbox;
 
@@ -59,7 +58,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) UIPopoverController *popoverControllerInformation;
 @property (nonatomic, retain) UIPopoverController *popoverControllerObjectSelector;
 @property (nonatomic, retain) UIPopoverController *popoverControllerSectionSettings;
-
 @property (nonatomic, retain) UIPopoverController *popoverControllerEditBarcode;
 @property (nonatomic, retain) UIPopoverController *popoverControllerEditDataLabel;
 @property (nonatomic, retain) UIPopoverController *popoverControllerEditAggregate;
@@ -80,8 +78,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) UIView *toolboxBackgroundView; 
 @property (nonatomic, retain) UIScrollView *toolboxScrollView;
 
-@property (nonatomic, retain) NSArray *toolboxToolbarItemsPrimary;
-@property (nonatomic, retain) NSArray *toolboxToolbarItemsFontChooser;
 @property (nonatomic, retain) NSArray *layoutConstraintsToolboxVisiable;
 @property (nonatomic, retain) NSArray *layoutConstraintsToolboxHidden;
 @property (nonatomic, retain) NSArray *toolbarTopItems;
@@ -103,8 +99,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, retain) NSMutableSet *selectedObjectIds;
 
 @property (nonatomic, retain) NSMutableDictionary *layoutConstraintsReportSectionHeight;
-
-@property (nonatomic, retain) NSMutableArray *widthConstraints;
 
 @property (nonatomic, retain) MTDocumentSectionView *reportFooterView;
 
@@ -155,7 +149,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_alertViewEdit release];
     [_sectionViewsArray release];
     [_sectionControlViewsArray release];
-    [_rulerConstraints release];
     [_viewDidAppearDesignerScrollViewConstraints release];
     [_viewDidAppearDesignerContentViewConstraints release];
     [_rulerView release];
@@ -176,8 +169,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_layoutConstraintsToolboxVisiable release];
     [_toolboxBackgroundView release];
     [_toolboxScrollView release];
-    [_toolboxToolbarItemsFontChooser release];
-    [_toolboxToolbarItemsPrimary release];
     [_toolboxToolbar release];
     [_sectionControlViews release];
     [_sectionBackgroundViews release];
@@ -194,7 +185,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [_layoutConstraintDesignerContentViewHeight release];
     [_toolbarBottomHeightConstraint release];
     [_collectionViewReuseIdentifiers release];
-    [_widthConstraints release];
     [super dealloc];
 }
 
@@ -454,7 +444,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    NSAttributedString *attributedString = [AppDelegate attributedStringMadDesigner];
+    NSAttributedString *attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadDesigner];
     [labelMadDesigner setAttributedText:attributedString];
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
@@ -490,7 +480,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSArray *constraints = @[lc1, lc2, lc3];
     [[self view] addConstraints:constraints];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+    UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
     
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [[storyboard instantiateViewControllerWithIdentifier:@"MTReportDesignerToolBoxViewControllerIdentifier"] retain];
     [viewControllerToolbox setDelegate:self];
@@ -530,10 +520,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([UIDevice isPad] == NO) {
         
         NSLayoutConstraint *layoutConstraintToolboxHeight = [NSLayoutConstraint constraintWithItem: [self toolboxView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view] attribute: NSLayoutAttributeHeight multiplier: 0.5000f constant: 0.0000f];
-        //NSLayoutConstraint *c1c = [NSLayoutConstraint constraintWithItem: [self view]               attribute: NSLayoutAttributeTop    relatedBy: NSLayoutRelationEqual toItem: [self designerScrollView] attribute: NSLayoutAttributeTop    multiplier: 1.0000f constant: 0.0000f];
-        //NSLayoutConstraint *c2c = [NSLayoutConstraint constraintWithItem: [self designerScrollView] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self view]      attribute: NSLayoutAttributeHeight    multiplier: 1.0000f constant: 0.0000f];
-        
-        //NSLayoutConstraint *layoutConstraintToolbarBottomHeight = [NSLayoutConstraint constraintWithItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight relatedBy: NSLayoutRelationEqual toItem: [self toolbarBottom] attribute: NSLayoutAttributeHeight multiplier: 0.0000f constant: 0.0000f];
         NSArray *layoutConstraintsToolboxVisiable = @[layoutConstraintToolboxHeight];
         [self setLayoutConstraintsToolboxVisiable:layoutConstraintsToolboxVisiable];
         
@@ -650,11 +636,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:[self rulerView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeRight          multiplier: 1.0000f constant: -MTReportDesignerBorderPadding];
     
     NSArray *rulerConstraints = @[constraint1, constraint2, constraint3, constraint4];
-    [self setRulerConstraints:rulerConstraints];
-
-    [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:[self rulerConstraints]];
-    [[self designerScrollView] addConstraints:[self rulerConstraints]];
-
+    [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:rulerConstraints];
+    [[self designerScrollView] addConstraints:rulerConstraints];
     
     CGFloat sectionHeights = CGSizeZero.height + MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     NSMutableArray *reportSectionKeyTracker = [[NSMutableArray alloc] init];
@@ -668,8 +651,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             
             sectionHeights += MTReportDesignerBorderPaddingVertical;
-            
-            //[lastCollectionView  release];  //Should be nil on first pass.
             
             // MARK: Create collection view for report document section.
             
@@ -732,14 +713,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             // MARK: Setup vert auto layout
             NSString *collectionViewKey = [reportSection sectionKey];
             
-            if ([UIDevice isLagacyOS]) {
-                CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-                [[collectionView layer] setBorderColor: shadowColor];
-                [[collectionView layer] setBorderWidth: 1.0000f];
-            } else {
-                [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
-                [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
-            }
+            [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+            [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
             
             [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
             
@@ -750,29 +725,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             id constraintItem =  sectionCounter == 0 ? [self rulerView] : /*lastCollectionView;*/ [[self sectionViews] objectForKey:lastKey];
             
             [[self designerContentView] addSubview:collectionView];
-            
-            /*
-            if ([UIDevice isModernOS]) {
-                UIInterpolatingMotionEffect *xAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-                UIInterpolatingMotionEffect *yAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-                
-                NSNumber *maximumRelativeValue = @(10.0000f);
-                NSNumber *minimumRelativeValue = @(-10.0000f);
-                
-                [xAxis setMaximumRelativeValue:maximumRelativeValue];
-                [xAxis setMinimumRelativeValue:minimumRelativeValue];
-                [yAxis setMaximumRelativeValue:maximumRelativeValue];
-                [yAxis setMinimumRelativeValue:minimumRelativeValue];
-                
-                UIMotionEffectGroup *motionGroup = [[UIMotionEffectGroup alloc] init];
-                NSArray *motionEffects = @[xAxis, yAxis];
-                [motionGroup setMotionEffects:motionEffects];
-                [sectionControlView addMotionEffect:motionGroup];
-                
-                [motionGroup release];
-                [yAxis release];
-                [xAxis release];
-            } */
             
             [[self designerContentView] addSubview:sectionControlView];
             
@@ -824,10 +776,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [reportSectionKeyTracker release];
     
     sectionHeights += MTReportDesignerBorderPaddingVertical;
-    
-    //[lastCollectionView release];
-    
-    //[viewRuler release];
     
     for (NSLayoutConstraint *layoutConstraint in [[self designerContentView] constraints]) {
         if ([layoutConstraint firstAttribute] ==  NSLayoutAttributeHeight &&
@@ -1076,54 +1024,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [aggregateViewController release];
         
     }
-}
-
-/*
-- (id)viewControllerForSegue:(UIStoryboardSegue *)segue toDocumentObjectBarcode:(id)sender {
-    
-    MTViewControllerBarcode *barcodeViewController;
-    
-    if (segue != nil) {
-        NSAssert([[segue identifier] isEqualToString:MTIdentifierSegueDocumentObjectEditBarcode], @"");
-        barcodeViewController = [[segue destinationViewController] retain];
-    } else {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-        barcodeViewController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewBarcodeViewControllerIdentifier] retain] ;
-    }
-
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    NSManagedObjectID *objectId = [self objectIdEditBarcode];
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
-    RptqDocumentObjectBarcode *barcodeObject = [[documentObject isBarcode] retain];
-    [barcodeViewController setBarcodeToEdit: barcodeObject];
-    [barcodeObject release];
-
-    return [barcodeViewController autorelease];
-}
-*/
-
-- (id)viewControllerForSegue:(UIStoryboardSegue *)segue toDocumentObjectAggregate:(id)sender {
-    MTDocumentObjectNewAggregateViewController *aggregateViewController;
-    if (segue != nil) {
-        NSAssert([[segue identifier] isEqualToString:MTIdentifierSegueDocumentObjectEditAggregate], @"");
-        aggregateViewController = [[segue destinationViewController] retain];
-    } else {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
-        aggregateViewController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateViewControllerIdentifier] retain] ;
-    }
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
-    RptqDocumentObject *documentObject = [(RptqDocumentObject *)[managedObjectContext objectWithID:objectId] retain];
-    RptqDocumentObjectAggregate *aggregateObject =  [[documentObject isAggregate] retain];
-    
-    [aggregateViewController setAggregateObjectToEdit:aggregateObject];
-    
-    [aggregateObject release];
-    [documentObject release];
-    
-    return [aggregateViewController autorelease];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -1567,7 +1467,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
         [self removeBorderFromView: elementView];
         [elementView setDisplaySelected:NO];
-        //[[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
         if ([UIDevice isPad]) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
@@ -2194,7 +2093,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                         if (viewToEdit != nil) {
                             
-                            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                            UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
                             
                             UINavigationController *navigationController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier] retain];
                             MTDocumentObjectNewAggregateViewController *aggregateViewController = [[[navigationController viewControllers] firstObject] retain];
@@ -2254,7 +2153,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         
                         if (viewToEdit != nil) {
                             
-                            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                            UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
                             MTViewControllerBarcode *barcodeViewController = [[storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier] retain];
                             [barcodeViewController setDelegate:self];
                             
@@ -2314,7 +2213,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         
                         if (viewToEdit != nil) {
                             
-                            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:[AppDelegate storyboardName] bundle:nil];
+                            UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
                             MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [[storyboard instantiateViewControllerWithIdentifier: @"UITableViewControllerChooseFieldDataObject"] retain];
                             
                             [chooseFieldViewController setDelegate:self];

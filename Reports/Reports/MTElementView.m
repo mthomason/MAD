@@ -13,6 +13,7 @@
 #import "UIView+NSObjectIdTag.h"
 #import "RptqDocumentObject+Extras.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentObjectImage+Extras.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "Constants.h"
 #import "MTFont.h"
@@ -138,6 +139,7 @@
 
     for (id updatedObject in updatedObjects) {
         if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
+            NSLog(@"Object id:\n%@\n%@", [self objectIdTag], [updatedObject objectID]);
             if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
                 [self updateDisplayLabel];
                 break;
@@ -161,6 +163,15 @@
             if ([[self objectIdTag] isEqual:[[updatedObject parentObjectLabelDataField] objectID]]) {
                 [self updateDisplayLabel];
                 break;
+            }
+        } else if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
+            RptqDocumentObject *obj = updatedObject;
+            RptqDocumentObjectImage *objImage = [obj isImage];
+            if (objImage) {
+                if ([[self objectIdTag] isEqual:[objImage objectID]]) {
+                    [self updateDisplayLabel];
+                    break;
+                }
             }
         }
     }
@@ -328,15 +339,15 @@
 
 - (void)drawRect:(CGRect)rect {
 
+    CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
+    CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
     if ([self displayImage]) {
-        [[self displayImage] drawInRect:rect];
+        [[self displayImage] drawInRect:drawingBounds];
     } else if ([self displayBarcode]) {
         [[self displayBarcode] initSampleData];
         [[self displayBarcode] setForgroundColor:[UIColor lightGrayColor]];
-        [[self displayBarcode] drawInRect:rect];
+        [[self displayBarcode] drawInRect:drawingBounds];
     } else {
-        CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
-        CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
         [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
     }
     //NSLog(@"drawRect: %@", [self displayStringAttributed]);

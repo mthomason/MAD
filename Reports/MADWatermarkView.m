@@ -71,7 +71,7 @@
                                   };
     
     NSString *getMadS = @"MAD";
-    NSString *getMadD = [AppDelegate isMadDesigner] ? @"DESIGNER" : @"";
+    NSString *getMadD = [MTApplicaitonInstance isMadDesigner] ? @"DESIGNER" : @"";
     
     NSAttributedString *getMad = [[NSAttributedString alloc] initWithString: getMadS attributes:attributes];
     NSAttributedString *getDesigner = [[NSAttributedString alloc] initWithString: getMadD attributes:attributes2];

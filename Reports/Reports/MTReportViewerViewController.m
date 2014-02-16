@@ -83,7 +83,7 @@
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
-    NSAttributedString *attributedString = [AppDelegate attributedStringMadViewer];
+    NSAttributedString *attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadViewer];
     [labelMadDesigner setAttributedText:attributedString];
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
@@ -131,7 +131,7 @@
         [[self asyncDelegate] displayContentController:viewController];
     } else {
         //__block MTReportViewerController *reportViewer = self;
-        if ([AppDelegate isMadDesigner]) {
+        if ([MTApplicaitonInstance isMadDesigner]) {
             [self reload:self];
         }
     }
