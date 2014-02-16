@@ -24,7 +24,7 @@
     if (self) {
         
         [self setBarcodeType:[MTBarcodeUspsIntelligentMail type]];
-        [self setName: @"USPS Intelligent Mail"];
+        [self setName: @"USPS OneCode (Intelligent Mail)"];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: NO];
         
@@ -34,6 +34,11 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeOneCode;
+}
+
+- (void)initSampleData {
+    [self setInput:              @"01234567094987654321-01234567891"];
+    [self setPrimaryData:        @""];
 }
 
 @end

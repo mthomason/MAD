@@ -58,4 +58,9 @@
     return [self option3];
 }
 
+- (void)initSampleData {
+    [self setInput:              [self name]];
+    [self setPrimaryData:        @""];
+}
+
 @end

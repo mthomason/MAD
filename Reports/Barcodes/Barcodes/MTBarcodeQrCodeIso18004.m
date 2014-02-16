@@ -73,4 +73,9 @@
     return [self option1];
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1Ei3RbGUevDJBVoM93g5ffrSE5snfFvfFS"];
+    [self setPrimaryData:        @""];
+}
+
 @end

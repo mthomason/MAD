@@ -36,4 +36,9 @@
     return MTBarcodeTypeUpce;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1123456"];
+    [self setPrimaryData:        @""];
+}
+
 @end

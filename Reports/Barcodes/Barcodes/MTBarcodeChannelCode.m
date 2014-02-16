@@ -47,4 +47,10 @@
     return [self option2];
 }
 
+- (void)initSampleData {
+    [self setNumberOfChannels:   4];
+    [self setInput:              @"257"];
+    [self setPrimaryData:        @""];
+}
+
 @end

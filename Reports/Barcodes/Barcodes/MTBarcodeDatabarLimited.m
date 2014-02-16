@@ -36,4 +36,9 @@
     return MTBarcodeTypeRssLtd;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1110111110111"];
+    [self setPrimaryData:        @""];
+}
+
 @end

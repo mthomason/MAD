@@ -70,4 +70,9 @@
     return MTBarcodeTypeHibc39;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"*CODE39*"];
+    [self setPrimaryData:        @""];
+}
+
 @end

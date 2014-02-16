@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C174CDB18B0C1C9007A88B3 /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDA18B0C1C9007A88B3 /* UIColor+Expanded.m */; };
 		4C2D4A961827A8DB005A46C2 /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C5CB71E189D1A1700BB5AF8 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB71C189D1A1700BB5AF8 /* libpng.a */; };
 		4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC7182C1CD400160E01 /* MTBarcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -136,6 +137,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C174CCC18B04DF5007A88B3 /* MTBarcodeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeProtocol.h; sourceTree = "<group>"; };
+		4C174CD918B0C1C9007A88B3 /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Expanded.h"; path = "/Users/mthomason/Desktop/Reports/Reports/Reports/../../3rdPartyProjects/Color/UIColor+Expanded.h"; sourceTree = "<absolute>"; };
+		4C174CDA18B0C1C9007A88B3 /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Expanded.m"; path = "/Users/mthomason/Desktop/Reports/Reports/Reports/../../3rdPartyProjects/Color/UIColor+Expanded.m"; sourceTree = "<absolute>"; };
 		4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeView.h; sourceTree = "<group>"; };
 		4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeView.m; sourceTree = "<group>"; };
 		4C5CB716189D1A1700BB5AF8 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
@@ -555,6 +559,9 @@
 		4CDA76D11825E8D400E462F6 /* Barcodes */ = {
 			isa = PBXGroup;
 			children = (
+				4C174CD918B0C1C9007A88B3 /* UIColor+Expanded.h */,
+				4C174CDA18B0C1C9007A88B3 /* UIColor+Expanded.m */,
+				4C174CCC18B04DF5007A88B3 /* MTBarcodeProtocol.h */,
 				4C95CAC6182C1CD400160E01 /* MTBarcode.h */,
 				4C95CAC7182C1CD400160E01 /* MTBarcode.m */,
 				4C95CBD618312D6300160E01 /* Subclasses */,
@@ -766,6 +773,7 @@
 				4CDA773A1825EA1F00E462F6 /* code1.c in Sources */,
 				4C95CB45183008A100160E01 /* MTBarcodeCode2of5Interleaved.m in Sources */,
 				4CDA77511825EA1F00E462F6 /* render.c in Sources */,
+				4C174CDB18B0C1C9007A88B3 /* UIColor+Expanded.m in Sources */,
 				4C95CB48183008B400160E01 /* MTBarcodeCode2of5Matrix.m in Sources */,
 				4C95CBB118300B2C00160E01 /* MTBarcodePharmaZentralnummerPzn.m in Sources */,
 				4C95CB9618300A9A00160E01 /* MTBarcodeLogmars.m in Sources */,

@@ -36,4 +36,9 @@
     return MTBarcodeTypePlanet;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1231231231231"];
+    [self setPrimaryData:        @""];
+}
+
 @end

@@ -47,4 +47,10 @@
     [self setOption2: checkDigit];
 }
 
+- (void)initSampleData {
+    [self setOption2:            0];
+    [self setInput:              @"87654321"];
+    [self setPrimaryData:        @""];
+}
+
 @end

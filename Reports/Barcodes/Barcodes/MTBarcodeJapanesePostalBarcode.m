@@ -36,4 +36,9 @@
     return [MTBarcodeJapanesePostalBarcode type];
 }
 
+- (void)initSampleData {
+    [self setInput:              @"Japanese-Postal-Barcode"];
+    [self setPrimaryData:        @""];
+}
+
 @end

@@ -36,4 +36,9 @@
     return MTBarcodeTypeCODABAR;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"9-$:/.+D"];
+    [self setPrimaryData:        @""];
+}
+
 @end

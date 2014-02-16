@@ -36,4 +36,9 @@
     return MTBarcodeTypeKoreaPost;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1234569"];
+    [self setPrimaryData:        @""];
+}
+
 @end

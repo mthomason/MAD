@@ -46,4 +46,9 @@
     [self setOption2:numberOfDataColumns];
 }
 
+- (void)initSampleData {
+    [self setInput:              [self name]];
+    [self setPrimaryData:        @""];
+}
+
 @end

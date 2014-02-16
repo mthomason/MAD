@@ -36,4 +36,9 @@
     return MTBarcodeTypeAzrune;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"314159265359"];
+    [self setPrimaryData:        @""];
+}
+
 @end

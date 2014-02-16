@@ -36,4 +36,9 @@
     return MTBarcodeTypeTelepenNum;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"466X33"];
+    [self setPrimaryData:        @""];
+}
+
 @end

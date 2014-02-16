@@ -48,4 +48,9 @@
     return [self option2] == 1;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"*CODE39*"];
+    [self setPrimaryData:        @""];
+}
+
 @end

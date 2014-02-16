@@ -63,4 +63,9 @@
     return [self primaryData];
 }
 
+- (void)initSampleData {
+    [self setInput:              @"666001433"];
+    [self setPrimaryData:        @"MAD Designer"];
+}
+
 @end

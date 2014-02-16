@@ -9,19 +9,25 @@
 #import "MTBarcode.h"
 
 @interface MTBarcodeCode128Iso15417 : MTBarcode
+
 @end
 
 @interface MTBarcodeCode128SubsetB : MTBarcode
+
 @end
 
 @interface MTBarcodeCode128Ean14 : MTBarcode
+
 @end
 
 @interface MTBarcodeCode128Nve18 : MTBarcode
+
 @end
 
 @interface MTBarcodeCode128Hibc : MTBarcode
+
 @end
 
 @interface MTBarcodeCode128Ean128 : MTBarcode
+
 @end

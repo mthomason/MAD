@@ -36,4 +36,9 @@
     return MTBarcodeTypePharmaTwo;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"64570080"];
+    [self setPrimaryData:        @""];
+}
+
 @end

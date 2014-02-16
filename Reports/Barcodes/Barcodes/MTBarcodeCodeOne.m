@@ -46,4 +46,9 @@
     return [self option2];
 }
 
+- (void)initSampleData {
+    [self setInput:              @"http://www.everydayapps.com/"];
+    [self setPrimaryData:        @""];
+}
+
 @end

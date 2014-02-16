@@ -69,6 +69,8 @@
 #import "MTBarcodeUniversalProductCodeUpce.h"
 #import "MTBarcodeUspsIntelligentMail.h"
 
+#import "UIColor+Expanded.h"
+
 @interface MTBarcode ()
 
 @property (nonatomic, assign) CGFloat rotate;
@@ -83,6 +85,8 @@
 @implementation MTBarcode
 
 - (void)dealloc {
+    [_forgroundColor release];
+    [_backgroundColor release];
     [_name release];
     [_detailsSegueIdentifer release];
     [_primaryData release];
@@ -129,9 +133,6 @@
     self = [super init];
     if (self) {
 
-
-
-        
     }
     return self;
 }
@@ -348,6 +349,8 @@
 }
 
 - (void)commonInit {
+    [self setForgroundColor:[UIColor blackColor]];
+    [self setBackgroundColor:[UIColor whiteColor]];
     [self setShowErrorMessages:YES];
     [self setHumanReadable:YES];
     [self setHeight:50];
@@ -409,6 +412,12 @@
                     break;
             }
         }
+        NSString *forgroundColor = [[self forgroundColor] hexStringValue];
+        NSString *backgroundColor = [[self backgroundColor] hexStringValue];
+        const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
+        const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
+        strcpy(barcode->fgcolour, fgcolor);
+        strcpy(barcode->bgcolour, bgcolor);
         
         barcode->height = [self height];
         barcode->border_width = [self borderWidth];
@@ -690,6 +699,10 @@
 
 + (NSString *)barcodeNameForType:(MTBarcodeType)type {
     return [[MTBarcode names] objectForKey:@(type)];
+}
+
+- (void)initSampleData {
+    
 }
 
 @end

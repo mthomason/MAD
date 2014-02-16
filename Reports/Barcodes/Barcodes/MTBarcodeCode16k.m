@@ -36,4 +36,9 @@
     return MTBarcodeTypeCODE16K;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"Code 16k"];
+    [self setPrimaryData:        @""];
+}
+
 @end

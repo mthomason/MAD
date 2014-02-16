@@ -58,4 +58,9 @@
     return [self option3] == DM_SQUARE;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"Thank you for using MAD Designer. Contact admin@everydayapps.com for your enterprise BI needs."];
+    [self setPrimaryData:        @""];
+}
+
 @end

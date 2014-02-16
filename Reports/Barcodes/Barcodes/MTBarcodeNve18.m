@@ -36,4 +36,9 @@
     return MTBarcodeTypeNve18;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"12345678901234567"];
+    [self setPrimaryData:        @""];
+}
+
 @end

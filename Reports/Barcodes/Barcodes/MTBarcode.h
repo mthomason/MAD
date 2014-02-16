@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "zint.h"
+#import "MTBarcodeProtocol.h"
 
 typedef NS_ENUM(NSUInteger, MTBarcodeSizingMode) {
     MTBarcodeSizingModeAutomaticResizing     = 1,
@@ -123,6 +124,10 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 };
 
 @interface MTBarcode : NSObject
+<MTBarcodeProtocol>
+
+@property (nonatomic, retain, readwrite) UIColor *forgroundColor;
+@property (nonatomic, retain, readwrite) UIColor *backgroundColor;
 
 @property (nonatomic, assign, readonly) MTBarcodeType barcodeType;
 @property (nonatomic, retain, readonly) NSString *name;

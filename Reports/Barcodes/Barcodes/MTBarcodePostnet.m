@@ -36,4 +36,9 @@
     return MTBarcodeTypePostnet;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"45202"];
+    [self setPrimaryData:        @""];
+}
+
 @end

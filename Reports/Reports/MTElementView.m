@@ -12,6 +12,7 @@
 #import "MTResizeHandleView.h"
 #import "UIView+NSObjectIdTag.h"
 #import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "Constants.h"
 #import "MTFont.h"
@@ -43,6 +44,8 @@
 @property (nonatomic, retain) NSAttributedString *displayStringAttributed;
 @property (nonatomic, assign) CGRect drawingRect;
 @property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
+@property (nonatomic, retain) UIImage *displayImage;
+@property (nonatomic, retain) MTBarcode *displayBarcode;
 
 @end
 
@@ -54,6 +57,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:_managedObjectContext];
+    [_displayBarcode release];
+    [_displayImage release];
     [_underlineStyle release];
     [_strikeThroughStyle release];
     [_managedObjectContext release];
@@ -246,6 +251,21 @@
         [self setDisplayText:string];
         [string release];
         
+        [self setDisplayImage:nil];
+        [self setDisplayBarcode:nil];
+        [self setDisplayImage:nil];
+        
+        if ([documentObject getType] == MTDocumentObjectTypeImage) {
+        
+            [self setDisplayImage:[[documentObject isImage] image]];
+        
+        } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
+
+            MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
+            [self setDisplayBarcode:displayBarcode];
+
+        }
+        
         NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
         [self setUnderlineStyle:underlineStyle];
         
@@ -308,10 +328,18 @@
 
 - (void)drawRect:(CGRect)rect {
 
-    CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
-    CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
-    [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
-    
+    if ([self displayImage]) {
+        [[self displayImage] drawInRect:rect];
+    } else if ([self displayBarcode]) {
+        [[self displayBarcode] initSampleData];
+        [[self displayBarcode] setForgroundColor:[UIColor lightGrayColor]];
+        [[self displayBarcode] drawInRect:rect];
+    } else {
+        CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
+        CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
+        [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
+    }
+    //NSLog(@"drawRect: %@", [self displayStringAttributed]);
 }
 
 #pragma mark - Members

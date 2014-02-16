@@ -36,4 +36,9 @@
     return MTBarcodeTypeC25IATA;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"11111111111"];
+    [self setPrimaryData:        @""];
+}
+
 @end

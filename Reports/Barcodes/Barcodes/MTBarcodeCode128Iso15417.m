@@ -36,6 +36,11 @@
     return MTBarcodeTypeCODE128;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"Code 128"];
+    [self setPrimaryData:        @""];
+}
+
 @end
 
 @implementation MTBarcodeCode128SubsetB
@@ -55,6 +60,11 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeCode128b;
+}
+
+- (void)initSampleData {
+    [self setInput:              @"Code 128b"];
+    [self setPrimaryData:        @""];
 }
 
 @end
@@ -78,6 +88,11 @@
     return MTBarcodeTypeEan14;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"9889876543210"];
+    [self setPrimaryData:        @""];
+}
+
 @end
 
 @implementation MTBarcodeCode128Nve18
@@ -97,6 +112,11 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeNve18;
+}
+
+- (void)initSampleData {
+    [self setInput:              @"13666666666666613"];
+    [self setPrimaryData:        @""];
 }
 
 @end
@@ -120,6 +140,11 @@
     return MTBarcodeTypeHibc128;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"27182818"];
+    [self setPrimaryData:        @""];
+}
+
 @end
 
 @implementation MTBarcodeCode128Ean128
@@ -139,6 +164,11 @@
 
 + (MTBarcodeType)type {
     return MTBarcodeTypeEAN128;
+}
+
+- (void)initSampleData {
+    [self setInput:              @"27182818"];
+    [self setPrimaryData:        @""];
 }
 
 @end

@@ -36,4 +36,9 @@
     return MTBarcodeTypePzn;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"123456"];
+    [self setPrimaryData:        @""];
+}
+
 @end

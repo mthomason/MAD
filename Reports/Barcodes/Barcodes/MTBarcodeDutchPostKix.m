@@ -36,4 +36,9 @@
     return MTBarcodeTypeKix;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"DUTCHPOSTKX"];
+    [self setPrimaryData:        @""];
+}
+
 @end

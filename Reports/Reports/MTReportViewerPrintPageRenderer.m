@@ -592,6 +592,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             break;
                                         }
                                         case MTDocumentObjectTypeBarcode: {
+                                            
                                             RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
                                             RptqQueryField *queryField1 = [[barcodeObject referencesField1] retain];
                                             RptqQueryField *queryField2 = [[barcodeObject referencesField2] retain];

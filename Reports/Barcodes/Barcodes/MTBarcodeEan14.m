@@ -36,4 +36,9 @@
     return MTBarcodeTypeEan14;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1111111111111"];
+    [self setPrimaryData:        @""];
+}
+
 @end

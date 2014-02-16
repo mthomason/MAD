@@ -36,4 +36,9 @@
     return MTBarcodeTypeFlat;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"3301"];
+    [self setPrimaryData:        @""];
+}
+
 @end

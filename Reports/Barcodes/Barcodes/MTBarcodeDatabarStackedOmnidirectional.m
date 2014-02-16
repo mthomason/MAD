@@ -36,4 +36,9 @@
     return MTBarcodeTypeRss14StackOmni;
 }
 
+- (void)initSampleData {
+    [self setInput:              @"1111111999999"];
+    [self setPrimaryData:        @""];
+}
+
 @end
