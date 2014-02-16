@@ -2674,7 +2674,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 NSUInteger hash = [[documentObject objectID] hash];
                 [elementView setTag: hash];
                 
-                [cell setTag:hash];
                 [cell setObjectIdTag:[documentObject objectID]];
                 [cell setUserInteractionEnabled:YES];
                 
