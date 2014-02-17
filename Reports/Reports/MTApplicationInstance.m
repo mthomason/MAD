@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 #import "MAReportDocument.h"
@@ -30,13 +30,13 @@ NSString * const MTStoryboardReportViewerPad                        = @"MTStoryb
 NSString * const MTStoryboardReportViewerLagacy                     = @"MTStoryboardReportViewerOS6";
 NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryboardReportViewerPadOS6";
 
-@interface MTApplicaitonInstance ()
+@interface MTApplicationInstance ()
 
 @property (nonatomic, retain) MAReportDocument *document;
 
 @end
 
-@implementation MTApplicaitonInstance
+@implementation MTApplicationInstance
 
 - (void)dealloc {
     [_document release];
@@ -59,8 +59,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 + (NSString *)applicationName {
 
-    NSString *localizedPrefix = [MTApplicaitonInstance applicationNamePrefixPart];
-    NSString *localizedSuffix = [MTApplicaitonInstance isMadDesigner] ?
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
+    NSString *localizedSuffix = [MTApplicationInstance isMadDesigner] ?
                                 NSLocalizedString(@"Designer", @"Designer") :
                                 NSLocalizedString(@"Viewer", @"Viewer");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
@@ -68,19 +68,19 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSString *)madDesigner {
-    NSString *localizedPrefix = [MTApplicaitonInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
 
 + (NSString *)madViewer {
-    NSString *localizedPrefix = [MTApplicaitonInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
     NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
 
 + (NSString *)madQuery {
-    NSString *localizedPrefix = [MTApplicaitonInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
     NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
@@ -127,9 +127,9 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static NSString *_bundleId;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if ([MTApplicaitonInstance isMadDesigner]) {
+        if ([MTApplicationInstance isMadDesigner]) {
             _bundleId = MTBundleIdMadDesigner;
-        } else if ([MTApplicaitonInstance isMadViewer]) {
+        } else if ([MTApplicationInstance isMadViewer]) {
             _bundleId = MTBundleIdMadViewer;
         }
     });
@@ -154,24 +154,24 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner {
-    NSString *title = [MTApplicaitonInstance madDesigner];
-    return [[[MTApplicaitonInstance logoForTitle:title] retain] autorelease];
+    NSString *title = [MTApplicationInstance madDesigner];
+    return [[[MTApplicationInstance logoForTitle:title] retain] autorelease];
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadViewer {
-    NSString *title = [MTApplicaitonInstance madViewer];
-    return [[[MTApplicaitonInstance logoForTitle:title] retain] autorelease];
+    NSString *title = [MTApplicationInstance madViewer];
+    return [[[MTApplicationInstance logoForTitle:title] retain] autorelease];
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadQuery {
-    NSString *title = [MTApplicaitonInstance madQuery];
-    return [[[MTApplicaitonInstance logoForTitle:title] retain] autorelease];
+    NSString *title = [MTApplicationInstance madQuery];
+    return [[[MTApplicationInstance logoForTitle:title] retain] autorelease];
 }
             
 + (NSAttributedString *)logoForTitle:(NSString *)title {
     
     
-    NSParagraphStyle *paragraphStyle = [[MTApplicaitonInstance paragraphStyleTitleBar] retain];
+    NSParagraphStyle *paragraphStyle = [[MTApplicationInstance paragraphStyleTitleBar] retain];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
     
@@ -206,7 +206,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if ([MTApplicaitonInstance isMadDesigner]) {
+        if ([MTApplicationInstance isMadDesigner]) {
             if ([UIDevice isModernOS]) {
                 _storyboardName = [UIDevice isPad] ?
                 MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
@@ -214,7 +214,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 _storyboardName = [UIDevice isPad] ?
                 MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
             }
-        } else if ([MTApplicaitonInstance isMadViewer]) {
+        } else if ([MTApplicationInstance isMadViewer]) {
             if ([UIDevice isModernOS]) {
                 _storyboardName = [UIDevice isPad] ?
                 MTStoryboardReportViewerPad : MTStoryboardReportViewer;
@@ -228,7 +228,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (UIStoryboard *)storyboard {
-    NSString *storyboardName = [MTApplicaitonInstance storyboardName];
+    NSString *storyboardName = [MTApplicationInstance storyboardName];
     UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:storyboardName bundle:nil] retain];
     return [storyboard autorelease];
 }

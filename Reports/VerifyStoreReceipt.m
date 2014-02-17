@@ -30,7 +30,7 @@
 
 #import "VerifyStoreReceipt.h"
 #import "AppDelegate.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 // link with Foundation.framework, Security.framework, libssl and libCrypto (via -lssl -lcrypto in Other Linker Flags)
@@ -569,8 +569,8 @@ BOOL verifyReceiptAtPath(NSString *receiptPath) {
 	// so use hard coded values instead (probably even somehow obfuscated)
     
     BOOL validReceipt = NO;
-	NSString *bundleVersion = [MTApplicaitonInstance bundleVersion];
-	NSString *bundleIdentifier = [MTApplicaitonInstance bundleId];
+	NSString *bundleVersion = [MTApplicationInstance bundleVersion];
+	NSString *bundleIdentifier = [MTApplicationInstance bundleId];
 
 	NSDictionary *receipt = dictionaryWithAppStoreReceipt(receiptPath);
     

@@ -101,13 +101,13 @@
             [[weakViewController activityIndicator2] stopAnimating];
             
             BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
-            if ([MTApplicaitonInstance isMadDesigner]) {
+            if ([MTApplicationInstance isMadDesigner]) {
                 [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneYear] setHidden:!allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setHidden:!allowPurchase];
-            } else if ([MTApplicaitonInstance isMadViewer]) {
+            } else if ([MTApplicationInstance isMadViewer]) {
                 [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowViewerOneMonth] setHidden:!allowPurchase];
@@ -123,13 +123,13 @@
                 [obj setHidden: NO];
             }];
 
-            if ([MTApplicaitonInstance isMadDesigner]) {
+            if ([MTApplicationInstance isMadDesigner]) {
                 [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:NO];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:NO];
                 //[[self buttonBuyNowDesignerOneYear] setHidden:YES];
                 //[[self buttonBuyNowDesignerOneMonth] setHidden:YES];
-            } else if ([MTApplicaitonInstance isMadViewer]) {
+            } else if ([MTApplicationInstance isMadViewer]) {
                 [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                 [[weakViewController buttonBuyNowViewerOneYear] setEnabled:NO];
                 [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:NO];
@@ -141,10 +141,10 @@
             [[weakViewController activityIndicator2] startAnimating];
             
             NSArray *productIds;
-            if ([MTApplicaitonInstance isMadDesigner]) {
+            if ([MTApplicationInstance isMadDesigner]) {
                 productIds = @[MTStoreKitProductIdentifierDesignerSubscriptionMonth1,
                                MTStoreKitProductIdentifierDesignerSubscriptionYear1];
-            } else if ([MTApplicaitonInstance isMadViewer]) {
+            } else if ([MTApplicationInstance isMadViewer]) {
                 productIds = @[MTStoreKitProductIdentifierViewerSubscriptionMonth1,
                                MTStoreKitProductIdentifierViewerSubscriptionYear1];
             } else {
@@ -158,13 +158,13 @@
                 [[weakViewController activityIndicator2] stopAnimating];
                 
                 [weakViewController enableUserInterface];
-                if ([MTApplicaitonInstance isMadDesigner]) {
+                if ([MTApplicationInstance isMadDesigner]) {
                     [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                     [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:success];
                     [[weakViewController buttonBuyNowDesignerOneYear] setHidden:NO];
                     [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:success];
                     [[weakViewController buttonBuyNowDesignerOneMonth] setHidden:NO];
-                } else if ([MTApplicaitonInstance isMadViewer]) {
+                } else if ([MTApplicationInstance isMadViewer]) {
                     [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColor] : [UIColor tintColor]];
                     [[weakViewController buttonBuyNowViewerOneYear] setEnabled:success];
                     [[weakViewController buttonBuyNowViewerOneYear] setHidden:NO];
@@ -224,10 +224,10 @@
     };
     [self setStandardCompletion:completion];
 
-    if ([MTApplicaitonInstance isMadDesigner]) {
+    if ([MTApplicationInstance isMadDesigner]) {
         [[[self buttonBuyNowDesignerOneYear] layer] setCornerRadius:6.6666f];
         [[[self buttonBuyNowDesignerOneMonth] layer] setCornerRadius:6.6666f];
-    } else if ([MTApplicaitonInstance isMadViewer]) {
+    } else if ([MTApplicationInstance isMadViewer]) {
         [[[self buttonBuyNowViewerOneYear] layer] setCornerRadius:6.6666f];
         [[[self buttonBuyNowViewerOneMonth] layer] setCornerRadius:6.6666f];
     }
@@ -236,11 +236,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if ([MTApplicaitonInstance isMadDesigner]) {
+    if ([MTApplicationInstance isMadDesigner]) {
         //[[self viewBuyButtonsBackground] setBackgroundColor:YES ? [UIColor whiteColor] : [UIColor lightGrayColor]];
         [[self buttonBuyNowDesignerOneYear] setEnabled:NO];
         [[self buttonBuyNowDesignerOneMonth] setEnabled:NO];
-    } else if ([MTApplicaitonInstance isMadViewer]) {
+    } else if ([MTApplicationInstance isMadViewer]) {
         //[[self viewBuyButtonsBackground] setBackgroundColor:YES ? [UIColor whiteColor] : [UIColor lightGrayColor]];
         [[self buttonBuyNowViewerOneYear] setEnabled:NO];
         [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
@@ -273,12 +273,12 @@
 }
 
 - (void)disableUserInterface {
-    if ([MTApplicaitonInstance isMadDesigner]) {
+    if ([MTApplicationInstance isMadDesigner]) {
         [[self buttonBuyNowDesignerOneYear] setEnabled:NO];
         [[self buttonBuyNowDesignerOneMonth] setEnabled:NO];
         [[self buttonBuyNowDesignerOneYear] setHidden:YES];
         [[self buttonBuyNowDesignerOneMonth] setHidden:YES];
-    } else if ([MTApplicaitonInstance isMadViewer]) {
+    } else if ([MTApplicationInstance isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setEnabled:NO];
         [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
         [[self buttonBuyNowViewerOneYear] setHidden:YES];
@@ -290,12 +290,12 @@
 }
 
 - (void)enableUserInterface {
-    if ([MTApplicaitonInstance isMadDesigner]) {
+    if ([MTApplicationInstance isMadDesigner]) {
         [[self buttonBuyNowDesignerOneYear] setEnabled:YES];
         [[self buttonBuyNowDesignerOneMonth] setEnabled:YES];
         [[self buttonBuyNowDesignerOneYear] setHidden:NO];
         [[self buttonBuyNowDesignerOneMonth] setHidden:NO];
-    } else if ([MTApplicaitonInstance isMadViewer]) {
+    } else if ([MTApplicationInstance isMadViewer]) {
         [[self buttonBuyNowViewerOneYear] setEnabled:YES];
         [[self buttonBuyNowViewerOneMonth] setEnabled:YES];
         [[self buttonBuyNowViewerOneYear] setHidden:NO];

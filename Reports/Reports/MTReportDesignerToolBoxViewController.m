@@ -75,7 +75,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
+    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
 
     MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
@@ -121,7 +121,7 @@
 
 - (IBAction)valueChanged:(id)sender {
     [sender setEnabled:NO];
-    UIStoryboard *sbFontTableView = [MTApplicaitonInstance storyboard];
+    UIStoryboard *sbFontTableView = [MTApplicationInstance storyboard];
 
     id newViewController = nil;
 
@@ -222,7 +222,7 @@
         shouldPushItem = YES;
         
         
-        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
 
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         RptqDocument *document = [reportDocument activeDocument];

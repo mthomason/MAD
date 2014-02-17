@@ -341,7 +341,7 @@
         NSInteger numberBold = 0, numberItalic = 0, numberStrike = 0, numberUnderline = 0;
         NSInteger numberNotBold = 0, numberNotItalic = 0, numberNotStrike = 0, numberNotUnderline = 0;
         
-        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -653,7 +653,7 @@
     [[self labelFontName] setText:[font name]];
     [[self labelFontName] setAttributedText:[self boldSystemString:[font name] ofSize:[[[self labelFontName] font] pointSize]]];
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -682,7 +682,7 @@
     }
     [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
@@ -711,7 +711,7 @@
     }
     [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -740,7 +740,7 @@
     [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
     
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
@@ -769,7 +769,7 @@
     }
     [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
@@ -787,7 +787,7 @@
 
 - (IBAction)controlValueChanged:(id)sender {
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     

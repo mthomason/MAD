@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTToolboxViewControllerProtocol.h"
 #import "MTFont.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 @class MTReportDesignerFontSettingsViewController;
 

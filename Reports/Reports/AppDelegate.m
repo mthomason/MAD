@@ -21,7 +21,7 @@
 
 @interface AppDelegate()
 
-@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
+@property (nonatomic, retain) MTApplicationInstance *applicationInstance;
 
 @property (nonatomic, retain) UIFontDescriptor *mainFontDescriptor;
 @property (nonatomic, retain) UIFontDescriptor *detailFontDescriptor;
@@ -35,9 +35,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     MTLogStatic(@"%@", exception);
 }
 
-+ (MTApplicaitonInstance *)applicationInstance {
++ (MTApplicationInstance *)applicationInstance {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    MTApplicaitonInstance *result = [[appDelegate applicationInstance] retain];
+    MTApplicationInstance *result = [[appDelegate applicationInstance] retain];
     return [result autorelease];
 }
 
@@ -52,7 +52,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    MTApplicaitonInstance *appInstance = [[MTApplicaitonInstance alloc] init];
+    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
     [self setApplicationInstance:appInstance];
     [appInstance release];
     
@@ -85,15 +85,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     // FIXME: Run these checks on app instance start...
     NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
-	NSCAssert([[MTApplicaitonInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
+	NSCAssert([[MTApplicationInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
     NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
-    NSCAssert([[MTApplicaitonInstance bundleId] isEqualToString:MTBundleIdMadDesigner] || [[MTApplicaitonInstance bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
-    NSCAssert([[MTApplicaitonInstance bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
+    NSCAssert([[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadDesigner] || [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadViewer], @"Bundle ID is incorrect.");
+    NSCAssert([[MTApplicationInstance bundleVersion] isEqualToString:MTGlobalBundleVersion], @"Bundle version is incorrect.");
     NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
 
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIStoryboard *storyBoard = [MTApplicaitonInstance storyboard];
+    UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
     [window setTintColor:[UIColor tintColor]];
     id initViewController = [storyBoard instantiateInitialViewController];
     [window setRootViewController:initViewController];

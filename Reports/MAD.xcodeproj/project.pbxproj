@@ -289,8 +289,8 @@
 		4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
-		4C174CDE18B13760007A88B3 /* MTApplicaitonInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicaitonInstance.m */; };
-		4C174CDF18B13760007A88B3 /* MTApplicaitonInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicaitonInstance.m */; };
+		4C174CDE18B13760007A88B3 /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
+		4C174CDF18B13760007A88B3 /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
 		4C19067D18348BB500116900 /* MTViewControllerBarcodeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC4182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m */; };
 		4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
@@ -1665,8 +1665,8 @@
 		4C13392818025838004F61CA /* LaunchModernPadLandscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchModernPadLandscape.png; sourceTree = "<group>"; };
 		4C13392918025838004F61CA /* LaunchModernPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchModernPad.png; sourceTree = "<group>"; };
 		4C13393A180259F7004F61CA /* MTLaunchImageGeneric@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTLaunchImageGeneric@2x.png"; sourceTree = "<group>"; };
-		4C174CDC18B13760007A88B3 /* MTApplicaitonInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTApplicaitonInstance.h; sourceTree = "<group>"; };
-		4C174CDD18B13760007A88B3 /* MTApplicaitonInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTApplicaitonInstance.m; sourceTree = "<group>"; };
+		4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTApplicationInstance.h; sourceTree = "<group>"; };
+		4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTApplicationInstance.m; sourceTree = "<group>"; };
 		4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
 		4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerFieldOrCustomValue.h; sourceTree = "<group>"; };
 		4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerFieldOrCustomValue.m; sourceTree = "<group>"; };
@@ -2744,8 +2744,8 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C174CDC18B13760007A88B3 /* MTApplicaitonInstance.h */,
-				4C174CDD18B13760007A88B3 /* MTApplicaitonInstance.m */,
+				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
+				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
 				4CFF3F23164DFF1F0070E880 /* MADocument.h */,
 				4CFF3F24164DFF1F0070E880 /* MADocument.m */,
 				4CFF3E7B164CD75D0070E880 /* MAReportDocument.h */,
@@ -5192,7 +5192,7 @@
 				4CABE4841837DF7D007EDD9D /* RptqDocumentObjectGroupKey.m in Sources */,
 				4C12293B16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */,
 				4C12293F16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m in Sources */,
-				4C174CDF18B13760007A88B3 /* MTApplicaitonInstance.m in Sources */,
+				4C174CDF18B13760007A88B3 /* MTApplicationInstance.m in Sources */,
 				4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */,
 				4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
@@ -5786,7 +5786,7 @@
 				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */,
 				4C4A68C217EA02D000FD6A73 /* MTViewControllerActivitySpinner.m in Sources */,
-				4C174CDE18B13760007A88B3 /* MTApplicaitonInstance.m in Sources */,
+				4C174CDE18B13760007A88B3 /* MTApplicationInstance.m in Sources */,
 				4CB4574A1705F6DB005269B7 /* RptqRelationship.m in Sources */,
 				4CB4575E1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,

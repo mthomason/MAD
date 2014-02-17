@@ -85,7 +85,7 @@
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
-    NSAttributedString *attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadViewer];
+    NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
     [labelMadDesigner setAttributedText:attributedString];
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
@@ -122,7 +122,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:reportDocument];
@@ -135,7 +135,7 @@
         [[self asyncDelegate] displayContentController:viewController];
     } else {
         //__block MTReportViewerController *reportViewer = self;
-        if ([MTApplicaitonInstance isMadDesigner]) {
+        if ([MTApplicationInstance isMadDesigner]) {
             [self reload:self];
         }
     }
@@ -144,7 +144,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if ([self asyncDelegate] == nil) {
-        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -250,7 +250,7 @@
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     [[reportDocument managedObjectContext] save:&error];
     if (error != nil) {
@@ -273,7 +273,7 @@
         if ([reportViewer lastCacheDate] == nil) {
 
             
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             RptqDocument *document = [reportDocument activeDocument];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -456,7 +456,7 @@
         dispatch_async(queuePriorityBackground, ^{
             
             
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
 
@@ -597,7 +597,7 @@
         printInfo.outputType = UIPrintInfoOutputGeneral;
         
         
-        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         printInfo.jobName = [reportDocument name];
         printInfo.duplex = UIPrintInfoDuplexLongEdge;

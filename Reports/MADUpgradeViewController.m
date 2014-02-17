@@ -15,7 +15,7 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
 //#import "MAReportDocument.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 
@@ -61,7 +61,7 @@ const NSInteger currentMajorVersion = 2;
         self.installChinook = NO;
     }
     
-    if ([MTApplicaitonInstance isMadDesigner]) {
+    if ([MTApplicationInstance isMadDesigner]) {
         NSNumber *samplesInstalled = [standardUserDefault objectForKey:MADUpgradeInstalledSamples];
         if (samplesInstalled == nil) {
             self.installSamples = YES;

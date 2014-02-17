@@ -17,7 +17,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @interface MTViewControllerOpenDocument() <UIAlertViewDelegate, NSFileManagerDelegate>
 
-@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
+@property (nonatomic, retain) MTApplicationInstance *applicationInstance;
 
 @property (nonatomic, retain) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
@@ -110,18 +110,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
     
-        MTApplicaitonInstance *applicationInstance = [blockSelf applicationInstance];
+        MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
         MAReportDocument *activeDocument = [applicationInstance activeDocument];
         [activeDocument regenThumbnail];
         [activeDocument closeWithCompletionHandler:^(BOOL success) {
             if (success) {
-                MTApplicaitonInstance *applicationInstance = [blockSelf applicationInstance];
+                MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
                 MAReportDocument *activeDocument = [applicationInstance activeDocument];
                 [activeDocument setSuspended:YES];
                 [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
                     [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
    
-                        MTApplicaitonInstance *applicationInstance = [blockSelf applicationInstance];
+                        MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
                         [applicationInstance setReportState:MTReportStateClosed];
 
                         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -148,14 +148,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     [self updateFileList:self];
     
-    if ([MTApplicaitonInstance isMadViewer] && [UIDevice isPad]) {
+    if ([MTApplicationInstance isMadViewer] && [UIDevice isPad]) {
 
-    } else if ([MTApplicaitonInstance isMadViewer] && ![UIDevice isPad]) {
+    } else if ([MTApplicationInstance isMadViewer] && ![UIDevice isPad]) {
     
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
-    if ([MTApplicaitonInstance isMadViewer]) {
+    if ([MTApplicationInstance isMadViewer]) {
         [self setReportViewer:nil];
     }
 
@@ -314,7 +314,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [super viewDidLoad];
     
 
-    MTApplicaitonInstance *appInstance = [[AppDelegate applicationInstance] retain];
+    MTApplicationInstance *appInstance = [[AppDelegate applicationInstance] retain];
     [self setApplicationInstance: appInstance];
     [appInstance release];
     
@@ -341,10 +341,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 
     NSAttributedString *attributedString = nil;
-    if ([MTApplicaitonInstance isMadDesigner]) {
-        attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadDesigner];
-    } else if ([MTApplicaitonInstance isMadViewer]) {
-        attributedString = [MTApplicaitonInstance localizedAttributedApplicationNameMadViewer];
+    if ([MTApplicationInstance isMadDesigner]) {
+        attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadDesigner];
+    } else if ([MTApplicationInstance isMadViewer]) {
+        attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
     }
     NSAssert(attributedString != nil, @"Navigation title is not set.");
     [labelMadDesigner setAttributedText:attributedString];
@@ -522,7 +522,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         if ([UIDevice isPad]) {
             if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
-                if ([MTApplicaitonInstance isMadViewer]) {
+                if ([MTApplicationInstance isMadViewer]) {
                     [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
                 } else {
                     [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 480.0000f)];
@@ -659,7 +659,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
-                    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
 
                     [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
@@ -677,7 +677,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 
                 __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                 
-                MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                 [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                     if (success) {
                         [managedDocument retain];
@@ -720,7 +720,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     __block MTQueryBuilderAdvancedViewController *advanced = nil;
     __block MTQueryBuilderViewController *standard = nil;
 
-    if ([MTApplicaitonInstance isMadDesigner]) {
+    if ([MTApplicationInstance isMadDesigner]) {
         UIViewController *childController = [contentController retain];
         if ([contentController isKindOfClass:[UINavigationController class]]) {
             UINavigationController *childNavigationController = (UINavigationController *)contentController;
@@ -766,7 +766,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
         }
         [childController release];
-    } else if ([MTApplicaitonInstance isMadViewer]) {
+    } else if ([MTApplicationInstance isMadViewer]) {
         __block __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
         
         
@@ -872,16 +872,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
         if (success) {
             [managedDocument retain];
             
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             [applicationInstance setActiveDocument: managedDocument];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                     [tvc reloadDocument:[applicationInstance activeDocument]];
                 });
             });

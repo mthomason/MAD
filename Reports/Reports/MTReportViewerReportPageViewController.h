@@ -12,7 +12,7 @@
 #import "MTReportViewerReportPageView.h"
 #import "MTPrintingProtocol.h"
 #import "UIColor+EverydayApps.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 @interface MTReportViewerReportPageViewController : UIViewController
     <MTPrintingProtocol>

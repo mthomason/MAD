@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 
 @interface AppDelegate : UIResponder
@@ -15,7 +15,7 @@
         UIDocumentInteractionControllerDelegate,
         UIAlertViewDelegate>
 
-+ (MTApplicaitonInstance *)applicationInstance;
++ (MTApplicationInstance *)applicationInstance;
 
 @property (nonatomic, strong) UIWindow *window;
 

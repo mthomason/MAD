@@ -18,7 +18,7 @@
 #import "MTTableViewControllerBarcodeExtraDataMatrix.h"
 #import "MTBarcodeCode39Extended.h"
 #import "MTBarcodeCode39Iso16388.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 - (MTBarcode *)barcodeToDisplay;

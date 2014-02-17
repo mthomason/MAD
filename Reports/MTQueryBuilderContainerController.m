@@ -43,7 +43,7 @@
     if (self) {
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        NSAttributedString *attributedString = [[MTApplicaitonInstance localizedAttributedApplicationNameMadQuery] retain];
+        NSAttributedString *attributedString = [[MTApplicationInstance localizedAttributedApplicationNameMadQuery] retain];
         [labelMadDesigner setAttributedText:attributedString];
         [[self navigationItem] setTitleView:labelMadDesigner];
         [[[self navigationItem] titleView] sizeToFit];

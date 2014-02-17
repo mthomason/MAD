@@ -183,7 +183,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        NSAttributedString *attributedString = [[MTApplicaitonInstance localizedAttributedApplicationNameMadQuery] retain];
+        NSAttributedString *attributedString = [[MTApplicationInstance localizedAttributedApplicationNameMadQuery] retain];
         [labelMadDesigner setAttributedText:attributedString];
         [[self navigationItem] setTitleView:labelMadDesigner];
         [[[self navigationItem] titleView] sizeToFit];
@@ -205,7 +205,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     if (reportDocument) {
@@ -242,7 +242,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     [[NSNotificationCenter defaultCenter] removeObserver: self
@@ -292,7 +292,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
-                    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
@@ -353,7 +353,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     if (tvc) {
                         [tvc setDelegate:self];
                         
-                        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                         MAReportDocument *reportDocument = [applicationInstance activeDocument];
                         RptqDocument *document = [reportDocument activeDocument];
                         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -381,7 +381,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     if ([identifier isEqualToString:MTSegueCloseDesigner]) {
         NSError *error = nil;
 
-        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
         [[reportDocument managedObjectContext] save:&error];
@@ -394,7 +394,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)documentStateChanged {
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     UIDocumentState state = [reportDocument documentState];
@@ -529,7 +529,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
@@ -541,7 +541,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
@@ -553,7 +553,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
@@ -578,7 +578,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
     [self dismissViewControllerAnimated:YES completion:^{ }];
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     [RptqQueryPredicate addPredicate:predicate toDocument:[reportDocument activeDocument]];
@@ -589,7 +589,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     [self dismissViewControllerAnimated:YES completion:^{ }];
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
@@ -610,7 +610,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
@@ -644,7 +644,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     NSIndexSet *indexSetSections = nil;
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -826,7 +826,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
                     
-                    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -1064,7 +1064,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     if (tvcLink) {
                         NSManagedObjectID *objid = [tvcLink tableID];
 
-                        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                         MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
                         [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
@@ -1077,7 +1077,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 // MARK: Delete MTQuerySectionsGroups
                 case MTQuerySectionsGroups: {
                     
-                    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -1140,7 +1140,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
-                        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+                        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                         MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
                         [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
@@ -1217,7 +1217,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [toGroup setWeight:@(toWeight)];
             [fromGroup setWeight:@(fromWeight)];
 
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             [reportDocument saveContext];
             [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
@@ -1263,7 +1263,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
 
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[reportDocument managedObjectContext]];
             
@@ -1541,7 +1541,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         {
             
             
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             RptqDocument *document = [reportDocument activeDocument];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -1625,7 +1625,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (NSMutableDictionary *)datamodel {
 
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];

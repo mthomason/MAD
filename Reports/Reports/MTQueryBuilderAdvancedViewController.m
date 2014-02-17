@@ -66,7 +66,7 @@ typedef void(^MTBlockResultVoid)(void);
 @implementation MTQueryBuilderAdvancedViewController
 
 - (void)dealloc {
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     [MTQueryBuilderAdvancedViewController removeNotificationsFromObserver:self forObjectContext:[document managedObjectContext]];
@@ -131,7 +131,7 @@ typedef void(^MTBlockResultVoid)(void);
         
         [self setTableDisplayCounter:0];
 
-        UIStoryboard *sb = [[MTApplicaitonInstance storyboard] retain];
+        UIStoryboard *sb = [[MTApplicationInstance storyboard] retain];
         [self setStoryboardDefault:sb];
         [sb release];
     }
@@ -552,7 +552,7 @@ typedef void(^MTBlockResultVoid)(void);
     CGPoint newOrigin = location; // [gestureRecognizer locationInView:[self contentView]];
     UIAttachmentBehavior *attachmentBehavior = [[self attachmentBehaviors] objectForKey:tableId];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqQueryTable *table = (RptqQueryTable *)[[reportDocument managedObjectContext] objectWithID:tableId];
@@ -653,7 +653,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated {
     if ([sender isKindOfClass:[MTQueryBuilderAdvancedSchemaViewController class]]) {
         MTQueryBuilderAdvancedSchemaViewController *controller = (MTQueryBuilderAdvancedSchemaViewController *)sender;
-        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[controller tableObjectId] fromObjectContext:[reportDocument managedObjectContext]];
         for (RptqQueryLinks *queryLink in [[queryTable inQuery] hasQueryLinks]) {
@@ -732,14 +732,14 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Reload document view controllers
 
 - (void)redraw {
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     [self reloadDocument:reportDocument animated:YES];
 }
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated {
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     if (reportDocument) {
@@ -778,7 +778,7 @@ typedef void(^MTBlockResultVoid)(void);
         NSManagedObjectID *objectId = [tableIdVertext object];
         if (objectId != nil) {
             
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
             RptqQueryTable *table = (RptqQueryTable *)[[reportDocument managedObjectContext] objectWithID:objectId];
@@ -812,7 +812,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSInteger topLevelTableCounter = 0;
     CGFloat segHeight = (self.contentView.bounds.size.height / (numberOfStartingPoints + 1));
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     // Display tables
@@ -927,7 +927,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)deleteQueryLink:(RptqQueryLinks *)deletedQueryLinks {
 
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -1068,7 +1068,7 @@ typedef void(^MTBlockResultVoid)(void);
         NSManagedObjectID *objectId = [tableIdVertext object];
         if (objectId != nil) {
             
-            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
             RptqQueryTable *table = (RptqQueryTable *)[[reportDocument managedObjectContext] objectWithID:objectId];
@@ -1354,7 +1354,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (MTQueryBuilderAdvancedSchemaViewController *)addSchemaViewControllerForTable:(RptqQueryTable *)table animated:(BOOL)animated {
     
-    UIStoryboard *sb = [[MTApplicaitonInstance storyboard] retain];
+    UIStoryboard *sb = [[MTApplicationInstance storyboard] retain];
     MTQueryBuilderAdvancedSchemaViewController *viewController = [[sb instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier] retain];
     [viewController setDelegate:self];
     [viewController setTableObjectId:[table objectID]];
@@ -1372,7 +1372,7 @@ typedef void(^MTBlockResultVoid)(void);
     [table setDesignerOriginX:@(subviewRect.origin.y)];
     [table setDesignerInitalLayout:@(NO)];
     
-    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     [[reportDocument managedObjectContext] save:nil];

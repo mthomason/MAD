@@ -10,7 +10,7 @@
 #define Reports_MTShowSqlViewController_h
 
 #import "MTViewController.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 @interface MTShowSqlViewController : MTViewController
 

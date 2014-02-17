@@ -33,7 +33,7 @@ extern NSString * const MTStoryboardReportViewerPad;
 extern NSString * const MTStoryboardReportViewerLagacy;
 extern NSString * const MTStoryboardReportViewerPadLagacy;
 
-@interface MTApplicaitonInstance : NSObject
+@interface MTApplicationInstance : NSObject
     <MAReportDocumentCacheProtocol>
 
 @property (nonatomic, assign) MTReportState reportState;

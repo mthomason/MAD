@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
-#import "MTApplicaitonInstance.h"
+#import "MTApplicationInstance.h"
 
 extern NSString * const MTIdentifierSegueDocumentObjectEditBarcode;
 extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
