@@ -39,6 +39,9 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 @property (nonatomic, assign) MTReportState reportState;
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
+- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
+
+- (MAReportDocument *)activeDocument;
 
 + (NSString *)applicationName;
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner;
@@ -50,9 +53,8 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 + (NSString *)bundleId;
 + (NSString *)bundleVersion;
 
-- (void)setActiveDocument:(MAReportDocument *)document;
-- (MAReportDocument *)activeDocument;
-
 + (UIStoryboard *)storyboard;
+
++ (NSArray *)reportUrls;
 
 @end

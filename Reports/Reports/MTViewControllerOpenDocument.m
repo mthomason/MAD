@@ -88,6 +88,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)closeReport {
     
+    
+    MTApplicationInstance *applicationInstance = [[AppDelegate applicationInstance] retain];
+
     __block MTViewControllerOpenDocument *blockSelf = self;
 
     NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
@@ -107,10 +110,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     [[self collectionView] setUserInteractionEnabled: NO];
     
+    [applicationInstance closeReportWithCompletionHandler:^(BOOL success) {
+        [[blockSelf collectionView] setUserInteractionEnabled: YES];
+        [blockSelf setCellsHidden:NO];
+        [[blockSelf collectionView] reloadData];
+    }];
     
+    /*
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
     
-        MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
+        //MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
         MAReportDocument *activeDocument = [applicationInstance activeDocument];
         [activeDocument regenThumbnail];
         [activeDocument closeWithCompletionHandler:^(BOOL success) {
@@ -134,7 +143,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }];
             };
         }];
-    });
+    });*/
 }
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
@@ -578,21 +587,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 });
             }];
             
-            /*
-            
-            [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
-                if (success) {
-                    [managedDocument retain];
-                    [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [[self reportViewer] reload];
-                        });
-                    });
-                    [managedDocument release];
-                }
-            }];
-             */
             [viewControllerReportViewer release];
             
         } else {
@@ -749,20 +743,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [managedDocument release];
                 }
             }];
-            /*
-            [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
-                
-                if (success) {
-                    [managedDocument retain];
-                    [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                    if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
-                    }
-                    [standard reloadDocument:managedDocument];
-                    [advanced reloadDocument:managedDocument animated:YES];
-                    [managedDocument release];
-                }
-            }];*/
-            
             
         }
         [childController release];
@@ -778,19 +758,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                        [managedDocument release];
                                    }
         }];
-        
-        /*
-        [MAReportDocument openManagedDocumentAtUrl:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
-            
-            if (success) {
-                [managedDocument retain];
-                [[MTActiveDocument sharedDocument] setActiveDocument: managedDocument];
-                [viewController reload:viewController];
-                [managedDocument release];
-            }
-            
-        }];
-        */
 
     }
 }
@@ -877,31 +844,17 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if (success) {
             [managedDocument retain];
             
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-            [applicationInstance setActiveDocument: managedDocument];
+            //MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            //[applicationInstance setActiveDocument: managedDocument];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                    [tvc reloadDocument:[applicationInstance activeDocument]];
+                    //MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+                    [tvc reloadDocument:nil/*[applicationInstance activeDocument]*/];
                 });
             });
             [managedDocument release];
         }
     }];
-    /*
-    [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
-
-        if (success) {
-            [managedDocument retain];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [tvc reloadDocument:managedDocument];
-                });
-            });
-            [managedDocument release];
-        }
-    }];
-     */
 }
 
 #pragma mark - Actions
@@ -914,7 +867,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (IBAction)updateFileList:(id)sender {
     
-    NSArray *madFiles = [NSFileManager madFiles];
+    NSArray *madFiles = [MTApplicationInstance reportUrls];
     NSMutableArray *a = [[NSMutableArray alloc] initWithArray:madFiles];
     [self setAvailableFilesCache: a];
     [a release];
@@ -992,8 +945,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (IBAction)about:(id)sender {
     NSString *applicationName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
     NSString *title = [NSString stringWithFormat:NSLocalizedString(@"About %@", @"About Mad Designer"),  applicationName];
-    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2012-2013.  Software created by Michael Thomason for Everyday Apps LLC.",
-                                          @"© Everyday Apps LLC 2012-2013.  Software created by Michael Thomason for Everyday Apps LLC.");
+    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2012-2014.  Software created by Michael Thomason for Everyday Apps LLC.",
+                                          @"© Everyday Apps LLC 2012-2014.  Software created by Michael Thomason for Everyday Apps LLC.");
     NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
 
     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: title
@@ -1486,7 +1439,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    MTCollectionViewCellDocument *result = [[self collectionView] dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
+    MTCollectionViewCellDocument *result = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
                                                                                       forIndexPath:indexPath];
     [result setDelegate:self];
     if ([indexPath row] < [[self availableFilesCache] count]) {

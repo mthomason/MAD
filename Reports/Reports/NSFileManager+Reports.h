@@ -11,6 +11,5 @@
 @interface NSFileManager (Reports)
 
 + (NSArray *)schemaFilesOld;
-+ (NSArray *)madFiles;
 
 @end

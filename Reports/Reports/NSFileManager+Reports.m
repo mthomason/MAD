@@ -24,10 +24,6 @@
     return [results autorelease];
 }
 
-+ (NSArray *)madFiles {
-    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
-}
-
 + (NSArray *)pdfFiles {
     return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:PDF_PATH_EXTENSION];
 }

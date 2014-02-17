@@ -1773,7 +1773,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         RptqDocument *document = [reportDocument activeDocument];
-        SectionEnumerator *sectionEnumerator = [[[SectionEnumerator alloc] initWithDocument:document] retain];
+        SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
 
         for (RptqDocumentSection *documentSection in sectionEnumerator) {
             MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];

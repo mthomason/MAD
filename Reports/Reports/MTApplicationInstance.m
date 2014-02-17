@@ -10,15 +10,16 @@
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 #import "MAReportDocument.h"
+#import "NSFileManager+Common.h"
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.200";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.200";
-NSString * const MTGlobalBundleRev                                  = @"821";
+NSString * const MTGlobalBundleVersion                              = @"1.0.202";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.202";
+NSString * const MTGlobalBundleRev                                  = @"823";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -32,24 +33,74 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 @interface MTApplicationInstance ()
 
-@property (nonatomic, retain) MAReportDocument *document;
+@property (nonatomic, retain) NSURL *currentDocument;           //To support opening multiple documents
+                                                                    //change this url to the url of the open
+                                                                    //document.  This url will be key for the
+                                                                    //documents array.
+@property (nonatomic, retain) NSMutableDictionary *documents;   //MAReportDocument stored by their NSURLS
 
 @end
 
 @implementation MTApplicationInstance
 
 - (void)dealloc {
-    [_document release];
+    [_currentDocument release];
+    [_documents removeAllObjects];
+    [_documents release];
     [super dealloc];
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
+        [self setDocuments:documents];
+        [documents release];
+    }
+    return self;
 }
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
      [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
          [managedDocument retain];
-         [self setActiveDocument:managedDocument];
+         [self setCurrentDocument:url];
+         [self documents][url] = managedDocument;
          [self setReportState:MTReportStateOpen];
          completionHandler([managedDocument autorelease], success);
      }];
+}
+
+- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler {
+    
+ 
+    __block MTApplicationInstance *blockSelf = self;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        MAReportDocument *activeDocument = [[blockSelf activeDocument] retain];
+        [activeDocument regenThumbnail];
+        [activeDocument closeWithCompletionHandler:^(BOOL success) {
+            
+            if (success) {
+                MAReportDocument *activeDocument = [blockSelf activeDocument];
+                [activeDocument setSuspended:YES];
+                [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                    [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
+                        if (success) {
+                            [blockSelf setReportState:MTReportStateClosed];
+                            [[blockSelf documents] removeObjectForKey:[blockSelf currentDocument]];
+//                            [[blockSelf documents] setObject:nil forKey:[blockSelf currentDocument]];
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                completionHandler(YES);
+                            });
+                        }
+                    }];
+                    
+                }];
+            };
+        }];
+        [activeDocument release];
+    });
+
 }
 
 + (NSString *)applicationNamePrefixPart {
@@ -85,20 +136,12 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
 
-- (void)setActiveDocument:(MAReportDocument *)document {
-    @synchronized(self) {
-        if (document != [self document]) {
-            id activeDocument = [document retain];
-            [self setDocument:activeDocument];
-            [activeDocument release];
-        }
-    }
-}
-
 - (MAReportDocument *)activeDocument {
     MAReportDocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
-        result = [[[self document] retain] autorelease];
+        NSDictionary *documents = [self documents];
+        NSURL *currentUrl = [self currentDocument];
+        result = [[documents[currentUrl] retain] autorelease];
     }
     return result;
 }
@@ -243,6 +286,17 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         [data writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
     }
     
+}
+
++ (NSArray *)reportUrls {
+    NSArray *madFiles = [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
+    SEL selectorPath = @selector(path);
+    SEL selectorSort = @selector(caseInsensitiveCompare:);
+    NSString *key = NSStringFromSelector(selectorPath);
+    NSSortDescriptor *sortByFileName = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:selectorSort];
+    NSArray *sortDescriptors = @[sortByFileName];
+    NSArray *results = [[madFiles sortedArrayUsingDescriptors:sortDescriptors] retain];
+    return [results autorelease];
 }
 
 @end

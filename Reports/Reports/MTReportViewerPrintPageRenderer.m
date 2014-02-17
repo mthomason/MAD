@@ -87,7 +87,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:nil];
     if (copy) {
         [copy setSortedQueryGroups:[self sortedQueryGroups]];
-        //[copy setActiveDocument:[self activeDocument]];
         [copy setCachedLayoutByPage:[self cachedLayoutByPage]];
         [copy setCachedDataByGroup:[self cachedDataByGroup]];
         [copy setCachedDataByPage:[self cachedDataByPage]];
@@ -156,9 +155,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (id)initWithDocument:(MAReportDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
     self = [super init];
     if (self) {
-        //[document retain];
-        //[self setActiveDocument:document];
-        //[document release];
         [self initCommon];
         [self setPrintableSize:printableAreaSize];
         
