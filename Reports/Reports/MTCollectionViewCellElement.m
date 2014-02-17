@@ -9,7 +9,6 @@
 #import "MTCollectionViewCellElement.h"
 #import <CoreData/CoreData.h>
 #import "MTActiveDocument.h"
-#import "MAReportDocument.h"
 
 @implementation MTCollectionViewCellElement
 
@@ -65,13 +64,7 @@
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
     
-    NSManagedObjectID *objectId = [self objectIdTag];
-    MAReportDocument *activeDocument = [[[MTActiveDocument sharedDocument] activeDocument] retain];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-    [[documentObject type] integerValue];
-    
-    MTDocumentObjectType objectType = [[documentObject type] integerValue];
+    MTDocumentObjectType objectType = [[self delegate] objectTypeRepresentedByCell:self];
 
     BOOL deleteAction = action == @selector(delete:);
     BOOL editAction = action == @selector(edit:);

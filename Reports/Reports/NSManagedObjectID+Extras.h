@@ -10,6 +10,6 @@
 #import "MTProtocolLog.h"
 #import "MTActiveDocument.h"
 
-@interface NSManagedObjectID (Extras) <MTProtocolLog>
+@interface NSManagedObjectID (Extras) //<MTProtocolLog>
 
 @end

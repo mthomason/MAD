@@ -8,6 +8,10 @@
 
 #import "MTShowSqlViewController.h"
 #import "RptqQuery+Extras.h"
+#import "MTAlertView.h"
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
+#import "AppDelegate.h"
 
 @interface MTShowSqlViewController ()
 
@@ -15,21 +19,19 @@
 
 @implementation MTShowSqlViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    RptqQuery *query = [RptqDocument queryForActiveDocument];
+    
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
     MTDatabase *databaseHandler = [MTDatabase databaseObjectForRptqDatabase:[query inDatabase]];
     NSString *sqlStatement = [databaseHandler getSqlForQuery: query onlyActiveFields: NO];
     if ([sqlStatement length] > 0) {

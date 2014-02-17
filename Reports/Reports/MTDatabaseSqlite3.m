@@ -189,19 +189,8 @@
 
     NSArray *results = [[self resultsForQueryString:queryString] retain];
     
-    MAReportDocument *rd = [[MTActiveDocument sharedDocument] activeDocument];
-    NSURL *url = [[rd cachedDataUrl] retain];
-    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:results
-                                                                    format:NSPropertyListBinaryFormat_v1_0
-                                                                   options:0
-                                                                     error:NULL];
-    NSError *error = nil;
-    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    if (error) {
-        error = nil;
-        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    }
-    [url release];
+    [[self delegateCacheData] cacheQueryResult:results];
+
     [results release];
     
     NSManagedObjectContext *managedObjectContext = [document managedObjectContext];

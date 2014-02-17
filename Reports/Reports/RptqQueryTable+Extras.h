@@ -14,7 +14,6 @@
 
 + (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable inDocument:(RptqDocument *)document;
 + (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document;
-+ (NSArray *)queryTablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 - (NSString *)queryAlias;

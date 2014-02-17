@@ -21,6 +21,9 @@
 #import "MTBarcodeCode39Extended.h"
 #import "MTBarcodeDataMatrixIso16022.h"
 
+#import "AppDelegate.h"
+
+
 @interface MTViewControllerBarcodeOptions ()
 
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
@@ -48,6 +51,7 @@
 }
 
 - (void)dealloc {
+    //[_applicationInstance release];
     [_sampleBarcodeDataMaxicode release];
     [_sampleBarcodeData2dComponent release];
     [_sampleBarcodeData release];
@@ -703,7 +707,10 @@
         [[self delegate] didSetField2:field];
     }
     
-    RptqDocument *document = [RptqDocument activeDocument];
+    
+    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+
+    RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     [mnsDatabase sampleDataForSchemaField:[field databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {

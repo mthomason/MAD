@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "MTActiveDocument.h"
+#import "MTApplicaitonInstance.h"
 #import "MTDatabase.h"
 #import "RptqDocument+Extras.h"
 
@@ -22,7 +22,7 @@
         UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, assign) IBOutlet id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
-
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 @property (nonatomic, retain) NSManagedObjectID *schemaFieldObjectId;
 
 @end

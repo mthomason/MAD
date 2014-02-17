@@ -18,7 +18,7 @@
 @property (assign) NSInteger current;
 @property (assign) NSInteger total;
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (id)initWithDocument:(RptqDocument *)document;
 - (NSArray *)allObjects;
 - (id)nextObject;
 - (NSInteger)count;

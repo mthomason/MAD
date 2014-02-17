@@ -66,7 +66,8 @@
 #pragma mark - Static
 
 + (NSArray *)queriesForDocument:(RptqDocument *)document {
-    RptqQuery *query = [RptqDocument queryForDocument:document];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
     NSSet *queryLinks = [query hasQueryLinks];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
     NSArray *results = [[queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
@@ -88,10 +89,12 @@
 + (id)createQueryLinkWithLeftField:(RptqQueryField *)fieldLeft
                          rightField:(RptqQueryField *)fieldRight
                            andJoinType:(MNSLinkType)joinType {
-    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:[[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+    
+    NSManagedObjectContext *managedObjectContext = [fieldLeft managedObjectContext];
+    NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:managedObjectContext];
     
     RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
-                                         insertIntoManagedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]];
+                                         insertIntoManagedObjectContext: managedObjectContext];
     
     [queryLinks setHasLeftField:    fieldLeft];
     [queryLinks setHasRightField:   fieldRight];

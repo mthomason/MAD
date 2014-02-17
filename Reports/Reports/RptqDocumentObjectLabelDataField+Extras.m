@@ -7,6 +7,10 @@
 //
 
 #import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "RptqDocument.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDocumentSection+Extras.h"
 
 @implementation RptqDocumentObjectLabelDataField (Extras)
 

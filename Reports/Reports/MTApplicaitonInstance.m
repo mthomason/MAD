@@ -9,15 +9,16 @@
 #import "MTApplicaitonInstance.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
+#import "MAReportDocument.h"
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.199";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.199";
-NSString * const MTGlobalBundleRev                                  = @"820";
+NSString * const MTGlobalBundleVersion                              = @"1.0.200";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.200";
+NSString * const MTGlobalBundleRev                                  = @"821";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -31,11 +32,25 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 @interface MTApplicaitonInstance ()
 
-@property (nonatomic, retain) id document;
+@property (nonatomic, retain) MAReportDocument *document;
 
 @end
 
 @implementation MTApplicaitonInstance
+
+- (void)dealloc {
+    [_document release];
+    [super dealloc];
+}
+
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
+     [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
+         [managedDocument retain];
+         [self setActiveDocument:managedDocument];
+         [self setReportState:MTReportStateOpen];
+         completionHandler([managedDocument autorelease], success);
+     }];
+}
 
 + (NSString *)applicationNamePrefixPart {
     NSString *localizedPrefix = NSLocalizedString(@"MAD %@", @"MAD %@");
@@ -70,7 +85,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
 
-- (void)setActiveDocument:(id)document {
+- (void)setActiveDocument:(MAReportDocument *)document {
     @synchronized(self) {
         if (document != [self document]) {
             id activeDocument = [document retain];
@@ -80,8 +95,12 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     }
 }
 
-- (id)activeDocument {
-    return [[[self document] retain] autorelease];
+- (MAReportDocument *)activeDocument {
+    MAReportDocument *result = nil;
+    if ([self reportState] == MTReportStateOpen) {
+        result = [[[self document] retain] autorelease];
+    }
+    return result;
 }
 
 + (BOOL)isMadViewer {
@@ -212,6 +231,18 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     NSString *storyboardName = [MTApplicaitonInstance storyboardName];
     UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:storyboardName bundle:nil] retain];
     return [storyboard autorelease];
+}
+
+- (void)cacheQueryResult:(id)queryResult {
+    NSError *error = nil;
+    NSData *data = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+    NSURL *url = [[self activeDocument] cachedDataUrl];
+    [data writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+    if (error) {
+        error = nil;
+        [data writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
+    }
+    
 }
 
 @end

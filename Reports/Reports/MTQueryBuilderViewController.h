@@ -51,6 +51,7 @@ extern NSString * const NSFetchedResultsCachePredicates;
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
 @property BOOL debug;

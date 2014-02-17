@@ -7,6 +7,8 @@
 //
 
 #import "MTReportViewerViewController.h"
+#import "UIDevice+Hack.h"
+#import "AppDelegate.h"
 
 @interface MTReportViewerController ()
 
@@ -120,8 +122,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    RptqDocument *document = [RptqDocument activeDocument];
-    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+
+    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:reportDocument];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
     
@@ -140,7 +144,9 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if ([self asyncDelegate] == nil) {
-        RptqDocument *document = [RptqDocument activeDocument];
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
         
@@ -243,7 +249,9 @@
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
     [[reportDocument managedObjectContext] save:&error];
     if (error != nil) {
         [[reportDocument managedObjectContext] save:&error];
@@ -263,7 +271,11 @@
     
     if ([reportViewer updatingOfTimerIsPaused] == NO) {
         if ([reportViewer lastCacheDate] == nil) {
-            RptqDocument *document = [RptqDocument activeDocument];
+
+            
+            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MAReportDocument *reportDocument = [applicationInstance activeDocument];
+            RptqDocument *document = [reportDocument activeDocument];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
             RptqQuery *query = [[database hasQueries] anyObject];
             NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
@@ -443,9 +455,12 @@
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
         dispatch_async(queuePriorityBackground, ^{
             
-            id activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+            
+            MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+            MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
-            [activeDocument refresh:^(BOOL success) {
+
+            [reportDocument refresh:^(BOOL success) {
             
                 if (success) {
                     
@@ -580,7 +595,11 @@
         // Obtain a printInfo so that we can set our printing defaults.
         UIPrintInfo *printInfo = [UIPrintInfo printInfo];
         printInfo.outputType = UIPrintInfoOutputGeneral;
-        printInfo.jobName = [[RptqDocument activeDocument] name];
+        
+        
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        printInfo.jobName = [reportDocument name];
         printInfo.duplex = UIPrintInfoDuplexLongEdge;
         controller.printInfo = printInfo;
         
@@ -645,9 +664,6 @@
             [[result view] setFrame:[[self view] bounds]];
             [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
-            //[[result view] setBackgroundColor:[UIColor redColor]];
-            //[[self view] setBackgroundColor:[UIColor blueColor]];
-
             [result autorelease];
         }
     }

@@ -7,6 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MAReportDocument.h"
+
+typedef NS_ENUM(NSUInteger, MTReportState) {
+	MTReportStateOpen = 0,
+	MTReportStateClosed
+};
 
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
@@ -28,6 +34,11 @@ extern NSString * const MTStoryboardReportViewerLagacy;
 extern NSString * const MTStoryboardReportViewerPadLagacy;
 
 @interface MTApplicaitonInstance : NSObject
+    <MAReportDocumentCacheProtocol>
+
+@property (nonatomic, assign) MTReportState reportState;
+
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 
 + (NSString *)applicationName;
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner;
@@ -39,8 +50,8 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 + (NSString *)bundleId;
 + (NSString *)bundleVersion;
 
-- (void)setActiveDocument:(id)document;
-- (id)activeDocument;
+- (void)setActiveDocument:(MAReportDocument *)document;
+- (MAReportDocument *)activeDocument;
 
 + (UIStoryboard *)storyboard;
 

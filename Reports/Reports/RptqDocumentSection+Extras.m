@@ -400,9 +400,9 @@
     
     NSInteger result = 0;
     BOOL breakNow = NO;
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[section managedObjectContext]];
+    RptqDocument *document = [RptqDocumentSection rptqDocumentForSection:section];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
     NSURL *urlNeedle = [[[section objectID] URIRepresentation] retain];
-
     for (RptqDocumentSection *sec in enumerator) {
         NSURL *urlInHaystack = [[[sec objectID] URIRepresentation] retain];
         breakNow = [urlNeedle isEqual:urlInHaystack];
@@ -413,6 +413,29 @@
     [enumerator release];
     [urlNeedle release];
     return result;
+}
+
+- (RptqDocument *)inRptqDocument {
+    RptqDocument *result = [[RptqDocumentSection rptqDocumentForSection:self] retain];
+    return [result autorelease];
+}
+
++ (RptqDocument *)rptqDocumentForSection:(RptqDocumentSection *)section {
+    RptqDocument *result = nil;
+    if ([section inGroup]) {
+        result = [[[[[section inGroup] inQuery] inDatabase] ownedByQueryAsStaticResource] retain];
+    } else if ([section inReport]) {
+        result = [[section inReport] retain];
+    } else if ([section inReportPageFooter]) {
+        result = [[section inReportPageFooter] retain];
+    } else if ([section inReportPageHeader]) {
+        result = [[section inReportPageHeader] retain];
+    } else if ([section inReportReportFooter]) {
+        result = [[section inReportReportFooter] retain];
+    } else if ([section inReportReportHeader]) {
+        result = [[section inReportReportHeader] retain];
+    }
+    return [result autorelease];
 }
 
 - (MNSDocumentSectionType)getDocumentSectionType {

@@ -26,6 +26,7 @@
         MTReportDesignerFontSelectorDelegate>
 
 @property (nonatomic, assign) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds;
 - (IBAction)valueChanged:(id)sender;

@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTToolboxViewControllerProtocol.h"
 #import "MTFont.h"
+#import "MTApplicaitonInstance.h"
 
 @class MTReportDesignerFontSettingsViewController;
 
@@ -23,6 +24,7 @@
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
 @property (assign, nonatomic) IBOutlet id <MTReportDesignerFontSettingsDelegate> delegate;
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 @property (nonatomic, retain) IBOutlet UILabel *labelFontName;
 

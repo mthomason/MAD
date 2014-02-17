@@ -58,6 +58,8 @@
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
+
 - (IBAction)doneReports:(id)sender;
 - (IBAction)done:(id)sender;
 - (IBAction)info:(id)sender;

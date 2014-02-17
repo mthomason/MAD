@@ -70,9 +70,13 @@
     return self;
 }
 
-- (void)initialize {
+- (void)initialize { }
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
     UIStoryboard *storyboard = [MTApplicaitonInstance storyboard];
-    
+
     MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
     [self setTableViewControllerTextLayoutSettings:reportDesignerFontSettingsViewController];
@@ -80,11 +84,6 @@
     MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
-    
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
 
     UINavigationItem *navigationItem = [[[self navigationBar] items] objectAtIndex:0];
     UIBarButtonItem *leftBarButtonItem = [navigationItem leftBarButtonItem];
@@ -222,7 +221,12 @@
     
         shouldPushItem = YES;
         
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+        
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        RptqDocument *document = [reportDocument activeDocument];
+        NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
         NSString *frontName = @"";
         for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];

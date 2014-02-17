@@ -16,6 +16,8 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
+    return [NSString stringWithFormat:@"%@", self];
+    /*
     NSString *result = nil;
     MAReportDocument *document = [[MTActiveDocument sharedDocument] activeDocument];
     NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
@@ -30,7 +32,7 @@
     } else {
         [error presentErrorToUser];
     }
-    return result;
+    return result;*/
 }
 
 - (NSString *)toString {

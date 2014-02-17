@@ -13,7 +13,6 @@
 #import "NSError+UserInterface.h"
 #import "MTPaper.h"
 #import "NSError+UserInterface.h"
-//#import "MTReportViewerPrintPageRenderer.h"
 
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
@@ -28,7 +27,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (NSString *)fileName;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSString *)thumbnailSaveName;
-- (void)regenThumbnail;
 
 @property (nonatomic, retain) NSURL *thumbnailUrl;
 @property (nonatomic, retain) NSURL *thumbnailUrlWithBorder;

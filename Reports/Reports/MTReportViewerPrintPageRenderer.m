@@ -11,6 +11,9 @@
 #import "UIColor+EverydayApps.h"
 #import "MTBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
+#import "UIDevice+Hack.h"
+#import "RptqDocument+ActiveDocument.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -28,7 +31,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) CGSize printableSize;
 
-//@property (nonatomic, assign) RptqDocument *document;
+//@property (nonatomic, assign) MAReportDocument *activeDocument;
 @property (nonatomic, retain) NSArray *cachedLayoutByPage;
 @property (nonatomic, retain) NSArray *cachedSortedSortDescriptorsGroup;
 @property (nonatomic, retain) NSArray *cachedDataByPage;
@@ -63,6 +66,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @implementation MTReportViewerPrintPageRenderer
 
 - (void)dealloc {
+    //[_activeDocument release];
     [_inputStream release];
     [_cachedLayoutByPage release];
     [_cachedSortedSortDescriptorsGroup release];
@@ -83,7 +87,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:nil];
     if (copy) {
         [copy setSortedQueryGroups:[self sortedQueryGroups]];
-        //[copy setDocument:[self document]];
+        //[copy setActiveDocument:[self activeDocument]];
         [copy setCachedLayoutByPage:[self cachedLayoutByPage]];
         [copy setCachedDataByGroup:[self cachedDataByGroup]];
         [copy setCachedDataByPage:[self cachedDataByPage]];
@@ -144,14 +148,17 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     }
 }
 
-- (id)initWithDocument:(RptqDocument *)document {
+- (id)initWithDocument:(MAReportDocument *)document {
     id result = [self initWithDocument:document andPrintableAreaSize:[MTPaper sizeLetter]];
     return [[result retain] autorelease];
 }
 
-- (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
+- (id)initWithDocument:(MAReportDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
     self = [super init];
     if (self) {
+        //[document retain];
+        //[self setActiveDocument:document];
+        //[document release];
         [self initCommon];
         [self setPrintableSize:printableAreaSize];
         
@@ -304,7 +311,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     
     NSUInteger detailRowsCounter = 0;
     NSUInteger pageNumber = 0;
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *activeDocument = [applicationInstance activeDocument];
     RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
     MTDatabase *database = [MTDatabase databaseForRptqDatabase: databaseSchemas];
@@ -1115,7 +1123,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage {
 
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *activeDocument = [applicationInstance activeDocument];
     RptqDocument *document = [activeDocument activeDocument];
     
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -1146,9 +1156,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
         NSSet *hasQueries = [database hasQueries];
         RptqQuery *query = [hasQueries anyObject];
-        //RptqQueryCache *queryCache = [query hasQueryCache];
-        
-        SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithManagedObjectContext:[query managedObjectContext]];
+
+        SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
+
         for (RptqDocumentSection *sec in enumerator) {
             CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
             NSNumber *lh = [[NSNumber alloc] initWithFloat:layoutHight];
@@ -1162,8 +1172,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         [[self temporaryLayoutByPage] removeAllObjects];
         [[self temporaryDataByPage] removeAllObjects];
         [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
-        //NSMutableDictionary *rd = [[NSMutableDictionary alloc] initWithCapacity:[[queryCache hasQueryResultFields] count]];
-        
         
         NSError *error = nil;
         NSArray *cachedResultsForReportSerialized = nil;
@@ -1539,7 +1547,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails
                         groupedRows:(NSDictionary *)groupedRows {
 
-    RptqDocument *document = [RptqDocument activeDocument];
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *activeDocument = [applicationInstance activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
     RptqDocumentSection *detailSection = [document hasDetailSection];
     BOOL isVisible = [[detailSection visibility] boolValue];
     CGFloat layoutHeight = isVisible ? [[detailSection layoutHeight] floatValue] : CGSizeZero.height;
@@ -1624,7 +1635,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     BOOL newPageCreated = NO;
     CGRect pageRect;
-    RptqDocument *document = [RptqDocument activeDocument];
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *activeDocument = [applicationInstance activeDocument];
+    RptqDocument *document = [activeDocument activeDocument];
     RptqDocumentSection *pageFooterSection = [document hasPageFooterSection];
     BOOL pageFooterIsVisable = [[pageFooterSection visibility] boolValue];
     CGFloat pageFooterSectionHeight = pageFooterIsVisable ? [[pageFooterSection layoutHeight] floatValue] : CGSizeZero.height;

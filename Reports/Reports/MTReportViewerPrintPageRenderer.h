@@ -27,8 +27,8 @@
 
 @property (nonatomic, assign) BOOL didRefresh;
 
-- (id)initWithDocument:(RptqDocument *)document;
-- (id)initWithDocument:(RptqDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
+- (id)initWithDocument:(MAReportDocument *)document;
+- (id)initWithDocument:(MAReportDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
 - (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
 - (void)writeToPdf:(NSURL *)filepath;
 - (UIImage *)thumbnail;

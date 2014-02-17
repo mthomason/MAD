@@ -375,28 +375,20 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    //MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
     //RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
     RptqQuery *query = [[database hasQueries] anyObject];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
     RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:managedObjectContext] retain];
 
     id queryResult = [self runQuery:queryString];
     
-    NSError *error = nil;
-    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
-
-    NSURL *url = [[activeDocument cachedDataUrl] retain];
-    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    if (error) {
-        error = nil;
-        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    }
-    [url release];
+    [[self delegateCacheData] cacheQueryResult:queryResult];
+    
     [queryCache setCacheDate:[NSDate date]];
     [query setHasQueryCache:queryCache];
     [queryCache release];

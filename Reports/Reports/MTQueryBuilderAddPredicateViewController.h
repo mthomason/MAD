@@ -12,7 +12,7 @@
 #import "RptqQueryField+Extras.h"
 #import "UITableViewControllerOpperators.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MTActiveDocument.h"
+#import "MTApplicaitonInstance.h"
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTTableViewController.h"
 
@@ -36,6 +36,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
         MTViewControllerValueBasedOnFieldDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 

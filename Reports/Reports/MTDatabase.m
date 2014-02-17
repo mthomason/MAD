@@ -12,6 +12,8 @@
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
+#import "MTDatabaseTable.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 @interface MTDatabase ()
 

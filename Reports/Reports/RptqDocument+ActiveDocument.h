@@ -6,21 +6,3 @@
 //  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_RptqDocument_ActiveDocument_h
-#define Reports_RptqDocument_ActiveDocument_h
-
-#import "RptqDocument.h"
-#import "RptqQuery.h"
-#import "AppDelegate.h"
-
-@interface RptqDocument (ActiveDocument)
-
-+ (RptqDocument *)activeDocument;
-+ (RptqQuery *)queryForActiveDocument;
-+ (NSArray *)queryLinksForActiveDocument;
-+ (NSArray *)tablesForActiveDocument;
-+ (RptqQuery *)queryForDocument:(RptqDocument *)document;
-
-@end
-
-#endif

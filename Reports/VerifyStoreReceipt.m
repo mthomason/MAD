@@ -31,6 +31,7 @@
 #import "VerifyStoreReceipt.h"
 #import "AppDelegate.h"
 #import "MTApplicaitonInstance.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 // link with Foundation.framework, Security.framework, libssl and libCrypto (via -lssl -lcrypto in Other Linker Flags)
 

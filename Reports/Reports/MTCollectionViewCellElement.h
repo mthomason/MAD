@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIView+NSObjectIdTag.h"
+#import "MAReportDocument.h"
 
 @class MTCollectionViewCellElement;
 
@@ -15,6 +16,7 @@
 
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+- (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell;
 
 @end
 

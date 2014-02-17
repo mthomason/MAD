@@ -8,6 +8,20 @@
 
 #import "MAReportDocument.h"
 #import "MTDatabaseSqlite3.h"
+#import "MTReportViewerPrintPageRenderer.h"
+#import "MTDatabaseTable.h"
+#import "MTDatabaseField.h"
+
+#import "RptqDocument+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqUserCredentals+Extras.h"
+
+#import "MTLog.h"
+#import "UIDevice+Hack.h"
 
 @interface MAReportDocument ()
 
@@ -43,6 +57,10 @@
 
 + (NSString *)persistentStoreName {
     return MTPersistentStoreAliasMad;
+}
+
+- (void)cacheQueryResult:(id)queryResult {
+    [[self delegateCacheData] cacheQueryResult:queryResult];
 }
 
 - (RptqDocument *)activeDocument {
@@ -252,7 +270,7 @@
     
     if (urlToOpen != nil) {
 
-        MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
+        MAReportDocument *managedDocumentAtUrl = [[[MAReportDocument alloc] initWithFileURL:urlToOpen] retain];
         
         NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
         NSNumber *inferMappingModelAutomaticallyOption = @YES;
@@ -268,17 +286,25 @@
             
             __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
             [blockManagedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
+                
+                MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
                 NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
-                [blockManagedDocumentAtUrl setThumbnailUrl:thumbnailUrl];
+                [activeDocument setThumbnailUrl:thumbnailUrl];
                 NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToOpen];
-                [blockManagedDocumentAtUrl setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
-                completionHandler(blockManagedDocumentAtUrl, success);
+                [activeDocument setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
+                completionHandler(activeDocument, success);
+                [activeDocument release];
             }];
         } else {
-            [managedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-                completionHandler(managedDocumentAtUrl, success);
+            __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
+            [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+                MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
+                completionHandler(activeDocument, success);
+                [activeDocument release];
             }];
         }
+        
+        [managedDocumentAtUrl release];
     }
     [urlToOpen release];
     
@@ -395,6 +421,21 @@
         }
     }];
     
+}
+
+- (void)regenThumbnail {
+    RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
+    if (document != nil) {
+        
+        if ([[self thumbnailUrl] isKindOfClass:[NSURL class]]) {
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:self];
+            UIImage *thumbnail = [printPageRender thumbnail];
+            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+            [pngImage writeToURL:[self thumbnailUrl] atomically:YES];
+            [printPageRender release];
+        }
+    }
+    [document release];
 }
 
 @end

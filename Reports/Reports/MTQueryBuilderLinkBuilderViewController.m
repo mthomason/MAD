@@ -84,6 +84,9 @@
 
     } else {
         
+        
+        MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+        
         if ([[segue identifier] isEqualToString:@"showSelectTableOne"]) {
 
             if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkFirstTableViewController class]]) {
@@ -91,7 +94,6 @@
                 if (tvc) {
                     [tvc setDelegate:self];
                     
-                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
                     RptqDocument *document = [reportDocument activeDocument];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
@@ -102,7 +104,7 @@
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [reportDocument managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
@@ -122,7 +124,7 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"inQueryTable == %@", [[self firstTableName] objectID]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [reportDocument managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -138,7 +140,6 @@
                 if (vcFf) {                
                     [vcFf setDelegate:self];                    
 
-                    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     RptqDocument *document = [reportDocument activeDocument];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -171,7 +172,7 @@
                     request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext]
+                                                                                          managedObjectContext: [reportDocument managedObjectContext]
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];

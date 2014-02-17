@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerObjectSelectorViewController.h"
+#import "UIDevice+Hack.h"
 
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";

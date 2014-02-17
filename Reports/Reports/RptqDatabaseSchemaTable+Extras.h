@@ -34,7 +34,6 @@
 + (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 + (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
-+ (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

@@ -7,6 +7,8 @@
 //
 
 #import "MTReportDesignerDocumentObjectFormat.h"
+#import "UIDevice+Hack.h"
+#import "AppDelegate.h"
 
 @interface MTReportDesignerDocumentObjectFormat ()
 
@@ -92,7 +94,11 @@
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
     
     BOOL numericTypeInSet = NO;
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+
+    
+    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
 
     NSMutableSet *keepers = [[NSMutableSet alloc] init];
     for (NSManagedObjectID *objectId in objectIds) {
@@ -128,7 +134,9 @@
     } else {
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
-        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        
+        MAReportDocument *activeDocument = [[AppDelegate applicationInstance] activeDocument];
+
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
@@ -184,7 +192,9 @@
 - (void)emptySelector:(id)sender {}
 
 - (IBAction)controlValueChanged:(id)sender {
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    
+    
+    MAReportDocument *activeDocument = [[AppDelegate applicationInstance] activeDocument];
 
     SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
@@ -243,7 +253,9 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if ([indexPath row] == 1 && [indexPath section] == 0) {
-        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        
+        MAReportDocument *activeDocument = [[AppDelegate applicationInstance] activeDocument];
+
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
             BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];

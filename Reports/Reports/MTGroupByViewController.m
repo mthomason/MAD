@@ -7,6 +7,7 @@
 //
 
 #import "MTGroupByViewController.h"
+#import "AppDelegate.h"
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 
@@ -32,7 +33,10 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         NSString *weight = NSStringFromSelector(@selector(weight));
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
         [request setSortDescriptors: @[sortDescriptor]];
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+        
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        id activeDocument = [applicationInstance activeDocument];
+        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                               managedObjectContext: managedObjectContext
                                                                                 sectionNameKeyPath: nil

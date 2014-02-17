@@ -22,6 +22,7 @@
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 - (IBAction)print:(id)sender;
 - (IBAction)sendToPdf:(id)sender;

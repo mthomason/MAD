@@ -31,8 +31,7 @@
     
     [[self navigationController] popViewControllerAnimated:YES];
     
-    RptqDocument *document = [RptqDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqDatabase *database = [[[field inQueryTable] inQuery] inDatabase];;
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     [mnsDatabase sampleDataForSchemaField:[field databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
         if (success) {

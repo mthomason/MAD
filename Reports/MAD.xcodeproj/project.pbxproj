@@ -2746,8 +2746,6 @@
 			children = (
 				4C174CDC18B13760007A88B3 /* MTApplicaitonInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicaitonInstance.m */,
-				4CFFEE9D16C0E53B00FC6EC4 /* Unreferenced */,
-				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CFF3F23164DFF1F0070E880 /* MADocument.h */,
 				4CFF3F24164DFF1F0070E880 /* MADocument.m */,
 				4CFF3E7B164CD75D0070E880 /* MAReportDocument.h */,
@@ -2774,6 +2772,7 @@
 				4CE9BC2416EF59CB00B0808C /* MTActiveDocument.m */,
 				4CF2F2711754F8F200DC34E3 /* MTPaper.h */,
 				4CF2F2721754F8F200DC34E3 /* MTPaper.m */,
+				4C8F7DE414CFFA13006171A7 /* Rptq */,
 			);
 			name = Model;
 			path = Reports;
@@ -4186,13 +4185,6 @@
 			);
 			name = "Query Builder";
 			path = Reports;
-			sourceTree = "<group>";
-		};
-		4CFFEE9D16C0E53B00FC6EC4 /* Unreferenced */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Unreferenced;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

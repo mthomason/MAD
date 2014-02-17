@@ -19,6 +19,8 @@
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> delegateContentController;
 
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
+
 - (MTQueryBuilderViewController *)queryBuilderController;
 - (MTQueryBuilderAdvancedViewController *)queryBuilderControllerAdvanced;
 

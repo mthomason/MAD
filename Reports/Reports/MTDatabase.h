@@ -11,10 +11,9 @@
 
 #import <Foundation/Foundation.h>
 #import "RptqDatabaseSchemaTable.h"
-#import "RptqQuery+Extras.h"
-#import "MTDatabaseTable.h"
-#import "MTStoreKitController+NonRenewableLicensing.h"
 #import "RptqQueryField.h"
+
+#import "RptqQuery+Extras.h"
 
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeNone = 0,
@@ -24,7 +23,14 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeVerify
 };
 
+@protocol MTDatabaseCacheProtocol <NSObject>
+@required
+- (void)cacheQueryResult:(id)queryResult;
+@end
+
 @interface MTDatabase : NSObject
+
+@property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
 
 + (id)databaseObjectForRptqDatabase:(RptqDatabase *)database;
 + (id)databaseForRptqDatabase:(RptqDatabase *)database;

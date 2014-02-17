@@ -11,6 +11,8 @@
 #import "UIManagedDocument+FileOperations.h"
 #import "MTLog.h"
 #import "UIColor+EverydayApps.h"
+#import "NSURL+Document.h"
+#import "UIDevice+Hack.h"
 
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
 NSString * const MTDocumentInfoKeyThumbnailStandard = @"thumbnail.png";
@@ -205,21 +207,6 @@ NSString * MTDocumentParentContextName          = @"moc";
     }
 
     return result;
-}
-
-- (void)regenThumbnail {
-    RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
-    if (document != nil) {
-        if ([[self thumbnailUrl] isKindOfClass:[NSURL class]] &&
-            [[self extraInformation] isKindOfClass:[NSMutableDictionary class]]) {
-            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:document];
-            UIImage *thumbnail = [printPageRender thumbnail];
-            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-            [pngImage writeToURL:[self thumbnailUrl] atomically:YES];
-            [printPageRender release];
-        }
-    }
-    [document release];
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {

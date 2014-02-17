@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
+#import "MTApplicaitonInstance.h"
 
 extern NSString * const MTIdentifierSegueDocumentObjectEditBarcode;
 extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
@@ -22,6 +23,8 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     <MTViewControllerBarcodePreviewDelegate, MTViewControllerBarcodeOptionsDelegate>
 
 @property (nonatomic, assign) id <MTViewControllerBarcodeDelegate> delegate;
+
+//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 @property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
 @property (nonatomic, retain, readwrite) RptqQueryField *queryField2;

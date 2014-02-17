@@ -76,7 +76,8 @@
     //rowHeight = DEFAULT_ROW_HEIGHT;
     _openSectionIndex = NSNotFound;
 
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    
+    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];

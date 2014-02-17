@@ -8,6 +8,7 @@
 
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTCellEnterText.h"
+#import "AppDelegate.h"
 
 @interface MTViewControllerValueBasedOnField ()
 
@@ -80,11 +81,13 @@
     
     dispatch_async(queuePriorityBackground, ^{
         
-        NSManagedObjectContext *objectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
         RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
                                                                     fromObjectContext: objectContext];
         
-        RptqDocument *document = [RptqDocument activeDocument];
+        RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
         [mnsDatabase sampleDataForSchemaField:field completion:^(BOOL success, NSError *error, NSArray *resultStrings) {

@@ -58,18 +58,6 @@
 
 #pragma mark - Static
 
-+ (NSArray *)tablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqQuery *query = [RptqDocument queryForActiveDocument];    
-    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-    request.predicate = [NSPredicate predicateWithFormat: @"inQuery == %@", [query objectID]];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
-    [request setSortDescriptors: @[sortDescriptor]];
-    NSError *error = nil;
-    NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
-    return results;
-}
-
 + (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                                label:(NSString *)label
                                          labelPlural:(NSString *)labelPlural
@@ -120,10 +108,8 @@
 }
 
 + (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-
-    MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqDatabase *database = [table inDatabase];
+    RptqDocument *document = [database ownedByQueryAsStaticResource];
     RptqQuery *query = [[database hasQueries] anyObject];
     NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
     

@@ -44,7 +44,8 @@
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
             MTQueryBuilderAddPredicateViewController *tvcSC = [[segue destinationViewController] retain];
             [tvcSC setDelegate:self];
-            [tvcSC release];        }
+            [tvcSC release];
+        }
     }
 }
 

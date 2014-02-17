@@ -347,20 +347,12 @@
                                 NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
                                 RptqQueryCache *queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
                                 
-                                NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:[fetch results]
-                                                                                                format:NSPropertyListBinaryFormat_v1_0
-                                                                                               options:0
-                                                                                                 error:NULL];
-                                MAReportDocument *rd = [[MTActiveDocument sharedDocument] activeDocument];
-                                NSURL *url = [[rd cachedDataUrl] retain];
-                                [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
-                                if (connError) {
-                                    connError = nil;
-                                    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&connError];
-                                }
+                                id queryResults = [[fetch results] retain];
+                                [[self delegateCacheData] cacheQueryResult:queryResults];
+                                [queryResults release];
+
                                 [queryCache setCacheDate:[NSDate date]];
                                 [query setHasQueryCache:queryCache];
-                                [url release];
                             }
                             
                         } else {

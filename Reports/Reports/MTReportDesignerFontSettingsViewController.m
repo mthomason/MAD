@@ -13,6 +13,7 @@
 #import "UIColor+EverydayApps.h"
 #import "UIColor+Gradients.h"
 #import "UIImage+Resizable.h"
+#import "UIDevice+Hack.h"
 
 @interface MTReportDesignerFontSettingsViewController()
 
@@ -340,7 +341,9 @@
         NSInteger numberBold = 0, numberItalic = 0, numberStrike = 0, numberUnderline = 0;
         NSInteger numberNotBold = 0, numberNotItalic = 0, numberNotStrike = 0, numberNotUnderline = 0;
         
-        NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
 
@@ -649,12 +652,15 @@
     [[self labelFontName] setFont:[font font]];
     [[self labelFontName] setText:[font name]];
     [[self labelFontName] setAttributedText:[self boldSystemString:[font name] ofSize:[[[self labelFontName] font] pointSize]]];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         [documentObject setFontname:[font name]];
     }
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [reportDocument saveContext];
 
 }
 
@@ -676,13 +682,16 @@
     }
     [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+
+    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL boldOn = [self controlStateBold] == MTControlStateOn ? YES : NO;
         [documentObject setBold:@(boldOn)];
     }
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [reportDocument saveContext];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -702,13 +711,15 @@
     }
     [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL italicOn = [self controlStateItalic] == MTControlStateOn ? YES : NO;
         [documentObject setItalic:@(italicOn)];
     }
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [reportDocument saveContext];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -728,13 +739,17 @@
     }
     [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+
+    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL strikeOn = [self controlStateStrike] == MTControlStateOn ? YES : NO;
         [documentObject setStrike:@(strikeOn)];
     }
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [reportDocument saveContext];
 }
 
 - (IBAction)toggleUnderline:(id)sender {
@@ -754,13 +769,16 @@
     }
     [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
     
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+
+    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
         BOOL underlineOn = [self controlStateUnderline] == MTControlStateOn ? YES : NO;
         [documentObject setUnderline:@(underlineOn)];
     }
-    [[[MTActiveDocument sharedDocument] activeDocument] saveContext];
+    [reportDocument saveContext];
 }
 
 - (void)emptySelector:(id)whofuckingCares {
@@ -768,7 +786,9 @@
 }
 
 - (IBAction)controlValueChanged:(id)sender {
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
+    
+    MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *activeDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     SEL valueChangedAction = @selector(emptySelector:);

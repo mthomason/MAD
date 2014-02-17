@@ -19,6 +19,7 @@
 #import "MTFont.h"
 #import "MTTextView.h"
 #import "UIColor+EverydayApps.h"
+#import "UIDevice+Hack.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0

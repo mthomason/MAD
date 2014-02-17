@@ -116,7 +116,9 @@
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
     [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     UILabel *titleLabel = [[self titleView] label];
     [titleLabel setText:[table alias]];
@@ -138,11 +140,11 @@
 #pragma mark - Table view datasource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
-    //RptqDatabaseSchemaTable *table = [RptqDatabaseSchemaTable getTableForObjectID:[self tableObjectId] fromObjectContext:managedObjectContext];
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
-    MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];    
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
+    
+    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
     RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
     UILabel *detailLabel = [result detailLabel];
@@ -158,7 +160,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     NSUInteger result = 0;
-    NSManagedObjectContext *managedObjectContext = [[[MTActiveDocument sharedDocument] activeDocument] managedObjectContext];
+    
+    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     
     if (queryTable != nil) {

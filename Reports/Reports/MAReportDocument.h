@@ -10,22 +10,20 @@
 #define Reports_MTReportDocument_h
 
 #import <Foundation/Foundation.h>
-
-#import "MTDatabase.h"
-#import "MTDatabaseTable.h"
-#import "MTDatabaseField.h"
-
-#import "RptqDocument+Extras.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqDatabase+Extras.h"
-#import "RptqUserCredentals+Extras.h"
 #import "MADocument.h"
+#import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 
+
+@protocol MAReportDocumentCacheProtocol <NSObject>
+@required
+- (void)cacheQueryResult:(id)queryResult;
+@end
+
 @interface MAReportDocument : MADocument
+    <MTDatabaseCacheProtocol>
+
+@property (nonatomic, assign) id <MAReportDocumentCacheProtocol> delegateCacheData;
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
@@ -40,6 +38,7 @@
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 
+- (void)regenThumbnail;
 - (RptqDocument *)activeDocument;
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion;

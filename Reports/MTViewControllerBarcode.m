@@ -12,6 +12,8 @@
 #import "MTBarcodeMicroQrCode.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMaxicodeIso16023.h"
+#import "UIDevice+Hack.h"
+#import "AppDelegate.h"
 
 NSString * const MTIdentifierSegueDocumentObjectEditBarcode = @"MTIdentifierSegueDocumentObjectEditBarcode";
 NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
@@ -111,7 +113,10 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     if ([self editmode]) {
         [[self barButtonItemSave] setEnabled:YES];
 
-        RptqDocument *document = [RptqDocument activeDocument];
+        
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
         

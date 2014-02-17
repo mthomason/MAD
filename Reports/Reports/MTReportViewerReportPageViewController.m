@@ -7,6 +7,7 @@
 //
 
 #import "MTReportViewerReportPageViewController.h"
+#import "AppDelegate.h"
 #import "NSDate+Extras.h"
 
 @interface MTReportViewerReportPageViewController ()
@@ -47,7 +48,9 @@
 
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
-        MAReportDocument *reportDocument = [[MTActiveDocument sharedDocument] activeDocument];
+        
+        MTApplicaitonInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
         NSString *cachedDataPath = [cachedDataUrl path];
         NSError *error = nil;

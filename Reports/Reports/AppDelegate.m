@@ -7,14 +7,21 @@
 //
 
 #import "AppDelegate.h"
-#import "MAReportDocument.h"
 #import "MTViewControllerOpenDocument.h"
 #import "UIManagedDocument+FileOperations.h"
 #import "UIApplication+Extras.h"
 #import "evp.h"
 #import "VerifyStoreReceipt.h"
 
+#import "UIDevice+Hack.h"
+#import "MACloudManager.h"
+#import "MTStoreKitController.h"
+#import "MTLog.h"
+#import "NSURL+Document.h"
+
 @interface AppDelegate()
+
+@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 @property (nonatomic, retain) UIFontDescriptor *mainFontDescriptor;
 @property (nonatomic, retain) UIFontDescriptor *detailFontDescriptor;
@@ -28,8 +35,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     MTLogStatic(@"%@", exception);
 }
 
++ (MTApplicaitonInstance *)applicationInstance {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    MTApplicaitonInstance *result = [[appDelegate applicationInstance] retain];
+    return [result autorelease];
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
+    [_applicationInstance release];
     [_mainFontDescriptor release];
     [_detailFontDescriptor release];
     [_window release];
@@ -37,6 +51,10 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    MTApplicaitonInstance *appInstance = [[MTApplicaitonInstance alloc] init];
+    [self setApplicationInstance:appInstance];
+    [appInstance release];
     
     //List all fonts
     
@@ -57,12 +75,15 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
+    
+    // FIXME: Have a seperate cache for each app instance, and then for each query even...
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
     
+    // FIXME: Run these checks on app instance start...
     NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
 	NSCAssert([[MTApplicaitonInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
     NSCAssert([MTGlobalBundleRev isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MADRev"]], @"Check the hard-coded MADRev, dog!");
@@ -74,7 +95,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UIStoryboard *storyBoard = [MTApplicaitonInstance storyboard];
     [window setTintColor:[UIColor tintColor]];
-    [window setRootViewController:[storyBoard instantiateInitialViewController]];
+    id initViewController = [storyBoard instantiateInitialViewController];
+    [window setRootViewController:initViewController];
     [window makeKeyAndVisible];
     [self setWindow: window];
     [window release];
@@ -106,7 +128,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (void)applicationDidBecomeActive:(UIApplication *)application { }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MAReportDocument *documentReport = [[[MTActiveDocument sharedDocument] activeDocument] retain];
+    MAReportDocument *documentReport = [[[self applicationInstance] activeDocument] retain];
     [documentReport quickSave];
     [documentReport release];
 }

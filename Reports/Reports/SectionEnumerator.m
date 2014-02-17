@@ -11,25 +11,25 @@
 
 @interface SectionEnumerator ()
 
-//@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) RptqDocument *document;
 
 @end
 
 @implementation SectionEnumerator
 
 - (void)dealloc {
+    [_document release];
     [super dealloc];
 }
 
-- (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (id)initWithDocument:(RptqDocument *)document {
     self = [super init];
     if (self) {
-        MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-        RptqDocument *document = [activeDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
         [self setCurrent: 0];
         [self setTotal: [[query hasQueryGroups] count]];
+        [self setDocument:document];
     }
     return self;
 }
@@ -39,9 +39,7 @@
 }
 
 - (NSArray *)allObjects {
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    RptqDocument *document = [activeDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     
     NSInteger current = [self current];
@@ -57,9 +55,7 @@
 }
 
 - (id)nextObject {
-    MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    RptqDocument *document = [activeDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
     NSInteger current = [self current];

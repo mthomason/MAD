@@ -99,17 +99,6 @@
     return result;
 }
 
-+ (NSArray *)queryTablesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqQuery *query = [RptqDocument queryForActiveDocument];
-    NSSet *queryTablesSet = [query hasQueryTables];
-    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *sortDescriptors = @[namesAccending];
-    NSArray *queryTablesArray = [[queryTablesSet sortedArrayUsingDescriptors:sortDescriptors] retain];
-    [namesAccending release];
-    return [queryTablesArray autorelease];
-}
-
-
 - (BOOL)isEqualTo:(id)sender {
     BOOL result;
     if ([self isEqual:sender]) {

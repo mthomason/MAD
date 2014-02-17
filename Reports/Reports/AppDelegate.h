@@ -9,17 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "MTApplicaitonInstance.h"
 
-#import "UIDevice+Hack.h"
-#import "MACloudManager.h"
-#import "MTStoreKitController.h"
-#import "MTLog.h"
-#import "NSURL+Document.h"
-
 
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate,
         UIDocumentInteractionControllerDelegate,
         UIAlertViewDelegate>
+
++ (MTApplicaitonInstance *)applicationInstance;
 
 @property (nonatomic, strong) UIWindow *window;
 
