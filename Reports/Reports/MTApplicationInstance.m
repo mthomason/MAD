@@ -17,9 +17,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.202";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.202";
-NSString * const MTGlobalBundleRev                                  = @"823";
+NSString * const MTGlobalBundleVersion                              = @"1.0.203";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.203";
+NSString * const MTGlobalBundleRev                                  = @"824";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -88,9 +88,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                         if (success) {
                             [blockSelf setReportState:MTReportStateClosed];
                             [[blockSelf documents] removeObjectForKey:[blockSelf currentDocument]];
-//                            [[blockSelf documents] setObject:nil forKey:[blockSelf currentDocument]];
                             dispatch_sync(dispatch_get_main_queue(), ^{
-                                completionHandler(YES);
+                                completionHandler(success);
                             });
                         }
                     }];
@@ -141,9 +140,9 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     if ([self reportState] == MTReportStateOpen) {
         NSDictionary *documents = [self documents];
         NSURL *currentUrl = [self currentDocument];
-        result = [[documents[currentUrl] retain] autorelease];
+        result = [documents objectForKey:currentUrl];
     }
-    return result;
+    return [[result retain] autorelease];
 }
 
 + (BOOL)isMadViewer {

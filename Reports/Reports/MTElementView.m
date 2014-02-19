@@ -28,27 +28,6 @@
 
 @interface MTElementView ()
 
-// This element view is made of four total views.
-//@property (nonatomic, readwrite, retain) UIImageView *imageView;   //Display image preview for image objects
-//@property (nonatomic, readwrite, retain) UILabel *displayLabel;    //Display label floats in the padding
-//@property (nonatomic, retain) UIView *paddingView;      //Padding is inside the visible view
-//@property (nonatomic, retain) UIView *visibleView;      //View floats inside the margin
-
-@property (assign) BOOL displayWobbling;
-@property (assign) BOOL displayHighlighted;
-
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain) UIFont *displayFont;
-@property (nonatomic, retain) NSParagraphStyle *paragraphStyle;
-@property (nonatomic, retain) NSString *displayText;
-@property (nonatomic, retain) NSNumber *underlineStyle;
-@property (nonatomic, retain) NSNumber *strikeThroughStyle;
-@property (nonatomic, retain) NSAttributedString *displayStringAttributed;
-@property (nonatomic, assign) CGRect drawingRect;
-@property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
-@property (nonatomic, retain) UIImage *displayImage;
-@property (nonatomic, retain) MTBarcode *displayBarcode;
-
 @end
 
 @implementation MTElementView
@@ -56,9 +35,6 @@
 #pragma mark - NSObject
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:NSManagedObjectContextDidSaveNotification
-                                                  object:_managedObjectContext];
     [_displayBarcode release];
     [_displayImage release];
     [_underlineStyle release];
@@ -124,231 +100,21 @@
         }
         [self setClipsToBounds:YES];
 
-        [self initalDisplaySettings];
-                
-        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-        [defaultCenter addObserver:self
-                          selector:@selector(managedObjectContextDidSave:)
-                              name:NSManagedObjectContextDidSaveNotification
-                            object:managedObjectContext];
     }
     return self;
 }
 
-- (void)managedObjectContextDidSave:(NSNotification *)notification {
-    NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
-
-    for (id updatedObject in updatedObjects) {
-        if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
-            NSLog(@"Object id:\n%@\n%@", [self objectIdTag], [updatedObject objectID]);
-            if ([[self objectIdTag] isEqual:[updatedObject objectID]]) {
-                [self updateDisplayLabel];
-                break;
-            }
-        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
-            if ([[self objectIdTag] isEqual:[[updatedObject parentObjectLabel] objectID]]) {
-                [self updateDisplayLabel];
-                break;
-            }
-        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
-            if ([[self objectIdTag] isEqual:[[updatedObject parentObjectBarcode] objectID]]) {
-                [self updateDisplayLabel];
-                break;
-            }
-        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectAggregate class]]) {
-            if ([[self objectIdTag] isEqual:[[updatedObject parentObject] objectID]]) {
-                [self updateDisplayLabel];
-                break;
-            }
-        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
-            if ([[self objectIdTag] isEqual:[[updatedObject parentObjectLabelDataField] objectID]]) {
-                [self updateDisplayLabel];
-                break;
-            }
-        } else if ([updatedObject isKindOfClass:[RptqDocumentObject class]]) {
-            RptqDocumentObject *obj = updatedObject;
-            RptqDocumentObjectImage *objImage = [obj isImage];
-            if (objImage) {
-                if ([[self objectIdTag] isEqual:[objImage objectID]]) {
-                    [self updateDisplayLabel];
-                    break;
-                }
-            }
-        }
-    }
-
-}
-
-- (void)initalDisplaySettings {
-    
-    // MARK: Display settings that should only run once.
-    // This is a bit of a performance hack.  Right now, I'm redisplaying the whole label
-    //   instead of only the changed parts.  That's cool, but should I reset the image, when
-    //   there is currently no UI to change the image?  No!
-    
-    // TODO: Update image when changed.
-    
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    if (documentObject != nil) {
-        //[[self imageView] setImage:[[documentObject isImage] image]];
-    }
-    
-    [self updateDisplayLabel];
-
-}
-
-- (void)updateDisplayLabel {
-    
-    // TODO: Only update specific properties when they change.
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[self objectIdTag] fromObjectContext:[self managedObjectContext]];
-    
-    if (documentObject != nil) {
-
-        CGRect marginViewFrame = [documentObject boundsContentView];
-
-        [self setFrame: marginViewFrame];
-
-        NSString *fontName = [documentObject fontname];
-        CGFloat pointSize = [[documentObject fontsize] floatValue];
-        
-        UIFont *displayFont = nil;
-        if ([fontName length] == 0) {
-            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        } else {
-            MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
-            if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
-                displayFont = [stylizedDisplayFont boldItalicFont];
-            } else if ([[documentObject bold] boolValue]) {
-                displayFont = [stylizedDisplayFont boldFont];
-            } else if ([[documentObject italic] boolValue]) {
-                displayFont = [stylizedDisplayFont italicFont];
-            } else {
-                displayFont = [stylizedDisplayFont font];
-            }
-            [stylizedDisplayFont release];
-        }
-        
-        if (displayFont == nil) {
-            displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-        }
-        [self setDisplayFont:displayFont];
-        
-        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        
-        MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
-        NSTextAlignment textAlignment;
-        switch (horizontalAlignment) {
-            case MTHorizontalAlignmentCenter:
-                textAlignment = NSTextAlignmentCenter;
-                break;
-            case MTHorizontalAlignmentLeft:
-                textAlignment = NSTextAlignmentLeft;
-                break;
-            case MTHorizontalAlignmentRight:
-                textAlignment = NSTextAlignmentRight;
-                break;
-            case MTHorizontalAlignmentJustified:
-                textAlignment = NSTextAlignmentJustified;
-                break;
-            default:
-                textAlignment = NSTextAlignmentLeft;
-                break;
-        }
-        
-        [paragraphStyle setAlignment:textAlignment];
-        [self setParagraphStyle:paragraphStyle];
-        [paragraphStyle release];
-
-        NSString *string = [[documentObject designerRepresentationText] retain];
-        [self setDisplayText:string];
-        [string release];
-        
-        [self setDisplayImage:nil];
-        [self setDisplayBarcode:nil];
-        [self setDisplayImage:nil];
-        
-        if ([documentObject getType] == MTDocumentObjectTypeImage) {
-        
-            [self setDisplayImage:[[documentObject isImage] image]];
-        
-        } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
-
-            MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
-            [self setDisplayBarcode:displayBarcode];
-
-        }
-        
-        NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-        [self setUnderlineStyle:underlineStyle];
-        
-        NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-        [self setStrikeThroughStyle:strikeThroughStyle];
-        
-        NSDictionary *attributes = @{
-                                     NSParagraphStyleAttributeName : [self paragraphStyle],
-                                     NSFontAttributeName : [self displayFont],
-                                     NSStrikethroughStyleAttributeName : [self underlineStyle],
-                                     NSUnderlineStyleAttributeName : [self strikeThroughStyle]
-                                     };
-        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:[self displayText] attributes:attributes];
-        [self setDisplayStringAttributed:attributtedString];
-        [attributtedString release];
-        
-        
-        
-        CGSize sizeContentView = [documentObject sizeContentView];
-        CGRect boundsContentView = [documentObject boundsContentView]; //x1
-        NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
-        [self setDrawingOptions:drawingOptions];
-        CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize:sizeContentView options:drawingOptions context:nil]; //x35
-        CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
-        
-        
-        MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-        
-        switch (verticalAlignment) {
-            case MTVerticalAlignmentCenter: {
-                CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
-                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                break;
-            }
-            case MTVerticalAlignmentBottom: {
-                CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
-                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                break;
-            }
-            case MTVerticalAlignmentTop:
-            default:
-                break;
-        }
-
-        CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
-        CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
-        CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
-        drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
-        [self setDrawingRect:drawingBounds];
-        
-        //NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
-
-        
-        [self setNeedsLayout];
-        [self setNeedsDisplay];
-    }
-}
-
 - (void)drawRect:(CGRect)rect {
 
-    CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
-    CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
     if ([self displayImage]) {
-        [[self displayImage] drawInRect:drawingBounds];
+        [[self displayImage] drawInRect:rect];
     } else if ([self displayBarcode]) {
         [[self displayBarcode] initSampleData];
         [[self displayBarcode] setForgroundColor:[UIColor lightGrayColor]];
-        [[self displayBarcode] drawInRect:drawingBounds];
+        [[self displayBarcode] drawInRect:rect];
     } else {
+        CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
+        CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
         [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
     }
     //NSLog(@"drawRect: %@", [self displayStringAttributed]);

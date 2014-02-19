@@ -272,12 +272,7 @@
     if ([reportViewer updatingOfTimerIsPaused] == NO) {
         if ([reportViewer lastCacheDate] == nil) {
 
-            
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-            MAReportDocument *reportDocument = [applicationInstance activeDocument];
-            RptqDocument *document = [reportDocument activeDocument];
-            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqQuery *query = [[database hasQueries] anyObject];
+            RptqQuery *query = [AppDelegate activeRptqQuery];
             NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
             [reportViewer setLastCacheDate: lastD];
             [lastD release];
@@ -548,11 +543,13 @@
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queuePriorityBackground, ^{
         
-        NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+        NSString *temporaryDirectoryPath = NSTemporaryDirectory();
+        NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
         NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
         [printPageRender writeToPdf:temporaryFile];
         [printPageRender release];
+        
         __block MTReportViewerController *blockReportViewer = reportViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [blockReportViewer setUpdatingOfTimerIsPaused:NO];

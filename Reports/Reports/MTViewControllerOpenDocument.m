@@ -116,34 +116,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[blockSelf collectionView] reloadData];
     }];
     
-    /*
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-    
-        //MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
-        MAReportDocument *activeDocument = [applicationInstance activeDocument];
-        [activeDocument regenThumbnail];
-        [activeDocument closeWithCompletionHandler:^(BOOL success) {
-            if (success) {
-                MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
-                MAReportDocument *activeDocument = [applicationInstance activeDocument];
-                [activeDocument setSuspended:YES];
-                [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                    [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
-   
-                        MTApplicationInstance *applicationInstance = [blockSelf applicationInstance];
-                        [applicationInstance setReportState:MTReportStateClosed];
-
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [[blockSelf collectionView] setUserInteractionEnabled: YES];
-                            [blockSelf setCellsHidden:NO];
-                            [[blockSelf collectionView] reloadData];
-                        });
-                    }];
-                    
-                }];
-            };
-        }];
-    });*/
 }
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
@@ -249,37 +221,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)endEditMode:(UITapGestureRecognizer *)sender {
     if ([self editModeEnabled]) {
         [self edit:self];
-
-        /*
-        [self setEditModeEnabled:NO];
-        [self setEditing:NO animated:YES];
-        [[self navigationItem] setRightBarButtonItem:[self barButtonItemEdit] animated:YES];
-
-        CGPoint locationInView = [sender locationInView:[self collectionView]];
-        NSIndexPath *indexPath = [[self collectionView] indexPathForItemAtPoint:locationInView];
-        if (!indexPath) {
-            [[[self collectionView] collectionViewLayout] invalidateLayout];
-        }
-        
-        for (NSUInteger item = 0; item < [[self collectionView] numberOfItemsInSection:0]; item++) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
-            MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[[self collectionView] cellForItemAtIndexPath:indexPath] retain];
-            [cell stopWobble];
-            [cell performDeselectionAnimations];
-            
-            NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
-            NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-            NSString *path = [url path];
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
-            if (image == nil) {
-                image = [[MTTableViewCellDocument defaultThumbnail] retain];
-            }
-            [[cell imagePreview] setImage:image];
-            [image release];
-            
-            [cell release];
-        }*/
-        
     }
 }
 
@@ -292,31 +233,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame:bounds];
     [v setBackgroundView:watermarkView];
     [watermarkView release];
-    /*
-    UILabel *bg = [[UILabel alloc] initWithFrame:[v bounds]];
-    [bg setNumberOfLines:1];
-    [bg setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
-    [bg setLineBreakMode:NSLineBreakByClipping];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
-    
-    NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:@"MAD"];
-    NSInteger length = [[attributedStringMadDesigner string] length];
-    CGFloat fontSize = [UIDevice isPad] ? 400.0000f : 160.0000f;
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
-    NSRange range = NSMakeRange(0, length);
-    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:[UIColor lightTextColor] range:range];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:range];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
-    [bg setAttributedText:attributedStringMadDesigner];
-    [v setBackgroundView:bg];
-    [paragraphStyle release];
-     [attributedStringMadDesigner release];
-    */
 }
 
 - (void)viewDidLoad {
@@ -333,15 +249,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [toolbar setBarTintColor:barTintColor];
     [toolbar setTintColor:tintColor];
 
-    
     [self setLetterpressBackground];
-    
-    
-    //MTBarcodeView *bview = [[MTBarcodeView alloc] initWithFrame:CGRectMake(500.0000f, 100.0000f, 200.0000f, 200.0000f) type:MTBarcodeUpca borderStyle:MTBarcodeBorderStyleNone stringToEncode:@"72527270270" whitespaceWidth:10.0000f];
-    //[[[self collectionView] backgroundView] addSubview:bview];
-    //[bview release];
-    
-    
+
     UIColor *bgColor = [UIColor lightGrayColor];
     [[self collectionView] setBackgroundColor:bgColor];
     

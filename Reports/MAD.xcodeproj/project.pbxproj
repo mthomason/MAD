@@ -370,6 +370,8 @@
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; };
 		4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; };
+		4C434ACB18B40CFC00750B6B /* NSManagedObject+Rptq.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C434ACA18B40CFC00750B6B /* NSManagedObject+Rptq.m */; };
+		4C434ACC18B40CFC00750B6B /* NSManagedObject+Rptq.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C434ACA18B40CFC00750B6B /* NSManagedObject+Rptq.m */; };
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
 		4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
@@ -1828,6 +1830,8 @@
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C3ACA45167297AA001BC16D /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryPredicate+Extras.m"; sourceTree = "<group>"; };
+		4C434AC918B40CFC00750B6B /* NSManagedObject+Rptq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Rptq.h"; sourceTree = "<group>"; };
+		4C434ACA18B40CFC00750B6B /* NSManagedObject+Rptq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Rptq.m"; sourceTree = "<group>"; };
 		4C43F218178C8E430069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewer.storyboard; sourceTree = "<group>"; };
 		4C43F21A178C8E430069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewerPad.storyboard; sourceTree = "<group>"; };
 		4C43F224178C8E680069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportDesigner.storyboard; sourceTree = "<group>"; };
@@ -4042,6 +4046,8 @@
 				4C84EEB4178B43F20028BF49 /* UIImage+Border.m */,
 				4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */,
 				4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */,
+				4C434AC918B40CFC00750B6B /* NSManagedObject+Rptq.h */,
+				4C434ACA18B40CFC00750B6B /* NSManagedObject+Rptq.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -5234,6 +5240,7 @@
 				4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */,
 				4CF2F2741754F8F300DC34E3 /* MTPaper.m in Sources */,
+				4C434ACC18B40CFC00750B6B /* NSManagedObject+Rptq.m in Sources */,
 				4CABE4781837DF7C007EDD9D /* RptqDocumentObjectLabelLink.m in Sources */,
 				4CDD5AD017ECDFB00032DF6E /* UIApplication+Extras.m in Sources */,
 				4C5625E11758A17F00433E88 /* MACloudManager.m in Sources */,
@@ -5626,6 +5633,7 @@
 				4CABE48F1837DF7F007EDD9D /* RptqQueryLinks.m in Sources */,
 				4CABE47F1837DF7D007EDD9D /* RptqDocument.m in Sources */,
 				4CABE4BB1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */,
+				4C434ACB18B40CFC00750B6B /* NSManagedObject+Rptq.m in Sources */,
 				4CD2FDC217F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,

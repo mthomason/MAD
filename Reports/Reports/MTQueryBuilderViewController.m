@@ -353,11 +353,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     if (tvc) {
                         [tvc setDelegate:self];
                         
-                        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-                        RptqDocument *document = [reportDocument activeDocument];
-                        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                        RptqQuery *query = [[database hasQueries] anyObject];
+                        RptqQuery *query = [AppDelegate activeRptqQuery];
                         RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
                                                                                              forQuery: query];
                         [tvc setInitalStepperValue:([[section height] floatValue])];
@@ -430,10 +426,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 #pragma mark Top Toolbar Actions
 
-//Labeled as "Reports"
-- (IBAction)done:(id)sender {
-//    [[self delegate] viewControllerDidFinish: self];
-}
+- (IBAction)done:(id)sender { }
 
 - (IBAction)edit:(id)sender {
     
@@ -531,7 +524,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
     RptqDocument *document = [reportDocument activeDocument];
     [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber]
                         inDocument:document];
@@ -1536,13 +1528,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     if (reportDocument) {
 
+        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [[reportDocument managedObjectContext] retain];
         
         {
             
             
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-            MAReportDocument *reportDocument = [applicationInstance activeDocument];
             RptqDocument *document = [reportDocument activeDocument];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
             RptqQuery *query = [[database hasQueries] anyObject];

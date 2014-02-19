@@ -375,8 +375,6 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
-    //MAReportDocument *activeDocument = [[MTActiveDocument sharedDocument] activeDocument];
-    //RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];

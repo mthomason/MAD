@@ -12,5 +12,6 @@
 @interface NSManagedObject (Extras)
 
 - (void)obtainPermanentID;
+- (NSUInteger)hash:(NSManagedObject *)objectContext;
 
 @end

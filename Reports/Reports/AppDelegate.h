@@ -16,6 +16,11 @@
         UIAlertViewDelegate>
 
 + (MTApplicationInstance *)applicationInstance;
++ (MAReportDocument *)activeReportDocument;
++ (RptqDocument *)activeRptqDocument;
++ (RptqDatabase *)activeRptqDatabase;
++ (RptqQuery *)activeRptqQuery;
+
 
 @property (nonatomic, strong) UIWindow *window;
 

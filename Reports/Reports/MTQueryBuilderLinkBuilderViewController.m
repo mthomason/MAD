@@ -84,8 +84,8 @@
 
     } else {
         
-        
-        MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+        RptqQuery *query = [AppDelegate activeRptqQuery];
+        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
         
         if ([[segue identifier] isEqualToString:@"showSelectTableOne"]) {
 
@@ -94,9 +94,6 @@
                 if (tvc) {
                     [tvc setDelegate:self];
                     
-                    RptqDocument *document = [reportDocument activeDocument];
-                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                    RptqQuery *query = [[database hasQueries] anyObject];
                     
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
                     request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
@@ -104,7 +101,7 @@
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [reportDocument managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
@@ -124,7 +121,7 @@
                     request.predicate = [NSPredicate predicateWithFormat:@"inQueryTable == %@", [[self firstTableName] objectID]];
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [reportDocument managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
@@ -140,10 +137,6 @@
                 if (vcFf) {                
                     [vcFf setDelegate:self];                    
 
-                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-                    RptqDocument *document = [reportDocument activeDocument];
-                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                    RptqQuery *query = [[database hasQueries] anyObject];
 
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
                     request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
@@ -172,7 +165,7 @@
                     request.predicate = predicate;
                     request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                          managedObjectContext: [reportDocument managedObjectContext]
+                                                                                          managedObjectContext: managedObjectContext
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];

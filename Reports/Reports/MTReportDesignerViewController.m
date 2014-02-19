@@ -10,6 +10,8 @@
 #import "DesignerSectionLabel.h"
 #import "MTViewControllerBarcode.h"
 #import "MTApplicationInstance.h"
+#import <CoreData/CoreData.h>
+#import "NSManagedObject+Rptq.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
@@ -200,7 +202,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[viewRuler layer] setBorderColor: shadowColor];
             [[viewRuler layer] setBorderWidth: 1.0000f];
         } else {
-            
             [[viewRuler layer] setBorderWidth: 0.5000f];
             [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
             
@@ -490,7 +491,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self setViewControllerToolbox:viewControllerToolbox];
     [viewControllerToolbox release];
 
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [[storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier] retain];
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier];
     [viewControllerSectionLayoutSettings setDelegate:self];
     [self setViewControllerSectionLayoutSettings: viewControllerSectionLayoutSettings];
 
@@ -498,12 +499,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     [[navigationController navigationBar] setBarTintColor:[UIColor tintColor]];
     [[navigationController navigationBar] setTintColor:[UIColor tintColor2]];
-    UIColor *whiteColor = [[UIColor whiteColor] retain];
-    NSDictionary *textAttribues = @{
-                                    NSForegroundColorAttributeName : whiteColor
-                                    };
+    UIColor *whiteColor = [UIColor whiteColor];
+    NSDictionary *textAttribues = @{ NSForegroundColorAttributeName : whiteColor };
     [[navigationController navigationBar] setTitleTextAttributes:textAttribues];
-    [whiteColor release];
     [self setNavigationControllerSectionLayoutSettings:navigationController];
     [navigationController release];
     
@@ -513,9 +511,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [doneButton release];
     }
 
-    [viewControllerSectionLayoutSettings release];
-
-    
     if ([self layoutConstraintsToRemove] != nil) {
         [[self view] removeConstraints:[self layoutConstraintsToRemove]];
     }
@@ -716,7 +711,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             
             // MARK: Setup vert auto layout
-            NSString *collectionViewKey = [reportSection sectionKey];
+            NSString *collectionViewKey = [[reportSection sectionKey] retain];
             
             [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
             [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
@@ -765,6 +760,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [collectionView release];
             [sectionControlView release];
             [backgroundView release];
+            [collectionViewKey autorelease];
             [flowLayoutDesignerSection release];
             
             
@@ -1321,18 +1317,210 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                 }
             }
-
-        } else if ([updatedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
-            //NSUInteger hash = [[[updatedObject parentObjectBarcode] objectID] hash];
-            //UIView *view = [[self designerContentView] viewWithTag:hash];
-            //[view setNeedsDisplay];
         }
     }
 }
 
-- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
+- (void)managedObjectContextDidSave:(NSNotification *)notification {
 
-- (void)managedObjectContextDidSave:(NSNotification *)notification { }
+    NSArray *managedObjectsUpdated = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
+    
+    for (NSManagedObject *managedObject in managedObjectsUpdated) {
+        
+        MTElementView *elementView = [self elementViewForManagedObject:managedObject];
+        [self updateElementView:elementView forManagedObjectContext:[managedObject managedObjectContext]];
+        
+    }
+}
+
+
+- (UIView *)viewForObjectID:(NSManagedObjectID *)objectID {
+    NSUInteger hash = [objectID hash];
+    UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
+    return [[viewToEdit retain] autorelease];
+}
+- (MTElementView *)elementViewForManagedObjectID:(NSManagedObjectID *)managedObjectID inObjectContext:(NSManagedObjectContext *)managedObjectContext{
+    MTElementView *elementView = nil;
+    NSManagedObject *managedObject = [managedObjectContext objectWithID:managedObjectID];
+    elementView = [self elementViewForManagedObject:managedObject];
+    return [[elementView retain] autorelease];
+}
+
+- (MTElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
+    MTElementView *elementView = nil;
+    elementView = (MTElementView *)[self viewForObjectID:[managedObject objectID]];
+    if (!elementView) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
+        if (documentObject) {
+            NSUInteger hash = [documentObject hash];
+            elementView = (MTElementView *)[[self designerContentView] viewWithTag:hash];
+            if (!elementView) {
+                elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:[documentObject managedObjectContext]];
+                [elementView setTag: hash];
+                [elementView setDelegate:self];
+                [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+                [self updateElementView:elementView forManagedObjectContext:[documentObject managedObjectContext]];
+                if ([UIDevice isLagacyOS]) {
+                    [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
+                    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
+                    [[elementView layer] setBorderWidth:1.0000f];
+                }
+            } else {
+                [elementView retain];
+            }
+            [elementView autorelease];
+        }
+    } else {
+        [[elementView retain] autorelease];
+    }
+    return elementView;
+}
+
+- (RptqDocumentObject *)documentObjectForElementView:(MTElementView *)elementView inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectID *objectID = [elementView objectIdTag];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectID];
+    return [[documentObject retain] autorelease];
+}
+
+- (void)updateElementView:(MTElementView *)elementView forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (elementView) {
+
+        // TODO: Only update specific properties when they change.
+        
+        RptqDocumentObject *documentObject = [self documentObjectForElementView:elementView inManagedObjectContext:managedObjectContext];
+        
+        if (documentObject != nil) {
+            
+            CGRect marginViewFrame = [documentObject boundsContentView];
+            
+            [elementView setFrame: marginViewFrame];
+            
+            NSString *fontName = [documentObject fontname];
+            CGFloat pointSize = [[documentObject fontsize] floatValue];
+            
+            UIFont *displayFont = nil;
+            if ([fontName length] == 0) {
+                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            } else {
+                MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
+                if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
+                    displayFont = [stylizedDisplayFont boldItalicFont];
+                } else if ([[documentObject bold] boolValue]) {
+                    displayFont = [stylizedDisplayFont boldFont];
+                } else if ([[documentObject italic] boolValue]) {
+                    displayFont = [stylizedDisplayFont italicFont];
+                } else {
+                    displayFont = [stylizedDisplayFont font];
+                }
+                [stylizedDisplayFont release];
+            }
+            
+            if (displayFont == nil) {
+                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            }
+            [elementView setDisplayFont:displayFont];
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+            
+            MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
+            NSTextAlignment textAlignment;
+            switch (horizontalAlignment) {
+                case MTHorizontalAlignmentCenter:
+                    textAlignment = NSTextAlignmentCenter;
+                    break;
+                case MTHorizontalAlignmentLeft:
+                    textAlignment = NSTextAlignmentLeft;
+                    break;
+                case MTHorizontalAlignmentRight:
+                    textAlignment = NSTextAlignmentRight;
+                    break;
+                case MTHorizontalAlignmentJustified:
+                    textAlignment = NSTextAlignmentJustified;
+                    break;
+                default:
+                    textAlignment = NSTextAlignmentLeft;
+                    break;
+            }
+            
+            [paragraphStyle setAlignment:textAlignment];
+            [elementView setParagraphStyle:paragraphStyle];
+            [paragraphStyle release];
+            
+            NSString *string = [[documentObject designerRepresentationText] retain];
+            [elementView setDisplayText:string];
+            [string release];
+            
+            [elementView setDisplayImage:nil];
+            [elementView setDisplayBarcode:nil];
+            [elementView setDisplayImage:nil];
+            
+            if ([documentObject getType] == MTDocumentObjectTypeImage) {
+                
+                [elementView setDisplayImage:[[documentObject isImage] image]];
+                
+            } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
+                
+                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
+                [elementView setDisplayBarcode:displayBarcode];
+                
+            }
+            
+            NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+            [elementView setUnderlineStyle:underlineStyle];
+            
+            NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+            [elementView setStrikeThroughStyle:strikeThroughStyle];
+            
+            NSDictionary *attributes = @{
+                                         NSParagraphStyleAttributeName : [elementView paragraphStyle],
+                                         NSFontAttributeName : [elementView displayFont],
+                                         NSStrikethroughStyleAttributeName : [elementView underlineStyle],
+                                         NSUnderlineStyleAttributeName : [elementView strikeThroughStyle]
+                                         };
+            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:[elementView displayText]
+                                                                                    attributes:attributes];
+            [elementView setDisplayStringAttributed:attributtedString];
+            [attributtedString release];
+            
+            CGSize sizeContentView = [documentObject sizeContentView];
+            CGRect boundsContentView = [documentObject boundsContentView]; //x1
+            NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
+            [elementView setDrawingOptions:drawingOptions];
+            CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize:sizeContentView options:drawingOptions context:nil]; //x35
+            CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
+            
+            
+            MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
+            
+            switch (verticalAlignment) {
+                case MTVerticalAlignmentCenter: {
+                    CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
+                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                    break;
+                }
+                case MTVerticalAlignmentBottom: {
+                    CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
+                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                    break;
+                }
+                case MTVerticalAlignmentTop:
+                default:
+                    break;
+            }
+            
+            CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
+            CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
+            CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
+            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
+            [elementView setDrawingRect:drawingBounds];
+            
+            [elementView setNeedsLayout];
+            [elementView setNeedsDisplay];
+        }
+    }
+}
 
 #pragma mark - Menu Notifications
 
@@ -1381,6 +1569,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
+
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[reportSection identifier] integerValue]];
@@ -1388,9 +1577,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[documentSectionView collectionViewLayout] invalidateLayout];
         }
     }
-    [(MTElementView *)sender updateDisplayLabel];
-    [sender setNeedsDisplay];
     [sectionEnumerator release];
+
+    [self updateElementView:sender forManagedObjectContext:[document managedObjectContext]];
 }
 
 - (void)didSelectElementView:(id)sender {
@@ -1759,8 +1948,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     //Try quick hash method...
     BOOL quickHashWorks = YES;
     for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
-        NSUInteger hash = [selectedObjectId hash];
-        UIView *selectedView = [[self designerContentView] viewWithTag:hash];
+        UIView *selectedView = [self viewForObjectID:selectedObjectId];
         if (selectedView != nil) {
             [results addObject:selectedView];
         } else {
@@ -1768,7 +1956,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
     }
     
-    if (quickHashWorks == NO) {
+
+    if (quickHashWorks == NO) {     // FIXME: This case should be unneeded now.
 
         MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -1907,11 +2096,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     CGRect rectToShow = CGRectZero;
                     
                     if (tooboxType == MTToolboxTypeSection) {
-                        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-                        RptqDocument *document = [reportDocument activeDocument];
-                        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                        RptqQuery *query = [[database hasQueries] anyObject];
+                        RptqQuery *query = [AppDelegate activeRptqQuery];
                         RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                                     forQuery: query];
                         
@@ -1950,7 +2135,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else {
         [self hideToolbox:self];
     }
-
 }
 
 - (IBAction)hideToolbox:(id)sender {
@@ -2009,7 +2193,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
-    //[self relayoutSectionView:section];
     CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
     [section setLayoutHeight:@(contentSize.height)];
     [section setHeight:@(contentSize.height + 44.0000f)];
@@ -2121,9 +2304,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         
                         CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
                         NSManagedObjectID *objectId = [objectToEdit objectID];
-                        NSUInteger hash = [objectId hash];
-                        UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
-                    
+                        UIView *viewToEdit = [self viewForObjectID:objectId];
+
                         if (viewToEdit != nil) {
                             
                             UIStoryboard *storyboard = [MTApplicationInstance storyboard];
@@ -2184,9 +2366,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         
                         CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
                         NSManagedObjectID *objectId = [objectToEdit objectID];
-                        NSUInteger hash = [objectId hash];
-                        UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
-                        
+                        UIView *viewToEdit = [self viewForObjectID:objectId];
+
                         if (viewToEdit != nil) {
                             
                             UIStoryboard *storyboard = [MTApplicationInstance storyboard];
@@ -2245,8 +2426,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         
                         CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
                         NSManagedObjectID *objectId = [objectToEdit objectID];
-                        NSUInteger hash = [objectId hash];
-                        UIView *viewToEdit = [[self designerContentView] viewWithTag: hash];
+                        UIView *viewToEdit = [self viewForObjectID:objectId];
                         
                         if (viewToEdit != nil) {
                             
@@ -2416,6 +2596,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark -
 #pragma mark Collection View Layout Delegate
 
+- (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
+
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -2580,43 +2762,22 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 
                 
                 
-                MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID]
-                                                                     inObjectContext:managedObjectContext];
-               
-                [elementView setDelegate:self];
-                [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-                
-                if ([UIDevice isLagacyOS]) {
-                    [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
-                    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-                    [[elementView layer] setBorderWidth:1.0000f];
-                }
+                MTElementView *elementView = [[self elementViewForManagedObject:documentObject] retain];
                 
                 UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
                 [panGesture setMaximumNumberOfTouches:1];
-                
                 //UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchPiece:)];
-                
                 [panGesture setDelegate:self];
                 //[pinchGesture setDelegate:self];
-                
-                
                 [[[self designerScrollView] panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
                 //[[[self designerScrollView] pinchGestureRecognizer] requireGestureRecognizerToFail:pinchGesture];
-                
                 [elementView addGestureRecognizer:panGesture];
                 //[elementView addGestureRecognizer:pinchGesture];
-                
                 [panGesture release];
 
-                
                 [elementView setFrame:cellFrame];
-                NSUInteger hash = [[documentObject objectID] hash];
-                [elementView setTag: hash];
-                
                 [cell setObjectIdTag:[documentObject objectID]];
                 [cell setUserInteractionEnabled:YES];
-                
                 [[cell contentView] addSubview:elementView];
                 
                 __block UICollectionViewCell *blockCell = cell;
@@ -2704,7 +2865,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return [objects count];
 }
 
-#pragma mark Collection View Delegate
+#pragma mark - Collection View Delegate
 
 - (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
                          inCollectionView:(UICollectionView *)collectionView {
@@ -2729,6 +2890,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         result = YES;
     }
     return result;
+}
+
+- (void)edit:(id)sender {
+    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {

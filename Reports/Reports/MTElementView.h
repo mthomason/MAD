@@ -13,6 +13,7 @@
 #import <CoreData/CoreData.h>
 #import "MTResizeHandleView.h"
 #import "MTBorderedView.h"
+#import "MTBarcode.h"
 
 @class MTElementView;
 
@@ -34,13 +35,26 @@
 //@property (nonatomic, readonly, retain) UIImageView *imageView;   //Display image preview for image objects
 //@property (nonatomic, readonly, retain) UILabel *displayLabel;    //Display label floats in the padding
 
+@property (assign) BOOL displayWobbling;
+@property (assign) BOOL displayHighlighted;
+
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) UIFont *displayFont;
+@property (nonatomic, retain) NSParagraphStyle *paragraphStyle;
+@property (nonatomic, retain) NSString *displayText;
+@property (nonatomic, retain) NSNumber *underlineStyle;
+@property (nonatomic, retain) NSNumber *strikeThroughStyle;
+@property (nonatomic, retain) NSAttributedString *displayStringAttributed;
+@property (nonatomic, assign) CGRect drawingRect;
+@property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
+@property (nonatomic, retain) UIImage *displayImage;
+@property (nonatomic, retain) MTBarcode *displayBarcode;
+
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
 - (BOOL)isSelected;
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
-- (void)updateDisplayLabel;
 
 @end
 

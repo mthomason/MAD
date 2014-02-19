@@ -23,7 +23,8 @@
 #import "UIImage+Border.h"
 #import "UIImage+Resize.h"
 
-@interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer <NSCopying>
+@interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
+    <NSCopying>
 
 @property (nonatomic, assign) BOOL didRefresh;
 

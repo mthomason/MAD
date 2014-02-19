@@ -96,6 +96,8 @@
     return  [graph autorelease];
 }
 
+#pragma mark - Actions
+
 - (RptqQueryGroup *)firstQueryGroup {
     NSString *weight = NSStringFromSelector(@selector(weight));
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];

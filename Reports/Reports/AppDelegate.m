@@ -41,6 +41,32 @@ void uncaughtExceptionHandler(NSException *exception) {
     return [result autorelease];
 }
 
++ (MAReportDocument *)activeReportDocument {
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
+    return [reportDocument autorelease];;
+}
+
++ (RptqDocument *)activeRptqDocument {
+    MAReportDocument *managedDocument = [AppDelegate activeReportDocument];
+    RptqDocument *document = [[managedDocument activeDocument] retain];
+    return [document autorelease];
+}
+
++ (RptqDatabase *)activeRptqDatabase {
+    RptqDocument *rptqDocument = [[AppDelegate activeRptqDocument] retain];
+    NSSet *databaseSchemas = [rptqDocument hasDatabaseSchemas];
+    RptqDatabase *databaseSchema = [[databaseSchemas anyObject] retain];
+    return [databaseSchema autorelease];
+}
+
++ (RptqQuery *)activeRptqQuery {
+    RptqDatabase *rptqDatabase = [[AppDelegate activeRptqDatabase] retain];
+    NSSet *queries = [rptqDatabase hasQueries];
+    RptqQuery *query = [[queries anyObject] retain];
+    return [query autorelease];
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
     [_applicationInstance release];

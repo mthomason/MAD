@@ -8,6 +8,12 @@
 
 #import "RptqDocumentObject+Extras.h"
 #import "MTBarcode.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectGroupKey.h"
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";
@@ -503,6 +509,27 @@ static NSNumberFormatter *currencyNumberFormatter;
     return result;
 }
 
++ (RptqDocumentObject *)documentObjectForObject:(NSManagedObject *)managedObject {
+    RptqDocumentObject *result = nil;
+
+    if ([managedObject isKindOfClass:[RptqDocumentObject class]]) {
+        result = (RptqDocumentObject *)managedObject;
+
+    } else if ([managedObject respondsToSelector:@selector(parentObject)]) {
+        result = [(RptqDocumentObjectGroupKey *)managedObject parentObject];
+
+    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabel class]]) {
+        result = [(RptqDocumentObjectLabel *)managedObject parentObjectLabel];
+        
+    } else if ([managedObject isKindOfClass:[RptqDocumentObjectBarcode class]]) {
+        result = [(RptqDocumentObjectBarcode *)managedObject parentObjectBarcode];
+        
+    } else if ([managedObject isKindOfClass:[RptqDocumentObjectLabelDataField class]]) {
+        result = [(RptqDocumentObjectLabelDataField *)managedObject parentObjectLabelDataField];
+        
+    }
+    return [[result retain] autorelease];
+}
 
 #pragma mark - MTProtocolLog
 

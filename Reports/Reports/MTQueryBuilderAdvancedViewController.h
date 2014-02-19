@@ -27,8 +27,6 @@
         MTQueryBuilderAdvancedSchemaDelegate,
         MTViewControllerProtocol>
 
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
-
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
 - (void)redraw;
 

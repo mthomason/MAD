@@ -51,12 +51,6 @@
 
 }
 
-- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
-    for (UIView *subview in [[self contentView] subviews]) {
-        [subview setNeedsDisplay];
-    }
-}
-
 - (BOOL)canBecomeFirstResponder {
     return YES;
 }
