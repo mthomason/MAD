@@ -541,8 +541,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [[AppDelegate applicationInstance] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
-                            [[queryBuilderViewController queryBuilderController] reloadDocument:managedDocument];
-                            [[queryBuilderViewController queryBuilderControllerAdvanced] reloadDocument:managedDocument animated:YES];
+                            [[queryBuilderViewController queryBuilderController] reloadActiveDocumentAnimated:YES];
+                            [[queryBuilderViewController queryBuilderControllerAdvanced] reloadActiveDocumentAnimatedAnimated:YES];
                             [managedDocument release];
                         }
                     }];
@@ -553,7 +553,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
                     __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
-                    //[queryBuilderViewController setDelegate:self];
                     
                     UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
                     MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
@@ -567,7 +566,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
-                            [queryBuilderViewController reloadDocument:managedDocument];
+                            [queryBuilderViewController reloadActiveDocumentAnimated:YES];
                             [managedDocument release];
                         }
                     }];
@@ -584,7 +583,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                     if (success) {
                         [managedDocument retain];
-                        [queryBuilderViewController reloadDocument:managedDocument];
+                        [queryBuilderViewController reloadActiveDocumentAnimated:YES];
                         [managedDocument release];
                     }
                 }];
@@ -647,8 +646,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [[AppDelegate applicationInstance] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                 if (success) {
                     [managedDocument retain];
-                    [standard reloadDocument:managedDocument];
-                    [advanced reloadDocument:managedDocument animated:YES];
+                    [standard reloadActiveDocumentAnimated:YES];
+                    [advanced reloadActiveDocumentAnimatedAnimated:YES];
                     [managedDocument release];
                 }
             }];
@@ -747,21 +746,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
-
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
         if (success) {
-            [managedDocument retain];
-            
-            //MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-            //[applicationInstance setActiveDocument: managedDocument];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    //MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                    [tvc reloadDocument:nil/*[applicationInstance activeDocument]*/];
+                    [tvc reloadActiveDocumentAnimated:YES];
                 });
             });
-            [managedDocument release];
         }
     }];
 }

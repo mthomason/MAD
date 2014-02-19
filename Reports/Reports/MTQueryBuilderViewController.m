@@ -1524,12 +1524,17 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 #pragma mark - NSFetchedResultsSetup
 
-- (void)reloadDocument:(MAReportDocument *)reportDocument {
+- (void)reloadActiveDocumentAnimated:(BOOL)animated {
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    [self reloadDocument:reportDocument animated:animated];
+}
+
+- (void)reloadDocument:(MAReportDocument *)reportDocument animated:(BOOL)animated {
     
     if (reportDocument) {
-
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        
+        [reportDocument retain];
         NSManagedObjectContext *managedObjectContext = [[reportDocument managedObjectContext] retain];
         
         {

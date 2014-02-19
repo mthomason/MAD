@@ -27,7 +27,7 @@
         MTQueryBuilderAdvancedSchemaDelegate,
         MTViewControllerProtocol>
 
-- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
+- (void)reloadActiveDocumentAnimatedAnimated:(BOOL)animated;
 - (void)redraw;
 
 @end

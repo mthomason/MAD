@@ -728,17 +728,13 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark Reload document view controllers
 
 - (void)redraw {
-    MAReportDocument *reportDocument = [AppDelegate activeReportDocument];
-    [self reloadDocument:reportDocument animated:YES];
+    [self reloadActiveDocumentAnimatedAnimated:YES];
 }
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated {
-    
-    MAReportDocument *reportDocument = [AppDelegate activeReportDocument];
-
-    if (reportDocument) {
-
-        NSManagedObjectContext *objectContext = [[reportDocument managedObjectContext] retain];
+    if (documentReport) {
+        
+        NSManagedObjectContext *objectContext = [[documentReport managedObjectContext] retain];
         [MTQueryBuilderAdvancedViewController addNotificationsToObserver:self forObjectContext:objectContext];
         
         [self clearScreen];
@@ -750,12 +746,18 @@ typedef void(^MTBlockResultVoid)(void);
         [[self controllersForObjectIds] removeAllObjects];     //Tables and links
         [[self controllersForObjectIdsLink] removeAllObjects];
         
-        RptqDocument *document = [reportDocument activeDocument];
+        RptqDocument *document = [documentReport activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *query = [[database hasQueries] anyObject];
         [self displayQuery:query animated:animated];
     }
     
+}
+
+- (void)reloadActiveDocumentAnimatedAnimated:(BOOL)animated {
+    
+    MAReportDocument *reportDocument = [AppDelegate activeReportDocument];
+    [self reloadDocument:reportDocument animated:YES];
     
 }
 

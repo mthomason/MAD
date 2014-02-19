@@ -55,7 +55,8 @@ extern NSString * const NSFetchedResultsCachePredicates;
 
 @property BOOL debug;
 
-- (void)reloadDocument:(MAReportDocument *)documentReport;
+- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
+- (void)reloadActiveDocumentAnimated:(BOOL)animated;
 
 - (IBAction)done:(id)sender;
 - (IBAction)addTable:(id)sender;
