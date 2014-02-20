@@ -17,9 +17,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.206";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.206";
-NSString * const MTGlobalBundleRev                                  = @"827";
+NSString * const MTGlobalBundleVersion                              = @"1.0.211";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.211";
+NSString * const MTGlobalBundleRev                                  = @"832";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -70,11 +70,15 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
+    __block MTApplicationInstance *blockSelf = self;
      [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
          [managedDocument retain];
          [self setCurrentDocument:url];
          [self documents][url] = managedDocument;
          [self setReportState:MTReportStateOpen];
+         [blockSelf retain];
+         [managedDocument setDelegateCacheData:(id<MTDatabaseCacheProtocol>)blockSelf];
+         [blockSelf release];
          completionHandler([managedDocument autorelease], success);
      }];
 }

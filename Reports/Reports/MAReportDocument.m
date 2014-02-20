@@ -92,6 +92,8 @@
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
+    [mnsDatabase setDelegateCacheData:self];
+    
     NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
     if ([sqlSelect length] > 0) {
         //sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 100000", sqlSelect];

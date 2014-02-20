@@ -15,15 +15,15 @@
 #import "MTDatabaseConnection.h"
 
 
-@protocol MAReportDocumentCacheProtocol <NSObject>
-@required
-- (void)cacheQueryResult:(id)queryResult;
-@end
+//@protocol MAReportDocumentCacheProtocol <NSObject>
+//@required
+//- (void)cacheQueryResult:(id)queryResult;
+//@end
 
 @interface MAReportDocument : MADocument
     <MTDatabaseCacheProtocol>
 
-@property (nonatomic, assign) id <MAReportDocumentCacheProtocol> delegateCacheData;
+@property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
 
 //Add a new connection to the report
 - (void)addDatasourceToReport: (MTDatabase *)database
