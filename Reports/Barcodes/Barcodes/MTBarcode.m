@@ -419,18 +419,18 @@
         strcpy(barcode->fgcolour, fgcolor);
         strcpy(barcode->bgcolour, bgcolor);
         
-        barcode->height = [self height];
-        barcode->border_width = [self borderWidth];
-        barcode->whitespace_width = [self whitespaceWidth];
+        barcode->height = (int)[self height];
+        barcode->border_width = (int)[self borderWidth];
+        barcode->whitespace_width = (int)[self whitespaceWidth];
         barcode->show_hrt = [self humanReadable];
         barcode->output_options = [self borderStyle];
         barcode->scale = 1.0000f;
         barcode->input_mode = MTBarcodeDataTypeUnicode;
         
         if (barcode->symbology != MTBarcodeTypeMaxicode) {
-            barcode->option_1 = [self option1];
-            barcode->option_2 = [self option2];
-            barcode->option_3 = [self option3];
+            barcode->option_1 = (int)[self option1];
+            barcode->option_2 = (int)[self option2];
+            barcode->option_3 = (int)[self option3];
         } else {
         }
         
@@ -438,7 +438,7 @@
         if ([self has2dComponentEnabled]) {
             
             primaryInput = [self primaryData];
-            barcode->option_1 = [self has2dComponentType];
+            barcode->option_1 = (int)[self has2dComponentType];
             
             if ([[self input] length] > 0) {
                 const char *primaryData = [[self input] UTF8String];
@@ -454,7 +454,7 @@
         NSInteger inputLength = [primaryInput length];
         NSString *inputString = inputLength > 0 ? primaryInput : @"";
         const char *input = [inputString UTF8String];
-        int inputLen = strlen(input);
+        int inputLen = (int)strlen(input);
         int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
         NSString *errorMessage = nil;
         switch (success) {

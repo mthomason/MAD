@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C174CDB18B0C1C9007A88B3 /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDA18B0C1C9007A88B3 /* UIColor+Expanded.m */; };
 		4C2D4A961827A8DB005A46C2 /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C434B2C18B5F60C00750B6B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2B18B5F60C00750B6B /* MobileCoreServices.framework */; };
 		4C5CB71E189D1A1700BB5AF8 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB71C189D1A1700BB5AF8 /* libpng.a */; };
 		4C95CAC8182C1CD400160E01 /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC7182C1CD400160E01 /* MTBarcode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C95CB1F182F99B000160E01 /* MTBarcodeAusreDirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CB1E182F99B000160E01 /* MTBarcodeAusreDirect.m */; };
@@ -142,6 +143,7 @@
 		4C174CDA18B0C1C9007A88B3 /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Expanded.m"; path = "/Users/mthomason/Desktop/Reports/Reports/Reports/../../3rdPartyProjects/Color/UIColor+Expanded.m"; sourceTree = "<absolute>"; };
 		4C2D4A941827A8DB005A46C2 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBarcodeView.h; sourceTree = "<group>"; };
 		4C2D4A951827A8DB005A46C2 /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeView.m; sourceTree = "<group>"; };
+		4C434B2B18B5F60C00750B6B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C5CB716189D1A1700BB5AF8 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4C5CB717189D1A1700BB5AF8 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
 		4C5CB718189D1A1700BB5AF8 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C434B2C18B5F60C00750B6B /* MobileCoreServices.framework in Frameworks */,
 				4CDA77631825EB0D00E462F6 /* libz.dylib in Frameworks */,
 				4CDA77611825EB0200E462F6 /* libm.dylib in Frameworks */,
 				4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */,
@@ -546,6 +549,7 @@
 		4CDA76CE1825E8D400E462F6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C434B2B18B5F60C00750B6B /* MobileCoreServices.framework */,
 				4C5CB713189D1A1700BB5AF8 /* libpng */,
 				4CDA77621825EB0D00E462F6 /* libz.dylib */,
 				4CDA77601825EB0200E462F6 /* libm.dylib */,
@@ -871,7 +875,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -902,7 +906,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -910,7 +914,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -935,7 +939,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
