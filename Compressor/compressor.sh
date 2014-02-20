@@ -41,7 +41,7 @@ readonly platform_macosx="macosx"
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
-readonly archs="i386 armv7 armv7s arm64"
+readonly archs="x86_64 i386 armv7 armv7s arm64"
 readonly archs_macosx="i386 x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
@@ -444,151 +444,154 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
        make install >> "${log_build_openssl}" 2>&1
        make clean >> "${log_build_openssl}" 2>&1
 
-   done
+    done
 
-   rm -rf "${path_library_openssl}"
-   mkdir -p "${path_library_openssl}"
+    rm -rf "${path_library_openssl}"
+    mkdir -p "${path_library_openssl}"
 
-   command_lipo_libcrypto="${command_lipo_libcrypto} -output ${path_library_openssl}/libcrypto.a"
-   $command_lipo_libcrypto
+    command_lipo_libcrypto="${command_lipo_libcrypto} -output ${path_library_openssl}/libcrypto.a"
+    $command_lipo_libcrypto
 
-   command_lipo_libssl="${command_lipo_libssl} -output ${path_library_openssl}/libssl.a"
-   $command_lipo_libssl
+    command_lipo_libssl="${command_lipo_libssl} -output ${path_library_openssl}/libssl.a"
+    $command_lipo_libssl
 
-   path_build_openssl_arch_include=${path_build_openssl_arch}/include
-   path_library_openssl_include=${path_library_openssl}
-   mkdir -p ${path_library_openssl_include}
+    path_build_openssl_arch_include=${path_build_openssl_arch}/include
+    path_library_openssl_include=${path_library_openssl}
+    mkdir -p ${path_library_openssl_include}
 
-   cp -R $path_build_openssl_arch_include $path_library_openssl
+    cp -R $path_build_openssl_arch_include $path_library_openssl
 
-    sed -ie 's/# include <openssl/opensslconf.h>/# include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+    path_library_openssl="${path_library_openssl}/include"
 
-    sed -ie 's/#include <openssl/objects.h>/#include "objects.h"/g' '${path_build_openssl_arch_include}/openssl/evp.h'
+    sed -ie "s/# include <openssl\/opensslconf.h>/# include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/evp.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/evp.h"
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/evp.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/evp.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/bn.h'
+    sed -ie "s/#include <openssl\/objects.h>/#include \"objects.h\"/g" "${path_library_openssl}/openssl/evp.h"
 
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/bn.h'
-    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/bn.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/bn.h"
 
-    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/bn.h"
+    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/bn.h"
 
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/pkcs7.h'
+    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/pkcs7.h"
 
-    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
-    sed -ie 's/#include <openssl/safestack.h>/#include "safestack.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/asn1.h"
 
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/asn1.h'
+    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+    sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/asn1.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/asn1.h"
 
-    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/e_os2.h'
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/asn1.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/bio.h'
-    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/bio.h'
+    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/e_os2.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
-    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/bio.h"
+    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/bio.h"
 
-    sed -ie 's/#include <openssl/safestack.h>/#include "safestack.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
-    sed -ie 's/#include <openssl/opensslv.h>/#include "opensslv.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/crypto.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/crypto.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/ossl_typ.h'
+    sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+    sed -ie "s/#include <openssl\/opensslv.h>/#include \"opensslv.h\"/g" "${path_library_openssl}/openssl/crypto.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/crypto.h"
 
-    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/safestack.h'
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/symhacks.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/ossl_typ.h"
 
-    sed -ie 's/#include <openssl/obj_mac.h>/#include "obj_mac.h"/g' '${path_build_openssl_arch_include}/openssl/objects.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/objects.h'
-    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/objects.h'
+    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/safestack.h"
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/symhacks.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/sha.h'
+    sed -ie "s/#include <openssl\/obj_mac.h>/#include \"obj_mac.h\"/g" "${path_library_openssl}/openssl/objects.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/objects.h"
+    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/objects.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/buffer.h>/#include "buffer.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/evp.h>/#include "evp.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/stack.h>/#include "stack.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/safestack.h>/#include "safestack.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/sha.h"
 
-    sed -ie 's/#include <openssl/ec.h>/#include "ec.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/buffer.h>/#include \"buffer.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/evp.h>/#include \"evp.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/stack.h>/#include \"stack.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/safestack.h>/#include \"safestack.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/ecdsa.h>/#include "ecdsa.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/ecdh.h>/#include "ecdh.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/rsa.h>/#include "rsa.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/dsa.h>/#include "dsa.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/ecdsa.h>/#include \"ecdsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/ecdh.h>/#include \"ecdh.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/dh.h>/#include "dh.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/rsa.h>/#include \"rsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/dsa.h>/#include \"dsa.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/sha.h>/#include "sha.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/dh.h>/#include \"dh.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/x509_vfy.h>/#include "x509_vfy.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
-    sed -ie 's/#include <openssl/pkcs7.h>/#include "pkcs7.h"/g' '${path_build_openssl_arch_include}/openssl/x509.h'
+    sed -ie "s/#include <openssl\/sha.h>/#include \"sha.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
-    sed -ie 's/#include <openssl/lhash.h>/#include "lhash.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
-    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+    sed -ie "s/#include <openssl\/x509_vfy.h>/#include \"x509_vfy.h\"/g" "${path_library_openssl}/openssl/x509.h"
+    sed -ie "s/#include <openssl\/pkcs7.h>/#include \"pkcs7.h\"/g" "${path_library_openssl}/openssl/x509.h"
 
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/x509_vfy.h'
+    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+    sed -ie "s/#include <openssl\/lhash.h>/#include \"lhash.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
+    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
 
-    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
-    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
-    sed -ie 's/#include <openssl/symhacks.h>/#include "symhacks.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/ec.h'
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/x509_vfy.h"
 
-    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
-    sed -ie 's/#include <openssl/ec.h>/#include "ec.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
+    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ec.h"
+    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/ec.h"
+    sed -ie "s/#include <openssl\/symhacks.h>/#include \"symhacks.h\"/g" "${path_library_openssl}/openssl/ec.h"
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ec.h"
 
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/ecdsa.h'
+    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+    sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
 
-    sed -ie 's/#include <openssl/opensslconf.h>/#include "opensslconf.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
-    sed -ie 's/#include <openssl/ec.h>/#include "ec.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/ecdh.h'
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ecdsa.h"
 
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/buffer.h'
+    sed -ie "s/#include <openssl\/opensslconf.h>/#include \"opensslconf.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+    sed -ie "s/#include <openssl\/ec.h>/#include \"ec.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/ecdh.h"
 
-    sed -ie 's/#include <openssl/asn1.h>/#include "asn1.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
-    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/rsa.h'
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/buffer.h"
 
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/bio.h'
-    sed -ie 's/#include <openssl/crypto.h>/#include "crypto.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
-    sed -ie 's/# include <openssl/dh.h>/# include "dh.h"/g' '${path_build_openssl_arch_include}/openssl/dsa.h'
+    sed -ie "s/#include <openssl\/asn1.h>/#include \"asn1.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/rsa.h"
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/rsa.h"
 
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
-    sed -ie 's/#include <openssl/bn.h>/#include "bn.h"/g' '${path_build_openssl_arch_include}/openssl/dh.h'
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/bio.h"
+    sed -ie "s/#include <openssl\/crypto.h>/#include \"crypto.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+    sed -ie "s/# include <openssl\/dh.h>/# include \"dh.h\"/g" "${path_library_openssl}/openssl/dsa.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/dsa.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/lhash.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/lhash.h'
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/dh.h"
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/dh.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/dh.h"
+    sed -ie "s/#include <openssl\/bn.h>/#include \"bn.h\"/g" "${path_library_openssl}/openssl/dh.h"
 
-    sed -ie 's/#include <openssl/e_os2.h>/#include "e_os2.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
-    sed -ie 's/#include <openssl/ossl_typ.h>/#include "ossl_typ.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
-    sed -ie 's/#include <openssl/bio.h>/#include "bio.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
-    sed -ie 's/#include <openssl/lhash.h>/#include "lhash.h"/g' '${path_build_openssl_arch_include}/openssl/err.h'
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/lhash.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/lhash.h"
+
+    sed -ie "s/#include <openssl\/e_os2.h>/#include \"e_os2.h\"/g" "${path_library_openssl}/openssl/err.h"
+    sed -ie "s/#include <openssl\/ossl_typ.h>/#include \"ossl_typ.h\"/g" "${path_library_openssl}/openssl/err.h"
+    sed -ie "s/#include <openssl\/bio.h>/#include \"bio.h\"/g" "${path_library_openssl}/openssl/err.h"
+    sed -ie "s/#include <openssl\/lhash.h>/#include \"lhash.h\"/g" "${path_library_openssl}/openssl/err.h"
 
 fi
 
