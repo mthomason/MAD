@@ -207,7 +207,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                             if (name != nil) {
                                 MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
-                                const char *typeDesc = dbprtype(typeBind);
+                                const char *typeDesc = dbprtype((int)typeBind);
                                 NSString *typeDescWrapper = [[NSString alloc] initWithCString: typeDesc
                                                                                      encoding: NSStringEncodingConversionAllowLossy];
                                 NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
@@ -509,7 +509,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                                      
                                                      ];
                     
-                    for (NSInteger columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
+                    for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                         
                         DBINT columnOffsetCtr = columnCtr + 1;
                         DBINT columnType = dbcoltype(dbconn, columnOffsetCtr);
@@ -694,7 +694,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                         DBINT sybDateTimnBindNull[resultCountForType];
                         
                         resultCountForType = [[counters objectForKey:@(SYBIMAGE)] integerValue];
-                        DBINT sybImageBind[resultCountForType];
+                        BYTE *sybImageBind[resultCountForType];
                         DBINT sybImageBindNull[resultCountForType];
                         
                         resultCountForType = [[counters objectForKey:@(SYBBINARY)] integerValue];
@@ -865,12 +865,12 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                     break;
                                     
                                 case SYBIMAGE:
-                                    dbbind(dbconn, columnOffsetNumber, BINARYBIND, sizeof(sybImageBind), (BYTE *)sybImageBind[columnIndexOfType]);
+                                    dbbind(dbconn, columnOffsetNumber, BINARYBIND, (int)sizeof(sybImageBind), (BYTE *)sybImageBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybImageBindNull[columnIndexOfType]);
                                     break;
                                     
                                 case SYBBINARY:
-                                    dbbind(dbconn, columnOffsetNumber, BINARYBIND, sizeof(sybBinaryBind), (BYTE *)&sybBinaryBind[columnIndexOfType]);
+                                    dbbind(dbconn, columnOffsetNumber, BINARYBIND, (int)sizeof(sybBinaryBind), (BYTE *)&sybBinaryBind[columnIndexOfType]);
                                     dbnullbind(dbconn, columnOffsetNumber, &sybBinaryBind[columnIndexOfType]);
                                     break;
                                     
@@ -1099,8 +1099,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                     }
                                     case SYBINT1: {
                                         if (sybInt1BindNull[indexOfType] != -1) {
-                                            int integer = sybInt1Bind[indexOfType];
-                                            NSNumber *object = [[NSNumber alloc] initWithInt:integer];
+                                            NSInteger integer = sybInt1Bind[indexOfType];
+                                            NSNumber *object = [[NSNumber alloc] initWithInteger:integer];
                                             //NSLog(@"%@\t\t(SYBINT1):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
@@ -1111,8 +1111,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                     }
                                     case SYBINT2: {
                                         if (sybInt2BindNull[indexOfType] != -1) {
-                                            int integer = sybInt2Bind[indexOfType];
-                                            NSNumber *object = [[NSNumber alloc] initWithInt:integer];
+                                            NSInteger integer = sybInt2Bind[indexOfType];
+                                            NSNumber *object = [[NSNumber alloc] initWithInteger:integer];
                                             [resultsForRow setObject:object forKey:fieldName];
                                             [object release];
                                         } else {
@@ -1178,7 +1178,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                     case SYBDATETIME: {
                                         if (sybDateTimeBindNull[indexOfType] != -1) {
                                             DBDATEREC dateinfo;
-                                            memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (columnNumber + 1))), sizeof(DBDATETIME));
+                                            memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
                                             dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimeBind[indexOfType]);
                                             
                                             NSDateComponents *comps = [[NSDateComponents alloc] init];
@@ -1203,7 +1203,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                     case SYBDATETIMN: {
                                         if (sybDateTimnBindNull[indexOfType] != -1) {
                                             DBDATEREC dateinfo;
-                                            memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (columnNumber + 1))), sizeof(DBDATETIME));
+                                            memcpy(&sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
                                             dbdatecrack(dbconn, &dateinfo, (DBDATETIME *)&sybDateTimnBind[indexOfType]);
                                             
                                             NSDateComponents *comps = [[NSDateComponents alloc] init];

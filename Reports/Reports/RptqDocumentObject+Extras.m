@@ -486,7 +486,7 @@ static NSNumberFormatter *currencyNumberFormatter;
                     result = [currencyNumberFormatter stringFromNumber:value];
                 } else {
                     NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
-                    [formatString appendFormat:@"%d", [[self formatNumericDecimals] integerValue]];
+                    [formatString appendFormat:@"%ld", (long)[[self formatNumericDecimals] integerValue]];
                     [formatString appendString:@"f"];
                     result = [NSString stringWithFormat:formatString, [value floatValue]];
                     [formatString release];

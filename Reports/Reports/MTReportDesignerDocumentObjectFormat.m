@@ -225,7 +225,7 @@
     if (numberOfDecimals == -1) {
         pointsString = @"-";
     } else {
-        pointsString = [@" " stringByAppendingFormat:@"%d", numberOfDecimals];
+        pointsString = [@" " stringByAppendingFormat:@"%ld", (long)numberOfDecimals];
     }
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];

@@ -44,11 +44,11 @@
     CGContextAddPath(currentContext, path);
     [[UIColor clearColor] setFill];
     [[self borderColor] setStroke];
-    float dashPhase = 0.0;
-    float dashLengths[] = { 7, 3, 7, 3, 7, 3 };
+    CGFloat dashPhase = 0.0;
+    CGFloat dashLengths[] = { 7, 3, 7, 3, 7, 3 };
     CGContextSetLineDash(currentContext,
                          dashPhase, dashLengths,
-                         sizeof( dashLengths ) / sizeof( float ) );
+                         sizeof( dashLengths ) / sizeof( CGFloat ) );
     CGContextSetLineWidth(currentContext, 1.0000f);
     CGContextDrawPath(currentContext, kCGPathFillStroke);
     [[UIColor blackColor] set];

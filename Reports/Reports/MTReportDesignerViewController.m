@@ -667,7 +667,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
             [collectionView setObjectIdTag:[reportSection objectID]];
             
-            NSString *documentElementReuseIdentifier = [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%d", [[reportSection identifier] integerValue]];
+            NSInteger reportSectionId = [[reportSection identifier] integerValue];
+            NSString *documentElementReuseIdentifier = [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%ld", (long)reportSectionId];
             [[self collectionViewReuseIdentifiers] setObject:documentElementReuseIdentifier forKey:[reportSection identifier]];
             [collectionView registerClass: [MTCollectionViewCellElement class] forCellWithReuseIdentifier: documentElementReuseIdentifier];
             [collectionView registerClass: [MTCollectionReuseableViewDefault class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader  withReuseIdentifier:supplmentaryViewReuseIdHeader];
@@ -1043,7 +1044,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
     
     scale *= [[[[self designerScrollView] window] screen] scale];
 
@@ -2539,7 +2540,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                           inputType:MTAggregateFunctionInputTypeField
                                                           groupType:groupType
                                                     aggregateObject:(RptqQueryField *)inputObject
-                                                        groupNumber:abs([groupNumber integerValue])];
+                                                        groupNumber:labs((long)[groupNumber integerValue])];
     [aggregateToEdit release];
 }
 

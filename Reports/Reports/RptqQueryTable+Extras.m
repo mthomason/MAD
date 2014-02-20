@@ -88,7 +88,7 @@
     NSString *tableName = [databaseSchemaTable name];
     NSNumber *dropIndex = [self dropIndex];
     NSInteger index = [dropIndex integerValue];
-    return [NSString stringWithFormat:@"%@_%d", tableName, index];
+    return [NSString stringWithFormat:@"%@_%ld", tableName, (long)index];
 }
 
 + (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document {

@@ -84,7 +84,7 @@
             CGFloat length = 0.0000f;
             if ((i % 8) == 0) {
                 CGRect locationRect = CGRectMake(xPoint - 5.000f, rect.size.height - 8.0000f, 10.0000f, 5.0000f);
-                NSString *s = [NSString stringWithFormat:@"%d", i / 8];
+                NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 8];
                 [s drawInRect:locationRect withAttributes:[self attributes]];
                 length = 1.0000f;
                 CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
@@ -111,7 +111,7 @@
             CGFloat xPointC = i * ([self cmInPoints] / 10.0000f);
             if ((i % 10) == 0) {
                 CGRect locationRect = CGRectMake(xPointC - 5.000f, 1.0000f, 10.0000f, 5.0000f);
-                NSString *s = [NSString stringWithFormat:@"%d", i / 10];
+                NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 10];
                 [s drawInRect:locationRect withAttributes:[self attributesMetric]];
                 length = 2.0000f;
                 CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);

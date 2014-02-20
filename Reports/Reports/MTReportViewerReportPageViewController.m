@@ -224,7 +224,7 @@
     
     UIView *numberView = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
     UILabel *labelView = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, w, h)];
-    [labelView setText:[NSString stringWithFormat:@"%d of %d", pageNumber, numberOfPages]];
+    [labelView setText:[NSString stringWithFormat:@"%lu of %lu", (unsigned long)pageNumber, (unsigned long)numberOfPages]];
     [labelView setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 1.0000f]];
     [labelView setTextColor:[UIColor whiteColor]];
     [labelView setTextAlignment:NSTextAlignmentCenter];

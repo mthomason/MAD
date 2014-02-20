@@ -26,7 +26,7 @@
         [applicationFileUrlWithExtention release];
         
         NSURL *baseUrlFormatted = [[documentsDirectoryURL
-                                    URLByAppendingPathComponent: [name stringByAppendingFormat:@" %d", ctr]] retain];
+                                    URLByAppendingPathComponent: [name stringByAppendingFormat:@" %ld", (long)ctr]] retain];
         
         
         applicationFileUrlWithExtention = [[baseUrlFormatted

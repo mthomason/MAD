@@ -291,8 +291,8 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
     require([purchase_info_string canBeConvertedToEncoding:NSASCIIStringEncoding] &&
             [signature_string canBeConvertedToEncoding:NSASCIIStringEncoding], outLabel);
     
-    size_t purchase_info_length;
-    purchase_info_length = [purchaseInfoData length];
+    CC_LONG purchase_info_length;
+    purchase_info_length = (unsigned int)[purchaseInfoData length];
     const uint8_t *purchase_info_bytes = [purchaseInfoData bytes];
     
     

@@ -85,7 +85,7 @@
 - (NSString *)sectionKey {
     NSCharacterSet *nonAumericCharacterSet = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
     NSString *objectIdAsUrlString = [[[self objectID] URIRepresentation] absoluteString];
-    NSString *section = [NSString stringWithFormat:@"%d", [[self identifier] integerValue]];
+    NSString *section = [NSString stringWithFormat:@"%ld", (long)[[self identifier] integerValue]];
     NSArray *components = [objectIdAsUrlString componentsSeparatedByCharactersInSet:nonAumericCharacterSet];
     NSString *key = [components componentsJoinedByString: section];
     return key;

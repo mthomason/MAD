@@ -70,7 +70,7 @@
                 [serv setUser:      username];
                 [serv setPassword:  password];
                 [serv setHost:      [[self databaseConnection] server]];
-                [serv setPort:      [[self databaseConnection] port]];
+                [serv setPort:      (unsigned int)[[self databaseConnection] port]];
                 [serv setSchema:    [[self databaseConnection] database]];
                 
                 NSError *errorConnection = nil;
@@ -127,7 +127,7 @@
     
     [serv setHost:      [[self databaseConnection] server]];
     [serv setSchema:    [[self databaseConnection] database]];
-    [serv setPort:      [[self databaseConnection] port]];
+    [serv setPort:      (unsigned int)[[self databaseConnection] port]];
     
     NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
     
@@ -324,7 +324,7 @@
         
         [serv setHost:      [[self databaseConnection] server]];
         [serv setSchema:    [[self databaseConnection] database]];
-        [serv setPort:      [[self databaseConnection] port]];
+        [serv setPort:      (unsigned int)[[self databaseConnection] port]];
         
         NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
         [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
@@ -393,7 +393,7 @@
             
             [serv setHost:      [[self databaseConnection] server]];
             [serv setSchema:    [[self databaseConnection] database]];
-            [serv setPort:      [[self databaseConnection] port]];
+            [serv setPort:      (unsigned int)[[self databaseConnection] port]];
             
             NSString *server = [[self databaseConnection] server];
             NSString *database = [[self databaseConnection] database];

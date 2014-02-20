@@ -343,7 +343,7 @@
                     
                     [cell setTag: tagWithStepper];
                 }
-                NSString *detail = [NSString stringWithFormat:@"%d", symbolHeight];
+                NSString *detail = [NSString stringWithFormat:@"%ld", (long)symbolHeight];
                 NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
                 [[cell textLabel] setAttributedText:attributedString];
                 
@@ -393,7 +393,7 @@
                     
                     [cell setTag: tagWithStepper];
                 }
-                NSString *detail = [NSString stringWithFormat:@"%d", [self borderWidth]];
+                NSString *detail = [NSString stringWithFormat:@"%ld", (long)[self borderWidth]];
                 NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Border width" withDetail:detail];
                 [[cell textLabel] setAttributedText:attributedString];
                 
@@ -412,7 +412,7 @@
             case 1:
                 cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentType forIndexPath:indexPath] retain];
                 NSInteger type = [barcode has2dComponentType];
-                NSString *detailText = [NSString stringWithFormat:@"%d", type];
+                NSString *detailText = [NSString stringWithFormat:@"%ld", (long)type];
                 [[cell detailTextLabel] setText:detailText];
                 BOOL enabled = [barcode has2dComponentEnabled];
                 UITableViewCellSelectionStyle style = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
@@ -457,7 +457,7 @@
 
 - (void)didChangeBorderWidth:(UIStepper *)sender {
     [self setBorderWidth:(NSInteger) [sender value]];
-    NSString *detail = [NSString stringWithFormat:@"%d", (NSInteger)[sender value]];
+    NSString *detail = [NSString stringWithFormat:@"%ld", (long)[sender value]];
     NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Border width" withDetail:detail];
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
     [[cell textLabel] setAttributedText:attributedString];
@@ -465,7 +465,7 @@
 }
 
 - (void)didChangeSymbolHeight:(UIStepper *)sender {
-    NSString *detail = [NSString stringWithFormat:@"%d", (NSInteger)[sender value]];
+    NSString *detail = [NSString stringWithFormat:@"%ld", (long)[sender value]];
     NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
     [[cell textLabel] setAttributedText:attributedString];

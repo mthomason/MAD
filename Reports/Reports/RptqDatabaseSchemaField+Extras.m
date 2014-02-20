@@ -203,7 +203,7 @@
             result = NSLocalizedString(@"Year", @"Number data type.");
             break;
         default:
-            result = [NSString stringWithFormat:@"Type %d", [[self dataType] integerValue]];
+            result = [NSString stringWithFormat:@"Type %ld", (long)[[self dataType] integerValue]];
             break;
     }
     return result;

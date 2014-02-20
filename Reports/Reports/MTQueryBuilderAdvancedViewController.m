@@ -608,7 +608,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale {
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
     [self resizeScrollViewContentArea];
 }
 
