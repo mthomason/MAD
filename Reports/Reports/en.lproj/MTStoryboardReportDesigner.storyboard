@@ -260,6 +260,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="barButtonItemDone" destination="zJA-ug-jW1" id="zRk-XV-wTY"/>
                         <outlet property="barButtonItemPrint" destination="bhj-Wd-mzP" id="AmA-fE-BMq"/>
                         <outlet property="barButtonItemRefresh" destination="ajA-Ys-fgg" id="TaH-ax-dEq"/>
                         <outlet property="barButtonItemSendToPdf" destination="m0Y-3f-wqU" id="qZB-B5-pXe"/>
