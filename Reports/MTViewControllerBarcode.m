@@ -98,7 +98,6 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     }
     NSString *asciiArtVertConstraint = @"V:|-(==0.0000)-[topView(==%@)]-(==0.0000)-[bottomView]-(==0.0000)-|";
     NSString *asciiArtVert = [NSString stringWithFormat: asciiArtVertConstraint, barcodeViewerHeight];
-    NSLog(@"%@", asciiArtVert);
     NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(topView, bottomView);
     NSArray *constraintsVert = [NSLayoutConstraint constraintsWithVisualFormat:asciiArtVert
                                                                              options:0
@@ -198,8 +197,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject {
     MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject] retain];
-    
     [self setBarcode:barcode];
+    [barcode release];
+    
     RptqQueryField *field1 = [barcodeDocumentObject referencesField1];
     RptqQueryField *field2 = [barcodeDocumentObject referencesField2];
     [self setQueryField1:field1];

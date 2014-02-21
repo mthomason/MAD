@@ -206,12 +206,12 @@ typedef void(^MTBlockResultVoid)(void);
         [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
         [collisionBehavior setCollisionDelegate:self];
         UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
-        [gravity setMagnitude:1.0000f];
+        [gravity setMagnitude:0.2000f];
         CGVector gravityDirection = CGVectorMake(1, 0);
         [gravity setGravityDirection:gravityDirection];
         UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
         [dynamicItemBehavior setAllowsRotation:NO];
-        [dynamicItemBehavior setElasticity:0.0000f];
+        [dynamicItemBehavior setElasticity:0.1000f];
         [dynamicItemBehavior setResistance:1.0000f];
         [self setDynamicItemBehavior: dynamicItemBehavior];
         [animator addBehavior:dynamicItemBehavior];
@@ -582,7 +582,6 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)pushPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     UIPushBehavior *pushBehavior = [[self pushBehaviorForItem:[gestureRecognizer view]] retain];
-    NSLog(@"Push Behavior %@", pushBehavior);
     [pushBehavior setActive:YES];
     
     // If we're starting the gesture then create a drag force
@@ -781,7 +780,6 @@ typedef void(^MTBlockResultVoid)(void);
             BOOL topLevel = YES;
             
             for (RptqQueryLinks *link in [query hasQueryLinks]) {
-                NSLog(@"%@", link);
                 RptqQueryField *rightField = [link hasRightField];
                 RptqQueryTable *rightQueryTable = [rightField inQueryTable];
                 if ([rightQueryTable isEqualTo:table]) {
@@ -1068,7 +1066,6 @@ typedef void(^MTBlockResultVoid)(void);
             BOOL topLevel = YES;
             
             for (RptqQueryLinks *link in [query hasQueryLinks]) {
-                NSLog(@"%@", link);
                 RptqQueryField *rightField = [link hasRightField];
                 RptqQueryTable *rightQueryTable = [rightField inQueryTable];
                 if ([rightQueryTable isEqualTo:table]) {
@@ -1164,9 +1161,10 @@ typedef void(^MTBlockResultVoid)(void);
     // FIXME: Make sure they are not the same, or crash, lolz
 
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerRight attachedToItem:viewControllerLeft];
-    [behavior setFrequency:1.0000f];
-    [behavior setDamping:0.9000f];
-    [behavior setLength:166.0000f];
+    [behavior setFrequency:1.000f];
+    [behavior setDamping:1.200f];
+    [behavior setLength:180.0000f];
+    
     return [behavior autorelease];
 }
 
@@ -1355,7 +1353,8 @@ typedef void(^MTBlockResultVoid)(void);
     [[self tableIds] addObject:[table objectID]];
     [[self controllersForObjectIds] setObject:viewController forKey:[table objectID]];
     CGFloat originX = 10.0000f + CGPointZero.x;
-    CGFloat originY = CGPointZero.y + [[self scrollView] frame].size.height - 200.0000f - 20.0000f;
+    BOOL ud = [[table identifier] integerValue] % 2;
+    CGFloat originY = CGPointZero.y + [[self scrollView] frame].size.height - (ud? 200.0000f:-600.0000f) - 20.0000f;
     subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
     [table setDesignerSizeHeight:@(subviewRect.size.height)];
     [table setDesignerSizeWidth:@(subviewRect.size.width)];

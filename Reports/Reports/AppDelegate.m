@@ -54,14 +54,14 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (RptqDatabase *)activeRptqDatabase {
-    RptqDocument *rptqDocument = [[AppDelegate activeRptqDocument] retain];
+    RptqDocument *rptqDocument = [AppDelegate activeRptqDocument];
     NSSet *databaseSchemas = [rptqDocument hasDatabaseSchemas];
     RptqDatabase *databaseSchema = [[databaseSchemas anyObject] retain];
     return [databaseSchema autorelease];
 }
 
 + (RptqQuery *)activeRptqQuery {
-    RptqDatabase *rptqDatabase = [[AppDelegate activeRptqDatabase] retain];
+    RptqDatabase *rptqDatabase = [AppDelegate activeRptqDatabase];
     NSSet *queries = [rptqDatabase hasQueries];
     RptqQuery *query = [[queries anyObject] retain];
     return [query autorelease];

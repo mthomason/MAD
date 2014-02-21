@@ -2520,7 +2520,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         NSError *error = nil;
         [managedObjectContext save:&error];
         if (error != nil) {
-            NSLog(@"Error: %@", error);
+            MTLog(@"Error: %@", error);
         }
     }
     

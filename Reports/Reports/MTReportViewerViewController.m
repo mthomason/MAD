@@ -442,6 +442,8 @@
     } else {
         reportViewer = self;
     }
+    
+    [[reportViewer barButtonItemDone] setEnabled:NO];
 
     if ([reportViewer isRefreshing] == NO) {
 
@@ -450,41 +452,44 @@
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
         dispatch_async(queuePriorityBackground, ^{
             
+            __block MTReportViewerController *reportViewer2 = reportViewer;
             
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-            MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
+            MTApplicationInstance *applicationInstance = [[AppDelegate applicationInstance] retain];
+            MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
 
             [reportDocument refresh:^(BOOL success) {
             
                 if (success) {
                     
-                    [[reportViewer printPageRendererReport] setDidRefresh:YES];
-
+                    [[reportViewer2 printPageRendererReport] setDidRefresh:YES];
+                    __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [MTReportViewerController setDisplayActive:reportViewer];
+                        [MTReportViewerController setDisplayActive:reportViewer3];
                         NSDate *lastD = [[NSDate date] retain];
-                        [reportViewer setLastCacheDate: lastD];
+                        [reportViewer3 setLastCacheDate: lastD];
                         [lastD release];
-                        [reportViewer reload:reportViewer];
+                        [reportViewer3 reload:reportViewer3];
                     });
                 } else {
-
+                    __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [MTReportViewerController setDisplayActive:reportViewer];
-                        [reportViewer reload:reportViewer];
+                        [MTReportViewerController setDisplayActive:reportViewer3];
+                        [reportViewer3 reload:reportViewer];
                     });
                 }
             }];
+            [reportDocument release];
+            [applicationInstance release];
         });
     }
 }
 
 - (void)reload {
+    __block MTReportViewerController *blockself = self;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self reload:self];
+            [blockself reload:blockself];
         });
     });
 }
@@ -520,6 +525,8 @@
             NSArray *viewControllers = @[pageOne];
             [blockViewer setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
             [pageOne release];
+            
+            [[blockViewer barButtonItemDone] setEnabled:YES];
         });
     });
 }
