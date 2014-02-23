@@ -219,18 +219,14 @@
                             </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="uNL-pS-3JN"/>
-                        <barButtonItem title="Print" width="66" id="ypc-Pg-ejz">
-                            <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="HDt-8o-ngI"/>
+                        <barButtonItem width="44" systemItem="action" id="Mnl-SJ-Bua">
+                            <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="print:" destination="ERc-MK-TMQ" id="OmV-hx-y5u"/>
+                                <action selector="activity:" destination="ERc-MK-TMQ" id="kep-te-mAh"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="PDF" width="66" id="J9E-CK-Nif">
-                            <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="sendToPdf:" destination="ERc-MK-TMQ" id="Yza-aw-Oyl"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="5Mc-Dk-rgz"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="L5Q-GJ-2o1">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="zUj-Uf-OIx">
@@ -247,10 +243,9 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="barButtonItemActivity" destination="Mnl-SJ-Bua" id="dpH-he-PDw"/>
                         <outlet property="barButtonItemDone" destination="zUj-Uf-OIx" id="Hdo-8t-1YQ"/>
-                        <outlet property="barButtonItemPrint" destination="ypc-Pg-ejz" id="7HJ-HI-zD4"/>
                         <outlet property="barButtonItemRefresh" destination="kyb-ds-B3C" id="T1g-Yx-0qY"/>
-                        <outlet property="barButtonItemSendToPdf" destination="J9E-CK-Nif" id="BID-7d-juG"/>
                         <outlet property="barButtonItemSliderView" destination="o4d-Rw-Lqn" id="D6d-xW-afc"/>
                         <outlet property="sliderPagination" destination="jvQ-RC-rI9" id="OIh-p0-m58"/>
                         <outlet property="sliderView" destination="rXE-1c-kzE" id="man-hs-nFo"/>

@@ -212,7 +212,7 @@ typedef void(^MTBlockResultVoid)(void);
         UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
         [dynamicItemBehavior setAllowsRotation:NO];
         [dynamicItemBehavior setElasticity:0.1000f];
-        [dynamicItemBehavior setResistance:1.0000f];
+        [dynamicItemBehavior setResistance:0.9000f];
         [self setDynamicItemBehavior: dynamicItemBehavior];
         [animator addBehavior:dynamicItemBehavior];
         
@@ -1163,7 +1163,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerRight attachedToItem:viewControllerLeft];
     [behavior setFrequency:1.000f];
     [behavior setDamping:1.200f];
-    [behavior setLength:180.0000f];
+    [behavior setLength:10.0000f];
     
     return [behavior autorelease];
 }

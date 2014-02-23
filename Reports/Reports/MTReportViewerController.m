@@ -6,11 +6,14 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportViewerViewController.h"
+#import "MTReportViewerController.h"
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
+#import "MTActivityItemProviderPdf.h"
+#import "MTActivityReportPrintPreview.h"
 
 @interface MTReportViewerController ()
+    <UIPopoverControllerDelegate>
 
 @property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -22,6 +25,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
+@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
 @property (nonatomic, retain) IBOutlet UILabel *labelDateLastRefreshed;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
@@ -39,11 +43,14 @@
 @property (atomic,    assign) BOOL isRefreshing;
 @property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
 
+@property (nonatomic, retain) UIPopoverController *popoverControllerActivity;
+
 @end
 
 @implementation MTReportViewerController
 
 - (void)dealloc {
+    [_popoverControllerActivity release];
     [_printPageRendererReport release];
     [_sliderPagination release];
     _asyncDelegate = nil;
@@ -61,6 +68,7 @@
     [_barButtonItemRefresh release];
     [_barButtonItemPrint release];
     [_barButtonItemSendToPdf release];
+    [_barButtonItemActivity release];
     [_labelDateLastRefreshed release];
     [_statusLabelWidthConstraint release];
     [_barButtonItemDone release];
@@ -232,6 +240,8 @@
             if (view != nil) {
                 CGFloat width = view? [view frame].size.width : (CGFloat)0.0;
                 nonSliderButtonsWidth += width + itemsMargin;
+            } else {
+                nonSliderButtonsWidth += [barButtonItem width];
             }
         }
         counter++;
@@ -374,7 +384,7 @@
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     
-    
+        // FIXME: Delete preview
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
         NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
         NSError *error = nil;
@@ -394,6 +404,7 @@
     [[controller barButtonItemDone] setEnabled:YES];
     [[controller barButtonItemPrint] setEnabled:YES];
     [[controller barButtonItemSendToPdf] setEnabled:YES];
+    [[controller barButtonItemActivity] setEnabled:YES];
     
     [controller setIsRefreshing:NO];
     [controller setUpdatingOfTimerIsPaused:NO];
@@ -418,6 +429,7 @@
     [[controller barButtonItemDone] setEnabled:NO];
     [[controller barButtonItemPrint] setEnabled:NO];
     [[controller barButtonItemSendToPdf] setEnabled:NO];
+    [[controller barButtonItemActivity] setEnabled:NO];
     [controller setUpdatingOfTimerIsPaused:YES];
     [[controller labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
     [[controller labelDateLastRefreshed] setNeedsDisplay];
@@ -484,6 +496,63 @@
     }
 }
 
+- (IBAction)activity:(id)sender {
+
+    NSString *temporaryDirectoryPath = NSTemporaryDirectory();
+    NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
+    NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+    MTActivityItemProviderPdf *activityItemProviderPdf = [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
+    NSArray *activityItems = @[activityItemProviderPdf];
+    
+    // FIXME: Delete preview
+    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
+        //if (completed) {
+            //[self dismissViewControllerAnimated:YES completion:^{
+                
+            //}];
+            //[MTReportViewerController setDisplayActive:self];
+        //}
+    };
+    
+    MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
+    [printPreview setDelegate:self];
+    NSArray *applicationActivities = @[printPreview];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
+    [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
+
+    if ([UIDevice isPad]) {
+        if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
+            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+            [popoverController setDelegate:self];
+            [popoverController presentPopoverFromBarButtonItem:[self barButtonItemActivity] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [self setPopoverControllerActivity:popoverController];
+            [popoverController release];
+        }
+    } else {
+        [self presentViewController:activityViewController animated:YES completion:^{ }];
+    }
+    
+    [activityViewController release];
+    [urlEmpty release];
+}
+
+- (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
+    return [[self retain] autorelease];
+}
+
+- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
+
+    if ([UIDevice isPad] == NO) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            completionHandler(YES);
+        }];
+    } else {
+        [[self popoverControllerActivity] dismissPopoverAnimated:YES];
+        completionHandler(YES);
+    }
+
+}
+
 - (void)reload {
     __block MTReportViewerController *blockself = self;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
@@ -531,11 +600,11 @@
     });
 }
 
-- (IBAction)sendToPdf:(id)sender {
-    
+- (void)sendToPdfWithCompletionHandler:(void (^)(BOOL))completionHandler {
 
     [[self barButtonItemDone] setEnabled:NO];
     [[self barButtonItemSendToPdf] setEnabled:NO];
+    [[self barButtonItemActivity] setEnabled:NO];
     [[self barButtonItemRefresh] setEnabled:NO];
     [[self barButtonItemPrint] setEnabled:NO];
     [self setUpdatingOfTimerIsPaused:YES];
@@ -545,8 +614,8 @@
     for (UITabBarItem *i in [[[self tabBarController] tabBar] items]) {
         [i setEnabled:NO];
     }
-    __block MTReportViewerController *reportViewer = self;
-
+    __block MTReportViewerController *blockself = self;
+    
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queuePriorityBackground, ^{
         
@@ -557,24 +626,35 @@
         [printPageRender writeToPdf:temporaryFile];
         [printPageRender release];
         
-        __block MTReportViewerController *blockReportViewer = reportViewer;
+        __block MTReportViewerController *blockself2 = blockself;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockReportViewer setUpdatingOfTimerIsPaused:NO];
-            [blockReportViewer updateLateRefreshedLabel:reportViewer];
-            [[blockReportViewer barButtonItemRefresh] setEnabled:YES];
-            [[blockReportViewer barButtonItemDone] setEnabled:YES];
-            [[blockReportViewer barButtonItemPrint] setEnabled:YES];
-            [[blockReportViewer barButtonItemSendToPdf] setEnabled:YES];
+            [blockself2 setUpdatingOfTimerIsPaused:NO];
+            [blockself2 updateLateRefreshedLabel:blockself2];
+            [[blockself2 barButtonItemRefresh] setEnabled:YES];
+            [[blockself2 barButtonItemDone] setEnabled:YES];
+            [[blockself2 barButtonItemPrint] setEnabled:YES];
+            [[blockself2 barButtonItemSendToPdf] setEnabled:YES];
+            [[blockself2 barButtonItemActivity] setEnabled:YES];
             
-            for (UITabBarItem *i in [[[blockReportViewer tabBarController] tabBar] items]) {
+            for (UITabBarItem *i in [[[blockself2 tabBarController] tabBar] items]) {
                 [i setEnabled:YES];
             }
             UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
-            [c setDelegate:blockReportViewer];
+            [c setDelegate:blockself2];
             [c presentPreviewAnimated:YES];
         });
-
+        
     });
+
+}
+
+- (IBAction)sendToPdf:(id)sender {
+    
+    [self sendToPdfWithCompletionHandler:^(BOOL success){
+     
+    }];
+    
+    
 }
 
 - (IBAction)print:(id)sender {
@@ -585,12 +665,14 @@
         [[self barButtonItemPrint] setEnabled:NO];
         [[self barButtonItemRefresh] setEnabled:NO];
         [[self barButtonItemSendToPdf] setEnabled:NO];
+        [[self barButtonItemActivity] setEnabled:NO];
         
         __block MTReportViewerController *reportViewer = self;
         UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
             [[reportViewer barButtonItemPrint] setEnabled:YES];
             [[reportViewer barButtonItemRefresh] setEnabled:YES];
             [[reportViewer barButtonItemSendToPdf] setEnabled:YES];
+            [[reportViewer barButtonItemActivity] setEnabled:YES];
             if(!completed && error){
                 //MTLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
             }

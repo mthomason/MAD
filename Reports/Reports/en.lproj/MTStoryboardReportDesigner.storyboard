@@ -235,16 +235,13 @@
                             </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="8RI-IH-kqi"/>
-                        <barButtonItem title="Print" width="44" id="bhj-Wd-mzP">
+                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="b36-6h-dRQ"/>
+                        <barButtonItem width="44" systemItem="action" id="qcM-qp-6Ho">
                             <connections>
-                                <action selector="print:" destination="D89-Nb-LnQ" id="E4b-0f-YWB"/>
+                                <action selector="activity:" destination="D89-Nb-LnQ" id="SpZ-H8-iaz"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="PDF" width="44" id="m0Y-3f-wqU">
-                            <connections>
-                                <action selector="sendToPdf:" destination="D89-Nb-LnQ" id="BNY-5W-sqQ"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="C7T-Zf-RSm"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="hjk-LA-j8h">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="zJA-ug-jW1">
@@ -260,10 +257,9 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="barButtonItemActivity" destination="qcM-qp-6Ho" id="hhp-gb-egF"/>
                         <outlet property="barButtonItemDone" destination="zJA-ug-jW1" id="zRk-XV-wTY"/>
-                        <outlet property="barButtonItemPrint" destination="bhj-Wd-mzP" id="AmA-fE-BMq"/>
                         <outlet property="barButtonItemRefresh" destination="ajA-Ys-fgg" id="TaH-ax-dEq"/>
-                        <outlet property="barButtonItemSendToPdf" destination="m0Y-3f-wqU" id="qZB-B5-pXe"/>
                         <outlet property="barButtonItemSliderView" destination="bMb-jS-V8M" id="xyI-FY-jA4"/>
                         <outlet property="sliderPagination" destination="az8-gW-1Nn" id="wtd-jU-RsN"/>
                         <outlet property="sliderView" destination="wY2-Or-Evv" id="WlM-jv-nap"/>

@@ -15,10 +15,12 @@
 #import "DocumentStatusView.h"
 #import "MUIViewControllerDelegate.h"
 #import "MTViewControllerAsyncProtocol.h"
+#import "MTActivityReportPrintPreview.h"
 
 @interface MTReportViewerController : UIPageViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
-        UIDocumentInteractionControllerDelegate, MTPrintingProtocol>
+        UIDocumentInteractionControllerDelegate, MTPrintingProtocol,
+        MTActivityReportPrintPreviewDelegate>
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;

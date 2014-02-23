@@ -1120,6 +1120,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     
+    // FIXME: This is overriding the user set document....
+    //          Maybe this whole fucking class should somehow be related to the document modal
+    //          MAYBE@!@!!@!!!!  That way it only prints its fucking self.  There, I said it.
+    
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     if (activeDocument) {
