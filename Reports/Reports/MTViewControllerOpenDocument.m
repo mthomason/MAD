@@ -38,6 +38,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, retain) UIPopoverController *openDocumentPopoverController;
 @property (nonatomic, retain) UIPopoverController *aboutPopoverController;
 @property (nonatomic, retain) UIPopoverController *licensingPopoverController;
+@property (nonatomic, retain) UIPopoverController *popoverControllerActivity;
 
 @property (nonatomic, retain) NSURL *urlBeingOpended;
 @property (nonatomic, retain) NSMutableArray *availableFilesCache;
@@ -61,6 +62,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @implementation MTViewControllerOpenDocument
 
 - (void)dealloc {
+    [_popoverControllerActivity release];
     [_applicationInstance release];
     [_reportViewer release];
     [_renameAlertView release];
@@ -378,7 +380,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return NO;
+    BOOL dismiss = [[self openDocumentPopoverController] isEqual:popoverController] == NO;
+    return dismiss;
 }
 
 - (BOOL)dismissAllPopovers {
@@ -907,7 +910,17 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:wrappedUrls applicationActivities:@[]];
     [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo]];
     [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
-    [self presentViewController:activityViewController animated:YES completion:^{}];
+    if ([UIDevice isPad]) {
+        if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
+            UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+            [popoverController setDelegate:self];
+            [popoverController presentPopoverFromBarButtonItem:[self barButtonItemAction] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [self setPopoverControllerActivity:popoverController];
+            [popoverController release];
+        }
+    } else {
+        [self presentViewController:activityViewController animated:YES completion:^{ }];
+    }
     [activityViewController release];
     
     [wrappedUrls release];

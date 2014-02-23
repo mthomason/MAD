@@ -426,7 +426,7 @@
 }
 
 - (void)regenThumbnail {
-    RptqDocument *document = [[RptqDocument getMainDocumentForManagedObjectContext:[self managedObjectContext]] retain];
+    RptqDocument *document = [[self activeDocument] retain];
     if (document != nil) {
         
         if ([[self thumbnailUrl] isKindOfClass:[NSURL class]]) {

@@ -1163,7 +1163,7 @@ typedef void(^MTBlockResultVoid)(void);
     UIAttachmentBehavior *behavior = [[UIAttachmentBehavior alloc] initWithItem:viewControllerRight attachedToItem:viewControllerLeft];
     [behavior setFrequency:1.000f];
     [behavior setDamping:1.200f];
-    [behavior setLength:10.0000f];
+    [behavior setLength:7.0000f];
     
     return [behavior autorelease];
 }
