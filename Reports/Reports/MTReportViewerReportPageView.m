@@ -14,13 +14,43 @@
 
 @implementation MTReportViewerReportPageView
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (void)initalize {
+    [self setDrawBlankPage:NO];
+}
+
 - (void)dealloc {
     _delegate = nil;
     [super dealloc];
 }
 
 - (void)drawRect:(CGRect)rect {
-    [[self delegate] drawView:self inRect:rect];
+    if ([self drawBlankPage] == NO) {
+        [[self delegate] drawView:self inRect:rect];
+    }
 }
 
 @end

@@ -45,14 +45,14 @@
 
 @property (nonatomic, retain) UIPopoverController *popoverControllerActivity;
 
+@property (nonatomic, retain) UIImageView *snapshotBeforeRotation;
+@property (nonatomic, retain) UIImageView *snapshotAfterRotation;
+
 @end
 
 @implementation MTReportViewerController {
     CGRect frameBeforeRotation;
     CGRect frameAfterRotation;
-    
-    UIImageView *snapshotBeforeRotation;
-    UIImageView *snapshotAfterRotation;
 }
 
 static UIImageView *captureSnapshotOfView (UIView *targetView) {
@@ -63,10 +63,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
     [snapshotView setFrame:[targetView frame]];
-    return snapshotView;
+    return [snapshotView autorelease];
 }
 
 - (void)dealloc {
+    [_snapshotAfterRotation release];
+    [_snapshotBeforeRotation release];
     [_popoverControllerActivity release];
     [_printPageRendererReport release];
     [_sliderPagination release];
@@ -358,9 +360,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
-    //frameBeforeRotation = [[self view] frame];
-    //snapshotBeforeRotation = captureSnapshotOfView([self view]);
-    //[[self view] insertSubview:snapshotBeforeRotation aboveSubview:[self view]];
+    MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+    UIView *displayView = [pageViewController view];
+
+    frameBeforeRotation = [displayView frame];
+    [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
+    [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
 
     BOOL isPad = [UIDevice isPad];
     if (isPad == NO) {
@@ -390,6 +395,86 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 }
 
+- (MTReportViewerReportPageViewController *)currentPageviewController {
+    NSInteger pageIndex = [self currentPageIndex];
+    MTReportViewerReportPageViewController *pageViewController = [self pageViewControllerAtIndex:pageIndex];
+    return [[pageViewController retain] autorelease];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+    UIView *displayView = [pageViewController view];
+    [displayView setNeedsDisplay];
+
+    CGRect oldBounds = displayView.bounds;
+    [self redrawReportViewer:self withFrame:oldBounds];
+
+    pageViewController = [self currentPageviewController];
+    displayView = [pageViewController view];
+    
+    frameAfterRotation = oldBounds;//[[self view] frame];
+    [UIView setAnimationsEnabled:NO];
+    [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
+    
+    CGRect framePreservingHeight = CGRectMake(frameBeforeRotation.origin.x, frameBeforeRotation.origin.y, frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+    [self.snapshotAfterRotation setFrame:framePreservingHeight];
+    
+    UIImage *imageBeforeRotation = [[self snapshotBeforeRotation] image];
+    imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+
+    UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
+    imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+
+    [UIView setAnimationsEnabled:YES];
+    
+    if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
+        [self.snapshotAfterRotation setAlpha:0.0000f];
+        [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+        [self.snapshotAfterRotation setAlpha:1.0000f];
+    } else {
+        [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+        [[self snapshotBeforeRotation] setAlpha:0.0000f];
+    }
+    
+    [self.snapshotAfterRotation setFrame:frameAfterRotation];
+    framePreservingHeight = CGRectMake(frameAfterRotation.origin.x, frameAfterRotation.origin.y, frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+    [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
+    
+    [(MTReportViewerReportPageView *)displayView setDrawBlankPage:YES];
+    [displayView setNeedsDisplay];
+}
+
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
+    MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+    UIView *displayView = [pageViewController view];
+    
+    [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+    [displayView setNeedsDisplay];
+
+    [self.snapshotBeforeRotation removeFromSuperview];
+    [self.snapshotAfterRotation removeFromSuperview];
+    //[self.snapshotBeforeRotation release];
+    //[self.snapshotAfterRotation release];
+    //self.snapshotBeforeRotation = nil;
+    //self.snapshotAfterRotation = nil;
+}
+
+- (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
+    NSArray *viewControllers = [self viewControllers];
+    NSInteger numberOfViewControllers = [viewControllers count];
+    MTReportViewerReportPageViewController *result = nil;
+    if (index < numberOfViewControllers) {
+        result = [viewControllers objectAtIndex:index];
+    } else {
+        result = [viewControllers lastObject];
+    }
+    return [[result retain] autorelease];
+}
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     [MTReportViewerController setDisplayActive:reportViewerController];
     
@@ -414,85 +499,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [pageOne release];
     
     [[reportViewerController barButtonItemDone] setEnabled:YES];
-
-}
-
-- (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
-    NSArray *viewControllers = [self viewControllers];
-    NSInteger numberOfViewControllers = [viewControllers count];
-    MTReportViewerReportPageViewController *result = nil;
-    if (index < numberOfViewControllers) {
-        result = [viewControllers objectAtIndex:index];
-    } else {
-        result = [viewControllers lastObject];
-    }
-    return [[result retain] autorelease];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    //[self reload:self];
     
-    MTReportViewerReportPageViewController *pageViewController = [self pageViewControllerAtIndex:[self currentPageIndex]];
-    [[pageViewController view] setNeedsDisplay];
-
-    
-    CGRect oldBounds = self.view.bounds;
-//    CGRect newBounds = CGRectMake(oldBounds.origin.x, oldBounds.origin.y, oldBounds.size.height, oldBounds.size.width);
-    
-    [self redrawReportViewer:self withFrame:oldBounds];
-    
-    
-/*
-    frameAfterRotation = oldBounds;//[[self view] frame];
-    [UIView setAnimationsEnabled:NO];
-    snapshotAfterRotation = captureSnapshotOfView([self view]);
-    
-    CGRect framePreservingHeight = CGRectMake(frameBeforeRotation.origin.x, frameBeforeRotation.origin.y, frameBeforeRotation.size.width, snapshotAfterRotation.frame.size.height);
-    [snapshotAfterRotation setFrame:framePreservingHeight];
-    
-    UIImage *imageBeforeRotation = [snapshotBeforeRotation image];
-    imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-
-    UIImage *imageAfterRotation = [snapshotAfterRotation image];
-    imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-
-    [UIView setAnimationsEnabled:YES];
-    
-    if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
-        [snapshotAfterRotation setAlpha:0.0000f];
-        [[self view] insertSubview:snapshotAfterRotation aboveSubview:snapshotBeforeRotation];
-        [snapshotAfterRotation setAlpha:1.0000f];
-    } else {
-        [[self view] insertSubview:snapshotAfterRotation aboveSubview:snapshotBeforeRotation];
-        [snapshotBeforeRotation setAlpha:0.0000f];
-    }
-    
-    [snapshotAfterRotation setFrame:frameAfterRotation];
-    framePreservingHeight = CGRectMake(frameAfterRotation.origin.x, frameAfterRotation.origin.y, frameAfterRotation.size.width, snapshotAfterRotation.frame.size.height);
-    [snapshotBeforeRotation setFrame:framePreservingHeight];
-    
-    [[self view] setHidden:YES];
-    */
-    
-    
-    //[self reload:self];
-}
-
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-
-/*
-    [snapshotBeforeRotation removeFromSuperview];
-    [snapshotAfterRotation removeFromSuperview];
-    [snapshotBeforeRotation release];
-    [snapshotAfterRotation release];
-    snapshotBeforeRotation = nil;
-    snapshotAfterRotation = nil;
-    
-    [[self view] setHidden:NO];
- */
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
