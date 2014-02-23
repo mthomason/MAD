@@ -47,7 +47,24 @@
 
 @end
 
-@implementation MTReportViewerController
+@implementation MTReportViewerController {
+    CGRect frameBeforeRotation;
+    CGRect frameAfterRotation;
+    
+    UIImageView *snapshotBeforeRotation;
+    UIImageView *snapshotAfterRotation;
+}
+
+static UIImageView *captureSnapshotOfView (UIView *targetView) {
+    UIGraphicsBeginImageContextWithOptions([targetView bounds].size, YES, 0);
+    [[targetView layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
+    [snapshotView setFrame:[targetView frame]];
+    return snapshotView;
+}
 
 - (void)dealloc {
     [_popoverControllerActivity release];
@@ -340,6 +357,11 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
+    //frameBeforeRotation = [[self view] frame];
+    //snapshotBeforeRotation = captureSnapshotOfView([self view]);
+    //[[self view] insertSubview:snapshotBeforeRotation aboveSubview:[self view]];
+
     BOOL isPad = [UIDevice isPad];
     if (isPad == NO) {
         CGFloat labelWidth = 180.0000f;
@@ -360,16 +382,117 @@
                 labelWidth = 170.000;
                 break;
         }
-        __block MTReportViewerController *reportViewer = self;
-        [UIView animateWithDuration:duration animations:^{
-            [[reportViewer statusLabelWidthConstraint] setConstant:labelWidth];
-        }];
+        
+        //__block MTReportViewerController *reportViewer = self;
+        //[UIView animateWithDuration:duration animations:^{
+            //[[reportViewer statusLabelWidthConstraint] setConstant:labelWidth];
+        //}];
     }
 }
 
+- (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
+    [MTReportViewerController setDisplayActive:reportViewerController];
+    
+    [[reportViewerController printPageRendererReport] cachePrintPageRenderDataForSize:frame.size];
+    NSUInteger numberOfPages = [[reportViewerController printPageRendererReport] numberOfPages];
+    [reportViewerController setNumberOfPages:numberOfPages];
+    [[reportViewerController sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+    
+    NSInteger pageNumber = [reportViewerController currentPageIndex] + 1;
+    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
+                                                                                                                 ofPages:numberOfPages];
+    [[pageOne view] setFrame:frame];
+    
+    [pageOne setDelegate:reportViewerController];
+    
+    NSArray *viewControllers = @[pageOne];
+    [reportViewerController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+        if (finished) {
+            [[pageOne view] setNeedsDisplay];
+        }
+    }];
+    [pageOne release];
+    
+    [[reportViewerController barButtonItemDone] setEnabled:YES];
+
+}
+
+- (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
+    NSArray *viewControllers = [self viewControllers];
+    NSInteger numberOfViewControllers = [viewControllers count];
+    MTReportViewerReportPageViewController *result = nil;
+    if (index < numberOfViewControllers) {
+        result = [viewControllers objectAtIndex:index];
+    } else {
+        result = [viewControllers lastObject];
+    }
+    return [[result retain] autorelease];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    //[self reload:self];
+    
+    MTReportViewerReportPageViewController *pageViewController = [self pageViewControllerAtIndex:[self currentPageIndex]];
+    [[pageViewController view] setNeedsDisplay];
+
+    
+    CGRect oldBounds = self.view.bounds;
+//    CGRect newBounds = CGRectMake(oldBounds.origin.x, oldBounds.origin.y, oldBounds.size.height, oldBounds.size.width);
+    
+    [self redrawReportViewer:self withFrame:oldBounds];
+    
+    
+/*
+    frameAfterRotation = oldBounds;//[[self view] frame];
+    [UIView setAnimationsEnabled:NO];
+    snapshotAfterRotation = captureSnapshotOfView([self view]);
+    
+    CGRect framePreservingHeight = CGRectMake(frameBeforeRotation.origin.x, frameBeforeRotation.origin.y, frameBeforeRotation.size.width, snapshotAfterRotation.frame.size.height);
+    [snapshotAfterRotation setFrame:framePreservingHeight];
+    
+    UIImage *imageBeforeRotation = [snapshotBeforeRotation image];
+    imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+
+    UIImage *imageAfterRotation = [snapshotAfterRotation image];
+    imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+
+    [UIView setAnimationsEnabled:YES];
+    
+    if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
+        [snapshotAfterRotation setAlpha:0.0000f];
+        [[self view] insertSubview:snapshotAfterRotation aboveSubview:snapshotBeforeRotation];
+        [snapshotAfterRotation setAlpha:1.0000f];
+    } else {
+        [[self view] insertSubview:snapshotAfterRotation aboveSubview:snapshotBeforeRotation];
+        [snapshotBeforeRotation setAlpha:0.0000f];
+    }
+    
+    [snapshotAfterRotation setFrame:frameAfterRotation];
+    framePreservingHeight = CGRectMake(frameAfterRotation.origin.x, frameAfterRotation.origin.y, frameAfterRotation.size.width, snapshotAfterRotation.frame.size.height);
+    [snapshotBeforeRotation setFrame:framePreservingHeight];
+    
+    [[self view] setHidden:YES];
+    */
+    
+    
+    //[self reload:self];
+}
+
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    [self reload:self];
+
+/*
+    [snapshotBeforeRotation removeFromSuperview];
+    [snapshotAfterRotation removeFromSuperview];
+    [snapshotBeforeRotation release];
+    [snapshotAfterRotation release];
+    snapshotBeforeRotation = nil;
+    snapshotAfterRotation = nil;
+    
+    [[self view] setHidden:NO];
+ */
 }
 
 - (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
@@ -505,14 +628,7 @@
     NSArray *activityItems = @[activityItemProviderPdf];
     
     // FIXME: Delete preview
-    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
-        //if (completed) {
-            //[self dismissViewControllerAnimated:YES completion:^{
-                
-            //}];
-            //[MTReportViewerController setDisplayActive:self];
-        //}
-    };
+    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) { };
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     [printPreview setDelegate:self];
