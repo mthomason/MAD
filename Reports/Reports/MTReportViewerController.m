@@ -48,11 +48,13 @@
 @property (nonatomic, retain) UIImageView *snapshotBeforeRotation;
 @property (nonatomic, retain) UIImageView *snapshotAfterRotation;
 
+@property (nonatomic, assign) CGRect frameBeforeRotation;
+@property (nonatomic, assign) CGRect frameAfterRotation;
+
 @end
 
 @implementation MTReportViewerController {
-    CGRect frameBeforeRotation;
-    CGRect frameAfterRotation;
+
 }
 
 static UIImageView *captureSnapshotOfView (UIView *targetView) {
@@ -363,7 +365,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
     UIView *displayView = [pageViewController view];
 
-    frameBeforeRotation = [displayView frame];
+    [self setFrameBeforeRotation: [displayView frame]];
+
     [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
     [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
 
@@ -414,11 +417,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     pageViewController = [self currentPageviewController];
     displayView = [pageViewController view];
     
-    frameAfterRotation = oldBounds;//[[self view] frame];
+    [self setFrameAfterRotation: oldBounds];
     [UIView setAnimationsEnabled:NO];
     [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
     
-    CGRect framePreservingHeight = CGRectMake(frameBeforeRotation.origin.x, frameBeforeRotation.origin.y, frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+    CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x, self.frameBeforeRotation.origin.y, self.frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
     [self.snapshotAfterRotation setFrame:framePreservingHeight];
     
     UIImage *imageBeforeRotation = [[self snapshotBeforeRotation] image];
@@ -438,8 +441,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [[self snapshotBeforeRotation] setAlpha:0.0000f];
     }
     
-    [self.snapshotAfterRotation setFrame:frameAfterRotation];
-    framePreservingHeight = CGRectMake(frameAfterRotation.origin.x, frameAfterRotation.origin.y, frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+    [self.snapshotAfterRotation setFrame:self.frameAfterRotation];
+    framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
     [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
     
     [(MTReportViewerReportPageView *)displayView setDrawBlankPage:YES];
@@ -449,6 +452,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [[[self navigationItem] titleView] sizeToFit];
 
     MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
     UIView *displayView = [pageViewController view];
@@ -456,12 +460,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
     [displayView setNeedsDisplay];
 
-    [self.snapshotBeforeRotation removeFromSuperview];
-    [self.snapshotAfterRotation removeFromSuperview];
-    //[self.snapshotBeforeRotation release];
-    //[self.snapshotAfterRotation release];
-    //self.snapshotBeforeRotation = nil;
-    //self.snapshotAfterRotation = nil;
+    [[self snapshotBeforeRotation] removeFromSuperview];
+    [[self snapshotAfterRotation] removeFromSuperview];
+
 }
 
 - (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
@@ -561,7 +562,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[controller barButtonItemSendToPdf] setEnabled:NO];
     [[controller barButtonItemActivity] setEnabled:NO];
     [controller setUpdatingOfTimerIsPaused:YES];
-    [[controller labelDateLastRefreshed] setText:NSLocalizedString(@"Refreshing data.", @"Refreshing data.")];
+    NSString *refreshing = NSLocalizedString(@"Refreshing data.", @"Refreshing data.");
+    [[controller labelDateLastRefreshed] setText:refreshing];
     [[controller labelDateLastRefreshed] setNeedsDisplay];
     [[controller barButtonItemDone] setEnabled:NO];
     
