@@ -195,17 +195,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if (self) {
         
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-        if ([UIDevice isLagacyOS]) {
-            [[viewRuler layer] setCornerRadius: MTReportDesignerCornerRadius];
-            [[viewRuler layer] setMasksToBounds: YES];
-            CGColorRef shadowColor = [[UIColor darkGrayColor] CGColor];
-            [[viewRuler layer] setBorderColor: shadowColor];
-            [[viewRuler layer] setBorderWidth: 1.0000f];
-        } else {
-            [[viewRuler layer] setBorderWidth: 0.5000f];
-            [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
-            
-        }
+        [[viewRuler layer] setBorderWidth: 0.5000f];
+        [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
         [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setRulerView:viewRuler];
         [viewRuler release];
@@ -1764,6 +1755,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     if ([sender state] == UIGestureRecognizerStateEnded) {
         
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+        
         if ([[self selectedElementViews] count] >= 1) {
             [self deselectAllElementsAnimated:YES];
             [self hideToolbox];
@@ -1822,7 +1815,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
-//
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+
     //Remove border from element views
     for (MTElementView *elementView in [self selectedElementViews]) {
         [self didDeselectElementView:elementView animated:animated];
@@ -3248,6 +3242,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
         case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
             
+            [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+
             [self setScrollersEnabled: NO];
             
             [[gestureRecognizer view] setAlpha:0.8888f];
