@@ -34,7 +34,7 @@
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withWrapper:(Class)managedObjectType andCompletionHandler:(void (^)(id, BOOL))completionHandler {
     
-    __block id managedDocumentAtUrl = [[managedObjectType alloc] initWithFileURL:url];
+    id managedDocumentAtUrl = [[managedObjectType alloc] initWithFileURL:url];
     
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
                               NSInferMappingModelAutomaticallyOption : @YES};
@@ -43,13 +43,14 @@
     
     BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
 
+    __block id blockManagedDocumentAtUrl = managedDocumentAtUrl;
     if (fileExist) {
-        [managedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
-            completionHandler(managedDocumentAtUrl, success);
+        [blockManagedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
+            completionHandler(blockManagedDocumentAtUrl, success);
         }];
     } else {
-        [managedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-            completionHandler(managedDocumentAtUrl, success);
+        [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            completionHandler(blockManagedDocumentAtUrl, success);
         }];
     }
     [managedDocumentAtUrl release];

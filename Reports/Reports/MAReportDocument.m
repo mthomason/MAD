@@ -285,7 +285,7 @@
             __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
             [blockManagedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
                 
-                MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
+                MAReportDocument *activeDocument = [managedDocumentAtUrl retain];
                 NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
                 [activeDocument setThumbnailUrl:thumbnailUrl];
                 completionHandler(activeDocument, success);

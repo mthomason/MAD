@@ -17,9 +17,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.222";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.222";
-NSString * const MTGlobalBundleRev                                  = @"843";
+NSString * const MTGlobalBundleVersion                              = @"1.0.225";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.225";
+NSString * const MTGlobalBundleRev                                  = @"846";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -45,7 +45,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)dealloc {
     [_currentDocument release];
-    [_documents removeAllObjects];
+    //[_documents removeAllObjects];
     [_documents release];
     [super dealloc];
 }
@@ -53,7 +53,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 - (id)init {
     self = [super init];
     if (self) {
-        
+                
         // FIXME: Run these checks on app instance start...
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
         NSCAssert([[MTApplicationInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
@@ -70,14 +70,12 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
-    __block MTApplicationInstance *blockSelf = self;
      [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
-         [managedDocument retain]; [blockSelf retain];
-         [blockSelf setCurrentDocument:url];
-         [[blockSelf documents] setObject:managedDocument forKey:url];
-         [blockSelf setReportState:MTReportStateOpen];
-         [managedDocument setDelegateCacheData:(id<MTDatabaseCacheProtocol>)blockSelf];
-         [blockSelf release];
+         [managedDocument retain];
+         [self setCurrentDocument:url];
+         [[self documents] setObject:managedDocument forKey:url];
+         [self setReportState:MTReportStateOpen];
+         [managedDocument setDelegateCacheData:(id<MTDatabaseCacheProtocol>)self];
          completionHandler([managedDocument autorelease], success);
      }];
 }
@@ -119,6 +117,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localizedPrefix = NSLocalizedString(@"MAD", @"MAD");
+        [localizedPrefix retain];
     });
     return localizedPrefix;
 }
@@ -128,6 +127,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localizedPrefix = NSLocalizedString(@"MAD %@", @"MAD %@");
+        [localizedPrefix retain];
     });
     return localizedPrefix;
 }
@@ -139,18 +139,19 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         result = [MTApplicationInstance isMadDesigner] ?
             NSLocalizedString(@"Designer", @"Designer") :
             NSLocalizedString(@"Viewer", @"Viewer");;
+        [result retain];
     });
     return result;
 }
 
 + (NSString *)applicationName {
-    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = [MTApplicationInstance applicationNameSufixPart];
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
 
 + (NSString *)madDesigner {
-    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
@@ -172,7 +173,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     if ([self reportState] == MTReportStateOpen) {
         NSDictionary *documents = [self documents];
         NSURL *currentUrl = [self currentDocument];
-        result = [[[documents objectForKey:currentUrl] retain] autorelease];
+        result = [documents objectForKey:currentUrl];
     }
     return [[result retain] autorelease];
 }
@@ -206,6 +207,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         } else if ([MTApplicationInstance isMadViewer]) {
             _bundleId = MTBundleIdMadViewer;
         }
+        [_bundleId retain];
     });
     return _bundleId;
 }
@@ -214,7 +216,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static NSString *_bundleVersion;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _bundleVersion = MTGlobalBundleVersion;
+        _bundleVersion = [MTGlobalBundleVersion retain];
     });
     return _bundleVersion;
 }
@@ -252,7 +254,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     UIFont *fonta = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
     UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0000f];
     NSRange range = NSMakeRange(0, length);
-    UIColor *foregroundColor = [UIColor tintColor2];
+    UIColor *foregroundColor = [UIColor whiteColor];
     NSArray *components = [title componentsSeparatedByString:@" "];
     NSRange firstRange;
     NSRange secondRange;
@@ -297,6 +299,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
             }
         }
+        [_storyboardName retain];
     });
     return _storyboardName;
 }
@@ -345,6 +348,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                                      NSFontAttributeName : customFont
                                      };
         attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
+        [attributedString retain];
     });
     return attributedString;
 }
@@ -362,6 +366,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                        NSFontAttributeName : customFont
                        };
         attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
+        [attributedString retain];
     });
     return attributedString;
 }

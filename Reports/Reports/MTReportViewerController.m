@@ -632,7 +632,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
-    NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+    NSURL *urlEmpty = [[temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"] retain];
     MTActivityItemProviderPdf *activityItemProviderPdf = [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
     NSArray *activityItems = @[activityItemProviderPdf];
     
