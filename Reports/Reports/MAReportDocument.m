@@ -26,10 +26,7 @@
 @interface MAReportDocument ()
 
 @property (nonatomic, retain) NSManagedObjectModel *mom;
-
 @property (nonatomic, retain) RptqDocument *document;
-
-@property (nonatomic, retain) NSManagedObjectContext *context;
 
 @end
 
@@ -37,7 +34,6 @@
 
 - (void)dealloc {
     [_document release];
-    [_context release];
     [_mom release];
     [super dealloc];
 }
@@ -292,8 +288,6 @@
                 MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
                 NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
                 [activeDocument setThumbnailUrl:thumbnailUrl];
-                NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToOpen];
-                [activeDocument setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
                 completionHandler(activeDocument, success);
                 [activeDocument release];
             }];

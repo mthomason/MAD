@@ -42,7 +42,6 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 //}
 
 - (void)dealloc {
-    [_thumbnailUrlWithBorder release];
     [_thumbnailUrl release];
     [_extraInformation release];
     [_thumbnail release];
@@ -106,11 +105,6 @@ NSString * MTDocumentParentContextName          = @"moc";
         
         NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlSaveMad];
         [self setThumbnailUrl:thumbnailUrl];
-
-        // FIXME: Add border using paths maybe.
-        NSURL *thumbnailUrlWithBorder = [MAReportDocument thumbnailUrlForMadUrl:urlSaveMad];
-        //[MAReportDocument thumbnailWithBorderUrlForMadUrl:urlSaveMad];
-        [self setThumbnailUrlWithBorder:thumbnailUrlWithBorder];
         
     }
     id result = [super contentsForType:typeName error:outError];
@@ -159,8 +153,11 @@ NSString * MTDocumentParentContextName          = @"moc";
     if (imageData != nil && readError == nil) {
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
-            [[self extraInformation] setObject:[UIImage imageWithData: imageData]
-                                        forKey:[MADocument thumbnailSaveName]];
+            UIImage *extraImage = [[UIImage imageWithData:imageData] retain];
+            NSString *key = [[MADocument thumbnailSaveName] retain];
+            [[self extraInformation] setObject:extraImage
+                                        forKey:key];
+            [extraImage release];
         }
     }
     
@@ -169,21 +166,23 @@ NSString * MTDocumentParentContextName          = @"moc";
 
     NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:metaUrl];
     
-    NSString *lastGenerator = [dicionary objectForKey:MTDocumentInfoKeyGenerator];
+    NSString *lastGenerator = [[dicionary objectForKey:MTDocumentInfoKeyGenerator] retain];
     if (lastGenerator == nil) {
-        lastGenerator = @"MAD Designer";
+        lastGenerator = [@"MAD Designer" retain];
     }
     
     [[self extraInformation] setObject:lastGenerator
                                 forKey:MTDocumentInfoKeyGenerator];
+    [lastGenerator release];
 
-    NSNumber *lastVersion = [dicionary objectForKey:MTDocumentInfoKeyGenerator];
+    NSNumber *lastVersion = [[dicionary objectForKey:MTDocumentInfoKeyGenerator] retain];
     if (lastVersion == nil) {
-        lastVersion = @(1.0);
+        lastVersion = [@(1.0) retain];
     }
     
     [[self extraInformation] setObject:lastVersion
                                 forKey:MTDocumentInfoKeyVersion];
+    [lastVersion release];
 
     return YES;
 }

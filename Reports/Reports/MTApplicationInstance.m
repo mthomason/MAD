@@ -17,9 +17,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.219";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.219";
-NSString * const MTGlobalBundleRev                                  = @"840";
+NSString * const MTGlobalBundleVersion                              = @"1.0.221";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.221";
+NSString * const MTGlobalBundleRev                                  = @"842";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -89,18 +89,19 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     __block MTApplicationInstance *blockSelf = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        MAReportDocument *activeDocument = [[blockSelf activeDocument] retain];
-        [activeDocument regenThumbnail];
-        [activeDocument closeWithCompletionHandler:^(BOOL success) {
+        __block MAReportDocument *blockActiveDocument = [blockSelf activeDocument];
+        __block MTApplicationInstance *blockSelf2 = blockSelf;
+        [blockActiveDocument regenThumbnail];
+        [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
             
             if (success) {
-                MAReportDocument *activeDocument = [blockSelf activeDocument];
-                [activeDocument setSuspended:YES];
-                [NSFileManager wrapFile:[activeDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                    [MADocument deleteFromDiskQuick:activeDocument completion:^(BOOL success) {
+                
+                [blockActiveDocument setSuspended:YES];
+                [NSFileManager wrapFile:[blockActiveDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                    [MADocument deleteFromDiskQuick:blockActiveDocument completion:^(BOOL success) {
                         if (success) {
-                            [blockSelf setReportState:MTReportStateClosed];
-                            [[blockSelf documents] removeObjectForKey:[blockSelf currentDocument]];
+                            [blockSelf2 setReportState:MTReportStateClosed];
+                            [[blockSelf2 documents] removeObjectForKey:[blockSelf2 currentDocument]];
                             dispatch_sync(dispatch_get_main_queue(), ^{
                                 completionHandler(success);
                             });
@@ -110,7 +111,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 }];
             };
         }];
-        [activeDocument release];
     });
 
 }
@@ -153,7 +153,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     if ([self reportState] == MTReportStateOpen) {
         NSDictionary *documents = [self documents];
         NSURL *currentUrl = [self currentDocument];
-        result = [documents objectForKey:currentUrl];
+        result = [[[documents objectForKey:currentUrl] retain] autorelease];
     }
     return [[result retain] autorelease];
 }

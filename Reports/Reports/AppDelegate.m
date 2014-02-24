@@ -36,7 +36,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (MTApplicationInstance *)applicationInstance {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    AppDelegate *appDelegate = [[(AppDelegate *)[[UIApplication sharedApplication] delegate] retain] autorelease];
     MTApplicationInstance *result = [[appDelegate applicationInstance] retain];
     return [result autorelease];
 }
@@ -44,7 +44,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 + (MAReportDocument *)activeReportDocument {
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
-    return [reportDocument autorelease];;
+    return [reportDocument autorelease];
 }
 
 + (RptqDocument *)activeRptqDocument {
