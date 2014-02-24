@@ -179,6 +179,7 @@
         MTDatabaseConnection *connectionSettings = [database connectionSettings];
 
         if (connectionSettings != nil) {
+            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
             [userCredentals setMysql_host:      [connectionSettings server]];
             [userCredentals setMysql_database:  [connectionSettings database]];
             [userCredentals setMysql_port:    @([connectionSettings port])];
@@ -190,6 +191,7 @@
         MTDatabaseConnection *connectionSettings = [database connectionSettings];
 
         if (connectionSettings != nil) {
+            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
             [userCredentals setTds_server:      [connectionSettings server]];
             [userCredentals setTds_host:        [connectionSettings server]];
             [userCredentals setTds_username:    [connectionSettings username]];
@@ -206,6 +208,7 @@
             NSString *path = [[connectionSettings databaseUrl] path];
             NSString *filename = [path lastPathComponent];
             [userCredentals setMysql_database:      filename];
+            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
         }
         
     }

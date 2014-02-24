@@ -18,6 +18,8 @@
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
+- (NSString *)databaseSchemaName;
+
 @end
 
 #endif

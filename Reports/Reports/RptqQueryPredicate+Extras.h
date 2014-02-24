@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 #define MNSPredicateOperatorNames [NSArray arrayWithObjects: NSLocalizedString(@"Equal", @"Equal"), NSLocalizedString(@"Not Equal", @"Not Equal"), NSLocalizedString(@"Greater Than", @"Greater Than"), NSLocalizedString(@"Greater Than or Equal To", @"Greater Than or Equal To"), NSLocalizedString(@"Less Than", @"Less Than"), NSLocalizedString(@"Less Than or Equal To", @"Less Than or Equal To"), nil]
 
 #define MNSPredicateOperatorSymbols [NSArray arrayWithObjects: @"=", @"<>", @">", @">=", @"<", @"<=", nil]
+#define MNSPredicateOperatorSymbolsDisplay [NSArray arrayWithObjects: @"==", @"!=", @">", @">=", @"<", @"<=", nil]
 
 #import "RptqQueryPredicate.h"
 #import "RptqDocument+Extras.h"
@@ -54,6 +55,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 + (void)deletePredicateWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (void)deletePredicate:(RptqQueryPredicate *)predicate;
 - (NSString *)symbolForComparson;
+- (NSString *)symbolForDisplay;
 
 @end
 

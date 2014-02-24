@@ -7,6 +7,8 @@
 //
 
 #import "RptqUserCredentals+Extras.h"
+#import "RptqDatabase+Extras.h"
+#import "MTDatabaseSqlite3.h"
 
 @implementation RptqUserCredentals (Extras)
 
@@ -54,6 +56,45 @@
         default:
             break;
     }
+}
+
+- (NSString *)databaseSchemaName {
+    NSString *result = @"";
+    MNSDatabaseType databaseType = [[[self inDatabase] databaseDriverTypeEnum] integerValue];
+    switch (databaseType) {
+        
+        case MNSDatabaseTypeMySQL:
+        case MNSDatabaseTypeSqlite3:
+            result = [self mysql_database];
+            break;
+        
+        case MNSDatabaseTypeMicrosoftSqlServer:
+            result = [self tds_database];
+            break;
+
+        case MNSDatabaseTypeUnknown: {
+            
+            if ([[self database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
+                result = [self mysql_database];
+                [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
+                
+            } else if ([[self database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+                result = [self tds_database];
+                [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
+                
+            } else if ([[self database_driver_type] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+                result = [self mysql_database];
+                [[self inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
+            }
+            
+            break;
+        }
+        default:
+            result = @"unknown";
+            break;
+    }
+    result = [[result stringByDeletingPathExtension] capitalizedString];
+    return [[result retain] autorelease];
 }
 
 #pragma mark - Static

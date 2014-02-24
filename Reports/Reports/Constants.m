@@ -101,7 +101,7 @@ CGFloat const MNSTableViewCellQueryInputHeightDefault = 100.0000f;
 CGFloat const MNSTableViewCellInstructionHeightDefault = 100.0000f;
 CGFloat const MNSTableViewCellInkNameHeightDefault = 0.0000f;
 CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
-CGFloat const MNSTableViewCellQueryLinkHeightDefault = 100.0000f;
+CGFloat const MNSTableViewCellQueryLinkHeightDefault = 50.0000f;
 
 
 NSString * const MUIViewControllerActivitySpinner                   = @"MUIViewControllerActivitySpinner";

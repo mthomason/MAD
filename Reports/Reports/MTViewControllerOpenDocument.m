@@ -17,7 +17,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @interface MTViewControllerOpenDocument() <UIAlertViewDelegate, NSFileManagerDelegate>
 
-@property (nonatomic, retain) MTApplicationInstance *applicationInstance;
+//@property (nonatomic, retain) MTApplicationInstance *applicationInstance;
 
 @property (nonatomic, retain) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
@@ -63,7 +63,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)dealloc {
     [_popoverControllerActivity release];
-    [_applicationInstance release];
+    //[_applicationInstance release];
     [_reportViewer release];
     [_renameAlertView release];
     [_barButtonItemEditDone release];
@@ -118,6 +118,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [[blockSelf collectionView] reloadData];
     }];
     
+    [applicationInstance release];
 }
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
@@ -241,9 +242,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [super viewDidLoad];
     
 
-    MTApplicationInstance *appInstance = [[AppDelegate applicationInstance] retain];
-    [self setApplicationInstance: appInstance];
-    [appInstance release];
+    //MTApplicationInstance *appInstance = [[AppDelegate applicationInstance] retain];
+    //[self setApplicationInstance: appInstance];
+    //[appInstance release];
     
     UIColor *barTintColor = [UIColor tintColor];
     UIColor *tintColor = [UIColor tintColor2];
@@ -491,7 +492,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [viewControllerReportViewer setViewControllerDelegate:self];
             [self setReportViewer:viewControllerReportViewer];
             
-            [[AppDelegate applicationInstance] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+            MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+            [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [[self reportViewer] reload];
@@ -541,7 +543,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
                     
-                    [[AppDelegate applicationInstance] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                    MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+                    [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
                             [[queryBuilderViewController queryBuilderController] reloadActiveDocumentAnimated:YES];
@@ -564,9 +567,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
-                    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
 
-                    [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                    MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+                    [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
                             [queryBuilderViewController reloadActiveDocumentAnimated:YES];
@@ -582,8 +585,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 
                 __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                 
-                MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+                [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                     if (success) {
                         [managedDocument retain];
                         [queryBuilderViewController reloadActiveDocumentAnimated:YES];
@@ -1353,7 +1356,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    MTCollectionViewCellDocument *result = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
+    MTCollectionViewCellDocument *result = [[self collectionView] dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
                                                                                       forIndexPath:indexPath];
     [result setDelegate:self];
     if ([indexPath row] < [[self availableFilesCache] count]) {

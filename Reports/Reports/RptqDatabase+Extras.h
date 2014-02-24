@@ -14,7 +14,7 @@
 #import "MTProtocolCompare.h"
 
 typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
-	MNSDatabaseTypeSalesforceCom        = 0,
+	MNSDatabaseTypeUnknown              = 0,
 	MNSDatabaseTypeDatabaseCom          = 1,
 	MNSDatabaseTypeMySQL                = 2,
     MNSDatabaseTypeMicrosoftSqlAzure    = 3,
@@ -24,6 +24,8 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
     MNSDatabaseTypeODBC                 = 7,
     MNSDatabaseTypeGooleAppEngine       = 8,
     MNSDatabaseTypeNone                 = 9,
+    MNSDatabaseTypeSqlite3              = 10,
+    MNSDatabaseTypeSample1              = 11,
 };
 
 #define MNSDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MNSDatabaseTypeSalesforceCom", @"MNSDatabaseTypeDatabaseCom", @"MNSDatabaseTypeMySQL", @"MNSDatabaseTypeMicrosoftSqlAzure", @"MNSDatabaseTypeAmazonSimpleDb", @"MNSDatabaseTypeMicrosoftSqlServer", @"MNSDatabaseTypeOracle", @"MNSDatabaseTypeODBC", @"MNSDatabaseTypeGooleAppEngine", @"MNSDatabaseTypeNone", nil]

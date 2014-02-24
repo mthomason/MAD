@@ -139,6 +139,10 @@
     }
 }
 
+- (NSString *)symbolForDisplay {
+    return [MNSPredicateOperatorSymbolsDisplay objectAtIndex:[[self comparson] integerValue]];
+}
+
 - (NSString *)symbolForComparson {
     return [MNSPredicateOperatorSymbols objectAtIndex:[[self comparson] integerValue]];
 }
