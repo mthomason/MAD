@@ -47,6 +47,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 @property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsPredicate;
 @property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsSql;
 
+@property (nonatomic, assign) BOOL toolbarIconShown;
+
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
 
@@ -106,6 +108,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        
+        [self setToolbarIconShown:NO];
+        
         CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
         
         UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
@@ -197,7 +202,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
     
     //[self disableUserInteraction];
-
+    
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
     [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
     [self setToolbarItems:toolbarButtons animated:NO];
@@ -218,15 +223,26 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                    object:reportDocument];
     }
 
-    if ([self barButtonItemShowSQL] != nil) {   //i.e. iPad version
+    if ([self toolbarIconShown] == NO && [self barButtonItemShowSQL] != nil) {   //i.e. iPad version
         __block MTQueryBuilderViewController *blockSelf = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser) {
+                
+                [blockSelf setToolbarIconShown:YES];
+                
                 NSMutableArray *toolbarButtons = [[blockSelf toolbarItems] mutableCopy];
                 NSInteger index = [toolbarButtons count] - 1;
-                [toolbarButtons insertObject:[blockSelf barButtonItemShowSQL] atIndex:index];
+                UIBarButtonItem *barButtonItemFlexableSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+                UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+                [barButtonItemFixedSpace setWidth:20.0000f];
+                [toolbarButtons insertObject:[blockSelf barButtonItemShowSQL] atIndex:index+1];
+                //[toolbarButtons insertObject:barButtonItemFlexableSpace atIndex:index];
+                [toolbarButtons insertObject:barButtonItemFixedSpace atIndex:index+1];
+                
+                
                 [blockSelf setToolbarItems:toolbarButtons animated:animated];
                 [toolbarButtons release];
+                [barButtonItemFlexableSpace release];
             }
         }];
     }

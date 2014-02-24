@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTNavigationController.h"
 
-@interface MTNavigationControllerHideBottomBarUnlicensed : UINavigationController
+@interface MTNavigationControllerHideBottomBarUnlicensed : MTNavigationController
 
 @end

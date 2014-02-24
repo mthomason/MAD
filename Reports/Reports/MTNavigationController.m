@@ -10,4 +10,10 @@
 
 @implementation MTNavigationController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self navigationBar] setBarStyle:UIBarStyleBlack];
+    [[self navigationBar] setTranslucent:YES];
+}
+
 @end

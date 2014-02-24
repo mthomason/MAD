@@ -17,6 +17,7 @@
     dispatch_once(&onceToken, ^{
         NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
         version = [infoDict objectForKey:@"CFBundleVersion"];
+        [version retain];
     });
     return version;
 }

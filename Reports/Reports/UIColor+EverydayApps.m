@@ -28,7 +28,8 @@
 + (id)edaTableHeaderBackground          {return [UIColor colorWithHue:0.5500f saturation:0.8000f brightness:0.8000f alpha:0.5000f];}
 
 + (id)tintColor {vendColor(13.0000f, 158.0000f, 215.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
-+ (id)tintColor2 {vendColor(222.0000f, 36.0000f, 72.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
+//+ (id)tintColor2 {vendColor(222.0000f, 36.0000f, 72.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
++ (id)tintColor2 {static UIColor *ret; if (ret == nil) ret = [[UIColor whiteColor] retain]; return ret; /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
 + (id)tintColor3 {vendColor(164.0000f, 157.0000f, 26.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
 + (id)tintColor4 {vendColor(138.0000f, 131.0000f, 1.0000f); /*vendColor(2.0000f, 108.0000f, 182.0000f);*/}
 
