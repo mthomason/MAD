@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@interface MADWatermarkScrollView : UIScrollView
+
+@end
+
 @interface MADWatermarkView : UIView
 
 @end

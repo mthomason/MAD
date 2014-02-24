@@ -10,8 +10,9 @@
 #define Reports_MTScrollViewCenter_h
 
 #import <UIKit/UIKit.h>
+#import "MADWatermarkView.h"
 
-@interface MTScrollViewCenter : UIScrollView
+@interface MTScrollViewCenter : MADWatermarkScrollView
 
 @end
 

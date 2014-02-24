@@ -17,9 +17,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.221";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.221";
-NSString * const MTGlobalBundleRev                                  = @"842";
+NSString * const MTGlobalBundleVersion                              = @"1.0.222";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.222";
+NSString * const MTGlobalBundleRev                                  = @"843";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -72,11 +72,10 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
     __block MTApplicationInstance *blockSelf = self;
      [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
-         [managedDocument retain];
-         [self setCurrentDocument:url];
-         [[self documents] setObject:managedDocument forKey:url];
-         [self setReportState:MTReportStateOpen];
-         [blockSelf retain];
+         [managedDocument retain]; [blockSelf retain];
+         [blockSelf setCurrentDocument:url];
+         [[blockSelf documents] setObject:managedDocument forKey:url];
+         [blockSelf setReportState:MTReportStateOpen];
          [managedDocument setDelegateCacheData:(id<MTDatabaseCacheProtocol>)blockSelf];
          [blockSelf release];
          completionHandler([managedDocument autorelease], success);
@@ -116,18 +115,38 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSString *)applicationNamePrefixPart {
-    NSString *localizedPrefix = NSLocalizedString(@"MAD %@", @"MAD %@");
-    return [[localizedPrefix retain] autorelease];
+    static NSString *localizedPrefix;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        localizedPrefix = NSLocalizedString(@"MAD", @"MAD");
+    });
+    return localizedPrefix;
+}
+
++ (NSString *)applicationNamePrefixPartFormat {
+    static NSString *localizedPrefix;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        localizedPrefix = NSLocalizedString(@"MAD %@", @"MAD %@");
+    });
+    return localizedPrefix;
+}
+
++ (NSString *)applicationNameSufixPart {
+    static NSString *result;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        result = [MTApplicationInstance isMadDesigner] ?
+            NSLocalizedString(@"Designer", @"Designer") :
+            NSLocalizedString(@"Viewer", @"Viewer");;
+    });
+    return result;
 }
 
 + (NSString *)applicationName {
-
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
-    NSString *localizedSuffix = [MTApplicationInstance isMadDesigner] ?
-                                NSLocalizedString(@"Designer", @"Designer") :
-                                NSLocalizedString(@"Viewer", @"Viewer");
+    NSString *localizedSuffix = [MTApplicationInstance applicationNameSufixPart];
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
-
 }
 
 + (NSString *)madDesigner {
@@ -137,13 +156,13 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSString *)madViewer {
-    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
 
 + (NSString *)madQuery {
-    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPart];
+    NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
     return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
 }
@@ -311,6 +330,96 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     NSArray *sortDescriptors = @[sortByFileName];
     NSArray *results = [[madFiles sortedArrayUsingDescriptors:sortDescriptors] retain];
     return [results autorelease];
+}
+
++ (NSAttributedString *)waterMarkStringMad {
+    static NSAttributedString *attributedString;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart];
+        UIColor *foregroundColor = [UIColor lightTextColor];
+        CGFloat fontSize = 100.0000f;
+        UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+        NSDictionary *attributes = @{
+                                     NSForegroundColorAttributeName : foregroundColor,
+                                     NSFontAttributeName : customFont
+                                     };
+        attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
+    });
+    return attributedString;
+}
+
++ (NSAttributedString *)waterMarkStringDesigner {
+    static NSAttributedString *attributedString;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *displayStringText = [[MTApplicationInstance applicationNameSufixPart] uppercaseString];
+        UIColor *foregroundColor = [UIColor lightTextColor];
+        CGFloat fontSize = 44.5000f;
+        UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+        NSDictionary *attributes = @{
+                       NSForegroundColorAttributeName : foregroundColor,
+                       NSFontAttributeName : customFont
+                       };
+        attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
+    });
+    return attributedString;
+}
+
++ (void)drawMadWatermarkInRect:(CGRect)rect {
+
+    NSAttributedString *displayString = [MTApplicationInstance waterMarkStringMad];
+    NSAttributedString *displayString2 = [MTApplicationInstance waterMarkStringDesigner];
+
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    NSStringDrawingContext *sctx = [[NSStringDrawingContext alloc] init];
+    
+    NSInteger rowCounter = 0, columnCounter = 0;
+    CGSize logoSize = [displayString size];
+    CGSize logoSize2 = [displayString2 size];
+    CGSize logoMargin = CGSizeMake(45.0000f, 66.0000f);
+    CGRect logoRect, logoRect2;
+    
+    CGFloat xHalfSize = logoMargin.width / 2.0000f - logoSize.width / 2.0000f;
+    CGFloat xOffset = xHalfSize - 66.0000f;
+    CGFloat yOffset = logoMargin.height / 2.0000f - logoSize.height / 2.0000f - 150.0000f;
+    
+    do {
+        columnCounter = 0;
+        
+        do {
+            BOOL moveLeft = rowCounter % 2 == 0;
+            CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width + xOffset;
+            CGFloat xQuarterSize = xOffset / 2;
+            if (moveLeft) {
+                x -= xQuarterSize;
+            } else {
+                x += xQuarterSize;
+            }
+            CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height + logoSize2.height + yOffset;
+            logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
+            CGFloat y2 = y + logoSize.height;
+            logoRect2 = CGRectMake(x, y2, logoSize2.width, logoSize2.height);
+            CGContextSaveGState(ctx);
+            
+            {
+                CGFloat yResolved = columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f);
+                CGFloat yt = logoRect.size.height - 24.0000f;
+                CGFloat firstT = yResolved + yt;
+                x += 2.000f;
+                CGContextTranslateCTM(ctx, x, firstT);
+                CGRect rect2 = CGRectMake(0.0000f, 0.0000f, logoRect2.size.width, logoRect2.size.height);
+                [displayString2 drawInRect:rect2];
+                CGContextTranslateCTM(ctx, -2.0000f, -yt);
+                CGRect rect1 = CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height);
+                [displayString drawInRect:rect1];
+            }
+            CGContextRestoreGState(ctx);
+            columnCounter++;
+        } while (logoRect.origin.x + logoRect.size.width < rect.size.width);
+        rowCounter++;
+    } while (logoRect.origin.y + logoRect.size.height < rect.size.height);
+    [sctx release];
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "CGAffineTransform+Common.h"
 #import "UIDevice+Hack.h"
 #import "MTShowSqlViewController.h"
+#import "MADWatermarkView.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -138,6 +139,8 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
+    
     if ([UIDevice isPad]) {
         CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
         UIColor *borderColor = [UIColor lightGrayColor];
@@ -167,7 +170,7 @@ typedef void(^MTBlockResultVoid)(void);
     [scrollView setBouncesZoom:NO];
     [scrollView setDelegate:self];
     [scrollView setDelaysContentTouches:YES];
-    [scrollView setBackgroundColor:[UIColor clearColor]];
+    [scrollView setBackgroundColor:bgColor];
     [scrollView addSubview:containerView];
     [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
     
@@ -298,6 +301,13 @@ typedef void(^MTBlockResultVoid)(void);
         [viewController setDelegate:self];
     }
     
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [UIView animateWithDuration:duration animations:^{
+        [[self scrollView] setNeedsDisplay];
+    }];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
