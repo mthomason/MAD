@@ -209,7 +209,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [super viewWillAppear: animated];
     
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
 
     if (reportDocument) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -1383,7 +1383,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [[result textLabel] setText:messageText];
             [[result textLabel] setAttributedText:message];
             [[result textLabel] setNumberOfLines:2];
- 
+            [paragraphStyleLeft release];
+            [paragraphStyleRight release];
+            [message release];
             [(UITableViewCellQueryGroup *)result setTableID:[group objectID]];
             break;
         }
