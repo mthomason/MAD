@@ -111,6 +111,7 @@ const NSUInteger tagAlertViewAquire         = 666;
                                                                     otherButtonTitles:continueButtonTitle, nil];
             [alertViewSaveToKeyChain setTag:tagAlertViewSave];
             [alertViewSaveToKeyChain show];
+            [self setFirstAlertView:alertViewSaveToKeyChain];
             [alertViewSaveToKeyChain release];
         }
     } else {
@@ -121,21 +122,27 @@ const NSUInteger tagAlertViewAquire         = 666;
 
 - (void)deleteKey:(NSString *)key {
     [self setCredentialsKey:key];
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove Saved Password"
-                                                                message:@"Should we remove the password saved in your keychain?"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"Keep"
-                                                      otherButtonTitles:@"Remove", nil];
-            [alertView setAlertViewStyle:UIAlertViewStyleDefault];
-            [alertView setTag:tagAlertViewRemovePassword];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove Saved Password"
+                                                        message:@"Should we remove the password saved in your keychain?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Keep"
+                                              otherButtonTitles:@"Remove", nil];
+    
+    [alertView setAlertViewStyle:UIAlertViewStyleDefault];
+    [alertView setTag:tagAlertViewRemovePassword];
+    [self setFirstAlertView:alertView];
+    if ([NSThread isMainThread]) {
+        [alertView show];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
             [alertView show];
-            [alertView release];
         });
-    });
+    }
+    [alertView release];
+}
+
+- (void)askShouldWeKeep {
 }
 
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
@@ -279,6 +286,7 @@ const NSUInteger tagAlertViewAquire         = 666;
                     [self setTextFieldOne:[alertView textFieldAtIndex:0]];
                     [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
                     [alertView show];
+                    [self setFirstAlertView:alertView];
                     [alertView release];
 
                 
@@ -301,6 +309,7 @@ const NSUInteger tagAlertViewAquire         = 666;
                     [self setTextFieldOne:[alertView textFieldAtIndex:0]];
                     [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
                     [alertView show];
+                    [self setFirstAlertView:alertView];
                     [alertView release];
                 });
             });
@@ -317,7 +326,7 @@ const NSUInteger tagAlertViewAquire         = 666;
 }
 
 + (NSString *)keyForServer:(NSString *)server port:(NSInteger)port andDatabase:(NSString *)database {
-    return [[[NSString stringWithFormat:@"[%@:%d]%@", server,  port, database] retain] autorelease];
+    return [[[NSString stringWithFormat:@"[%@:%ld]%@", server,  (long)port, database] retain] autorelease];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
