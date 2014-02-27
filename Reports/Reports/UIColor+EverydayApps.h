@@ -22,6 +22,7 @@
 
 + (id)edaTableHeaderBackground;
 + (id)tintColor;
++ (id)tintColorRed;
 + (id)tintColor2;
 + (id)tintColor3;
 + (id)tintColor4;

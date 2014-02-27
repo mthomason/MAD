@@ -10,6 +10,7 @@
 #import "MADWatermarkView.h"
 #import "MTBarcode.h"
 #import "MTBarcodeView.h"
+#import "UAAppReviewManager.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
@@ -892,6 +893,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     
     UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
+        
+        if (completed) {
+            [UAAppReviewManager userDidSignificantEvent:YES];
+        }
     
         NSUInteger numberOfSections = [[self collectionView] numberOfSections];
         for (NSUInteger section = 0; section < numberOfSections; section++) {
@@ -957,7 +962,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         [[self availableFilesCache] removeObjectsAtIndexes:indexSet];
         [[self collectionView] deleteItemsAtIndexPaths:itemsToDelete];
-//        updateFileList
         [indexSet release];
         [itemsToDelete release];
     }
@@ -1101,6 +1105,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - MFMailComposeViewController delegate protocol
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    if (result == MFMailComposeResultSent) {
+        [UAAppReviewManager userDidSignificantEvent:YES];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
     [error presentErrorToUser];
 }
