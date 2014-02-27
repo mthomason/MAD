@@ -195,8 +195,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if (self) {
         
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
+
         [[viewRuler layer] setBorderWidth: 0.5000f];
         [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
+        
         [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setRulerView:viewRuler];
         [viewRuler release];
@@ -746,7 +748,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[self sectionViews] setValue:collectionView forKey:collectionViewKey];
             [[self sectionControlViews] setValue:sectionControlView forKey:collectionViewKey];
             
-            
             [reportSectionKeyTracker addObject:collectionViewKey];
             
             [collectionView release];
@@ -754,7 +755,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [backgroundView release];
             [collectionViewKey autorelease];
             [flowLayoutDesignerSection release];
-            
             
             sectionCounter++;
             
@@ -1352,11 +1352,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [elementView setDelegate:self];
                 [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
                 [self updateElementView:elementView forManagedObjectContext:[documentObject managedObjectContext]];
-                if ([UIDevice isLagacyOS]) {
-                    [[elementView layer] setCornerRadius: MTReportDesignerCornerRadius];
-                    [[elementView layer] setBorderColor:[[UIColor blackColor] CGColor]];
-                    [[elementView layer] setBorderWidth:1.0000f];
-                }
             } else {
                 [elementView retain];
             }
@@ -1835,7 +1830,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [sectionLabel dimView];
     } else {
         [[view layer] setBorderColor:[[[self view] tintColor] CGColor]];
-        [[view layer] setBorderWidth:1.0000f];
+        [[view layer] setBorderWidth:1.0000f / [[UIScreen mainScreen] scale]];
     }
 }
 
@@ -1855,6 +1850,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         if ([self isBorderAppliedToView:view]) {
             result = YES;
             [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+            
             [[view layer] setBorderWidth:0.0000f];
         } else {
             result = NO;
@@ -1865,7 +1861,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
-    BOOL result = ([[view layer] borderWidth] > 0.5000f);
+    BOOL result = ([[view layer] borderWidth] > 0.0100f);
     if (result == NO) {
         if ([view isKindOfClass:[DesignerSectionLabel class]] && [UIDevice isModernOS]) {
             result = [(DesignerSectionLabel *)view selected];
