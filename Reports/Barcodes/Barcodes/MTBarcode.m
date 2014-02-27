@@ -407,6 +407,9 @@
                 case MTBarcodeTypeRssExpstack:
                     barcode->symbology = MTBarcodeTypeRssExpstackCc;
                     break;
+                case MTBarcodeTypeTelepenNum:
+                    
+                    
                     
                 default:
                     break;
@@ -451,8 +454,16 @@
             primaryInput = [self input];
         }
         
+        
         NSInteger inputLength = [primaryInput length];
         NSString *inputString = inputLength > 0 ? primaryInput : @"";
+        
+        if (barcode->symbology == MTBarcodeTypeTelepenNum) {
+            NSCharacterSet *numeric = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
+        }
+
+        
         const char *input = [inputString UTF8String];
         int inputLen = (int)strlen(input);
         int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
