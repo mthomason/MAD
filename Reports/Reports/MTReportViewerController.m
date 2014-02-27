@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "MTActivityItemProviderPdf.h"
 #import "MTActivityReportPrintPreview.h"
+#import "UAAppReviewManager.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate>
@@ -593,7 +594,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         [MTReportViewerController setDisplayInactive:reportViewer];
         
-        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_async(queuePriorityBackground, ^{
             
             __block MTReportViewerController *reportViewer2 = reportViewer;
@@ -603,22 +604,29 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
             [reportDocument refresh:^(BOOL success) {
             
+                dispatch_queue_t highpriorityqueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
                 if (success) {
                     
                     [[reportViewer2 printPageRendererReport] setDidRefresh:YES];
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [MTReportViewerController setDisplayActive:reportViewer3];
-                        NSDate *lastD = [[NSDate date] retain];
-                        [reportViewer3 setLastCacheDate: lastD];
-                        [lastD release];
-                        [reportViewer3 reload:reportViewer3];
+                    dispatch_async(highpriorityqueue, ^{
+                        __block MTReportViewerController *reportViewer4 = reportViewer3;
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [MTReportViewerController setDisplayActive:reportViewer4];
+                            NSDate *lastD = [[NSDate date] retain];
+                            [reportViewer4 setLastCacheDate: lastD];
+                            [lastD release];
+                            [reportViewer4 reload:reportViewer4];
+                        });
                     });
                 } else {
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [MTReportViewerController setDisplayActive:reportViewer3];
-                        [reportViewer3 reload:reportViewer];
+                    dispatch_async(highpriorityqueue, ^{
+                        __block MTReportViewerController *reportViewer4 = reportViewer3;
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            [MTReportViewerController setDisplayActive:reportViewer4];
+                            [reportViewer4 reload:reportViewer4];
+                        });
                     });
                 }
             }];
@@ -637,7 +645,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     NSArray *activityItems = @[activityItemProviderPdf];
     
     // FIXME: Delete preview
-    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) { };
+    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
+        if (completed) {
+            [UAAppReviewManager userDidSignificantEvent:YES];
+        }
+    };
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     [printPreview setDelegate:self];
