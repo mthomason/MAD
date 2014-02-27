@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
@@ -75,7 +75,7 @@
         <!--Navigation Controller - MAD Designer-->
         <scene sceneID="yOK-hf-Fsm">
             <objects>
-                <navigationController definesPresentationContext="YES" id="OXh-cm-FbU" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="OXh-cm-FbU" customClass="MTNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="2" title="MAD Designer" image="UIBarButtonItemMadDesigner.png" id="vln-o5-mR0"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
@@ -663,7 +663,7 @@
         <!--Navigation Controller-->
         <scene sceneID="tGV-wD-tHP">
             <objects>
-                <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="zzw-py-TKX" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="zzw-py-TKX" customClass="MTNavigationController" sceneMemberID="viewController">
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="Uh4-Y6-5AZ">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
@@ -1147,7 +1147,7 @@
         <!--Navigation Controller-->
         <scene sceneID="sdL-eF-aTX">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Cv6-b4-74W" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="Cv6-b4-74W" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
@@ -4115,7 +4115,7 @@
         <!--Navigation Controller-->
         <scene sceneID="zjV-CC-5UJ">
             <objects>
-                <navigationController storyboardIdentifier="MTDocumentObjectNewAggregateNavigationControllerIdentifier" definesPresentationContext="YES" id="kI9-NN-3QQ" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MTDocumentObjectNewAggregateNavigationControllerIdentifier" definesPresentationContext="YES" id="kI9-NN-3QQ" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="JS2-0u-CNr">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -5318,7 +5318,7 @@
         <!--Navigation Controller-->
         <scene sceneID="g4N-gY-IgG">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Qvq-4t-vff" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="Qvq-4t-vff" customClass="MTNavigationController" sceneMemberID="viewController">
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="YEN-6a-ocg">
                         <autoresizingMask key="autoresizingMask"/>
@@ -6618,7 +6618,7 @@
         <!--Navigation Controller-->
         <scene sceneID="bos-JY-kao">
             <objects>
-                <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="dTF-M4-0rC" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" id="dTF-M4-0rC" customClass="MTNavigationController" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Fbg-3f-fFE">
                         <autoresizingMask key="autoresizingMask"/>
@@ -6639,7 +6639,7 @@
         <!--Navigation Controller-->
         <scene sceneID="mo3-n6-VAd">
             <objects>
-                <navigationController storyboardIdentifier="MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier" definesPresentationContext="YES" id="0Pi-Dh-I28" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier" definesPresentationContext="YES" id="0Pi-Dh-I28" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="U1O-Tv-7Cx">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -11514,11 +11514,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="nE4-pf-aqf"/>
-        <segue reference="IEs-Ya-JFk"/>
+        <segue reference="En2-cS-5pQ"/>
         <segue reference="7pZ-CD-6UY"/>
-        <segue reference="YFs-Yk-PnB"/>
         <segue reference="glj-Nb-BHS"/>
         <segue reference="zUp-ku-ep4"/>
+        <segue reference="nE4-pf-aqf"/>
+        <segue reference="hpj-RX-bhb"/>
     </inferredMetricsTieBreakers>
 </document>
