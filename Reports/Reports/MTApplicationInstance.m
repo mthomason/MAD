@@ -21,9 +21,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.227";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.227";
-NSString * const MTGlobalBundleRev                                  = @"848";
+NSString * const MTGlobalBundleVersion                              = @"1.0.236";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.236";
+NSString * const MTGlobalBundleRev                                  = @"857";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -155,33 +155,39 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler {
     
- 
-    __block MTApplicationInstance *blockSelf = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        __block MAReportDocument *blockActiveDocument = [blockSelf activeDocument];
-        __block MTApplicationInstance *blockSelf2 = blockSelf;
-        [blockActiveDocument regenThumbnail];
-        [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
-            
-            if (success) {
+    if ([self activeDocument]) {
+
+        __block MTApplicationInstance *blockSelf = self;
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            __block MAReportDocument *blockActiveDocument = [blockSelf activeDocument];
+            __block MTApplicationInstance *blockSelf2 = blockSelf;
+            [blockActiveDocument regenThumbnail];
+            [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
                 
-                [blockActiveDocument setSuspended:YES];
-                [NSFileManager wrapFile:[blockActiveDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
-                    [MADocument deleteFromDiskQuick:blockActiveDocument completion:^(BOOL success) {
-                        if (success) {
-                            [blockSelf2 setReportState:MTReportStateClosed];
-                            [[blockSelf2 documents] removeObjectForKey:[blockSelf2 currentDocument]];
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                completionHandler(success);
-                            });
-                        }
-                    }];
+                if (success) {
                     
-                }];
-            };
-        }];
-    });
+                    [blockActiveDocument setSuspended:YES];
+                    [NSFileManager wrapFile:[blockActiveDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                        [MADocument deleteFromDiskQuick:blockActiveDocument completion:^(BOOL success) {
+                            if (success) {
+                                [blockSelf2 setReportState:MTReportStateClosed];
+                                [[blockSelf2 documents] removeObjectForKey:[blockSelf2 currentDocument]];
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    completionHandler(success);
+                                });
+                            }
+                        }];
+                        
+                    }];
+                };
+            }];
+        });
+
+    } else {
+        completionHandler(YES);
+    }
+ 
 
 }
 
