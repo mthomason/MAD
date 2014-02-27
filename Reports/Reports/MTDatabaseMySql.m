@@ -320,24 +320,35 @@
         
         RptqQuery *query = [[database hasQueries] anyObject];
         
-        __block MysqlServer *serv = [[MysqlServer alloc] init];
+        //MysqlServer *serv = [[MysqlServer alloc] init];
         
-        [serv setHost:      [[self databaseConnection] server]];
-        [serv setSchema:    [[self databaseConnection] database]];
-        [serv setPort:      (unsigned int)[[self databaseConnection] port]];
+        //[serv setHost:      [[self databaseConnection] server]];
+        //[serv setSchema:    [[self databaseConnection] database]];
+        //[serv setPort:      (unsigned int)[[self databaseConnection] port]];
         
+        //__block MysqlServer *blockServ = serv;
         NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
         [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
-            
+            //[blockServ retain];
             if (success) {
-                [serv setUser:      username];
-                [serv setPassword:  password];
+                //[blockServ setUser:      username];
+                //[blockServ setPassword:  password];
                 
+                //__block MysqlServer *blockServ2 = blockServ;
                 [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                    
+                    //[blockServ2 retain];
                     @try
                     {
                         NSError *connError = nil;
+                        
+                        MysqlServer *serv = [[MysqlServer alloc] init];
+                        
+                        [serv setHost:      [[self databaseConnection] server]];
+                        [serv setSchema:    [[self databaseConnection] database]];
+                        [serv setPort:      (unsigned int)[[self databaseConnection] port]];
+                        [serv setUser:      username];
+                        [serv setPassword:  password];
+                        
                         MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
                         if (conn && connError == nil) {
                             
@@ -360,7 +371,7 @@
                             [[MTKeyChain sharedObject] deleteKey:key];
                         }
                         
-                        
+                        [serv release];
                         completion(self, [query hasQueryCache]);
                     }
                     @catch(NSException *ex)
@@ -370,13 +381,14 @@
                         [alertView release];
                         completion(nil, nil);
                     }
+                    //[blockServ2 release];
                 }];
             } else {
                 completion(nil, nil);
             }
-            
+//            [blockServ release];
         }];
-        [serv release];
+  //      [serv release];
     }
 }
 
