@@ -11,15 +11,19 @@
 #import "UIDevice+Hack.h"
 #import "MAReportDocument.h"
 #import "NSFileManager+Common.h"
+#import "UAAppReviewManager.h"
+
+NSString *const MTApplicationIdMadDesigner                          = @"666001433";
+NSString *const MTApplicationIdMadViewer                            = @"666003759";
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.225";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.225";
-NSString * const MTGlobalBundleRev                                  = @"846";
+NSString * const MTGlobalBundleVersion                              = @"1.0.227";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.227";
+NSString * const MTGlobalBundleRev                                  = @"848";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -45,7 +49,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)dealloc {
     [_currentDocument release];
-    //[_documents removeAllObjects];
+    [_documents removeAllObjects];
     [_documents release];
     [super dealloc];
 }
@@ -53,6 +57,15 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 - (id)init {
     self = [super init];
     if (self) {
+
+        [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
+            // This is the block syntx for showing prompts.
+            // It lets you decide if it should be shown now or not based on
+            // the UAAppReviewManager trackingInfo or any other factor.
+            NSLog(@"UAAppReviewManager trackingInfo: %@", trackingInfo);
+            // Don't show the prompt now, but do it from the buttons in the example app.
+            return NO;
+        }];
                 
         // FIXME: Run these checks on app instance start...
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
@@ -65,9 +78,69 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
         [self setDocuments:documents];
         [documents release];
+        
+        [self setupAppReviewManager:self];
     }
     return self;
 }
+
+#pragma mark - UAAppReviewManager
+
+- (void)setupAppReviewManager:(id)sender {
+    
+    NSString *appId = [MTApplicationInstance applicationId];
+    NSString *appName = [MTApplicationInstance applicationName];
+
+	[UAAppReviewManager setAppID:appId];
+	
+    BOOL debug = NO;
+    [UAAppReviewManager setDebug:debug];
+    [UAAppReviewManager userDidSignificantEvent:NO];    //Launch is significant, but not for display of prompt
+    [UAAppReviewManager setAppName:appName];
+
+    NSString *formatString = NSLocalizedString(@"Do you find %@ useful?", @"Do you find %@ useful?");
+    NSString *reviewTitle = [NSString stringWithFormat:formatString, appName];
+	[UAAppReviewManager setReviewTitle:reviewTitle];
+    
+	// This overrides the default value, read from the UAAppReviewManager bundle plist
+    NSString *plea = NSLocalizedString(@"Continued development relies on this softwares success.  If you find this software useful, then please take the time to show your support. Leaving a review.", @"Continued development relies on this softwares success.  If you find this software useful, then please take the time to show your support. Leaving a review.");
+	[UAAppReviewManager setReviewMessage:plea];
+    
+    NSString *buttonTitleNever = NSLocalizedString(@"Never", @"Never");
+    NSString *buttonTitleRate = NSLocalizedString(@"Lets Do It", @"Lets Do It");
+    NSString *buttonTitleLater = NSLocalizedString(@"Maybe... later", @"Maybe... later");
+	[UAAppReviewManager setCancelButtonTitle:   buttonTitleNever];
+	[UAAppReviewManager setRateButtonTitle:     buttonTitleRate];
+	[UAAppReviewManager setRemindButtonTitle:   buttonTitleLater];
+    
+	// This overrides the default value of 30, but it doesn't matter here because of Debug mode enabled
+	[UAAppReviewManager setDaysUntilPrompt:28];
+    
+	// This overrides the default value of 1, but it doesn't matter here because of Debug mode enabled
+	[UAAppReviewManager setDaysBeforeReminding:13];
+    
+	// This means that the popup won't show if you have already rated any version of the app, but it doesn't matter here because of Debug mode enabled
+	[UAAppReviewManager setShouldPromptIfRated:NO];
+    
+	// This overrides the default value of 20, but it doesn't matter here because of Debug mode enabled
+	[UAAppReviewManager setSignificantEventsUntilPrompt:20];
+    
+	[UAAppReviewManager setUseMainAppBundleForLocalizations:YES];
+    
+    [UAAppReviewManager setAffiliateCode:@""];                      // FIXME: Add this affiliate code.
+	[UAAppReviewManager setAffiliateCampaignCode:@""];              // FIXME: Add this affiliate code.
+
+    
+	// UAAppReviewManager is block based, so setup some blocks on events
+	[UAAppReviewManager setOnDeclineToRate:^() {}];
+	[UAAppReviewManager setOnDidDisplayAlert:^() {}];
+	[UAAppReviewManager setOnDidOptToRate:^() {}];
+	[UAAppReviewManager setOnDidOptToRemindLater:^() {}];
+	[UAAppReviewManager setKey:@"kSettingsSignificantEventTally" forUAAppReviewManagerKeyType:UAAppReviewManagerKeySignificantEventCount];
+    
+}
+
+#pragma mark - Open and close mad document
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
      [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
@@ -112,6 +185,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 }
 
+#pragma mark - App settings
+
 + (NSString *)applicationNamePrefixPart {
     static NSString *localizedPrefix;
     static dispatch_once_t onceToken;
@@ -139,6 +214,18 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         result = [MTApplicationInstance isMadDesigner] ?
             NSLocalizedString(@"Designer", @"Designer") :
             NSLocalizedString(@"Viewer", @"Viewer");;
+        [result retain];
+    });
+    return result;
+}
+
++ (NSString *)applicationId {
+    static NSString *result;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        result = [MTApplicationInstance isMadDesigner] ?
+                    MTApplicationIdMadDesigner :
+                    MTApplicationIdMadViewer;
         [result retain];
     });
     return result;
