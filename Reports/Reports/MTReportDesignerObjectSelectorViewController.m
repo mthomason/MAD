@@ -166,7 +166,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     tag = MTDocumentObjectTypeLabelStatic;
                     break;
                 }
-                case 5: {
+                case 6: {
                     cellIdentifier = MTIdentiferDocumentObjectGroupKeyCollectionViewCell;
                     tag = MTDocumentObjectTypeGroupKey;
                     break;
@@ -201,7 +201,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     tag = MTDocumentObjectTypeWhtiespace;
                     break;
                 }
-                case 6: {
+                case 5: {
                     cellIdentifier = MTIdentiferDocumentObjectBarcodeCollectionViewCell;
                     tag = MTDocumentObjectTypeBarcode;
                     break;
@@ -233,7 +233,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     NSInteger result = 0;
     switch (section) {
         case 0:
-            result = 7;
+            result = 6;
             break;
         default:
             break;

@@ -2372,7 +2372,7 @@
         <scene sceneID="L9u-MK-Qo7">
             <objects>
                 <navigationController definesPresentationContext="YES" id="Hl5-7b-oyD" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ls3-ih-94Q">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Ls3-ih-94Q">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
