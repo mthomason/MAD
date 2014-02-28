@@ -11,6 +11,11 @@
 
 @interface MTConnectorView ()
 
+@property (nonatomic, retain) UIColor *forgroundColor;
+
+@property (nonatomic, assign) CGSize shadowSize;
+@property (nonatomic, assign) CGSize smallCircleSize;
+
 @end
 
 @implementation MTConnectorView
@@ -20,6 +25,7 @@
     [_anchorViewRight release];
     [_topLeftToBottomRight release];
     [_linkDescription release];
+    [_forgroundColor release];
     [super dealloc];
 }
 
@@ -30,12 +36,23 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        //[self setOpaque:YES];
         [self setBackgroundColor:[UIColor clearColor]];
+
+        CGSize shadowSize = CGSizeMake(2.0000f, 2.0000f);
+        [self setShadowSize:shadowSize];
+
+        CGSize smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
+        [self setSmallCircleSize:smallCircleSize];
+        
         UIView *anchorLeft = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 1.0000f, 1.0000f)];
         UIView *anchorRight = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height, 1.0000f, 1.0000f)];
         
         [anchorLeft setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin];
         [anchorRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin];
+        
+        UIColor *color = [UIColor tintColorRed];
+        [self setForgroundColor:color];
         
         [self setAnchorViewLeft:anchorLeft];
         [self setAnchorViewRight:anchorRight];
@@ -117,20 +134,20 @@
     rect = CGRectInset(rect, 10.0000f, 10.0000f);
     
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    CGContextSetShadow(currentContext, CGSizeMake(2.0000f, 2.0000f), 5.0000f);
+    CGContextSetShadow(currentContext, [self shadowSize], 5.0000f);
     CGContextSetLineWidth(currentContext, 3.0000f);
 
     CGRect connectorNobRectOrigin;
     CGRect connectorNobRectDestination;
 
     CGFloat largeCircleRadius = 3.0000f;
-    CGSize smallCircleSize = CGSizeMake(4.0000f, 4.0000f);
+    CGSize smallCircleSize = [self smallCircleSize];
     CGFloat smallCircleRadius = 2.0000f;
 
     CGPoint origin, destination;
     CGPoint tangent[2];
 
-    [(UIColor *)[UIColor tintColorRed] set];
+    [[self forgroundColor] set];
 
     if ([[self topLeftToBottomRight] boolValue]) {
         
@@ -170,7 +187,7 @@
     CGContextMoveToPoint(currentContext, origin.x, origin.y);
     CGContextAddCurveToPoint(currentContext, tangent[0].x, tangent[0].y, tangent[1].x, tangent[1].y, destination.x, destination.y);
 
-    CGContextStrokePath(currentContext);
+    //CGContextStrokePath(currentContext);
     
 
     CGFloat arrowRadius = 5.0000f;
