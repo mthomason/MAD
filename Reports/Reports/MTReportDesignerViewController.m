@@ -1471,8 +1471,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             NSDictionary *attributes = @{
                                          NSParagraphStyleAttributeName : [elementView paragraphStyle],
                                          NSFontAttributeName : [elementView displayFont],
-                                         NSStrikethroughStyleAttributeName : [elementView underlineStyle],
-                                         NSUnderlineStyleAttributeName : [elementView strikeThroughStyle]
+                                         NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
+                                         NSUnderlineStyleAttributeName : [elementView underlineStyle]
                                          };
             NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:[elementView displayText]
                                                                                     attributes:attributes];
@@ -2008,12 +2008,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if (error != nil) {
         [[reportDocument managedObjectContext] save:&error];
     }
-
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:@(NO)];
     } else {
         [self deselectAllElementsAnimated:YES];
     }
+    //[reportDocument quickSave];
 }
 
 - (IBAction)doneReports:(id)sender {
@@ -3038,19 +3038,22 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         if (finished) {
             [detailSection reloadData];
-            [UIView animateWithDuration:0.3 animations:^{
-                
-                MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                MAReportDocument *activeDocument = [[applicationInstance activeDocument] retain];
 
-                RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [detailSection objectIdTag]
-                                                                                        fromObjectContext: [activeDocument managedObjectContext]];
-                [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            MAReportDocument *activeDocument = [[applicationInstance activeDocument] retain];
+            
+            RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [detailSection objectIdTag]
+                                                                                    fromObjectContext: [activeDocument managedObjectContext]];
+            
+            [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
+
+            [UIView animateWithDuration:0.30000f animations:^{
                 [[reportDesigner designerContentView] setNeedsUpdateConstraints];
-                [activeDocument saveContext];
-                [activeDocument quickSave];
-                [activeDocument release];
             }];
+            [activeDocument saveContext];
+            [activeDocument quickSave];
+            [activeDocument release];
+            
         }
         
     }];

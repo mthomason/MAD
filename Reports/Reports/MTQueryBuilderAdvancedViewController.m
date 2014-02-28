@@ -649,9 +649,9 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - UICollisionBehaviorDelegate
 
-- (void)collisionBehavior:(UICollisionBehavior *)behavior endedContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier {
+//- (void)collisionBehavior:(UICollisionBehavior *)behavior endedContactForItem:(id<UIDynamicItem>)item withBoundaryIdentifier:(id<NSCopying>)identifier {
 
-}
+//}
 
 #pragma mark - MTQueryBuilderAdvancedSchemaViewControllerDelegate
 

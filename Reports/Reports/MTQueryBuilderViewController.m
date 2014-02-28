@@ -445,8 +445,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 #pragma mark Top Toolbar Actions
 
-- (IBAction)done:(id)sender { }
-
 - (IBAction)edit:(id)sender {
     
     BOOL editing = ![[self tableView] isEditing];
