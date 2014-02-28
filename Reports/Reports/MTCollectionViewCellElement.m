@@ -91,7 +91,7 @@
             break;
         }
         case MTDocumentObjectTypeBarcode: {
-            result = deleteAction || editAction || formatAction;
+            result = deleteAction || formatAction; // FIXME: Edit action broke on barcodes... datasource is lost... || editAction;
             break;
         }
         default:
