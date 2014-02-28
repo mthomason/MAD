@@ -12,6 +12,7 @@
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
+#import "RptqDocumentObjectBarcode.h"
 #import "MTDatabaseTable.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
@@ -309,6 +310,18 @@
         
         //Logic to return only needed fields.
         
+        //Fields in barcode bitches.
+        NSString *entityObjectBarcode = NSStringFromClass([RptqDocumentObjectBarcode class]);
+        NSFetchRequest *fetchRequestBarcode = [[NSFetchRequest alloc] initWithEntityName:entityObjectBarcode];
+        NSPredicate *predicateBarcode = [NSPredicate predicateWithValue:YES];
+        [fetchRequestBarcode setPredicate:predicateBarcode];
+        NSError *fetchBarcodeError = nil;
+        NSArray *barcodes = [managedObjectContext executeFetchRequest:fetchRequestBarcode error:&fetchBarcodeError];
+        if (fetchBarcodeError != nil) {
+            barcodes = [managedObjectContext executeFetchRequest:fetchRequestBarcode error:&fetchBarcodeError];
+        }
+        [barcodes retain];
+        
         //Fields in data label.
         NSString *entityNameObjectLabelDataField = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
         NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityNameObjectLabelDataField];
@@ -360,6 +373,17 @@
         NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count] + [queryGroups count];
         NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
 
+        for (RptqDocumentObjectBarcode *dataField in barcodes) {
+            RptqQueryField *queryField = [dataField referencesField1];
+            if (queryField != nil) {
+                [queryFields addObject:queryField];
+            }
+            RptqQueryField *queryField2 = [dataField referencesField2];
+            if (queryField2 != nil) {
+                [queryFields addObject:queryField2];
+            }
+        }
+        
         for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
             RptqQueryField *queryField = [dataField referencesQueryField];
             if (queryField != nil) {
@@ -418,6 +442,8 @@
         [dataObjectFields release];
         [fetchRequestDataField release];
         [fetchRequestAggregate release];
+        [barcodes release];
+        [fetchRequestBarcode release];
     } else {
 
         // Logic to return all fields.

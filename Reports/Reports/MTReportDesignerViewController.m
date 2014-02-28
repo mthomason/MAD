@@ -468,9 +468,19 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [tapGestureDoubleTap setNumberOfTapsRequired:2];
     [tapGestureDoubleTap setNumberOfTouchesRequired:1];
     [tapGestureDoubleTap setDelegate: self];
-    [[self designerScrollView] addGestureRecognizer:tapGestureDoubleTap];
-    [tapGestureDoubleTap release];
+
+    UITapGestureRecognizer *tapGestureSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapToDeselectElementViews:)];
+    [tapGestureSingleTap setNumberOfTapsRequired:1];
+    [tapGestureSingleTap setNumberOfTouchesRequired:1];
+    [tapGestureSingleTap setDelegate: self];
+    [tapGestureSingleTap requireGestureRecognizerToFail:tapGestureDoubleTap];
     
+    [[self designerScrollView] addGestureRecognizer:tapGestureDoubleTap];
+    [[self designerScrollView] addGestureRecognizer:tapGestureSingleTap];
+
+    [tapGestureDoubleTap release];
+    [tapGestureSingleTap release];
+
     NSLayoutConstraint *lc1 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeLeft   multiplier:1.0000f constant:0.0000f];
     NSLayoutConstraint *lc2 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeRight  multiplier:1.0000f constant:0.0000f];
     NSLayoutConstraint *lc3 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self toolbarTop]    attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f];
@@ -1744,6 +1754,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         });
         // FIXME: Zoom to double tap point.
     }
+}
+
+- (void)singleTapToDeselectElementViews:(UITapGestureRecognizer *)sender {
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    [self deselectAllElementsAnimated:YES];
+    [self hideToolbox];
 }
 
 - (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {

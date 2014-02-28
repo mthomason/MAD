@@ -12,7 +12,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self navigationBar] setBarStyle:UIBarStyleDefault];
+    [[self navigationBar] setBarStyle:UIBarStyleBlack];
     [[self navigationBar] setTranslucent:YES];
     NSMutableDictionary *titleTextAttributes = [[[self navigationBar] titleTextAttributes] mutableCopy];
     UIColor *whiteColor = [UIColor whiteColor];
