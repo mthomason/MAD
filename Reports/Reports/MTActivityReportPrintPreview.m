@@ -35,7 +35,7 @@
 }
 
 - (UIImage *)activityImage {
-    NSString *imageName = [UIDevice isPad] ? @"MTActivityPreview-76" : @"MTActivityPreview";
+    NSString *imageName = [UIDevice isPad] ? @"MTActivityProvidence~iPad" : @"MTActivityProvidence";
     return [UIImage imageNamed:imageName];
 }
 
