@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
@@ -8,7 +8,7 @@
         <!--Navigation Controller-->
         <scene sceneID="w4c-YE-AK8">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="gok-n2-WN9" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="gok-n2-WN9" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="72b-A9-bsM">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
@@ -289,7 +289,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Gkw-Gl-sH2">
             <objects>
-                <navigationController definesPresentationContext="YES" id="NjT-Cb-RPR" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="NjT-Cb-RPR" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fmB-2y-opW">
                         <autoresizingMask key="autoresizingMask"/>
@@ -341,7 +341,7 @@
         <!--Navigation Controller-->
         <scene sceneID="zS0-pC-hNb">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Iah-MZ-57m" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Iah-MZ-57m" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HnM-dV-WPK">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -464,7 +464,7 @@
         <!--Navigation Controller-->
         <scene sceneID="OkN-az-f05">
             <objects>
-                <navigationController definesPresentationContext="YES" id="MI3-W5-wJi" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="MI3-W5-wJi" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4VZ-eM-FIW">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -564,7 +564,7 @@
         <!--Navigation Controller-->
         <scene sceneID="QHH-Hz-qRM">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="JJ7-jR-fBg" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="JJ7-jR-fBg" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="cer-7U-Ubk"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="BCd-wA-a4t">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
@@ -610,16 +610,13 @@
                             </view>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="eeG-Zx-OZJ"/>
-                        <barButtonItem title="Print" width="44" id="KNd-LH-6lj">
+                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="oRz-l3-jqR"/>
+                        <barButtonItem systemItem="action" id="8as-OV-SYL">
                             <connections>
-                                <action selector="print:" destination="xKW-ao-6Re" id="bDU-88-pdc"/>
+                                <action selector="activity:" destination="xKW-ao-6Re" id="1ja-Pg-EPK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="PDF" width="44" id="PWD-1N-ew9">
-                            <connections>
-                                <action selector="sendToPdf:" destination="xKW-ao-6Re" id="e5M-nW-TGj"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="IVu-OT-hLJ"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="MAD Viewer" id="uIe-NH-liy">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="YTp-ll-dNI">
@@ -634,10 +631,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="barButtonItemActivity" destination="8as-OV-SYL" id="2Om-sh-szO"/>
                         <outlet property="barButtonItemDone" destination="YTp-ll-dNI" id="Saa-m9-qmO"/>
-                        <outlet property="barButtonItemPrint" destination="KNd-LH-6lj" id="rvL-Tb-Ub3"/>
                         <outlet property="barButtonItemRefresh" destination="pfN-Fy-9qt" id="fM8-Sy-0oZ"/>
-                        <outlet property="barButtonItemSendToPdf" destination="PWD-1N-ew9" id="6CP-Ht-q99"/>
                         <outlet property="barButtonItemSliderView" destination="9ID-gN-COP" id="fR3-L6-G64"/>
                         <outlet property="sliderPagination" destination="lq7-UU-wSf" id="Ndq-IK-7Ut"/>
                         <outlet property="sliderView" destination="YQT-I2-1eW" id="hPV-MX-jrL"/>
@@ -659,6 +655,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="gUN-ox-xcz"/>
+        <segue reference="rvN-Us-I2c"/>
     </inferredMetricsTieBreakers>
 </document>

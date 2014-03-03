@@ -15,8 +15,7 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     UIColor *barTintColor = [UIColor tintColor];
@@ -24,12 +23,6 @@
     [toolbar setBarTintColor:barTintColor];
     [[[self navigationController] navigationBar] setTintColor:barTintColor];
 	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

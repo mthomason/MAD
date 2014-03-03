@@ -21,9 +21,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 NSInteger  const MTGlobalBundleVersionMajor                         = 2;
-NSString * const MTGlobalBundleVersion                              = @"1.0.241";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.241";
-NSString * const MTGlobalBundleRev                                  = @"862";
+NSString * const MTGlobalBundleVersion                              = @"3.0.0";
+NSString * const MTGlobalBundleShortVersion                         = @"3.0.0";
+NSString * const MTGlobalBundleRev                                  = @"869";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -62,7 +62,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
             // This is the block syntx for showing prompts.
             // It lets you decide if it should be shown now or not based on
             // the UAAppReviewManager trackingInfo or any other factor.
-            NSLog(@"UAAppReviewManager trackingInfo: %@", trackingInfo);
+            //NSLog(@"UAAppReviewManager trackingInfo: %@", trackingInfo);
             // Don't show the prompt now, but do it from the buttons in the example app.
             return NO;
         }];
@@ -434,7 +434,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     dispatch_once(&onceToken, ^{
         NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart];
         UIColor *foregroundColor = [UIColor lightTextColor];
-        CGFloat fontSize = 100.0000f;
+        CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
         UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
         NSDictionary *attributes = @{
                                      NSForegroundColorAttributeName : foregroundColor,
@@ -452,14 +452,18 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     dispatch_once(&onceToken, ^{
         NSString *displayStringText = [[MTApplicationInstance applicationNameSufixPart] uppercaseString];
         UIColor *foregroundColor = [UIColor lightTextColor];
-        CGFloat fontSize = 44.5000f;
+        CGFloat fontSize =  [MTApplicationInstance isMadDesigner] ? 44.5000f : 46.0000f;
         UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [paragraphStyle setAlignment:NSTextAlignmentCenter];
         NSDictionary *attributes = @{
                        NSForegroundColorAttributeName : foregroundColor,
-                       NSFontAttributeName : customFont
+                       NSFontAttributeName : customFont,
+                       NSParagraphStyleAttributeName : paragraphStyle
                        };
         attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
         [attributedString retain];
+        [paragraphStyle release];
     });
     return attributedString;
 }
@@ -498,6 +502,11 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
             logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
             CGFloat y2 = y + logoSize.height;
             logoRect2 = CGRectMake(x, y2, logoSize2.width, logoSize2.height);
+            
+            //if (logoRect.size.width > logoRect2.size.width) {
+            //    logoRect2.origin.x = logoRect2.origin.x + ((logoRect.size.width - logoRect2.size.width) / 2.0000f);
+            //}
+            
             CGContextSaveGState(ctx);
             
             {
@@ -506,7 +515,13 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 CGFloat firstT = yResolved + yt;
                 x += 2.000f;
                 CGContextTranslateCTM(ctx, x, firstT);
-                CGRect rect2 = CGRectMake(0.0000f, 0.0000f, logoRect2.size.width, logoRect2.size.height);
+                
+                CGFloat rect2Offset = 0.0000f;
+                //if (logoRect.size.width > logoRect2.size.width) {
+                //    rect2Offset = (logoRect.size.width - logoRect2.size.width) / 2.0000f;
+                //}
+                
+                CGRect rect2 = CGRectMake(rect2Offset, 0.0000f, logoRect2.size.width, logoRect2.size.height);
                 [displayString2 drawInRect:rect2];
                 CGContextTranslateCTM(ctx, -2.0000f, -yt);
                 CGRect rect1 = CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height);
