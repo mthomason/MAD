@@ -1,0 +1,42 @@
+#!/bin/sh
+
+#  buildcounter.sh
+#  MAD
+#
+#  Created by Michael Thomason on 3/4/14.
+#  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+
+# Tag major versions like "v3.0"
+
+echo "Updating version/build number from git..."
+plist=${PROJECT_DIR}/${INFOPLIST_FILE}
+
+versionnum=$( git describe | awk '{split($0,a,"-"); print a[1]}' )
+versionnum=${versionnum#"v"}
+currentvnum=$( git describe | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
+currentvnum=${currentvnum#"v"}
+buildnum=$( git rev-list HEAD --count )
+
+if [[ "${versionnum}" == "" ]]; then
+echo "No version number from git"
+exit 2
+fi
+
+if [[ "${buildnum}" == "" ]]; then
+echo "No build number from git"
+exit 2
+fi
+
+/usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString $currentvnum" "${plist}"
+echo "Updated version number to $versionnum"
+
+/usr/libexec/Plistbuddy -c "Set CFBundleVersion $currentvnum" "${plist}"
+echo "Updated build number to $currentvnum"
+
+/usr/libexec/Plistbuddy -c "Set MADRev $buildnum" "${plist}"
+echo "Updated build number to $buildnum"
+
+filelocation=${PROJECT_DIR}/Reports/MTApplicationInstance.m
+sed -ie "s/NSString \* const MTGlobalBundleVersion.*/NSString \* const MTGlobalBundleVersion                              = @\"${currentvnum}\";/g" "${filelocation}"
+sed -ie "s/NSString \* const MTGlobalBundleShortVersion.*/NSString \* const MTGlobalBundleShortVersion                         = @\"${currentvnum}\";/g" "${filelocation}"
+sed -ie "s/NSString \* const MTGlobalBundleRev.*/NSString \* const MTGlobalBundleRev                                  = @\"${buildnum}\";/g" "${filelocation}"
