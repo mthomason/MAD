@@ -211,6 +211,8 @@ extern CGFloat const MNSTableViewCellQueryLinkHeightDefault;
 
 extern CGFloat const MNSDocumentHeight;
 
+extern NSString * const MTSampleDatabaseChinook;
+
 extern NSString * const MNSInterfaceButtonDismiss;
 extern NSString * const MNSInterfaceTitleProblem;
 extern NSString * const MNSInterfaceTitleError;
@@ -225,6 +227,7 @@ extern NSString * const MTPersistentStoreAliasUserPreferences;
 
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
+extern NSString * const MTDocumentExtentionSqlite3;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 extern NSString * const TEMPLATE_PATH_EXTENSION;

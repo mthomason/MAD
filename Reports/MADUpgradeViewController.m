@@ -8,13 +8,11 @@
 
 #import "MADUpgradeViewController.h"
 #import "NSFileManager+Reports.h"
-//#import "MADocument.h"
 #import "MACloudManager.h"
 #import "MTLog.h"
 #import "NSFileManager+Common.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseSqlite3.h"
-//#import "MAReportDocument.h"
 #import "MTApplicationInstance.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
@@ -22,6 +20,7 @@
 NSString * const MADUpgradeInstalledChinook = @"MADUpgradeInstalledChinook";
 NSString * const MADUpgradeInstalledSamples = @"MADUpgradeInstalledSamples";
 NSString * const MADUpgradeLastVersionRun = @"MADUpgradeLastVersionRun";
+
 
 const NSInteger currentMajorVersion = 2;
 
@@ -53,7 +52,7 @@ const NSInteger currentMajorVersion = 2;
     //For testing
     //lastVersionRun = @(1);
     
-    NSURL *chinookUrl = [self chinookDbUrl];
+    NSURL *chinookUrl = [MADUpgradeViewController applicationSupportSampleDatabaseChinook];
     BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:[chinookUrl path] isDirectory:NO];
     if (gotChinook == NO) {
         self.installChinook = YES;
@@ -97,9 +96,15 @@ const NSInteger currentMajorVersion = 2;
     
 }
 
-- (NSURL *)chinookDbUrl {
++ (NSURL *)applicationSupportSampleDatabaseChinook {
     NSURL *appSupportDirectory = [NSFileManager applicationSupportDirectory];
-    return [appSupportDirectory URLByAppendingPathComponent:@"chinook.sqlite3" isDirectory:NO];
+    NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
+    return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+}
+
++ (NSURL *)applicationBundleSampleDatabaseChinook {
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    return [mainBundle URLForResource:MTSampleDatabaseChinook withExtension:MTDocumentExtentionSqlite3];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -110,14 +115,9 @@ const NSInteger currentMajorVersion = 2;
     BOOL chinookInstalling = NO;
     
     if ([self installChinook]) {
-        NSBundle *mainBundle = [NSBundle mainBundle];
-        NSURL *fileUrl = [mainBundle URLForResource:@"chinook" withExtension:@"sqlite3"];
-        NSURL *appSupportDirectory = [NSFileManager applicationSupportDirectory];
-        NSURL *chinookAppSupportUrl = nil;
+        NSURL *fileUrl = [MADUpgradeViewController applicationBundleSampleDatabaseChinook];
+        NSURL *chinookAppSupportUrl = [MADUpgradeViewController applicationSupportSampleDatabaseChinook];
 
-        
-        chinookAppSupportUrl = [appSupportDirectory URLByAppendingPathComponent:@"chinook.sqlite3" isDirectory:NO];
-        
         if (chinookAppSupportUrl != nil) {
             NSError *error = nil;
             [defaultManager copyItemAtURL:fileUrl toURL:chinookAppSupportUrl error:&error];
@@ -227,11 +227,6 @@ const NSInteger currentMajorVersion = 2;
     if (chinookInstalling == NO) {
         [self performSegueWithIdentifier:@"MTSegueUpgradeComplete" sender:self];
     }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

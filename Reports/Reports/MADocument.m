@@ -14,6 +14,8 @@
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
 
+typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
+
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
 NSString * const MTDocumentInfoKeyThumbnailStandard = @"thumbnail.png";
 NSString * const MTDocumentInfoKeyThumbnailRetna = @"thumbnail@2x.png";
@@ -42,7 +44,6 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 //}
 
 - (void)dealloc {
-    [_thumbnailUrl release];
     [_extraInformation release];
     [_thumbnail release];
     [_fileWrapper release];
@@ -99,19 +100,8 @@ NSString * MTDocumentParentContextName          = @"moc";
 }*/
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
-    if ([self thumbnailUrl] == nil) {
-        NSURL *urlSaveMad = [NSURL uniqueUrlForDocumentWithName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]
-                              withExtension:MTDocumentExtentionMobleApplicationDocument];
-        
-        NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlSaveMad];
-        [self setThumbnailUrl:thumbnailUrl];
-        
-    }
     id result = [super contentsForType:typeName error:outError];
-    
     [self setWeMustSave:NO];
-
-    
     return result;
 }
 
@@ -143,14 +133,38 @@ NSString * MTDocumentParentContextName          = @"moc";
 
 #pragma mark - UIManagedDocument
 
-- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
++ (NSData *)dataForUrl:(NSURL *)url {
     NSError *readError = nil;
-    NSData *imageData = nil;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[[self thumbnailUrl] path]]) {
-        imageData = [NSData dataWithContentsOfURL: [self thumbnailUrl] options:NSDataReadingUncached error:&readError];
+    NSData *data = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+        data = [NSData dataWithContentsOfURL: url options:NSDataReadingUncached error:&readError];
     }
+    return [[data retain] autorelease];
+}
 
-    if (imageData != nil && readError == nil) {
+- (NSURL *)urlThumbnail {
+    NSURL *fileurl = [self fileURL];
+    NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:fileurl];
+    return [[thumbnailUrl retain] autorelease];
+}
+
+- (NSURL *)urlMetaPlaylist {
+    NSURL *fileurl = [self fileURL];
+    NSURL *resultUrl = [fileurl URLByAppendingPathComponent:@"meta.plist"];
+    return [[resultUrl retain] autorelease];
+}
+
+- (NSData *)thumbnailData {
+    NSURL *thumbnailUrl = [self urlThumbnail];
+    NSData *imageData = [MADocument dataForUrl:thumbnailUrl];
+    return [[imageData retain] autorelease];
+}
+
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
+    
+    NSData *imageData = [self thumbnailData];
+
+    if (imageData != nil) {
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
             UIImage *extraImage = [[UIImage imageWithData:imageData] retain];
@@ -161,8 +175,7 @@ NSString * MTDocumentParentContextName          = @"moc";
         }
     }
     
-    NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];
-    readError = nil;
+    NSURL *metaUrl = [self urlMetaPlaylist];
 
     NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:metaUrl];
     
@@ -222,7 +235,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 
         NSError *filePresenterError = nil;
         
-        NSURL *metaUrl = [absoluteURL URLByAppendingPathComponent:@"meta.plist"];
+        NSURL *metaUrl = [self urlMetaPlaylist];
         id version = [content objectForKey:MTDocumentInfoKeyVersion];
         id generator = [content objectForKey:MTDocumentInfoKeyGenerator];
         [(NSDictionary *)@{MTDocumentInfoKeyVersion:version, MTDocumentInfoKeyGenerator:generator} writeToURL:metaUrl atomically:NO];
@@ -277,8 +290,6 @@ NSString * MTDocumentParentContextName          = @"moc";
         }];
     }
 }
-
-typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
     

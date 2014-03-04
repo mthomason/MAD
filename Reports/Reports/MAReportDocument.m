@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+typedef void (^MTCompletionHandlerSuccess)(BOOL success);
+
 #import "MAReportDocument.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTReportViewerPrintPageRenderer.h"
@@ -166,6 +168,17 @@
     return MTDocumentTypeUtiMad;
 }
 
++ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
+    NSString *destinationName = [[[[madUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+    NSURL *destinationDirectoryUrl = [[NSFileManager localTemporaryDirectory] retain];
+    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
+    [directories lastObject];
+    NSURL *destinationUrl = [[destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES] retain];
+    [destinationName release];
+    [destinationDirectoryUrl release];
+    return [destinationUrl autorelease];
+}
+
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
     NSString *lastPathComponent = [madUrl lastPathComponent];
     NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
@@ -195,111 +208,103 @@
  */
 }
 
++ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
+    NSFileManager *fileManager = [[NSFileManager defaultManager] retain];
+    BOOL isDirectory;
+    BOOL exists = [fileManager fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
+    if (exists) {
+        NSError *deleteError = nil;
+        if (isDirectory) {
+            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:destinationUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+                MTLog(@"Error %@", error);
+                return YES;
+            }];
+            for (NSURL *file in enumerator) {
+                NSError *error = nil;
+                [fileManager removeItemAtURL:file error:&error];
+                if (error != nil) {
+                    MTLog(@"Error %@", error);
+                }
+            }
+            [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+            if (deleteError != nil) {
+                MTLog(@"%@", deleteError);
+            }
+        } else {
+            [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+        }
+    }
+    [fileManager release];
+}
+
++ (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl {
+    NSURL *urlToOpen = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL fileexist = [fileManager fileExistsAtPath:[url path]];
+    if (fileexist) {
+        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+        NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+        NSError* fileWrittingError = nil;
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        if (fileWrittingError) {
+            fileWrittingError = nil;
+            [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        }
+        if (fileWrittingError == nil) {
+            urlToOpen = [destinationUrl retain];
+        }
+        [fileWrapper release];
+        [data release];
+    } else {
+        urlToOpen = [url retain];
+    }
+    return [urlToOpen autorelease];
+}
+
++ (NSDictionary *)optionsPersistentStore{
+    NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
+    NSNumber *inferMappingModelAutomaticallyOption = @YES;
+    return @{
+             NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+             NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
+             };
+}
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
     
     NSURL *urlToOpen = nil;
     if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
         
-        
-        //Aquire the destination URL.
-        NSString *destinationName = [[[[url lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
-        NSURL *destinationDirectoryUrl = [[NSFileManager localTemporaryDirectory] retain];
-        NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
-        [directories lastObject];
-        NSURL *destinationUrl = [[destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES] retain];
-        
-        //Remove existing Core Data File.
-        NSFileManager *fileManager = [[NSFileManager defaultManager] retain];
-        BOOL isDirectory;
-        BOOL exists = [fileManager fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
-        if (exists) {
-            NSError *deleteError = nil;
-            if (isDirectory) {
-                NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:destinationUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
-                    MTLog(@"Error %@", error);
-                    return YES;
-                }];
-                for (NSURL *file in enumerator) {
-                    NSError *error = nil;
-                    [fileManager removeItemAtURL:file error:&error];
-                    if (error != nil) {
-                        MTLog(@"Error %@", error);
-                    }
-                }
-                [fileManager removeItemAtURL:destinationUrl error:&deleteError];
-                if (deleteError != nil) {
-                    MTLog(@"%@", deleteError);
-                }
-            } else {
-                [fileManager removeItemAtURL:destinationUrl error:&deleteError];
-            }
-        }
-        [fileManager release];
-        
-        //Load MAD File
-        BOOL fileexist = [fileManager fileExistsAtPath:[url path]];
-        if (fileexist) {
-            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-            NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-            NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-            NSError* fileWrittingError = nil;
-            [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-            if (fileWrittingError) {
-                fileWrittingError = nil;
-                [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-            }
-            if (fileWrittingError == nil) {
-                urlToOpen = [destinationUrl retain];
-            }
-            [fileWrapper release];
-            [data release];
-        } else {
-            urlToOpen = [url retain];
-        }
-        
-        
-        [destinationName release];
-        [destinationDirectoryUrl release];
+        NSURL *destinationUrl = [[MAReportDocument archiveUrlForMadUrl:url] retain];
+        [MAReportDocument deleteCoreDataFilesAtDirectory:destinationUrl];
+        urlToOpen = [[MAReportDocument unpackMadFile:url toDestinationUrl:destinationUrl] retain];
         [destinationUrl release];
+        
     } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
         urlToOpen = [url retain];
     }
     
     if (urlToOpen != nil) {
 
+        NSDictionary *options = [MAReportDocument optionsPersistentStore];
         MAReportDocument *managedDocumentAtUrl = [[[MAReportDocument alloc] initWithFileURL:urlToOpen] retain];
-        
-        NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
-        NSNumber *inferMappingModelAutomaticallyOption = @YES;
-        NSDictionary *options = @{
-                    NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                    NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
-                    };
-        
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
+        __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
+        MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
+            MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
+            completionHandler(activeDocument, success);
+            [activeDocument release];
+        };
+
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
         if (fileExist) {
-            
-            __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
-            [blockManagedDocumentAtUrl openWithCompletionHandler:^(BOOL success) {
-                
-                MAReportDocument *activeDocument = [managedDocumentAtUrl retain];
-                NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:urlToOpen];
-                [activeDocument setThumbnailUrl:thumbnailUrl];
-                completionHandler(activeDocument, success);
-                [activeDocument release];
-            }];
+            [blockManagedDocumentAtUrl openWithCompletionHandler:handlerOpen];
         } else {
-            __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
-            [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-                MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
-                completionHandler(activeDocument, success);
-                [activeDocument release];
-            }];
+            [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
         }
-        
+
         [managedDocumentAtUrl release];
     }
     [urlToOpen release];
@@ -314,8 +319,10 @@
             
             __block MAReportDocument *documentReport = managedDocument;
             [databaseConnection retain];
+            
             id database = nil;
             NSString *databaseId = [databaseConnection databaseTypeIdentifier];
+            
             if ([databaseId isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
                 
                 database = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
@@ -335,26 +342,32 @@
                     
                     [RptqDocument addDatabase:database toDocument:[documentReport activeDocument] completion:^(BOOL successAddingDatasource, NSError *error) {
                         
+                        MTCompletionHandlerSuccess completeSuccess = ^(BOOL success) {
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                completion(YES);
+                            });
+                        };
+                        
+                        MTCompletionHandlerSuccess completeFail = ^(BOOL success) {
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                completion(YES);
+                            });
+                        };
+
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (successAddingDatasource) {
-                                [documentReport closeWithCompletionHandler:^(BOOL success) {
+                                
+                                MTCompletionHandlerSuccess handlerClose = ^(BOOL success) {
                                     if (success) {
                                         [documentReport setSuspended:YES];
                                         [[documentReport managedObjectContext] lock];
                                         [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
-                                            
-                                            [documentReport deleteFromDiskCompletion:^(BOOL success) {
-                                                //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                                dispatch_sync(dispatch_get_main_queue(), ^{
-                                                    completion(YES);
-                                                    
-                                                });
-                                                
-                                            }];
-                                            
+                                            [documentReport deleteFromDiskCompletion:completeSuccess];
                                         }];
                                     }
-                                }];
+                                };
+                                
+                                [documentReport closeWithCompletionHandler:handlerClose];
                                 
                             } else {
                                 [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
@@ -364,9 +377,7 @@
                                         
                                         if (error) {
                                             
-                                            [error presentErrorToUserWithCompletion:^(BOOL success) {
-                                                completion(NO);
-                                            }];
+                                            [error presentErrorToUserWithCompletion:completeFail];
                                             
                                         } else {
                                             
@@ -375,13 +386,9 @@
                                             NSString *connectionCancel = NSLocalizedString(@"Cancel", @"Cancel");
                                             
                                             MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: connectionProblem message: connectionMessage cancelButtonTitle: connectionCancel otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
-                                                
                                                 completion(NO);
-                                                
                                             } onCancel:^{
-                                                
                                                 completion(NO);
-                                                
                                             }];
                                             [alertView show];
                                             [alertView autorelease];
@@ -422,14 +429,11 @@
 - (void)regenThumbnail {
     RptqDocument *document = [[self activeDocument] retain];
     if (document != nil) {
-        
-        if ([[self thumbnailUrl] isKindOfClass:[NSURL class]]) {
-            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:self];
-            UIImage *thumbnail = [printPageRender thumbnail];
-            NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-            [pngImage writeToURL:[self thumbnailUrl] atomically:YES];
-            [printPageRender release];
-        }
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:self];
+        UIImage *thumbnail = [printPageRender thumbnail];
+        NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+        [pngImage writeToURL:[self urlThumbnail] atomically:YES];
+        [printPageRender release];
     }
     [document release];
 }

@@ -28,7 +28,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSString *)thumbnailSaveName;
 
-@property (nonatomic, retain) NSURL *thumbnailUrl;
+- (NSURL *)urlThumbnail;
 
 @property (nonatomic, assign, getter = isSuspended) BOOL suspended;
 

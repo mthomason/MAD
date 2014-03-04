@@ -58,9 +58,6 @@ extern NSString * const NSFetchedResultsCachePredicates;
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
 - (void)reloadActiveDocumentAnimated:(BOOL)animated;
 
-- (IBAction)done:(id)sender;
-- (IBAction)addTable:(id)sender;
-- (IBAction)addLink:(id)sender;
 - (IBAction)edit:(id)sender;
 
 @end

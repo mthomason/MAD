@@ -3045,8 +3045,6 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4CA14FF618B7D42A001AFAD8 /* MTActivityItemProviderPdf.h */,
-				4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */,
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
 				4CFF3F23164DFF1F0070E880 /* MADocument.h */,
@@ -3078,6 +3076,8 @@
 				4C8F7DE414CFFA13006171A7 /* Rptq */,
 				4CA14FFA18B7F913001AFAD8 /* MTActivityReportExportToPdf.h */,
 				4CA14FFB18B7F913001AFAD8 /* MTActivityReportExportToPdf.m */,
+				4CA14FF618B7D42A001AFAD8 /* MTActivityItemProviderPdf.h */,
+				4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */,
 				4CA14FFE18B7F955001AFAD8 /* MTActivityReportPrintPreview.h */,
 				4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */,
 			);
@@ -3171,13 +3171,6 @@
 			name = iOS7;
 			sourceTree = "<group>";
 		};
-		4C1906781834765A00116900 /* Transformers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Transformers;
-			sourceTree = "<group>";
-		};
 		4C1B7A58163E0D9400E331AA /* MySqlClientTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -3205,6 +3198,17 @@
 				4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */,
 			);
 			name = ReportDesigner;
+			sourceTree = "<group>";
+		};
+		4C1E27C018C5B4650007B2BB /* Singletons */ = {
+			isa = PBXGroup;
+			children = (
+				4CA2391517AF660C0066FEAF /* MTKeyChain.h */,
+				4CA2391617AF660C0066FEAF /* MTKeyChain.m */,
+				4C5625DE1758A17D00433E88 /* MACloudManager.h */,
+				4C5625DF1758A17E00433E88 /* MACloudManager.m */,
+			);
+			name = Singletons;
 			sourceTree = "<group>";
 		};
 		4C202134163DD4090058F869 /* ReportsGeneralTest */ = {
@@ -3889,14 +3893,9 @@
 		4C8EEC881644E6C000FAB2F3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4C1906781834765A00116900 /* Transformers */,
-				4C95CABF182B6D1F00160E01 /* Barcode */,
+				4C1E27C018C5B4650007B2BB /* Singletons */,
 				4C5CD3D7181ED424005FC6DD /* Macros */,
 				4C0081E11784968B00874849 /* MTStoreKit */,
-				4C5625DE1758A17D00433E88 /* MACloudManager.h */,
-				4C5625DF1758A17E00433E88 /* MACloudManager.m */,
-				4CA2391517AF660C0066FEAF /* MTKeyChain.h */,
-				4CA2391617AF660C0066FEAF /* MTKeyChain.m */,
 				4CF1329616CA1E5D00FD0F0B /* Query Builder */,
 				4CF1329416CA1E4900FD0F0B /* Report Desinger */,
 				4CF1329516CA1E5200FD0F0B /* Report Viewer */,
@@ -3913,6 +3912,7 @@
 				4C94AA5217DD8590000F6FCF /* MTStateButton.m */,
 				4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */,
 				4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */,
+				4C95CABF182B6D1F00160E01 /* Barcode */,
 				4C3C17D6163F414400A77BA6 /* Libraries */,
 			);
 			name = Classes;
@@ -4259,6 +4259,8 @@
 		4CDB624614E38B9600A5389E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
+				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
 				4C4A68C017EA02D000FD6A73 /* MTViewControllerActivitySpinner.h */,
 				4C4A68C117EA02D000FD6A73 /* MTViewControllerActivitySpinner.m */,
 				4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */,
@@ -4462,14 +4464,12 @@
 		4CF1329616CA1E5D00FD0F0B /* Query Builder */ = {
 			isa = PBXGroup;
 			children = (
-				4CF1334F16CCB2E900FD0F0B /* MTQueryBuilderContainerController.h */,
-				4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */,
 				4CD0F7C214CC532A003DA079 /* MTQueryBuilderViewController.h */,
 				4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */,
 				4CF1335316CD1FE200FD0F0B /* MTQueryBuilderAdvancedViewController.h */,
 				4CF1335416CD1FE300FD0F0B /* MTQueryBuilderAdvancedViewController.m */,
-				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
-				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
+				4CF1334F16CCB2E900FD0F0B /* MTQueryBuilderContainerController.h */,
+				4CF1335016CCB2EC00FD0F0B /* MTQueryBuilderContainerController.m */,
 				4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */,
 				4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */,
 				4C12292E16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.h */,

@@ -152,14 +152,6 @@
         }
         [subviews release];
     }
-    /*
-    if ([self rightView]) {
-        CGFloat top = self.topLayoutGuide.length;
-        CGFloat bot = self.bottomLayoutGuide.length;
-        [(UITableView *)[self leftView] setContentInset: UIEdgeInsetsMake(top, 0, bot, 0)];
-        [(UITableView *)[self leftView] setScrollIndicatorInsets: [(UITableView *)[self leftView] contentInset]];
-    }
-     */
 }
 
 - (id)leftViewController {
@@ -174,15 +166,9 @@
     [[self delegate] viewControllerDidFinish:self animated:YES];
 }
 
-- (IBAction)showReportDesigner:(id)sender {
-//    MTQueryBuilderViewController *queryBuilderController = [[self queryBuilderController] retain];
-//    [queryBuilderController show]
-//    [queryBuilderController release];
-}
+- (IBAction)showReportDesigner:(id)sender { }
 
-- (IBAction)revealQuery:(id)sender {
-
-}
+- (IBAction)revealQuery:(id)sender { }
 
 - (IBAction)done:(id)sender {
     NSError *error = nil;
@@ -260,7 +246,5 @@
         }
     }];
 }
-
-
 
 @end
