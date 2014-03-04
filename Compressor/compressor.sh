@@ -1,6 +1,10 @@
 #!/bin/sh
 
-# Created Michael Thomason for Everyday Apps LLC on Jan 24, 2014.
+#  buildcounter.sh
+#  MAD
+#
+#  Created by Michael Thomason on 1/24/14.
+#  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 
 set -e
 
