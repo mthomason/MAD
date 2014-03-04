@@ -2553,6 +2553,7 @@
 		4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CB53B4917396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewLayoutLiquidAttributes.h; sourceTree = "<group>"; };
 		4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCollectionViewLayoutLiquidAttributes.m; sourceTree = "<group>"; };
+		4CBE1CC718C5A6E6009675CE /* buildcounter.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildcounter.sh; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorSalesforceViewController.h; sourceTree = "<group>"; };
 		4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorSalesforceViewController.m; sourceTree = "<group>"; };
 		4CC182C916C6040F006FAD93 /* MTReportViewerReportPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageView.h; sourceTree = "<group>"; };
@@ -3340,6 +3341,7 @@
 			isa = PBXGroup;
 			children = (
 				4C5CB712189C4F5D00BB5AF8 /* compressor.sh */,
+				4CBE1CC718C5A6E6009675CE /* buildcounter.sh */,
 			);
 			name = Scripts;
 			sourceTree = "<group>";
@@ -5365,7 +5367,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\n#versionnum=\"3.0.0\"\nversionnum=$( git describe | awk '{split($0,a,\"-\"); print a[1]}' )\n#currentvnum=\"3.0.0\"\ncurrentvnum=$( git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}' )\n#buildnum=\"869\"\nbuildnum=$( git rev-list HEAD --count )\n\nif [[ \"${versionnum}\" == \"\" ]]; then\n    echo \"No version number from git\"\n    exit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\n    echo \"No build number from git\"\n    exit 2\nfi\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\necho \"Updated version number to $versionnum\"\n\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\necho \"Updated build number to $currentvnum\"\n\n/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\necho \"Updated build number to $buildnum\"\n\npushd $SRCROOT\ncd ../Compressor\n\necho \"\"\necho $( pwd )\necho \"\"\n\nif [ -e \"library/libmysqlclient/libmysqlclient.a\" ]\nthen\n    echo \"Found MySQL Connector.\"\nelse\n    echo \"Installing MySQL Connector.\"\n    $( sh ./compressor.sh --mysql )\nfi\n\nif [ -e \"library/libpng/libpng.a\" ]\nthen\n    echo \"Found libpng!\"\nelse\n    echo \"Installing libpng.\"\n    $( sh ./compressor.sh --libpng )\nfi\n\nif [ -e \"library/libsybdb/libsybdb.a\" ]\nthen\n    echo \"Found libsybdb!\"\nelse\n    echo \"Installing libsybdb.\"\n    $( sh ./compressor.sh --freetds )\nfi\n\nif [ -e \"library/openssl/libcrypto.a\" ]\nthen\n    echo \"Found libcrypto!\"\nelse\n    echo \"Installing openssl.\"\n    $( sh ./compressor.sh --openssl )\nfi\n\npopd\n";
+			shellScript = "echo \"Custom Script Start\"\n\n$( sh ${PROJECT_DIR}/buildcounter.sh )\n\npushd $SRCROOT\ncd ../Compressor\n\necho \"\"\necho $( pwd )\necho \"\"\n\nif [ -e \"library/libmysqlclient/libmysqlclient.a\" ]\nthen\n    echo \"Found MySQL Connector.\"\nelse\n    echo \"Installing MySQL Connector.\"\n    $( sh ./compressor.sh --mysql )\nfi\n\nif [ -e \"library/libpng/libpng.a\" ]\nthen\n    echo \"Found libpng!\"\nelse\n    echo \"Installing libpng.\"\n    $( sh ./compressor.sh --libpng )\nfi\n\nif [ -e \"library/libsybdb/libsybdb.a\" ]\nthen\n    echo \"Found libsybdb!\"\nelse\n    echo \"Installing libsybdb.\"\n    $( sh ./compressor.sh --freetds )\nfi\n\nif [ -e \"library/openssl/libcrypto.a\" ]\nthen\n    echo \"Found libcrypto!\"\nelse\n    echo \"Installing openssl.\"\n    $( sh ./compressor.sh --openssl )\nfi\n\npopd\n\necho \"Custom Script End\"\n";
 		};
 		4C1B7A52163E0D9400E331AA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5417,7 +5419,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Assumes that you tag versions with the version number (e.g., \"1.1\") and then the build number is\n# that plus the number of commits since the tag (e.g., \"1.1.17\")\n\necho \"Updating version/build number from git...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nversionnum=\"3.0.0\"\n#$( git describe | awk '{split($0,a,\"-\"); print a[1]}' )\ncurrentvnum=\"3.0.0\"\n#$( git describe | awk '{split($0,a,\"-\"); print a[1] \".\" a[2]}' )\nbuildnum=\"869\"\n#$( git rev-list HEAD --count )\n\nif [[ \"${versionnum}\" == \"\" ]]; then\necho \"No version number from git\"\nexit 2\nfi\n\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number from git\"\nexit 2\nfi\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleShortVersionString $currentvnum\" \"${plist}\"\n#echo \"Updated version number to $versionnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $currentvnum\" \"${plist}\"\n#echo \"Updated build number to $currentvnum\"\n\n#/usr/libexec/Plistbuddy -c \"Set MADRev $buildnum\" \"${plist}\"\n#echo \"Updated build number to $buildnum\"";
+			shellScript = "echo \"Custom Script Start\"\n\n$( sh ${PROJECT_DIR}/buildcounter.sh )\n\necho \"Custom Script End\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -7079,7 +7081,6 @@
 					/Users/mthomason/Desktop/Reports/Compressor/library/libpng,
 					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 					/Users/mthomason/Desktop/Reports/Reports,
-					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -7118,7 +7119,6 @@
 					/Users/mthomason/Desktop/Reports/Compressor/library/libpng,
 					/Users/mthomason/Desktop/Reports/Compressor/library/openssl,
 					/Users/mthomason/Desktop/Reports/Reports,
-					"/Users/mthomason/Desktop/Reports/libMySqlClientObjectiveC/build/Release-iphoneos",
 				);
 				OTHER_LDFLAGS = (
 					"-all_load",

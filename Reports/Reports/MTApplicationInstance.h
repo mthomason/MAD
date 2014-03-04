@@ -18,8 +18,8 @@ extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
 extern NSString * const MTBundleIdDesigner;
 extern NSString * const MTBundleIdViewer;
+
 extern NSString * const MTGlobalBundleVersion;
-extern NSInteger  const MTGlobalBundleVersionMajor;
 extern NSString * const MTGlobalBundleShortVersion;
 extern NSString * const MTGlobalBundleRev;
 
