@@ -7,8 +7,214 @@
 //
 
 #import "MTPaper.h"
+#import "MTPaperLegal.h"
+#import "MTPaperLetter.h"
+#import "MTPaperGovernmentLegal.h"
+#import "MTPaperGovernmentLetter.h"
+#import "MTPaperA0.h"
+#import "MTPaperA1.h"
+#import "MTPaperA2.h"
+#import "MTPaperA3.h"
+#import "MTPaperA4.h"
+#import "MTPaperA5.h"
+#import "MTPaperA6.h"
+#import "MTPaperA7.h"
+#import "MTPaperA8.h"
+#import "MTPaperA9.h"
+#import "MTPaperA10.h"
+#import "MTPaperB0.h"
+#import "MTPaperB1.h"
+#import "MTPaperB2.h"
+#import "MTPaperB3.h"
+#import "MTPaperB4.h"
+#import "MTPaperB5.h"
+#import "MTPaperB6.h"
+#import "MTPaperB7.h"
+#import "MTPaperB8.h"
+#import "MTPaperB9.h"
+#import "MTPaperB10.h"
+#import "MTPaperC0.h"
+#import "MTPaperC1.h"
+#import "MTPaperC2.h"
+#import "MTPaperC3.h"
+#import "MTPaperC4.h"
+#import "MTPaperC5.h"
+#import "MTPaperC6.h"
+#import "MTPaperC7.h"
+#import "MTPaperC8.h"
+#import "MTPaperC9.h"
+#import "MTPaperC10.h"
+
 
 @implementation MTPaper
+
+//- (id)init {
+//    return [self initWithType:MTPaperLetter];
+//}
+
+- (id)initWithType:(MTPaperType)papertype {
+    
+    switch (papertype) {
+        
+        case MTPaperTypeLetter:
+            self = [MTPaperLetter init];
+            break;
+
+        case MTPaperTypeLegal:
+            self = [MTPaperLegal init];
+            break;
+
+        case MTPaperTypeGovernmentLetter:
+            self = [MTPaperGovernemntLetter init];
+            break;
+
+        case MTPaperTypeGovernmentLegal:
+            self = [MTPaperGovernemntLegal init];
+            break;
+
+        case MTPaperTypeA0:
+            self = [MTPaperA0 init];
+            break;
+
+        case MTPaperTypeA1:
+            self = [MTPaperA1 init];
+            break;
+
+        case MTPaperTypeA2:
+            self = [MTPaperA2 init];
+            break;
+
+        case MTPaperTypeA3:
+            self = [MTPaperA3 init];
+            break;
+
+        case MTPaperTypeA4:
+            self = [MTPaperA4 init];
+            break;
+
+        case MTPaperTypeA5:
+            self = [MTPaperA5 init];
+            break;
+
+        case MTPaperTypeA6:
+            self = [MTPaperA6 init];
+            break;
+
+        case MTPaperTypeA7:
+            self = [MTPaperA7 init];
+            break;
+
+        case MTPaperTypeA8:
+            self = [MTPaperA8 init];
+            break;
+
+        case MTPaperTypeA9:
+            self = [MTPaperA9 init];
+            break;
+
+        case MTPaperTypeA10:
+            self = [MTPaperA10 init];
+            break;
+
+        case MTPaperTypeB0:
+            self = [MTPaperB0 init];
+            break;
+            
+        case MTPaperTypeB1:
+            self = [MTPaperB1 init];
+            break;
+            
+        case MTPaperTypeB2:
+            self = [MTPaperB2 init];
+            break;
+            
+        case MTPaperTypeB3:
+            self = [MTPaperB3 init];
+            break;
+            
+        case MTPaperTypeB4:
+            self = [MTPaperB4 init];
+            break;
+            
+        case MTPaperTypeB5:
+            self = [MTPaperB5 init];
+            break;
+            
+        case MTPaperTypeB6:
+            self = [MTPaperB6 init];
+            break;
+            
+        case MTPaperTypeB7:
+            self = [MTPaperB7 init];
+            break;
+            
+        case MTPaperTypeB8:
+            self = [MTPaperB8 init];
+            break;
+            
+        case MTPaperTypeB9:
+            self = [MTPaperB9 init];
+            break;
+            
+        case MTPaperTypeB10:
+            self = [MTPaperB10 init];
+            break;
+
+        case MTPaperTypeC0:
+            self = [MTPaperC0 init];
+            break;
+            
+        case MTPaperTypeC1:
+            self = [MTPaperC1 init];
+            break;
+            
+        case MTPaperTypeC2:
+            self = [MTPaperC2 init];
+            break;
+            
+        case MTPaperTypeC3:
+            self = [MTPaperC3 init];
+            break;
+            
+        case MTPaperTypeC4:
+            self = [MTPaperC4 init];
+            break;
+            
+        case MTPaperTypeC5:
+            self = [MTPaperC5 init];
+            break;
+            
+        case MTPaperTypeC6:
+            self = [MTPaperC6 init];
+            break;
+            
+        case MTPaperTypeC7:
+            self = [MTPaperC7 init];
+            break;
+            
+        case MTPaperTypeC8:
+            self = [MTPaperC8 init];
+            break;
+            
+        case MTPaperTypeC9:
+            self = [MTPaperC9 init];
+            break;
+            
+        case MTPaperTypeC10:
+            self = [MTPaperC10 init];
+            break;
+
+            
+        default:
+            break;
+    }
+    
+    self = [super init];
+    if (self) {
+
+    }
+    return self;
+}
 
 + (CGRect)boundsForSize:(CGSize)size {
     return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
