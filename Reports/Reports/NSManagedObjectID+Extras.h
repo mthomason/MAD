@@ -8,7 +8,6 @@
 
 #import <CoreData/CoreData.h>
 #import "MTProtocolLog.h"
-#import "MTActiveDocument.h"
 
 @interface NSManagedObjectID (Extras) //<MTProtocolLog>
 

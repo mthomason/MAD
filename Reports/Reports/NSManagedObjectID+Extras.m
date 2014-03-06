@@ -17,22 +17,6 @@
 
 - (NSString *)toStringHumanReadable {
     return [NSString stringWithFormat:@"%@", self];
-    /*
-    NSString *result = nil;
-    MAReportDocument *document = [[MTActiveDocument sharedDocument] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
-    NSError *error = nil;
-    id existingObject = [managedObjectContext existingObjectWithID:self error:&error];
-    if (error == nil) {
-        if ([existingObject conformsToProtocol:@protocol(MTProtocolLog)]) {
-            result = [existingObject toStringHumanReadable];
-        } else {
-            result = [self toString];
-        }
-    } else {
-        [error presentErrorToUser];
-    }
-    return result;*/
 }
 
 - (NSString *)toString {

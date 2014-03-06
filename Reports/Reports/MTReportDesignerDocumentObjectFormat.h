@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "MTToolboxViewControllerProtocol.h"
-#import "MTActiveDocument.h"
 #import "RptqDocumentObject+Extras.h"
 
 @interface MTReportDesignerDocumentObjectFormat : UITableViewController

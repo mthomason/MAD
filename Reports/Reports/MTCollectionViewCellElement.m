@@ -8,7 +8,6 @@
 
 #import "MTCollectionViewCellElement.h"
 #import <CoreData/CoreData.h>
-#import "MTActiveDocument.h"
 
 @implementation MTCollectionViewCellElement
 

@@ -12,7 +12,6 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqFieldSelectorManager.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
-#import "MTActiveDocument.h"
 
 @class MTQueryBuilderChooseFieldViewController;
 
