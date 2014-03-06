@@ -8,11 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "RptqQueryPredicate+Extras.h"
-#import "RptqQueryField+Extras.h"
 #import "UITableViewControllerOpperators.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MTApplicationInstance.h"
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTTableViewController.h"
 

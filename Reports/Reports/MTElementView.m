@@ -8,17 +8,10 @@
 
 #import "MTElementView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CGGeometry+Extras.h"
-#import "MTResizeHandleView.h"
 #import "UIView+NSObjectIdTag.h"
-#import "RptqDocumentObject+Extras.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
 #import "RptqDocumentObjectImage+Extras.h"
-#import "RptqDocumentObjectLabelDataField.h"
 #import "Constants.h"
-#import "MTFont.h"
 #import "MTTextView.h"
-#import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)

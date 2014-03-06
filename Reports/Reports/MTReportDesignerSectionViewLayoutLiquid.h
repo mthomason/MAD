@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MTReportDesignerSectionDecorationView.h"
-#import "CGGeometry+Extras.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 
 @class MTReportDesignerSectionViewLayoutLiquid;

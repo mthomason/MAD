@@ -7,8 +7,6 @@
 //
 
 #import "MTQueryBuilderLinkBuilderViewController.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
 #import "AppDelegate.h"
 
 @interface MTQueryBuilderLinkBuilderViewController ()

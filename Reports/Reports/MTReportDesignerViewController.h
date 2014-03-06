@@ -10,28 +10,18 @@
 #define Reports_MTReportDesignerViewController_h
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
 #import "MTSettingsViewController.h"
-#import "MTReportDesignerFontSelectorViewController.h"
-#import "MTReportDesignerFontSettingsViewController.h"
 #import "MTReportDesignerObjectSelectorViewController.h"
 #import "MTReportViewerController.h"
 #import "MTCollectionViewCellElement.h"
-#import "UICollectionView+Extras.h"
-#import "UIView+NSObjectIdTag.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
-#import "MTCollectionReusableViewFloatingLabel.h"
 #import "MTElementView.h"
-#import "MTFont.h"
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "MTReportDesignerToolBoxViewController.h"
 #import "MTRulerView.h"
 #import "MTDocumentSectionView.h"
-#import "UIGestureRecognizer+AnchorPoint.h"
 #import "UIDevice+Hack.h"
-#import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
 #import "NSManagedObject+Extras.h"
@@ -57,8 +47,6 @@
         MTDocumentSectionViewDelegate,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderChooseFieldDelegate>
-
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 - (IBAction)doneReports:(id)sender;
 - (IBAction)done:(id)sender;

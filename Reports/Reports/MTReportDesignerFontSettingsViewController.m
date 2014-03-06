@@ -9,10 +9,6 @@
 #import "MTReportDesignerFontSettingsViewController.h"
 #import "RptqDocumentObject+Extras.h"
 #import "AppDelegate.h"
-#import "MTFont.h"
-#import "UIColor+EverydayApps.h"
-#import "UIColor+Gradients.h"
-#import "UIImage+Resizable.h"
 #import "UIDevice+Hack.h"
 
 @interface MTReportDesignerFontSettingsViewController()

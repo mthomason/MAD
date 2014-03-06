@@ -11,8 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MTResizeHandleView.h"
-#import "MTBorderedView.h"
 #import "MTBarcode.h"
 
 @class MTElementView;

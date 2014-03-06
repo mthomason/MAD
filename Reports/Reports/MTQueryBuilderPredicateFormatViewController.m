@@ -7,7 +7,6 @@
 //
 
 #import "MTQueryBuilderPredicateFormatViewController.h"
-#import "MTQueryBuilderAddPredicateViewController.h"
 
 @implementation MTQueryBuilderPredicateFormatViewController
 

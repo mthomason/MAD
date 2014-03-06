@@ -7,12 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTViewController.h"
 #import "MTReportViewerReportPageViewController.h"
-#import "MAReportDocument.h"
-#import "MTPrintingProtocol.h"
 #import "NSDate+Extras.h"
-#import "DocumentStatusView.h"
 #import "MUIViewControllerDelegate.h"
 #import "MTViewControllerAsyncProtocol.h"
 #import "MTActivityReportPrintPreview.h"

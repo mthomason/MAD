@@ -7,7 +7,7 @@
 //
 
 #import "MADWatermarkView.h"
-#import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 
 @implementation MADWatermarkView
 

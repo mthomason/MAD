@@ -7,9 +7,6 @@
 //
 
 #import "MTViewControllerOpenDocument.h"
-#import "MADWatermarkView.h"
-#import "MTBarcode.h"
-#import "MTBarcodeView.h"
 #import "UAAppReviewManager.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";

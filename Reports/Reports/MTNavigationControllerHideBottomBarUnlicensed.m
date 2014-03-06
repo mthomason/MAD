@@ -7,7 +7,6 @@
 //
 
 #import "MTNavigationControllerHideBottomBarUnlicensed.h"
-#import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 @interface MTNavigationControllerHideBottomBarUnlicensed ()

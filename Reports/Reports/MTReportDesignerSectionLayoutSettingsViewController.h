@@ -10,7 +10,6 @@
 #define Reports_MTReportDesignerSectionLayoutSettingsViewController_h
 
 #import <UIKit/UIKit.h>
-#import "UIViewTableSectionHeaderQueryBuilder.h"
 
 extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier;
 

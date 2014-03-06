@@ -1,6 +1,4 @@
 #import "DocumentStatusView.h"
-#import "UIDevice+Hack.h"
-#import "UIColor+EverydayApps.h"
 
 @interface DocumentStatusView()
 

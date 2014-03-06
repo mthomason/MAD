@@ -7,7 +7,6 @@
 //
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
-#import "MTLog.h"
 
 NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
 

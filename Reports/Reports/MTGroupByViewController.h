@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 
 extern NSString * const MTGroupByViewControllerIdentifier;

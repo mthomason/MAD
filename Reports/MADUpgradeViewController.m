@@ -7,12 +7,10 @@
 //
 
 #import "MADUpgradeViewController.h"
+#import "NSFileManager+Common.h"
 #import "NSFileManager+Reports.h"
 #import "MACloudManager.h"
 #import "MTLog.h"
-#import "NSFileManager+Common.h"
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseSqlite3.h"
 #import "MTApplicationInstance.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.

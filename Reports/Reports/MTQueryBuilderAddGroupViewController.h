@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "RptqQueryGroup.h"
-#import "RptqDatabaseSchemaField.h"
 #import "MTTableViewController.h"
 
 @class MTQueryBuilderAddGroupViewController;

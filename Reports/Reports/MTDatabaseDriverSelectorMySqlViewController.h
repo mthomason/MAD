@@ -11,15 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
-#import "NSError+UserInterface.h"
-#import "MTDatabaseConnection.h"
-#import "MAReportDocument.h"
-#import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
-#import "AppDelegate.h"
 #import "NSURL+Document.h"
-#import "MTAlertView.h"
-#import "UIManagedDocument+FileOperations.h"
 
 @interface MTDatabaseDriverSelectorMySqlViewController : MTTableViewController
     <UITableViewDelegate, UIViewControllerTransitioningDelegate,

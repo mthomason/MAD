@@ -19,17 +19,8 @@
 #import "MTTableViewCellQueryPredicate.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
-#import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerViewController.h"
-#import "UIColor+PaperPatterns.h"
-#import "RptqUserCredentals+Extras.h"
-#import "RptqQueryGroup+Extras.h"
-#import "RptqQueryPredicate+Extras.h"
-#import "RptqQueryLinks+Extras.h"
 #import "MTViewTableHeader.h"
-#import "MAReportDocument.h"
-#import "UIDevice+Hack.h"
-#import "MTLog.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 extern NSString * const NSFetchedResultsCacheName;

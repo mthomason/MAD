@@ -8,12 +8,8 @@
 
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
-#import "UIColor+EverydayApps.h"
-#import "MTBarcode.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIDevice+Hack.h"
-#import "RptqDocument+ActiveDocument.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";

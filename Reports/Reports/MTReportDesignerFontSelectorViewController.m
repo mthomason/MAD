@@ -7,7 +7,6 @@
 //
 
 #import "MTReportDesignerFontSelectorViewController.h"
-#import "MTFont.h"
 #import "UIDevice+Hack.h"
 
 @interface MTReportDesignerFontSelectorViewController()

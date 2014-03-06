@@ -7,9 +7,6 @@
 //
 
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-#import "MTQueryBuilderAddLinkFirstFieldViewController.h"
 
 @implementation MTQueryBuilderAddLinkFirstTableViewController
 

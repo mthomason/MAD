@@ -10,9 +10,7 @@
 #define Reports_MTDatabaseDriverSelectorViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTTableViewController.h"
 #import "UIDevice+Hack.h"
-#import "Constants.h"
 #import "MTDatabaseDriverSelectorMySqlViewController.h"
 
 @interface MTDatabaseDriverSelectorViewController : MTTableViewController

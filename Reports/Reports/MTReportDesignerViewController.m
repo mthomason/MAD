@@ -9,9 +9,6 @@
 #import "MTReportDesignerViewController.h"
 #import "DesignerSectionLabel.h"
 #import "MTViewControllerBarcode.h"
-#import "MTApplicationInstance.h"
-#import <CoreData/CoreData.h>
-#import "NSManagedObject+Rptq.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 

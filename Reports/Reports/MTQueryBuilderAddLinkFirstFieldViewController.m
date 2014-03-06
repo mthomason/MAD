@@ -7,7 +7,6 @@
 //
 
 #import "MTQueryBuilderAddLinkFirstFieldViewController.h"
-#import "MTQueryBuilderAddLinkSecondTableViewController.h"
 
 @implementation MTQueryBuilderAddLinkFirstFieldViewController
 

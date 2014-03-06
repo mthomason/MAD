@@ -7,10 +7,7 @@
 //
 
 #import "MTShowSqlViewController.h"
-#import "RptqQuery+Extras.h"
-#import "MTAlertView.h"
 #import "RptqDocument.h"
-#import "RptqDatabase.h"
 #import "AppDelegate.h"
 
 @interface MTShowSqlViewController ()

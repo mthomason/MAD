@@ -94,11 +94,9 @@
 		4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */; };
 		4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
 		4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; };
-		4C0E776F163B5AEC003B951E /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
-		4C0E7773163B5AEC003B951E /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; };
@@ -650,7 +648,6 @@
 		4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5E3C2417DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; };
-		4C6362B914E6261C005DBBFF /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
@@ -792,7 +789,6 @@
 		4C860AEF167EDE7000AC1904 /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E80164CD7DE0070E880 /* MTDatabase.m */; };
 		4C860AF0167EDE7000AC1904 /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */; };
 		4C860AF2167EDE7000AC1904 /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E371658F0A00002F8EA /* MTDatabaseTable.m */; };
-		4C860AF8167EDE7000AC1904 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4C860AF9167EDE7000AC1904 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4C860AFB167EDE7000AC1904 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4C860AFE167EDE7000AC1904 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
@@ -834,7 +830,6 @@
 		4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
 		4C860B2A167EDE7000AC1904 /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
-		4C860B2B167EDE7000AC1904 /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4C860B2E167EDE7000AC1904 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4C860B2F167EDE7000AC1904 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
 		4C860B30167EDE7000AC1904 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
@@ -1001,11 +996,9 @@
 		4C9294A818C4CC0A0010AAEF /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4C9294A918C4CC0A0010AAEF /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
 		4C9294AA18C4CC0F0010AAEF /* MTViewControllerActivitySpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A68C117EA02D000FD6A73 /* MTViewControllerActivitySpinner.m */; };
-		4C9294AB18C4CC0F0010AAEF /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4C9294AC18C4CC0F0010AAEF /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
 		4C9294AD18C4CC0F0010AAEF /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C9294AE18C4CC0F0010AAEF /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
-		4C9294AF18C4CC0F0010AAEF /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4C9294B018C4CC0F0010AAEF /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C9294B118C4CC0F0010AAEF /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C9294B218C4CC0F0010AAEF /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; };
@@ -1286,10 +1279,8 @@
 		4CA1639C167EB89C00540A14 /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E80164CD7DE0070E880 /* MTDatabase.m */; };
 		4CA1639D167EB89C00540A14 /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */; };
 		4CA1639F167EB89C00540A14 /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E371658F0A00002F8EA /* MTDatabaseTable.m */; };
-		4CA163AA167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CA163AB167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4CA163AD167EB8B300540A14 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
-		4CA163AE167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CA163AF167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4CA163B1167EB8B300540A14 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4CA163B4167EB8BA00540A14 /* UILabelStrikethrough.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00815614B6BB9F003DF437 /* UILabelStrikethrough.m */; };
@@ -1365,7 +1356,6 @@
 		4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
 		4CA16413167EB90D00540A14 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4CA16416167EB90D00540A14 /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
-		4CA16417167EB90D00540A14 /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4CA1641A167EB90D00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CA1641B167EB90D00540A14 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
 		4CA1641C167EB90D00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
@@ -1379,7 +1369,6 @@
 		4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
 		4CA16436167EB90F00540A14 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4CA16439167EB90F00540A14 /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; };
-		4CA1643A167EB90F00540A14 /* UINavigationControllerModelControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */; };
 		4CA1643D167EB90F00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */; };
 		4CA1643E167EB90F00540A14 /* MTShowSqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC3DE316714A260016E1E8 /* MTShowSqlViewController.m */; };
 		4CA1643F167EB90F00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; };
@@ -1747,7 +1736,6 @@
 		4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
 		4CDA778B18275B5700E462F6 /* MTBarcodeView.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA778918275B5700E462F6 /* MTBarcodeView.h */; };
 		4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */; };
-		4CDB61F614E33BF400A5389E /* UITableViewControllerEnterString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */; };
 		4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4CDBCB6616AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBCB6516AF91B000E08FAD /* RptqDocument+ActiveDocument.m */; };
@@ -2307,8 +2295,6 @@
 		4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellStoreItemReportTemplate.m; sourceTree = "<group>"; };
 		4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
 		4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
-		4C6362B714E6261C005DBBFF /* UINavigationControllerModelControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationControllerModelControllers.h; sourceTree = "<group>"; };
-		4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationControllerModelControllers.m; sourceTree = "<group>"; };
 		4C6362BC14E6278D005DBBFF /* MTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationController.h; sourceTree = "<group>"; };
 		4C6362BD14E6278D005DBBFF /* MTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationController.m; sourceTree = "<group>"; };
 		4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
@@ -2858,8 +2844,6 @@
 		4CDA778918275B5700E462F6 /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeView.h; path = Barcodes/Barcodes/MTBarcodeView.h; sourceTree = "<group>"; };
 		4CDB61ED14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderPredicateFormatViewController.h; sourceTree = "<group>"; };
 		4CDB61EE14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderPredicateFormatViewController.m; sourceTree = "<group>"; };
-		4CDB61F414E33BF400A5389E /* UITableViewControllerEnterString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewControllerEnterString.h; sourceTree = "<group>"; };
-		4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewControllerEnterString.m; sourceTree = "<group>"; };
 		4CDB625014E395E400A5389E /* UIColor+EverydayApps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EverydayApps.h"; sourceTree = "<group>"; };
 		4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EverydayApps.m"; sourceTree = "<group>"; };
 		4CDB626314E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewTableSectionHeaderQueryBuilder.h; sourceTree = "<group>"; };
@@ -4565,8 +4549,6 @@
 				4C4A68C117EA02D000FD6A73 /* MTViewControllerActivitySpinner.m */,
 				4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */,
 				4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */,
-				4CDB61F414E33BF400A5389E /* UITableViewControllerEnterString.h */,
-				4CDB61F514E33BF400A5389E /* UITableViewControllerEnterString.m */,
 				4C8BA98B174533CF00B646E2 /* MTViewControllerValueBasedOnField.h */,
 				4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */,
 				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
@@ -4574,8 +4556,6 @@
 				4C9F94BC1642280500A562B9 /* MTViewController.m */,
 				4C9F94C016423D7300A562B9 /* MTTableViewController.h */,
 				4C9F94C116423D7300A562B9 /* MTTableViewController.m */,
-				4C6362B714E6261C005DBBFF /* UINavigationControllerModelControllers.h */,
-				4C6362B814E6261C005DBBFF /* UINavigationControllerModelControllers.m */,
 				4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */,
 				4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */,
 				4C1A585814DE2AB400184445 /* UITableViewControllerOpperators.h */,
@@ -5792,11 +5772,9 @@
 				4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */,
 				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
-				4C0E776F163B5AEC003B951E /* UITableViewControllerEnterString.m in Sources */,
 				4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */,
 				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
-				4C0E7773163B5AEC003B951E /* UINavigationControllerModelControllers.m in Sources */,
 				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
 				4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */,
 				4CBABBA018C7E1E300EE5768 /* MTPaperA7.m in Sources */,
@@ -6023,7 +6001,6 @@
 				4CA16396167EB89B00540A14 /* MTDatabase.m in Sources */,
 				4CA16397167EB89B00540A14 /* MTDatabaseMySql.m in Sources */,
 				4CA16399167EB89B00540A14 /* MTDatabaseTable.m in Sources */,
-				4CA163AA167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */,
 				4CA163AB167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4CA163AD167EB8B300540A14 /* MTClipboardView.m in Sources */,
 				4CA163B4167EB8BA00540A14 /* UILabelStrikethrough.m in Sources */,
@@ -6066,7 +6043,6 @@
 				4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */,
 				4CA16413167EB90D00540A14 /* MTViewControllerOpenDocument.m in Sources */,
 				4CA16416167EB90D00540A14 /* MTNavigationController.m in Sources */,
-				4CA16417167EB90D00540A14 /* UINavigationControllerModelControllers.m in Sources */,
 				4CA1641A167EB90D00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CA1641B167EB90D00540A14 /* MTShowSqlViewController.m in Sources */,
 				4CA1641C167EB90D00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
@@ -6173,7 +6149,6 @@
 				4CA1639C167EB89C00540A14 /* MTDatabase.m in Sources */,
 				4CA1639D167EB89C00540A14 /* MTDatabaseMySql.m in Sources */,
 				4CA1639F167EB89C00540A14 /* MTDatabaseTable.m in Sources */,
-				4CA163AE167EB8B300540A14 /* UITableViewControllerEnterString.m in Sources */,
 				4CA163AF167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4CA163B1167EB8B300540A14 /* MTClipboardView.m in Sources */,
 				4CA163B9167EB8BB00540A14 /* UILabelStrikethrough.m in Sources */,
@@ -6216,7 +6191,6 @@
 				4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */,
 				4CA16436167EB90F00540A14 /* MTViewControllerOpenDocument.m in Sources */,
 				4CA16439167EB90F00540A14 /* MTNavigationController.m in Sources */,
-				4CA1643A167EB90F00540A14 /* UINavigationControllerModelControllers.m in Sources */,
 				4CA1643D167EB90F00540A14 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CA1643E167EB90F00540A14 /* MTShowSqlViewController.m in Sources */,
 				4CA1643F167EB90F00540A14 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
@@ -6399,14 +6373,12 @@
 				4CA1500018B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
-				4CDB61F614E33BF400A5389E /* UITableViewControllerEnterString.m in Sources */,
 				4CBABB9F18C7E1E300EE5768 /* MTPaperA7.m in Sources */,
 				4CBABBF918C7E96F00EE5768 /* MTPaperB2.m in Sources */,
 				4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */,
 				4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4CBABBF318C7E96F00EE5768 /* MTPaperC4.m in Sources */,
-				4C6362B914E6261C005DBBFF /* UINavigationControllerModelControllers.m in Sources */,
 				4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */,
 				4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */,
 				4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */,
@@ -6622,7 +6594,6 @@
 				4C860AEF167EDE7000AC1904 /* MTDatabase.m in Sources */,
 				4C860AF0167EDE7000AC1904 /* MTDatabaseMySql.m in Sources */,
 				4C860AF2167EDE7000AC1904 /* MTDatabaseTable.m in Sources */,
-				4C860AF8167EDE7000AC1904 /* UITableViewControllerEnterString.m in Sources */,
 				4C860AF9167EDE7000AC1904 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C860AFB167EDE7000AC1904 /* MTClipboardView.m in Sources */,
 				4C860AFE167EDE7000AC1904 /* UILabelStrikethrough.m in Sources */,
@@ -6664,7 +6635,6 @@
 				4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */,
 				4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */,
 				4C860B2A167EDE7000AC1904 /* MTNavigationController.m in Sources */,
-				4C860B2B167EDE7000AC1904 /* UINavigationControllerModelControllers.m in Sources */,
 				4C860B2E167EDE7000AC1904 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4C860B2F167EDE7000AC1904 /* MTShowSqlViewController.m in Sources */,
 				4C860B30167EDE7000AC1904 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
@@ -6787,7 +6757,6 @@
 				4C92953418C4CC890010AAEF /* UIGestureRecognizer+AnchorPoint.m in Sources */,
 				4C9294A418C4CBFF0010AAEF /* MTReportViewerReportPageView.m in Sources */,
 				4C92950F18C4CC7F0010AAEF /* RptqQueryCache+Extras.m in Sources */,
-				4C9294AF18C4CC0F0010AAEF /* UINavigationControllerModelControllers.m in Sources */,
 				4C9294A818C4CC0A0010AAEF /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C92952918C4CC890010AAEF /* NSManagedObject+Extras.m in Sources */,
 				4C9294FA18C4CC7A0010AAEF /* RptqQueryField.m in Sources */,
@@ -6799,7 +6768,6 @@
 				4C92948D18C4CBF40010AAEF /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C9294D418C4CC340010AAEF /* MTTitleView.m in Sources */,
 				4C9294DE18C4CC630010AAEF /* MTDatabaseField.m in Sources */,
-				4C9294AB18C4CC0F0010AAEF /* UITableViewControllerEnterString.m in Sources */,
 				4C9294DC18C4CC5B0010AAEF /* MTDatabaseSqlServer.m in Sources */,
 				4C9294B118C4CC0F0010AAEF /* UITableViewControllerOpperators.m in Sources */,
 				4C92947B18C4CBEB0010AAEF /* MTStoreKitController+NonRenewableLicensing.m in Sources */,

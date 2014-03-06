@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RptqDatabaseSchemaTable.h"
 #import "UITableViewControllerCoreDataResults.h"
 #import "RptqQueryTable.h"
 

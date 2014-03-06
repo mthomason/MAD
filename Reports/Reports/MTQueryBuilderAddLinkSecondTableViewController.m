@@ -7,8 +7,6 @@
 //
 
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "MTQueryBuilderAddLinkSecondFieldViewController.h"
 
 @implementation MTQueryBuilderAddLinkSecondTableViewController
 

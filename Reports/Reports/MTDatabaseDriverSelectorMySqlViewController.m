@@ -8,7 +8,6 @@
 
 #import "MTDatabaseDriverSelectorMySqlViewController.h"
 #import "MTViewControllerActivitySpinner.h"
-#import "MTDatabaseConnection.h"
 #import "UIDevice+Hack.h"
 
 @interface MTDatabaseDriverSelectorMySqlViewController()

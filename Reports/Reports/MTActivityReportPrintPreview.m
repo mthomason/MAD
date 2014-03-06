@@ -7,7 +7,6 @@
 //
 
 #import "MTActivityReportPrintPreview.h"
-#import "AppDelegate.h"
 #import "UIDevice+Hack.h"
 
 @interface MTActivityReportPrintPreview()

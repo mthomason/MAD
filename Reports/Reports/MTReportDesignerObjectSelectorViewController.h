@@ -12,12 +12,9 @@
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "AppDelegate.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTGroupByViewController.h"
-#import "RptqDocumentObjectFormula+Extras.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
 
 extern NSInteger const MTViewTagAggregateFunctions;
 extern NSInteger const MTViewTagGroupByOptions;

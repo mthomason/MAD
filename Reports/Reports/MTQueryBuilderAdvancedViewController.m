@@ -7,12 +7,8 @@
 //
 
 #import "MTQueryBuilderAdvancedViewController.h"
-#import "MTViewControllerDynamicItem.h"
-#import "MAReportDocument.h"
 #import "CGAffineTransform+Common.h"
 #import "UIDevice+Hack.h"
-#import "MTShowSqlViewController.h"
-#import "MADWatermarkView.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

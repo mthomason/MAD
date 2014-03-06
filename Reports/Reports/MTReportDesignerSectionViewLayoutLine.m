@@ -7,7 +7,6 @@
 //
 
 #import "MTReportDesignerSectionViewLayoutLine.h"
-#import "MTLog.h"
 
 @interface MTReportDesignerSectionViewLayoutLine ()
 

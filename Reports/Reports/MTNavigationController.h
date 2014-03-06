@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIColor+EverydayApps.h"
-#import "UIDevice+Hack.h"
 
 @interface MTNavigationController : UINavigationController
 

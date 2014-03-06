@@ -7,9 +7,9 @@
 //
 
 #import "MTQueryBuilderViewController.h"
-#import "AppDelegate.h"
-#import "MTClipboardView.h"
-#import "RptqDocument+ActiveDocument.h"
+//#import "AppDelegate.h"
+//#import "MTClipboardView.h"
+//#import "RptqDocument+ActiveDocument.h"
 
 NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
 

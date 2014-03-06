@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 
 @class MTQueryBuilderAddLinkSecondFieldViewController;

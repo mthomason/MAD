@@ -9,7 +9,6 @@
 #import "MTViewControllerAbout.h"
 #import <MessageUI/MessageUI.h>
 #import "NSError+UserInterface.h"
-#import "UIDevice+Hack.h"
 
 @interface MTViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>

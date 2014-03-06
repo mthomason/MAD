@@ -7,11 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTViewController.h"
 #import "MTQueryBuilderViewController.h"
-#import "MTQueryBuilderAdvancedSchemaViewController.h"
-#import "MTTitleView.h"
-#import "MTViewControllerAsyncProtocol.h"
 #import "MTQueryBuilderAdvancedViewController.h"
 
 @interface MTQueryBuilderContainerController : MTViewController

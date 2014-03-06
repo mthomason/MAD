@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "MTApplicationInstance.h"
-#import "MTDatabase.h"
 #import "RptqDocument+Extras.h"
 
 @protocol MTViewControllerValueBasedOnFieldDelegate

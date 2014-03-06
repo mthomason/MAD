@@ -10,13 +10,10 @@
 #define Reports_MTShowSqlViewController_h
 
 #import "MTViewController.h"
-#import "MTApplicationInstance.h"
 
 @interface MTShowSqlViewController : MTViewController
 
 @property (nonatomic, retain) IBOutlet UITextView *textView;
-
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 - (IBAction)done:(id)sender;
 

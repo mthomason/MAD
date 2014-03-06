@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
 #import "MTAggregateFunctionsViewController.h"
 
 extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;

@@ -11,15 +11,9 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-#import "MTQueryBuilderViewController.h"
-#import "NSFileManager+Reports.h"
 #import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
-#import "MTQueryBuilderAdvancedViewController.h"
-#import "MTDocumentCellProtocol.h"
-#import "UIManagedDocument+FileOperations.h"
-#import "MTViewControllerAsyncProtocol.h"
 #import "MTViewControllerAbout.h"
 #import "MTTableViewCellDocument.h"
 

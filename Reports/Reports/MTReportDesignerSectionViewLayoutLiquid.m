@@ -12,7 +12,6 @@
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 
-//@property (nonatomic, assign) CGSize contentSize;
 @property (nonatomic, assign) NSInteger numberOfSections;
 
 @property (nonatomic, retain) NSMutableArray *itemAttributesBySection;

@@ -7,16 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDocument+ActiveDocument.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
-#import "UIColor+EverydayApps.h"
-#import "UIGestureRecognizer+AnchorPoint.h"
-#import "UIView+NSObjectIdTag.h"
-#import "CGGeometry+Extras.h"
-#import "UIColor+PaperPatterns.h"
 #import "MTScrollViewCenter.h"
-#import "MUIViewControllerDelegate.h"
 #import "MTViewController.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
