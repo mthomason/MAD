@@ -18,6 +18,7 @@
 #import "MTStoreKitController.h"
 #import "MTLog.h"
 #import "NSURL+Document.h"
+#import "RptqDocument+Extras.h"
 
 @interface AppDelegate()
 

@@ -13,6 +13,7 @@
 #import "MTReportDesignerViewController.h"
 #import "MTTitleView.h"
 #import "MADWatermarkView.h"
+#import "NSURL+Document.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
