@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MAReportDocument.h"
+#import "MTUser.h"
 
 typedef NS_ENUM(NSUInteger, MTReportState) {
 	MTReportStateOpen = 0,
@@ -37,6 +38,8 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
     <MTDatabaseCacheProtocol>
 
 @property (nonatomic, assign) MTReportState reportState;
+
+@property (nonatomic, retain, readonly) MTUser *user;
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;

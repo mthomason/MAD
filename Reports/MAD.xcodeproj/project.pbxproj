@@ -1575,6 +1575,8 @@
 		4CBABC0B18C7ED1300EE5768 /* MTPaperGovernmentLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC0918C7ED1300EE5768 /* MTPaperGovernmentLegal.m */; };
 		4CBABC0E18C7ED2100EE5768 /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC0D18C7ED2100EE5768 /* MTPaperGovernmentLetter.m */; };
 		4CBABC0F18C7ED2100EE5768 /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC0D18C7ED2100EE5768 /* MTPaperGovernmentLetter.m */; };
+		4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC1318C8945B00EE5768 /* MTUser.m */; };
+		4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC1318C8945B00EE5768 /* MTUser.m */; };
 		4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4CC182CB16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
 		4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
@@ -2681,6 +2683,8 @@
 		4CBABC0918C7ED1300EE5768 /* MTPaperGovernmentLegal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperGovernmentLegal.m; sourceTree = "<group>"; };
 		4CBABC0C18C7ED2100EE5768 /* MTPaperGovernmentLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaperGovernmentLetter.h; sourceTree = "<group>"; };
 		4CBABC0D18C7ED2100EE5768 /* MTPaperGovernmentLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaperGovernmentLetter.m; sourceTree = "<group>"; };
+		4CBABC1218C8945B00EE5768 /* MTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUser.h; sourceTree = "<group>"; };
+		4CBABC1318C8945B00EE5768 /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		4CBE1CC718C5A6E6009675CE /* buildcounter.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildcounter.sh; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorSalesforceViewController.h; sourceTree = "<group>"; };
 		4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorSalesforceViewController.m; sourceTree = "<group>"; };
@@ -3171,6 +3175,8 @@
 			children = (
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
+				4CBABC1218C8945B00EE5768 /* MTUser.h */,
+				4CBABC1318C8945B00EE5768 /* MTUser.m */,
 				4C8A648818C7C6C200997D22 /* Document */,
 				4C8A649118C7C6D100997D22 /* Database */,
 				4C8A649218C7C71100997D22 /* DatabaseTable */,
@@ -5735,6 +5741,7 @@
 				4CBABB9818C7E1CA00EE5768 /* MTPaperA5.m in Sources */,
 				4CD2FDC317F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
 				4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */,
 				4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
 				4C0E7754163B5AEC003B951E /* MTQueryBuilderViewController.m in Sources */,
@@ -6330,6 +6337,7 @@
 				4CBABB9718C7E1CA00EE5768 /* MTPaperA5.m in Sources */,
 				4CABE4BB1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */,
 				4C434ACB18B40CFC00750B6B /* NSManagedObject+Rptq.m in Sources */,
+				4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */,
 				4CD2FDC217F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
 				4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,

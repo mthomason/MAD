@@ -12,6 +12,7 @@
 #import "MAReportDocument.h"
 #import "NSFileManager+Common.h"
 #import "UAAppReviewManager.h"
+#import "MTUser.h"
 
 NSString *const MTApplicationIdMadDesigner                          = @"666001433";
 NSString *const MTApplicationIdMadViewer                            = @"666003759";
@@ -21,9 +22,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"3.0.9";
-NSString * const MTGlobalBundleShortVersion                         = @"3.0.9";
-NSString * const MTGlobalBundleRev                                  = @"878";
+NSString * const MTGlobalBundleVersion                              = @"3.0.10";
+NSString * const MTGlobalBundleShortVersion                         = @"3.0.10";
+NSString * const MTGlobalBundleRev                                  = @"879";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -41,6 +42,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                                                                     //change this url to the url of the open
                                                                     //document.  This url will be key for the
                                                                     //documents array.
+@property (nonatomic, retain, readwrite) MTUser *user;
 @property (nonatomic, retain) NSMutableDictionary *documents;   //MAReportDocument stored by their NSURLS
 
 @end
@@ -48,6 +50,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 @implementation MTApplicationInstance
 
 - (void)dealloc {
+    [_user release];
     [_currentDocument release];
     [_documents removeAllObjects];
     [_documents release];
@@ -58,6 +61,10 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     self = [super init];
     if (self) {
 
+        MTUser *user = [[MTUser alloc] init];
+        [self setUser:user];
+        [user release];
+        
         [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
             // This is the block syntx for showing prompts.
             // It lets you decide if it should be shown now or not based on
