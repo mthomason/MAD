@@ -343,15 +343,23 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
                     [RptqDocument addDatabase:database toDocument:[documentReport activeDocument] completion:^(BOOL successAddingDatasource, NSError *error) {
                         
                         MTCompletionHandlerSuccess completeSuccess = ^(BOOL success) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
+                            if ([NSThread isMainThread]) {
                                 completion(YES);
-                            });
+                            } else {
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    completion(YES);
+                                });
+                            }
                         };
                         
                         MTCompletionHandlerSuccess completeFail = ^(BOOL success) {
-                            dispatch_sync(dispatch_get_main_queue(), ^{
+                            if ([NSThread isMainThread]) {
                                 completion(YES);
-                            });
+                            } else {
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    completion(YES);
+                                });
+                            }
                         };
 
                         dispatch_async(dispatch_get_main_queue(), ^{

@@ -6,18 +6,9 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDatabaseDriverSelectorViewController_h
-#define Reports_MTDatabaseDriverSelectorViewController_h
-
 #import <UIKit/UIKit.h>
-#import "UIDevice+Hack.h"
-#import "MTDatabaseDriverSelectorMySqlViewController.h"
+#import "MTTableViewController.h"
 
 @interface MTDatabaseDriverSelectorViewController : MTTableViewController
 
-- (IBAction)done:(id)sender;
-- (IBAction)cancel:(id)sender;
-
 @end
-
-#endif

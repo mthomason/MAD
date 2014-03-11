@@ -81,19 +81,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [[[self navigationItem] titleView] sizeToFit];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 #pragma mark - View lifecycle
@@ -106,54 +98,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
     }
     return self;
-}
-
-- (MTViewTableHeader *)tableHeaderDatabaseInfo {
-    NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
-    MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] setHidden:YES];
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderTablesToSelect {
-    NSString *title = NSLocalizedString(@"Tables to Select", @"Tables to Select");
-    MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderTableJoins {
-    NSString *title = NSLocalizedString(@"Table Joins", @"Table Joins");
-    MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderGroupedBy {
-    SEL selector = @selector(addGroup:);
-    NSString *title = NSLocalizedString(@"Grouped By", @"Grouped By");
-    MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeaderPredicate {
-    SEL selector = @selector(addPredicate:);
-    NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Next to the button to add database tables.");
-    MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    return header;
-}
-
-- (MTViewTableHeader *)tableHeader {
-    CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
-    MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:rect];
-    return tableHeader;
 }
 
 - (void)viewDidLoad {
@@ -221,15 +165,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear: animated];
-    [[self tableView] reloadData];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
@@ -244,7 +179,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {                  // MARK: Prepair to show database drivers.
+        
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
@@ -432,32 +369,23 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark Table Header Actions
 
 - (void)addConnection:(id)sender {
-    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
 }
 
 - (void)addTable:(id)sender {
-    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
 }
 
 - (void)addLink:(id)sender {
-    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
 }
 
 - (void)addPredicate:(id)sender {
-    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
 }
 
 - (void)addGroup:(id)sender {
-    // FIXME: Show in popover.
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
-}
-
-- (void)showPopoverWtihController:(UIViewController *)controller fromView:(UIView *)view {
-    
 }
 
 #pragma mark - Modal helper
@@ -1570,9 +1498,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
 
     switch (numberOfTables) {
-        case 0: {
-            
-            //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
+        case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
             
             NSArray *sections = @[@(MTQuerySectionsDatasource),
                                   @(MTQuerySectionsTables)];
@@ -1594,7 +1520,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             
             break;
         }
-        case 1: {
+        case 1: {   //Only one table in query.  No ability to add links.
             
             NSArray *sections = @[@(MTQuerySectionsDatasource),
                          @(MTQuerySectionsTables),
@@ -1618,7 +1544,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
             break;
         }
-        default: {
+        default: {   //Two more more tables in query.  All features available.
 
             NSArray *sections = @[@(MTQuerySectionsDatasource),
                                   @(MTQuerySectionsTables),
@@ -1789,6 +1715,56 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [controller performFetch:nil];
     }
     [[self tableView] reloadData];
+}
+
+#pragma mark - Table Headers
+
+- (MTViewTableHeader *)tableHeaderDatabaseInfo {
+    NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] setHidden:YES];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderTablesToSelect {
+    NSString *title = NSLocalizedString(@"Tables to Select", @"Tables to Select");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderTableJoins {
+    NSString *title = NSLocalizedString(@"Table Joins", @"Table Joins");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderGroupedBy {
+    SEL selector = @selector(addGroup:);
+    NSString *title = NSLocalizedString(@"Grouped By", @"Grouped By");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderPredicate {
+    SEL selector = @selector(addPredicate:);
+    NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Next to the button to add database tables.");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeader {
+    CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
+    MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:rect];
+    return tableHeader;
 }
 
 @end

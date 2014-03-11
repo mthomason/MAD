@@ -7,6 +7,8 @@
 //
 
 #import "MTDatabaseDriverSelectorViewController.h"
+#import "MTDatabaseDriverSelectorMySqlViewController.h"
+#import "UIDevice+Hack.h"
 
 @implementation MTDatabaseDriverSelectorViewController
 
@@ -42,14 +44,6 @@
         [[segue destinationViewController] setDelegate:self];
 
     }
-}
-
-- (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish:self];
-}
-
-- (IBAction)cancel:(id)sender {
-    [[self delegate] viewControllerDidFinish:self];
 }
 
 - (void)viewControllerDidFinish:(id)sender {
