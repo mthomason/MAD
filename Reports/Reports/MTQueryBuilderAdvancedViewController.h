@@ -7,17 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTQueryBuilderAdvancedSchemaViewController.h"
-#import "MTScrollViewCenter.h"
-#import "MTViewController.h"
 
 @interface MTQueryBuilderAdvancedViewController : UIViewController
-    <UIGestureRecognizerDelegate,
-        UIScrollViewDelegate,
-        UIPopoverControllerDelegate,
-        UICollisionBehaviorDelegate,
-        MTQueryBuilderAdvancedSchemaDelegate,
-        MTViewControllerProtocol>
 
 - (void)reloadActiveDocumentAnimatedAnimated:(BOOL)animated;
 - (void)redraw;

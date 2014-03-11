@@ -9,6 +9,9 @@
 #import "MTQueryBuilderAdvancedViewController.h"
 #import "CGAffineTransform+Common.h"
 #import "UIDevice+Hack.h"
+#import "MTQueryBuilderAdvancedSchemaViewController.h"
+#import "MTScrollViewCenter.h"
+#import "MTViewController.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
@@ -21,6 +24,12 @@ NSString * const MTQueryBuilderAdvancedSchemaViewControllerIdentifier = @"MTQuer
 typedef void(^MTBlockResultVoid)(void);
 
 @interface MTQueryBuilderAdvancedViewController ()
+    <UIGestureRecognizerDelegate,
+        UIScrollViewDelegate,
+        UIPopoverControllerDelegate,
+        UICollisionBehaviorDelegate,
+        MTQueryBuilderAdvancedSchemaDelegate,
+        MTViewControllerProtocol>
 
     @property (nonatomic, assign) BOOL uidynamicsSetup;
 

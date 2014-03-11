@@ -11,14 +11,14 @@
 #import "MTReportViewerController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerViewController.h"
+#import "MTTitleView.h"
+#import "MADWatermarkView.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
 @interface MTViewControllerOpenDocument() <UIAlertViewDelegate, NSFileManagerDelegate>
-
-//@property (nonatomic, retain) MTApplicationInstance *applicationInstance;
 
 @property (nonatomic, retain) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;
@@ -64,7 +64,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)dealloc {
     [_popoverControllerActivity release];
-    //[_applicationInstance release];
     [_reportViewer release];
     [_renameAlertView release];
     [_barButtonItemEditDone release];

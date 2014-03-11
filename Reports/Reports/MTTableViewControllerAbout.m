@@ -8,6 +8,7 @@
 
 #import "MTTableViewControllerAbout.h"
 #import <MessageUI/MessageUI.h>
+#import "MTApplicationInstance.h"
 #import "UIApplication+Extras.h"
 #import "MTViewControllerOpenDocument.h"
 
