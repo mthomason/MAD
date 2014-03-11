@@ -26,6 +26,18 @@
     
 }
 
+- (CGSize)preferredContentSize {
+    CGSize preferredContentSize;
+    if ([UIDevice isPad]) {
+        preferredContentSize = CGSizeMake(540.0000f, 556.0000f);
+        [[self navigationController] setPreferredContentSize:preferredContentSize];
+        [[[self navigationController] view] setNeedsLayout];
+    } else {
+        preferredContentSize = [super preferredContentSize];
+    }
+    return preferredContentSize;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     if ([UIDevice isPad]) {

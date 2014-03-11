@@ -448,7 +448,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 if ([MTApplicationInstance isMadViewer]) {
                     [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
                 } else {
-                    [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 480.0000f)];
+                    [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(540.0000f, 556.0000f)];
                 }
             } else {
                 [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(320.0000f, 320.0000f)];
@@ -532,6 +532,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
                 if ([UIDevice isPad]) {
                     UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+                    [[tabBarController view] setTintColor:[UIColor tintColorRed]];
+
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
                     __block MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
                     [queryBuilderViewController setDelegate:self];
@@ -558,6 +560,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 } else {
                     
                     UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+                    [[tabBarController view] setTintColor:[UIColor tintColorRed]];
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
                     __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
                     

@@ -10,28 +10,15 @@
 
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain) IBOutlet MTTitleView *titleView;
-@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, retain) NSMutableArray *hasFieldsObjectIds;
-
-@property (nonatomic, retain) NSManagedObjectID *cachedTableObjectId;
-@property (nonatomic, retain) IBOutlet UIView *containerView;
+@property (nonatomic, strong) IBOutlet MTTitleView *titleView;
+@property (nonatomic, strong) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, strong) NSMutableArray *hasFieldsObjectIds;
+@property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
 
 @end
 
 @implementation MTQueryBuilderAdvancedSchemaViewController
-
-- (void)dealloc {
-    //[_layoutConstraintX release];
-    //[_layoutConstraintY release];
-    [_cachedTableObjectId release];
-    [_schemaTableViewController release];
-    [_hasFieldsObjectIds release];
-    [_titleView release];
-    [_toolbar release];
-    [_containerView release];
-    [super dealloc];
-}
 
 - (void)setCenter:(CGPoint)center {
     //NSLog(@"Set Center :%@", NSStringFromCGPoint(center));
@@ -67,11 +54,6 @@
     if (self) {
         NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
         [self setHasFieldsObjectIds:hasFieldsObjectIds];
-        [hasFieldsObjectIds release];
-        
-        //NSManagedObjectID *emptyId = [[NSManagedObjectID alloc] init];
-        //[self setCachedTableObjectId:emptyId];
-        //[emptyId release];
     }
     return self;
 }
@@ -79,15 +61,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
         NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
         [self setHasFieldsObjectIds:hasFieldsObjectIds];
-        [hasFieldsObjectIds release];
-
-        //NSManagedObjectID *emptyId = [[NSManagedObjectID alloc] init];
-        //[self setCachedTableObjectId:emptyId];
-        //[emptyId release];
-
     }
     return self;
 }
@@ -110,7 +85,7 @@
 }
 
 - (NSManagedObjectID *)tableObjectId {
-    return [[[self cachedTableObjectId] retain] autorelease];
+    return [self cachedTableObjectId];
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
@@ -173,8 +148,6 @@
         for (RptqQueryField *field in fields) {
             [[self hasFieldsObjectIds] addObject:[field objectID]];
         }
-        [fields release];
-        [namesAccending release];
         
         result = [[self hasFieldsObjectIds] count];
     }

@@ -773,6 +773,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [[blockself2 barButtonItemActivity] setEnabled:YES];
             
             for (UITabBarItem *i in [[[blockself2 tabBarController] tabBar] items]) {
+                
                 [i setEnabled:YES];
             }
             UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];

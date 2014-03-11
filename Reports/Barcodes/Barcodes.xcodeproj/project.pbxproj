@@ -111,8 +111,6 @@
 		4CDA77531825EA1F00E462F6 /* svg.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA77321825EA1F00E462F6 /* svg.c */; };
 		4CDA77541825EA1F00E462F6 /* telepen.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA77331825EA1F00E462F6 /* telepen.c */; };
 		4CDA77551825EA1F00E462F6 /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA77341825EA1F00E462F6 /* upcean.c */; };
-		4CDA77611825EB0200E462F6 /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA77601825EB0200E462F6 /* libm.dylib */; };
-		4CDA77631825EB0D00E462F6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA77621825EB0D00E462F6 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -346,8 +344,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C434B2C18B5F60C00750B6B /* MobileCoreServices.framework in Frameworks */,
-				4CDA77631825EB0D00E462F6 /* libz.dylib in Frameworks */,
-				4CDA77611825EB0200E462F6 /* libm.dylib in Frameworks */,
 				4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */,
 				4C5CB71E189D1A1700BB5AF8 /* libpng.a in Frameworks */,
 			);

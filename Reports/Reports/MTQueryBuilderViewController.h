@@ -18,8 +18,6 @@ extern NSString * const NSFetchedResultsCachePredicates;
 
 @interface MTQueryBuilderViewController : UITableViewController
 
-@property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
-
 @property BOOL debug;
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;

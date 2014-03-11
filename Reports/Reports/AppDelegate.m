@@ -96,8 +96,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     //}
     
     UIColor *titleTextColor = [UIColor tintColor2];
-    NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName : titleTextColor};
+    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : titleTextColor};
 
+    
     [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes
                                              forState:UIControlStateNormal];
     

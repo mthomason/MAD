@@ -45,29 +45,23 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderPredicateFormatDelegate>
 
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
+@property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerTables;
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerLinks;
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerGroups;
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerPredicates;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
 
-@property (nonatomic, retain) UIFont *boldSystemFont;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerTables;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerLinks;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerPredicates;
+
+@property (nonatomic, strong) UIFont *boldSystemFont;
 
 @property (nonatomic, assign) BOOL beganUpdates;
 @property (nonatomic, assign) BOOL toolbarIconShown;
 
 @property (assign) NSInteger lastSelectedRowNumber;
-
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsDocumentGroups;
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsDatasource;
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsTables;
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsLinks;
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsGroups;
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsPredicate;
-@property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsSql;
 
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
@@ -80,40 +74,18 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 @implementation MTQueryBuilderViewController
 
 - (void)dealloc {
-    [_boldSystemFont release];
-    [_barButtonItemShowSQL release];
-    [_barButtonItemEdit release];
-    [_barButtonItemDone release];
-    
-    [_viewTableHeaderQuerySectionsDocumentGroups release];
-    [_viewTableHeaderQuerySectionsDatasource release];
-    [_viewTableHeaderQuerySectionsTables release];
-    [_viewTableHeaderQuerySectionsLinks release];
-    [_viewTableHeaderQuerySectionsGroups release];
-    [_viewTableHeaderQuerySectionsPredicate release];
-    [_viewTableHeaderQuerySectionsSql release];
-
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
-
-    [_fetchedResultsControllerTables release];
-    [_fetchedResultsControllerLinks release];
-    [_fetchedResultsControllerGroups release];
-    [_fetchedResultsControllerPredicates release];
-    
-    [super dealloc];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action {
-    
-}
+- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -132,71 +104,56 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
         [self setToolbarIconShown:NO];
         
-        CGRect headerRect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
-        
-        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-        UIColor *color = [UIColor whiteColor];
-        
-        MTViewTableHeader *viewTableHeaderDocumentGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        [[viewTableHeaderDocumentGroups labelTitle] setText:NSLocalizedString(@"Report Sections", @"Sections")];
-        [[viewTableHeaderDocumentGroups labelTitle] setFont:font];
-        [[viewTableHeaderDocumentGroups buttonAdd] setHidden:YES];
-        [[viewTableHeaderDocumentGroups labelTitle] setTextColor:color];
-        [self setViewTableHeaderQuerySectionsDocumentGroups:viewTableHeaderDocumentGroups];
-        [viewTableHeaderDocumentGroups release];
-        
-        MTViewTableHeader *viewTableHeaderDatasource = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        NSString *datasource = NSLocalizedString(@"Query Datasource", @"Query Datasource");
-        [[viewTableHeaderDatasource labelTitle] setText:datasource];
-        [[viewTableHeaderDatasource labelTitle] setFont:font];
-        [[viewTableHeaderDatasource labelTitle] setTextColor:color];
-        [[viewTableHeaderDatasource buttonAdd] setHidden:YES];
-        [self setViewTableHeaderQuerySectionsDatasource:viewTableHeaderDatasource];
-        [viewTableHeaderDatasource release];
-        
-        MTViewTableHeader *viewTableHeaderTables = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        NSString *queryTables = NSLocalizedString(@"Tables to Select", @"Tables to Select");
-        [[viewTableHeaderTables labelTitle] setText:queryTables];
-        [[viewTableHeaderTables labelTitle] setFont:font];
-        [[viewTableHeaderTables labelTitle] setTextColor:color];
-        [[viewTableHeaderTables buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
-        [self setViewTableHeaderQuerySectionsTables:viewTableHeaderTables];
-        [viewTableHeaderTables release];
-        
-        MTViewTableHeader *viewTableHeaderLinks = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        NSString *queryLinks = NSLocalizedString(@"Table Joins", @"Table Joins");
-        [[viewTableHeaderLinks labelTitle] setText:queryLinks];
-        [[viewTableHeaderLinks labelTitle] setFont:font];
-        [[viewTableHeaderLinks labelTitle] setTextColor:color];
-        [[viewTableHeaderLinks buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
-        [self setViewTableHeaderQuerySectionsLinks:viewTableHeaderLinks];
-        [viewTableHeaderLinks release];
-        
-        MTViewTableHeader *viewTableHeaderGroups = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        [[viewTableHeaderGroups labelTitle] setText:NSLocalizedString(@"Grouped By", @"Grouped By")];
-        [[viewTableHeaderGroups labelTitle] setFont:font];
-        [[viewTableHeaderGroups labelTitle] setTextColor:color];
-        [[viewTableHeaderGroups buttonAdd] addTarget:self action:@selector(addGroup:) forControlEvents:UIControlEventTouchUpInside];
-        [self setViewTableHeaderQuerySectionsGroups:viewTableHeaderGroups];
-        [viewTableHeaderGroups release];
-        
-        MTViewTableHeader *viewTableHeaderPredicate = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        [[viewTableHeaderPredicate labelTitle] setText:NSLocalizedString(@"Having Specified Criteria", @"Next to the button to add database tables.")];
-        [[viewTableHeaderPredicate labelTitle] setFont:font];
-        [[viewTableHeaderPredicate labelTitle] setTextColor:color];
-        [[viewTableHeaderPredicate buttonAdd] addTarget:self action:@selector(addPredicate:) forControlEvents:UIControlEventTouchUpInside];
-        [self setViewTableHeaderQuerySectionsPredicate:viewTableHeaderPredicate];
-        [viewTableHeaderPredicate release];
-        
-        MTViewTableHeader *viewTableHeaderSql = [[MTViewTableHeader alloc] initWithFrame:headerRect];
-        [[viewTableHeaderSql labelTitle] setText:NSLocalizedString(@"Build Query", @"Build Query")];
-        [[viewTableHeaderSql labelTitle] setFont:font];
-        [[viewTableHeaderSql labelTitle] setTextColor:color];
-        [[viewTableHeaderSql buttonAdd] setHidden:YES];
-        [self setViewTableHeaderQuerySectionsSql:viewTableHeaderSql];
-        [viewTableHeaderSql release];
     }
     return self;
+}
+
+- (MTViewTableHeader *)tableHeaderDatabaseInfo {
+    NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] setHidden:YES];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderTablesToSelect {
+    NSString *title = NSLocalizedString(@"Tables to Select", @"Tables to Select");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderTableJoins {
+    NSString *title = NSLocalizedString(@"Table Joins", @"Table Joins");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderGroupedBy {
+    SEL selector = @selector(addGroup:);
+    NSString *title = NSLocalizedString(@"Grouped By", @"Grouped By");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeaderPredicate {
+    SEL selector = @selector(addPredicate:);
+    NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Next to the button to add database tables.");
+    MTViewTableHeader *header = [self tableHeader];
+    [[header labelTitle] setText:title];
+    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    return header;
+}
+
+- (MTViewTableHeader *)tableHeader {
+    CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
+    MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:rect];
+    return tableHeader;
 }
 
 - (void)viewDidLoad {
@@ -212,22 +169,19 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        NSAttributedString *attributedString = [[MTApplicationInstance localizedAttributedApplicationNameMadQuery] retain];
+        NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
         [labelMadDesigner setAttributedText:attributedString];
         [[self navigationItem] setTitleView:labelMadDesigner];
         [[[self navigationItem] titleView] sizeToFit];
-        [attributedString release];
-        [labelMadDesigner release];
     }
     
-    [self setBoldSystemFont:[[[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)] retain] autorelease]];
+    [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
     
     //[self disableUserInteraction];
     
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
     [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
     [self setToolbarItems:toolbarButtons animated:NO];
-    [toolbarButtons release];
 
 }
 
@@ -235,7 +189,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [super viewWillAppear: animated];
     
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-    MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     if (reportDocument) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -245,7 +199,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
 
     if ([self toolbarIconShown] == NO && [self barButtonItemShowSQL] != nil) {   //i.e. iPad version
-        __block MTQueryBuilderViewController *blockSelf = self;
+        __weak MTQueryBuilderViewController *blockSelf = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser) {
                 
@@ -253,7 +207,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 
                 NSMutableArray *toolbarButtons = [[blockSelf toolbarItems] mutableCopy];
                 NSInteger index = [toolbarButtons count] - 1;
-                UIBarButtonItem *barButtonItemFlexableSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+                //UIBarButtonItem *barButtonItemFlexableSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
                 UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
                 [barButtonItemFixedSpace setWidth:20.0000f];
                 [toolbarButtons insertObject:[blockSelf barButtonItemShowSQL] atIndex:index+1];
@@ -262,12 +216,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 
                 
                 [blockSelf setToolbarItems:toolbarButtons animated:animated];
-                [toolbarButtons release];
-                [barButtonItemFlexableSpace release];
             }
         }];
     }
-    [reportDocument release];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -295,15 +246,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {                  // MARK: Prepair to show database drivers.
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
+            UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTDatabaseDriverSelectorViewController class]]) {
-                    MTDatabaseDriverSelectorViewController *tvc = (MTDatabaseDriverSelectorViewController *)[[navControl topViewController] retain];
+                    MTDatabaseDriverSelectorViewController *tvc = (MTDatabaseDriverSelectorViewController *)[navControl topViewController];
                     if (tvc) [tvc setDelegate:self];
-                    [tvc release];
                 }
             }
-            [navControl release];
         }
         [[segue destinationViewController] setDelegate:self];
 
@@ -319,7 +268,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
+            UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
                     
@@ -340,15 +289,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: NSFetchedResultsCacheName];
                     [tvc setFetchedResultsController: frc];
-                    [frc release];
                 }
             }
-            [navControl release];
         }
 
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
+            UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
                     
@@ -358,11 +305,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     }
                 }
             }
-            [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
+            UINavigationController *navControl = [segue destinationViewController];
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
@@ -372,11 +318,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     }
                 }
             }
-            [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
         if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [[segue destinationViewController] retain];
+            UINavigationController *navControl = [segue destinationViewController];
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
                     MTQueryBuilderAddGroupViewController *tvc = (MTQueryBuilderAddGroupViewController *)[navControl topViewController];
@@ -385,7 +330,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     }
                 }
             }
-            [navControl release];
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
                 if ([[segue destinationViewController] isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
@@ -480,7 +424,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
         [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
         [self setBarButtonItemEdit:barButtonItem];
-        [barButtonItem release];
     }
 
     [[self tableView] setEditing: editing];
@@ -522,28 +465,26 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section withNumberOfTables:(NSInteger)numberOfTables {
     MTQuerySections result = section;
     NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
-    NSArray *sectionTypes = [[dataModel objectForKey: MTTableSectionSectionsKey] retain];
+    NSArray *sectionTypes = [dataModel objectForKey: MTTableSectionSectionsKey];
     if ([sectionTypes count] >= section) {
         result = [[sectionTypes objectAtIndex:section] integerValue];
     }
-    [sectionTypes release];
     return result;
 }
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
     MTQuerySections result = sec;
     NSDictionary *datamodel = [self datamodel];
-    NSArray *sectionTypes = [[datamodel objectForKey: MTTableSectionSectionsKey] retain];
+    NSArray *sectionTypes = [datamodel objectForKey: MTTableSectionSectionsKey];
     if ([sectionTypes count] >= sec) {
         result = [[sectionTypes objectAtIndex:sec] integerValue];
     }
-    [sectionTypes release];
     return result;
 }
 
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
     NSInteger result = 0;
-    NSArray *sectionTypes = [[[self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey] retain];
+    NSArray *sectionTypes = [[self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey];
     NSInteger secPos = 0;
     for (NSNumber *num in sectionTypes) {
         if ([num integerValue] == sec) {
@@ -552,7 +493,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         }
         secPos++;
     }
-    [sectionTypes release];
     return result;
 }
 
@@ -682,13 +622,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
 
-    NSDictionary *oldLayout = [[self datamodel] retain];
-    NSArray *oldLayoutSectionTypes = [[oldLayout objectForKey:MTTableSectionSectionsKey] retain];
+    NSDictionary *oldLayout = [self datamodel];
+    NSArray *oldLayoutSectionTypes = [oldLayout objectForKey:MTTableSectionSectionsKey];
     
     RptqQueryTable *newQueryTable = [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
     
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *queryTablesArray = [[[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]] retain];
+    NSArray *queryTablesArray = [[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]];
 
     NSUInteger indexCounter = 0;
     for (RptqQueryTable *queryTable in queryTablesArray) {
@@ -697,15 +637,14 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         }
     }
     
-    [queryTablesArray release];
     
     //NSUInteger indexCounter = [[query hasQueryTables] count] - 1;
     
     NSUInteger sectionPosition = [self sectionPositionForTableSectionType: MTQuerySectionsTables];
-    NSIndexPath *insertedRowIndexPath = [[NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition] retain];
+    NSIndexPath *insertedRowIndexPath = [NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition];
     
-    NSDictionary *newLayout = [[self datamodel] retain];
-    NSArray *newLayoutSectionTypes = [[newLayout objectForKey:MTTableSectionSectionsKey] retain];
+    NSDictionary *newLayout = [self datamodel];
+    NSArray *newLayoutSectionTypes = [newLayout objectForKey:MTTableSectionSectionsKey];
 
     if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
         if ([oldLayoutSectionTypes count] < [newLayoutSectionTypes count]) { //add sections
@@ -762,13 +701,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     [reportDocument quickSave];
 
-    [newLayoutSectionTypes release];
-    [oldLayoutSectionTypes release];
-    [oldLayout release];
-    [newLayout release];
-    [indexSetSections release];
-    [insertedRowIndexPath release];
-    [namesAccending release];
     
 }
 
@@ -784,19 +716,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     MTQuerySections ts = [self tableSectionTypeForIndexPathSection: section];
     
-    NSDictionary *rowsDict = [[[self datamodel] objectForKey: MTTableSectionRowKey] retain];
+    NSDictionary *rowsDict = [[self datamodel] objectForKey: MTTableSectionRowKey];
     NSInteger numberOfRows = 0;
     numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
     if (numberOfRows < 0) {
         switch (ts) {
-            case MTQuerySectionsDocumentGroups: {
-                //The sections are report header, report footer, page header, page footer,
-                //  body, group header, and group footer
-                NSInteger numberOfGroups = [[[self.fetchedResultsControllerGroups sections] objectAtIndex: 0] numberOfObjects];
-                numberOfRows = (2 * numberOfGroups) + 5;
-                //NSLog(@"Section Rows:   %d", numberOfRows);
-                break;
-            }
             case MTQuerySectionsTables: {
                 numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
                 //NSLog(@"Table Rows:     %d", numberOfRows);
@@ -825,7 +749,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 break;
         }
     }
-    [rowsDict release];
 	return numberOfRows;
 }
 
@@ -868,7 +791,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
                     
                     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
-                    NSManagedObjectID *deleatedTableObjectId = [[table objectID] retain];
+                    NSManagedObjectID *deleatedTableObjectId = [table objectID];
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasQueryTablesObject:table];
@@ -909,7 +832,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                             deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
                         }
                     }
-                    [newTableLayout release];
                     
                     
                     [tableView beginUpdates];
@@ -959,18 +881,18 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         if (querySection == MTQuerySectionsLinks) {
                             
                             NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
-                            NSFetchedResultsController *fetchedLinkes = [[self fetchedResultsControllerLinks] retain];
+                            NSFetchedResultsController *fetchedLinkes = [self fetchedResultsControllerLinks];
                             for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
                                 NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
                                 NSError *error = nil;
                                 NSManagedObject *object = nil;
-                                UITableViewCellQueryLink *tableViewCellLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:linkIndexPath] retain];
+                                UITableViewCellQueryLink *tableViewCellLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
                                 if (tableViewCellLink) {
-                                    object = [[[managedObjectContext existingObjectWithID:[tableViewCellLink tableID] error:&error] retain] autorelease];
+                                    object = [managedObjectContext existingObjectWithID:[tableViewCellLink tableID] error:&error];
                                 } else {
                                     NSIndexPath *testLinkIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
                                     
-                                    object = [[[fetchedLinkes objectAtIndexPath:testLinkIndexPath] retain] autorelease];
+                                    object = [fetchedLinkes objectAtIndexPath:testLinkIndexPath];
                                 }
                                 if (!error && object && [object isKindOfClass:[RptqQueryLinks class]]) {
                                     RptqQueryLinks *queryLink = (RptqQueryLinks *)object;
@@ -983,12 +905,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                         [cellsToDelete addObject:linkIndexPath];
                                     }
                                 }
-                                [tableViewCellLink release];
                             }
                             NSError *error = nil;
                             [managedObjectContext save:&error];
 
-                            [fetchedLinkes release];
                             
                         } else if (querySection == MTQuerySectionsGroups) {
                             
@@ -998,13 +918,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                 NSError *error = nil;
                                 NSManagedObject *object = nil;
 
-                                UITableViewCellQueryGroup *tableViewCellGroup = (UITableViewCellQueryGroup *)[[tableView cellForRowAtIndexPath:groupIndexPath] retain];
+                                UITableViewCellQueryGroup *tableViewCellGroup = (UITableViewCellQueryGroup *)[tableView cellForRowAtIndexPath:groupIndexPath];
                                 if (tableViewCellGroup) {
                                     NSError *error = nil;
-                                    object = [[[managedObjectContext existingObjectWithID:[tableViewCellGroup tableID] error:&error] retain] autorelease];
+                                    object = [managedObjectContext existingObjectWithID:[tableViewCellGroup tableID] error:&error];
                                 } else {
                                     NSIndexPath *testGroupIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-                                    object = [[[[self fetchedResultsControllerGroups] objectAtIndexPath:testGroupIndexPath] retain] autorelease];
+                                    object = [[self fetchedResultsControllerGroups] objectAtIndexPath:testGroupIndexPath];
                                 }
                                 if (!error && object && [object isKindOfClass:[RptqQueryGroup class]]) {
                                     RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
@@ -1014,7 +934,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                         [cellsToDelete addObject:groupIndexPath];
                                     }
                                 }
-                                [tableViewCellGroup release];
                             
                             }
                             
@@ -1025,14 +944,14 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                 NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
                                 
 
-                                MTTableViewCellQueryPredicate *tableViewCellPredicate = [(MTTableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:predicateIndexPath] retain] autorelease];
+                                MTTableViewCellQueryPredicate *tableViewCellPredicate = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
                                 NSError *error = nil;
                                 NSManagedObject *object = nil;
                                 if (tableViewCellPredicate) {
-                                    object = [[[managedObjectContext existingObjectWithID:[tableViewCellPredicate tableID] error:&error] retain] autorelease];
+                                    object = [managedObjectContext existingObjectWithID:[tableViewCellPredicate tableID] error:&error];
                                 } else {
                                     NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-                                    object = [[[[self fetchedResultsControllerPredicates] objectAtIndexPath: testPredicateIndexPath] retain] autorelease];
+                                    object = [[self fetchedResultsControllerPredicates] objectAtIndexPath: testPredicateIndexPath];
                                 }
                                 if (!error && object && [object isKindOfClass:[RptqQueryPredicate class]]) {
                                     RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
@@ -1072,16 +991,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     }
                     [tableView endUpdates];
                     
-                    [cellsToDelete release];
 
 
-                    [deleteRows release];
-                    [deleteSections release];
-                    [oldTableLayout release];
 
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
                     
-                    [deleatedTableObjectId release];
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
                     
 
@@ -1090,7 +1004,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
                 // MARK: Delete MTQuerySectionsLinks
                 case MTQuerySectionsLinks: {
-                    UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[[tableView cellForRowAtIndexPath:indexPath] retain];
+                    UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
                     if (tvcLink) {
                         NSManagedObjectID *objid = [tvcLink tableID];
 
@@ -1100,7 +1014,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
                         [reportDocument saveContext];
                     }
-                    [tvcLink release];
                     break;
                 }
                     
@@ -1131,14 +1044,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         }
                         
                         if (groupToRemove) {
-                            NSSet *sectionsToRemove = [[groupToRemove hasSection] retain];
-                            NSArray *sections = [[sectionsToRemove allObjects] retain];
+                            NSSet *sectionsToRemove = [groupToRemove hasSection];
+                            NSArray *sections = [sectionsToRemove allObjects];
                             if ([sections count] == 2) {
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
                             }
-                            [sections release];
-                            [sectionsToRemove release];
                             [managedObjectContext deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
@@ -1166,7 +1077,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 
                 case MTQuerySectionsPredicate: {
 
-                    MTTableViewCellQueryPredicate *tvcPred = (MTTableViewCellQueryPredicate *)[[tableView cellForRowAtIndexPath:indexPath] retain];
+                    MTTableViewCellQueryPredicate *tvcPred = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
                     
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
@@ -1176,7 +1087,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
                         [reportDocument saveContext];
                     }
-                    [tvcPred release];
 
                     break;
                 }
@@ -1202,17 +1112,15 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove {
     if (groupToRemove) {
-        RptqQuery *query = [[groupToRemove inQuery] retain];
-        NSManagedObjectContext *managedObjectContext = [[query managedObjectContext] retain];
+        RptqQuery *query = [groupToRemove inQuery];
+        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
         
-        NSSet *sectionsToRemove = [[groupToRemove hasSection] retain];
-        NSArray *sections = [[sectionsToRemove allObjects] retain];
+        NSSet *sectionsToRemove = [groupToRemove hasSection];
+        NSArray *sections = [sectionsToRemove allObjects];
         if ([sections count] == 2) {
             [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
             [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
         }
-        [sections release];
-        [sectionsToRemove release];
         [[query managedObjectContext] deleteObject: groupToRemove];
         [query removeHasQueryGroupsObject: groupToRemove];
         [managedObjectContext save:nil];
@@ -1227,8 +1135,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             counter++;
         }
         [managedObjectContext save:nil];
-        [query release];
-        [managedObjectContext release];
     }
 }
 
@@ -1273,21 +1179,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     switch (section) {
 
-        // MARK: Display optional instructions about query builder.
-        case MTQuerySectionsDocumentGroups: {
-            static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellInstruction";
-            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
-            NSInteger numberOfGroups = [[[[self fetchedResultsControllerGroups] sections] objectAtIndex: 0] numberOfObjects];
-            NSString *sectionName = [[RptqDocumentSection getDocumentSectionNameForRow: row withNumberOfGroups:numberOfGroups] retain];
-            NSInteger sectionIndentLevel = [RptqDocumentSection getDocumentSectionIndentLevelForRow:row withNumberOfGroups:numberOfGroups];
-            [[(UITableViewCellInstruction *) result labelGroupType] setText:[NSString stringWithFormat:@"%@", sectionName]];
-            [[(UITableViewCellInstruction *) result labelGroupType] setBackgroundColor:[UIColor clearColor]];
-            [[(UITableViewCellInstruction *) result labelGroupType] setFont:[self boldSystemFont]];
-            [(UITableViewCellInstruction *) result setIndentationLevel: (sectionIndentLevel+1)];
-            [sectionName release];
-            break;
-        }
-
         // MARK: Display and identify the data source and data sources
         case MTQuerySectionsDatasource: {
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
@@ -1298,9 +1189,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[reportDocument managedObjectContext]];
             
             if (connections) {
-                [connections retain];
                 if ([connections count] >= 1) {
-                    RptqUserCredentals *connection = [[connections objectAtIndex: 0] retain];
+                    RptqUserCredentals *connection = [connections objectAtIndex: 0];
                     
                     NSString *databaseType = [NSString stringWithFormat:@"%@", [connection database_driver_type]];
                     NSString *schemaName = [connection databaseSchemaName];
@@ -1323,10 +1213,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     [[result textLabel] setAttributedText:messageAttributed];
                     //[[result textLabel] setFont:font];
                     [[result detailTextLabel] setText:@""];
-                    [connection release];
-                    [messageAttributed release];
                 }
-                [connections release];
             }
             [[result textLabel] setNumberOfLines:2];
             break;
@@ -1336,14 +1223,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         case MTQuerySectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
-            RptqQueryTable *tablea = [[[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]] retain];
+            RptqQueryTable *tablea = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             [[resultR textLabel] setText: [NSString stringWithFormat:@"%@", [tablea alias]]];
             [[resultR textLabel] setFont: font];
             
             [[resultR textLabel] setBackgroundColor:[UIColor clearColor]];
             [resultR setIndentationLevel: 1];
-            [tablea release];
             result = resultR;
             break;
         }
@@ -1382,8 +1268,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
             [message addAttributes:attributesAlt range:rangeLinkDesc];
             [[result textLabel] setAttributedText: message];
-            [message release];
-            [paragraphStyle release];
 
             break;
         }
@@ -1418,9 +1302,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [[result textLabel] setText:messageText];
             [[result textLabel] setAttributedText:message];
             [[result textLabel] setNumberOfLines:2];
-            [paragraphStyleLeft release];
-            [paragraphStyleRight release];
-            [message release];
             [(UITableViewCellQueryGroup *)result setTableID:[group objectID]];
             break;
         }
@@ -1454,8 +1335,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSDictionary *attributesCaption = @{ NSForegroundColorAttributeName :  color };
 
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
-            //NSRange rangeLeft = [messageText rangeOfString:leftFieldDisplay];
-            //NSRange rangeRight = [messageText rangeOfString:rightFieldDisplay];
             NSRange rangeMiddle = [messageText rangeOfString:symbol];
             [[result textLabel] setNumberOfLines:2];
             [message addAttributes:attributesCaption range:rangeMiddle];
@@ -1489,7 +1368,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
     
     if (!result) {
-        result = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DefaultCellShouldNotGetHere"] autorelease];
+        result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DefaultCellShouldNotGetHere"];
         [[result textLabel] setText: @"Err"];
     }
 
@@ -1503,46 +1382,37 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     section = [self tableSectionTypeForIndexPathSection: section];
     
     switch (section) {
-        case MTQuerySectionsDocumentGroups: {
-            
-            result = [self viewTableHeaderQuerySectionsDocumentGroups];
-            break;
-        }
             
         case MTQuerySectionsDatasource: {
-            result = [self viewTableHeaderQuerySectionsDatasource];
+            result = [self tableHeaderDatabaseInfo];
             break;
         }
             
         case MTQuerySectionsTables: {
-            result = [self viewTableHeaderQuerySectionsTables];
+            result = [self tableHeaderTablesToSelect];
             break;
         }
             
         case MTQuerySectionsLinks: {
-            result = [self viewTableHeaderQuerySectionsLinks];
+            result = [self tableHeaderTableJoins];
             break;
         }
             
         case MTQuerySectionsGroups: {
-            result = [self viewTableHeaderQuerySectionsGroups];
+            result = [self tableHeaderGroupedBy];
             break;
         }
             
         case MTQuerySectionsPredicate: {
-            result = [self viewTableHeaderQuerySectionsPredicate];
-            break;
-        }
-        case MTQuerySectionsSql: {
-            result = [self viewTableHeaderQuerySectionsSql];
+            result = [self tableHeaderPredicate];
             break;
         }
         default: {
-            result = [self viewTableHeaderQuerySectionsDatasource];
+            result = [self tableHeaderDatabaseInfo];
             break;
         }
     }
-    return [[result retain] autorelease];
+    return result;
 }
 
 
@@ -1551,12 +1421,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
-    if (section == MTQuerySectionsDocumentGroups && [UIDevice isPad] == NO) {
-        [self setLastSelectedRowNumber: [indexPath row]];
-        [self performSegueWithIdentifier:MNSIdentifierSegueShowLayoutSettings sender:self];
-    }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath { }
@@ -1610,8 +1474,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     if (reportDocument) {
         
-        [reportDocument retain];
-        NSManagedObjectContext *managedObjectContext = [[reportDocument managedObjectContext] retain];
+        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         
         {
             
@@ -1632,7 +1495,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [frc setDelegate:self];
             [self setFetchedResultsControllerTables: frc];
             [self performFetchTables];
-            [frc release];
             frc = nil;
         }
         
@@ -1648,7 +1510,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [frc setDelegate:self];
             [self setFetchedResultsControllerLinks: frc];
             [self performFetchLinks];
-            [frc release];
             frc = nil;
         }
         
@@ -1664,7 +1525,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [frc setDelegate:self];
             [self setFetchedResultsControllerGroups: frc];
             [self performFetchGroups];
-            [frc release];
             frc = nil;
             
         }
@@ -1682,29 +1542,21 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [frc setDelegate:self];
             [self setFetchedResultsControllerPredicates: frc];
             [self performFetchPredicate];
-            [frc release];
-            [sortDescriptor release];
-            [sortDescriptors release];
-            [request release];
             frc = nil;
         }
-        [managedObjectContext release];
-        [reportDocument release];
         [[self tableView] reloadData];
     }
 
 }
 
 - (NSMutableDictionary *)datamodel {
-
-    
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
     NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForDocument:document];
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
-    return [result autorelease];
+    return result;
 }
 
 - (NSDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
@@ -1821,13 +1673,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     } else if ([controller isEqual:[self fetchedResultsControllerGroups]]) {
 
-        NSInteger sectionDocumentGroup = [self sectionPositionForTableSectionType: MTQuerySectionsDocumentGroups];
         NSInteger sectionGroup = [self sectionPositionForTableSectionType: MTQuerySectionsGroups];
-        NSNumber *numberSectionDocumentGroup = @(sectionDocumentGroup);
-        NSNumber *numberSectionDocumentGroup2 = @(sectionDocumentGroup);
         NSNumber *numberSectionGroup = @(sectionGroup);
-        [result addObject: numberSectionDocumentGroup]; //Once for group header settings
-        [result addObject: numberSectionDocumentGroup2]; //Once for group footer settings
         [result addObject: numberSectionGroup];
     
     } else if ([controller isEqual:[self fetchedResultsControllerPredicates]]) {
@@ -1837,7 +1684,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [result addObject: sectionNumber];
     }
     
-    return [result autorelease];
+    return result;
 
 }
 
@@ -1847,7 +1694,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 	 forChangeType: (NSFetchedResultsChangeType)type {
 
     
-    NSMutableArray *sections = [[self sectionsUsedByFetchedResultsController: controller] retain];
+    NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
     for (NSNumber *section in sections) {
         MTQuerySections updateSection = [section integerValue];
@@ -1867,7 +1714,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     }
     
-    [sections release];
 }
 
 
@@ -1875,16 +1721,15 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 	   atIndexPath: (NSIndexPath *)indexPath forChangeType: (NSFetchedResultsChangeType)type
 	  newIndexPath: (NSIndexPath *)newIndexPath {
     
-    NSMutableArray *sections = [[self sectionsUsedByFetchedResultsController: controller] retain];
+    NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];
     
     for (NSNumber *section in sections) {
         MTQuerySections updateSection = [section integerValue];
         
         NSIndexPath *path = [NSIndexPath indexPathForRow: [indexPath row]
                                                inSection: updateSection];
-        
         if (path) {
-            if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+            if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
                         [[self tableView] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
@@ -1912,55 +1757,34 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
     }
-    [sections release];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    if (self.beganUpdates) [[self tableView] endUpdates];
-    [self setBeganUpdates:NO];
-}
-
-- (void)endSuspensionOfUpdatesDueToContextChanges {
-    _suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
-}
-
-- (void)setSuspendAutomaticTrackingOfChangesInManagedObjectContext:(BOOL)suspend {
-    if (suspend) {
-        _suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
-    } else {
-        SEL selEndSuspensionOfUpdates = @selector(endSuspensionOfUpdatesDueToContextChanges);
-        [self performSelector:selEndSuspensionOfUpdates withObject:0 afterDelay:0];
+    if ([self beganUpdates]) {
+        [[self tableView] endUpdates];
     }
+    [self setBeganUpdates:NO];
 }
 
 #pragma mark - Fetching
 
 - (void)performFetchTables {
-    NSFetchedResultsController *controller = [self fetchedResultsControllerTables];
-    if (controller) {
-        [controller performFetch:nil];
-    }
-    [[self tableView] reloadData];
+    [self performFetchWithController:[self fetchedResultsControllerTables]];
 }
 
 - (void)performFetchLinks {
-    NSFetchedResultsController *controller = [self fetchedResultsControllerLinks];
-    if (controller) {
-        [controller performFetch:nil];
-    }
-    [[self tableView] reloadData];
+    [self performFetchWithController:[self fetchedResultsControllerLinks]];
 }
 
 - (void)performFetchGroups {
-    NSFetchedResultsController *controller = [self fetchedResultsControllerGroups];
-    if (controller) {
-        [controller performFetch:nil];
-    }
-    [[self tableView] reloadData];
+    [self performFetchWithController:[self fetchedResultsControllerGroups]];
 }
 
 - (void)performFetchPredicate {
-    NSFetchedResultsController *controller = [self fetchedResultsControllerPredicates];
+    [self performFetchWithController:[self fetchedResultsControllerPredicates]];
+}
+
+- (void)performFetchWithController:(NSFetchedResultsController *)controller {
     if (controller) {
         [controller performFetch:nil];
     }
