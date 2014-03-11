@@ -7,12 +7,23 @@
 //
 
 #import "MTQueryBuilderViewController.h"
-//#import "AppDelegate.h"
-//#import "MTClipboardView.h"
-//#import "RptqDocument+ActiveDocument.h"
+#import "MTQueryBuilderAddTableViewController.h"
+#import "MTQueryBuilderAddGroupViewController.h"
+#import "MTQueryBuilderPredicateFormatViewController.h"
+#import "UITableViewCellInstruction.h"
+#import "UITableViewCellTableName.h"
+#import "UITableViewCellQueryLink.h"
+#import "UITableViewCellOverride.h"
+#import "UITableViewCellQueryInput.h"
+#import "UITableViewCellQueryGroup.h"
+#import "MTTableViewCellQueryPredicate.h"
+#import "MTDatabaseDriverSelectorViewController.h"
+#import "MTQueryBuilderLinkBuilderViewController.h"
+#import "MTReportDesignerViewController.h"
+#import "MTViewTableHeader.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
-NSString * const MTSegueCloseDesigner = @"MTSegueCloseDesigner";
-
+NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
 NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
 NSString * const NSFetchedResultsCacheLinks         = @"NSFetchedResultsCacheLinks";
@@ -22,8 +33,18 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark - Private Category
 
 @interface MTQueryBuilderViewController()
+    <UITableViewDataSource,
+        UITableViewDelegate,
+        NSFetchedResultsControllerDelegate,
+        MTQueryBuilderAddLinkFirstTableDelegate,
+        MTQueryBuilderAddTableDelegate,
+        MTQueryBuilderAddGroupDelegate,
+        MTViewControllerProtocol,
+        MTQueryBuilderLinkBuilderDelegate,
+        MTViewControllerProtocol,
+        MTReportDesignerSectionLayoutSettingsDelegate,
+        MTQueryBuilderPredicateFormatDelegate>
 
-//@property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
@@ -36,6 +57,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 @property (nonatomic, retain) UIFont *boldSystemFont;
 
 @property (nonatomic, assign) BOOL beganUpdates;
+@property (nonatomic, assign) BOOL toolbarIconShown;
 
 @property (assign) NSInteger lastSelectedRowNumber;
 
@@ -47,7 +69,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 @property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsPredicate;
 @property (nonatomic, retain) MTViewTableHeader *viewTableHeaderQuerySectionsSql;
 
-@property (nonatomic, assign) BOOL toolbarIconShown;
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
@@ -1475,10 +1496,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return result;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 
     MTViewTableHeader *result = nil;
@@ -1542,17 +1559,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-	
-}
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 29.0000f;
@@ -1583,13 +1594,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return NSLocalizedString(@"Remove", @"Remove button title.");
  }
 
-- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 #pragma mark - NSFetchedResultsSetup
 
@@ -1905,13 +1912,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
     }
-    
     [sections release];
-    //[sections enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-
-    //    NSNumber *section = obj;
-        
-    //}];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
@@ -1927,7 +1928,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     if (suspend) {
         _suspendAutomaticTrackingOfChangesInManagedObjectContext = YES;
     } else {
-        [self performSelector:@selector(endSuspensionOfUpdatesDueToContextChanges) withObject:0 afterDelay:0];
+        SEL selEndSuspensionOfUpdates = @selector(endSuspensionOfUpdatesDueToContextChanges);
+        [self performSelector:selEndSuspensionOfUpdates withObject:0 afterDelay:0];
     }
 }
 

@@ -7,21 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTQueryBuilderAddTableViewController.h"
-#import "MTQueryBuilderAddGroupViewController.h"
-#import "MTQueryBuilderPredicateFormatViewController.h"
-#import "UITableViewCellInstruction.h"
-#import "UITableViewCellTableName.h"
-#import "UITableViewCellQueryLink.h"
-#import "UITableViewCellOverride.h"
-#import "UITableViewCellQueryInput.h"
-#import "UITableViewCellQueryGroup.h"
-#import "MTTableViewCellQueryPredicate.h"
-#import "MTDatabaseDriverSelectorViewController.h"
-#import "MTQueryBuilderLinkBuilderViewController.h"
-#import "MTReportDesignerViewController.h"
-#import "MTViewTableHeader.h"
-#import "MTStoreKitController+NonRenewableLicensing.h"
+
+@class MAReportDocument;
 
 extern NSString * const NSFetchedResultsCacheName;
 extern NSString * const NSFetchedResultsCacheTables;
@@ -30,17 +17,6 @@ extern NSString * const NSFetchedResultsCacheGroups;
 extern NSString * const NSFetchedResultsCachePredicates;
 
 @interface MTQueryBuilderViewController : UITableViewController
-    <UITableViewDataSource,
-        UITableViewDelegate,
-        NSFetchedResultsControllerDelegate,
-        MTQueryBuilderAddLinkFirstTableDelegate,
-        MTQueryBuilderAddTableDelegate,
-        MTQueryBuilderAddGroupDelegate,
-        MTViewControllerProtocol,
-        MTQueryBuilderLinkBuilderDelegate,
-        MTViewControllerProtocol,
-        MTReportDesignerSectionLayoutSettingsDelegate,
-        MTQueryBuilderPredicateFormatDelegate>
 
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 

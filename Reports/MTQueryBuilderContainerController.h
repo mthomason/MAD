@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderViewController.h"
 #import "MTQueryBuilderAdvancedViewController.h"
+#import "MTViewControllerAsyncProtocol.h"
 
 @interface MTQueryBuilderContainerController : MTViewController
     <MTViewControllerProtocol>

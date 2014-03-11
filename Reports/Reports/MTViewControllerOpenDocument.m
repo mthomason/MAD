@@ -8,6 +8,9 @@
 
 #import "MTViewControllerOpenDocument.h"
 #import "UAAppReviewManager.h"
+#import "MTReportViewerController.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
+#import "MTReportDesignerViewController.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
