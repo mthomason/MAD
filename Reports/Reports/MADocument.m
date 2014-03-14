@@ -291,38 +291,54 @@ NSString * MTDocumentParentContextName          = @"moc";
     }
 }
 
+- (NSURL *)storeUrlForContext:(NSManagedObjectContext *)managedObjectContext {
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = [managedObjectContext persistentStoreCoordinator];
+    NSArray *persistentStores = [persistentStoreCoordinator persistentStores];
+    NSPersistentStore * lastPersistentStoreCoordinator = [persistentStores lastObject];
+    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:lastPersistentStoreCoordinator];
+    return storeURL;
+}
+
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
     
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
+        NSURL *fileURL = [self fileURL];
         NSError *deleteError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:[self fileURL] includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: fileURL
+                                              includingPropertiesForKeys: @[NSURLIsDirectoryKey]
+                                                                 options: -1
+                                                            errorHandler: ^BOOL(NSURL *url, NSError *error) {
             return YES;
         }];
         for (NSURL *file in enumerator) {
             NSError *error = nil;
             [fileManager removeItemAtURL:file error:&error];
         }
-        [[NSFileManager defaultManager] removeItemAtURL:[self fileURL] error:&deleteError];
+        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
         if (deleteError != nil) {
             MTLog(@"%@", deleteError);
         }
-        
         completion(YES);
     };
 
     NSAssert([self documentState] == UIDocumentStateClosed, @"Document must be closed to call this!");
 
     NSError *error;
+    
     // retrieve the store URL
-    NSURL * storeURL = [[[self managedObjectContext] persistentStoreCoordinator] URLForPersistentStore:[[[[self managedObjectContext] persistentStoreCoordinator] persistentStores] lastObject]];
-    // lock the current context
-    [[self managedObjectContext] lock];
-    [[self managedObjectContext] reset];//to drop pending changes
+    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = [managedObjectContext persistentStoreCoordinator];
+    NSArray *persistentStores = [persistentStoreCoordinator persistentStores];
+    NSPersistentStore *persistentStore = [persistentStores lastObject];
+    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
+
+    [managedObjectContext lock];
+    [managedObjectContext reset];//to drop pending changes
+    
     //delete the store from the current managedObjectContext
-    if ([[[self managedObjectContext] persistentStoreCoordinator] removePersistentStore:[[[[self managedObjectContext] persistentStoreCoordinator] persistentStores] lastObject] error:&error])
-    {
-        // remove the file containing the data
+    BOOL success = [persistentStoreCoordinator removePersistentStore:persistentStore error:&error];
+    if (success) {
         
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
         //recreate the store like in the  appDelegate method
@@ -330,9 +346,9 @@ NSString * MTDocumentParentContextName          = @"moc";
         NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
                                    NSInferMappingModelAutomaticallyOption : @YES};
         
-        [[[self managedObjectContext] persistentStoreCoordinator] addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
+        [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
     }
-    [[self managedObjectContext] unlock];
+    [managedObjectContext unlock];
 
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
@@ -355,7 +371,7 @@ NSString * MTDocumentParentContextName          = @"moc";
                 MTLog(@"Error %@", error);
             }
         }
-        [[NSFileManager defaultManager] removeItemAtURL:blockFileUrl error:&deleteError];
+        [fileManager removeItemAtURL:blockFileUrl error:&deleteError];
         if (deleteError != nil) {
             MTLog(@"%@", deleteError);
         }

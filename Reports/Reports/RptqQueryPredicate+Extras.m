@@ -122,13 +122,6 @@
 
 }
 
-+ (void)deletePredicateWithID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
-    if (result) {
-        [managedObjectContext deleteObject: result];
-    }
-}
-
 + (void)deletePredicate:(RptqQueryPredicate *)predicate {
     if (predicate) {
         NSManagedObjectContext *objectContext = [[predicate managedObjectContext] retain];

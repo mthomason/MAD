@@ -420,15 +420,12 @@ mkdir -p media;
 #
 
 download_archive $archive_glib      $archive_glib_base_url
-download_archive $archive_unixodbc  $archive_unixodbc_base_url
 download_archive $archive_classpath $archive_classpath_base_url
 download_archive $archive_openssl   $archive_openssl_base_url
 download_archive $archive_mysql     $archive_mysql_base_url
 download_archive $archive_freetds   $archive_freetds_base_url
 download_archive $archive_zint      $archive_zint_base_url
 download_archive $archive_png       $archive_png_base_url
-download_archive $archive_autoconf  $archive_autoconf_base_url
-download_archive $archive_automake  $archive_automake_base_url
 
 cd "${path_base}"
 
@@ -440,13 +437,69 @@ counter_arch=0
 
 platform="iphoneos"
 
-#
-# Libffi - Required by Glib
-#
-
 readonly config_debug="Debug"
 readonly config_release="Release"
 readonly command_lipo_create="lipo -create "
+
+#
+# Gettext - Required by Glib
+#   Unused way to (maybe) cross compile gettext.  Why?  Becuse, fuck it.
+#
+
+build_gettext_static_ios() {
+
+    download_archive $archive_gettext  $archive_gettext_base_url
+
+    echo "Building gettext."
+
+    command_lipo_gettext="${command_lipo_create}"
+
+    for arch in ${archs}
+    do
+
+        platform=$( platform_for_architecture arch )
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_gettext_arch="${path_library_gettext}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_gettext_arch}"
+        rm -rf -- "${path_build_gettext_arch}"
+        mkdir -p "${path_build_gettext_arch}"
+        tar zxf ${path_media_gettext} -C ${path_build_gettext_arch}
+
+        log_build_gettext="${path_build_gettext_arch}/build-gettext-${version_gettext}-${arch}.log"
+        > "$log_build_gettext"
+
+        prepp="${path_library}/gettext/$platform_version_arch.sdk/${archive_name_gettext}"
+        cd "${prepp}"
+
+        extract_source $path_media_gettext $path_build_gettext_arch &
+        spinner $!
+
+        cd "${prepp}"
+
+        additional_config="--enable-gui=no "
+
+        printf "Build path %s.\n" "$path_build_gettext_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_gettext"
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_gettext
+
+    done
+}
+
+path_library_gettext="${path_library}/gettext"
+
+if [[ $build_gettext == $true && $show_help == $false ]]; then
+
+    build_gettext_static_ios
+fi
+
+#
+# Libffi - Required by Glib
+#
 
 build_libffi_static_ios() {
 
@@ -522,12 +575,16 @@ if [[ $build_libffi == $true && $show_help == $false ]]; then
 fi
 
 #
-# Autoconf - Required by Glib
+# Automake - Required by Glib
+#   Unused way to (maybe) cross compile automake.  Why?  Becuse, fuck it.
 #
 
 path_library_automake="${path_library}/automake"
 
 if [[ $build_automake == $true && $show_help == $false ]]; then
+
+    download_archive $archive_automake  $archive_automake_base_url
+
 
     echo "Building Automake."
 
@@ -570,13 +627,15 @@ if [[ $build_automake == $true && $show_help == $false ]]; then
 fi
 
 #
-# Automake - Required by Glib
+# Autoconf - Required by Glib
+#   Unused way to (maybe) cross compile automake.  Why?  Becuse, fuck it.
 #
 
 path_library_autoconf="${path_library}/autoconf"
 
 if [[ $build_autoconf == $true && $show_help == $false ]]; then
 
+    download_archive $archive_autoconf  $archive_autoconf_base_url
     echo "Building Automake."
 
     command_lipo_autoconf="${command_lipo_create}"
@@ -616,7 +675,6 @@ if [[ $build_autoconf == $true && $show_help == $false ]]; then
 
     done
 fi
-
 
 #
 # Glib - Required by Classpath
@@ -707,11 +765,17 @@ if [[ $build_glib == $true && $show_help == $false ]]; then
         spinner $!
 
         cd "${path_source_glib}"
-pwd
+        pwd
 
-sh ./autogen.sh
+        export LIBFFI_CFLAGS="-I${path_library}/libffi/include"
+        export LIBFFI_LIBS="-L${path_library}/libffi -lffi"
 
-additional_config="--enable-gui=no "
+        sh ./autogen.sh
+
+        echo "Autoget success"
+        echo exit 0
+
+        additional_config="--enable-gui=no "
 
 
 #SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
@@ -720,7 +784,6 @@ additional_config="--enable-gui=no "
 #       additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
 #additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--cache-file=Library/Caches/odbc--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
 
-        printf "Build path %s.\n" "$path_build_glib_arch"
 
         config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_glib_arch $log_build_glib
 
@@ -799,13 +862,16 @@ fi
 # UnixODBC
 #
 # This is not useful on iOS, because its only purpose is to load
-#   dynamic libraries.
+#   dynamic libraries.  Dynamic libs are not used on iOS.  Mostly
+#   untested.
 #
 
 path_library_unixodbc="${path_library}/UnixODBC"
 
 if [[ $build_unixodbc == $true && $show_help == $false ]]; then
     echo "Building Unixodbc."
+    download_archive $archive_unixodbc  $archive_unixodbc_base_url
+
 
     command_lipo_unixodbc="${command_lipo_create}"
 
@@ -844,20 +910,11 @@ if [[ $build_unixodbc == $true && $show_help == $false ]]; then
 
         cd "${path_source_unixodbc}"
 
-#SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
-#echo $SKDROOT
         command_lipo_unixodbc="${command_lipo_unixodbc} ${path_build_unixodbc}/libodbc.a"
         additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-#additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--cache-file=Library/Caches/odbc--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-
         printf "Build path %s.\n" "$path_build_unixodbc_arch"
 
         config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_unixodbc_arch $log_build_unixodbc
-
-
-        #config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_tds_arch $log_build_tds $additional_work
-
-
 
     done
 

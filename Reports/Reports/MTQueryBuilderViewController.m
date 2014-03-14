@@ -1011,8 +1011,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         NSManagedObjectID *objid = [tvcPred tableID];
                         MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
                         MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-                        [RptqQueryPredicate deletePredicateWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
+                        NSManagedObject *predicate = [[reportDocument managedObjectContext] objectRegisteredForID:objid];
+                        [[reportDocument managedObjectContext] deleteObject:predicate];
                         [reportDocument saveContext];
                     }
 
