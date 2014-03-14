@@ -10,6 +10,9 @@ set -e
 
 readonly path_base=$( pwd )
 
+readonly true=0
+readonly false=1
+
 case $path_base in # Check if current path contains whitespace.
    *\ * )
    printf "ABORT: Current path has whitespace.\n"
@@ -19,8 +22,10 @@ case $path_base in # Check if current path contains whitespace.
 
 print_help() {
    printf "  %s\n"  "Usage: compressor [options] ..."
-   printf "  %s\n" "--autoconf               Build Autoconf.\n"
-#  printf "  %s\n" "--unixodbc               Build UnixODBC.\n"
+#  printf "  %s\n" "--autoconf               Build Autoconf.\n" #Only needed on local machine
+#  printf "  %s\n" "--automake               Build Automake.\n" #Only needed on local machine
+#  printf "  %s\n" "--unixodbc               Build UnixODBC.\n" #Not useful on iOS, becuase dynamic loading
+   printf "  %s\n" "--libffi                 Build Libffi.\n"
    printf "  %s\n" "--glib                   Build Glib.\n"
    printf "  %s\n" "--classpath              Build Classpath.\n"
    printf "  %s\n" "--openssl                Build OpenSSL.\n"
@@ -30,16 +35,151 @@ print_help() {
    printf "  %s\n" "-h,--help                Show help.\n"
 }
 
+build_openssl=$false
+build_png=$false
+build_mysql=$false
+build_mysql_ios7=$false
+build_tds=$false
+build_zint=$false
+build_unixodbc=$false
+build_glib=$false
+build_classpath=$false
+build_autoconf=$false
+build_automake=$false
+build_libffi=$false
+show_help=$false
+
+#
+# Process flags
+#
+
+if [[ $# == 0 ]];
+then
+   show_help=$true
+else
+   show_help=$false
+fi
+
+while [[ $# > 0 ]]
+do
+    key="$1"
+    shift
+
+    case $key in
+
+        --libffi)
+            build_libffi=$true;;
+
+        --autoconf)
+            build_autoconf=$true;;
+
+        --automake)
+            build_automake=$true;;
+
+        --glib)
+            build_glib=$true;;
+
+        --classpath)
+            build_classpath=$true;;
+
+      #don't build unixodbc for iOS, lol
+        --unixodbc)
+            build_unixodbc=$false;;
+
+        --openssl)
+            build_openssl=$true;;
+
+        --libpng)
+            build_png=$true;;
+
+        --mysqlold)
+            build_mysql=$true;;
+
+        --mysql)
+            build_mysql_ios7=$true;;
+
+        --freetds)
+            build_tds=$true;;
+
+        --zint)
+            build_zint=$true;;
+
+        --help | -h)
+            show_help=$true;;
+
+        esac
+done
+
+if [ $show_help == $true ];
+then
+    print_help
+    exit 0
+fi
+
+
+version_for_platform() {
+    local version=$( xcodebuild -version -sdk "${1}" SDKVersion 2>/dev/null )
+    printf "%s" "${version}"
+}
+
+spinner() {
+   local pid=$1
+   local delay=0.66
+   local spinstr='|/-\'
+   while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+      local temp=${spinstr#?}
+      local s=$(printf " [%c]  " "$spinstr")
+      printf "%s" "$s"
+      local spinstr=$temp${spinstr%"$temp"}
+      sleep $delay
+      printf "\b\b\b\b\b\b"
+   done
+   printf "    \b\b\b\b"
+}
+
+print_building() {
+   printf "Building %s version %s for architecture %s.\n" "$1" "$2" "$3"
+}
+
+platform_for_architecture() {
+   local architecture=$1
+   local result="iPhoneOS"
+   if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
+   then
+      result="iPhoneSimulator"
+   fi
+   echo $result
+}
+
+download_archive() { # $1=archive name; $2=archive url
+   if [ ! -e media/${1} ]; then
+      printf "\n\nDownloading %s from %s.\n" "${1}" "${2}"
+      cd media && { curl -L -O ${2}${1} ; cd - ; }
+   fi
+}
+
+extract_source() {
+    local archive=$1
+    local destination=$2
+    printf "Extracting %s\n\t\tto %s.\n" $archive $destination
+    rm -rf -- "${destination}"
+    mkdir -p "${destination}"
+    tar zxf ${archive} -C ${destination}
+}
+
+empty_directory() {
+    local directory=$1
+    mkdir -p "${directory}"
+    rm -rf -- "${directory}"
+    mkdir -p "${directory}"
+}
+
 #
 # Globals
 #
 
-readonly true=0
-readonly false=1
-
 readonly version_openssl="1.0.1f"
 readonly version_mysql="6.1.3"
-#readonly version_freetds="stable"
 readonly version_freetds="0.91"
 readonly version_tds=7.1
 readonly version_zint="2.4.2"
@@ -48,21 +188,29 @@ readonly version_unixodbc="2.3.2"
 readonly version_classpath="0.98"
 readonly version_glib="2.38.2"
 readonly version_autoconf="2.69"
+readonly version_automake="1.14"
+readonly version_libffi="3.0.14RC0"
 
 readonly version_mysql_6_0="6.0.2"  #do not change
 readonly version_mysql_6_1="6.1.3"
 
-readonly version_macosx=$( xcodebuild -version -sdk macosx SDKVersion 2>/dev/null )
-readonly version_ios=$( xcodebuild -version -sdk iphoneos SDKVersion 2>/dev/null )
-readonly version_ios_min=$version_ios
-
 readonly platform_iphoneos="iphoneos"
 readonly platform_simulator="iphonesimulator"
 readonly platform_macosx="macosx"
+
+readonly platforms="${platform_iphoneos} ${platform_simulator} ${platform_macosx}"
+
+readonly path_xcode=$( xcode-select -print-path )
+
+readonly version_macosx=$( version_for_platform $platform_macosx )
+readonly version_ios=$( version_for_platform $platform_iphoneos )
+
+readonly version_ios_min="6.0"
+
 readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
-readonly archs="armv7 i386 armv7s arm64 x86_64"
+readonly archs="armv7 armv7s arm64 i386 x86_64"
 readonly archs_macosx="i386 x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
@@ -74,6 +222,10 @@ readonly archive_openssl="${archive_name_openssl}.tar.gz"
 readonly archive_autoconf_base_url="http://ftp.gnu.org/gnu/autoconf/"
 readonly archive_name_autoconf="autoconf-${version_autoconf}"
 readonly archive_autoconf="${archive_name_autoconf}.tar.gz"
+
+readonly archive_automake_base_url="http://ftp.gnu.org/gnu/automake/"
+readonly archive_name_automake="automake-${version_automake}"
+readonly archive_automake="${archive_name_automake}.tar.gz"
 
 readonly archive_glib_base_url="https://git.gnome.org/browse/glib/snapshot/"
 readonly archive_name_glib="glib-${version_glib}"
@@ -122,6 +274,7 @@ readonly path_build_unixodbc="${path_build}/unixodbc"
 readonly path_build_classpath="${path_build}/classpath"
 readonly path_build_glib="${path_build}/glib"
 readonly path_build_autoconf="${path_build}/autoconf"
+readonly path_build_automake="${path_build}/automake"
 
 readonly path_media_ssl="$path_media/$archive_openssl"
 readonly path_media_mysql="$path_media/$archive_mysql"
@@ -132,145 +285,15 @@ readonly path_media_unixodbc="$path_media/$archive_unixodbc"
 readonly path_media_classpath="$path_media/$archive_classpath"
 readonly path_media_glib="$path_media/$archive_glib"
 readonly path_media_autoconf="$path_media/$archive_autoconf"
+readonly path_media_automake="$path_media/$archive_automake"
+
+readonly additional_config_blank="--empty-config=remove"
 
 readonly path_gcc=$( xcrun -find gcc )
 readonly path_clang=$( xcrun -find clang )
 
-build_openssl=$false
-build_png=$false
-build_mysql=$false
-build_mysql_ios7=$false
-build_tds=$false
-build_zint=$false
-build_unixodbc=$false
-build_glib=$false
-build_classpath=$false
-build_autoconf=$false
-show_help=$false
-
-#
-# Functions
-#
-
 formatting_divider="####################"
 formatting_divider=$formatting_divider$formatting_divider$formatting_divider$formatting_divider
-
-spinner() {
-   local pid=$1
-   local delay=0.66
-   local spinstr='|/-\'
-   while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-      local temp=${spinstr#?}
-      s=$(printf " [%c]  " "$spinstr")
-      printf "%s" "$s"
-      local spinstr=$temp${spinstr%"$temp"}
-      sleep $delay
-      printf "\b\b\b\b\b\b"
-   done
-   printf "    \b\b\b\b"
-}
-
-print_building() {
-   printf "Building %s version %s for architecture %s.\n" "$1" "$2" "$3"
-}
-
-platform_for_architecture() {
-   local architecture=$1
-   local result="iPhoneOS"
-   if [[ "${architecture}" == "i386" || "${architecture}" == "x86_64" ]];
-   then
-      result="iPhoneSimulator"
-   fi
-   echo $result
-}
-
-
-#
-# Process flags
-#
-
-if [[ $# == 0 ]];
-then
-   show_help=$true
-else
-   show_help=$false
-fi
-
-while [[ $# > 0 ]]
-do
-   key="$1"
-   shift
-
-   case $key in
-
-      --autoconf)
-        build_autoconf=$true;;
-
-      --glib)
-         build_glib=$true;;
-
-      --classpath)
-         build_classpath=$true;;
-
-      #don't build unixodbc for iOS, lol
-      --unixodbc)
-         build_unixodbc=$false;;
-
-      --openssl)
-         build_openssl=$true;;
-
-      --libpng)
-         build_png=$true;;
-
-      --mysqlold)
-         build_mysql=$true;;
-
-      --mysql)
-         build_mysql_ios7=$true;;
-
-      --freetds)
-         build_tds=$true;;
-
-      --zint)
-         build_zint=$true;;
-
-      --help | -h)
-         show_help=$true;;
-
-   esac
-done
-
-if [ $show_help == $true ];
-then
-    print_help
-    exit 0
-fi
-
-
-#
-# Download missing source archives
-#
-
-download_archive() { # $1=archive name; $2=archive url
-   if [ ! -e media/${1} ]; then
-      printf "\n\nDownloading %s from %s.\n" "${1}" "${2}"
-      cd media && { curl -L -O ${2}${1} ; cd - ; }
-   fi
-}
-
-#
-# Extract archives
-#
-
-extract_source() {
-   local archive=$1
-   local destination=$2
-   rm -rf -- "${destination}"
-   mkdir -p "${destination}"
-   tar zxf ${archive} -C ${destination}
-}
-
-path_xcode=`xcode-select -print-path`
 
 path_sdk_root_iPhoneOS=$( xcodebuild -version -sdk iphoneos Path 2>/dev/null )
 path_sdk_root_iPhoneSimulator=$( xcodebuild -version -sdk iphonesimulator Path 2>/dev/null )
@@ -292,6 +315,16 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    local path_make=$5
    local log=$6
    local additional_work=$7
+
+    if [[ "${#additional_config}" > 0 ]];
+    then
+        s="s/${additional_config_blank}//g"
+        additional_config=$(echo $additional_config | sed -e $s)
+        printf "Additional config is blank (%s)" $additional_config
+    else
+        echo "pass additional_config_blank for additional_config"
+        exit 1
+    fi
 
    local architecture_host_part=$( uname -p )
    local architecture_host="${architecture_host_part}-apple-darwin"
@@ -336,20 +369,12 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    if [[ "${#additional_config}" > 0 ]];
    then
 
-      additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
-      printf "\n\nCONFIG\n"
-      printf "\n\n./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make} ${additional_config}\n"
-      echo ""
-#./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} >> "${log}.error.log" &
-#      ./configure --build=${architecture_host} --host=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} >> "${log}.error.log" &
-./configure --build=${architecture_host} --host=${architecture_target} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} &
-      spinner $!
-
+        additional_config=$(echo $additional_config | sed -e "s/--/\ --/g")
+        pwd
+        ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" ${additional_config} >> "${log}.error.log" &
+        spinner $!
    else
 
-      echo "CONFIG"
-      echo "./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix=${path_make}"
-      echo ""
       ./configure --host=${architecture_target} --build=${architecture_host} --target=${architecture_target} --enable-static --disable-shared --prefix="${path_make}" >> "${log}.error.log" &
       spinner $!
 
@@ -357,9 +382,7 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
 
    if [[ "${#additional_work}" > 0 ]];
    then
-        printf "Additional work found: %s - %s\n" "${additional_work}" "${path_make}"
-${additional_work} "${path_make}"
-#      $( "${additional_work} \$path_make" )
+        ${additional_work} "${path_make}"
    fi
 
     printf "make clean"
@@ -388,6 +411,7 @@ path_source_unixodbc="$path_source/$archive_name_unixodbc"
 path_source_classpath="$path_source/$archive_name_classpath"
 path_source_glib="$path_source/$archive_name_glib"
 path_source_autoconf="$path_source/$archive_name_autoconf"
+path_source_automake="$path_source/$archive_name_automake"
 
 mkdir -p media;
 
@@ -404,6 +428,7 @@ download_archive $archive_freetds   $archive_freetds_base_url
 download_archive $archive_zint      $archive_zint_base_url
 download_archive $archive_png       $archive_png_base_url
 download_archive $archive_autoconf  $archive_autoconf_base_url
+download_archive $archive_automake  $archive_automake_base_url
 
 cd "${path_base}"
 
@@ -416,80 +441,180 @@ counter_arch=0
 platform="iphoneos"
 
 #
+# Libffi - Required by Glib
+#
+
+readonly config_debug="Debug"
+readonly config_release="Release"
+readonly command_lipo_create="lipo -create "
+
+build_libffi_static_ios() {
+
+    printf "Building Libffi.\n"
+    printf "Requries automake, autoconf, and libtool to be installed locally.\n"
+
+    local readonly archive_libffi_base_url="ftp://sourceware.org/pub/libffi/"
+    local readonly archive_name_libffi="libffi-${version_libffi}"
+    local readonly archive_libffi="${archive_name_libffi}.tar.gz"
+    local readonly path_media_libffi="$path_media/$archive_libffi"
+    local readonly path_source_libffi="$path_source/$archive_name_libffi"
+    local readonly path_library_libffi="${path_library}/libffi"
+    local readonly path_build_libffi="${path_build}/libffi"
+
+    download_archive $archive_libffi $archive_libffi_base_url
+
+    #instead of empty, move to tmp...
+    empty_directory $path_library_libffi
+
+    local command_lipo_libffi="${command_lipo_create}"
+
+    empty_directory $path_build_libffi
+
+    for platform in $platform_iphoneos $platform_simulator
+    do
+
+        if [ "${platform}" == "${platform_iphoneos}" ]
+        then
+            local readonly config=$config_release
+            local readonly sdk_build=${sdk_iphoneos}
+            local readonly archs_to_build=$archs_ios
+        else
+            local readonly config=$config_debug
+            local readonly sdk_build=${sdk_simulator}
+            local readonly archs_to_build=$archs_macosx
+        fi
+
+
+        local readonly platform_version_arch="${platform}${version_ios}"
+
+        empty_directory $path_source_libffi
+
+        extract_source $path_media_libffi $path_source &
+        spinner $!
+
+        local log_build_libffi="${path_build_libffi}/build-libffi-${version_libffi}.log"
+        > "$log_build_libffi"
+        pushd "${path_source_libffi}" > /dev/null
+
+        xcodebuild -project libffi.xcodeproj -target libffi-iOS -configuration $config -sdk $sdk_build ONLY_ACTIVE_ARCH=NO ARCHS="${archs_to_build}" VALID_ARCHS="${archs_valid}" >> "${log_build_libffi}" &
+        spinner $!
+
+        popd > /dev/null
+        local readonly archive="${path_build_libffi}/${platform_version_arch}.sdk"
+        empty_directory $archive
+        mv "$path_source_libffi/build/$config-$platform" $archive
+        command_lipo_libffi="$command_lipo_libffi $archive/$config-$platform/libffi.a "
+
+    done
+
+    path_library_libffi_include="$path_library_libffi"
+    empty_directory $path_library_libffi_include
+    mv "$path_source_libffi/darwin_ios/include" "${path_library_libffi_include}/."
+    cp -R "${path_source_libffi}/darwin_common/include/." "${path_library_libffi_include}/include/"
+
+    command_lipo_libffi="$command_lipo_libffi -output $path_library_libffi/libffi.a"
+    $command_lipo_libffi
+
+}
+
+if [[ $build_libffi == $true && $show_help == $false ]]; then
+    build_libffi_static_ios
+fi
+
+#
 # Autoconf - Required by Glib
+#
+
+path_library_automake="${path_library}/automake"
+
+if [[ $build_automake == $true && $show_help == $false ]]; then
+
+    echo "Building Automake."
+
+    command_lipo_automake="${command_lipo_create}"
+
+    for arch in ${archs}
+    do
+
+        platform=$( platform_for_architecture arch )
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_automake_arch="${path_library_automake}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_automake_arch}"
+        rm -rf -- "${path_build_automake_arch}"
+        mkdir -p "${path_build_automake_arch}"
+        tar zxf ${path_media_automake} -C ${path_build_automake_arch}
+
+        log_build_automake="${path_build_automake_arch}/build-automake-${version_automake}-${arch}.log"
+        > "$log_build_automake"
+
+        prepp="${path_library}/automake/$platform_version_arch.sdk/${archive_name_automake}"
+        cd "${prepp}"
+
+        extract_source $path_media_automake $path_build_automake_arch &
+        spinner $!
+
+        cd "${prepp}"
+
+        additional_config="--enable-gui=no "
+
+        printf "Build path %s.\n" "$path_build_automake_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_automake"
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_automake
+
+    done
+fi
+
+#
+# Automake - Required by Glib
 #
 
 path_library_autoconf="${path_library}/autoconf"
 
 if [[ $build_autoconf == $true && $show_help == $false ]]; then
 
-    echo "Building Autoconf."
+    echo "Building Automake."
 
-    command_lipo_autoconf="lipo -create "
+    command_lipo_autoconf="${command_lipo_create}"
 
     for arch in ${archs}
     do
 
-        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-        then
-            platform="iPhoneSimulator"
-        else
-            platform="iPhoneOS"
-        fi
-
         platform=$( platform_for_architecture arch )
 
-        printf "Extracting Autoconf source code.\n"
-        rm -rf -- "${path_source_autoconf}"
-
-echo "${path_source_autoconf}"
-
-        mkdir -p "${path_source_autoconf}"
-        tar zxf ${path_media_autoconf} -C ${path_source}
-
         platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_autoconf_arch="${path_build_autoconf}/$platform_version_arch.sdk"
-
-echo "${path_build_autoconf_arch}"
+        path_build_autoconf_arch="${path_library_autoconf}/$platform_version_arch.sdk"
 
         mkdir -p "${path_build_autoconf_arch}"
         rm -rf -- "${path_build_autoconf_arch}"
         mkdir -p "${path_build_autoconf_arch}"
-        log_build_autoconf="${path_build_autoconf}/build-autoconf-${version_autoconf}-${arch}.log"
+        tar zxf ${path_media_autoconf} -C ${path_build_autoconf_arch}
+
+        log_build_autoconf="${path_build_autoconf_arch}/build-autoconf-${version_autoconf}-${arch}.log"
         > "$log_build_autoconf"
 
-        cd "${path_base}"
+        prepp="${path_library}/autoconf/$platform_version_arch.sdk/${archive_name_autoconf}"
+        cd "${prepp}"
 
-        extract_source $path_media_autoconf $path_source &
+        extract_source $path_media_autoconf $path_build_autoconf_arch &
         spinner $!
 
-        cd "${path_source_autoconf}"
-        additional_config=""
+        cd "${prepp}"
 
-
-#SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
-#echo $SKDROOT
-#command_lipo_unixodbc="${command_lipo_classpath} ${path_build_classpath}/libjvm.a"
-#       additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--disable-libtool-lock--disable-ltdl-install--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
-#additional_config="--libdir=${SDKROOT}/usr/lib--includedir=${SDKROOT}/usr/include--oldincludedir=${SDKROOT}/usr/include--cache-file=Library/Caches/odbc--enable-gui=no--enable-drivers=yes--enable-drivers-conf=yes--enable-sysconfigdir=Documents/odbc "
+        additional_config="--enable-gui=no "
 
         printf "Build path %s.\n" "$path_build_autoconf_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_autoconf"
 
-        config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_autoconf_arch $log_build_autoconf
-
-        mv "bin" "${path_build_autoconf_arch}/."
-
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_autoconf
 
     done
-
-    cd ".."
-
-    mkdir -p "${path_library_autoconf}"
-    rm -rf -- "${path_library_autoconf}"
-    mv "${path_build_autoconf}" "${path_library_autoconf}/."
-
-    cd ".."
-
 fi
 
 
@@ -503,33 +628,71 @@ if [[ $build_glib == $true && $show_help == $false ]]; then
 
     echo "Building Glib."
 
-    command_lipo_glib="lipo -create "
+    command_lipo_glib="${command_lipo_create}"
 
     path_pre_glib=$PATH
 
     for arch in ${archs}
     do
 
-        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
-        then
-            platform="iPhoneSimulator"
-        else
-            platform="iPhoneOS"
-        fi
-
-        PATH="${path_library_autoconf}/${platform_version_arch}.sdk/bin/autoconfig:${path_pre_glib}"
-        export PATH
-
-#$( "${path_library_autoconf}/${platform_version_arch.sdk}/bin/autoconfig" )
+#        if [[ "${arch}" == "i386" || "${arch}" == "x86_64" ]];
+#        then
+#            platform="iPhoneSimulator"
+#        else
+#            platform="iPhoneOS"
+#        fi
 
         platform=$( platform_for_architecture arch )
+        platform_version_arch="${platform}${version_ios}-${arch}"
+
+
+        parent=$( dirname $path_base )
+        path_pkg_config="${parent}/3rdPartyProjects/pkg-config-0.28"
+
+#        path_autoconf="${path_library}/autoconf/$platform_version_arch.sdk/${archive_name_autoconf}"
+#        path_automake="${path_library}/automake/$platform_version_arch.sdk/${archive_name_automake}"
+#        path_autoconf="/Users/mthomason/Desktop/Reports/Compressor/library/autoconf/iPhoneOS7.1-i386.sdk/${archive_name_autoconf}"
+#        path_automake="/Users/mthomason/Desktop/Reports/Compressor/library/automake/iPhoneOS7.1-i386.sdk/${archive_name_automake}"
+
+#        path_autoconf_bin="${path_autoconf}/bin"
+#        path_autoconf_lib="${path_autoconf}/lib"
+
+#        if [ -e "$path_autoconf" ]
+#        then
+#            printf "\nFound autoconf"
+#        else
+#            printf "\nMissing %s\n" $path_autoconf
+#            printf "Starting build of autoconf.\n\n"
+#            exit 1
+#            sh ./compressor.sh --autoconf
+#        fi
+
+#        path_automake_bin="${path_automake}/bin"
+#        path_automake_lib="${path_automake}/lib"
+
+#        if [ -e "$path_automake" ]
+#        then
+#            printf "\nFound automake"
+#        else
+#            printf "\nMissing %s\n" $path_automake
+#            printf "\nStarting build of automake.\n\n"
+#            exit 1
+#            sh ./compressor.sh --automake
+#        fi
+
+#        echo ""
+#        echo "path_pkg_config"
+#        echo "${path_pkg_config}"
+#        echo ""
+
+#        PATH="${path_autoconf_bin}:${path_pkg_config}:${path_pkg_config}/pkg-config:${path_pkg_config}/glib:${path_automake_bin}:${path_autoconf_lib}:${path_automake_lib}:${path_pre_glib}"
+#        export PATH
 
         printf "Extracting Glib source code.\n"
         rm -rf -- "${path_source_glib}"
         mkdir -p "${path_source_glib}"
         tar zxf ${path_media_glib} -C ${path_source}
 
-        platform_version_arch="${platform}${version_ios}-${arch}"
         path_build_glib_arch="${path_build_glib}/$platform_version_arch.sdk"
 
         mkdir -p "${path_build_glib_arch}"
@@ -545,9 +708,10 @@ if [[ $build_glib == $true && $show_help == $false ]]; then
 
         cd "${path_source_glib}"
 pwd
-        sh ./autogen.sh
 
-        additional_config="--with-pkg-config=../../../3rdPartyProjects/pkg-config-0.28/pkg-config"
+sh ./autogen.sh
+
+additional_config="--enable-gui=no "
 
 
 #SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
@@ -578,7 +742,7 @@ if [[ $build_classpath == $true && $show_help == $false ]]; then
 
     echo "Building Classpath."
 
-    command_lipo_classpath="lipo -create "
+    command_lipo_classpath="${command_lipo_create}"
 
     for arch in ${archs}
     do
@@ -643,7 +807,7 @@ path_library_unixodbc="${path_library}/UnixODBC"
 if [[ $build_unixodbc == $true && $show_help == $false ]]; then
     echo "Building Unixodbc."
 
-    command_lipo_unixodbc="lipo -create "
+    command_lipo_unixodbc="${command_lipo_create}"
 
     for arch in ${archs}
     do
@@ -695,11 +859,6 @@ if [[ $build_unixodbc == $true && $show_help == $false ]]; then
 
 
 
-
-
-
-
-
     done
 
 
@@ -716,8 +875,8 @@ path_library_openssl="${path_library}/openssl"
 
 if [[ $build_openssl == $true && $show_help == $false ]]; then
 
-   command_lipo_libcrypto="lipo -create "
-   command_lipo_libssl="lipo -create "
+   command_lipo_libcrypto="${command_lipo_create}"
+   command_lipo_libssl="${command_lipo_create}"
 
    for arch in ${archs}
    do
@@ -963,7 +1122,7 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
 fi
 
 #
-# MySQL Connector - Comp_err OS X swizzle
+# MySQL Connector - Comp_err OS X swizzle - Correct way to do it.
 #
 
 mysql_custom_openssl=$true
@@ -977,7 +1136,7 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
    #  the libs, but since the libs are armv, we need to do a native
    #  generation of this helper application.
 
-   command_lipo_mysql="lipo -create "
+   command_lipo_mysql="${command_lipo_create}"
    path_library_mysql="${path_library}/libmysqlclient"
 
    path_source_mysql_native="${path_source}/native"
@@ -998,7 +1157,7 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 
    #sed -ie 's/compile_time_assert(sizeof(LF_PINS) == 64);/\/\/compile_time_assert(sizeof(LF_PINS) == 64);/g' 'mysys/lf_alloc-pin.c'
 
-   xcodebuild -project LibMySQL.xcodeproj  -target mysqlclient -configuration Release -sdk macosx${version_macosx} >> $log_build_mysql &
+   xcodebuild -project LibMySQL.xcodeproj -target mysqlclient -configuration Release -sdk macosx${version_macosx}  >> $log_build_mysql &
    spinner $!
 
 
@@ -1119,12 +1278,12 @@ if [[ $build_mysql_ios7 == $true  && $show_help == $false ]]; then
 fi
 
 #
-# MySQL Connector - OS X Hack
+# MySQL Connector - OS X Hack - Do not use.
 #
 
 if [[ $build_mysql == $true  && $show_help == $false ]]; then
 
-   command_lipo_mysql="lipo -create "
+   command_lipo_mysql="${command_lipo_create}"
    path_library_mysql="${path_library}/libmysqlclient"
 
    mkdir -p "${path_build_mysql}"
@@ -1225,7 +1384,7 @@ fi
 
 if [[ $build_png == $true  && $show_help == $false ]]; then
 
-   command_lipo_png="lipo -create "
+   command_lipo_png="${command_lipo_create}"
    path_library_png="${path_library}/libpng"
 
    for arch in ${archs}
@@ -1289,8 +1448,8 @@ if [[ $build_tds == $true  && $show_help == $false ]]; then
 
    set -e
 
-   command_lipo_tds="lipo -create "
-   command_lipo_ct="lipo -create "
+   command_lipo_tds="${command_lipo_create}"
+   command_lipo_ct="${command_lipo_create}"
    path_library_tds="${path_library}/libsybdb"
 
    for arch in ${archs}
@@ -1358,7 +1517,7 @@ fi
 
 if [[ $build_zint == $true  && $show_help == $false ]]; then
 
-   command_lipo_zint="lipo -create "
+   command_lipo_zint="${command_lipo_create}"
 
    platform=$( platform_for_architecture arch )
 
@@ -1390,7 +1549,7 @@ if [[ $build_zint == $true  && $show_help == $false ]]; then
 
 fi
 
-rm -rf -- "${path_build}"
-rm -rf -- "${path_source}"
+empty_directory $path_build
+empty_directory $path_source
 
 printf "Compressor is done.\n"
