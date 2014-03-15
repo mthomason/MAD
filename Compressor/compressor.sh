@@ -22,17 +22,20 @@ case $path_base in # Check if current path contains whitespace.
 
 print_help() {
    printf "  %s\n"  "Usage: compressor [options] ..."
-#  printf "  %s\n" "--autoconf               Build Autoconf.\n" #Only needed on local machine
-#  printf "  %s\n" "--automake               Build Automake.\n" #Only needed on local machine
-#  printf "  %s\n" "--unixodbc               Build UnixODBC.\n" #Not useful on iOS, becuase dynamic loading
    printf "  %s\n" "--libffi                 Build Libffi.\n"
    printf "  %s\n" "--glib                   Build Glib.\n"
+   printf "  %s\n" "--gettext                Build Gettext.\n"
+   printf "  %s\n" "--acl                    Build Gettext.\n"
+#printf "  %s\n" "--attr                   Build Gettext.\n"
    printf "  %s\n" "--classpath              Build Classpath.\n"
    printf "  %s\n" "--openssl                Build OpenSSL.\n"
    printf "  %s\n" "--freetds                Build FreeTds.\n"
    printf "  %s\n" "--libpng                 Build libpng.\n"
    printf "  %s\n" "--mysql                  Build MySQL Connector.\n"
    printf "  %s\n" "-h,--help                Show help.\n"
+#  printf "  %s\n" "--autoconf               Build Autoconf.\n" #Only needed on local machine
+#  printf "  %s\n" "--automake               Build Automake.\n" #Only needed on local machine
+#  printf "  %s\n" "--unixodbc               Build UnixODBC.\n" #Not useful on iOS, becuase dynamic loading
 }
 
 build_openssl=$false
@@ -47,6 +50,9 @@ build_classpath=$false
 build_autoconf=$false
 build_automake=$false
 build_libffi=$false
+build_gettext=$false
+build_attr=$false
+build_gettext=$false
 show_help=$false
 
 #
@@ -66,6 +72,15 @@ do
     shift
 
     case $key in
+
+        --acl)
+            build_acl=$true;;
+
+        --attr)
+            build_attr=$true;;
+
+        --gettext)
+            build_gettext=$true;;
 
         --libffi)
             build_libffi=$true;;
@@ -115,7 +130,6 @@ then
     print_help
     exit 0
 fi
-
 
 version_for_platform() {
     local version=$( xcodebuild -version -sdk "${1}" SDKVersion 2>/dev/null )
@@ -189,7 +203,10 @@ readonly version_classpath="0.98"
 readonly version_glib="2.38.2"
 readonly version_autoconf="2.69"
 readonly version_automake="1.14"
+readonly version_gettext="0.18.3.1"
 readonly version_libffi="3.0.14RC0"
+readonly version_acl="2.2.52"
+readonly version_attr="2.4.47"
 
 readonly version_mysql_6_0="6.0.2"  #do not change
 readonly version_mysql_6_1="6.1.3"
@@ -211,6 +228,7 @@ readonly sdk_iphoneos="${platform_iphoneos}${version_ios}"
 readonly sdk_simulator="${platform_simulator}${version_ios}"
 
 readonly archs="armv7 armv7s arm64 i386 x86_64"
+#readonly archs="arm64 x86_64"
 readonly archs_macosx="i386 x86_64"
 readonly archs_ios="armv7 armv7s arm64"
 readonly archs_valid="${archs_macosx} ${archs_ios}"
@@ -275,6 +293,8 @@ readonly path_build_classpath="${path_build}/classpath"
 readonly path_build_glib="${path_build}/glib"
 readonly path_build_autoconf="${path_build}/autoconf"
 readonly path_build_automake="${path_build}/automake"
+#readonly path_build_acl="${path_build}/acl"
+#readonly path_build_attr="${path_build}/attr"
 
 readonly path_media_ssl="$path_media/$archive_openssl"
 readonly path_media_mysql="$path_media/$archive_mysql"
@@ -286,6 +306,8 @@ readonly path_media_classpath="$path_media/$archive_classpath"
 readonly path_media_glib="$path_media/$archive_glib"
 readonly path_media_autoconf="$path_media/$archive_autoconf"
 readonly path_media_automake="$path_media/$archive_automake"
+#readonly path_media_acl="$path_media/$archive_acl"
+#readonly path_media_attr="$path_media/$archive_attr"
 
 readonly additional_config_blank="--empty-config=remove"
 
@@ -351,20 +373,24 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
    developer_root=$( xcode-select -print-path )
    platform_root=$( xcodebuild -version -sdk $sdk PlatformPath 2>/dev/null )
 
-   export DEVROOT="${platform_root}/Developer"
+   export DEVROOT="${platform_root}/Developer "
    export SDKROOT=$( xcodebuild -version -sdk $sdk Path 2>/dev/null )
    export CC=$( xcrun -find gcc )
-   export CFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min}"
+   export CFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include -miphoneos-version-min=${version_sdk_min} ${CFLAGS} "
+   export CPPFLAGS=" -arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include ${CPPFLAGS} "
    export LD=$( xcrun -find ld )
-   export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min}"
-   export CPPFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -I${SDKROOT}/usr/include"
+   export LDFLAGS="-arch ${architecture} -isysroot ${SDKROOT} -L${SDKROOT}/usr/lib -miphoneos-version-min=${version_sdk_min} "
 
-   printf "Configure with sdk version %s.\n" "${version_sdk}"
-   printf "Configure with sdk min version %s.\n" "${version_sdk_min}"
-   printf "Configure with architecture %s.\n" "${architecture}"
-   printf "Configure with prefix %s.\n" "${path_make}"
-   printf "Configure with log file %s.\n" "${log}"
-   printf "Configure with additional config %s.\n" "${additional_config}"
+    printf "Configure with sdk version          %s.\n" "${version_sdk}"
+    printf "Configure with sdk min version      %s.\n" "${version_sdk_min}"
+    printf "Configure with architecture         %s.\n" "${architecture}"
+    printf "Configure with architecture host    %s.\n" "${architecture_host}"
+    printf "Configure with architecture target  %s.\n" "${architecture_target}"
+    printf "Configure with prefix               %s.\n" "${path_make}"
+    printf "Configure with log file             %s.\n" "${log}"
+    printf "Configure with additional config    %s.\n" "${additional_config}"
+    printf "Configure with CFLAGS               %s.\n" "${CFLAGS}"
+    printf "Configure with CPPFLAGS             %s.\n" "${CPPFLAGS}"
 
    if [[ "${#additional_config}" > 0 ]];
    then
@@ -390,12 +416,12 @@ config_make_install() { # $1=sdk-version $2=sdk-min-version $3=arch $4=additiona
     spinner $!
 
     printf "\nmake\n"
-    make >> "${log}.error.log"
+    make -j8 >> "${log}.error.log"
     spinner $!
 
     printf "\nmake install"
 
-    make install >> "${log}.error.log" &
+    make -j8 install >> "${log}.error.log" &
     spinner $!
 
    printf "\n"
@@ -412,6 +438,8 @@ path_source_classpath="$path_source/$archive_name_classpath"
 path_source_glib="$path_source/$archive_name_glib"
 path_source_autoconf="$path_source/$archive_name_autoconf"
 path_source_automake="$path_source/$archive_name_automake"
+path_source_autoconf="$path_source/$archive_name_acl"
+path_source_automake="$path_source/$archive_name_attr"
 
 mkdir -p media;
 
@@ -448,11 +476,20 @@ readonly command_lipo_create="lipo -create "
 
 build_gettext_static_ios() {
 
-    download_archive $archive_gettext  $archive_gettext_base_url
+    readonly archive_gettext_base_url="http://ftp.gnu.org/pub/gnu/gettext/"
+    readonly archive_name_gettext="gettext-${version_gettext}"
+    readonly archive_gettext="${archive_name_gettext}.tar.gz"
+    readonly path_source_gettext="$path_source/$archive_name_gettext"
+    readonly path_media_gettext="$path_media/$archive_gettext"
+    readonly path_build_gettext="${path_build}/gettext"
+
+    download_archive $archive_gettext $archive_gettext_base_url
 
     echo "Building gettext."
 
-    command_lipo_gettext="${command_lipo_create}"
+    local command_lipo_gettext_libintl="${command_lipo_create}"
+    local command_lipo_gettext_libgettextpo="${command_lipo_create}"
+    local command_lipo_gettext_libasprintf="${command_lipo_create}"
 
     for arch in ${archs}
     do
@@ -460,7 +497,7 @@ build_gettext_static_ios() {
         platform=$( platform_for_architecture arch )
 
         platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_gettext_arch="${path_library_gettext}/$platform_version_arch.sdk"
+        path_build_gettext_arch="${path_build_gettext}/$platform_version_arch.sdk"
 
         mkdir -p "${path_build_gettext_arch}"
         rm -rf -- "${path_build_gettext_arch}"
@@ -470,7 +507,7 @@ build_gettext_static_ios() {
         log_build_gettext="${path_build_gettext_arch}/build-gettext-${version_gettext}-${arch}.log"
         > "$log_build_gettext"
 
-        prepp="${path_library}/gettext/$platform_version_arch.sdk/${archive_name_gettext}"
+        prepp="${path_build_gettext}/$platform_version_arch.sdk/${archive_name_gettext}"
         cd "${prepp}"
 
         extract_source $path_media_gettext $path_build_gettext_arch &
@@ -485,16 +522,173 @@ build_gettext_static_ios() {
         printf "Build arch %s.\n" "$arch"
         printf "Build log  %s.\n" "$log_build_gettext"
 
+        export CFLAGS=" -I${path_library}/crt_externs "
+        export CPPFLAGS=" -I${path_library}/crt_externs "
+
         config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_gettext
 
+        command_lipo_gettext_libintl="$command_lipo_gettext_libintl $prepp/lib/libintl.a";
+        command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo $prepp/lib/libgettextpo.a";
+        command_lipo_gettext_libasprintf="$command_lipo_gettext_libasprintf $prepp/lib/libasprintf.a";
+    done
+
+    local path_library_gettext="${path_library}/gettext"
+
+    empty_directory $path_library_gettext
+    empty_directory "$path_library_gettext/include"
+
+    cp -R "$path_build_gettext/$platform_version_arch.sdk/$archive_name_gettext/include/." "$path_library_gettext/include/."
+
+    command_lipo_gettext_libintl="$command_lipo_gettext_libintl -output $path_library_gettext/libintl.a";
+    command_lipo_gettext_libgettextpo="$command_lipo_gettext_libgettextpo -output $path_library_gettext/libgettextpo.a";
+    command_lipo_gettext_libasprintf="$command_lipo_gettext_libasprintf -output $path_library_gettext/libasprintf.a";
+
+    echo $command_lipo_gettext_libintl
+    echo $command_lipo_gettext_libgettextpo
+    echo $command_lipo_gettext_libasprintf
+
+    $command_lipo_gettext_libintl
+    $command_lipo_gettext_libgettextpo
+    $command_lipo_gettext_libasprintf
+
+}
+
+if [[ $build_gettext == $true && $show_help == $false ]]; then
+    build_gettext_static_ios
+fi
+
+#
+# Attr - Required by Glib
+#   Unused way to (maybe) cross compile gettext.  Why?  Becuse, fuck it.
+#
+
+build_attr_static_ios() {
+
+    readonly archive_attr_base_url="http://download.savannah.gnu.org/releases/attr/"
+    readonly archive_name_attr="attr-${version_attr}"
+    readonly archive_attr="${archive_name_attr}.src.tar.gz"
+    readonly path_source_attr="$path_source/$archive_name_attr"
+    readonly path_media_attr="$path_media/$archive_attr"
+    readonly path_build_attr="${path_build}/attr"
+
+    download_archive $archive_attr $archive_attr_base_url
+
+    echo "Building attr."
+
+    command_lipo_attr="${command_lipo_create}"
+
+    for arch in ${archs}
+    do
+
+        platform=$( platform_for_architecture arch )
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_attr_arch="${path_build_attr}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_attr_arch}"
+        rm -rf -- "${path_build_attr_arch}"
+        mkdir -p "${path_build_attr_arch}"
+        tar zxf ${path_media_attr} -C ${path_build_attr_arch}
+
+        log_build_attr="${path_build_attr_arch}/build-attr-${version_attr}-${arch}.log"
+        > "$log_build_attr"
+
+        prepp="${path_build_attr}/$platform_version_arch.sdk/${archive_name_attr}"
+        cd "${prepp}"
+
+        extract_source $path_media_attr $path_build_attr_arch &
+        spinner $!
+
+        cd "${prepp}"
+
+        additional_config="--enable-gui=no "
+
+        printf "Build path %s.\n" "$path_build_attr_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_attr"
+
+#export CFLAGS=" -I${path_library}/crt_externs "
+#export CPPFLAGS=" -I${path_library}/crt_externs "
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_attr
+exit 0
     done
 }
 
-path_library_gettext="${path_library}/gettext"
+path_library_attr="${path_library}/attr"
 
-if [[ $build_gettext == $true && $show_help == $false ]]; then
+if [[ $build_attr == $true && $show_help == $false ]]; then
 
-    build_gettext_static_ios
+    build_attr_static_ios
+fi
+
+#
+# Acl - Required by Glib
+#   Unused way to (maybe) cross compile acl.  Why?  Becuse, fuck it.
+#
+
+build_acl_static_ios() {
+
+    build_attr_static_ios
+
+    readonly archive_acl_base_url="http://download.savannah.gnu.org/releases/acl/"
+    readonly archive_name_acl="acl-${version_acl}"
+    readonly archive_acl="${archive_name_acl}.src.tar.gz"
+    readonly path_source_acl="$path_source/$archive_name_acl"
+    readonly path_media_acl="$path_media/$archive_acl"
+    readonly path_build_acl="${path_build}/acl"
+
+    download_archive $archive_acl $archive_acl_base_url
+
+    echo "Building acl."
+
+    command_lipo_acl="${command_lipo_create}"
+
+    for arch in ${archs}
+    do
+
+        platform=$( platform_for_architecture arch )
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_acl_arch="${path_build_acl}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_acl_arch}"
+        rm -rf -- "${path_build_acl_arch}"
+        mkdir -p "${path_build_acl_arch}"
+        tar zxf ${path_media_acl} -C ${path_build_acl_arch}
+
+        log_build_acl="${path_build_acl_arch}/build-acl-${version_acl}-${arch}.log"
+        > "$log_build_acl"
+
+        prepp="${path_build_acl}/$platform_version_arch.sdk/${archive_name_acl}"
+        cd "${prepp}"
+
+        extract_source $path_media_acl $path_build_acl_arch &
+        spinner $!
+
+        cd "${prepp}"
+
+        additional_config="--enable-gui=no "
+
+        printf "Build path %s.\n" "$path_build_acl_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_acl"
+
+        export CFLAGS=" -I${path_library}/crt_externs "
+        export CPPFLAGS=" -I${path_library}/crt_externs "
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_acl
+exit 0
+    done
+}
+
+path_library_acl="${path_library}/acl"
+
+if [[ $build_acl == $true && $show_help == $false ]]; then
+
+    build_acl_static_ios
 fi
 
 #
@@ -536,7 +730,6 @@ build_libffi_static_ios() {
             local readonly sdk_build=${sdk_simulator}
             local readonly archs_to_build=$archs_macosx
         fi
-
 
         local readonly platform_version_arch="${platform}${version_ios}"
 
