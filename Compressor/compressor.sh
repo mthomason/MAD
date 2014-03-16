@@ -293,8 +293,6 @@ readonly path_build_classpath="${path_build}/classpath"
 readonly path_build_glib="${path_build}/glib"
 readonly path_build_autoconf="${path_build}/autoconf"
 readonly path_build_automake="${path_build}/automake"
-#readonly path_build_acl="${path_build}/acl"
-#readonly path_build_attr="${path_build}/attr"
 
 readonly path_media_ssl="$path_media/$archive_openssl"
 readonly path_media_mysql="$path_media/$archive_mysql"
@@ -306,8 +304,6 @@ readonly path_media_classpath="$path_media/$archive_classpath"
 readonly path_media_glib="$path_media/$archive_glib"
 readonly path_media_autoconf="$path_media/$archive_autoconf"
 readonly path_media_automake="$path_media/$archive_automake"
-#readonly path_media_acl="$path_media/$archive_acl"
-#readonly path_media_attr="$path_media/$archive_attr"
 
 readonly additional_config_blank="--empty-config=remove"
 
@@ -557,139 +553,6 @@ if [[ $build_gettext == $true && $show_help == $false ]]; then
     build_gettext_static_ios
 fi
 
-#
-# Attr - Required by Glib
-#   Unused way to (maybe) cross compile gettext.  Why?  Becuse, fuck it.
-#
-
-build_attr_static_ios() {
-
-    readonly archive_attr_base_url="http://download.savannah.gnu.org/releases/attr/"
-    readonly archive_name_attr="attr-${version_attr}"
-    readonly archive_attr="${archive_name_attr}.src.tar.gz"
-    readonly path_source_attr="$path_source/$archive_name_attr"
-    readonly path_media_attr="$path_media/$archive_attr"
-    readonly path_build_attr="${path_build}/attr"
-
-    download_archive $archive_attr $archive_attr_base_url
-
-    echo "Building attr."
-
-    command_lipo_attr="${command_lipo_create}"
-
-    for arch in ${archs}
-    do
-
-        platform=$( platform_for_architecture arch )
-
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_attr_arch="${path_build_attr}/$platform_version_arch.sdk"
-
-        mkdir -p "${path_build_attr_arch}"
-        rm -rf -- "${path_build_attr_arch}"
-        mkdir -p "${path_build_attr_arch}"
-        tar zxf ${path_media_attr} -C ${path_build_attr_arch}
-
-        log_build_attr="${path_build_attr_arch}/build-attr-${version_attr}-${arch}.log"
-        > "$log_build_attr"
-
-        prepp="${path_build_attr}/$platform_version_arch.sdk/${archive_name_attr}"
-        cd "${prepp}"
-
-        extract_source $path_media_attr $path_build_attr_arch &
-        spinner $!
-
-        cd "${prepp}"
-
-        additional_config="--enable-gui=no "
-
-        printf "Build path %s.\n" "$path_build_attr_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_attr"
-
-#export CFLAGS=" -I${path_library}/crt_externs "
-#export CPPFLAGS=" -I${path_library}/crt_externs "
-
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_attr
-exit 0
-    done
-}
-
-path_library_attr="${path_library}/attr"
-
-if [[ $build_attr == $true && $show_help == $false ]]; then
-
-    build_attr_static_ios
-fi
-
-#
-# Acl - Required by Glib
-#   Unused way to (maybe) cross compile acl.  Why?  Becuse, fuck it.
-#
-
-build_acl_static_ios() {
-
-    build_attr_static_ios
-
-    readonly archive_acl_base_url="http://download.savannah.gnu.org/releases/acl/"
-    readonly archive_name_acl="acl-${version_acl}"
-    readonly archive_acl="${archive_name_acl}.src.tar.gz"
-    readonly path_source_acl="$path_source/$archive_name_acl"
-    readonly path_media_acl="$path_media/$archive_acl"
-    readonly path_build_acl="${path_build}/acl"
-
-    download_archive $archive_acl $archive_acl_base_url
-
-    echo "Building acl."
-
-    command_lipo_acl="${command_lipo_create}"
-
-    for arch in ${archs}
-    do
-
-        platform=$( platform_for_architecture arch )
-
-        platform_version_arch="${platform}${version_ios}-${arch}"
-        path_build_acl_arch="${path_build_acl}/$platform_version_arch.sdk"
-
-        mkdir -p "${path_build_acl_arch}"
-        rm -rf -- "${path_build_acl_arch}"
-        mkdir -p "${path_build_acl_arch}"
-        tar zxf ${path_media_acl} -C ${path_build_acl_arch}
-
-        log_build_acl="${path_build_acl_arch}/build-acl-${version_acl}-${arch}.log"
-        > "$log_build_acl"
-
-        prepp="${path_build_acl}/$platform_version_arch.sdk/${archive_name_acl}"
-        cd "${prepp}"
-
-        extract_source $path_media_acl $path_build_acl_arch &
-        spinner $!
-
-        cd "${prepp}"
-
-        additional_config="--enable-gui=no "
-
-        printf "Build path %s.\n" "$path_build_acl_arch"
-        printf "Build conf %s.\n" "$additional_config"
-        printf "Build arch %s.\n" "$arch"
-        printf "Build log  %s.\n" "$log_build_acl"
-
-        export CFLAGS=" -I${path_library}/crt_externs "
-        export CPPFLAGS=" -I${path_library}/crt_externs "
-
-        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_acl
-exit 0
-    done
-}
-
-path_library_acl="${path_library}/acl"
-
-if [[ $build_acl == $true && $show_help == $false ]]; then
-
-    build_acl_static_ios
-fi
 
 #
 # Libffi - Required by Glib
@@ -1797,6 +1660,140 @@ if [[ $build_zint == $true  && $show_help == $false ]]; then
 
    config_make_install $version_ios $version_ios_min $arch $additional_config $path_build_zint_arch $log_build_zint # $1=sdk-version $2=sdk-min-version $3=arch $4=additionalConfig $5=make-path $6=log-path
 
+fi
+
+#
+# Attr - Required by Glib
+#   Unused way to (maybe) cross compile gettext.  Why?  Becuse, fuck it.
+#
+
+build_attr_static_ios() {
+
+    readonly archive_attr_base_url="http://download.savannah.gnu.org/releases/attr/"
+    readonly archive_name_attr="attr-${version_attr}"
+    readonly archive_attr="${archive_name_attr}.src.tar.gz"
+    readonly path_source_attr="$path_source/$archive_name_attr"
+    readonly path_media_attr="$path_media/$archive_attr"
+    readonly path_build_attr="${path_build}/attr"
+
+    download_archive $archive_attr $archive_attr_base_url
+
+    echo "Building attr."
+
+    command_lipo_attr="${command_lipo_create}"
+
+    for arch in ${archs}
+    do
+
+        platform=$( platform_for_architecture arch )
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_attr_arch="${path_build_attr}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_attr_arch}"
+        rm -rf -- "${path_build_attr_arch}"
+        mkdir -p "${path_build_attr_arch}"
+        tar zxf ${path_media_attr} -C ${path_build_attr_arch}
+
+        log_build_attr="${path_build_attr_arch}/build-attr-${version_attr}-${arch}.log"
+        > "$log_build_attr"
+
+        prepp="${path_build_attr}/$platform_version_arch.sdk/${archive_name_attr}"
+        cd "${prepp}"
+
+        extract_source $path_media_attr $path_build_attr_arch &
+        spinner $!
+
+        cd "${prepp}"
+
+        additional_config="--enable-gui=no "
+
+        printf "Build path %s.\n" "$path_build_attr_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_attr"
+
+#export CFLAGS=" -I${path_library}/crt_externs "
+#export CPPFLAGS=" -I${path_library}/crt_externs "
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_attr
+exit 0
+    done
+}
+
+path_library_attr="${path_library}/attr"
+
+if [[ $build_attr == $true && $show_help == $false ]]; then
+
+    build_attr_static_ios
+fi
+
+#
+# Acl - Required by Glib
+#   Unused way to (maybe) cross compile acl.  Why?  Becuse, fuck it.
+#
+
+build_acl_static_ios() {
+
+    build_attr_static_ios
+
+    readonly archive_acl_base_url="http://download.savannah.gnu.org/releases/acl/"
+    readonly archive_name_acl="acl-${version_acl}"
+    readonly archive_acl="${archive_name_acl}.src.tar.gz"
+    readonly path_source_acl="$path_source/$archive_name_acl"
+    readonly path_media_acl="$path_media/$archive_acl"
+    readonly path_build_acl="${path_build}/acl"
+
+    download_archive $archive_acl $archive_acl_base_url
+
+    echo "Building acl."
+
+    command_lipo_acl="${command_lipo_create}"
+
+    for arch in ${archs}
+    do
+
+        platform=$( platform_for_architecture arch )
+
+        platform_version_arch="${platform}${version_ios}-${arch}"
+        path_build_acl_arch="${path_build_acl}/$platform_version_arch.sdk"
+
+        mkdir -p "${path_build_acl_arch}"
+        rm -rf -- "${path_build_acl_arch}"
+        mkdir -p "${path_build_acl_arch}"
+        tar zxf ${path_media_acl} -C ${path_build_acl_arch}
+
+        log_build_acl="${path_build_acl_arch}/build-acl-${version_acl}-${arch}.log"
+        > "$log_build_acl"
+
+        prepp="${path_build_acl}/$platform_version_arch.sdk/${archive_name_acl}"
+        cd "${prepp}"
+
+        extract_source $path_media_acl $path_build_acl_arch &
+        spinner $!
+
+        cd "${prepp}"
+
+        additional_config="--enable-gui=no "
+
+        printf "Build path %s.\n" "$path_build_acl_arch"
+        printf "Build conf %s.\n" "$additional_config"
+        printf "Build arch %s.\n" "$arch"
+        printf "Build log  %s.\n" "$log_build_acl"
+
+        export CFLAGS=" -I${path_library}/crt_externs "
+        export CPPFLAGS=" -I${path_library}/crt_externs "
+
+        config_make_install $version_ios $version_ios_min $arch $additional_config $prepp $log_build_acl
+exit 0
+    done
+}
+
+path_library_acl="${path_library}/acl"
+
+if [[ $build_acl == $true && $show_help == $false ]]; then
+
+    build_acl_static_ios
 fi
 
 empty_directory $path_build
