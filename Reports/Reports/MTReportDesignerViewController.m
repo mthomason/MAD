@@ -1792,7 +1792,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [self hideToolbox];
         } else {
             
-            if ([self isBorderAppliedToView:[sender view]]) {
+            if ([(DesignerSectionLabel *)[sender view] selected]) {
                 
                 
                 DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
@@ -1861,8 +1861,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
 
     //Remove border from the section views
-    for (UIView *view in [[self sectionControlViews] objectEnumerator]) {
-        [self  removeBorderFromView:view];
+    for (DesignerSectionLabel *view in [[self sectionControlViews] objectEnumerator]) {
+        [view normalView];
     }
 
 }
