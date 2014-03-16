@@ -7,6 +7,17 @@
 //
 
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+
+#import "MTReportDesigner.h"
+#import "MTReportViewer.h"
+#import "MTQueryDesigner.h"
+#import "MAReportDocument.h"
+
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
+
 #import "MTViewControllerOpenDocument.h"
 #import "UIManagedDocument+FileOperations.h"
 #import "UIApplication+Extras.h"
@@ -34,6 +45,10 @@
 void uncaughtExceptionHandler(NSException *exception);
 void uncaughtExceptionHandler(NSException *exception) {
     MTLogStatic(@"%@", exception);
+}
+
++ (MTApplicationInstance *)app {
+    return [[[AppDelegate applicationInstance] retain] autorelease];
 }
 
 + (MTApplicationInstance *)applicationInstance {
@@ -85,15 +100,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     [self setApplicationInstance:appInstance];
     [appInstance release];
     
-    //List all fonts
-    
-    //NSArray *fontFamilies = [UIFont familyNames];
-    
-    //for (NSInteger i = 0; i < [fontFamilies count]; i++) {
-    //    NSString *fontFamily = [fontFamilies objectAtIndex:i];
-    //    NSArray *fontNames = [UIFont fontNamesForFamilyName:[fontFamilies objectAtIndex:i]];
-    //    NSLog (@"%@: %@", fontFamily, fontNames);
-    //}
     
     UIColor *titleTextColor = [UIColor tintColor2];
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : titleTextColor};

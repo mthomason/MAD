@@ -9,6 +9,8 @@
 #import "MTReportDesignerDocumentObjectFormat.h"
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+#import "MAReportDocument.h"
 
 @interface MTReportDesignerDocumentObjectFormat ()
 

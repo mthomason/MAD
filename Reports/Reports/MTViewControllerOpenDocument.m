@@ -15,6 +15,7 @@
 #import "MADWatermarkView.h"
 #import "NSURL+Document.h"
 #import "MTUser.h"
+#import "MTApplicationInstance.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";

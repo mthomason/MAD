@@ -6,14 +6,19 @@
 //  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_AppDelegate_h
+#define Reports_AppDelegate_h
+
 #import <UIKit/UIKit.h>
-#import "MTApplicationInstance.h"
 
-
+@class MTApplicationInstance, MAReportDocument,
+            RptqDocument, RptqDatabase, RptqQuery;
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate,
         UIDocumentInteractionControllerDelegate,
         UIAlertViewDelegate>
+
++ (MTApplicationInstance *)app;
 
 + (MTApplicationInstance *)applicationInstance;
 + (MAReportDocument *)activeReportDocument;
@@ -28,3 +33,5 @@
 - (UIFont *)detailFont;
 
 @end
+
+#endif

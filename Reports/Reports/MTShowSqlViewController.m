@@ -7,8 +7,11 @@
 //
 
 #import "MTShowSqlViewController.h"
-#import "RptqDocument.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+#import "RptqDocument.h"
+#import "RptqDocument.h"
+#import "MTDatabase.h"
 
 @interface MTShowSqlViewController ()
 

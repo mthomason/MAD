@@ -30,7 +30,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemMain;
 
-//@property (nonatomic, retain) IBOutlet UICollectionViewController *documentObjectSelectorViewController;
 @property (nonatomic, retain) IBOutlet UICollectionViewController *visibleViewController;
 @property (nonatomic, retain) UIViewController *childViewController;
 @property (nonatomic, retain) UIViewController *viewControllerToPush;

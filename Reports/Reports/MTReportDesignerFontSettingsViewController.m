@@ -10,6 +10,7 @@
 #import "RptqDocumentObject+Extras.h"
 #import "AppDelegate.h"
 #import "UIDevice+Hack.h"
+#import "MTApplicationInstance.h"
 
 @interface MTReportDesignerFontSettingsViewController()
 

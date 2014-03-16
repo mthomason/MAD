@@ -17,6 +17,9 @@
 #import "MTReportDesigner.h"
 #import "MTReportViewer.h"
 #import "MTQueryDesigner.h"
+#import "MAReportDocument.h"
+#import "MTUser.h"
+
 
 NSString *const MTApplicationIdMadDesigner                          = @"666001433";
 NSString *const MTApplicationIdMadViewer                            = @"666003759";
@@ -26,9 +29,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"3.0.24";
-NSString * const MTGlobalBundleShortVersion                         = @"3.0.24";
-NSString * const MTGlobalBundleRev                                  = @"893";
+NSString * const MTGlobalBundleVersion                              = @"3.0.25";
+NSString * const MTGlobalBundleShortVersion                         = @"3.0.25";
+NSString * const MTGlobalBundleRev                                  = @"894";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";

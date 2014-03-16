@@ -9,6 +9,7 @@
 #import "MTLicensingViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
+#import "MTApplicationInstance.h"
 
 @interface MTLicensingViewController ()
 

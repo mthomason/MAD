@@ -7,6 +7,7 @@
 //
 
 #import "UIApplication+Extras.h"
+#import "MTApplicationInstance.h"
 #import "AppDelegate.h"
 
 @implementation UIApplication (Extras)

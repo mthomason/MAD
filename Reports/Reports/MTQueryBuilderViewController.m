@@ -7,6 +7,7 @@
 //
 
 #import "MTQueryBuilderViewController.h"
+#import "MTApplicationInstance.h"
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderPredicateFormatViewController.h"
@@ -22,6 +23,8 @@
 #import "MTReportDesignerViewController.h"
 #import "MTViewTableHeader.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "UIDevice+Hack.h"
 
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";

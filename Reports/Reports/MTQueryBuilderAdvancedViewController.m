@@ -7,6 +7,7 @@
 //
 
 #import "MTQueryBuilderAdvancedViewController.h"
+#import "MTApplicationInstance.h"
 #import "CGAffineTransform+Common.h"
 #import "UIDevice+Hack.h"
 #import "MTQueryBuilderAdvancedSchemaViewController.h"

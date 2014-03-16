@@ -7,6 +7,8 @@
 //
 
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
+#import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 
