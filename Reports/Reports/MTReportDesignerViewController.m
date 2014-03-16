@@ -1447,7 +1447,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     textAlignment = NSTextAlignmentLeft;
                     break;
             }
-            
+            [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingMiddle];
             [paragraphStyle setAlignment:textAlignment];
             [elementView setParagraphStyle:paragraphStyle];
             [paragraphStyle release];
