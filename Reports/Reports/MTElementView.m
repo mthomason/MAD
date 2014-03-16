@@ -13,6 +13,7 @@
 #import "Constants.h"
 #import "MTTextView.h"
 #import "UIDevice+Hack.h"
+#import "UIColor+EverydayApps.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -97,6 +98,11 @@
     return self;
 }
 
+static CGFloat const kDashedBorderWidth     = (0.5f);
+static CGFloat const kDashedPhase           = (0.0f);
+static CGFloat const kDashedLinesLength[]   = {4.0f, 2.0f};
+static size_t const kDashedCount            = (2.0f);
+
 - (void)drawRect:(CGRect)rect {
 
     if ([self displayImage]) {
@@ -110,6 +116,14 @@
         CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
         [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
     }
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, kDashedBorderWidth);
+    UIColor *tintColor = [UIColor tintColor];
+    CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
+    CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount) ;
+    CGContextAddRect(context, rect);
+    CGContextStrokePath(context);
 }
 
 #pragma mark - Members
