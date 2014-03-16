@@ -2127,6 +2127,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         rectToShow = [selectedSectionView convertRect:superv.frame toView:self.designerScrollView];
                     } else if (tooboxType == MTToolboxTypeElement) {
                         rectToShow = [self rectForSelectedElements];
+                        
+                        
                     }
                     
                     CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
@@ -2139,7 +2141,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     rectToShow.origin.y = rectToShow.origin.y - adjustment;
                     visableRect.origin.y = visableRect.origin.y - adjustment;
                     if (CGRectIntersectsRect(visableRect, rectToShow) == NO) {
-                        CGPoint contentOffset = CGPointMake(CGPointZero.x, rectToShow.origin.y);
+
+                        CGFloat yOffset;
+                        if  (tooboxType == MTToolboxTypeElement) {
+                            yOffset = ((rectToShow.origin.y + adjustment) * self.designerScrollView.zoomScale) - adjustment;
+                        } else {
+                            yOffset = rectToShow.origin.y;
+                        }
+                        CGPoint contentOffset = CGPointMake(CGPointZero.x, yOffset);
                         [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
                     }
                     
@@ -2153,19 +2162,21 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 + (CGRect)visableRect:(UIScrollView *)scrollView {
-		
     CGRect visibleRect;
     visibleRect.origin = scrollView.contentOffset;
     visibleRect.size = scrollView.bounds.size;
+    return [MTReportDesignerViewController adjustRect:visibleRect forZoomScale:scrollView.zoomScale];
+}
 
-    CGFloat scale = 1.0000f / scrollView.zoomScale;
++ (CGRect)adjustRect:(CGRect)rect forZoomScale:(CGFloat)zoomScale {
+    CGFloat scale = 1.0000f / zoomScale;
     if ( isless(scale, 1.0000f) ) {
-        visibleRect.origin.x *= scale;
-        visibleRect.origin.y *= scale;
-        visibleRect.size.width *= scale;
-        visibleRect.size.height *= scale;
+        rect.origin.x *= scale;
+        rect.origin.y *= scale;
+        rect.size.width *= scale;
+        rect.size.height *= scale;
     }
-    return visibleRect;
+    return rect;
 }
 
 - (void)hideToolbox {
