@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerViewController.h"
+#include <math.h>
 #import "MTApplicationInstance.h"
 #import "MTReportDesigner.h"
 #import "MTSettingsViewController.h"
@@ -2098,6 +2099,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             __block MTReportDesignerViewController *reportDesigner = self;
 
+            [[[AppDelegate app] reportDesigner] setContentOffsetOnShowToolbox:reportDesigner.designerScrollView.contentOffset];
+            
             [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
                 //[self setWantsFullScreenLayout:YES];
                 
@@ -2118,28 +2121,51 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         RptqQuery *query = [AppDelegate activeRptqQuery];
                         RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                                     forQuery: query];
-                        
                         UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
-                        
-                        rectToShow = selectedSectionView.frame;
-                        
+                        UIView *superv = [selectedSectionView superview];
+                        rectToShow = superv.frame;
+                        rectToShow = [selectedSectionView convertRect:superv.frame toView:self.designerScrollView];
                     } else if (tooboxType == MTToolboxTypeElement) {
                         rectToShow = [self rectForSelectedElements];
                     }
-
-                    if (CGRectIntersectsRect(rectToShow, self.designerScrollView.frame) == NO) {
-                        CGFloat offsetPointY = (rectToShow.origin.y - [[self designerScrollView] bounds].size.height) - (rectToShow.size.height - 44.0000f);
-                        CGPoint offsetPoint = CGPointMake(CGPointZero.x, offsetPointY);
-                        [[reportDesigner designerScrollView] setContentOffset:offsetPoint animated:YES];
-                        
+                    
+                    CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
+                    
+                    //Scroll to top
+                    CGRect db = self.designerScrollView.bounds;
+                    CGRect b = [self.designerScrollView convertRect:db toView:self.view];
+                    CGFloat adjustment = self.navigationController.navigationBar.bounds.size.height + [UIApplication sharedApplication].statusBarFrame.size.height + (MTReportDesignerBorderPadding / 2.0000f);
+                    b.size.height = b.size.height - adjustment;
+                    rectToShow.origin.y = rectToShow.origin.y - adjustment;
+                    visableRect.origin.y = visableRect.origin.y - adjustment;
+                    if (CGRectIntersectsRect(visableRect, rectToShow) == NO) {
+                        CGPoint contentOffset = CGPointMake(CGPointZero.x, rectToShow.origin.y);
+                        [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
                     }
-                }            
+                    
+                }
             }];
         }
     }
     
     [viewController release];
     
+}
+
++ (CGRect)visableRect:(UIScrollView *)scrollView {
+		
+    CGRect visibleRect;
+    visibleRect.origin = scrollView.contentOffset;
+    visibleRect.size = scrollView.bounds.size;
+
+    CGFloat scale = 1.0000f / scrollView.zoomScale;
+    if ( isless(scale, 1.0000f) ) {
+        visibleRect.origin.x *= scale;
+        visibleRect.origin.y *= scale;
+        visibleRect.size.width *= scale;
+        visibleRect.size.height *= scale;
+    }
+    return visibleRect;
 }
 
 - (void)hideToolbox {
@@ -2188,23 +2214,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     [[reportDesigner toolbarBottom] setItems:[self toolbarBottomItems] animated:YES];
                     [[reportDesigner toolbarTop] setItems:[self toolbarTopItems] animated:YES];
                     [[reportDesigner informationButton] setEnabled: YES];
+                    
+                    CGPoint contentOffset = [[[AppDelegate app] reportDesigner] contentOffsetOnShowToolbox];
+                    [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
+
                 }
             }];
             [self deselectAllElementsAnimated:YES];
         }
-    }
-}
-
-- (void)dismissObjectSelectorViewController {
-    if ([UIDevice isPad]) {
-        if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
-            [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
-        }
-    } else {
-        [[self designerScrollView] setContentOffset:CGPointZero animated:NO];
-        [self dismissViewControllerAnimated:YES completion:^{
-        
-        }];
     }
 }
 

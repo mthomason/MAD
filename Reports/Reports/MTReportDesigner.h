@@ -15,4 +15,6 @@
 @property (nonatomic, assign) BOOL shownAndHidden;
 @property (nonatomic, assign) BOOL toolboxIsVisible;
 
+@property (nonatomic, assign) CGPoint contentOffsetOnShowToolbox;
+
 @end
