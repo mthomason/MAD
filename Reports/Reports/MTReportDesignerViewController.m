@@ -376,7 +376,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     if ([UIDevice isPad] == NO) {
         CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
-        //CGFloat toolBarHeight;
         if (navigationToolbarFrame.size.height != [[self toolbarBottomHeightConstraint] constant]) {
             __block MTReportDesignerViewController *reportDesigner = self;
             [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
@@ -385,16 +384,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
     }
 
-}
-
-- (CGFloat)toolbarBottomHeight {
-    CGFloat toolbarHeight;
-    if ([self toolbarBottomZero]) {
-        toolbarHeight = 0.0000f;
-    } else {
-        toolbarHeight = self.navigationController.toolbar.frame.size.height;
-    }
-    return toolbarHeight;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -412,7 +401,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    
 }
 
 - (void)viewWillLayoutSubviews {
@@ -1528,16 +1516,28 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - Methods
 
+- (CGFloat)toolbarBottomHeight {
+    return self.toolbarBottomZero ? CGSizeZero.height :
+    self.navigationController.toolbar.frame.size.height;
+}
+
 - (CGRect)rectForSelectedElements {
-    CGRect popoverRect = CGRectZero;
-    if ([[self selectedObjectIds] count] == 1) {
-        MTElementView *elementView = [[self selectedElementViews] anyObject];
-        popoverRect = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
-    } else if ([[self selectedObjectIds] count] > 1) {
-        CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
+    return [MTReportDesignerViewController popoverRectForSelectedElements:[self selectedElementViews]
+                                                                   inView:[self designerContentView]];
+}
+
++ (CGRect)popoverRectForSelectedElements:(NSSet *)selectedElementViews inView:(UIView *)contentView {
+    CGRect result;
+    if ([selectedElementViews count] == 0) {
+        result = CGRectZero;
+    } else if ([selectedElementViews count] == 1) {
+        UIView *elementView = [selectedElementViews anyObject];
+        result = [elementView convertRect:[elementView frame] toView:contentView];
+    } else {
+        CGFloat minx = CGPointZero.x, miny = CGPointZero.y, maxx = CGPointZero.x, maxy = CGPointZero.y;
         NSUInteger counter = 0;
-        for (MTElementView *elementView in [self selectedElementViews]) {
-            CGRect frame = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
+        for (UIView *elementView in selectedElementViews) {
+            CGRect frame = [elementView convertRect:[elementView frame] toView:contentView];
             if (counter == 0) {
                 minx = frame.origin.x;
                 miny = frame.origin.y;
@@ -1551,9 +1551,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             }
             counter++;
         }
-        popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
+        result = CGRectMake(minx, miny, maxx - minx, maxy - miny);
     }
-    return popoverRect;
+    return result;
 }
 
 #pragma mark - MTElementViewDelegate
@@ -1622,29 +1622,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
                 [passThroughViews release];
                 
-                CGRect popoverRect = CGRectZero;
-                if ([[self selectedObjectIds] count] == 1) {
-                    popoverRect = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
-                } else if ([[self selectedObjectIds] count] > 1) {
-                    CGFloat minx = 0.0000f, miny = 0.0000f, maxx = 0.0000f, maxy = 0.0000f;
-                    NSUInteger counter = 0;
-                    for (MTElementView *elementView in [self selectedElementViews]) {
-                        CGRect frame = [elementView convertRect:[elementView frame] toView:[self designerContentView]];
-                        if (counter == 0) {
-                            minx = frame.origin.x;
-                            miny = frame.origin.y;
-                            maxx = frame.origin.x + frame.size.width;
-                            maxy = frame.origin.y + frame.size.height;
-                        } else {
-                            minx = minx < frame.origin.x ? minx : frame.origin.x;
-                            miny = miny < frame.origin.y ? miny : frame.origin.y;
-                            maxx = maxx > frame.origin.x + frame.size.width ? maxx : frame.origin.x + frame.size.width;
-                            maxy = maxy > frame.origin.y + frame.size.height ? maxy : frame.origin.y + frame.size.height;
-                        }
-                        counter++;
-                    }
-                    popoverRect = CGRectMake(minx, miny, maxx - minx, maxy - miny);
-                }
+                CGRect popoverRect = [MTReportDesignerViewController popoverRectForSelectedElements:[self selectedElementViews]
+                                                                                          inView:[self designerContentView]];
+                    
                 [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
                                                                      inView: [self designerContentView]
                                                    permittedArrowDirections: UIPopoverArrowDirectionAny
@@ -1949,41 +1929,42 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
-    //Try quick hash method...
-    BOOL quickHashWorks = YES;
-    for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
-        UIView *selectedView = [self viewForObjectID:selectedObjectId];
-        if (selectedView != nil) {
-            [results addObject:selectedView];
-        } else {
-            quickHashWorks = NO;
+    if ([[self selectedObjectIds] count] > 0) {
+        //Try quick hash method...
+        BOOL quickHashWorks = YES;
+        for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
+            UIView *selectedView = [self viewForObjectID:selectedObjectId];
+            if (selectedView != nil) {
+                [results addObject:selectedView];
+            } else {
+                quickHashWorks = NO;
+            }
+        }
+        
+        if (quickHashWorks == NO) {     // FIXME: This case should be unneeded now.
+            
+            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            MAReportDocument *reportDocument = [applicationInstance activeDocument];
+            RptqDocument *document = [reportDocument activeDocument];
+            SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
+            
+            for (RptqDocumentSection *documentSection in sectionEnumerator) {
+                MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
+                
+                for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+                    for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
+                        MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:documentSectionView];
+                        if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
+                            [results addObject:elementView];
+                        }
+                    }
+                }
+                [documentSectionView release];
+            }
+            [sectionEnumerator release];
         }
     }
     
-
-    if (quickHashWorks == NO) {     // FIXME: This case should be unneeded now.
-
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        RptqDocument *document = [reportDocument activeDocument];
-        SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
-
-        for (RptqDocumentSection *documentSection in sectionEnumerator) {
-            MTDocumentSectionView *documentSectionView = [[self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]] retain];
-            
-            for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
-                for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
-                    MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:documentSectionView];
-                    if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
-                        [results addObject:elementView];
-                    }
-                }
-            }
-            [documentSectionView release];
-        }
-        [sectionEnumerator release];
-    }
-
     return [results autorelease];
 
 }

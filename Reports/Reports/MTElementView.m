@@ -110,7 +110,6 @@
         CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
         [[self displayStringAttributed] drawWithRect:drawingBounds options:[self drawingOptions] context:nil];
     }
-    //NSLog(@"drawRect: %@", [self displayStringAttributed]);
 }
 
 #pragma mark - Members
