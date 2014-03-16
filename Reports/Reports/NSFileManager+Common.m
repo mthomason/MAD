@@ -13,8 +13,8 @@
 
 @implementation NSFileManager (Common)
 
-+ (NSMutableArray *)contentsOfDocumentsDirectory {
-    NSMutableArray *doc = [[NSMutableArray array] retain];
++ (NSMutableSet *)contentsOfDocumentsDirectory {
+    NSMutableSet *doc = [[NSMutableSet alloc] init];
     NSString *documentsDirectoryPath = [[NSFileManager applicationDocumentsDirectory] retain];
 	NSArray *documentsDirectoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:NULL] retain];
 

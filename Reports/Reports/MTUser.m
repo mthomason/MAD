@@ -7,10 +7,9 @@
 //
 
 #import "MTUser.h"
+#import "NSFileManager+Common.h"
 
 @interface MTUser()
-
-@property (nonatomic, retain) NSMutableDictionary *urlsDocuments;   //MAReportDocument stored by their NSURLS
 
 @end
 
@@ -20,12 +19,18 @@
     self = [super init];
     if (self) {
         
-        NSMutableDictionary *urls = [[NSMutableDictionary alloc] init];
-        [self setUrlsDocuments:urls];
-        [urls release];
-        
     }
     return self;
+}
+
+- (NSArray *)hasMadDocuments {
+    NSSet *madFiles = [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
+    SEL selectorPath = @selector(path);
+    SEL selectorSort = @selector(caseInsensitiveCompare:);
+    NSString *key = NSStringFromSelector(selectorPath);
+    NSSortDescriptor *sortByFileName = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:selectorSort];
+    NSArray *sortDescriptors = @[sortByFileName];
+    return [[[madFiles sortedArrayUsingDescriptors:sortDescriptors] retain] autorelease];
 }
 
 @end

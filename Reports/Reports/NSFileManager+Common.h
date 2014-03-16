@@ -10,8 +10,8 @@
 
 @interface NSFileManager (Common)
 
-+ (NSMutableArray *)contentsOfDocumentsDirectory;
-+ (NSMutableArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
++ (NSSet *)contentsOfDocumentsDirectory;
++ (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 + (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension;
 + (NSMutableArray *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension;
 

@@ -24,7 +24,7 @@
     return [results autorelease];
 }
 
-+ (NSArray *)pdfFiles {
++ (NSSet *)pdfFiles {
     return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:PDF_PATH_EXTENSION];
 }
 

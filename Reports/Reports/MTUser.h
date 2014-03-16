@@ -10,4 +10,6 @@
 
 @interface MTUser : NSObject
 
+- (NSArray *)hasMadDocuments;
+
 @end

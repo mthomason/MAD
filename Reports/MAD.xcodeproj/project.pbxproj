@@ -44,6 +44,12 @@
 		4C0081EC17849A4A00874849 /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* MTVerificationController.m */; };
 		4C0081ED17849A4A00874849 /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* MTVerificationController.m */; };
 		4C0081EE17849A4A00874849 /* MTVerificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0081E817849A4A00874849 /* MTVerificationController.m */; };
+		4C02F74E18D5DC8800061A83 /* MTReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */; };
+		4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */; };
+		4C02F75A18D5DC9900061A83 /* MTQueryDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */; };
+		4C02F75B18D5DC9900061A83 /* MTQueryDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */; };
+		4C02F75E18D5DCAB00061A83 /* MTReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */; };
+		4C02F75F18D5DCAB00061A83 /* MTReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */; };
 		4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
 		4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
@@ -1973,6 +1979,12 @@
 		4C0081DB1781D8C200874849 /* MTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLog.m; sourceTree = "<group>"; };
 		4C0081E817849A4A00874849 /* MTVerificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVerificationController.m; sourceTree = "<group>"; };
 		4C0081E917849A4A00874849 /* MTVerificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVerificationController.h; sourceTree = "<group>"; };
+		4C02F74C18D5DC8800061A83 /* MTReportDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesigner.h; sourceTree = "<group>"; };
+		4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesigner.m; sourceTree = "<group>"; };
+		4C02F75818D5DC9900061A83 /* MTQueryDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryDesigner.h; sourceTree = "<group>"; };
+		4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryDesigner.m; sourceTree = "<group>"; };
+		4C02F75C18D5DCAB00061A83 /* MTReportViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewer.h; sourceTree = "<group>"; };
+		4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewer.m; sourceTree = "<group>"; };
 		4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
 		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
@@ -3177,6 +3189,12 @@
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
 				4CBABC1218C8945B00EE5768 /* MTUser.h */,
 				4CBABC1318C8945B00EE5768 /* MTUser.m */,
+				4C02F74C18D5DC8800061A83 /* MTReportDesigner.h */,
+				4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */,
+				4C02F75818D5DC9900061A83 /* MTQueryDesigner.h */,
+				4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */,
+				4C02F75C18D5DCAB00061A83 /* MTReportViewer.h */,
+				4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */,
 				4C8A648818C7C6C200997D22 /* Document */,
 				4C8A649118C7C6D100997D22 /* Database */,
 				4C8A649218C7C71100997D22 /* DatabaseTable */,
@@ -5717,6 +5735,7 @@
 			files = (
 				4C0E7721163B5AEC003B951E /* main.m in Sources */,
 				4CBABB9018C7E1B100EE5768 /* MTPaperA3.m in Sources */,
+				4C02F75B18D5DC9900061A83 /* MTQueryDesigner.m in Sources */,
 				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
 				4C0E7725163B5AEC003B951E /* MTReportDesignerViewController.m in Sources */,
 				4CBABBE618C7E96F00EE5768 /* MTPaperB7.m in Sources */,
@@ -5874,6 +5893,7 @@
 				4CDBCB6716AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */,
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
+				4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
 				4C80A5D51831415500242703 /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4CABE4601837DF7A007EDD9D /* RptqDatabase.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
@@ -5915,6 +5935,7 @@
 				4C8BF47416F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m in Sources */,
 				4C8BF47816F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4C8BF47C16F645D3002D9F9B /* RptqDocumentObjectImage+Extras.m in Sources */,
+				4C02F75F18D5DCAB00061A83 /* MTReportViewer.m in Sources */,
 				4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */,
 				4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */,
 				4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
@@ -6313,6 +6334,7 @@
 			files = (
 				4C384E3514B29789007B4F48 /* main.m in Sources */,
 				4CBABB8F18C7E1B100EE5768 /* MTPaperA3.m in Sources */,
+				4C02F75A18D5DC9900061A83 /* MTQueryDesigner.m in Sources */,
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
 				4C76F0B114B4F132005DCE49 /* MTReportDesignerViewController.m in Sources */,
 				4CBABBE518C7E96F00EE5768 /* MTPaperB7.m in Sources */,
@@ -6470,6 +6492,7 @@
 				4C4C78C016960C23000ADD1D /* UIColor+Gradients.m in Sources */,
 				4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 				4C0B4ABA1836A9A6002B6BDB /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
+				4C02F74E18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
 				4CABE4971837DF7F007EDD9D /* RptqDocumentSectionRows.m in Sources */,
 				4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8E16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
@@ -6511,6 +6534,7 @@
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 				4C80A5EF18317B6800242703 /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
+				4C02F75E18D5DCAB00061A83 /* MTReportViewer.m in Sources */,
 				4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4CABE4531837DF77007EDD9D /* RptqDocumentObjectChart.m in Sources */,
 				4C8BF46F16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */,

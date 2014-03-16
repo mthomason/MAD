@@ -14,6 +14,7 @@
 #import "MTTitleView.h"
 #import "MADWatermarkView.h"
 #import "NSURL+Document.h"
+#import "MTUser.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
@@ -777,12 +778,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (IBAction)updateFileList:(id)sender {
-    
-    NSArray *madFiles = [MTApplicationInstance reportUrls];
-    NSMutableArray *a = [[NSMutableArray alloc] initWithArray:madFiles];
-    [self setAvailableFilesCache: a];
-    [a release];
-    
+    MTApplicationInstance *app = [AppDelegate applicationInstance];
+    NSMutableArray *madFiles = [[[app user] hasMadDocuments] mutableCopy];
+    [self setAvailableFilesCache: madFiles];
+    [madFiles release];
     [[self collectionView] reloadData];
     
 }
@@ -856,8 +855,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (IBAction)about:(id)sender {
     NSString *applicationName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
     NSString *title = [NSString stringWithFormat:NSLocalizedString(@"About %@", @"About Mad Designer"),  applicationName];
-    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2012-2014.  Software created by Michael Thomason for Everyday Apps LLC.",
-                                          @"© Everyday Apps LLC 2012-2014.  Software created by Michael Thomason for Everyday Apps LLC.");
+    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.",
+                                          @"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.");
     NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
 
     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: title
