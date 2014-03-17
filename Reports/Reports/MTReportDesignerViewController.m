@@ -2114,51 +2114,68 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             } completion:^(BOOL finished) {
                 
                 if (finished) {
-                    
-                    CGRect rectToShow = CGRectZero;
-                    
                     if (tooboxType == MTToolboxTypeSection) {
-                        RptqQuery *query = [AppDelegate activeRptqQuery];
-                        RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
-                                                                                                    forQuery: query];
-                        UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
-                        UIView *superv = [selectedSectionView superview];
-                        rectToShow = superv.frame;
-                        rectToShow = [selectedSectionView convertRect:superv.frame toView:self.designerScrollView];
+                        [self adjustContentOffsetForLastSelectedSectionControlPanel];
                     } else if (tooboxType == MTToolboxTypeElement) {
-                        rectToShow = [self rectForSelectedElements];
-                        
-                        
+                        [self adjustContentOffsetForSelectedElements];
                     }
-                    
-                    CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
-                    
-                    //Scroll to top
-                    CGRect db = self.designerScrollView.bounds;
-                    CGRect b = [self.designerScrollView convertRect:db toView:self.view];
-                    CGFloat adjustment = self.navigationController.navigationBar.bounds.size.height + [UIApplication sharedApplication].statusBarFrame.size.height + (MTReportDesignerBorderPadding / 2.0000f);
-                    b.size.height = b.size.height - adjustment;
-                    rectToShow.origin.y = rectToShow.origin.y - adjustment;
-                    visableRect.origin.y = visableRect.origin.y - adjustment;
-                    if (CGRectIntersectsRect(visableRect, rectToShow) == NO) {
-
-                        CGFloat yOffset;
-                        if  (tooboxType == MTToolboxTypeElement) {
-                            yOffset = ((rectToShow.origin.y + adjustment) * self.designerScrollView.zoomScale) - adjustment;
-                        } else {
-                            yOffset = rectToShow.origin.y;
-                        }
-                        CGPoint contentOffset = CGPointMake(CGPointZero.x, yOffset);
-                        [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
-                    }
-                    
                 }
             }];
         }
     }
-    
     [viewController release];
+}
+
+- (CGFloat)heightTopBars {
+    return self.navigationController.navigationBar.bounds.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+}
+
+- (CGFloat)heightScrollViewAdjustment {
+    return [self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f);
+}
+
+- (void)adjustContentOffsetForSelectedElements {
+    CGRect rectToShow = [self rectForSelectedElements];
+    CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
     
+    //Scroll to top
+    CGRect db = self.designerScrollView.bounds;
+    CGRect b = [self.designerScrollView convertRect:db toView:self.view];
+    CGFloat adjustment = [self heightScrollViewAdjustment];
+    b.size.height -= adjustment;
+    rectToShow.origin.y -= adjustment;
+    visableRect.origin.y -= adjustment;
+    if (CGRectIntersectsRect(visableRect, rectToShow) == NO) {
+        CGFloat yOffset = ((rectToShow.origin.y + adjustment) * self.designerScrollView.zoomScale) - adjustment;
+        CGPoint contentOffset = CGPointMake(CGPointZero.x, yOffset);
+        [[self designerScrollView] setContentOffset:contentOffset animated:YES];
+    }
+}
+
+- (void)adjustContentOffsetForLastSelectedSectionControlPanel {
+    RptqQuery *query = [AppDelegate activeRptqQuery];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                                forQuery: query];
+    UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
+    UIView *superv = [selectedSectionView superview];
+    CGRect rectToShow = superv.frame;
+    rectToShow = [selectedSectionView convertRect:superv.frame toView:self.designerScrollView];
+    CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
+    
+    //Scroll to top
+    CGRect db = self.designerScrollView.bounds;
+    CGRect b = [self.designerScrollView convertRect:db toView:self.view];
+    CGFloat adjustment = [self heightScrollViewAdjustment];
+    b.size.height -= adjustment;
+    rectToShow.origin.y -= adjustment;
+    visableRect.origin.y -= adjustment;
+    if (CGRectIntersectsRect(visableRect, rectToShow) == NO) {
+    
+        CGFloat yOffset = rectToShow.origin.y;
+        CGPoint contentOffset = CGPointMake(CGPointZero.x, yOffset);
+        [[self designerScrollView] setContentOffset:contentOffset animated:YES];
+    }
+
 }
 
 + (CGRect)visableRect:(UIScrollView *)scrollView {

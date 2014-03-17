@@ -7,6 +7,7 @@
 //
 
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "UIColor+EverydayApps.h"
 
 NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier = @"MTReportDesignerSectionLayoutSettingsViewControllerIdentifier";
 
@@ -42,6 +43,8 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackOpaque];
+    UIColor *tintColor = [UIColor tintColorRed];
+    [[[[[self navigationController] navigationBar] topItem] rightBarButtonItem] setTintColor:tintColor];
     [self updateDisplay];
 }
 

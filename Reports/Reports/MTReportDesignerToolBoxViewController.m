@@ -9,6 +9,7 @@
 #import "MTReportDesignerToolBoxViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTReportDesignerToolBoxViewController ()
 
@@ -88,7 +89,11 @@
 
     UINavigationItem *navigationItem = [[[self navigationBar] items] objectAtIndex:0];
     UIBarButtonItem *leftBarButtonItem = [navigationItem leftBarButtonItem];
+    UIBarButtonItem *rightBarButtonItem = [navigationItem rightBarButtonItem];
+    UIColor *tintColor = [UIColor tintColorRed];
+    [rightBarButtonItem setTintColor:tintColor];
     UISegmentedControl *segmentedControl = (UISegmentedControl *)[leftBarButtonItem customView];
+    [segmentedControl setTintColor:[UIColor tintColor2]];
     [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self setSceneSelector:segmentedControl];
     UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];
