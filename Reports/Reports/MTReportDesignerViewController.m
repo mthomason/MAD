@@ -2041,7 +2041,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else {
         [self deselectAllElementsAnimated:YES];
     }
-    //[reportDocument quickSave];
 }
 
 - (IBAction)doneReports:(id)sender {
@@ -2087,14 +2086,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             break;
     }
 
-    if (tooboxType == MTToolboxTypeElement) {
-        [[viewController view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
+    [[viewController view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
+    [[viewController view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    
+    if ([[viewController view] superview] == nil) {
+        [[self toolboxView] addSubview:[viewController view]];
     }
-        [[viewController view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        
-        if ([[viewController view] superview] == nil) {
-            [[self toolboxView] addSubview:[viewController view]];
-        }
 
     
     if ([UIDevice isPad]) {
