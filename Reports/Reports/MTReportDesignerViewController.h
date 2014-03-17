@@ -12,6 +12,8 @@
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
 
+//extern const CGFloat MTReportDesignerBorderPadding;
+
 @interface MTReportDesignerViewController : MTViewController
     
 - (IBAction)doneReports:(id)sender;

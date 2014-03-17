@@ -2087,7 +2087,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             break;
     }
 
-    if ([UIDevice isLagacyOS] || tooboxType == MTToolboxTypeElement) {
+    if (tooboxType == MTToolboxTypeElement) {
         [[viewController view] setFrame:CGRectMake(CGPointZero.x, CGPointZero.y, self.toolboxView.frame.size.width, self.toolboxView.frame.size.height)];
     }
         [[viewController view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -2143,7 +2143,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (CGFloat)heightTopBars {
-    return self.navigationController.navigationBar.bounds.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+    CGFloat height = self.navigationController.navigationBar.bounds.size.height;
+    return UIDeviceOrientationIsLandscape([self interfaceOrientation]) ? (height += [UIApplication sharedApplication].statusBarFrame.size.width) : (height += [UIApplication sharedApplication].statusBarFrame.size.height);
 }
 
 - (CGFloat)heightScrollViewAdjustment {
