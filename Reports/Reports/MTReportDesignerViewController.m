@@ -1618,6 +1618,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)didSelectElementView:(id)sender {
+    [self removeBorderFromSectionViews];
     
     NSUInteger deselectedSectionViewCounter = 0;
     //Remove border from the section views
@@ -1814,11 +1815,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 
                 [self deselectAllElementsAnimated:YES];
                 
-                if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
-                    DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
-                    [sectionLabel dimView];
-                }
-                
                 [self setLastSelectedSectionControlPanel:[[sender view] tag]];
                 
                 MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
@@ -1828,6 +1824,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 RptqQuery *query = [[database hasQueries] anyObject];
                 RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                     forQuery: query];
+                
+                
+                if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
+                    DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
+                    [sectionLabel dimView];
+                    UIColor *borderColor = [UIColor tintColor];
+                    UIView *superView = [self getSectionViewForDocumentSection: section];
+                    [[superView layer] setBorderColor: [borderColor CGColor]];
+                    [[superView layer] setBorderWidth:1.0000f];
+                }
+
                 [[self viewControllerSectionLayoutSettings] setInitalStepperValue:([[section height] floatValue])];
                 [[self viewControllerSectionLayoutSettings] setInitalSwitchValue:[[section visibility] boolValue]];
                 [[self viewControllerSectionLayoutSettings] setInitalNumberOfRows:[[section numberOfRows] integerValue]];
@@ -1857,15 +1864,23 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
 
     //Remove border from element views
-    for (MTElementView *elementView in [self selectedElementViews]) {
+    [[self selectedElementViews] enumerateObjectsUsingBlock:^(MTElementView *elementView, BOOL *stop) {
         [self didDeselectElementView:elementView animated:animated];
-    }
+    }];
+    
+    [self removeBorderFromSectionViews];
+}
+
+- (void)removeBorderFromSectionViews {
+    //Remove border from the section views
+    [[self sectionControlViews] enumerateKeysAndObjectsUsingBlock:^(id key, DesignerSectionLabel *view, BOOL *stop) {
+        [view normalView];
+    }];
 
     //Remove border from the section views
-    for (DesignerSectionLabel *view in [[self sectionControlViews] objectEnumerator]) {
-        [view normalView];
-    }
-
+    [[self sectionViews] enumerateKeysAndObjectsUsingBlock:^(id key, UICollectionView *view, BOOL *stop) {
+        [[view layer] setBorderWidth:0.0000f];
+    }];
 }
 
 - (void)applyBorderToView:(UIView *)view {
@@ -1987,7 +2002,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 
                 for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
                     for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
-                        MTElementView *elementView = [self elementViewAtIndexPath:[NSIndexPath indexPathForItem:item inSection:section] inCollectionView:documentSectionView];
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
+                        MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
                         if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
                             [results addObject:elementView];
                         }
