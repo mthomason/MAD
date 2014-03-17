@@ -3386,37 +3386,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
                     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
-                    
-                    CGRect viewFrame = [[gestureRecognizer view] frame];
-                    [documentObject setOrigin:viewFrame.origin];
-                    
+                    CGRect frame = [[gestureRecognizer view] frame];
                     [[gestureRecognizer view] removeFromSuperview];
+                    
                     NSManagedObjectID *sectionId = [newSection objectIdTag];
                     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
                                                                                             fromObjectContext: managedObjectContext];
-                    
-                    NSUInteger sectionZero = 0;
-                    RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
-                    NSUInteger lastIndex = [[sectionRow hasObjects] count];
-                    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
-                    
-                    [documentObject setDropPoint:viewFrame.origin];
-                    
-                    NSNumber *dropIndex = @([documentSection nextDropIndexForSection]);
-                    [documentObject setDropIndex:dropIndex];
-                    
-                    NSOrderedSet *documentObjects = [sectionRow hasObjects];
-                    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
-                    
-                    
-                    [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
-                    
-                    NSArray *indexPaths = [NSArray arrayWithObject: indexInsert];
-                    
-                    [sectionRow setHasObjects:hasObjects];
-                    [managedObjectContext save:nil];
-                    [newSection insertItemsAtIndexPaths:indexPaths];
-                    [hasObjects release];
+
+                    NSIndexPath *indexPathInsert = [documentSection addDocumentObject:documentObject withDropPoint:frame.origin];
+                    NSArray *indexPathsInserted = @[indexPathInsert];
+                    [newSection insertItemsAtIndexPaths:indexPathsInserted];
                     
                 } completion:^(BOOL finished) {
                     if (finished) {
@@ -3435,6 +3414,38 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             break;
     }
 }
+/*
+
+- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject
+                 toDocumentSection:(RptqDocumentSection *)documentSection
+                        withDropPoint:(CGPoint)origin {
+    
+    
+    [documentObject setOrigin:origin];
+    [documentObject setDropPoint:origin];
+    
+    NSUInteger sectionZero = 0;
+    RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
+    NSUInteger lastIndex = [[sectionRow hasObjects] count];
+    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
+    
+    
+    NSNumber *dropIndex = @([documentSection nextDropIndexForSection]);
+    [documentObject setDropIndex:dropIndex];
+    
+    NSOrderedSet *documentObjects = [sectionRow hasObjects];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
+    
+    
+    [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
+    [sectionRow setHasObjects:hasObjects];
+    [hasObjects release];
+    
+    [[documentSection managedObjectContext] save:nil];
+
+    return [[indexInsert retain] autorelease];
+
+}*/
 
 - (MTDocumentSectionView *)sectionViewFor:(UIGestureRecognizer *)gesture {
     MTDocumentSectionView *result = nil;

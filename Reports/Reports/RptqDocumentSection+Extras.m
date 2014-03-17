@@ -110,6 +110,36 @@
     return dropIndex;
 }
 
+- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject
+                     withDropPoint:(CGPoint)origin {
+    
+    
+    [documentObject setOrigin:origin];
+    [documentObject setDropPoint:origin];
+    
+    NSUInteger sectionZero = 0;
+    RptqDocumentSectionRows *sectionRow = [[self hasRows] objectAtIndex: sectionZero];
+    NSUInteger lastIndex = [[sectionRow hasObjects] count];
+    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
+    
+    
+    NSNumber *dropIndex = @([self nextDropIndexForSection]);
+    [documentObject setDropIndex:dropIndex];
+    
+    NSOrderedSet *documentObjects = [sectionRow hasObjects];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
+    
+    
+    [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
+    [sectionRow setHasObjects:hasObjects];
+    [hasObjects release];
+    
+    [[self managedObjectContext] save:nil];
+    
+    return [[indexInsert retain] autorelease];
+    
+}
+
 #pragma mark - Static
 
 + (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
