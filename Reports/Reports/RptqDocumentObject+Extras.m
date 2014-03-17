@@ -80,8 +80,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     [self setVerticalAlignment:@(MTVerticalAlignmentTop)];
     [self setHorizontalAlignment:@(MTHorizontalAlignmentLeft)];
     [self setSectionRowNumber:@(1)];
-    [self setDropPointX:@(CGPointZero.x)];
-    [self setDropPointY:@(CGPointZero.y)];
+    [self setDropPoint:CGPointZero];
     [self setDropIndex:@(lastDropIndex)];
     
 }
@@ -147,6 +146,18 @@ static NSNumberFormatter *currencyNumberFormatter;
     CGFloat sizeWidth = elementViewBounds.size.width;
     CGFloat sizeHeight = elementViewBounds.size.height;
     return CGRectMake(originX, originY, sizeWidth, sizeHeight);
+}
+
+- (void)setDropPoint:(CGPoint)drop {
+    NSNumber *x = @(drop.x), *y = @(drop.y);
+    [self setDropPointX: x];
+    [self setDropPointY: y];
+}
+
+- (void)setOrigin:(CGPoint)origin {
+    NSNumber *x = @(origin.x), *y = @(origin.y);
+    [self setOriginx: x];
+    [self setOriginy: y];
 }
 
 #pragma mark - Member
@@ -233,9 +244,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     
     RptqDocumentObject *documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                  insertIntoManagedObjectContext: mangedObjectContext];
-
-    [documentObject setOriginx: @(CGPointZero.x)];
-    [documentObject setOriginy: @(CGPointZero.y)];
+    [documentObject setOrigin:CGPointZero];
     [documentObject setSizewidth: @(75.0000f)];
     [documentObject setSizeheight: @(22.0000f)];
 

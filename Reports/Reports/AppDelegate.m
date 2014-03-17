@@ -54,6 +54,10 @@ void uncaughtExceptionHandler(NSException *exception) {
     return [[[AppDelegate applicationInstance] retain] autorelease];
 }
 
++ (UIWindow *)window {
+    return [[[[[UIApplication sharedApplication] windows] objectAtIndex:0] retain] autorelease];
+}
+
 + (MTApplicationInstance *)applicationInstance {
     AppDelegate *appDelegate = [[(AppDelegate *)[[UIApplication sharedApplication] delegate] retain] autorelease];
     MTApplicationInstance *result = [[appDelegate applicationInstance] retain];

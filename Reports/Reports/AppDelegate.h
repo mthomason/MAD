@@ -19,6 +19,7 @@
         UIAlertViewDelegate>
 
 + (MTApplicationInstance *)app;
++ (UIWindow *)window;
 
 + (MTApplicationInstance *)applicationInstance;
 + (MAReportDocument *)activeReportDocument;
