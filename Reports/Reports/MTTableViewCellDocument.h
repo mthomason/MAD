@@ -3,12 +3,14 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/7/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTTableViewCellDocument_h
+#define Reports_MTTableViewCellDocument_h
 
 #import <UIKit/UIKit.h>
 #import "MTDocumentCellProtocol.h"
-#import "UIDevice+Hack.h"
 
 @interface MTTableViewCellDocument : UITableViewCell
 
@@ -21,3 +23,5 @@
 @property (nonatomic, assign) id <MTDocumentCellProtocol> delegate;
 
 @end
+
+#endif

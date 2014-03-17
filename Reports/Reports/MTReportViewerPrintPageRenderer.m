@@ -3,13 +3,19 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/30/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
+#import <QuartzCore/QuartzCore.h>
+#import "MTApplicationInstance.h"
+#import "MAReportDocument.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIDevice+Hack.h"
+#import "MTPaper.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";

@@ -3,7 +3,7 @@
 //  libSqlite3.8Tests
 //
 //  Created by Michael Thomason on 10/23/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>

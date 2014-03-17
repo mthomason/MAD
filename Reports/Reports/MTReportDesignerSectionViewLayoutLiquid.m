@@ -4,11 +4,14 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "SectionEnumerator.h"
+#import "MTReportDesignerSectionDecorationView.h"
+#import "MTCollectionViewLayoutLiquidAttributes.h"
+#import "CGGeometry+Extras.h"
 
 @interface MTReportDesignerSectionViewLayoutLiquid ()
 

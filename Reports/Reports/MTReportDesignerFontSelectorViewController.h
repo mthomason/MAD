@@ -3,17 +3,15 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/6/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MTReportDesignerFontSelectorViewController_h
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTFont.h"
-#import "MTLog.h"
 
-@class MTReportDesignerFontSelectorViewController;
+@class MTReportDesignerFontSelectorViewController, MTFont;
 
 @protocol MTReportDesignerFontSelectorDelegate
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;

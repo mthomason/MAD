@@ -3,13 +3,16 @@
 //  Reports
 //
 //  Created by Michael Thomason on 6/26/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTLicensingViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 #import "MTApplicationInstance.h"
+#import <QuartzCore/QuartzCore.h>
+#import "MTStoreKitController.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 @interface MTLicensingViewController ()
 

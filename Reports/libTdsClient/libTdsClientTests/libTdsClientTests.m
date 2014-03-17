@@ -3,7 +3,7 @@
 //  libTdsClientTests
 //
 //  Created by Michael Thomason on 6/6/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "libTdsClientTests.h"

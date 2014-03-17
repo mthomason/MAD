@@ -3,8 +3,11 @@
 //  Barcodes
 //
 //  Created by Michael Thomason on 11/7/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Barcodes_MTBarcode_h
+#define Barcodes_MTBarcode_h
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -124,7 +127,7 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 };
 
 @interface MTBarcode : NSObject
-<MTBarcodeProtocol>
+    <MTBarcodeProtocol>
 
 @property (nonatomic, retain, readwrite) UIColor *forgroundColor;
 @property (nonatomic, retain, readwrite) UIColor *backgroundColor;
@@ -164,3 +167,5 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 + (id)barcodeWithType :(MTBarcodeType)type;
 
 @end
+
+#endif

@@ -1,6 +1,6 @@
-#import "DocumentStatusView.h"
+#import "MTDocumentStatusView.h"
 
-@interface DocumentStatusView()
+@interface MTDocumentStatusView()
 
 @property (nonatomic, assign) UIDocumentState state;
 @property (nonatomic, retain) NSString *message;
@@ -9,7 +9,7 @@
 
 @end
 
-@implementation DocumentStatusView
+@implementation MTDocumentStatusView
 
 - (void)dealloc {
     [_activityIndicator release];

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/16/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportDesignerDocumentObjectFormat.h"
@@ -11,8 +11,12 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MAReportDocument.h"
+#import <CoreData/CoreData.h>
+#import "MTToolboxViewControllerProtocol.h"
+#import "RptqDocumentObject+Extras.h"
 
 @interface MTReportDesignerDocumentObjectFormat ()
+    <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
 @property (nonatomic, retain) NSSet *userSelectedObjectIds;
 

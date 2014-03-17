@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/16/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTElementView.h"
@@ -14,6 +14,7 @@
 #import "MTTextView.h"
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
+#import "MTBarcode.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0

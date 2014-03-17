@@ -3,14 +3,13 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MTReportDesignerSectionViewLayout_h
 #define Reports_MTReportDesignerSectionViewLayout_h
 
 #import <UIKit/UIKit.h>
-#import "MTReportDesignerSectionDecorationView.h"
 
 @class MTReportDesignerSectionViewLayoutLine;
 

@@ -3,11 +3,12 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/4/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportDesignerViewController.h"
 #include <math.h>
+#import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTReportDesigner.h"
 #import "MTSettingsViewController.h"
@@ -27,6 +28,12 @@
 #import "NSManagedObject+Extras.h"
 #import "DesignerSectionLabel.h"
 #import "MTViewControllerBarcode.h"
+#import "MTDocumentObjectNewAggregateViewController.h"
+#import "MTDocumentObjectNewStaticLabelViewController.h"
+#import "MTCollectionViewLayoutLiquidAttributes.h"
+#import "MTLog.h"
+#import "UIView+NSObjectIdTag.h"
+#import "CGGeometry+Extras.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
@@ -1802,14 +1809,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     [sectionLabel normalView];
                 }
                 
-                if ([UIDevice isPad]) {
-                    
-                    if ([[self popoverControllerSectionSettings] isPopoverVisible]) {
-                        [[self popoverControllerSectionSettings] dismissPopoverAnimated:YES];
-                    }
-                } else {
-                    [self hideToolbox];
-                }
+                [self hideToolbox];
                 
             } else {
                 

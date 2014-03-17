@@ -3,11 +3,17 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/15/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportDesignerObjectSelectorViewController.h"
+#import <CoreData/CoreData.h>
 #import "UIDevice+Hack.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MTDocumentObjectNewAggregateViewController.h"
+#import "MTDocumentObjectNewStaticLabelViewController.h"
+#import "MTGroupByViewController.h"
+#import "RptqQueryField.h"
 
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";
@@ -26,6 +32,12 @@ NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @interface MTReportDesignerObjectSelectorViewController ()
+    <MTQueryBuilderChooseFieldDelegate,
+        MTAggregateFunctionsViewControllerDelegate,
+        MTGroupByViewControllerDelegate,
+        UINavigationControllerDelegate,
+        UICollectionViewDataSource,
+        UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemMain;

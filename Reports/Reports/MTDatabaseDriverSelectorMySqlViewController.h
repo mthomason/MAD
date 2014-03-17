@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MTDatabaseDriverSelectorMySqlViewController_h
@@ -11,8 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
-#import "MTDatabaseSqlServer.h"
-#import "NSURL+Document.h"
 
 @interface MTDatabaseDriverSelectorMySqlViewController : MTTableViewController
     <UITableViewDelegate, UIViewControllerTransitioningDelegate,

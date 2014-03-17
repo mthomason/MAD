@@ -3,8 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_UITableViewControllerCoreDataResults_h
+#define Reports_UITableViewControllerCoreDataResults_h
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
@@ -22,3 +25,5 @@
 @property BOOL debug;
 
 @end
+
+#endif

@@ -3,12 +3,14 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/8/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTSettingsViewController_h
+#define Reports_MTSettingsViewController_h
 
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
-#import "AppDelegate.h"
 
 @interface MTSettingsViewController : MTTableViewController
     <UITableViewDelegate>
@@ -25,3 +27,5 @@
 - (IBAction)done:(id)sender;
 
 @end
+
+#endif

@@ -3,15 +3,22 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/25/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDocumentObjectNewAggregateViewController_h
+#define Reports_MTDocumentObjectNewAggregateViewController_h
+
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import "MTAggregateFunctionsViewController.h"
+#import "Constants.h"
 
 extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;
 extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
+
+@class RptqQueryField, RptqDocumentObjectAggregate;
 
 @protocol MTViewControllerAggregateDelegate
 - (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
@@ -41,3 +48,5 @@ extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
 - (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject;
 
 @end
+
+#endif

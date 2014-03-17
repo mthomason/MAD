@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/5/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportDesignerFontSettingsViewController.h"
@@ -11,8 +11,10 @@
 #import "AppDelegate.h"
 #import "UIDevice+Hack.h"
 #import "MTApplicationInstance.h"
+#import "MTFont.h"
 
 @interface MTReportDesignerFontSettingsViewController()
+    <UITableViewDelegate>
 
 @property (assign) MTControlState controlStateBold;
 @property (assign) MTControlState controlStateItalic;

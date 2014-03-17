@@ -3,13 +3,18 @@
 //  Reports
 //
 //  Created by Michael Thomason on 5/16/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTCellEnterText.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import <CoreData/CoreData.h>
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+
 @interface MTViewControllerValueBasedOnField ()
 
 @property (nonatomic, retain) IBOutlet UITableView *tableViewMain;

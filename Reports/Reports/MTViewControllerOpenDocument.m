@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/2/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTViewControllerOpenDocument.h"
@@ -16,12 +16,29 @@
 #import "NSURL+Document.h"
 #import "MTUser.h"
 #import "MTApplicationInstance.h"
+#import <MessageUI/MessageUI.h>
+#import "MTQueryBuilderContainerController.h"
+#import "MTCollectionViewCellDocument.h"
+#import "UIView+Animations.h"
+#import "MTViewControllerAbout.h"
+#import "MTTableViewCellDocument.h"
+#import "UIDevice+Hack.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
-@interface MTViewControllerOpenDocument() <UIAlertViewDelegate, NSFileManagerDelegate>
+@interface MTViewControllerOpenDocument()
+    <UIAlertViewDelegate, NSFileManagerDelegate, UIPopoverControllerDelegate,
+        UICollectionViewDataSource,
+        UICollectionViewDelegate,
+        UICollectionViewDelegateFlowLayout,
+        UIGestureRecognizerDelegate,
+        MFMailComposeViewControllerDelegate,
+        UITextFieldDelegate,
+        MTViewControllerProtocol,
+        MTDocumentCellProtocol,
+        MTViewControllerAsyncProtocol>
 
 @property (nonatomic, retain) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemTitle;

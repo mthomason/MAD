@@ -3,12 +3,15 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTDatabaseDriverSelectorMySqlViewController.h"
 #import "MTViewControllerActivitySpinner.h"
 #import "UIDevice+Hack.h"
+#import "MTTableViewController.h"
+#import "MTDatabaseSqlServer.h"
+#import "NSURL+Document.h"
 
 @interface MTDatabaseDriverSelectorMySqlViewController()
 

@@ -3,11 +3,13 @@
 //  Reports
 //
 //  Created by Michael Thomason on 12/21/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTCollectionViewCellElement.h"
 #import <CoreData/CoreData.h>
+#import "UIView+NSObjectIdTag.h"
+#import "MAReportDocument.h"
 
 @implementation MTCollectionViewCellElement
 

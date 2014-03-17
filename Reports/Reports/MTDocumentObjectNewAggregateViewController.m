@@ -3,12 +3,15 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/25/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import "RptqQueryField.h"
+#import "RptqDocumentObjectAggregate.h"
+#import "MTAggregateFunctionsViewController.h"
 
 NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";
 NSString * const MTSegueAggregateFunctionFirst      = @"MTSegueAggregateFunctionFirst";

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 11/9/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTTableViewCellBarcodeCompositCode.h"

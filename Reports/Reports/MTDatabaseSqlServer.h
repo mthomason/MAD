@@ -3,8 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 6/18/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTDatabaseSqlServer_h
+#define Reports_MTDatabaseSqlServer_h
 
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
@@ -46,3 +49,5 @@ extern NSString * const MTDatabaseConnectionAppName;
 - (id)connectionSettings;
 
 @end
+
+#endif

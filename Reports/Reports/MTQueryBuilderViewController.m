@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTQueryBuilderViewController.h"
@@ -25,6 +25,7 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "UIDevice+Hack.h"
+#import "UIColor+EverydayApps.h"
 
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";

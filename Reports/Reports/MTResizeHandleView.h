@@ -3,8 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/17/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTResizeHandleView_h
+#define Reports_MTResizeHandleView_h
 
 #import <UIKit/UIKit.h>
 
@@ -38,3 +41,5 @@ typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 - (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position;
 
 @end
+
+#endif

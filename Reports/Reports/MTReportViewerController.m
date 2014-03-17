@@ -3,14 +3,19 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/1/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportViewerController.h"
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 #import "MTActivityItemProviderPdf.h"
 #import "UAAppReviewManager.h"
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
+#import "RptqQueryCache.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate>

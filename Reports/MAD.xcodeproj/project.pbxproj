@@ -2305,8 +2305,6 @@
 		4C5CD3DA1821A0C8005FC6DD /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = Music.mad; sourceTree = "<group>"; };
 		4C5E3C2117DF63D600CEEA76 /* MADUpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADUpgradeViewController.h; path = ../MADUpgradeViewController.h; sourceTree = "<group>"; };
 		4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADUpgradeViewController.m; path = ../MADUpgradeViewController.m; sourceTree = "<group>"; };
-		4C5F02E414BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellStoreItemReportTemplate.h; sourceTree = "<group>"; };
-		4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellStoreItemReportTemplate.m; sourceTree = "<group>"; };
 		4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
 		4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
 		4C6362BC14E6278D005DBBFF /* MTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationController.h; sourceTree = "<group>"; };
@@ -2704,8 +2702,8 @@
 		4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerReportPageView.m; sourceTree = "<group>"; };
 		4CC24AA31503E3AB00C4EE98 /* MTGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGradientView.h; sourceTree = "<group>"; };
 		4CC24AA41503E3AB00C4EE98 /* MTGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGradientView.m; sourceTree = "<group>"; };
-		4CC39D61175E4A4800865CCA /* DocumentStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentStatusView.h; sourceTree = "<group>"; };
-		4CC39D62175E4A4800865CCA /* DocumentStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentStatusView.m; sourceTree = "<group>"; };
+		4CC39D61175E4A4800865CCA /* MTDocumentStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentStatusView.h; sourceTree = "<group>"; };
+		4CC39D62175E4A4800865CCA /* MTDocumentStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentStatusView.m; sourceTree = "<group>"; };
 		4CC39D6A175FEBFA00865CCA /* NSDate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extras.h"; sourceTree = "<group>"; };
 		4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extras.m"; sourceTree = "<group>"; };
 		4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBorderedView.h; sourceTree = "<group>"; };
@@ -3124,8 +3122,8 @@
 				4C5029E81816440100C88CD4 /* MADWatermarkView.h */,
 				4C5029E91816440100C88CD4 /* MADWatermarkView.m */,
 				4CDC60AE16E48F9C00924676 /* Table View Cells */,
-				4CC39D61175E4A4800865CCA /* DocumentStatusView.h */,
-				4CC39D62175E4A4800865CCA /* DocumentStatusView.m */,
+				4CC39D61175E4A4800865CCA /* MTDocumentStatusView.h */,
+				4CC39D62175E4A4800865CCA /* MTDocumentStatusView.m */,
 				4CE3143516952E3B00114431 /* MTTextView.h */,
 				4CE3143616952E3B00114431 /* MTTextView.m */,
 				4CC6BA4E16A13D3B000A69A1 /* MTBorderedView.h */,
@@ -3534,13 +3532,6 @@
 				4C95CACC182CCA3F00160E01 /* MTBarcode.h */,
 			);
 			name = includes;
-			sourceTree = "<group>";
-		};
-		4C3C17D6163F414400A77BA6 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Libraries;
 			sourceTree = "<group>";
 		};
 		4C434AD518B5F3E800750B6B /* openssl */ = {
@@ -4098,7 +4089,6 @@
 				4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */,
 				4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */,
 				4C95CABF182B6D1F00160E01 /* Barcode */,
-				4C3C17D6163F414400A77BA6 /* Libraries */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -4690,8 +4680,6 @@
 				4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */,
 				4CC8993914DAFB720094E17E /* UITableViewCellQueryGroup.h */,
 				4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */,
-				4C5F02E414BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.h */,
-				4C5F02E514BA3A6600C49BE9 /* UITableViewCellStoreItemReportTemplate.m */,
 			);
 			name = "Table View Cells";
 			sourceTree = "<group>";

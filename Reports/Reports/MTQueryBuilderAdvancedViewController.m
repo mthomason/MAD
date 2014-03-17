@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/14/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTQueryBuilderAdvancedViewController.h"
@@ -13,6 +13,7 @@
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "MTScrollViewCenter.h"
 #import "MTViewController.h"
+#import "CGGeometry+Extras.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

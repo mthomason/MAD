@@ -3,11 +3,12 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/13/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTRulerView.h"
 #import "UIDevice+Hack.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTRulerView ()
 

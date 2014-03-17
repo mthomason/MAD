@@ -3,8 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/25/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTGroupByViewController_h
+#define Reports_MTGroupByViewController_h
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
@@ -29,3 +32,5 @@ extern NSString * const MTGroupByViewControllerIdentifier;
 - (void)selectGroupType:(MTAggregateGroupByType)groupByType withSectionNumber:(NSInteger)sectionNumber;
 
 @end
+
+#endif

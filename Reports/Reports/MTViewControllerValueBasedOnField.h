@@ -3,12 +3,15 @@
 //  Reports
 //
 //  Created by Michael Thomason on 5/16/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTViewControllerValueBasedOnField_h
+#define Reports_MTViewControllerValueBasedOnField_h
+
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import "RptqDocument+Extras.h"
+
+@class NSManagedObjectID;
 
 @protocol MTViewControllerValueBasedOnFieldDelegate
 - (void)enterStringDidFinishWithString:(NSString *)userInput;
@@ -19,7 +22,8 @@
         UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, assign) IBOutlet id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 @property (nonatomic, retain) NSManagedObjectID *schemaFieldObjectId;
 
 @end
+
+#endif

@@ -3,12 +3,13 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/23/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseSqlite3_h
+#define Reports_MTDatabaseSqlite3_h
+
 #import "MTDatabase.h"
-//#import <liblibSqlite3_8/libSqlite3_8.h>
-//#import "sqlite3.h"
 #import "libSqlite3_8.h"
 
 #import "MTDatabaseConnection.h"
@@ -37,3 +38,5 @@
 - (id)connectionSettings;
 
 @end
+
+#endif

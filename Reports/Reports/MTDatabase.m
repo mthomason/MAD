@@ -3,18 +3,25 @@
 //  Reports
 //
 //  Created by Michael Thomason on 11/9/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTDatabase.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnection.h"
+#import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
 #import "RptqDocumentObjectBarcode.h"
 #import "MTDatabaseTable.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqQueryField.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+#import "RptqQueryCache.h"
 
 @interface MTDatabase ()
 

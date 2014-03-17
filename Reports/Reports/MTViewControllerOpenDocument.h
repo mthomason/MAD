@@ -3,34 +3,20 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/2/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MTViewControllerOpenDocument_h
 #define Reports_MTViewControllerOpenDocument_h
 
 #import <UIKit/UIKit.h>
-#import <MessageUI/MessageUI.h>
-#import "MTQueryBuilderContainerController.h"
-#import "MTCollectionViewCellDocument.h"
-#import "UIView+Animations.h"
-#import "MTViewControllerAbout.h"
-#import "MTTableViewCellDocument.h"
 
 extern NSString * const MTSegueShowAddDocument;
 extern NSString * const MTSegueShowOpenDocument;
 
+@class MTCollectionViewCellDocument;
+
 @interface MTViewControllerOpenDocument : UICollectionViewController
-    <UIPopoverControllerDelegate,
-        UICollectionViewDataSource,
-        UICollectionViewDelegate,
-        UICollectionViewDelegateFlowLayout,
-        UIGestureRecognizerDelegate,
-        MFMailComposeViewControllerDelegate,
-        UITextFieldDelegate,
-        MTViewControllerProtocol,
-        MTDocumentCellProtocol,
-        MTViewControllerAsyncProtocol>
 
 @property (nonatomic, assign) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 @property (nonatomic, retain, readonly) UIPopoverController *aboutPopoverController;

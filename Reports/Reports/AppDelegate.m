@@ -3,10 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/2/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import "MTQueryBuilderViewController.h"
 #import "MTApplicationInstance.h"
 
 #import "MTReportDesigner.h"
@@ -30,6 +31,8 @@
 #import "MTLog.h"
 #import "NSURL+Document.h"
 #import "RptqDocument+Extras.h"
+
+#import "UIColor+EverydayApps.h"
 
 @interface AppDelegate()
 

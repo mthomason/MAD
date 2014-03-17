@@ -3,15 +3,22 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/28/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTReportDesignerToolBoxViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "UIColor+EverydayApps.h"
+#import "MTReportDesignerFontSettingsViewController.h"
+#import "MTReportDesignerFontSelectorViewController.h"
+#import "MTReportDesignerDocumentObjectFormat.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
 
 @interface MTReportDesignerToolBoxViewController ()
+    <UINavigationBarDelegate, MTReportDesignerFontSettingsDelegate,
+        MTReportDesignerFontSelectorDelegate>
 
 @property (nonatomic, copy) NSSet *selectedObjectIds;
 

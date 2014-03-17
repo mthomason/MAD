@@ -3,15 +3,17 @@
 //  Reports
 //
 //  Created by Michael Thomason on 12/6/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #import "MTShowSqlViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "RptqDocument.h"
-#import "RptqDocument.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
 #import "MTDatabase.h"
+#import "MTAlertView.h"
 
 @interface MTShowSqlViewController ()
 

@@ -3,8 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 3/25/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTAggregateFunctionsViewController_h
+#define Reports_MTAggregateFunctionsViewController_h
 
 #import <UIKit/UIKit.h>
 #import "RptqDocumentObject+Extras.h"
@@ -23,3 +26,5 @@ extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
 
 @end
+
+#endif

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/16/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MTElementView_h
@@ -11,9 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MTBarcode.h"
 
-@class MTElementView;
+@class MTElementView, MTBarcode;
 
 @protocol MTElementViewDelegate
 - (void)didSelectElementView:(id)sender;
@@ -29,9 +28,6 @@
 @property (nonatomic, assign) id <MTElementViewDelegate> delegate;
 
 @property (nonatomic, assign) BOOL displaySelected;
-
-//@property (nonatomic, readonly, retain) UIImageView *imageView;   //Display image preview for image objects
-//@property (nonatomic, readonly, retain) UILabel *displayLabel;    //Display label floats in the padding
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;

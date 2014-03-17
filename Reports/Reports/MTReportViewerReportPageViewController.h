@@ -3,8 +3,11 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/30/13.
-//  Copyright (c) 2013 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTReportViewerReportPageViewController_h
+#define Reports_MTReportViewerReportPageViewController_h
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
@@ -22,3 +25,5 @@
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
 
 @end
+
+#endif

@@ -3,17 +3,17 @@
 //  Reports
 //
 //  Created by Michael Thomason on 11/9/12.
-//  Copyright (c) 2012 Everyday Apps LLC. All rights reserved.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
 #ifndef Reports_MTDatabase_h
 #define Reports_MTDatabase_h
 
 #import <Foundation/Foundation.h>
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqQueryField.h"
-
-#import "RptqQuery+Extras.h"
+//#import "RptqDatabaseSchemaTable.h"
+//#import "RptqQueryField.h"
+//#import "RptqQuery.h"
+//#import "RptqQuery+Extras.h"
 
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeNone = 0,
@@ -22,6 +22,9 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeGetResults,
 	MTDatabaseQueryTypeVerify
 };
+
+@class RptqDocument, RptqDatabase, RptqQuery, RptqQueryField, RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
+        RptqQueryCache;
 
 @protocol MTDatabaseCacheProtocol <NSObject>
 @required
