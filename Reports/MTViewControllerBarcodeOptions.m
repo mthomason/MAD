@@ -708,7 +708,7 @@
     }
     
     
-    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];

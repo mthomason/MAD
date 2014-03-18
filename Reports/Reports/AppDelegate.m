@@ -51,21 +51,17 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (MTApplicationInstance *)app {
-    return [[[AppDelegate applicationInstance] retain] autorelease];
+    AppDelegate *appDelegate = [[(AppDelegate *)[[UIApplication sharedApplication] delegate] retain] autorelease];
+    MTApplicationInstance *result = [[appDelegate applicationInstance] retain];
+    return [result autorelease];
 }
 
 + (UIWindow *)window {
     return [[[[[UIApplication sharedApplication] windows] objectAtIndex:0] retain] autorelease];
 }
 
-+ (MTApplicationInstance *)applicationInstance {
-    AppDelegate *appDelegate = [[(AppDelegate *)[[UIApplication sharedApplication] delegate] retain] autorelease];
-    MTApplicationInstance *result = [[appDelegate applicationInstance] retain];
-    return [result autorelease];
-}
-
 + (MAReportDocument *)activeReportDocument {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
     return [reportDocument autorelease];
 }

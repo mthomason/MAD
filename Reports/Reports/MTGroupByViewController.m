@@ -34,7 +34,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
         [request setSortDescriptors: @[sortDescriptor]];
         
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         id activeDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request

@@ -32,7 +32,7 @@
     [super viewDidLoad];
     
     
-    NSManagedObjectContext *managedObjectContext = [[[AppDelegate applicationInstance] activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[[AppDelegate app] activeDocument] managedObjectContext];
 
     NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:managedObjectContext];
     RptqUserCredentals *userCredentals = connections[0];
@@ -77,7 +77,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    id activeDocument = [[AppDelegate app] activeDocument];
     if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[MNSLinkTypeReuseIds objectAtIndex:MNSLinkTypeInnerJoin]]) {
 
         [[self delegate] viewControllerSchemaAddLinkJoinTypeDidFinishWith: MNSLinkTypeInnerJoin from:activeDocument];

@@ -156,7 +156,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:reportDocument];
@@ -178,7 +178,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if ([self asyncDelegate] == nil) {
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -286,7 +286,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     [[reportDocument managedObjectContext] save:&error];
     if (error != nil) {
@@ -603,7 +603,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
             __block MTReportViewerController *reportViewer2 = reportViewer;
             
-            MTApplicationInstance *applicationInstance = [[AppDelegate applicationInstance] retain];
+            MTApplicationInstance *applicationInstance = [[AppDelegate app] retain];
             MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
 
             [reportDocument refresh:^(BOOL success) {
@@ -825,7 +825,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         printInfo.outputType = UIPrintInfoOutputGeneral;
         
         
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         printInfo.jobName = [reportDocument name];
         printInfo.duplex = UIPrintInfoDuplexLongEdge;

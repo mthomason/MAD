@@ -309,7 +309,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     
     NSUInteger detailRowsCounter = 0;
     NSUInteger pageNumber = 0;
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
@@ -1126,7 +1126,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     //          Maybe this whole fucking class should somehow be related to the document modal
     //          MAYBE@!@!!@!!!!  That way it only prints its fucking self.  There, I said it.
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     if (activeDocument) {
 
@@ -1556,7 +1556,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                         groupedRows:(NSDictionary *)groupedRows {
 
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     RptqDocument *document = [activeDocument activeDocument];
     RptqDocumentSection *detailSection = [document hasDetailSection];
@@ -1644,7 +1644,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     BOOL newPageCreated = NO;
     CGRect pageRect;
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     RptqDocument *document = [activeDocument activeDocument];
     RptqDocumentSection *pageFooterSection = [document hasPageFooterSection];

@@ -102,7 +102,7 @@
     BOOL numericTypeInSet = NO;
 
     
-    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
 
@@ -141,7 +141,7 @@
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
         
-        MAReportDocument *activeDocument = [[AppDelegate applicationInstance] activeDocument];
+        MAReportDocument *activeDocument = [[AppDelegate app] activeDocument];
 
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -200,7 +200,7 @@
 - (IBAction)controlValueChanged:(id)sender {
     
     
-    MAReportDocument *activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    MAReportDocument *activeDocument = [[AppDelegate app] activeDocument];
 
     SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
@@ -260,7 +260,7 @@
     
     if ([indexPath row] == 1 && [indexPath section] == 0) {
         
-        MAReportDocument *activeDocument = [[AppDelegate applicationInstance] activeDocument];
+        MAReportDocument *activeDocument = [[AppDelegate app] activeDocument];
 
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];

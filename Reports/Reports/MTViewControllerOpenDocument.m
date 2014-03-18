@@ -111,7 +111,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)closeReport {
     
     
-    MTApplicationInstance *applicationInstance = [[AppDelegate applicationInstance] retain];
+    MTApplicationInstance *applicationInstance = [[AppDelegate app] retain];
 
     __block MTViewControllerOpenDocument *blockSelf = self;
 
@@ -262,7 +262,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [super viewDidLoad];
     
 
-    //MTApplicationInstance *appInstance = [[AppDelegate applicationInstance] retain];
+    //MTApplicationInstance *appInstance = [[AppDelegate app] retain];
     //[self setApplicationInstance: appInstance];
     //[appInstance release];
     
@@ -512,7 +512,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [viewControllerReportViewer setViewControllerDelegate:self];
             [self setReportViewer:viewControllerReportViewer];
             
-            MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+            MTApplicationInstance *appInstance = [[[AppDelegate app] retain] autorelease];
             [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                     dispatch_sync(dispatch_get_main_queue(), ^{
@@ -565,7 +565,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
                     
-                    MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+                    MTApplicationInstance *appInstance = [[[AppDelegate app] retain] autorelease];
                     [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
@@ -591,7 +591,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
 
-                    MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+                    MTApplicationInstance *appInstance = [[[AppDelegate app] retain] autorelease];
                     [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [managedDocument retain];
@@ -608,7 +608,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 
                 __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                 
-                MTApplicationInstance *appInstance = [[[AppDelegate applicationInstance] retain] autorelease];
+                MTApplicationInstance *appInstance = [[[AppDelegate app] retain] autorelease];
                 [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                     if (success) {
                         [managedDocument retain];
@@ -672,7 +672,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([self bothContentControllersDisplayed] && standard != nil && standard != nil) {
             
             
-            [[AppDelegate applicationInstance] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+            [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                 if (success) {
                     [managedDocument retain];
                     [standard reloadActiveDocumentAnimated:YES];
@@ -687,7 +687,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         __block __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
         
         
-        [[AppDelegate applicationInstance] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+        [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
             
                                    if (success) {
                                        [managedDocument retain];
@@ -775,7 +775,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
         if (success) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -796,7 +796,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (IBAction)updateFileList:(id)sender {
-    MTApplicationInstance *app = [AppDelegate applicationInstance];
+    MTApplicationInstance *app = [AppDelegate app];
     NSMutableArray *madFiles = [[[app user] hasMadDocuments] mutableCopy];
     [self setAvailableFilesCache: madFiles];
     [madFiles release];

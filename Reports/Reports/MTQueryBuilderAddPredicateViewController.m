@@ -101,7 +101,7 @@
     
     RptqQueryPredicate *queryPredicate = nil;
     
-    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     if ([self leftValue] == nil) {

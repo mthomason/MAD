@@ -94,7 +94,7 @@
     [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
     
-    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     UILabel *titleLabel = [[self titleView] label];
@@ -120,7 +120,7 @@
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
     
-    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
     RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
@@ -138,7 +138,7 @@
 
     NSUInteger result = 0;
     
-    id activeDocument = [[AppDelegate applicationInstance] activeDocument];
+    id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
     

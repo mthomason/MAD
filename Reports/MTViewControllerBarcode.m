@@ -113,7 +113,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         [[self barButtonItemSave] setEnabled:YES];
 
         
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         RptqDocument *document = [reportDocument activeDocument];
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];

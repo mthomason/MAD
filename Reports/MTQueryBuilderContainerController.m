@@ -177,7 +177,7 @@
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     [[reportDocument managedObjectContext] save:&error];
     if (error != nil) {
         [[reportDocument managedObjectContext] save:&error];

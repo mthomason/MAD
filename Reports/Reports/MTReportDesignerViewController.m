@@ -294,7 +294,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
         RptqQueryField *queryField = [dynamicFieldController queryField];
 
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
@@ -378,7 +378,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             MTBarcode *barcode = [barcodeViewController barcode];
 
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
             NSManagedObjectID *objectId = [self objectIdEditBarcode];
@@ -612,7 +612,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[app reportDesigner] setZoomScaleRestore:[[self designerScrollView] zoomScale]];
     [[self designerScrollView] setZoomScale:1.0000f animated:NO];
 
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -990,7 +990,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)updateViewConstraints {
     [super updateViewConstraints];
-    MAReportDocument *reportDocument = [[AppDelegate applicationInstance] activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
     CGSize designerContentViewSize = CGSizeMake([[self view] bounds].size.width, CGSizeZero.height);
@@ -1059,7 +1059,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         MTViewControllerBarcode *barcodeViewController = [[segue destinationViewController] retain];
 
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditBarcode];
@@ -1072,7 +1072,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
         
         MTDocumentObjectNewAggregateViewController *aggregateViewController = [[segue destinationViewController] retain];
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
@@ -1126,7 +1126,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - Document State
 
 - (void)documentStateChanged {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     UIDocumentState state = [reportDocument documentState];
     switch (state) {
@@ -1162,7 +1162,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     [RptqDocumentSection setVisibility: isVisible
@@ -1184,7 +1184,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 // FIXME: Used for multiple rows in the document section... currently unused
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     
@@ -1208,7 +1208,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -1277,7 +1277,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)didUpdateLayout:(id)sender {
     MTDocumentSectionView *documentSectionView = (MTDocumentSectionView *)sender;
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -1293,7 +1293,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)relayoutSectionView:(MTDocumentSectionView *)documentSectionView {
     NSManagedObjectID *objectId = [documentSectionView objectIdTag];
     NSURL *objectIdUrl = [[objectId URIRepresentation] retain];
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContect = [reportDocument managedObjectContext];
@@ -1585,7 +1585,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (CGSize)designerContentViewSize {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
@@ -1634,7 +1634,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)sizeChanged:(id)sender {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
 
@@ -1889,7 +1889,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (NSSet *)elementViews {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
@@ -1947,7 +1947,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         if (quickHashWorks == NO) {     // FIXME: This case should be unneeded now.
             
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             RptqDocument *document = [reportDocument activeDocument];
             SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
@@ -1985,7 +1985,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (IBAction)done:(id)sender {
     
     NSError *error = nil;
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     [[reportDocument managedObjectContext] save:&error];
     if (error != nil) {
@@ -2232,7 +2232,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)resizeCollectionView:(UICollectionView *)collectionView forSectionWithId:(NSManagedObjectID *)sectionObjectId {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
@@ -2271,7 +2271,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell {
     NSManagedObjectID *objectId = [cell objectIdTag];
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
@@ -2285,7 +2285,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSManagedObjectID *objectId = [cell objectIdTag];
     [self removeCollectionViewCellForElementView:objectId completion:^(BOOL finished) {
         if (finished) {
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
             RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
@@ -2297,7 +2297,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     NSManagedObjectID *elementViewId = [cell objectIdTag];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -2348,7 +2348,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                             MTDocumentObjectNewAggregateViewController *aggregateViewController = [[[navigationController viewControllers] firstObject] retain];
                             [aggregateViewController setDelegate:self];
                             
-                            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+                            MTApplicationInstance *applicationInstance = [AppDelegate app];
                             MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
                             NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -2408,7 +2408,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                             MTViewControllerBarcode *barcodeViewController = [[storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier] retain];
                             [barcodeViewController setDelegate:self];
                             
-                            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+                            MTApplicationInstance *applicationInstance = [AppDelegate app];
                             MAReportDocument *reportDocument = [applicationInstance activeDocument];
                             NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                             RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
@@ -2545,7 +2545,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo {
 
     if ([self barcodeToEdit] != nil) {
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         RptqDocumentObjectBarcode *barcodeObject = [self barcodeToEdit];
@@ -2599,7 +2599,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([alertView cancelButtonIndex] != buttonIndex) {
         
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         NSManagedObjectID *objectId = [self objectIdEditStaticLabel];
@@ -2628,7 +2628,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)collectionViewDidFinishUpdates:(UICollectionView *)collectionView { }
 
 - (CGFloat)heightOfCollectionView:(UICollectionView *)collectionView {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     
@@ -2641,7 +2641,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     
@@ -2666,7 +2666,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
 
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     
@@ -2699,7 +2699,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (NSUInteger)collectionView:(UICollectionView *)collectionView
                       layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
@@ -2723,7 +2723,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
           setDropPoint:(CGPoint)dropPoint
     forItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
@@ -2749,7 +2749,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     CGFloat contextScale = [[self designerScrollView] zoomScale] * [[[[self designerScrollView] window] screen] scale];
 
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -2839,7 +2839,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
@@ -2878,7 +2878,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[reportDocument managedObjectContext]];
@@ -2886,7 +2886,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:[reportDocument managedObjectContext]];
@@ -2927,7 +2927,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     NSInteger row = [indexPath row];
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
@@ -3038,7 +3038,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self barButtonItemObjects] setEnabled:YES];
 
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
@@ -3061,7 +3061,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         if (finished) {
             [detailSection reloadData];
 
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+            MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *activeDocument = [[applicationInstance activeDocument] retain];
             
             RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [detailSection objectIdTag]
@@ -3103,7 +3103,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                     completion:(void (^)(BOOL finished))completion {
     
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
@@ -3413,7 +3413,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 
                 [self setLastSelectedSectionControlPanel:[[sender view] tag]];
                 
-                MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+                MTApplicationInstance *applicationInstance = [AppDelegate app];
                 MAReportDocument *reportDocument = [applicationInstance activeDocument];
                 RptqDocument *document = [reportDocument activeDocument];
                 RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
@@ -3570,7 +3570,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)resizeCollectionView:(UICollectionView *)collectionView {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: [reportDocument managedObjectContext]];

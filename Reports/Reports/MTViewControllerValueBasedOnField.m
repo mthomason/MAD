@@ -86,7 +86,7 @@
     
     dispatch_async(queuePriorityBackground, ^{
         
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
         RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]

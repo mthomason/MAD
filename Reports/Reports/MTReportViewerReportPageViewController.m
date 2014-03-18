@@ -50,7 +50,7 @@
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
         
-        MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
         NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
         NSString *cachedDataPath = [cachedDataUrl path];
