@@ -38,10 +38,6 @@
     return self;
 }
 
-- (void)initalize {
-    [self setDrawBlankPage:NO];
-}
-
 - (void)dealloc {
     _delegate = nil;
     [super dealloc];
@@ -51,6 +47,10 @@
     if ([self drawBlankPage] == NO) {
         [[self delegate] drawView:self inRect:rect];
     }
+}
+
+- (void)initalize {
+    [self setDrawBlankPage:NO];
 }
 
 @end

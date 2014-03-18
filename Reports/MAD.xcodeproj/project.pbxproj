@@ -1232,6 +1232,8 @@
 		4C9E445818D88D7000F0F578 /* MTTableLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E445618D88D7000F0F578 /* MTTableLayout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E446818D8AADE00F0F578 /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E446B18D8B5EF00F0F578 /* MTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446A18D8B5EF00F0F578 /* MTCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E446C18D8B5EF00F0F578 /* MTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446A18D8B5EF00F0F578 /* MTCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9F400816F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
@@ -2517,6 +2519,8 @@
 		4C9E445618D88D7000F0F578 /* MTTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableLayout.m; sourceTree = "<group>"; };
 		4C9E446518D8AADE00F0F578 /* MTTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableController.h; sourceTree = "<group>"; };
 		4C9E446618D8AADE00F0F578 /* MTTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableController.m; sourceTree = "<group>"; };
+		4C9E446918D8B5EF00F0F578 /* MTCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCache.h; sourceTree = "<group>"; };
+		4C9E446A18D8B5EF00F0F578 /* MTCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCache.m; sourceTree = "<group>"; };
 		4C9F400616F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectFormula+Extras.h"; sourceTree = "<group>"; };
 		4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectFormula+Extras.m"; sourceTree = "<group>"; };
 		4C9F94BB1642280500A562B9 /* MTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewController.h; sourceTree = "<group>"; };
@@ -3191,6 +3195,8 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C9E446918D8B5EF00F0F578 /* MTCache.h */,
+				4C9E446A18D8B5EF00F0F578 /* MTCache.m */,
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
 				4CBABC1218C8945B00EE5768 /* MTUser.h */,
@@ -5845,6 +5851,7 @@
 				4CE17E2A1650C6B50002F8EA /* RptqUserCredentals+Extras.m in Sources */,
 				4CABE4741837DF7C007EDD9D /* RptqDatabaseSchemaField.m in Sources */,
 				4CE17E391658F0A10002F8EA /* MTDatabaseTable.m in Sources */,
+				4C9E446C18D8B5EF00F0F578 /* MTCache.m in Sources */,
 				4CE17E3D1658F1100002F8EA /* MTDatabaseField.m in Sources */,
 				4C68B71516600245002682CB /* MTDatabaseConnection.m in Sources */,
 				4C95CAD2182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */,
@@ -6446,6 +6453,7 @@
 				4CFF3E85164CD86E0070E880 /* MTDatabaseMySql.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4CFF3F21164D76270070E880 /* NSURL+Document.m in Sources */,
+				4C9E446B18D8B5EF00F0F578 /* MTCache.m in Sources */,
 				4CABE4B31837DF81007EDD9D /* RptqQueryCache.m in Sources */,
 				4C95CAC5182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m in Sources */,
 				4CABE45F1837DF7A007EDD9D /* RptqDatabase.m in Sources */,

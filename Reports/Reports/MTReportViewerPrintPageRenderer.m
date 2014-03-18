@@ -16,6 +16,7 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIDevice+Hack.h"
 #import "MTPaper.h"
+#import "MTCache.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -60,7 +61,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, retain) NSArray *sortedQueryGroups;
 
-@property (nonatomic, retain) NSInputStream *inputStream;
 @property (nonatomic, assign) BOOL showWaterMark;
 
 @end
@@ -68,8 +68,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @implementation MTReportViewerPrintPageRenderer
 
 - (void)dealloc {
-    //[_activeDocument release];
-    [_inputStream release];
     [_cachedLayoutByPage release];
     [_cachedSortedSortDescriptorsGroup release];
     [_cachedDataByPage release];
@@ -1178,20 +1176,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [[self temporaryDataByPage] removeAllObjects];
             [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
             
-            NSError *error = nil;
-            NSArray *cachedResultsForReportSerialized = nil;
-            
             NSURL *url = [[activeDocument cachedDataUrl] retain];
             
-            error = nil;
-            NSPropertyListFormat format;
-            NSString *filePath = [[url path] retain];
-            NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:filePath];
-            [inputStream open];
-            cachedResultsForReportSerialized = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
+            MTCache *cache = [[MTCache alloc] initWithUrl:url];
+            NSArray *cachedResultsForReportSerialized = [cache results];
             
-            [filePath release];
-            [url autorelease];
             
             NSSet *hasQueryGroups = [query hasQueryGroups];
             
@@ -1308,15 +1297,16 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             
             NSArray *tdbp = [[self temporaryDataByPage] retain];
             [self setCachedDataByPage: tdbp];
+
+            [url autorelease];
             [tdbp release];
             
             [cachedResultsForReport release];
-            //[groupedRows release];
+            [cache release];
             [sortedResultsByRow release];
             [sortDescriptor release];
             
         }
-        [[self inputStream] close];
         
     }
 
