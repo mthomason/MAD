@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol MTReportDesignerToolBoxDelegate
-- (void)heightChanged:(CGFloat)newHeight;
+- (void)toolboxHeightChanged:(CGFloat)newHeight;
 - (void)hideToolbox;
 @end
 

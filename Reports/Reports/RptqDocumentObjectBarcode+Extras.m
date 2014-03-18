@@ -70,6 +70,7 @@
     [self setScale:             @([barcode scale])];
     [self setReferencesField1:  fieldOne];
     [self setReferencesField2:  fieldTwo];
+    [[self managedObjectContext] save:nil];
 }
 
 + (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject {

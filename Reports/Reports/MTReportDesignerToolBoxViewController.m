@@ -178,7 +178,7 @@
     
     } completion:^(BOOL finished) {
     
-        [[self delegate] heightChanged:[self contentHeight]];
+        [[self delegate] toolboxHeightChanged:[self contentHeight]];
         [sender setEnabled:YES];
 
     }];
@@ -187,7 +187,7 @@
 #pragma mark - UINavigationBarDelegate
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
-    [[self delegate] heightChanged:[self contentHeight]];
+    [[self delegate] toolboxHeightChanged:[self contentHeight]];
     
     if ([item isEqual:[self navigationItemFontSelector]]) {
     } else if ([item isEqual:[self navigationItemLayout]]) {
@@ -197,7 +197,7 @@
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
-    [[self delegate] heightChanged:[self contentHeight]];
+    [[self delegate] toolboxHeightChanged:[self contentHeight]];
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {

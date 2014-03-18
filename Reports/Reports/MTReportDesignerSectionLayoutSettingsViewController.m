@@ -106,7 +106,7 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 #pragma mark - Helpers
 
 - (double)stepperValueNormalized {
-    return ([[self heightStepper] value] / 2);
+    return [[self heightStepper] value] / 2;
 }
 
 #pragma mark - Table view delegate

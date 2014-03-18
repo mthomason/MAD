@@ -122,22 +122,25 @@
     NSUInteger lastIndex = [[sectionRow hasObjects] count];
     NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
     
-    
     NSNumber *dropIndex = @([self nextDropIndexForSection]);
     [documentObject setDropIndex:dropIndex];
     
     NSOrderedSet *documentObjects = [sectionRow hasObjects];
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
     
-    
     [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
     [sectionRow setHasObjects:hasObjects];
     [hasObjects release];
     
     [[self managedObjectContext] save:nil];
-    
     return [[indexInsert retain] autorelease];
     
+}
+
+- (void)setInterfaceHeight:(CGFloat)height {
+    [self setLayoutHeight:@(height)];
+    [self setHeight:@(height + 44.0000f)];
+    [[self managedObjectContext] save:nil];
 }
 
 #pragma mark - Static

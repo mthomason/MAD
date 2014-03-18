@@ -43,6 +43,17 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeSection = 3,
 };
 
+typedef NS_ENUM(NSUInteger, MTDirection) {
+    MTDirectionNorth,       //60˚-120˚
+    MTDirectionNorthWest,   //120˚-150˚
+    MTDirectionNorthEast,
+    MTDirectionSouth,       //240˚-300˚
+    MTDirectionSouthWest,   //210˚-240˚
+    MTDirectionSouthEast,
+    MTDirectionEast,        //330˚-360˚,0-30˚
+    MTDirectionWest,        //210˚-150˚
+};
+
 NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
 NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
@@ -147,10 +158,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, assign) CGPoint pinchInitalPointB;
 @property (nonatomic, assign) CGAffineTransform pinchBeginTransform;
 
-@property (nonatomic, assign) CGFloat currentNewPointAX;
-@property (nonatomic, assign) CGFloat currentNewPointAY;
-@property (nonatomic, assign) CGFloat currentNewPointBX;
-@property (nonatomic, assign) CGFloat currentNewPointBY;
+@property (nonatomic, assign) CGPoint currentNewPointA;
+@property (nonatomic, assign) CGPoint currentNewPointB;
+
+//@property (nonatomic, assign) CGFloat currentNewPointAX;
+//@property (nonatomic, assign) CGFloat currentNewPointAY;
+//@property (nonatomic, assign) CGFloat currentNewPointBX;
+//@property (nonatomic, assign) CGFloat currentNewPointBY;
 @property (nonatomic, assign) CGSize currentScaleSize;
 
 @property (nonatomic, assign) BOOL toolbarBottomZero;
@@ -371,11 +385,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
             RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
             [barcodeObject updateWithBarcode:barcode fieldOne:[barcodeViewController queryField1] fieldTwo:[barcodeViewController queryField2]];
-            NSError *error = nil;
-            [managedObjectContext save:&error];
-
             [self setObjectIdEditBarcode:nil];
-//            [activeDocument saveContext];
+
         } else {
             
             NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
@@ -685,7 +696,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         @autoreleasepool {
             
-            
             sectionHeights += MTReportDesignerBorderPaddingVertical;
             
             // MARK: Create collection view for report document section.
@@ -715,6 +725,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [collectionView setDelegate:self];
             [collectionView setSectionDelegate:self];
             [collectionView setDataSource:self];
+            
             BOOL visibility = [[reportSection visibility] boolValue];
             UIColor *bgcolor = [MTReportDesignerViewController sectionBackgroundColor:visibility];
             [collectionView setBackgroundColor:bgcolor];
@@ -760,6 +771,29 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             NSString *lastKey = [reportSectionKeyTracker lastObject];
             id constraintItem =  sectionCounter == 0 ? [self rulerView] : /*lastCollectionView;*/ [[self sectionViews] objectForKey:lastKey];
+            
+            [collectionView setShowsVerticalScrollIndicator:YES];
+            
+            /*
+            for (UIGestureRecognizer *parentGesture in [[self designerScrollView] gestureRecognizers]) {
+                if ([parentGesture isKindOfClass:[UIPanGestureRecognizer class]]) {
+                    [parentGesture setDelaysTouchesBegan:YES];
+                    for (UIGestureRecognizer *childGesture in [collectionView gestureRecognizers]) {
+                        if ([childGesture isKindOfClass:[UIPanGestureRecognizer class]]) {
+                            [childGesture setDelaysTouchesBegan:NO];
+                            //[parentGesture requireGestureRecognizerToFail:childGesture];
+                            NSLog(@"Parent %@", parentGesture);
+                            NSLog(@"Child  %@", childGesture);
+                        }
+                    }
+                }
+            }*/
+          
+            [[self designerScrollView] setDelaysContentTouches:YES];
+            [self designerScrollView].canCancelContentTouches = YES;
+
+            [collectionView setDelaysContentTouches:NO];
+            collectionView.canCancelContentTouches = NO;
             
             [[self designerContentView] addSubview:collectionView];
             
@@ -1073,11 +1107,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSSet *elementViews = [[self elementViews] retain];
     for (MTElementView *elementView in elementViews) {
         [elementView setContentScaleFactor:scale];
-    //    if ([[[elementView displayLabel] text] length] > 0) {
-    //        [[elementView displayLabel] setContentScaleFactor:scale];
-    //    } else if ([elementView imageView] != nil) {
-    //        [[elementView imageView] setContentScaleFactor:scale];
-    //    }
     }
     [elementViews release];
     elementViews = nil;
@@ -1088,6 +1117,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
     [controlViews release];
     controlViews = nil;
+    
+    for (UICollectionView *collectionView in [[self sectionViews] objectEnumerator]) {
+        [collectionView setContentScaleFactor:scale];
+    }
 }
 
 #pragma mark - Document State
@@ -1126,38 +1159,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - Layout Settings Delegate
 
-- (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
-    
-    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    RptqDocument *document = [reportDocument activeDocument];
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
-                                                                                forQuery: query];
-
-    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedSectionControlPanel] inDocument:document];
-    UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
-
-    [documentSection setLayoutHeight:@([[documentSectionView collectionViewLayout] collectionViewContentSize].height)];
-    [[reportDocument managedObjectContext] save:nil];
-    //[reportDocument quickSave];
-    
-    MTReportDesignerSectionBackgroundView *backgroundView = [[[self sectionBackgroundViews] objectForKey:[documentSection sectionKey]] retain];
-    [backgroundView setNeedsDisplay];
-    [backgroundView release];
-    
-    [[documentSectionView collectionViewLayout] invalidateLayout];
-    [documentSection setLayoutHeight:@([[documentSectionView collectionViewLayout] collectionViewContentSize].height)];
-    [documentSectionView release];
-
-    [[self view] setNeedsUpdateConstraints];
-    
-}
-
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
-
+    
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -1178,6 +1181,31 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [reportDocument saveContext];
 }
 
+// FIXME: Used for multiple rows in the document section... currently unused
+- (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
+    
+    MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    RptqDocument *document = [reportDocument activeDocument];
+    
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                                forQuery: query];
+    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
+    CGFloat h = [[documentSectionView collectionViewLayout] collectionViewContentSize].height;
+    [documentSection setInterfaceHeight: h];    // WTF: Why is this called twice
+    MTReportDesignerSectionBackgroundView *backgroundView = [[self sectionBackgroundViews] objectForKey:[documentSection sectionKey]];
+    [backgroundView setNeedsDisplay];
+    [[documentSectionView collectionViewLayout] invalidateLayout];
+    [documentSection setInterfaceHeight: h];
+
+    [[self view] setNeedsUpdateConstraints];
+    
+}
+
+// FIXME: Used for multiple rows in the document section... currently unused
+
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     
     MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
@@ -1193,8 +1221,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     __block UICollectionView *documentSectionView = [[self getSectionViewForDocumentSection: documentSection] retain];
 
-    //RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel] forQuery: query];
-    
     if ([[documentSection numberOfRows] integerValue] == numberOfRows) {
         
         //No change
@@ -1218,7 +1244,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[hasRows lastObject] setInSection:nil];
         [hasRows removeObjectAtIndex:[hasRows count] - 1];
         [documentSection setHasRows:hasRows];
-//        [section setNumberOfRows:[[section numberOfRows] integerValue] -1];
         [hasRows release]; hasRows = nil;
         [rowToDelete setInSection:nil];
         
@@ -1283,7 +1308,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - Toolbox Delegate
 
-- (void)heightChanged:(CGFloat)newHeight {
+- (void)toolboxHeightChanged:(CGFloat)newHeight {
     CGSize newSize = CGSizeMake(320.0000f, newHeight);
     [[self popoverControllerInformation] setPopoverContentSize:newSize animated:YES];
     [[[self popoverControllerInformation] contentViewController] setPreferredContentSize:newSize];
@@ -1628,63 +1653,70 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)didSelectElementView:(id)sender {
     [self removeBorderFromSectionViews];
     
-    NSUInteger deselectedSectionViewCounter = 0;
-    //Remove border from the section views
-    for (UIView *view in [[self sectionControlViews] objectEnumerator]) {
-        deselectedSectionViewCounter += [self  removeBorderFromView:view] ? 1 : 0;
-    }
-    
-    if (deselectedSectionViewCounter == 0) {
+    if ([sender isEqual:[self lastElementViewToShowMenu]] && [sender isSelected]) {
+        [self setLastElementViewToShowMenu:nil];
+        [sender toggleSelected];
+        [self deselectAllElementsAnimated:YES];
+    } else {
 
-        if ([UIDevice isPad] == NO) {
-            if (![self dismissAllPopovers]) {
-                if (sender != nil) {
-                    if ([sender isEqual:[self lastElementViewToShowMenu]]) {
-                        
-                    } else {
-                        [self showToolbox:MTToolboxTypeElement];
-                    }
-                } else {
-                    [self showToolbox:MTToolboxTypeElement];
-                }
-            }
+        NSUInteger deselectedSectionViewCounter = 0;
+        //Remove border from the section views
+        for (UIView *view in [[self sectionControlViews] objectEnumerator]) {
+            deselectedSectionViewCounter += [self  removeBorderFromView:view] ? 1 : 0;
         }
         
-        if ([sender isKindOfClass:[MTElementView class]]) {
-            MTElementView *elementView = sender;
+        if (deselectedSectionViewCounter == 0) {
             
-            NSManagedObjectID *objid = [elementView objectIdTag];
-            if (objid != nil) {
-                if ([objid isTemporaryID]) {
-                    // FIXME: If temporary id.
+            if ([UIDevice isPad] == NO) {
+                if (![self dismissAllPopovers]) {
+                    if (sender != nil) {
+                        if ([[UIMenuController sharedMenuController] isMenuVisible] == NO) {
+                            [self showToolbox:MTToolboxTypeElement];
+                        }
+                    } else {
+                        //   [self showToolbox:MTToolboxTypeElement];
+                    }
                 }
             }
             
-            [[self selectedObjectIds] addObject:[elementView objectIdTag]];
-            [self applyBorderToView:elementView];
-            [elementView setDisplaySelected:YES];
-            
-            [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
-            if ([UIDevice isPad]) {
+            if ([sender isKindOfClass:[MTElementView class]]) {
+                MTElementView *elementView = sender;
                 
-                NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
-                [passThroughViews addObject:elementView];
-                [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
-                [passThroughViews release];
+                NSManagedObjectID *objid = [elementView objectIdTag];
+                if (objid != nil) {
+                    if ([objid isTemporaryID]) {
+                        // FIXME: If temporary id.
+                    }
+                }
                 
-                CGRect popoverRect = [MTReportDesignerViewController popoverRectForSelectedElements:[self selectedElementViews]
-                                                                                          inView:[self designerContentView]];
+                [[self selectedObjectIds] addObject:[elementView objectIdTag]];
+                [self applyBorderToView:elementView];
+                [elementView setDisplaySelected:YES];
+                
+                [[self viewControllerToolbox] showToolboxWithObjectIds:[self selectedObjectIds]];
+                if ([UIDevice isPad]) {
                     
-                [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
-                                                                     inView: [self designerContentView]
-                                                   permittedArrowDirections: UIPopoverArrowDirectionAny
-                                                                   animated: YES];
+                    NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
+                    [passThroughViews addObject:elementView];
+                    [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
+                    [passThroughViews release];
+                    
+                    CGRect popoverRect = [MTReportDesignerViewController popoverRectForSelectedElements:[self selectedElementViews]
+                                                                                                 inView:[self designerContentView]];
+                    
+                    [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
+                                                                         inView: [self designerContentView]
+                                                       permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                                       animated: YES];
+                }
             }
+            
+        } else {
+            [self hideToolbox];
         }
-
-    } else {
-        [self hideToolbox];
     }
+    
+
     
 }
 
@@ -1780,84 +1812,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             });
         });
         // FIXME: Zoom to double tap point.
-    }
-}
-
-- (void)singleTapToDeselectElementViews:(UITapGestureRecognizer *)sender {
-    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
-    [self deselectAllElementsAnimated:YES];
-    [self hideToolbox];
-}
-
-
-
-- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
-    
-    if ([sender state] == UIGestureRecognizerStateEnded) {
-        
-        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
-        
-        if ([[self selectedElementViews] count] >= 1) {
-            [self deselectAllElementsAnimated:YES];
-            [self hideToolbox];
-        } else {
-            
-            if ([(DesignerSectionLabel *)[sender view] selected]) {
-                
-                
-                DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
-                if ([sectionLabel selected]) {
-                    [sectionLabel normalView];
-                }
-                
-                [self hideToolbox];
-                
-            } else {
-                
-                [self deselectAllElementsAnimated:YES];
-                
-                [self setLastSelectedSectionControlPanel:[[sender view] tag]];
-                
-                MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-                MAReportDocument *reportDocument = [applicationInstance activeDocument];
-                RptqDocument *document = [reportDocument activeDocument];
-                RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                RptqQuery *query = [[database hasQueries] anyObject];
-                RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
-                                                                                    forQuery: query];
-                
-                
-                if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
-                    DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
-                    [sectionLabel dimView];
-                    UIColor *borderColor = [UIColor tintColor];
-                    UIView *superView = [self getSectionViewForDocumentSection: section];
-                    [[superView layer] setBorderColor: [borderColor CGColor]];
-                    [[superView layer] setBorderWidth:1.0000f];
-                }
-
-                [[self viewControllerSectionLayoutSettings] setInitalStepperValue:([[section height] floatValue])];
-                [[self viewControllerSectionLayoutSettings] setInitalSwitchValue:[[section visibility] boolValue]];
-                [[self viewControllerSectionLayoutSettings] setInitalNumberOfRows:[[section numberOfRows] integerValue]];
-                [[self viewControllerSectionLayoutSettings] updateDisplay];
-                
-                if ([UIDevice isPad]) {
-                    
-                    [[self popoverControllerSectionSettings] setPassthroughViews:@[[sender view]]];
-                    [[self popoverControllerSectionSettings] presentPopoverFromRect:[[sender view] bounds]
-                                                                             inView:[sender view]
-                                                           permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                                           animated:YES];
-                    
-                } else {
-                    [self showToolbox:MTToolboxTypeSection];
-                }
-            }
-            
-        }
-        
-    } else {
-        
     }
 }
 
@@ -2115,17 +2069,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
             [[[AppDelegate app] reportDesigner] setContentOffsetOnShowToolbox:reportDesigner.designerScrollView.contentOffset];
             
-            [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
-                //[self setWantsFullScreenLayout:YES];
-                
+            MTBlockCompletionNoReturn animations = ^{
                 [[reportDesigner view] removeConstraints:[self layoutConstraintsToolboxHidden]];
                 [[reportDesigner view] addConstraints:[self layoutConstraintsToolboxVisiable]];
                 [[reportDesigner toolbarBottomHeightConstraint] setConstant:0.0000f];
                 UIEdgeInsets insets = [reportDesigner edgeInsetsWithoutToolbar];
                 [[reportDesigner designerScrollView] setContentInset: insets];
-
                 [[reportDesigner view] layoutIfNeeded];
-            } completion:^(BOOL finished) {
+            };
+            
+            MTBlockCompletionSimple completion = ^(BOOL finished) {
                 
                 if (finished) {
                     if (tooboxType == MTToolboxTypeSection) {
@@ -2134,11 +2087,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         [self adjustContentOffsetForSelectedElements];
                     }
                 }
-            }];
+            };
+            
+            [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                             animations:animations completion:completion];
         }
     }
     [viewController release];
 }
+
+
 
 - (CGFloat)heightTopBars {
     CGFloat height = self.navigationController.navigationBar.bounds.size.height;
@@ -2238,15 +2196,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
             CGFloat toolBarHeight = [self toolbarBottomHeight];
             __block MTReportDesignerViewController *reportDesigner = self;
-            [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: ^{
+            
+            MTBlockCompletionNoReturn animations = ^{
                 [[reportDesigner view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
                 [[reportDesigner view] addConstraints:[self layoutConstraintsToolboxHidden]];
                 [[reportDesigner toolbarBottomHeightConstraint] setConstant:toolBarHeight];
                 UIEdgeInsets insets = [reportDesigner edgeInsetsWithToolbar];
                 [[reportDesigner designerScrollView] setContentInset: insets];
                 [[reportDesigner view] layoutIfNeeded];
-                
-            } completion:^(BOOL finished) {
+            };
+            
+            MTBlockCompletionSimple completion = ^(BOOL finished) {
                 if (finished) {
                     if ([[[reportDesigner navigationControllerSectionLayoutSettings] view] superview] != nil) {
                         [[[reportDesigner navigationControllerSectionLayoutSettings] view] removeFromSuperview];
@@ -2260,9 +2220,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     CGPoint contentOffset = [[[AppDelegate app] reportDesigner] contentOffsetOnShowToolbox];
                     [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
-
+                    
                 }
-            }];
+            };
+            
+            [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: animations
+                             completion:completion];
             [self deselectAllElementsAnimated:YES];
         }
     }
@@ -2274,13 +2237,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
     CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
-    [section setLayoutHeight:@(contentSize.height)];
-    [section setHeight:@(contentSize.height + 44.0000f)];
-    NSError *error = nil;
-    [managedObjectContext save:&error];
-    if (error != nil) {
-        [error presentErrorToUser];
-    }
+
+    [section setInterfaceHeight:contentSize.height];
+    
     [[self designerContentView] setNeedsLayout];
     [[self view] setNeedsUpdateConstraints];
 }
@@ -2350,21 +2309,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
     
     BOOL found = NO;
-    //NSUInteger deleteSection = 0;
     
     for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
         
         NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
         NSUInteger deleteIndex = 0;
-        
-        
         for (RptqDocumentObject *object in hasObjects) {
-            
             if ([[object objectID] isEqual: elementViewId]) {
                 found = YES;
                 break;
             }
-            
             deleteIndex++;
         }
         
@@ -2596,11 +2550,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         RptqDocumentObjectBarcode *barcodeObject = [self barcodeToEdit];
         [barcodeObject updateWithBarcode:barcode fieldOne:fieldOne fieldTwo:fieldTwo];
-        NSError *error = nil;
-        [managedObjectContext save:&error];
-        if (error != nil) {
-            MTLog(@"Error: %@", error);
-        }
     }
     
 }
@@ -2829,9 +2778,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 for (UIView *subview in [[cell contentView] subviews]) {
                     [subview removeFromSuperview];
                 }
-                if ([[documentObject objectID] isTemporaryID]) {
+                //if ([[documentObject objectID] isTemporaryID]) {
 // FIXME: What's happening here.
-                }
+                //}
                 
                 
                 [cell setBackgroundColor:[UIColor clearColor]];
@@ -2844,12 +2793,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
                 [panGesture setMaximumNumberOfTouches:1];
                 [panGesture setDelegate:self];
+                
                 UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchPiece:)];
                 [pinchGesture setDelegate:self];
+                
                 [[[self designerScrollView] panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
                 [[[self designerScrollView] pinchGestureRecognizer] requireGestureRecognizerToFail:pinchGesture];
+                
                 [elementView addGestureRecognizer:panGesture];
                 [elementView addGestureRecognizer:pinchGesture];
+                
                 [pinchGesture release];
                 [panGesture release];
 
@@ -2882,9 +2835,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    
-}
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
@@ -3137,7 +3088,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    
+    //return YES;
     return [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO  &&
             [[gestureRecognizer view] isEqual:[self designerScrollView]] == NO &&
             [[otherGestureRecognizer view] isEqual:[self designerScrollView]] == NO;
@@ -3218,108 +3169,196 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)addPointA:(CGPoint)pointA andPointB:(CGPoint)pointB {
-    _currentNewPointAX *= previousScaleWeight;
-    _currentNewPointAX += (1 - previousScaleWeight) * pointA.x;
-    _currentNewPointAY *= previousScaleWeight;
-    _currentNewPointAY += (1 - previousScaleWeight) * pointA.y;
-    _currentNewPointBX *= previousScaleWeight;
-    _currentNewPointBX += (1 - previousScaleWeight) * pointB.x;
-    _currentNewPointBY *= previousScaleWeight;
-    _currentNewPointBY += (1 - previousScaleWeight) * pointB.y;
+    _currentNewPointA.x *= previousScaleWeight;
+    _currentNewPointA.x += (1 - previousScaleWeight) * pointA.x;
+    _currentNewPointA.y *= previousScaleWeight;
+    _currentNewPointA.y += (1 - previousScaleWeight) * pointA.y;
+    _currentNewPointB.x *= previousScaleWeight;
+    _currentNewPointB.x += (1 - previousScaleWeight) * pointB.x;
+    _currentNewPointB.y *= previousScaleWeight;
+    _currentNewPointB.y += (1 - previousScaleWeight) * pointB.y;
+}
+
+- (CGPoint)locationOfPointInWindows:(CGPoint)point {
+    UIWindow *window = [AppDelegate window];
+    return [[self designerScrollView] convertPoint:point fromView:window];
+}
+
+- (CGFloat)directionInDegreesFromVelocity:(CGPoint)velocity {
+    CGFloat direction = 0.0000f;
+    if (velocity.y == 0) {
+        if (velocity.x < 0) {
+            direction = -90.0000f;
+        } else {
+            direction = 90.0000f;
+        }
+    } else {
+        if (velocity.y > 0) {
+            direction = atan(velocity.x / velocity.y);
+        } else {
+            direction = 180 + atan(velocity.x / velocity.y);
+        }
+    }
+    return direction;
+}
+
+- (MTDirection)generalDirectionOfDegrees:(CGFloat)degrees {
+    MTDirection direction = MTDirectionNorth;
+    if (degrees > 60.0000f && degrees < 120.0000f) {
+        direction = MTDirectionNorth;
+    } else if (degrees > 30.0000f && degrees < 60.0000f) {
+        direction = MTDirectionNorthEast;
+    } else if ( degrees > 120.0000f && degrees < 150.0000f ) {
+        direction = MTDirectionNorthWest;
+    } else if ( degrees > 240.0000f && degrees < 300.0000f ) {
+        direction = MTDirectionSouth;
+    } else if ( degrees > 300.0000f && degrees < 330.0000f ) {
+        direction = MTDirectionSouthEast;
+    } else if ( degrees > 210.0000f && degrees < 240.0000f ) {
+        direction = MTDirectionSouthWest;
+    } else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
+        direction = MTDirectionEast;
+    } else if ( degrees > 150.0000f && degrees < 210.0000f) {
+        direction = MTDirectionWest;
+    }
+    return direction;
 }
 
 - (void)pinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
+
     switch ([gestureRecognizer state]) {
         case UIGestureRecognizerStatePossible:
             break;
         case UIGestureRecognizerStateBegan: {
+            
             if ([gestureRecognizer numberOfTouches] >= 2) {
                 [self setPinchBeginTransform:[[gestureRecognizer view] transform]];
-                CGPoint locationA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
-                CGPoint locationB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+                UIView *pinchView = [gestureRecognizer view];
+                CGPoint locationA = [gestureRecognizer locationOfTouch:0 inView:pinchView];
+                CGPoint locationB = [gestureRecognizer locationOfTouch:1 inView:pinchView];
+                locationA = [self locationOfPointInWindows:locationA];
+                locationB = [self locationOfPointInWindows:locationB];
+                
                 [self addPointA:locationA andPointB:locationB];
                 [self setPinchInitalPointA:locationA];
                 [self setPinchInitalPointB:locationB];
             }
             break;
+            
         }
         case UIGestureRecognizerStateChanged: {
+            
             if ([gestureRecognizer numberOfTouches] >= 2) {
-                CGPoint newTouchA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
-                CGPoint newTouchB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
-                [self addPointA:newTouchA
-                      andPointB:newTouchB];
+                //UICollectionView *parentView = [self sectionViewFor:gestureRecognizer];
+                //CGPoint centroidInParentView = [gestureRecognizer locationInView:parentView];
+                //MTElementView *elementView = (MTElementView *)[gestureRecognizer view];
+                //CGPoint centroidInElementView = [gestureRecognizer locationInView:elementView];
+                //CGPoint touchPointOne = [gestureRecognizer locationOfTouch:0 inView:elementView];
+                //CGPoint touchPointTwo = [gestureRecognizer locationOfTouch:1 inView:elementView];
                 
-                CGFloat differenceX = fabsf([self pinchInitalPointA].x - [self pinchInitalPointB].x);
-                CGFloat differenceY = fabsf([self pinchInitalPointA].y - [self pinchInitalPointB].y);
+                //CGLineSegment lineSegment = CGLineSegmentMake(touchPointOne, touchPointTwo);
+                //CGFloat slope = CGLineSegmentSlope(lineSegment);
+                //CGFloat directionInDegrees = atan(slope);
                 
-                CGFloat newDifferenceX = fabsf(_currentNewPointAX - _currentNewPointBX);
-                CGFloat newDifferenceY = fabsf(_currentNewPointAY - _currentNewPointBY);
-                CGFloat scaleWidth = differenceX != 0 ? newDifferenceX / differenceX : 1.0000f;
-                CGFloat scaleHeight = differenceY != 0 ? newDifferenceY / differenceY : 1.0000f;
+//                {
+                    //CGPoint newTouchA = [gestureRecognizer locationOfTouch:0 inView:[gestureRecognizer view]];
+                    //CGPoint newTouchB = [gestureRecognizer locationOfTouch:1 inView:[gestureRecognizer view]];
+                    //[self addPointA:newTouchA
+                    //      andPointB:newTouchB];
+                    
+                    //CGFloat differenceX = fabsf([self pinchInitalPointA].x - [self pinchInitalPointB].x);
+                    //CGFloat differenceY = fabsf([self pinchInitalPointA].y - [self pinchInitalPointB].y);
+                    
+                    //CGFloat newDifferenceX = fabsf(_currentNewPointA.x - _currentNewPointB.x);
+                    //CGFloat newDifferenceY = fabsf(_currentNewPointA.y - _currentNewPointB.y);
+ //               }
+                
+                CGFloat scale = gestureRecognizer.scale;
+                CGFloat scaleWidth = scale;
+                CGFloat scaleHeight = scale;
+ //               CGFloat velocity = gestureRecognizer.velocity;
+                //CGFloat directionInDegrees = [self directionInDegreesFromVelocity:CGPointMake(velocity, velocity)];
+                /*
+                MTDirection direction = [self generalDirectionOfDegrees: directionInDegrees];
+                NSString *directionDesc;
+                switch (direction) {
+                    case MTDirectionSouth:
+                    case MTDirectionNorth:
+                        directionDesc = @"North-South";
+                        scaleHeight = scale;
+                        scaleWidth = 1.0000f;
+                        break;
+                    case MTDirectionEast:
+                    case MTDirectionWest:
+                        directionDesc = @"East-West";
+                        scaleHeight = 1.0000f;
+                        scaleWidth = scale;
+                        break;
+                    case MTDirectionNorthEast:
+                    case MTDirectionSouthWest:
+                    case MTDirectionSouthEast:
+                    case MTDirectionNorthWest:
+                        directionDesc = @"Diag";
+                        scaleHeight = scale;
+                        scaleWidth = scale;
+                        break;
+                    default:
+                        scaleHeight = scale;
+                        scaleWidth = scale;
+                        break;
+                }
+                */
+                //NSLog(@"Pinch (%f, %f, %f˚) at %@ - %@", slope, directionInDegrees, gestureRecognizer.scale, NSStringFromCGPoint(centroidInParentView), directionDesc);
+
+
                 gestureRecognizer.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, scaleWidth, scaleHeight);
-                gestureRecognizer.scale = 1.0000f;
-                
+                [gestureRecognizer.view  setNeedsDisplay];
+                //[gestureRecognizer.view setCenter:centroidInElementView];
+                //CGPoint v = CGPointMake(gestureRecognizer.velocity, gestureRecognizer.velocity);
+                //CGFloat directionInDegrees = [self directionInDegreesFromVelocity:v];
                 _currentScaleSize = CGSizeMake(scaleWidth, scaleHeight);
+                
                 
                 //Save off the size to use at the end.
             }
             break;
         }
         case UIGestureRecognizerStateCancelled:
-        case UIGestureRecognizerStateFailed: {
-            gestureRecognizer.view.transform = [self pinchBeginTransform];
-            [[gestureRecognizer view] setNeedsDisplay];
-            //            [(MTElementView *)[gestureRecognizer view] updateDisplayLabel];
-            [[gestureRecognizer view] setNeedsDisplay];
-            [[gestureRecognizer view] setNeedsLayout];
-            gestureRecognizer.scale = 1.0000f;
-            break;
-        }
+        case UIGestureRecognizerStateFailed:
         case UIGestureRecognizerStateEnded: {
-            MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
-            MAReportDocument *reportDocument = [applicationInstance activeDocument];
-            NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[(MTElementView *)[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
-            CGFloat sizeWidth = nearbyintf(_currentScaleSize.width * [[documentObject sizewidth] floatValue]);
-            CGFloat sizeHeight = nearbyintf(_currentScaleSize.height * [[documentObject sizeheight] floatValue]);
-            MTElementView *elementView = (MTElementView *)[gestureRecognizer view];
-            [elementView setTransform: CGAffineTransformScale(CGAffineTransformIdentity, _currentScaleSize.width, _currentScaleSize.height)];
-            [documentObject setSizewidth:@(sizeWidth)]; [documentObject setSizeheight:@(sizeHeight)];
-            [managedObjectContext save:nil];
-            //            [elementView setTransform: CGAffineTransformIdentity];
-            //[elementView setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, sizeWidth, sizeHeight)];
+
+            UICollectionView *collectionView = [[self sectionViewFor:gestureRecognizer] retain];
+
             
+            MTBlockCompletionNoReturn update = ^(void) {
+                MTApplicationInstance *app = [AppDelegate app];
+                MAReportDocument *reportDocument = [app activeDocument];
+                NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[(MTElementView *)[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
+                CGFloat sizeWidth = nearbyintf(_currentScaleSize.width * [[documentObject sizewidth] floatValue]);
+                CGFloat sizeHeight = nearbyintf(_currentScaleSize.height * [[documentObject sizeheight] floatValue]);
+                MTElementView *elementView = (MTElementView *)[gestureRecognizer view];
+                [elementView setTransform: CGAffineTransformScale(CGAffineTransformIdentity, _currentScaleSize.width, _currentScaleSize.height)];
+                [documentObject setSizewidth:@(sizeWidth)]; [documentObject setSizeheight:@(sizeHeight)];
+                [documentObject setDropPoint:elementView.frame.origin];
+                [managedObjectContext save:nil];
+
+                [elementView setNeedsLayout];
+                [elementView setNeedsDisplay];
+
+            };
             
-            
-            //UIView *parentView = [[gestureRecognizer view] superview];
-            //[[gestureRecognizer view] removeFromSuperview];
-            //[documentObject performSelector:@selector(setSizewidth:) withObject:@(sizeWidth)];
-            //MTElementView *elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:[documentObject managedObjectContext]];
-            //[parentView addSubview:elementView];
+            __block MTReportDesignerViewController *reportDesigner = self;
+            MTBlockCompletionSimple finishedUpdate = ^(BOOL finished) {
+                if (finished) [reportDesigner resizeCollectionView:collectionView];
+            };
+
+             [collectionView performBatchUpdates:update completion:finishedUpdate];
+            [[collectionView collectionViewLayout] invalidateLayout];
+            [collectionView release];
+
             gestureRecognizer.scale = 1.0000f;
-            //MTElementView *elementView = (MTElementView *)[gestureRecognizer view];
-            //[elementView updateDisplayLabel];
-            ///[elementView setNeedsLayout];
-            //MTCollectionViewCellElement *cell = [[elementView container] retain];
-            //[cell setNeedsLayout];
-            //[cell setNeedsDisplay];
-            //[cell release];
-            
-            dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            dispatch_async(queuePriorityBackground, ^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UICollectionView *collectionView = [[self sectionViewFor:gestureRecognizer] retain];
-                    [[collectionView collectionViewLayout] invalidateLayout];
-                    [collectionView release];
-                    dispatch_async(queuePriorityBackground, ^{
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [elementView setNeedsLayout];
-                            [elementView setNeedsDisplay];
-                        });
-                    });
-                });
-            });
+
             break;
         }
     }
@@ -3329,7 +3368,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     UIWindow *window = [AppDelegate window];
     CGPoint gestureLocation = [gestureRecognizer locationInView:window];
     gestureLocation = [[self designerScrollView] convertPoint:gestureLocation fromView:window];
-    return gestureLocation;//[window convertPoint:gestureLocation toWindow:nil];
+    return gestureLocation;
 }
 
 - (void)gestureBegan {
@@ -3341,46 +3380,124 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self setScrollersEnabled:YES];
 }
 
+- (void)singleTapToDeselectElementViews:(UITapGestureRecognizer *)sender {
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    [self deselectAllElementsAnimated:YES];
+    [self hideToolbox];
+}
+
+- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
+    
+    if ([sender state] == UIGestureRecognizerStateEnded) {
+        
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+        
+        if ([[self selectedElementViews] count] >= 1) {
+            [self deselectAllElementsAnimated:YES];
+            [self hideToolbox];
+        } else {
+            
+            if ([(DesignerSectionLabel *)[sender view] selected]) {
+                
+                
+                DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
+                if ([sectionLabel selected]) {
+                    [sectionLabel normalView];
+                }
+                
+                [self hideToolbox];
+                
+            } else {
+                
+                [self deselectAllElementsAnimated:YES];
+                
+                [self setLastSelectedSectionControlPanel:[[sender view] tag]];
+                
+                MTApplicationInstance *applicationInstance = [AppDelegate applicationInstance];
+                MAReportDocument *reportDocument = [applicationInstance activeDocument];
+                RptqDocument *document = [reportDocument activeDocument];
+                RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+                RptqQuery *query = [[database hasQueries] anyObject];
+                RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
+                                                                                    forQuery: query];
+                
+                
+                if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
+                    DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
+                    [sectionLabel dimView];
+                    UIColor *borderColor = [UIColor tintColor];
+                    UIView *superView = [self getSectionViewForDocumentSection: section];
+                    [[superView layer] setBorderColor:  [borderColor CGColor]];
+                    [[superView layer] setBorderWidth:  1.0000f];
+                }
+                
+                [[self viewControllerSectionLayoutSettings] setInitalStepperValue:([[section height] floatValue])];
+                [[self viewControllerSectionLayoutSettings] setInitalSwitchValue:[[section visibility] boolValue]];
+                [[self viewControllerSectionLayoutSettings] setInitalNumberOfRows:[[section numberOfRows] integerValue]];
+                [[self viewControllerSectionLayoutSettings] updateDisplay];
+                
+                if ([UIDevice isPad]) {
+                    
+                    [[self popoverControllerSectionSettings] setPassthroughViews:@[[sender view]]];
+                    [[self popoverControllerSectionSettings] presentPopoverFromRect:[[sender view] bounds]
+                                                                             inView:[sender view]
+                                                           permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                                           animated:YES];
+                    
+                } else {
+                    [self showToolbox:MTToolboxTypeSection];
+                }
+            }
+            
+        }
+        
+    } else {
+        
+    }
+}
+
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
 
     switch ([gestureRecognizer state]) {
             
-        case UIGestureRecognizerStateBegan: {   // MARK: UIPanGestureRecognizer UIGestureRecognizerStateBegan
+        case UIGestureRecognizerStateBegan: {
 
             [self gestureBegan];
             
             [[gestureRecognizer view] setAlpha:0.8888f];
             [[self designerContentView] bringSubviewToFront: [gestureRecognizer view]];
+            CGFloat scale = self.designerScrollView.zoomScale;
+            [[gestureRecognizer view] setTransform: CGAffineTransformScale(CGAffineTransformIdentity, scale, scale)];
             CGPoint newCenter = [self locationInWindow:gestureRecognizer];
-            
             [[self designerScrollView] addSubview: [gestureRecognizer view]];
-            [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag] completion:nil];
+            [self removeCollectionViewCellForElementView:[[gestureRecognizer view] objectIdTag]
+                                              completion:nil];
             [[gestureRecognizer view] setCenter: newCenter];
-            NSLog(@"%@", NSStringFromCGPoint(newCenter));
-            break;
-        }
-        case UIGestureRecognizerStateChanged: {     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateChanged
             
-            CGPoint newCenter = [self locationInWindow:gestureRecognizer];//[[self designerScrollView] convertPoint:newCenter fromView:window];
-            [[gestureRecognizer view] setCenter: newCenter];
-            NSLog(@"%@", NSStringFromCGPoint(newCenter));
             break;
         }
-        case UIGestureRecognizerStatePossible:      // MARK: UIPanGestureRecognizer UIGestureRecognizerStatePossible
+        case UIGestureRecognizerStateChanged: {
+            
+            CGPoint newCenter = [self locationInWindow:gestureRecognizer];
+            [[gestureRecognizer view] setCenter: newCenter];
+
             break;
-        case UIGestureRecognizerStateCancelled:     // MARK: UIPanGestureRecognizer UIGestureRecognizerStateCancelled
-        case UIGestureRecognizerStateFailed:        // MARK: UIPanGestureRecognizer UIGestureRecognizerStateFailed
-        case UIGestureRecognizerStateEnded: {       // MARK: UIPanGestureRecognizer UIGestureRecognizerStateEnded
+        }
+        case UIGestureRecognizerStatePossible:
+            break;
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateEnded: {
             
             [[gestureRecognizer view] setAlpha:1.0000f];
-
+            [[gestureRecognizer view] setTransform: CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000)];
             UICollectionView *newSection = [[self sectionViewFor:gestureRecognizer] retain];
             
             if (newSection != nil) {
+                
                 __block MTReportDesignerViewController *reportDesigner = self;
                 
-                [newSection performBatchUpdates:^{
-                    
+                MTBlockCompletionNoReturn update = ^(void) {
                     MTApplicationInstance *app = [AppDelegate app];
                     MAReportDocument *reportDocument = [app activeDocument];
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -3392,16 +3509,18 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     NSManagedObjectID *sectionId = [newSection objectIdTag];
                     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
                                                                                             fromObjectContext: managedObjectContext];
-
+                    
                     NSIndexPath *indexPathInsert = [documentSection addDocumentObject:documentObject withDropPoint:frame.origin];
                     NSArray *indexPathsInserted = @[indexPathInsert];
                     [newSection insertItemsAtIndexPaths:indexPathsInserted];
-                    
-                } completion:^(BOOL finished) {
-                    if (finished) {
-                        [reportDesigner resizeCollectionView:newSection];
-                    }
-                }];
+
+                };
+                
+                MTBlockCompletionSimple finishedUpdate = ^(BOOL finished) {
+                    if (finished) [reportDesigner resizeCollectionView:newSection];
+                };
+                
+                [newSection performBatchUpdates:update completion:finishedUpdate];
                 
             }
             [newSection release];
@@ -3414,38 +3533,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             break;
     }
 }
-/*
-
-- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject
-                 toDocumentSection:(RptqDocumentSection *)documentSection
-                        withDropPoint:(CGPoint)origin {
-    
-    
-    [documentObject setOrigin:origin];
-    [documentObject setDropPoint:origin];
-    
-    NSUInteger sectionZero = 0;
-    RptqDocumentSectionRows *sectionRow = [[documentSection hasRows] objectAtIndex: sectionZero];
-    NSUInteger lastIndex = [[sectionRow hasObjects] count];
-    NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
-    
-    
-    NSNumber *dropIndex = @([documentSection nextDropIndexForSection]);
-    [documentObject setDropIndex:dropIndex];
-    
-    NSOrderedSet *documentObjects = [sectionRow hasObjects];
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:documentObjects];
-    
-    
-    [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
-    [sectionRow setHasObjects:hasObjects];
-    [hasObjects release];
-    
-    [[documentSection managedObjectContext] save:nil];
-
-    return [[indexInsert retain] autorelease];
-
-}*/
 
 - (MTDocumentSectionView *)sectionViewFor:(UIGestureRecognizer *)gesture {
     MTDocumentSectionView *result = nil;

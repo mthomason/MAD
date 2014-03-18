@@ -127,17 +127,11 @@
     [[document hasPageFooterSection] setType:        @(MNSDocumentSectionTypePageFooter)];
     [[document hasDetailSection] setType:            @(MNSDocumentSectionTypeBody)];
 
-    [[document hasReportHeaderSection] setHeight:@44.0000f];
-    [[document hasReportFooterSection] setHeight:@44.0000f];
-    [[document hasPageHeaderSection] setHeight:@44.0000f];
-    [[document hasPageFooterSection] setHeight:@44.0000f];
-    [[document hasDetailSection] setHeight:@88.0000f];
-
-    [[document hasReportHeaderSection] setLayoutHeight:@44.0000f];
-    [[document hasReportFooterSection] setLayoutHeight:@44.0000f];
-    [[document hasPageHeaderSection] setLayoutHeight:@44.0000f];
-    [[document hasPageFooterSection] setLayoutHeight:@44.0000f];
-    [[document hasDetailSection] setLayoutHeight:@88.0000f];
+    [[document hasReportHeaderSection] setInterfaceHeight:44.0000f];
+    [[document hasReportFooterSection] setInterfaceHeight:44.0000f];
+    [[document hasPageHeaderSection] setInterfaceHeight:44.0000f];
+    [[document hasPageFooterSection] setInterfaceHeight:44.0000f];
+    [[document hasDetailSection] setInterfaceHeight:88.0000f];
 
     [[document hasReportHeaderSection] setVisibility:@YES];
     [[document hasReportFooterSection] setVisibility:@YES];

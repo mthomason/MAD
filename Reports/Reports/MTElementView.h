@@ -47,6 +47,7 @@
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
 - (BOOL)isSelected;
+- (BOOL)toggleSelected;
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

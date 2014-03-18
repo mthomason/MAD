@@ -9,6 +9,9 @@
 #ifndef Reports_MTReportDesignerViewController_h
 #define Reports_MTReportDesignerViewController_h
 
+typedef void(^MTBlockCompletionSimple)(BOOL finished);
+typedef void(^MTBlockCompletionNoReturn)(void);
+
 #import <UIKit/UIKit.h>
 #import "MTViewController.h"
 
