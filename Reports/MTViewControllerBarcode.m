@@ -14,6 +14,7 @@
 #import "MTBarcodeMaxicodeIso16023.h"
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
+#import "MTQuery.h"
 
 NSString * const MTIdentifierSegueDocumentObjectEditBarcode = @"MTIdentifierSegueDocumentObjectEditBarcode";
 NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
@@ -112,16 +113,15 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     if ([self editmode]) {
         [[self barButtonItemSave] setEnabled:YES];
 
-        
         MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        RptqDocument *document = [reportDocument activeDocument];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
+        MTQuery *defaultQuery = [reportDocument defaultQuery];
         
         __block MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
         if ([self queryField1] != nil) {
-            [mnsDatabase sampleDataForSchemaField:[[self queryField1] databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+            RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
+            [defaultQuery sampleDataForSchemaField:schemaField
+                                        completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
                 if (success) {
                     [optionsViewController setSampleBarcodeData:resultStrings];
                     [[optionsViewController tableView] reloadData];
@@ -130,7 +130,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         }
         
         if ([self queryField2] != nil) {
-            [mnsDatabase sampleDataForSchemaField:[[self queryField2] databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+            RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
+            [defaultQuery sampleDataForSchemaField:schemaField
+                                        completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
                 if (success) {
                     [optionsViewController setSampleBarcodeData2dComponent:resultStrings];
                     [[optionsViewController tableView] reloadData];

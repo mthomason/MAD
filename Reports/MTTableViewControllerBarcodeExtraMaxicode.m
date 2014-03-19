@@ -7,6 +7,9 @@
 //
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
+#import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+#import "MTQuery.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 
@@ -27,13 +30,18 @@
 
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
+- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+                                      withField: (RptqQueryField *)field {
     
     [[self navigationController] popViewControllerAnimated:YES];
     
-    RptqDatabase *database = [[[field inQueryTable] inQuery] inDatabase];;
-    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    [mnsDatabase sampleDataForSchemaField:[field databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MTQuery *defaultQuery = [reportDocument defaultQuery];
+    
+    RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
+    [defaultQuery sampleDataForSchemaField:schemaField
+                                completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
         if (success) {
             [resultStrings retain];
             [[self delegate] barcodeMaxicodeDidChooseSampleData:resultStrings];
@@ -59,6 +67,5 @@
         [[self delegate] barcodeMaxicodeDidSetEncodingMode:[cell tag]];
     }
 }
-
 
 @end

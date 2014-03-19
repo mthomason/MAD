@@ -745,6 +745,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     
                 }
             }
+            [whiteColor release];
         }
         
         [nextGroupLevelKeys release];

@@ -8,6 +8,7 @@
 
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
 
 #pragma mark -
 #pragma mark TableViewController

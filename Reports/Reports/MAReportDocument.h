@@ -14,17 +14,19 @@
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 
+@class MTQuery;
 
 @interface MAReportDocument : MADocument
     <MTDatabaseCacheProtocol>
 
 @property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
 
+- (id)initWithFileURL:(NSURL *)url;
+
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion;
 
 - (void)refresh:(void (^)(BOOL success))completion;
-- (BOOL)hasCachedData;
 - (void)sendTo;
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
@@ -35,10 +37,14 @@
 - (void)regenThumbnail;
 - (RptqDocument *)activeDocument;
 
-+ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion;
++ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention
+             andConnection:(MTDatabaseConnection *)databaseConnection
+                completion:(void(^)(BOOL success))completion;
 
 + (NSURL *)cachedDataFileUrlForFileUrl:(NSURL *)fileUrl;
 - (NSURL *)cachedDataUrl;
+
+- (MTQuery *)defaultQuery;
 
 @end
 

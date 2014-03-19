@@ -1,0 +1,22 @@
+//
+//  MTDatabaseConnectionMySql.h
+//  MAD
+//
+//  Created by Michael Thomason on 3/19/14.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//
+
+#ifndef Reports_MTDatabaseConnectionMySql_h
+#define Reports_MTDatabaseConnectionMySql_h
+
+#import "MTDatabaseConnection.h"
+
+@interface MTDatabaseConnectionMySql : MTDatabaseConnection
+
+- (id)initWithHost:(NSString *)host
+          database:(NSString *)database
+           andPort:(NSInteger)port;
+
+@end
+
+#endif

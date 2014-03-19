@@ -7,13 +7,11 @@
 //
 
 #import "MTDatabaseSqlite3.h"
+#import "MTQuerySqlite3.h"
 #import "RptqQueryField+Extras.h"
 
 
 @interface MTDatabaseSqlite3 ()
-
-@property (readwrite, nonatomic, retain) MTDatabaseConnection *databaseConnection;
-
 
 @property (assign) sqlite3 *database;
 
@@ -21,53 +19,23 @@
 
 @implementation MTDatabaseSqlite3
 
+- (void)openDatabase {
+
+    //Open conneciton... closed in dealloc.
+    NSString *filepath = [[[self connectionSettings] databaseUrl] path];
+    if (sqlite3_open([filepath UTF8String], &_database) != SQLITE_OK) {
+        NSAssert1(0, @"Error: failed to open database with message '%s'.", sqlite3_errmsg(_database));
+    } else {
+        sqlite3_extended_result_codes(_database, true);
+    }
+    
+}
+
 - (void)dealloc {
     if (sqlite3_close(_database) != SQLITE_OK) {
         NSAssert1(0, @"Error: failed to close database with message '%s'.", sqlite3_errmsg([self database]));
     }
-    [_databaseConnection release];
     [super dealloc];
-}
-
-- (id)initWithConnectionSettings: (MTDatabaseConnection *)connectionSettings {
-    self = [super init];
-    if (self) {
-
-        //Open conneciton... closed in dealloc.
-        NSString *filepath = [[connectionSettings databaseUrl] path];
-        if (sqlite3_open([filepath UTF8String], &_database) != SQLITE_OK) {
-            NSAssert1(0, @"Error: failed to open database with message '%s'.", sqlite3_errmsg(_database));
-        } else {
-            sqlite3_extended_result_codes(_database, true);
-        }
-
-        [self setDatabaseConnection:connectionSettings];
-
-    }
-    return self;
-}
-
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
-    // FIXME: Use backticks `` to make more robust.
-    return [[[NSString stringWithFormat:@"\"%@\"", fieldOrTableName] retain] autorelease];
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [[[NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName] retain] autorelease];
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [[[NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName] retain] autorelease];
-}
-
-- (NSString *)selectPart {
-    return @"SELECT\n";
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
@@ -177,33 +145,12 @@
     return result;
 }
 
-
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                         completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
-    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-    RptqQuery *query = [[database hasQueries] anyObject];
-
-    NSArray *results = [[self resultsForQueryString:queryString] retain];
-    
-    [[self delegateCacheData] cacheQueryResult:results];
-
-    [results release];
-    
-    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
-    RptqQueryCache *queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
-    [queryCache setCacheDate:[NSDate date]];
-    [query setHasQueryCache:queryCache];
-
-    completion(self, [query hasQueryCache]);
-    
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return [MTQuerySqlite3 safeQueryField:queryField];
 }
-
-- (NSString *)tableAliasConnector {
-    return @" ";
+- (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
+    id results = [[[self resultsForQueryString:sql] retain] autorelease];
+    completion(YES, nil, results);
 }
 
 - (NSArray *)resultsForQueryString:(NSString *)queryString {
@@ -301,25 +248,13 @@
     return [results autorelease];
 }
 
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
-
-    NSString *safeField = [self safeQuerySchemaField:schemaField];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
-    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
-                                                @"%@ %@ "
-                                                @"LIMIT 255;",
-                                                safeField, MTSqlFrom, safeTable];
-    NSArray *results = [[self resultsForQueryString:sql] retain];
-    completion(YES, nil, [results autorelease]);
-}
-
-- (NSString *)sqlLimitClause {
-    return [self isLicensedUser] ? @"" : @"\nLIMIT 50";
-}
-
 - (NSString *)identifier {
     return [MTDatabaseSqlite3 identifier];
+}
+
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
+    // FIXME: Use backticks `` to make more robust.
+    return [NSString stringWithFormat:@"\"%@\"", fieldOrTableName];
 }
 
 + (NSString *)identifier {

@@ -12,18 +12,22 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
+@class RptqUserCredentals;
+
 @interface MTDatabaseConnection : NSObject
 
-@property (nonatomic, retain) NSString  *databaseTypeIdentifier;
-@property (nonatomic, retain) NSURL     *databaseUrl;
-@property (nonatomic, retain) NSString  *username;
-@property (nonatomic, retain) NSString  *password;
-@property (nonatomic, retain) NSString  *server;
-@property (nonatomic, retain) NSString  *database;
-@property (nonatomic, retain) NSString  *host;
+@property (nonatomic, strong) NSString  *databaseTypeIdentifier;
+@property (nonatomic, strong) NSURL     *databaseUrl;
+@property (nonatomic, strong) NSString  *username;
+@property (nonatomic, strong) NSString  *password;
+@property (nonatomic, strong) NSString  *server;
+@property (nonatomic, strong) NSString  *database;
+@property (nonatomic, strong) NSString  *host;
 @property (nonatomic, assign) NSInteger port;
 
 - (NSString *)appname;
+
++ (id)credentalsFromRptqCredentals:(RptqUserCredentals *)credentals;
 
 @end
 

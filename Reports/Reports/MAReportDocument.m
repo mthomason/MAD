@@ -23,6 +23,9 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqUserCredentals+Extras.h"
 
 #import "MTLog.h"
+#import "MTQuery.h"
+#import "MTCache.h"
+
 #import "UIDevice+Hack.h"
 
 @interface MAReportDocument ()
@@ -30,21 +33,35 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 @property (nonatomic, retain) NSManagedObjectModel *mom;
 @property (nonatomic, retain) RptqDocument *document;
 
+@property (nonatomic, retain) NSMutableDictionary *reportQueries;
+
 @end
 
 @implementation MAReportDocument
 
 - (void)dealloc {
+    [_reportQueries release];
     [_document release];
     [_mom release];
     [super dealloc];
 }
 
+- (id)initWithFileURL:(NSURL *)url {
+    self = [super initWithFileURL:url];
+    if (self) {
+        
+        NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
+        [self setReportQueries:reportQueries];
+        [reportQueries release];
+        
+    }
+    return self;
+}
+
 - (NSManagedObjectModel *)managedObjectModel {
     NSManagedObjectModel *result = [self mom];
     if (result == nil) {
-        NSString *modelPath = [[NSBundle mainBundle]
-                               pathForResource:@"MAD" ofType:@"momd"];
+        NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"MAD" ofType:@"momd"];
         NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
         NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
         [self setMom:mom];
@@ -71,6 +88,15 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
         [document retain];
         [self setDocument:document];
         [document release];
+        
+        // FIXME: Only one query for a report at this time.
+        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqQuery *rquery = [[database hasQueries] anyObject];
+        MTQuery *query = [[MTQuery queryForRptqQuery:rquery] retain];
+        [self reportQueries][@"defaultq"] = query;
+        [query release];
+
+        
     }
     return [[[self document] retain] autorelease];
 }
@@ -85,27 +111,22 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
     }];
 }
 
+- (MTQuery *)defaultQuery {
+    return [[[self reportQueries][@"defaultq"] retain] autorelease];
+}
+
 - (void)refresh:(void (^)(BOOL success))completion {
     RptqDocument *document = [self activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    [mnsDatabase setDelegateCacheData:self];
-    
-    NSString *sqlSelect = [mnsDatabase getSqlForQuery:query];
-    if ([sqlSelect length] > 0) {
-        //sqlSelect = [NSString stringWithFormat:@"%@ LIMIT 100000", sqlSelect];
-        [mnsDatabase cacheReportQueryForDocument: document completion: ^(MTDatabase *database, RptqQueryCache *cache) {
-            if (database != nil && cache != nil) {
-                completion(YES);
-            } else {
-                completion(NO);
-            }
-        }];
-    } else {
-        [self emptyCache];
-        completion(YES);
-    }
+    MTQuery *defaultQuery = [[self defaultQuery] retain];
+
+    [[self defaultQuery] cacheReportQueryForDocument:document completion:^(BOOL success, NSError *error, id results) {
+        if (success) {
+            [MTCache cacheData:results toUrl:[self cachedDataUrl]];
+        }
+        completion(success);
+    }];
+
+    [defaultQuery release];
 }
 
 + (NSURL *)cachedDataFileUrlForFileUrl:(NSURL *)fileUrl {
@@ -141,13 +162,6 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
     [queryCache setCacheDate:[NSDate date]];
     [query setHasQueryCache:queryCache];
     [queryCache release];
-}
-
-- (BOOL)hasCachedData {
-    RptqDocument *document = [self document];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    return [query hasQueryCache] != nil;
 }
 
 - (void)sendTo {
@@ -320,27 +334,15 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
             __block MAReportDocument *documentReport = managedDocument;
             [databaseConnection retain];
             
-            id database = nil;
-            NSString *databaseId = [databaseConnection databaseTypeIdentifier];
-            
-            if ([databaseId isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
-                
-                database = [[MTDatabaseMySql alloc] initWithConnectionSettings:databaseConnection];
-                
-            } else if ([databaseId isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
-                
-                database = [[MTDatabaseSqlServer alloc] initWithConnectionSettings:databaseConnection];
-                
-            } else if ([databaseId isEqualToString:[MTDatabaseSqlite3 identifier]]) {
-                
-                database = [[MTDatabaseSqlite3 alloc] initWithConnectionSettings:databaseConnection];
-            }
+            RptqDocument *rptqDocument = [[documentReport activeDocument] retain];
+            RptqDatabase *rptqDatabase = [[rptqDocument hasDatabaseSchemas] anyObject];
+            MTDatabase *database = [MTDatabase databaseForRptqDatabase:rptqDatabase];
             
             if (database) {
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [RptqDocument addDatabase:database toDocument:[documentReport activeDocument] completion:^(BOOL successAddingDatasource, NSError *error) {
+                    [RptqDocument addDatabase:database toDocument:rptqDocument completion:^(BOOL successAddingDatasource, NSError *error) {
                         
                         MTCompletionHandlerSuccess completeSuccess = ^(BOOL success) {
                             if ([NSThread isMainThread]) {
@@ -411,6 +413,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
                 });
             }
             
+            [rptqDocument release];
             [databaseConnection release];
             [database release];
             

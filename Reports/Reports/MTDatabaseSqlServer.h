@@ -27,18 +27,10 @@ extern NSString * const MTDatabaseConnectionAppName;
 
 @interface MTDatabaseSqlServer : MTDatabase
 
-- (id)initWithConnectionSettings: (MTDatabaseConnection *)connectionSettings;
-
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
-
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                                     completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;
-
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
 - (NSString *)identifier;
 + (NSString *)identifier;
@@ -47,6 +39,8 @@ extern NSString * const MTDatabaseConnectionAppName;
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 
 - (id)connectionSettings;
+
+
 
 @end
 

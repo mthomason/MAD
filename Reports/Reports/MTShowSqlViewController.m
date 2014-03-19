@@ -14,6 +14,7 @@
 #import "RptqQuery.h"
 #import "MTDatabase.h"
 #import "MTAlertView.h"
+#import "MTQuery.h"
 
 @interface MTShowSqlViewController ()
 
@@ -28,14 +29,15 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    MTApplicationInstance *app = [AppDelegate app];
+    MAReportDocument *reportDocument = [app activeDocument];
+    MTQuery *query = [reportDocument defaultQuery];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    MTDatabase *databaseHandler = [MTDatabase databaseObjectForRptqDatabase:[query inDatabase]];
-    NSString *sqlStatement = [databaseHandler getSqlForQuery: query onlyActiveFields: NO];
+    RptqQuery *q = [[database hasQueries] anyObject];
+    NSString *sqlStatement = [query getSqlForQuery:q onlyActiveFields:NO];
+    
     if ([sqlStatement length] > 0) {
         [[self textView] setText:sqlStatement];
     } else {

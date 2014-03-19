@@ -20,6 +20,7 @@
 #import "MTBarcodeCode39Iso16388.h"
 #import "MTBarcodeCode39Extended.h"
 #import "MTBarcodeDataMatrixIso16022.h"
+#import "MTQuery.h"
 
 #import "AppDelegate.h"
 
@@ -709,11 +710,7 @@
     
     
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-
-    RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    [mnsDatabase sampleDataForSchemaField:[field databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+    [[reportDocument defaultQuery] sampleDataForSchemaField:[field databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
         if (success) {
             [resultStrings retain];
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");
@@ -726,7 +723,9 @@
             [resultStrings release];
             [[self tableView] reloadData];
         }
+        
     }];
+    
 }
 
 #pragma mark - MTTableViewControllerBarcodeExtraAztecDelegate

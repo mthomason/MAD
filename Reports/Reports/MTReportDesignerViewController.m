@@ -2545,9 +2545,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo {
 
     if ([self barcodeToEdit] != nil) {
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         RptqDocumentObjectBarcode *barcodeObject = [self barcodeToEdit];
         [barcodeObject updateWithBarcode:barcode fieldOne:fieldOne fieldTwo:fieldTwo];
     }

@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 };
 
 @class RptqDocument, RptqDatabase, RptqQuery, RptqQueryField, RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
-        RptqQueryCache;
+        RptqQueryCache, MTDatabaseConnection;
 
 @protocol MTDatabaseCacheProtocol <NSObject>
 @required
@@ -34,8 +34,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @interface MTDatabase : NSObject
 
 @property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
+@property (nonatomic, retain) MTDatabaseConnection *databaseConnection;
 
-+ (id)databaseObjectForRptqDatabase:(RptqDatabase *)database;
 + (id)databaseForRptqDatabase:(RptqDatabase *)database;
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
@@ -45,14 +45,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-      completion: (void (^)(MTDatabase *database, RptqQueryCache *cache))completion;
-
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
-
-- (NSString *)getSqlForQuery:(RptqQuery *)query;
-- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields;
 
 - (NSString *)identifier;
 + (NSString *)identifier;
@@ -61,8 +53,10 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (id)connectionSettings;
 
-- (NSString *)selectPart;
 - (NSString *)tableAliasConnector;
+
+- (void)executeSql:(NSString *)sql
+        completion:(void (^)(BOOL success, NSError *error, id results))completion;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 

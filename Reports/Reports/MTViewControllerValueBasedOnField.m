@@ -14,6 +14,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+#import "MTQuery.h"
 
 @interface MTViewControllerValueBasedOnField ()
 
@@ -92,11 +93,8 @@
         RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
                                                                     fromObjectContext: objectContext];
         
-        RptqDocument *document = [reportDocument activeDocument];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-        [mnsDatabase sampleDataForSchemaField:field completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
-            
+        [[reportDocument defaultQuery] sampleDataForSchemaField:field
+                                                     completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
             if (success) {
                 [resultStrings retain];
                 [self setPickerData:resultStrings];
@@ -105,7 +103,6 @@
             } else {
                 [error presentErrorToUser];
             }
-            
         }];
         
     });

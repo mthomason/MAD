@@ -67,6 +67,7 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 + (UIStoryboard *)storyboard;
 
 + (void)drawMadWatermarkInRect:(CGRect)rect;
++ (NSString *)bundleDisplayName;
 
 @end
 

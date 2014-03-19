@@ -1234,6 +1234,20 @@
 		4C9E446818D8AADE00F0F578 /* MTTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446618D8AADE00F0F578 /* MTTableController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E446B18D8B5EF00F0F578 /* MTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446A18D8B5EF00F0F578 /* MTCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E446C18D8B5EF00F0F578 /* MTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446A18D8B5EF00F0F578 /* MTCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E446F18D8C7BF00F0F578 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446E18D8C7BF00F0F578 /* MTQuery.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447018D8C7BF00F0F578 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446E18D8C7BF00F0F578 /* MTQuery.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447318D8CA7400F0F578 /* MTQueryMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E447218D8CA7400F0F578 /* MTQueryMySql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447418D8CA7400F0F578 /* MTQueryMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E447218D8CA7400F0F578 /* MTQueryMySql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447718D8CAB400F0F578 /* MTQuerySqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E447618D8CAB400F0F578 /* MTQuerySqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447818D8CAB400F0F578 /* MTQuerySqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E447618D8CAB400F0F578 /* MTQuerySqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447B18D8CACF00F0F578 /* MTQuerySqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E447A18D8CACF00F0F578 /* MTQuerySqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E447C18D8CACF00F0F578 /* MTQuerySqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E447A18D8CACF00F0F578 /* MTQuerySqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E448118D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */; };
+		4C9E448218D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */; };
+		4C9E448518D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */; };
+		4C9E448618D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */; };
+		4C9E448918D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */; };
+		4C9E448A18D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */; };
 		4C9F400816F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4C9F94BD1642280500A562B9 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
@@ -2521,6 +2535,20 @@
 		4C9E446618D8AADE00F0F578 /* MTTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableController.m; sourceTree = "<group>"; };
 		4C9E446918D8B5EF00F0F578 /* MTCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCache.h; sourceTree = "<group>"; };
 		4C9E446A18D8B5EF00F0F578 /* MTCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCache.m; sourceTree = "<group>"; };
+		4C9E446D18D8C7BF00F0F578 /* MTQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuery.h; sourceTree = "<group>"; };
+		4C9E446E18D8C7BF00F0F578 /* MTQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuery.m; sourceTree = "<group>"; };
+		4C9E447118D8CA7400F0F578 /* MTQueryMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryMySql.h; sourceTree = "<group>"; };
+		4C9E447218D8CA7400F0F578 /* MTQueryMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryMySql.m; sourceTree = "<group>"; };
+		4C9E447518D8CAB400F0F578 /* MTQuerySqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySqlServer.h; sourceTree = "<group>"; };
+		4C9E447618D8CAB400F0F578 /* MTQuerySqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySqlServer.m; sourceTree = "<group>"; };
+		4C9E447918D8CACF00F0F578 /* MTQuerySqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySqlite3.h; sourceTree = "<group>"; };
+		4C9E447A18D8CACF00F0F578 /* MTQuerySqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySqlite3.m; sourceTree = "<group>"; };
+		4C9E447F18D9E93D00F0F578 /* MTDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnectionMySql.h; sourceTree = "<group>"; };
+		4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnectionMySql.m; sourceTree = "<group>"; };
+		4C9E448318D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnectionSqlServer.h; sourceTree = "<group>"; };
+		4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnectionSqlServer.m; sourceTree = "<group>"; };
+		4C9E448718D9E95800F0F578 /* MTDatabaseConnectionSqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseConnectionSqlite3.h; sourceTree = "<group>"; };
+		4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseConnectionSqlite3.m; sourceTree = "<group>"; };
 		4C9F400616F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectFormula+Extras.h"; sourceTree = "<group>"; };
 		4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectFormula+Extras.m"; sourceTree = "<group>"; };
 		4C9F94BB1642280500A562B9 /* MTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewController.h; sourceTree = "<group>"; };
@@ -2882,8 +2910,6 @@
 		4CDD5ACE17ECDFB00032DF6E /* UIApplication+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+Extras.m"; path = "../UIApplication+Extras.m"; sourceTree = "<group>"; };
 		4CDF618916B66BA500C80E01 /* MTReportDesignerToolBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerToolBoxViewController.h; sourceTree = "<group>"; };
 		4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerToolBoxViewController.m; sourceTree = "<group>"; };
-		4CE17E1B164E2BF90002F8EA /* MTDatabaseSalesForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseSalesForce.h; sourceTree = "<group>"; };
-		4CE17E1C164E2BFA0002F8EA /* MTDatabaseSalesForce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseSalesForce.m; sourceTree = "<group>"; };
 		4CE17E1F16501A800002F8EA /* RptqDatabaseSchemaField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabaseSchemaField+Extras.h"; sourceTree = "<group>"; };
 		4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabaseSchemaField+Extras.m"; sourceTree = "<group>"; };
 		4CE17E231650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabaseSchemaTable+Extras.h"; sourceTree = "<group>"; };
@@ -3211,7 +3237,6 @@
 				4C8A649118C7C6D100997D22 /* Database */,
 				4C8A649218C7C71100997D22 /* DatabaseTable */,
 				4C8A649318C7C72900997D22 /* DatabaseField */,
-				4C8A649418C7C73B00997D22 /* DatabaseConnection */,
 				4CBABB7018C7E11F00EE5768 /* Paper */,
 				4CF339421693E5B400390B3A /* MTFont.h */,
 				4CF339431693E5B400390B3A /* MTFont.m */,
@@ -4039,16 +4064,9 @@
 		4C8A649118C7C6D100997D22 /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				4CFF3E7F164CD7DE0070E880 /* MTDatabase.h */,
-				4CFF3E80164CD7DE0070E880 /* MTDatabase.m */,
-				4CFF3E83164CD86E0070E880 /* MTDatabaseMySql.h */,
-				4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */,
-				4C5029F01817A64900C88CD4 /* MTDatabaseSqlite3.h */,
-				4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */,
-				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
-				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
-				4CE17E1B164E2BF90002F8EA /* MTDatabaseSalesForce.h */,
-				4CE17E1C164E2BFA0002F8EA /* MTDatabaseSalesForce.m */,
+				4C8A649418C7C73B00997D22 /* DatabaseConnection */,
+				4C9E447E18D9E61C00F0F578 /* Database */,
+				4C9E447D18D8D3B800F0F578 /* Query */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -4076,6 +4094,12 @@
 			children = (
 				4C68B71216600245002682CB /* MTDatabaseConnection.h */,
 				4C68B71316600245002682CB /* MTDatabaseConnection.m */,
+				4C9E447F18D9E93D00F0F578 /* MTDatabaseConnectionMySql.h */,
+				4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */,
+				4C9E448318D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.h */,
+				4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */,
+				4C9E448718D9E95800F0F578 /* MTDatabaseConnectionSqlite3.h */,
+				4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */,
 			);
 			name = DatabaseConnection;
 			sourceTree = "<group>";
@@ -4294,6 +4318,36 @@
 				4C9962F516401CF800B7BACC /* libMySqlClientObjectiveC.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4C9E447D18D8D3B800F0F578 /* Query */ = {
+			isa = PBXGroup;
+			children = (
+				4C9E446D18D8C7BF00F0F578 /* MTQuery.h */,
+				4C9E446E18D8C7BF00F0F578 /* MTQuery.m */,
+				4C9E447118D8CA7400F0F578 /* MTQueryMySql.h */,
+				4C9E447218D8CA7400F0F578 /* MTQueryMySql.m */,
+				4C9E447518D8CAB400F0F578 /* MTQuerySqlServer.h */,
+				4C9E447618D8CAB400F0F578 /* MTQuerySqlServer.m */,
+				4C9E447918D8CACF00F0F578 /* MTQuerySqlite3.h */,
+				4C9E447A18D8CACF00F0F578 /* MTQuerySqlite3.m */,
+			);
+			name = Query;
+			sourceTree = "<group>";
+		};
+		4C9E447E18D9E61C00F0F578 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				4CFF3E7F164CD7DE0070E880 /* MTDatabase.h */,
+				4CFF3E80164CD7DE0070E880 /* MTDatabase.m */,
+				4CFF3E83164CD86E0070E880 /* MTDatabaseMySql.h */,
+				4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */,
+				4C5029F01817A64900C88CD4 /* MTDatabaseSqlite3.h */,
+				4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */,
+				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
+				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
+			);
+			name = Database;
 			sourceTree = "<group>";
 		};
 		4CA96E8C17BD395C0076F66A /* Document Icons */ = {
@@ -5743,6 +5797,8 @@
 				4CBABB9018C7E1B100EE5768 /* MTPaperA3.m in Sources */,
 				4C02F75B18D5DC9900061A83 /* MTQueryDesigner.m in Sources */,
 				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
+				4C9E448618D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */,
+				4C9E447418D8CA7400F0F578 /* MTQueryMySql.m in Sources */,
 				4C0E7725163B5AEC003B951E /* MTReportDesignerViewController.m in Sources */,
 				4CBABBE618C7E96F00EE5768 /* MTPaperB7.m in Sources */,
 				4CBABB9C18C7E1D600EE5768 /* MTPaperA6.m in Sources */,
@@ -5786,6 +5842,7 @@
 				4C0E775E163B5AEC003B951E /* MTQueryBuilderAddLinkFirstFieldViewController.m in Sources */,
 				4C0E775F163B5AEC003B951E /* MTQueryBuilderAddLinkJoinTypeViewController.m in Sources */,
 				4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */,
+				4C9E447018D8C7BF00F0F578 /* MTQuery.m in Sources */,
 				4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */,
 				4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
 				4CBABBDA18C7E96F00EE5768 /* MTPaperB10.m in Sources */,
@@ -5801,6 +5858,7 @@
 				4CABE4B41837DF81007EDD9D /* RptqQueryCache.m in Sources */,
 				4CBABB9418C7E1BD00EE5768 /* MTPaperA4.m in Sources */,
 				4C0E7769163B5AEC003B951E /* MTQueryBuilderSortTypeViewController.m in Sources */,
+				4C9E448218D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */,
 				4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */,
 				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */,
@@ -5932,6 +5990,7 @@
 				4CF8670E16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
 				4CABE4A81837DF80007EDD9D /* RptqDocumentObjectFormula.m in Sources */,
+				4C9E447818D8CAB400F0F578 /* MTQuerySqlServer.m in Sources */,
 				4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */,
 				4C3138EB184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4CBABBE418C7E96F00EE5768 /* MTPaperC8.m in Sources */,
@@ -5945,6 +6004,7 @@
 				4C8BF47816F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4C8BF47C16F645D3002D9F9B /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4C02F75F18D5DCAB00061A83 /* MTReportViewer.m in Sources */,
+				4C9E448A18D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */,
 				4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */,
 				4C8155C117009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
@@ -5993,6 +6053,7 @@
 				4C0081EB17849A4A00874849 /* MTVerificationController.m in Sources */,
 				4C2670F31794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
 				4CA57A5C179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
+				4C9E447C18D8CACF00F0F578 /* MTQuerySqlite3.m in Sources */,
 				4CABE4701837DF7C007EDD9D /* RptqDocumentObjectImage.m in Sources */,
 				4C19067D18348BB500116900 /* MTViewControllerBarcodeOptions.m in Sources */,
 				4C5029EB1816440100C88CD4 /* MADWatermarkView.m in Sources */,
@@ -6345,6 +6406,8 @@
 				4CBABB8F18C7E1B100EE5768 /* MTPaperA3.m in Sources */,
 				4C02F75A18D5DC9900061A83 /* MTQueryDesigner.m in Sources */,
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
+				4C9E448518D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */,
+				4C9E447318D8CA7400F0F578 /* MTQueryMySql.m in Sources */,
 				4C76F0B114B4F132005DCE49 /* MTReportDesignerViewController.m in Sources */,
 				4CBABBE518C7E96F00EE5768 /* MTPaperB7.m in Sources */,
 				4CBABB9B18C7E1D600EE5768 /* MTPaperA6.m in Sources */,
@@ -6388,6 +6451,7 @@
 				4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4CABE4B71837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.m in Sources */,
 				4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */,
+				4C9E446F18D8C7BF00F0F578 /* MTQuery.m in Sources */,
 				4C95CBD91831308600160E01 /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4CABE46F1837DF7C007EDD9D /* RptqDocumentObjectImage.m in Sources */,
 				4CBABBD918C7E96F00EE5768 /* MTPaperB10.m in Sources */,
@@ -6403,6 +6467,7 @@
 				4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */,
 				4CBABB9318C7E1BD00EE5768 /* MTPaperA4.m in Sources */,
 				4CD9CB0C14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m in Sources */,
+				4C9E448118D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */,
 				4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
 				4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */,
@@ -6534,6 +6599,7 @@
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
 				4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */,
+				4C9E447718D8CAB400F0F578 /* MTQuerySqlServer.m in Sources */,
 				4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
 				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,
 				4CBABBE318C7E96F00EE5768 /* MTPaperC8.m in Sources */,
@@ -6547,6 +6613,7 @@
 				4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 				4C80A5EF18317B6800242703 /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C02F75E18D5DCAB00061A83 /* MTReportViewer.m in Sources */,
+				4C9E448918D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4CABE4531837DF77007EDD9D /* RptqDocumentObjectChart.m in Sources */,
 				4C8BF46F16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */,
@@ -6595,6 +6662,7 @@
 				4C0081D51781C33000874849 /* MTStoreKitController.m in Sources */,
 				4C0081DC1781D8C200874849 /* MTLog.m in Sources */,
 				4C0081EA17849A4A00874849 /* MTVerificationController.m in Sources */,
+				4C9E447B18D8CACF00F0F578 /* MTQuerySqlite3.m in Sources */,
 				4C2670F21794490A00690133 /* MTStoreKitController+NonRenewableLicensing.m in Sources */,
 				4CA57A5B179FD46300B58871 /* DesignerSectionLabel.m in Sources */,
 				4CABE4771837DF7C007EDD9D /* RptqDocumentObjectLabelLink.m in Sources */,

@@ -15,6 +15,7 @@
 
 - (id)initWithUrl:(NSURL *)url;
 - (NSArray *)results;
++ (void)cacheData:(id)data toUrl:(NSURL *)url;
 
 @end
 

@@ -29,9 +29,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"3.0.42";
-NSString * const MTGlobalBundleShortVersion                         = @"3.0.42";
-NSString * const MTGlobalBundleRev                                  = @"911";
+NSString * const MTGlobalBundleVersion                              = @"3.0.43";
+NSString * const MTGlobalBundleShortVersion                         = @"3.0.43";
+NSString * const MTGlobalBundleRev                                  = @"912";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -270,6 +270,10 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     return result;
 }
 
++ (NSString *)bundleDisplayName {
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:MTBundleDisplayName];;
+}
+
 + (NSString *)applicationName {
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = [MTApplicationInstance applicationNameSufixPart];
@@ -447,7 +451,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
             [data writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
         }
     }
-    
 }
 
 + (NSAttributedString *)waterMarkStringMad {

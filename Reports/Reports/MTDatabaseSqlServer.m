@@ -7,6 +7,7 @@
 //
 
 #import "MTDatabaseSqlServer.h"
+#import "MTQuerySqlServer.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
@@ -18,23 +19,22 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 @interface MTDatabaseSqlServer ()
 
-@property (readwrite, nonatomic, retain) MTDatabaseConnection *databaseConnection;
+//@property (nonatomic, retain, readwrite) MTDatabaseConnection *databaseConnection;
 
 @end
 
 @implementation MTDatabaseSqlServer
 
-- (void)dealloc {
-    [_databaseConnection release];
-    [super dealloc];
-}
-
-- (id)initWithConnectionSettings: (MTDatabaseConnection *)connectionSettings {
+- (id)initWithConnectionSettings:(MTDatabaseConnection *)connectionSettings {
     self = [super init];
     if (self) {
-        [self setDatabaseConnection:connectionSettings];
+        
     }
     return self;
+}
+
+- (void)dealloc {
+    [super dealloc];
 }
 
 - (NSString *)tableAliasConnector {
@@ -324,33 +324,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return result;
 }
 
-NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
-
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
-    
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    
-    dispatch_async(queuePriorityBackground, ^{
-        
-        NSString *safeField = [self safeQuerySchemaField:schemaField];
-        NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
-
-        NSString *sql = [NSString stringWithFormat:@"%@ %@ "
-                         @"%@"
-                         @" %@ ORDER BY %@;",
-                         MTSqlSelectTop100, safeField, MTSqlFrom, safeTable, safeField];
-        NSArray *resultStrings = [[self runQuery:sql] retain];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(YES, nil, resultStrings);
-            
-        });
-        [resultStrings release];
-    });
-    
-}
-
 - (NSString *)selectPart {
     return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50\n";
 }
@@ -360,9 +333,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
+    return [MTQuerySqlServer safeQueryField:queryField];
 }
 
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
@@ -371,7 +342,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     NSString *fieldName = [schemaField name];
     return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
 }
-
+/*
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                                      completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
     
@@ -380,17 +351,16 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
     NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
     RptqQuery *query = [[database hasQueries] anyObject];
-    NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
-    RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:managedObjectContext] retain];
 
     id queryResult = [self runQuery:queryString];
     
     [[self delegateCacheData] cacheQueryResult:queryResult];
-    
-    [queryCache setCacheDate:[NSDate date]];
-    [query setHasQueryCache:queryCache];
-    [queryCache release];
     completion(self, [query hasQueryCache]);
+}*/
+
+- (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
+    id results = [[[self runQuery:sql] retain] autorelease];
+    completion(YES, nil, results);
 }
 
 - (id)runQuery:(NSString *)sql {
@@ -419,9 +389,12 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
             
             NSString *begining = [sql substringToIndex:[sql rangeOfString:MTSqlFrom].location];
             NSRange rangeOfSelectPart = [begining rangeOfString:[sqlServer selectPart]];
-            if (rangeOfSelectPart.location == NSNotFound) {
-                rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
-            }
+            
+            // FIXME: What is this trying to do?
+            //if (rangeOfSelectPart.location == NSNotFound) {
+            //    rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
+            //}
+            
             NSString *selectColumns = [begining substringFromIndex:rangeOfSelectPart.location + rangeOfSelectPart.length];
             NSArray *columns = [selectColumns componentsSeparatedByString:@","];
             
@@ -957,6 +930,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                                         break;
                                                     }
                                                 }
+                                                [seperator release];
                                             }
                                             
                                             if (tdsDecimalSeperatorMatchesCocoaDecimalSeperator == NO) {
@@ -1169,6 +1143,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                             //NSLog(@"%@\t\t(SYBDATETIME4):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], newDate);
                                             [resultsForRow setObject:newDate forKey:fieldName];
                                             [newDate release];
+                                            [offsetCompsDays release];
+                                            [offsetCompsWithMinutes release];
                                         } else {
                                             //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
@@ -1220,6 +1196,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
                                             //NSLog(@"%@\t\t(SYBDATETIMN):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], date);
                                             [resultsForRow setObject:date forKey:fieldName];
                                             [date release];
+                                            [comps release];
+                                            [gregorian release];
                                         } else {
                                             [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                         }
