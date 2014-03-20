@@ -10,6 +10,7 @@
 
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseConnection.h"
+#import "MTDatabaseConnectionMySql.h"
 #import "MTQueryMySql.h"
 
 @interface MTDatabaseMySql ()
@@ -428,11 +429,11 @@
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseMySql identifier];
+    return [MTDatabaseConnectionMySql identifier];
 }
 
 + (NSString *)identifier {
-    return @"MySQL";
+    return [MTDatabaseConnectionMySql identifier];
 }
 
 @end

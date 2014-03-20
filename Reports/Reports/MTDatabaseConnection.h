@@ -29,6 +29,9 @@
 
 + (id)credentalsFromRptqCredentals:(RptqUserCredentals *)credentals;
 
+- (NSString *)identifier;
++ (NSString *)identifier;
+
 @end
 
 #endif

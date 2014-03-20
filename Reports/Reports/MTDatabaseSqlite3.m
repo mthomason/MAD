@@ -8,6 +8,7 @@
 
 #import "MTDatabaseSqlite3.h"
 #import "MTQuerySqlite3.h"
+#import "MTDatabaseConnectionSqlite3.h"
 #import "RptqQueryField+Extras.h"
 
 
@@ -256,16 +257,16 @@
 }
 
 - (NSString *)identifier {
-    return [MTDatabaseSqlite3 identifier];
+    return [MTDatabaseConnectionSqlite3 identifier];
+}
+
++ (NSString *)identifier {
+    return [MTDatabaseConnectionSqlite3 identifier];
 }
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     // FIXME: Use backticks `` to make more robust.
     return [NSString stringWithFormat:@"\"%@\"", fieldOrTableName];
-}
-
-+ (NSString *)identifier {
-    return @"Sqlite 3";
 }
 
 @end

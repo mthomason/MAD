@@ -7,7 +7,6 @@
 //
 
 #import "MTDatabaseConnectionSqlServer.h"
-#import "MTDatabaseSqlServer.h"
 
 @implementation MTDatabaseConnectionSqlServer
 
@@ -22,9 +21,17 @@
         [self setServer: server];
         [self setDatabase: database];
         [self setPort: port];
-        [self setDatabaseTypeIdentifier: [MTDatabaseSqlServer identifier]];
+        [self setDatabaseTypeIdentifier: [MTDatabaseConnectionSqlServer identifier]];
     }
     return self;
+}
+
+- (NSString *)identifier {
+    return [MTDatabaseConnectionSqlServer identifier];
+}
+
++ (NSString *)identifier {
+    return @"TDS";
 }
 
 @end

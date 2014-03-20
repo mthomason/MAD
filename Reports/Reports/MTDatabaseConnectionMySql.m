@@ -7,7 +7,6 @@
 //
 
 #import "MTDatabaseConnectionMySql.h"
-#import "MTDatabaseMySql.h"
 
 @implementation MTDatabaseConnectionMySql
 
@@ -17,9 +16,17 @@
         [self setServer: host];
         [self setDatabase: database];
         [self setPort: port];
-        [self setDatabaseTypeIdentifier: [MTDatabaseMySql identifier]];
+        [self setDatabaseTypeIdentifier: [MTDatabaseConnectionMySql identifier]];
     }
     return self;
+}
+
+- (NSString *)identifier {
+    return [MTDatabaseConnectionMySql identifier];
+}
+
++ (NSString *)identifier {
+    return @"MySQL";
 }
 
 @end

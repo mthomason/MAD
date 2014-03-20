@@ -9,12 +9,11 @@
 #import "MTDatabaseConnection.h"
 #import "MTApplicationInstance.h"
 #import "RptqUserCredentals.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
-#import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
+
+#import "NSFileManager+Common.h"
 
 @implementation MTDatabaseConnection
 
@@ -30,20 +29,20 @@
     
     id resultCredentals = nil;
     
-    if ([[credentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
+    if ([[credentals database_driver_type] isEqualToString:[MTDatabaseConnectionMySql identifier]]) {
         
         resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: credentals.mysql_host
                                                                   database: credentals.mysql_database
                                                                    andPort: credentals.mysql_port.integerValue];
         
-    } else if ([[credentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+    } else if ([[credentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlServer identifier]]) {
         
         resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: credentals.tds_host
                                                                         server: credentals.tds_server
                                                                   database: credentals.tds_database
                                                                    andPort: credentals.tds_port.integerValue];
         
-    } else if ([[credentals database_driver_type] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+    } else if ([[credentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
 
         NSString *databaseFilename = [credentals mysql_database];
         // FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
@@ -73,6 +72,14 @@
     [self setUsername: nil];
     [self setPassword: nil];
     [self setPort: 0];
+}
+
+- (NSString *)identifier {
+    return [MTDatabaseConnection identifier];
+}
+
++ (NSString *)identifier {
+    return @"NONE";
 }
 
 @end

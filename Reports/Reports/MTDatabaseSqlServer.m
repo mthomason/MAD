@@ -8,6 +8,7 @@
 
 #import "MTDatabaseSqlServer.h"
 #import "MTQuerySqlServer.h"
+#import "MTDatabaseConnectionSqlServer.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

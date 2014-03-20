@@ -7,7 +7,6 @@
 //
 
 #import "MTDatabaseConnectionSqlite3.h"
-#import "MTDatabaseSqlite3.h"
 
 @implementation MTDatabaseConnectionSqlite3
 
@@ -16,11 +15,19 @@
     self = [super init];
     if (self) {
         [self setDatabaseUrl: url];
-        [self setDatabaseTypeIdentifier: [MTDatabaseSqlite3 identifier]];
+        [self setDatabaseTypeIdentifier: [MTDatabaseConnectionSqlite3 identifier]];
 
     }
     return self;
     
+}
+
+- (NSString *)identifier {
+    return [MTDatabaseConnectionSqlite3 identifier];
+}
+
++ (NSString *)identifier {
+    return @"Sqlite 3";
 }
 
 @end
