@@ -16,6 +16,7 @@
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
 #import "RptqQueryCache.h"
+#import "NSError+UserInterface.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate>
@@ -606,7 +607,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             MTApplicationInstance *applicationInstance = [[AppDelegate app] retain];
             MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
 
-            [reportDocument refresh:^(BOOL success) {
+            [reportDocument refresh:^(BOOL success, NSError *error) {
             
                 dispatch_queue_t highpriorityqueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
                 if (success) {
@@ -624,6 +625,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         });
                     });
                 } else {
+                    [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_async(highpriorityqueue, ^{
                         __block MTReportViewerController *reportViewer4 = reportViewer3;

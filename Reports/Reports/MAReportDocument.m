@@ -117,15 +117,13 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
     return [[[self reportQueries][@"defaultq"] retain] autorelease];
 }
 
-- (void)refresh:(void (^)(BOOL success))completion {
+- (void)refresh:(void (^)(BOOL success, NSError *error))completion {
     RptqDocument *document = [self activeDocument];
     MTQuery *defaultQuery = [[self defaultQuery] retain];
 
     [[self defaultQuery] cacheReportQueryForDocument:document completion:^(BOOL success, NSError *error, id results) {
-        if (success) {
-            [MTCache cacheData:results toUrl:[self cachedDataUrl]];
-        }
-        completion(success);
+        [MTCache cacheData:results toUrl:[self cachedDataUrl]];
+        completion(success, error);
     }];
 
     [defaultQuery release];

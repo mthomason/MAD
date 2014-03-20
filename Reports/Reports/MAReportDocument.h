@@ -26,7 +26,7 @@
 - (void)addDatasourceToReport: (MTDatabase *)database
                    completion: (void (^)(BOOL success, NSError *error))completion;
 
-- (void)refresh:(void (^)(BOOL success))completion;
+- (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 - (void)sendTo;
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
