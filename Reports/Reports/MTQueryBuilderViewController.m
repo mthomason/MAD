@@ -107,25 +107,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if ([UIDevice isPad] == NO) {
-        
-        UIColor *barTintColor = [UIColor tintColor];
-        UIColor *tintColor = [UIColor tintColor2];
-        UIToolbar *toolbar = [[self navigationController] toolbar];
-        [toolbar setBarTintColor:barTintColor];
-        [toolbar setTintColor:tintColor];
-        
-        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-        [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
-        [labelMadDesigner setAttributedText:attributedString];
-        [[self navigationItem] setTitleView:labelMadDesigner];
-        [[[self navigationItem] titleView] sizeToFit];
-    }
-    
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
-    
-    //[self disableUserInteraction];
     
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
     [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
@@ -167,6 +149,23 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }];
     }
+    
+    if ([UIDevice isPad] == NO) {
+        
+        UIColor *barTintColor = [UIColor tintColor];
+        UIColor *tintColor = [UIColor tintColor2];
+        UIToolbar *toolbar = [[self navigationController] toolbar];
+        [toolbar setBarTintColor:barTintColor];
+        [toolbar setTintColor:tintColor];
+        
+        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+        [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
+        [labelMadDesigner setAttributedText:attributedString];
+        [[self navigationItem] setTitleView:labelMadDesigner];
+        [[[self navigationItem] titleView] sizeToFit];
+    }
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
