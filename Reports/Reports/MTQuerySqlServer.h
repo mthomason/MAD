@@ -8,6 +8,8 @@
 
 #import "MTQuery.h"
 
+extern NSString * const MTSqlSelectTop100;
+
 @interface MTQuerySqlServer : MTQuery
 
 @end

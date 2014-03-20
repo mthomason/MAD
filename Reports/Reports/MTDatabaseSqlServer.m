@@ -325,7 +325,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 }
 
 - (NSString *)selectPart {
-    return [self isLicensedUser] ? @"SELECT\n" : @"SELECT TOP 50\n";
+    return (YES) ? @"SELECT\n" : @"SELECT TOP 50\n";
 }
 
 - (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
@@ -388,12 +388,13 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             NSDate *janFirst1990 = [[gregorian dateFromComponents:janFirst1990Components] retain];
             
             NSString *begining = [sql substringToIndex:[sql rangeOfString:MTSqlFrom].location];
-            NSRange rangeOfSelectPart = [begining rangeOfString:[sqlServer selectPart]];
+            NSString *selectPart = [sqlServer selectPart];
+            NSRange rangeOfSelectPart = [begining rangeOfString:selectPart];
             
             // FIXME: What is this trying to do?
-            //if (rangeOfSelectPart.location == NSNotFound) {
-            //    rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
-            //}
+            if (rangeOfSelectPart.location == NSNotFound) {
+                rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
+            }
             
             NSString *selectColumns = [begining substringFromIndex:rangeOfSelectPart.location + rangeOfSelectPart.length];
             NSArray *columns = [selectColumns componentsSeparatedByString:@","];
