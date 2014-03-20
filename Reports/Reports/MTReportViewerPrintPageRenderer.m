@@ -35,7 +35,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) CGSize printableSize;
 
-//@property (nonatomic, assign) MAReportDocument *activeDocument;
 @property (nonatomic, retain) NSArray *cachedLayoutByPage;
 @property (nonatomic, retain) NSArray *cachedSortedSortDescriptorsGroup;
 @property (nonatomic, retain) NSArray *cachedDataByPage;
@@ -1067,20 +1066,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     }
     return rowData;
 }
-/*
-- (NSDictionary *)rowDataForRow:(NSUInteger)row {
-    return [[self cachedDataByReport] objectAtIndex:row];
-    id rowData = nil;
-    if (page < [[self cachedDataByPage] count]) {
-        NSArray *pageData = [[self cachedDataByPage] objectAtIndex:page];
-        if (row < [pageData count]) {
-            NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
-            rowData = [[self cachedDataByReport] objectAtIndex:cachedDataIndex];
-        }
-    }
-    return rowData;
-}
-*/
 
 - (id)dataForCachedGroupData:(id)data andKeys:(NSArray *)keys {
     id resultData = nil;
@@ -1218,13 +1203,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
             
             //Get unique, distinct, and sorted... slowly
-            //NSDate *start = [NSDate date];
             
             NSArray *sortedArray = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
-            //        NSArray *sortedResultsByRow = [[NSArray alloc] initWithArray:sortedArray];
             NSArray *sortedResultsByRow = [sortedArray retain];
-            //start = [NSDate date];
-            
+
             [self setCachedDataByReport:sortedResultsByRow];
             
             id groupedRows = [self cachedGroupedResults:sortedResultsByRow level:0];
@@ -1306,7 +1288,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
             [url autorelease];
             [tdbp release];
-            
             [cachedResultsForReport release];
             [cache release];
             [sortedResultsByRow release];
@@ -1315,8 +1296,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         }
         
     }
-
-
 }
 
 // FIXME: Hack... this shit looks just like cacheGroupLevel

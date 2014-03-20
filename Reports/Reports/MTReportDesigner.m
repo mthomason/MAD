@@ -10,8 +10,4 @@
 
 @implementation MTReportDesigner
 
-- (void)dealloc {
-    [super dealloc];
-}
-
 @end

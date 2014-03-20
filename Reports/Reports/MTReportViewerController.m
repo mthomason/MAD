@@ -157,8 +157,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MTApplicationInstance *app = [AppDelegate app];
+    MAReportDocument *reportDocument = [app activeDocument];
 
     MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:reportDocument];
     [self setPrintPageRendererReport: prtingPageRendererReport];
@@ -169,7 +169,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         __block __weak MTReportViewerController *viewController = self;
         [[self asyncDelegate] displayContentController:viewController];
     } else {
-        //__block MTReportViewerController *reportViewer = self;
         if ([MTApplicationInstance isMadDesigner]) {
             [self reload:self];
         }
