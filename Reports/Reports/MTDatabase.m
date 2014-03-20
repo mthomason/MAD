@@ -9,6 +9,7 @@
 #import "MTDatabase.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
+#import "MTDatabaseSqlServer.h"
 #import "MTDatabaseConnection.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
@@ -36,32 +37,11 @@
     [super dealloc];
 }
 
-- (void)executeSql:(NSString *)sql
-        completion:(void (^)(BOOL success, NSError *error, id results))completion {
-    
-    NSString *message = @"Only call this on subclasses.";
-    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:484 userInfo:errorInfo];
-    completion(NO, error, nil);
-}
++ (id)databaseFactory:(MTDatabaseConnection *)connection {
 
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return @"";
-}
-
-- (NSString *)safeIdentifier:(NSString *)s {
-    return s;
-}
-
-+ (id)databaseForRptqDatabase:(RptqDatabase *)database {
-    RptqUserCredentals *userCredentals = [database ownedByUser];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
-    return [[[MTDatabase databaseForConnection:databaseConnection] retain] autorelease];
-}
-
-+ (id)databaseForConnection:(MTDatabaseConnection *)connection {
-    id result = nil;
     NSString *identifier = [connection databaseTypeIdentifier];
+    
+    id result = nil;
     if ([[MTDatabaseMySql identifier] isEqualToString:identifier]) {
         
         result = [[MTDatabaseMySql alloc] init];
@@ -82,6 +62,23 @@
     }
     
     return [result autorelease];
+}
+
+- (void)executeSql:(NSString *)sql
+        completion:(void (^)(BOOL success, NSError *error, id results))completion {
+    
+    NSString *message = @"Only call this on subclasses.";
+    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:484 userInfo:errorInfo];
+    completion(NO, error, nil);
+}
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return @"";
+}
+
+- (NSString *)safeIdentifier:(NSString *)s {
+    return s;
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {

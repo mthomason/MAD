@@ -17,6 +17,7 @@
 #import "UIDevice+Hack.h"
 #import "MTPaper.h"
 #import "MTCache.h"
+#import "RptqQuery+Extras.h"
 
 const NSString *MTReportSectionType = @"MTReportSectionType";
 const NSString *MTReportSectionValues = @"MTReportSectionValues";
@@ -311,7 +312,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
-    MTDatabase *database = [MTDatabase databaseForRptqDatabase: databaseSchemas];
+    RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+    MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
     
     if (query) {
@@ -1156,7 +1159,9 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             [self setTemporaryCachedDetailCounter:0];
             
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            MTDatabase *madDatabase = [MTDatabase databaseForRptqDatabase:database];
+            RptqUserCredentals *userCredentals = [database ownedByUser];
+            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+            MTDatabase *madDatabase = [MTDatabase databaseFactory:databaseConnection];
             
             NSSet *hasQueries = [database hasQueries];
             RptqQuery *query = [hasQueries anyObject];

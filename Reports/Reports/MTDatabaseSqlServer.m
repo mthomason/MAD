@@ -9,6 +9,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTQuerySqlServer.h"
 #import "MTDatabaseConnectionSqlServer.h"
+#import "MTKeyChain.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
@@ -343,21 +344,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     NSString *fieldName = [schemaField name];
     return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
 }
-/*
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                                     completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
-    MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-    NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-    RptqQuery *query = [[database hasQueries] anyObject];
-
-    id queryResult = [self runQuery:queryString];
-    
-    [[self delegateCacheData] cacheQueryResult:queryResult];
-    completion(self, [query hasQueryCache]);
-}*/
 
 - (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
     id results = [[[self runQuery:sql] retain] autorelease];

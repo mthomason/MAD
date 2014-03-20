@@ -20,14 +20,7 @@
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
 
-#import "RptqQueryCache+Extras.h"
-#import "RptqQuery+Extras.h"
-#import "RptqQueryLinks+Extras.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqQueryField+Extras.h"
-#import "RptqQueryPredicate+Extras.h"
-#import "MTKeyChain.h"
+@class RptqDatabaseSchemaTable;
 
 @interface MTDatabaseMySql : MTDatabase
 

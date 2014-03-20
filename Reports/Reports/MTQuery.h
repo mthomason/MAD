@@ -30,7 +30,7 @@
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
-+ (id)queryForRptqQuery:(RptqQuery *)rptqQuery;
++ (id)queryFactory:(RptqQuery *)rptqQuery;
 + (NSString *)safeQueryField:(RptqQueryField *)queryField;
 
 @end

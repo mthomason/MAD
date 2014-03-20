@@ -9,9 +9,19 @@
 // FIXME: Add @try statements around MySQL calls.
 
 #import "MTDatabaseMySql.h"
+#import "MTQueryMySql.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
-#import "MTQueryMySql.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqQueryCache+Extras.h"
+#import "RptqQuery+Extras.h"
+#import "RptqQueryLinks+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqQueryPredicate+Extras.h"
+#import "MTKeyChain.h"
 
 @interface MTDatabaseMySql ()
 
@@ -94,92 +104,7 @@
     [connectionSettings release];
 
 }
-/*
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                         completion:(void (^)(MTDatabase *database, RptqQueryCache *cache))completion {
-    
-    @autoreleasepool {
-        
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *rquery = [[database hasQueries] anyObject];
-        MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
-        NSString *queryString = [mnsDatabase getSqlForQuery:rquery];
-        
-        
-        RptqQuery *query = [[database hasQueries] anyObject];
-        
-        //MysqlServer *serv = [[MysqlServer alloc] init];
-        
-        //[serv setHost:      [[self databaseConnection] server]];
-        //[serv setSchema:    [[self databaseConnection] database]];
-        //[serv setPort:      (unsigned int)[[self databaseConnection] port]];
-        
-        //__block MysqlServer *blockServ = serv;
-        NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
-        [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
-            //[blockServ retain];
-            if (success) {
-                //[blockServ setUser:      username];
-                //[blockServ setPassword:  password];
-                
-                //__block MysqlServer *blockServ2 = blockServ;
-                [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                    //[blockServ2 retain];
-                    @try
-                    {
-                        NSError *connError = nil;
-                        
-                        MysqlServer *serv = [[MysqlServer alloc] init];
-                        
-                        [serv setHost:      [[self databaseConnection] server]];
-                        [serv setSchema:    [[self databaseConnection] database]];
-                        [serv setPort:      (unsigned int)[[self databaseConnection] port]];
-                        [serv setUser:      username];
-                        [serv setPassword:  password];
-                        
-                        MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
-                        if (conn && connError == nil) {
-                            
-                            @autoreleasepool {
-                                //__block NSString *s = @"Select LSJDF FROM LDSJFLKJSDF.sDSF sLj;";
-                                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
-                                //NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
-                                //RptqQueryCache *queryCache = [RptqQueryCache initObjectForManagedObjectContext:managedObjectContext];
-                                
-                                id queryResults = [[fetch results] retain];
-                                [[self delegateCacheData] cacheQueryResult:queryResults];
-                                [queryResults release];
-                                
-                                //[queryCache setCacheDate:[NSDate date]];
-                                //[query setHasQueryCache:queryCache];
-                            }
-                            
-                        } else {
-                            [connError presentErrorToUser];
-                            [[MTKeyChain sharedObject] deleteKey:key];
-                        }
-                        
-                        [serv release];
-                        completion(self, [query hasQueryCache]);
-                    }
-                    @catch(NSException *ex)
-                    {
-                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:ex.name message:ex.reason delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
-                        [alertView show];
-                        [alertView release];
-                        completion(nil, nil);
-                    }
-                    //[blockServ2 release];
-                }];
-            } else {
-                completion(nil, nil);
-            }
-            //            [blockServ release];
-        }];
-        //      [serv release];
-    }
-}
-*/
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];

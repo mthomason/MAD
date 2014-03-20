@@ -21,6 +21,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
+#import "RptqQueryCache+Extras.h"
 
 #import "MTLog.h"
 #import "MTQuery.h"
@@ -92,7 +93,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
         // FIXME: Only one query for a report at this time.
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *rquery = [[database hasQueries] anyObject];
-        MTQuery *query = [[MTQuery queryForRptqQuery:rquery] retain];
+        MTQuery *query = [[MTQuery queryFactory:rquery] retain];
         if (query) {
             [self reportQueries][@"defaultq"] = query;
         }
@@ -335,7 +336,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
             [databaseConnection retain];
             
             RptqDocument *rptqDocument = [[documentReport activeDocument] retain];
-            MTDatabase *database = [[MTDatabase databaseForConnection:databaseConnection] retain];
+            MTDatabase *database = [[MTDatabase databaseFactory:databaseConnection] retain];
             
             if (database) {
                 

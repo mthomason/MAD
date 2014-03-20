@@ -19,15 +19,16 @@
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryLinks.h"
+#import "RptqQueryLinks+Extras.h"
 #import "RptqQueryField.h"
 #import "RptqQueryPredicate.h"
 #import "RptqQueryPredicate+Extras.h"
 
 #import "NSError+UserInterface.h"
 
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlite3.h"
-#import "MTDatabaseSqlServer.h"
+#import "MTDatabaseConnectionMySql.h"
+#import "MTDatabaseConnectionSqlite3.h"
+#import "MTDatabaseConnectionSqlServer.h"
 
 #import "MTQueryMySql.h"
 #import "MTQuerySqlServer.h"
@@ -45,32 +46,45 @@
 - (id)initWithDatabase:(RptqDatabase *)database {
     self = [super init];
     if (self) {
-
-        MTDatabase *db = [MTDatabase databaseForRptqDatabase:database];
+        
+        RptqUserCredentals *userCredentals = [database ownedByUser];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
 
     }
     return self;
 }
 
-+ (id)queryForRptqQuery:(RptqQuery *)rptqQuery {
++ (id)queryFactory:(RptqQuery *)rptqQuery {
     RptqDatabase *database = [rptqQuery inDatabase];
     RptqUserCredentals *userCredentals = [database ownedByUser];
     id result = nil;
-    if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
+    if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionMySql identifier]]) {
         
         result = [[MTQueryMySql alloc] initWithDatabase:database];
         
-    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlServer identifier]]) {
         
         result = [[MTQuerySqlServer alloc] initWithDatabase:database];
         
-    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
         
         result = [[MTQuerySqlite3 alloc] initWithDatabase:database];
-
+        
     }
     return result;
+}
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return [MTQuery safeQueryField:queryField];
+}
+
++ (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[queryField inQueryTable] queryAlias];
+    NSString *fieldName = [[queryField databaseSchemaField] name];
+    return [NSString stringWithFormat:@"%@.%@", queryTable, fieldName];
 }
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
@@ -88,12 +102,6 @@
 }
 
 - (NSString *)tableAliasConnector {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTQuery; don't use it directly.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTQuery; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

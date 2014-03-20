@@ -14,6 +14,8 @@
 #import "MTScrollViewCenter.h"
 #import "MTViewController.h"
 #import "CGGeometry+Extras.h"
+#import "RptqQueryLinks.h"
+#import "RptqQuery+Extras.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

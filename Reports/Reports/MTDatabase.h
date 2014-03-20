@@ -10,10 +10,6 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/Foundation.h>
-//#import "RptqDatabaseSchemaTable.h"
-//#import "RptqQueryField.h"
-//#import "RptqQuery.h"
-//#import "RptqQuery+Extras.h"
 
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeNone = 0,
@@ -24,7 +20,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 };
 
 @class RptqDocument, RptqDatabase, RptqQuery, RptqQueryField, RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
-        RptqQueryCache, MTDatabaseConnection;
+        RptqQueryCache, RptqUserCredentals, MTDatabaseConnection;
 
 @protocol MTDatabaseCacheProtocol <NSObject>
 @required
@@ -36,8 +32,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
 @property (nonatomic, retain) MTDatabaseConnection *databaseConnection;
 
-+ (id)databaseForRptqDatabase:(RptqDatabase *)database;
-+ (id)databaseForConnection:(MTDatabaseConnection *)connection;
++ (id)databaseFactory:(MTDatabaseConnection *)connection;
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 
