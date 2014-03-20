@@ -11,16 +11,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class MAReportDocument;
+@class MAReportDocument, MTReportFormatter;
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
     <NSCopying>
 
-@property (nonatomic, assign) BOOL didRefresh;
 
-- (id)initWithDocument:(MAReportDocument *)document;
-- (id)initWithDocument:(MAReportDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize;
-- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
+- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter;
+- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter andPrintableAreaSize:(CGSize)printableAreaSize;
 - (void)writeToPdf:(NSURL *)filepath;
 - (UIImage *)thumbnail;
 

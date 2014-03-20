@@ -14,12 +14,26 @@
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 
-@class MTQuery;
+extern const NSString *MTReportSectionType;
+extern const NSString *MTReportSectionValues;
+extern const NSString *MTReportGroupLevel;
+
+extern const NSString *MTPageDetail;
+extern const NSString *MTPageHeader;
+extern const NSString *MTPageFooter;
+extern const NSString *MTReportHeader;
+extern const NSString *MTReportFooter;
+extern const NSString *MTReportGroupHeader;
+extern const NSString *MTReportGroupFooter;
+
+@class MTQuery, MTReportFormatter;
 
 @interface MAReportDocument : MADocument
     <MTDatabaseCacheProtocol>
 
 @property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
+
+@property (nonatomic, retain) MTReportFormatter *reportFormatter;
 
 - (id)initWithFileURL:(NSURL *)url;
 
@@ -45,6 +59,12 @@
 - (NSURL *)cachedDataUrl;
 
 - (MTQuery *)defaultQuery;
+
+// Page caching
+//- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
+//- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;
+
+//- (NSInteger)numberOfPages; // Valid after caching.
 
 @end
 

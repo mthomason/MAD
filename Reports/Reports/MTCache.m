@@ -10,7 +10,7 @@
 
 @interface MTCache ()
 
-@property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong, readwrite) NSURL *url;
 @property (nonatomic, strong) NSInputStream *inputStream;
 @property (nonatomic, strong) NSArray *cachedResultsSerialized;
 
@@ -19,16 +19,13 @@
 @implementation MTCache
 
 - (void)dealloc {
-    [[self inputStream] close];
+    [[self lazyInputStream] close];
 }
 
 - (id)initWithUrl:(NSURL *)url {
     self = [super init];
     if (self) {
-        NSString *filePath = [url path];
-        NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:filePath];
         [self setUrl:url];
-        [self setInputStream:inputStream];
     }
     return self;
 }
@@ -39,15 +36,15 @@
 }
 
 - (void)reload {
-    [[self inputStream] open];
+    [[self lazyInputStream] open];
     NSPropertyListFormat format;
     NSError *error = nil;
-    NSArray *data = [NSPropertyListSerialization propertyListWithStream:[self inputStream]
+    NSArray *data = [NSPropertyListSerialization propertyListWithStream:[self lazyInputStream]
                                                                 options:0
                                                                  format:&format
                                                                   error:&error];
     [self setCachedResultsSerialized:data];
-    [[self inputStream] close];
+    [[self lazyInputStream] close];
 }
 
 - (void)cacheData:(id)data {
@@ -65,6 +62,15 @@
             [cache writeToURL:url options:mask error:&error];
         }
     }
+}
+
+- (NSInputStream *)lazyInputStream {
+    if ([self inputStream] == nil) {
+        NSString *path = [[self url] path];
+        NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: path];
+        [self setInputStream:inputStream];
+    }
+    return [self inputStream];
 }
 
 @end

@@ -22,12 +22,28 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqDatabase+Extras.h"
 #import "RptqUserCredentals+Extras.h"
 #import "RptqQueryCache+Extras.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 
 #import "MTLog.h"
 #import "MTQuery.h"
 #import "MTCache.h"
 
+#import "MTReportFormatter.h"
+
 #import "UIDevice+Hack.h"
+
+const NSString *MTReportSectionType = @"MTReportSectionType";
+const NSString *MTReportSectionValues = @"MTReportSectionValues";
+const NSString *MTReportGroupLevel = @"MTReportGroupLevel";
+
+const NSString *MTPageDetail = @"MTPageDetail";
+const NSString *MTPageHeader = @"MTPageHeader";
+const NSString *MTPageFooter = @"MTPageFooter";
+const NSString *MTReportHeader = @"MTReportHeader";
+const NSString *MTReportFooter = @"MTReportFooter";
+const NSString *MTReportGroupHeader = @"MTReportGroupHeader";
+const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @interface MAReportDocument ()
 
@@ -36,24 +52,64 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 @property (nonatomic, retain) NSMutableDictionary *reportQueries;
 
+@property (nonatomic, assign) BOOL didRefresh;
+
+// Below this be page caching fu
+/*
+
+@property (nonatomic, assign) CGSize printableSize;
+@property (nonatomic, assign) CGRect printableRect;
+
+@property (nonatomic, assign) CGSize cachedPageSize;
+
+@property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
+
+@property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
+
+@property (nonatomic, retain) NSArray *cachedDataByPage;
+@property (nonatomic, retain) NSArray *cachedLayoutByPage;
+
+@property (nonatomic, retain) NSArray *sortedQueryGroups;
+@property (nonatomic, retain) NSArray *cachedSortedSortDescriptorsGroup;
+@property (nonatomic, retain) NSArray *cachedDataByReport;
+@property (nonatomic, retain) NSDictionary *cachedDataByGroup;
+
+@property (nonatomic, retain) NSMutableArray *temporaryLayoutForPage;
+@property (nonatomic, retain) NSMutableArray *temporaryDataForPage;
+@property (nonatomic, retain) NSMutableArray *temporaryLayoutByPage;
+@property (nonatomic, retain) NSMutableArray *temporaryDataByPage;
+*/
+
 @end
 
 @implementation MAReportDocument
 
 - (void)dealloc {
+/*    [_cachedLayoutByPage release];
+    [_cachedSortedSortDescriptorsGroup release];
+    [_cachedDataByPage release];
+    [_cachedDataByGroup release];
+    [_cachedDataByReport release];
+    [_temporaryLayoutByPage release]; _temporaryLayoutByPage = nil;
+    [_temporaryLayoutForPage release]; _temporaryLayoutForPage = nil;
+    [_temporaryDataByPage release]; _temporaryDataByPage = nil;
+    [_temporaryDataForPage release]; _temporaryDataForPage = nil;
+    [_sortedQueryGroups release]; _sortedQueryGroups = nil;*/
     [_reportQueries release];
     [_document release];
     [_mom release];
     [super dealloc];
 }
 
-- (id)initWithFileURL:(NSURL *)url {
+- (id) initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
-        
+
         NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
         [self setReportQueries:reportQueries];
         [reportQueries release];
+        
+        [self setDidRefresh:NO];
         
     }
     return self;
@@ -99,7 +155,13 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
         }
         [query release];
 
-        
+        if ([self reportFormatter] == nil) {
+            MTCache *cache = [[MTCache alloc] initWithUrl:[self cachedDataUrl]];
+            MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:cache
+                                                                                        andLayout:[self activeDocument]];
+            [self setReportFormatter:reportFormatter];
+
+        }
     }
     return [[[self document] retain] autorelease];
 }
@@ -124,6 +186,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
     [[self defaultQuery] cacheReportQueryForDocument:document completion:^(BOOL success, NSError *error, id results) {
         [MTCache cacheData:results toUrl:[self cachedDataUrl]];
+        [self setDidRefresh:success];
         completion(success, error);
     }];
 
@@ -440,7 +503,10 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 - (void)regenThumbnail {
     RptqDocument *document = [[self activeDocument] retain];
     if (document != nil) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:self];
+
+        MTCache *defaultCache = [[self defaultQuery] cache];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:defaultCache andLayout:[self activeDocument]];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:[self urlThumbnail] atomically:YES];

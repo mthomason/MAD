@@ -19,33 +19,14 @@
 #import "MTCache.h"
 #import "RptqQuery+Extras.h"
 
-const NSString *MTReportSectionType = @"MTReportSectionType";
-const NSString *MTReportSectionValues = @"MTReportSectionValues";
-const NSString *MTReportGroupLevel = @"MTReportGroupLevel";
+#import "MTReportFormatter.h"
 
-const NSString *MTPageDetail = @"MTPageDetail";
-const NSString *MTPageHeader = @"MTPageHeader";
-const NSString *MTPageFooter = @"MTPageFooter";
-const NSString *MTReportHeader = @"MTReportHeader";
-const NSString *MTReportFooter = @"MTReportFooter";
-const NSString *MTReportGroupHeader = @"MTReportGroupHeader";
-const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 @interface MTReportViewerPrintPageRenderer ()
 
 @property (nonatomic, assign) CGSize printableSize;
 
-@property (nonatomic, retain) NSArray *cachedLayoutByPage;
-@property (nonatomic, retain) NSArray *cachedSortedSortDescriptorsGroup;
-@property (nonatomic, retain) NSArray *cachedDataByPage;
-@property (nonatomic, retain) NSDictionary *cachedDataByGroup;
-@property (nonatomic, retain) NSArray *cachedDataByReport;
-
-@property (nonatomic, retain) NSMutableArray *temporaryLayoutByPage;
-@property (nonatomic, retain) NSMutableArray *temporaryLayoutForPage;
-
-@property (nonatomic, retain) NSMutableArray *temporaryDataByPage;
-@property (nonatomic, retain) NSMutableArray *temporaryDataForPage;
+@property (nonatomic, retain) MTReportFormatter *reportFormatter;
 
 @property (nonatomic, retain) NSMutableDictionary *temporaryDataByGroup;
 @property (nonatomic, retain) NSMutableDictionary *temporaryDataByReport;
@@ -59,7 +40,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @property (nonatomic, assign) CGSize cachedPageSize;
 @property (nonatomic, assign) CGRect cachedPageRect;
 
-@property (nonatomic, retain) NSArray *sortedQueryGroups;
+//@property (nonatomic, retain) NSArray *sortedQueryGroups;
 
 @property (nonatomic, assign) BOOL showWaterMark;
 
@@ -68,38 +49,29 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 @implementation MTReportViewerPrintPageRenderer
 
 - (void)dealloc {
-    [_cachedLayoutByPage release];
-    [_cachedSortedSortDescriptorsGroup release];
-    [_cachedDataByPage release];
-    [_cachedDataByGroup release];
-    [_cachedDataByReport release];
-    [_temporaryLayoutByPage release]; _temporaryLayoutByPage = nil;
-    [_temporaryLayoutForPage release]; _temporaryLayoutForPage = nil;
-    [_temporaryDataByPage release]; _temporaryDataByPage = nil;
-    [_temporaryDataForPage release]; _temporaryDataForPage = nil;
     [_temporaryDataByGroup release]; _temporaryDataByGroup = nil;
     [_temporaryDataByReport release]; _temporaryDataByReport = nil;
-    [_sortedQueryGroups release]; _sortedQueryGroups = nil;
     [super dealloc];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:nil];
+    MTReportViewerPrintPageRenderer *copy = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:nil];
     if (copy) {
-        [copy setSortedQueryGroups:[self sortedQueryGroups]];
-        [copy setCachedLayoutByPage:[self cachedLayoutByPage]];
-        [copy setCachedDataByGroup:[self cachedDataByGroup]];
-        [copy setCachedDataByPage:[self cachedDataByPage]];
-        [copy setCachedDataByReport:[self cachedDataByReport]];
-        [copy setCachedSortedSortDescriptorsGroup:[self cachedSortedSortDescriptorsGroup]];
+
     }
     return copy;
 }
 
-- (id)init {
+- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter {
+    return [self initWithReportFormatter:reportFormatter andPrintableAreaSize:[MTPaper sizeLetter]];
+}
+
+- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter andPrintableAreaSize:(CGSize)printableAreaSize {
     self = [super init];
     if (self) {
         [self initCommon];
+        [self setPrintableSize:printableAreaSize];
+        [self setReportFormatter:reportFormatter];
     }
     return self;
 }
@@ -109,32 +81,17 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     BOOL showWatermark = [MTStoreKitController licensedUser] == NO;
     [self setShowWaterMark: showWatermark];
 
-    NSMutableArray *a1 = [[NSMutableArray alloc] init];
-    [self setTemporaryLayoutByPage:a1];
-    [a1 release];
-    
-    NSMutableArray *a2 = [[NSMutableArray alloc] init];
-    [self setTemporaryLayoutForPage:a2];
-    [a2 release];
     
     NSMutableDictionary *d2 = [[NSMutableDictionary alloc] init];
     [self setTemporaryDataByReport:d2];
     [d2 release];
     
-    NSMutableArray *d3 = [[NSMutableArray alloc] init];
-    [self setTemporaryDataByPage:d3];
-    [d3 release];
-    
     NSMutableDictionary *d4 = [[NSMutableDictionary alloc] init];
     [self setTemporaryDataByGroup:d4];
     [d4 release];
     
-    NSMutableArray *d5 = [[NSMutableArray alloc] init];
-    [self setTemporaryDataForPage:d5];
-    [d5 release];
     
     [self setDebugMode:NO];
-    [self setDidRefresh:NO];
 
     [self setCachedPageSize:CGSizeZero];
     [self setCachedPageRect:CGRectZero];
@@ -147,25 +104,10 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     }
 }
 
-- (id)initWithDocument:(MAReportDocument *)document {
-    id result = [self initWithDocument:document andPrintableAreaSize:[MTPaper sizeLetter]];
-    return [[result retain] autorelease];
-}
-
-- (id)initWithDocument:(MAReportDocument *)document andPrintableAreaSize:(CGSize)printableAreaSize {
-    self = [super init];
-    if (self) {
-        [self initCommon];
-        [self setPrintableSize:printableAreaSize];
-        
-    }
-    return self;
-}
-
 - (void)writeToPdf:(NSURL *)filepath {
     NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
     CGRect letterRect = [MTPaper rectLetter];
-    [self cachePrintPageRenderDataForSize:letterRect.size];
+    [[self reportFormatter] cachePrintPageRenderDataForSize:letterRect.size];
     NSUInteger numberOfPages = [self numberOfPages];
     UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
     
@@ -202,7 +144,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
     CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
     
-    [self cachePrintPageRenderDataForSize:letterRect.size onlyFirstPage:YES];
+    [[self reportFormatter] cachePrintPageRenderDataForSize:letterRect.size onlyFirstPage:YES];
     UIGraphicsBeginImageContextWithOptions(letterRect.size, NO, 0.0000f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -321,11 +263,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         
-        NSUInteger numberOfPages = [[self cachedLayoutByPage] count];
+        NSUInteger numberOfPages = [[[self reportFormatter] cachedLayoutByPage] count];
         
         if (index < numberOfPages) {
             
-            NSArray *pageSectionsToPrint = [[self cachedLayoutByPage] objectAtIndex:index];
+            NSArray *pageSectionsToPrint = [[[self reportFormatter] cachedLayoutByPage] objectAtIndex:index];
             
             CGRect sectionRect = CGRectZero;
             
@@ -407,14 +349,14 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                     }
 
                     NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                    NSDictionary *rowData = [self rowDataForRow: detailRowToPrint onPage: index];
+                    NSDictionary *rowData = [[self reportFormatter] rowDataForRow: detailRowToPrint onPage: index];
                     
                     NSNumber *documentSectionType = [documentSection type];
                     BOOL useNextRowData = ([documentSectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                     NSInteger nextDetailRowToPrint = detailRowToPrint;
                     NSInteger nextPageIndex = index;
                     if (useNextRowData) {
-                        NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                        NSArray *pageData = [[[self reportFormatter] cachedDataByPage] objectAtIndex:index];
                         NSInteger numberOfItemsOnPage = [pageData count];
                         if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
                             nextDetailRowToPrint++;
@@ -423,12 +365,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                             nextPageIndex++;
                         }
                     }
-                    NSDictionary *nextRowData = [self rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
+                    NSDictionary *nextRowData = [[self reportFormatter] rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
                     
                     [groupLevelKeys removeAllObjects];
                     [nextGroupLevelKeys removeAllObjects];
                     if (rowData != nil) {
-                        for (NSSortDescriptor *sortDescriptor in [self cachedSortedSortDescriptorsGroup]) {
+                        for (NSSortDescriptor *sortDescriptor in [[self reportFormatter] cachedSortedSortDescriptorsGroup]) {
                             @autoreleasepool {
                                 NSString *key = [sortDescriptor key];
                                 id sortKey = [rowData objectForKey:key];
@@ -475,11 +417,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                     // FIXME: Check to see which ones of these are correct.
                                                 case MTAggregateGroupByTypePage: {
                                                     
-                                                    NSArray *pageIndices = [[self cachedDataByPage] objectAtIndex:index];
+                                                    NSArray *pageIndices = [[[self reportFormatter] cachedDataByPage] objectAtIndex:index];
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
                                                     for (NSNumber *dataIndex in pageIndices) {
                                                         NSInteger i = [dataIndex integerValue];
-                                                        id objectToAdd = [[self cachedDataByReport] objectAtIndex: i];
+                                                        id objectToAdd = [[[self reportFormatter] cachedDataByReport] objectAtIndex: i];
                                                         [(NSMutableArray *)dataForGroup addObject:objectToAdd];
                                                     }
                                                     [dataForGroup autorelease];
@@ -488,18 +430,18 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                 case MTAggregateGroupByTypeSection: {
                                                     BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
                                                     if (useNextRowData) {
-                                                        dataForGroup = [self dataForCachedGroupData:[self cachedDataByGroup] andKeys:nextGroupLevelKeys];
+                                                        dataForGroup = [[self reportFormatter] dataForCachedGroupData:[[self reportFormatter] cachedDataByGroup] andKeys:nextGroupLevelKeys];
                                                     } else {
-                                                        dataForGroup = [self dataForCachedGroupData:[self cachedDataByGroup] andKeys:groupLevelKeys];
+                                                        dataForGroup = [[self reportFormatter] dataForCachedGroupData:[[self reportFormatter] cachedDataByGroup] andKeys:groupLevelKeys];
                                                     }
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeReport:
-                                                    dataForGroup = [self cachedDataByReport];
+                                                    dataForGroup = [[self reportFormatter] cachedDataByReport];
                                                     break;
                                                     
                                                 default:
-                                                    dataForGroup = [self cachedDataByReport];
+                                                    dataForGroup = [[self reportFormatter] cachedDataByReport];
                                                     break;
                                             }
                                             
@@ -610,7 +552,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                             NSNumber *sectionType = [documentSection type];
                                             BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                             if (useNextRowData) {
-                                                NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                                                NSArray *pageData = [[[self reportFormatter] cachedDataByPage] objectAtIndex:index];
                                                 NSInteger numberOfItemsOnPage = [pageData count];
                                                 if (rowToPrint < numberOfItemsOnPage - 1) {
                                                     rowToPrint++;
@@ -661,7 +603,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
                                                 NSNumber *sectionType = [documentSection type];
                                                 BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                                 if (useNextRowData) {
-                                                    NSArray *pageData = [[self cachedDataByPage] objectAtIndex:index];
+                                                    NSArray *pageData = [[[self reportFormatter] cachedDataByPage] objectAtIndex:index];
                                                     NSInteger numberOfItemsOnPage = [pageData count];
                                                     if (rowToPrint < numberOfItemsOnPage - 1) {
                                                         rowToPrint++;
@@ -1032,13 +974,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     return result;
 }
 
-- (NSInteger)numberOfPages {
-    if ([self cachedLayoutByPage] == nil) {
-        [self cachePrintPageRenderDataForSize:[self printableRect].size];
-    }
-    return [[self cachedLayoutByPage] count];
-}
-
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
     [super drawHeaderForPageAtIndex:index inRect:headerRect];
 }
@@ -1049,663 +984,6 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)drawFooterForPageAtIndex:(NSInteger)index inRect:(CGRect)footerRect {
     [super drawFooterForPageAtIndex:index inRect:footerRect];
-}
-
-#pragma mark - Object methods
-
-- (NSDictionary *)rowDataForRow:(NSUInteger)row onPage:(NSUInteger)page {
-    id rowData = nil;
-    if (page < [[self cachedDataByPage] count]) {
-        NSArray *pageData = [[self cachedDataByPage] objectAtIndex:page];
-        if (row < [pageData count]) {
-            NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
-            if (cachedDataIndex < [[self cachedDataByReport] count]) {
-                rowData = [[self cachedDataByReport] objectAtIndex:cachedDataIndex];
-            }
-        }
-    }
-    return rowData;
-}
-
-- (id)dataForCachedGroupData:(id)data andKeys:(NSArray *)keys {
-    id resultData = nil;
-    if ([data isKindOfClass:[NSArray class]]) {
-        resultData = [data retain];
-    } else {
-        if ([keys count] > 0) {
-            id subData = [[data objectForKey:[keys objectAtIndex:0]] retain];
-            NSArray *subKeys = nil;
-            if ([keys count] > 1) {
-                NSRange range = NSMakeRange(1, [keys count] - 1);
-                subKeys = [[[keys objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]] retain] autorelease];
-                resultData = [[self dataForCachedGroupData:subData andKeys:subKeys] retain];
-            } else if ([keys count] == 1) {
-                resultData = [subData retain];
-            } else {
-                resultData = [subData retain];
-            }
-            [subData release];
-        } else {
-            resultData = @[];
-            [resultData retain];
-        }
-    }
-    return [resultData autorelease];
-}
-
-- (void)prepareForDrawingPages:(NSRange)range {
-    [self cachePrintPageRenderDataForSize:[self printableRect].size];
-}
-
-#pragma mark - Routines to cache the data
-
-//  Data is cached by group, page, and report.
-
-- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize {
-    [self cachePrintPageRenderDataForSize:printableSize onlyFirstPage:NO];
-}
-
-- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage {
-
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    
-    // FIXME: This is overriding the user set document....
-    //          Maybe this whole fucking class should somehow be related to the document modal
-    //          MAYBE@!@!!@!!!!  That way it only prints its fucking self.  There, I said it.
-    
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *activeDocument = [applicationInstance activeDocument];
-    if (activeDocument) {
-
-
-        RptqDocument *document = [activeDocument activeDocument];
-        
-        UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-        BOOL landscape = (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-        CGSize cachedSizeHorizontal = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeHorizontal"]);
-        CGSize cachedSizePortrait   = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeVertical"]);
-        BOOL cacheAgain = (landscape ? CGSizeEqualToSize(cachedSizeHorizontal, printableSize) : CGSizeEqualToSize(cachedSizePortrait, printableSize)) ||
-        [[activeDocument fileURL] isEqual:[standardUserDefaults objectForKey:@"MTCachedFileUrl"]] == NO;
-        
-        if (cacheAgain || [self didRefresh]) {
-            if (landscape) {
-                [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeHorizontal"];
-            } else {
-                [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeVertical"];
-            }
-            [standardUserDefaults setURL:[activeDocument fileURL] forKey:@"MTCachedFileUrl"];
-            [standardUserDefaults synchronize];
-            
-            [self setDidRefresh:NO];
-            [self setCachedPageSize:printableSize];
-            [self setCachedPageRect:[self printableRect]];
-            [self setPrintableSize:printableSize];
-            
-            [self setTemporaryCachedDetailCounter:0];
-            
-            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqUserCredentals *userCredentals = [database ownedByUser];
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-            MTDatabase *madDatabase = [MTDatabase databaseFactory:databaseConnection];
-            
-            NSSet *hasQueries = [database hasQueries];
-            RptqQuery *query = [hasQueries anyObject];
-            
-            SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
-            
-            for (RptqDocumentSection *sec in enumerator) {
-                CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
-                NSNumber *lh = [[NSNumber alloc] initWithFloat:layoutHight];
-                [sec setLayoutHeight:lh];
-                [lh release];
-            }
-            [enumerator release];
-            
-            NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
-            
-            [[self temporaryLayoutByPage] removeAllObjects];
-            [[self temporaryDataByPage] removeAllObjects];
-            [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
-            
-            NSURL *url = [[activeDocument cachedDataUrl] retain];
-            
-            MTCache *cache = [[MTCache alloc] initWithUrl:url];
-            NSArray *cachedResultsForReportSerialized = [cache results];
-            
-            
-            NSSet *hasQueryGroups = [query hasQueryGroups];
-            
-            NSString *sortKey = NSStringFromSelector(@selector(weight));
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];
-            NSArray *sortedHasQueryGroups = [[hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
-            [self setSortedQueryGroups:sortedHasQueryGroups];
-            [sortedHasQueryGroups release];
-            
-            NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
-            
-            for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
-                
-                BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-                RptqQueryField *groupField = [queryGroup hasField];
-                
-                NSString *queryTable = [[groupField inQueryTable] queryAlias];
-                NSString *safeQueryTable = [madDatabase safeIdentifier:queryTable];
-                NSString *fieldName = [[groupField databaseSchemaField] name];
-                NSString *safeFieldName = [madDatabase safeIdentifier:fieldName];
-                NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
-                
-                NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                               ascending: sortAscending];
-                [sortedSortDescriptorsGroup addObject:sortDescriptor];
-                [sortDescriptor release];
-            }
-            
-            [self setCachedSortedSortDescriptorsGroup:sortedSortDescriptorsGroup];
-            
-            //Get unique, distinct, and sorted... slowly
-            
-            NSArray *sortedArray = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self cachedSortedSortDescriptorsGroup]];
-            NSArray *sortedResultsByRow = [sortedArray retain];
-
-            [self setCachedDataByReport:sortedResultsByRow];
-            
-            id groupedRows = [self cachedGroupedResults:sortedResultsByRow level:0];
-            
-            [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
-            
-            //Report Header
-            RptqDocumentSection *reportHeaderSection = [document hasReportHeaderSection];
-            BOOL reportHeaderIsVisable = [[reportHeaderSection visibility] boolValue];
-            CGFloat reportHeaderHeight = reportHeaderIsVisable ? [[reportHeaderSection layoutHeight] floatValue] : CGSizeZero.height;
-            CGFloat printableSpaceUsed = [self printableSpaceUsedPageHeight] + reportHeaderHeight;
-            [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
-            [self cacheReportHeaderWithValueDictionary:groupedRows];
-            
-            //First Page Header
-            RptqDocumentSection *pageHeaderSection = [document hasPageHeaderSection];
-            BOOL pageHeaderIsVisable = [[pageHeaderSection visibility] boolValue];
-            CGFloat pageHeaderHeight = pageHeaderIsVisable ? [[pageHeaderSection layoutHeight] floatValue] : CGSizeZero.height;
-            printableSpaceUsed = [self printableSpaceUsedPageHeight] + pageHeaderHeight;
-            [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
-            [self cachePageHeaderWithValueDictionary:groupedRows];
-            
-            [sortedSortDescriptorsGroup release];
-            
-            BOOL detailPrinted = NO;
-            
-            RptqQueryGroup *firstGroup = [query firstQueryGroup];
-            if (onlyFirstPage) {
-                BOOL firstPageComplete = NO;
-                [self cacheUntilFirstPageStartingWithGroup:firstGroup groupedRows:groupedRows groupedRowsLevel:0 detailPrinted:&detailPrinted firstPageComplete:&firstPageComplete];
-            } else {
-                [self cacheGroupLevel:firstGroup groupedRows:groupedRows groupedRowsLevel:0 detailPrinted:&detailPrinted];
-            }
-            
-            RptqDocumentSection *reportFooter = [document hasReportFooterSection];
-            BOOL reportFooterIsVisible = [[reportFooter visibility] boolValue];
-            CGFloat reportFooterHeight = reportFooterIsVisible ? [[reportFooter layoutHeight] floatValue] : CGSizeZero.height;
-            
-            [self cachePageBreakWithNextItemHeight: reportFooterHeight
-                                       groupedRows: groupedRows];
-            
-            
-            RptqDocumentSection *pageFooterSection = [document hasPageFooterSection];
-            BOOL pageFooterIsVisible = [[pageFooterSection visibility] boolValue];
-            CGFloat pageFooterHeight = pageFooterIsVisible ? [[pageFooterSection layoutHeight] floatValue] : CGSizeZero.height;
-            
-            printableSpaceUsed = [self printableSpaceUsedPageHeight] + pageFooterHeight;
-            [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
-            [self cachePageFooterWithValueDictionary:groupedRows];
-            
-            
-            printableSpaceUsed = [self printableSpaceUsedPageHeight] + reportFooterHeight;
-            [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
-            [self cacheReportFooterWithValueDictionary:groupedRows];
-            
-            NSArray *tlfp = [[self temporaryLayoutForPage] retain];
-            [[self temporaryLayoutByPage] addObject:tlfp];
-            [tlfp release];
-            
-            NSArray *tdfp = [[self temporaryDataForPage] retain];
-            [[self temporaryDataByPage] addObject:tdfp];
-            [tdfp release];
-            
-            id gr;
-            if ([groupedRows isKindOfClass:[NSDictionary class]]) {
-                gr = [groupedRows retain];
-            } else {
-                gr = [groupedRows retain];
-            }
-            [self setCachedDataByGroup: gr];
-            [gr release];
-            
-            NSArray *tlbp = [[self temporaryLayoutByPage] retain];
-            [self setCachedLayoutByPage: tlbp];
-            [tlbp release];
-            
-            NSArray *tdbp = [[self temporaryDataByPage] retain];
-            [self setCachedDataByPage: tdbp];
-
-            [url autorelease];
-            [tdbp release];
-            [cachedResultsForReport release];
-            [cache release];
-            [sortedResultsByRow release];
-            [sortDescriptor release];
-            
-        }
-        
-    }
-}
-
-// FIXME: Hack... this shit looks just like cacheGroupLevel
-- (void)cacheUntilFirstPageStartingWithGroup:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel detailPrinted:(BOOL *)detailPrinted firstPageComplete:(BOOL *)firstPageComplete {
-    
-    if (*firstPageComplete == NO) {
-        
-        if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
-            
-            SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
-            
-            BOOL nullGroupExist = NO;
-            NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys] copyItems:NO];
-            for (id obj in allKeys) {
-                if ([obj isKindOfClass:[NSString class]]) {
-                    NSString *str = (NSString *)obj;
-                    if ([str isEqualToString: @"(null)"]) {
-                        nullGroupExist = YES;
-                        break;
-                    }
-                }
-            }
-            if (nullGroupExist) {
-                [allKeys removeObject:@"(null)"];
-            }
-            NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
-            
-            
-            NSEnumerator *loopEnumerator = nil;
-            
-            if (sortSelector != nil) {
-                NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
-                if (nullGroupExist) {
-                    [allKeysSorted insertObject:@"(null)" atIndex:0];
-                }
-                
-                if ([desc ascending] == NO) {
-                    loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
-                } else {
-                    loopEnumerator = [[allKeysSorted objectEnumerator] retain];
-                }
-                [allKeysSorted release];
-            } else {
-                loopEnumerator = [[allKeys objectEnumerator] retain];
-            }
-            
-            [desc release];
-            
-            
-            for (id key in loopEnumerator) {
-                id obj = [[groupedRows objectForKey:key] retain];
-                
-                //Group header section
-                for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-                    if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                        BOOL isVisible = [[documentSection visibility] boolValue];
-                        CGFloat layoutHeight = isVisible ? [[documentSection layoutHeight] floatValue] : CGSizeZero.height;
-                        *firstPageComplete = [self cachePageBreakWithNextItemHeight: layoutHeight
-                                                                        groupedRows: groupedRows];
-                        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + layoutHeight;
-                        [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
-                        break;
-                    }
-                }
-                
-                if (*firstPageComplete == NO) {
-                    
-                [self cacheGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
-                
-                
-                RptqQueryGroup *nextGroup = nil;
-                if ([[self sortedQueryGroups] count] > groupedRowsLevel + 1) {  //Is there a next group?  Short ciruit
-                    if (queryGroup != nil) {
-                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[queryGroup weight] integerValue] + 1)];
-                        NSArray *filteredGroups = [[self sortedQueryGroups] filteredArrayUsingPredicate:predicate];
-                        if ([filteredGroups count] >= 1) {
-                            nextGroup = [filteredGroups objectAtIndex:0];
-                        }
-                    }
-                }
-                    if (nextGroup != nil) {
-                        [self cacheUntilFirstPageStartingWithGroup: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 detailPrinted: detailPrinted firstPageComplete:firstPageComplete];
-                    } else {
-                        [self cacheDetailLevelWithDetails:obj groupedRows:groupedRows];
-                    }
-                //Group footer section
-                for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-                    if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                        BOOL isVisible = [[documentSection visibility] boolValue];
-                        CGFloat layoutHeight = isVisible ? [[documentSection layoutHeight] floatValue] : CGSizeZero.height;
-                        [self cachePageBreakWithNextItemHeight: layoutHeight groupedRows: groupedRows];
-                        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + layoutHeight;
-                        [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
-                        break;
-                    }
-                }
-                
-                [self cacheGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
-                
-                }
-
-                [obj release];
-                if (*firstPageComplete) {
-                    break;
-                }
-            }
-            [loopEnumerator release];
-            [allKeys release];
-            
-        } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
-            
-            [self cacheDetailLevelWithDetails:(NSArray *)groupedRows
-                                  groupedRows:groupedRows];
-        }
-    }
-}
-
-- (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel detailPrinted:(BOOL *)detailPrinted {
-    
-    if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
-        
-        SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
-        
-        BOOL nullGroupExist = NO;
-        NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys] copyItems:NO];
-        for (id obj in allKeys) {
-            if ([obj isKindOfClass:[NSString class]]) {
-                NSString *str = (NSString *)obj;
-                if ([str isEqualToString: @"(null)"]) {
-                    nullGroupExist = YES;
-                    break;
-                }
-            }
-        }
-        if (nullGroupExist) {
-            [allKeys removeObject:@"(null)"];
-        }
-        NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
-        
-        
-        NSEnumerator *loopEnumerator = nil;
-        
-        if (sortSelector != nil) {
-            NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
-            if (nullGroupExist) {
-                [allKeysSorted insertObject:@"(null)" atIndex:0];
-            }
-            
-            if ([desc ascending] == NO) {
-                loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
-            } else {
-                loopEnumerator = [[allKeysSorted objectEnumerator] retain];
-            }
-            [allKeysSorted release];
-        } else {
-            loopEnumerator = [[allKeys objectEnumerator] retain];
-        }
-        
-        [desc release];
-        
-        
-        for (id key in loopEnumerator) {
-            id obj = [[groupedRows objectForKey:key] retain];
-            
-            //Group header section
-            for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-                if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                    BOOL isVisible = [[documentSection visibility] boolValue];
-                    CGFloat layoutHeight = isVisible ? [[documentSection layoutHeight] floatValue] : CGSizeZero.height;
-                    [self cachePageBreakWithNextItemHeight: layoutHeight
-                                               groupedRows: groupedRows];
-                    CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + layoutHeight;
-                    [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
-                    break;
-                }
-            }
-            
-            [self cacheGroupHeaderWithValueDictionary:obj andLevel:groupedRowsLevel];
-            
-            
-            RptqQueryGroup *nextGroup = nil;
-            if ([[self sortedQueryGroups] count] > groupedRowsLevel + 1) {  //Is there a next group?  Short ciruit
-                if (queryGroup != nil) {
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[queryGroup weight] integerValue] + 1)];
-                    NSArray *filteredGroups = [[self sortedQueryGroups] filteredArrayUsingPredicate:predicate];
-                    if ([filteredGroups count] >= 1) {
-                        nextGroup = [filteredGroups objectAtIndex:0];
-                    }
-                }
-            }
-            
-            //This old method was SLOW!!!!
-            //RptqQueryGroup *nextGroup = [queryGroup next];
-            
-            
-            if (nextGroup != nil) {
-                [self cacheGroupLevel: nextGroup
-                          groupedRows: obj
-                     groupedRowsLevel: groupedRowsLevel + 1
-                        detailPrinted: detailPrinted];
-            } else {
-                [self cacheDetailLevelWithDetails:obj
-                                      groupedRows:groupedRows];
-            }
-            
-            //Group footer section
-            for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-                if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                    BOOL isVisible = [[documentSection visibility] boolValue];
-                    CGFloat layoutHeight = isVisible ? [[documentSection layoutHeight] floatValue] : CGSizeZero.height;
-                    [self cachePageBreakWithNextItemHeight: layoutHeight groupedRows: groupedRows];
-                    CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + layoutHeight;
-                    [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
-                    break;
-                }
-            }
-            
-            [self cacheGroupFooterWithValueDictionary:obj andLevel:groupedRowsLevel];
-            
-            [obj release];
-        }
-        [loopEnumerator release];
-        [allKeys release];
-        
-    } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
-        
-        [self cacheDetailLevelWithDetails:(NSArray *)groupedRows
-                              groupedRows:groupedRows];
-    }
-}
-
-- (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails
-                        groupedRows:(NSDictionary *)groupedRows {
-
-    
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *activeDocument = [applicationInstance activeDocument];
-    RptqDocument *document = [activeDocument activeDocument];
-    RptqDocumentSection *detailSection = [document hasDetailSection];
-    BOOL isVisible = [[detailSection visibility] boolValue];
-    CGFloat layoutHeight = isVisible ? [[detailSection layoutHeight] floatValue] : CGSizeZero.height;
-    for (NSDictionary *resultDictionary in containerDetails) {
-        [self cachePageBreakWithNextItemHeight: layoutHeight groupedRows: groupedRows];
-        [self cacheDetailWithValueDictionary:resultDictionary];
-        CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + layoutHeight;
-        [self setPrintableSpaceUsedPageHeight: printableHeightUsed];
-    }
-
-}
-
-//Roll through the groups
-//Returns dictionary for group levels (level < n), and array of dictionaries for details/results (level == n-1).
-- (id)cachedGroupedResults:(NSArray *)sortedResults level:(NSUInteger)level {
-    
-    BOOL detailLevel = level == [[self cachedSortedSortDescriptorsGroup] count];
-    id resultsDictionary = nil;
-    
-    if (detailLevel) {
-        resultsDictionary = [sortedResults copy];
-    } else {
-        resultsDictionary = [[NSMutableDictionary alloc] init];
-        NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
-        
-        NSSortDescriptor *sortDescriptor = detailLevel ? nil : [[self cachedSortedSortDescriptorsGroup] objectAtIndex:level];
-        
-        NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
-
-        id valueForField = nil, lastValueForField = nil;
-        
-        NSUInteger groupResultIndexForLevel = 0;
-        
-        for (NSDictionary *result in sortedResults) {
-            valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
-            if (valueForField == nil) {
-                valueForField = @"(null)";
-            }
-            if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
-
-                id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
-                                                      level: (level + 1)];
-                
-                [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
-                
-                [resultsForGroup removeAllObjects];
-                
-            }
-            [resultsForGroup addObject:result];
-            lastValueForField = valueForField;
-            groupResultIndexForLevel++;
-        }
-
-        //NSArray *resultsCopy = [[NSArray alloc] initWithArray: resultsForGroup];                //Last item
-        if (valueForField != nil) {
-            id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
-                                                  level: (level + 1)];
-            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
-            [resultsDictionary setObject:resultOfNextGroup forKey:key];
-        } else {
-            id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
-                                                        level: (level + 1)];
-            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
-            if (key == nil) {
-                NSNull *n = [[NSNull alloc] init];
-                key = @"(null)";
-                [n release];
-            }
-            [resultsDictionary setObject:resultOfNextGroup forKey:key];
-        }
-        
-        //[resultsCopy release];
-        
-        [resultsForGroup removeAllObjects];
-        [resultsForGroup release];
-    }
-    return [resultsDictionary autorelease];
-}
-
-- (BOOL)cachePageBreakWithNextItemHeight:(CGFloat)nextItemHeight
-                             groupedRows:(NSDictionary *)groupedRows {
-
-    BOOL newPageCreated = NO;
-    CGRect pageRect;
-    
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *activeDocument = [applicationInstance activeDocument];
-    RptqDocument *document = [activeDocument activeDocument];
-    RptqDocumentSection *pageFooterSection = [document hasPageFooterSection];
-    BOOL pageFooterIsVisable = [[pageFooterSection visibility] boolValue];
-    CGFloat pageFooterSectionHeight = pageFooterIsVisable ? [[pageFooterSection layoutHeight] floatValue] : CGSizeZero.height;
-    
-    if (CGRectIsEmpty([self printableRect])) {
-        pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);
-    } else {
-        pageRect = [self paperRect];
-    }
-    
-    if ([self printableSpaceUsedPageHeight] + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
-
-        newPageCreated = YES;
-        CGFloat newHeight = [self printableSpaceUsedPageHeight] + pageFooterSectionHeight;
-        [self setPrintableSpaceUsedPageHeight:newHeight];
-        [self cachePageFooterWithValueDictionary:groupedRows];
-        
-        id layoutToAdd = [[self temporaryLayoutForPage] copy];
-        [[self temporaryLayoutByPage] addObject:layoutToAdd];
-        [layoutToAdd release];
-
-        id dataToAdd = [[self temporaryDataForPage] copy];
-        [[self temporaryDataByPage] addObject:dataToAdd];
-        [dataToAdd release];
-        
-        [[self temporaryLayoutForPage] removeAllObjects];
-        [[self temporaryDataForPage] removeAllObjects];
-        
-        RptqDocumentSection *pageHeaderSection = [document hasPageHeaderSection];
-        BOOL pageHeaderIsVisable = [[pageHeaderSection visibility] boolValue];
-        CGFloat pageHeaderHeight = CGPointZero.y;
-        pageHeaderHeight += pageHeaderIsVisable ? [[pageHeaderSection layoutHeight] floatValue] : CGSizeZero.height;
-        [self setPrintableSpaceUsedPageHeight: pageHeaderHeight];
-        [self cachePageHeaderWithValueDictionary:groupedRows];
-        
-    }
-    return newPageCreated;
-}
-
-- (void)cachePageHeaderWithValueDictionary:(NSDictionary *)values {
-    NSDictionary *d = @{MTReportSectionType : MTPageHeader};
-    [[self temporaryLayoutForPage] addObject:  d];
-}
-
-- (void)cachePageFooterWithValueDictionary:(NSDictionary *)values {
-    NSDictionary *d = @{MTReportSectionType : MTPageFooter};
-    [[self temporaryLayoutForPage] addObject: d];
-}
-
-- (void)cacheReportHeaderWithValueDictionary:(NSDictionary *)values {
-    [[self temporaryLayoutForPage] removeAllObjects];
-    [[self temporaryDataForPage] removeAllObjects];
-    NSDictionary *d = @{MTReportSectionType : MTReportHeader};
-    [[self temporaryLayoutForPage] addObject: d];
-}
-
-- (void)cacheReportFooterWithValueDictionary:(NSDictionary *)values {
-    NSDictionary *d = @{MTReportSectionType : MTReportFooter};
-    [[self temporaryLayoutForPage] addObject: d];
-}
-
-- (void)cacheGroupHeaderWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
-    NSNumber *level = @(groupLevel);
-    NSDictionary *d = @{MTReportSectionType : MTReportGroupHeader,
-                        MTReportGroupLevel : level};
-    [[self temporaryLayoutForPage] addObject: d];
-}
-
-- (void)cacheGroupFooterWithValueDictionary:(NSDictionary *)values andLevel:(NSUInteger)groupLevel {
-    NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
-    NSDictionary *d = @{MTReportSectionType : MTReportGroupFooter,
-                        MTReportGroupLevel : gl};
-    [[self temporaryLayoutForPage] addObject: d];
-    [gl release];
-}
-
-- (void)cacheDetailWithValueDictionary:(NSDictionary *)values {
-    NSDictionary *detail = @{MTReportSectionType : MTPageDetail};
-    [[self temporaryLayoutForPage] addObject: detail];
-    NSUInteger ctr = [self temporaryCachedDetailCounter];
-    NSNumber *counter = @(ctr);
-    [[self temporaryDataForPage] addObject:counter];
-    ctr++;
-    [self setTemporaryCachedDetailCounter:ctr];
 }
 
 @end

@@ -12,12 +12,13 @@
 #import <Foundation/Foundation.h>
 
 @class RptqQuery, RptqDatabase, RptqDocument, RptqQueryField, MTDatabase, RptqQueryCache, RptqDatabaseSchemaField,
-        MTDatabaseConnection;
+        MTDatabaseConnection, MTCache;
 
 @interface MTQuery : NSObject
 
 @property (nonatomic, strong, readonly) MTDatabase *database;
 @property (nonatomic, strong, readonly) MTDatabaseConnection *credentials;
+@property (nonatomic, strong) MTCache *cache;
 
 - (id)initWithDatabase:(RptqDatabase *)database;
 - (NSString *)selectPart;

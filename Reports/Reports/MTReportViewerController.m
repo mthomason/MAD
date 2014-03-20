@@ -10,6 +10,7 @@
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "MAReportDocument.h"
 #import "MTActivityItemProviderPdf.h"
 #import "UAAppReviewManager.h"
 #import "RptqDocument.h"
@@ -17,6 +18,7 @@
 #import "RptqQuery.h"
 #import "RptqQueryCache.h"
 #import "NSError+UserInterface.h"
+#import "MTReportFormatter.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate>
@@ -31,7 +33,7 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemActivity;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
 @property (nonatomic, retain) IBOutlet UILabel *labelDateLastRefreshed;
 @property (nonatomic, retain) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
@@ -160,7 +162,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     MTApplicationInstance *app = [AppDelegate app];
     MAReportDocument *reportDocument = [app activeDocument];
 
-    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithDocument:reportDocument];
+    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportDocument reportFormatter]];
     [self setPrintPageRendererReport: prtingPageRendererReport];
     [prtingPageRendererReport release];
     
@@ -483,9 +485,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     [MTReportViewerController setDisplayActive:reportViewerController];
+    MTApplicationInstance *app = [AppDelegate app];
+    MAReportDocument *doc = [app activeDocument];
+    [[doc reportFormatter] cachePrintPageRenderDataForSize:frame.size];
     
-    [[reportViewerController printPageRendererReport] cachePrintPageRenderDataForSize:frame.size];
-    NSUInteger numberOfPages = [[reportViewerController printPageRendererReport] numberOfPages];
+    NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
     [reportViewerController setNumberOfPages:numberOfPages];
     [[reportViewerController sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
     
@@ -611,7 +615,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 dispatch_queue_t highpriorityqueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
                 if (success) {
                     
-                    [[reportViewer2 printPageRendererReport] setDidRefresh:YES];
+
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_async(highpriorityqueue, ^{
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
@@ -713,17 +717,19 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     __block MTReportViewerController *blockViewer = reportViewer;
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
+    MTApplicationInstance *app = [AppDelegate app];
+    __block MAReportDocument *doc = [app activeDocument];
+
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         
-        
-        [[blockViewer printPageRendererReport] cachePrintPageRenderDataForSize:viewBounds];
+        [[doc reportFormatter] cachePrintPageRenderDataForSize:viewBounds];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             [MTReportViewerController setDisplayActive:blockViewer];
             
-            NSUInteger numberOfPages = [[blockViewer printPageRendererReport] numberOfPages];
+            NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
             [blockViewer setNumberOfPages:numberOfPages];
             [[blockViewer sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
             

@@ -1212,6 +1212,8 @@
 		4C94ADFB17C3514200037FCB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADFA17C3514200037FCB /* Default@2x.png */; };
 		4C94ADFD17C3514200037FCB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADFC17C3514200037FCB /* Default-568h@2x.png */; };
 		4C94AE0617C3514200037FCB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C94AE0517C3514200037FCB /* ViewController.m */; };
+		4C95C42F18DB6B6D003DFB11 /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */; };
+		4C95C43018DB6B6D003DFB11 /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */; };
 		4C95CAB6182B6CCB00160E01 /* MTViewControllerBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAB5182B6CCB00160E01 /* MTViewControllerBarcode.m */; };
 		4C95CAC2182B6D3E00160E01 /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC1182B6D3E00160E01 /* MTViewControllerBarcodePreview.m */; };
 		4C95CAC5182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAC4182B6D5A00160E01 /* MTViewControllerBarcodeOptions.m */; };
@@ -2511,6 +2513,8 @@
 		4C94AE0417C3514200037FCB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4C94AE0517C3514200037FCB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
+		4C95C42D18DB6B6D003DFB11 /* MTReportFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatter.h; sourceTree = "<group>"; };
+		4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatter.m; sourceTree = "<group>"; };
 		4C95CAB4182B6CCB00160E01 /* MTViewControllerBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcode.h; sourceTree = "<group>"; };
 		4C95CAB5182B6CCB00160E01 /* MTViewControllerBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerBarcode.m; sourceTree = "<group>"; };
 		4C95CAC0182B6D3E00160E01 /* MTViewControllerBarcodePreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerBarcodePreview.h; sourceTree = "<group>"; };
@@ -3247,6 +3251,8 @@
 				4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */,
 				4CA14FFE18B7F955001AFAD8 /* MTActivityReportPrintPreview.h */,
 				4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */,
+				4C95C42D18DB6B6D003DFB11 /* MTReportFormatter.h */,
+				4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -5966,6 +5972,7 @@
 				4C50DF9416B8F9A500CD8BC0 /* MTReportViewerPrintPageRenderer.m in Sources */,
 				4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
+				4C95C43018DB6B6D003DFB11 /* MTReportFormatter.m in Sources */,
 				4CF1335216CCB2EE00FD0F0B /* MTQueryBuilderContainerController.m in Sources */,
 				4CBABBDE18C7E96F00EE5768 /* MTPaperB9.m in Sources */,
 				4C9E445818D88D7000F0F578 /* MTTableLayout.m in Sources */,
@@ -6575,6 +6582,7 @@
 				4CDBCB6616AF91B000E08FAD /* RptqDocument+ActiveDocument.m in Sources */,
 				4C95CAB6182B6CCB00160E01 /* MTViewControllerBarcode.m in Sources */,
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
+				4C95C42F18DB6B6D003DFB11 /* MTReportFormatter.m in Sources */,
 				4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4CBABBDD18C7E96F00EE5768 /* MTPaperB9.m in Sources */,
 				4C9E445718D88D7000F0F578 /* MTTableLayout.m in Sources */,

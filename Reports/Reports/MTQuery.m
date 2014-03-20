@@ -36,7 +36,6 @@
 
 @interface MTQuery ()
 
-@property (nonatomic, strong) MTCache *cache;
 @property (nonatomic, strong, readwrite) MTDatabase *database;
 
 @end

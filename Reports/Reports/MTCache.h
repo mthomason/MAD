@@ -17,6 +17,8 @@
 - (NSArray *)results;
 + (void)cacheData:(id)data toUrl:(NSURL *)url;
 
+@property (nonatomic, strong, readonly) NSURL *url;
+
 @end
 
 #endif
