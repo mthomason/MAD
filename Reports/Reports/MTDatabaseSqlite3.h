@@ -30,8 +30,6 @@
 
 - (void)openDatabase;
 
-- (id)connectionSettings;
-
 @end
 
 #endif

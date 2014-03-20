@@ -22,7 +22,7 @@
 - (void)openDatabase {
 
     //Open conneciton... closed in dealloc.
-    NSString *filepath = [[[self connectionSettings] databaseUrl] path];
+    NSString *filepath = [[[self databaseConnection] databaseUrl] path];
     if (sqlite3_open([filepath UTF8String], &_database) != SQLITE_OK) {
         NSAssert1(0, @"Error: failed to open database with message '%s'.", sqlite3_errmsg(_database));
     } else {
@@ -224,13 +224,20 @@
                     
                     if (value != nil) {
                         NSString *fieldName = fieldNames[colCtr];
-                        const char *columnName = sqlite3_column_name(statement, colCtr);
-                        const char *tableName = sqlite3_column_table_name(statement, colCtr);
-                        const char *originName = sqlite3_column_origin_name(statement, colCtr);
-                        const char *databaseName = sqlite3_column_database_name(statement, colCtr);
-                        NSString *columnName8 = [self safeIdentifier:[NSString stringWithUTF8String:columnName]];
-                        NSString *tableName8 = [self safeIdentifier:[NSString stringWithUTF8String:tableName]];
-                        NSString *key = [NSString stringWithFormat:@"%@.%@", tableName8, columnName8];
+                        
+                        if (NO) {
+                            const char *columnName = sqlite3_column_name(statement, colCtr);
+                            const char *tableName = sqlite3_column_table_name(statement, colCtr);
+                            const char *originName = sqlite3_column_origin_name(statement, colCtr);
+                            const char *databaseName = sqlite3_column_database_name(statement, colCtr);
+                            NSString *columnName8 = [self safeIdentifier:[NSString stringWithUTF8String:columnName]];
+                            NSString *tableName8 = [self safeIdentifier:[NSString stringWithUTF8String:tableName]];
+                            NSString *key = [NSString stringWithFormat:@"%@.%@", tableName8, columnName8];
+                            NSString *oname = [NSString stringWithUTF8String:originName];
+                            NSString *dbname = [NSString stringWithUTF8String:databaseName];
+                            NSLog(@"%@-%@-%@", dbname, oname, key);
+                        }
+                        
                         [resultsForRow setObject:value forKey:fieldName];
                     }
                 }
