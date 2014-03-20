@@ -58,15 +58,22 @@
     @autoreleasepool {
         
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        MTDatabase *mnsDatabase = [MTDatabase databaseForRptqDatabase: database];
         
         RptqQuery *rquery = [[database hasQueries] anyObject];
-        NSString *sql = [self getSqlForQuery:rquery];
+        NSError *__autoreleasing error = nil;
+        NSString *sql = [self getSqlForQuery:rquery error:&error];
         
-        [mnsDatabase executeSql:sql completion:^(BOOL success, NSError *error, id results) {
-            // FIXME: Return something.
-            completion(success, error, results);
-        }];
+        if (error) {
+            
+            completion(NO, error, nil);
+
+        } else {
+
+            [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
+                completion(success, error, results);
+            }];
+            
+        }
         
     }
 }

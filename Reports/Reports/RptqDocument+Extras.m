@@ -170,7 +170,7 @@
     
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
         
-        MTDatabaseConnection *connectionSettings = [database connectionSettings];
+        MTDatabaseConnection *connectionSettings = [database databaseConnection];
 
         if (connectionSettings != nil) {
             [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
@@ -182,7 +182,7 @@
         }
 
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
-        MTDatabaseConnection *connectionSettings = [database connectionSettings];
+        MTDatabaseConnection *connectionSettings = [database databaseConnection];
 
         if (connectionSettings != nil) {
             [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
@@ -196,7 +196,7 @@
 
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
 
-        MTDatabaseConnection *connectionSettings = [database connectionSettings];
+        MTDatabaseConnection *connectionSettings = [database databaseConnection];
         if (connectionSettings != nil) {
             // FIXME: Storing Sqlite3 database url in mysql holder.
             NSString *path = [[connectionSettings databaseUrl] path];

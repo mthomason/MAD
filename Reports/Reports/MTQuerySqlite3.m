@@ -20,13 +20,19 @@
     
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
-    NSString *queryString = [self getSqlForQuery:rquery];
-
-    [[self database] executeSql:queryString
-                     completion:^(BOOL success, NSError *error, id results) {
+    NSError *__autoreleasing error = nil;
+    NSString *sql = [self getSqlForQuery:rquery error:&error];
+    
+    if (error) {
+        
+        completion(NO, error, nil);
+        
+    } else {
+        [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
                          // FIXME: Return something.
                          completion(success, error, results);
                      }];
+        }
     
     
 }

@@ -109,11 +109,11 @@
     return @"SELECT\n";
 }
 
-- (NSString *)getSqlForQuery:(RptqQuery *)query {
-    return [self getSqlForQuery:query onlyActiveFields:YES];
+- (NSString *)getSqlForQuery:(RptqQuery *)query error:(NSError **)error {
+    return [self getSqlForQuery:query onlyActiveFields:YES error:error];
 }
 
-- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields {
+- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
     if ([[query hasQueryTables] count] > 0) {
@@ -149,12 +149,11 @@
         
         
         // MARK: Sort the vectors topologically.
-        NSError *error = nil;
-        MTLinkedList *topologicalSort = [graph topologicalSortWithError:&error];
+        *error = nil;
+        MTLinkedList *topologicalSort = [graph topologicalSortWithError:error];
         
         // MARK: Error on circuts or other bad query.
-        if (error) {
-            [error presentErrorToUserWithCompletion:^(BOOL success) {}];
+        if (error == nil) {
             [result setString:@""];
         } else {
             
@@ -183,6 +182,9 @@
                                                forManagedObjectContext:[query managedObjectContext]]];
                 
             } else {
+                NSString *message = NSLocalizedString(@"Empty query while using \"only active fields.\" You may need to reference some query fields.", @"Empty query while using \"only active fields.\" You may need to reference some query fields.");
+                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                *error = [NSError errorWithDomain:@"MTQuery" code:5774 userInfo:errorInfo];
                 [result setString:@""];
             }
             

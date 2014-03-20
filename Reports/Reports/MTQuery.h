@@ -21,8 +21,8 @@
 
 - (id)initWithDatabase:(RptqDatabase *)database;
 - (NSString *)selectPart;
-- (NSString *)getSqlForQuery:(RptqQuery *)query;
-- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields;
+- (NSString *)getSqlForQuery:(RptqQuery *)query error:(NSError **)error;
+- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                          completion: (void (^)(BOOL success, NSError *error, id results))completion;

@@ -111,8 +111,5 @@
     return @"NONE";
 }
 
-- (id)connectionSettings {
-    return nil;
-}
 
 @end

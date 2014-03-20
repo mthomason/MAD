@@ -50,13 +50,16 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
-    NSString *queryString = [self getSqlForQuery:rquery];
+    NSError *__autoreleasing error = nil;
+    NSString *sql = [self getSqlForQuery:rquery error:&error];
     
-    [[self database] executeSql:queryString
-                     completion:^(BOOL success, NSError *error, id results) {
-                         // FIXME: Return something.
-                         completion(success, error, results);
-                     }];
+    if (error) {
+        completion(NO, error, nil);
+    } else {
+        [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
+            completion(success, error, results);
+        }];
+    }
     
     
 }

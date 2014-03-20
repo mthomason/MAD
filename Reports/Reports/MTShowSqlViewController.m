@@ -36,8 +36,11 @@
     RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *q = [[database hasQueries] anyObject];
-    NSString *sqlStatement = [query getSqlForQuery:q onlyActiveFields:NO];
-    
+    NSError *error = nil;
+    NSString *sqlStatement = [query getSqlForQuery:q onlyActiveFields:NO error:&error];
+    if (error) {
+        sqlStatement = [error localizedDescription];
+    }
     if ([sqlStatement length] > 0) {
         [[self textView] setText:sqlStatement];
     } else {

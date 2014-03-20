@@ -261,8 +261,4 @@
     return @"Sqlite 3";
 }
 
-- (id)connectionSettings {
-    return [self databaseConnection];
-}
-
 @end

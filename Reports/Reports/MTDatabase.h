@@ -52,8 +52,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
-- (id)connectionSettings;
-
 - (NSString *)tableAliasConnector;
 
 - (void)executeSql:(NSString *)sql
