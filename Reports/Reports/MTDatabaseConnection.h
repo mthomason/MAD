@@ -27,7 +27,8 @@
 
 - (NSString *)appname;
 
-+ (id)credentalsFromRptqCredentals:(RptqUserCredentals *)credentals;
++ (id)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier;
++ (id)databaseConnectionFactory:(RptqUserCredentals *)credentals;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

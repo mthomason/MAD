@@ -313,7 +313,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     RptqDocument *document = [activeDocument activeDocument];
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
     
@@ -1160,7 +1160,7 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
             
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
             RptqUserCredentals *userCredentals = [database ownedByUser];
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
             MTDatabase *madDatabase = [MTDatabase databaseFactory:databaseConnection];
             
             NSSet *hasQueries = [database hasQueries];

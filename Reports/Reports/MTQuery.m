@@ -48,7 +48,7 @@
     if (self) {
         
         RptqUserCredentals *userCredentals = [database ownedByUser];
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
 
@@ -157,7 +157,7 @@
         
         
         // MARK: Sort the vectors topologically.
-        *error = nil;
+        if (error != NULL) *error = nil;
         MTLinkedList *topologicalSort = [graph topologicalSortWithError:error];
         
         // MARK: Error on circuts or other bad query.

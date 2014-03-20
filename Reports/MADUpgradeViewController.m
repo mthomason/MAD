@@ -131,9 +131,7 @@ const NSInteger currentMajorVersion = 2;
         
 #if MADUPGRADE_CREATE_SAMPLE == TRUE
         chinookInstalling = YES;
-        MTDatabaseConnection *dbDetails = [[MTDatabaseConnection alloc] init];
-        [dbDetails setDatabaseTypeIdentifier:  [MTDatabaseSqlite3 identifier]];
-
+        MTDatabaseConnection *dbDetails =  = [[MTDatabaseConnection databaseConnectionFactoryEmpty:[MTDatabaseSqlite3 identifier]] retain];
         
         [dbDetails setDatabaseUrl:chinookAppSupportUrl];
         NSArray *possibleDocumentDirectoryUrls = [defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];

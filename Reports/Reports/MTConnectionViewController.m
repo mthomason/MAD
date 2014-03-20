@@ -153,13 +153,10 @@
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
 
-    MTDatabaseConnection *dbDetails = [[MTDatabaseConnection alloc] init];
-    [dbDetails setUsername:                nil];
-    [dbDetails setPassword:                nil];
+    MTDatabaseConnection *dbDetails = [[MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]] retain];
     [dbDetails setServer:                  blockServer];
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
-    [dbDetails setDatabaseTypeIdentifier:  [self databaseType]];
     
     [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success) {
         if (success) {
@@ -172,7 +169,7 @@
         }
     }];
     
-    
+    [dbDetails release];
     [blockServer release];
     [blockDatabase release];
 

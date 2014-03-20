@@ -677,6 +677,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [activityViewController release];
     [urlEmpty release];
+    [activityItemProviderPdf release];
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {

@@ -25,7 +25,34 @@
     return self;
 }
 
-+ (id)credentalsFromRptqCredentals:(RptqUserCredentals *)credentals {
++ (id)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier {
+    
+    id resultCredentals = nil;
+    
+    if ([[MTDatabaseConnectionMySql identifier] isEqualToString:typeIdentifier]) {
+        
+        resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: @""
+                                                                  database: @""
+                                                                   andPort: 3306];
+        
+    } else if ([[MTDatabaseConnectionSqlServer identifier] isEqualToString:typeIdentifier]) {
+        
+        resultCredentals = [[MTDatabaseConnectionSqlServer alloc] initWithHost: @""
+                                                                        server: @""
+                                                                      database: @""
+                                                                       andPort: 1433];
+        
+    } else if ([[MTDatabaseConnectionSqlite3 identifier] isEqualToString:typeIdentifier]) {
+        
+        resultCredentals = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:nil];
+        
+    }
+    
+    return [resultCredentals autorelease];
+
+}
+
++ (id)databaseConnectionFactory:(RptqUserCredentals *)credentals {
     
     id resultCredentals = nil;
     
