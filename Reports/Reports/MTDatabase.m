@@ -54,23 +54,28 @@
 }
 
 + (id)databaseForRptqDatabase:(RptqDatabase *)database {
-    id result = nil;
     RptqUserCredentals *userCredentals = [database ownedByUser];
-    if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseMySql identifier]]) {
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
+    return [[[MTDatabase databaseForConnection:databaseConnection] retain] autorelease];
+}
+
++ (id)databaseForConnection:(MTDatabaseConnection *)connection {
+    id result = nil;
+    NSString *identifier = [connection databaseTypeIdentifier];
+    if ([[MTDatabaseMySql identifier] isEqualToString:identifier]) {
         
         result = [[MTDatabaseMySql alloc] init];
-
-    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlServer identifier]]) {
-
+        
+    } else if ([[MTDatabaseSqlServer identifier] isEqualToString:identifier]) {
+        
         result = [[MTDatabaseSqlServer alloc] init];
         
-    } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+    } else if ([[MTDatabaseSqlite3 identifier] isEqualToString:identifier]) {
         
         result = [[MTDatabaseSqlite3 alloc] init];
     }
     
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection credentalsFromRptqCredentals:userCredentals];
-    [result setDatabaseConnection:databaseConnection];
+    [result setDatabaseConnection:connection];
     
     if ([result respondsToSelector:@selector(openDatabase)]) {
         [result openDatabase];

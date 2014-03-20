@@ -1025,10 +1025,10 @@
             </objects>
             <point key="canvasLocation" x="1486" y="-987"/>
         </scene>
-        <!--Database Driver Selector My Sql View Controller - MySQL Setup-->
+        <!--Connection View Controller - MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
             <objects>
-                <tableViewController id="OZq-ny-MYn" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
+                <tableViewController id="OZq-ny-MYn" customClass="MTConnectionViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="WtT-L0-6MH">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5577,10 +5577,10 @@
             </objects>
             <point key="canvasLocation" x="3873" y="-781"/>
         </scene>
-        <!--Database Driver Selector My Sql View Controller - SQL Server-->
+        <!--Connection View Controller - SQL Server-->
         <scene sceneID="uTI-q1-IJ8">
             <objects>
-                <tableViewController id="c9T-2m-ezv" customClass="MTDatabaseDriverSelectorMySqlViewController" sceneMemberID="viewController">
+                <tableViewController id="c9T-2m-ezv" customClass="MTConnectionViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="h1v-Ht-WS5">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -93,7 +93,9 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
         RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
         RptqQuery *rquery = [[database hasQueries] anyObject];
         MTQuery *query = [[MTQuery queryForRptqQuery:rquery] retain];
-        [self reportQueries][@"defaultq"] = query;
+        if (query) {
+            [self reportQueries][@"defaultq"] = query;
+        }
         [query release];
 
         
@@ -335,8 +337,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
             [databaseConnection retain];
             
             RptqDocument *rptqDocument = [[documentReport activeDocument] retain];
-            RptqDatabase *rptqDatabase = [[rptqDocument hasDatabaseSchemas] anyObject];
-            MTDatabase *database = [MTDatabase databaseForRptqDatabase:rptqDatabase];
+            MTDatabase *database = [[MTDatabase databaseForConnection:databaseConnection] retain];
             
             if (database) {
                 

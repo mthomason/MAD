@@ -1,18 +1,18 @@
 //
-//  UITableViewControllerDataSourceSetupMySql.h
+//  MTConnectionViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/13/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTDatabaseDriverSelectorMySqlViewController_h
-#define Reports_MTDatabaseDriverSelectorMySqlViewController_h
+#ifndef Reports_MTConnectionViewController_h
+#define Reports_MTConnectionViewController_h
 
 #import <UIKit/UIKit.h>
 #import "MTTableViewController.h"
 
-@interface MTDatabaseDriverSelectorMySqlViewController : MTTableViewController
+@interface MTConnectionViewController : MTTableViewController
     <UITableViewDelegate, UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,
         UITextFieldDelegate, UIAlertViewDelegate>
@@ -35,7 +35,7 @@
 @property (nonatomic, retain) IBOutlet UITextField *textFieldDatabase;
 @property (nonatomic, retain) IBOutlet UITextField *textFieldReportName;
 
-@property (nonatomic, retain) NSString *databaseType;
+@property (nonatomic, copy) NSString *databaseType;
 
 - (IBAction)save:(id)sender;
 - (IBAction)done:(id)sender;

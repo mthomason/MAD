@@ -71,7 +71,7 @@
 		4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */; };
 		4C0E773D163B5AEC003B951E /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4C0E773E163B5AEC003B951E /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
-		4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
+		4C0E773F163B5AEC003B951E /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4C0E7754163B5AEC003B951E /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -831,7 +831,7 @@
 		4C860B20167EDE7000AC1904 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4C860B21167EDE7000AC1904 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C860B22167EDE7000AC1904 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
-		4C860B23167EDE7000AC1904 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
+		4C860B23167EDE7000AC1904 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4C860B24167EDE7000AC1904 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
@@ -933,7 +933,7 @@
 		4C92946118C4CB930010AAEF /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
 		4C92946218C4CB970010AAEF /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E3C2217DF63D600CEEA76 /* MADUpgradeViewController.m */; };
 		4C92946318C4CB9C0010AAEF /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
-		4C92946418C4CBA70010AAEF /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
+		4C92946418C4CBA70010AAEF /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4C92946518C4CBAA0010AAEF /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4C92946618C4CBB10010AAEF /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4C92946718C4CBC00010AAEF /* MTTableViewCellBarcodeCompositCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CAD6182F0D6700160E01 /* MTTableViewCellBarcodeCompositCode.m */; };
@@ -1376,7 +1376,7 @@
 		4CA163FC167EB8F600540A14 /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
 		4CA163FD167EB8F600540A14 /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4CA1640E167EB90D00540A14 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
-		4CA1640F167EB90D00540A14 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
+		4CA1640F167EB90D00540A14 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4CA16410167EB90D00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4CA16411167EB90D00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
@@ -1389,7 +1389,7 @@
 		4CA1641E167EB90D00540A14 /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; };
 		4CA16420167EB90D00540A14 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; };
 		4CA16431167EB90F00540A14 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
-		4CA16432167EB90F00540A14 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
+		4CA16432167EB90F00540A14 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4CA16433167EB90F00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4CA16434167EB90F00540A14 /* MTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94BC1642280500A562B9 /* MTViewController.m */; };
 		4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F94C116423D7300A562B9 /* MTTableViewController.m */; };
@@ -1831,7 +1831,7 @@
 		4CE8A04114C019B4007C8345 /* UIImageDocumentsAlt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE8A03D14C019B4007C8345 /* UIImageDocumentsAlt20@2x.png */; };
 		4CE8A04314C01ABB007C8345 /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4CE8A04614C01C7B007C8345 /* MTDatabaseDriverSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */; };
-		4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */; };
+		4CE8A04914C01EA1007C8345 /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4CE9985F14B69AA80015C8D1 /* MTReportDesignerFontSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9985D14B69AA70015C8D1 /* MTReportDesignerFontSettingsViewController.m */; };
 		4CE9BC8116EF702600B0808C /* RptqQueryTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */; };
 		4CE9BC8216EF702600B0808C /* RptqQueryTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */; };
@@ -2938,8 +2938,8 @@
 		4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerOpenDocument.m; sourceTree = "<group>"; };
 		4CE8A04414C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorViewController.h; sourceTree = "<group>"; };
 		4CE8A04514C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorViewController.m; sourceTree = "<group>"; };
-		4CE8A04714C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorMySqlViewController.h; sourceTree = "<group>"; };
-		4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorMySqlViewController.m; sourceTree = "<group>"; };
+		4CE8A04714C01EA0007C8345 /* MTConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTConnectionViewController.h; sourceTree = "<group>"; };
+		4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectionViewController.m; sourceTree = "<group>"; };
 		4CE9985C14B69AA70015C8D1 /* MTReportDesignerFontSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerFontSettingsViewController.h; sourceTree = "<group>"; };
 		4CE9985D14B69AA70015C8D1 /* MTReportDesignerFontSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerFontSettingsViewController.m; sourceTree = "<group>"; };
 		4CE9BC7F16EF702600B0808C /* RptqQueryTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryTable+Extras.h"; sourceTree = "<group>"; };
@@ -3421,8 +3421,8 @@
 		4C35E2F616E4875000ECAB2E /* Database Driver Setup */ = {
 			isa = PBXGroup;
 			children = (
-				4CE8A04714C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.h */,
-				4CE8A04814C01EA0007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m */,
+				4CE8A04714C01EA0007C8345 /* MTConnectionViewController.h */,
+				4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */,
 				4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */,
 				4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */,
 				4CE8A04414C01C7A007C8345 /* MTDatabaseDriverSelectorViewController.h */,
@@ -5822,7 +5822,7 @@
 				4C0E773E163B5AEC003B951E /* MTDatabaseDriverSelectorViewController.m in Sources */,
 				4CBABB9818C7E1CA00EE5768 /* MTPaperA5.m in Sources */,
 				4CD2FDC317F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
-				4C0E773F163B5AEC003B951E /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4C0E773F163B5AEC003B951E /* MTConnectionViewController.m in Sources */,
 				4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */,
 				4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */,
@@ -6136,7 +6136,7 @@
 				4CA163F8167EB8F500540A14 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
 				4CA163F9167EB8F500540A14 /* UITableViewControllerOpperators.m in Sources */,
 				4CA1640E167EB90D00540A14 /* MTDatabaseDriverSelectorViewController.m in Sources */,
-				4CA1640F167EB90D00540A14 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4CA1640F167EB90D00540A14 /* MTConnectionViewController.m in Sources */,
 				4CA16410167EB90D00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4CA16411167EB90D00540A14 /* MTViewController.m in Sources */,
 				4CA16412167EB90D00540A14 /* MTTableViewController.m in Sources */,
@@ -6284,7 +6284,7 @@
 				4CA163FC167EB8F600540A14 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
 				4CA163FD167EB8F600540A14 /* UITableViewControllerOpperators.m in Sources */,
 				4CA16431167EB90F00540A14 /* MTDatabaseDriverSelectorViewController.m in Sources */,
-				4CA16432167EB90F00540A14 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4CA16432167EB90F00540A14 /* MTConnectionViewController.m in Sources */,
 				4CA16433167EB90F00540A14 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4CA16434167EB90F00540A14 /* MTViewController.m in Sources */,
 				4CA16435167EB90F00540A14 /* MTTableViewController.m in Sources */,
@@ -6434,7 +6434,7 @@
 				4C434ACB18B40CFC00750B6B /* NSManagedObject+Rptq.m in Sources */,
 				4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */,
 				4CD2FDC217F4CBF20015458B /* VerifyStoreReceipt.m in Sources */,
-				4CE8A04914C01EA1007C8345 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4CE8A04914C01EA1007C8345 /* MTConnectionViewController.m in Sources */,
 				4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */,
 				4CD0F7C514CC532A003DA079 /* MTQueryBuilderViewController.m in Sources */,
@@ -6743,7 +6743,7 @@
 				4C860B20167EDE7000AC1904 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
 				4C860B21167EDE7000AC1904 /* UITableViewControllerOpperators.m in Sources */,
 				4C860B22167EDE7000AC1904 /* MTDatabaseDriverSelectorViewController.m in Sources */,
-				4C860B23167EDE7000AC1904 /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4C860B23167EDE7000AC1904 /* MTConnectionViewController.m in Sources */,
 				4C860B24167EDE7000AC1904 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */,
 				4C860B25167EDE7000AC1904 /* MTViewController.m in Sources */,
 				4C860B26167EDE7000AC1904 /* MTTableViewController.m in Sources */,
@@ -6984,7 +6984,7 @@
 				4C9294F918C4CC7A0010AAEF /* RptqDatabase.m in Sources */,
 				4C92946018C4CB900010AAEF /* MACloudManager.m in Sources */,
 				4C92952318C4CC890010AAEF /* UIView+NSObjectIdTag.m in Sources */,
-				4C92946418C4CBA70010AAEF /* MTDatabaseDriverSelectorMySqlViewController.m in Sources */,
+				4C92946418C4CBA70010AAEF /* MTConnectionViewController.m in Sources */,
 				4C9294A318C4CBFF0010AAEF /* MTReportViewerReportPageViewController.m in Sources */,
 				4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */,
 				4C92952C18C4CC890010AAEF /* NSURL+Document.m in Sources */,

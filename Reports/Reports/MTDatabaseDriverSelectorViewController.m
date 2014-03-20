@@ -7,9 +7,12 @@
 //
 
 #import "MTDatabaseDriverSelectorViewController.h"
-#import "MTDatabaseDriverSelectorMySqlViewController.h"
+#import "MTConnectionViewController.h"
 #import "UIDevice+Hack.h"
 #import "Constants.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
+#import "MTDatabaseSqlite3.h"
 
 @implementation MTDatabaseDriverSelectorViewController
 
@@ -29,22 +32,26 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
+    
+    NSString *dbId = nil;
     if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         [[segue destinationViewController] setDelegate:self];
-        [(MTDatabaseDriverSelectorMySqlViewController *)[segue destinationViewController] setDatabaseType:MTSegueShowSetUpDatasourceMySqlIdentifier];
+        dbId = [[MTDatabaseMySql identifier] retain];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         [[segue destinationViewController] setDelegate:self];
-        [(MTDatabaseDriverSelectorMySqlViewController *)[segue destinationViewController] setDatabaseType:MTSegueShowSetUpDatasourceSqlServerIdentifier];
+        dbId = [[MTDatabaseSqlServer identifier] retain];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         [[segue destinationViewController] setDelegate:self];
+        dbId = [[MTDatabaseSqlite3 identifier] retain];
 
     }
+    [(MTConnectionViewController *)[segue destinationViewController] setDatabaseType:dbId];
+    [dbId release];
 }
 
 - (void)viewControllerDidFinish:(id)sender {

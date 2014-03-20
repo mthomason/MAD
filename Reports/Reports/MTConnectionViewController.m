@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDatabaseDriverSelectorMySqlViewController.h"
+#import "MTConnectionViewController.h"
 #import "MTViewControllerActivitySpinner.h"
 #import "UIDevice+Hack.h"
 #import "MTTableViewController.h"
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
 
-@interface MTDatabaseDriverSelectorMySqlViewController()
+@interface MTConnectionViewController()
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, retain) MTViewControllerActivitySpinner *activitySpinnerViewController;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation MTDatabaseDriverSelectorMySqlViewController
+@implementation MTConnectionViewController
 
 - (void)dealloc {
     [_holderButton release];
@@ -136,7 +136,7 @@
     [barButtonItem release];
     [activityIndicator release];
     
-    __block MTDatabaseDriverSelectorMySqlViewController *blockSelf = self;
+    __block MTConnectionViewController *blockSelf = self;
     
     UITextField *textFieldServer    = [blockSelf textFieldHost];
     UITextField *textFieldDatabae   = [blockSelf textFieldDatabase];
@@ -148,8 +148,6 @@
     NSString *textPortText  = [textFieldPort text];
     NSString *textPort      = [textPortText length] > 0 ? textPortText : @"0";   // FIXME: A very poor guess.
     NSInteger blockPort     = [textPort integerValue];
-    
-    NSString *databaseType = [[NSString alloc] initWithString:[blockSelf databaseType]];
     
     __block id blockSender = sender;
     
@@ -163,7 +161,6 @@
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
     [dbDetails setDatabaseTypeIdentifier:  [self databaseType]];
-    
     
     [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success) {
         if (success) {
@@ -179,7 +176,6 @@
     
     [blockServer release];
     [blockDatabase release];
-    [databaseType release];
 
 }
 

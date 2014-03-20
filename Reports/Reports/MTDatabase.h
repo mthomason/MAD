@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @property (nonatomic, retain) MTDatabaseConnection *databaseConnection;
 
 + (id)databaseForRptqDatabase:(RptqDatabase *)database;
++ (id)databaseForConnection:(MTDatabaseConnection *)connection;
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 
@@ -49,7 +50,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)identifier;
 + (NSString *)identifier;
 
-- (NSString *) safeIdentifier:(NSString *)fieldOrTableName;
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
 - (id)connectionSettings;
 
