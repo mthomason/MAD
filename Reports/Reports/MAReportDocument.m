@@ -157,9 +157,11 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 
         if ([self reportFormatter] == nil) {
             MTCache *cache = [[MTCache alloc] initWithUrl:[self cachedDataUrl]];
-            MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:cache
-                                                                                        andLayout:[self activeDocument]];
+            MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithDatasource:cache
+                                                                                        andLayout:[self activeDocument]] retain];
             [self setReportFormatter:reportFormatter];
+            [reportFormatter release];
+            [cache release];
 
         }
     }
@@ -177,7 +179,8 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (MTQuery *)defaultQuery {
-    return [[[self reportQueries][@"defaultq"] retain] autorelease];
+    MTQuery *defaultQuery = [[self reportQueries][@"defaultq"] retain];
+    return [defaultQuery autorelease];
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
@@ -504,13 +507,12 @@ const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
     RptqDocument *document = [[self activeDocument] retain];
     if (document != nil) {
 
-        MTCache *defaultCache = [[self defaultQuery] cache];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:defaultCache andLayout:[self activeDocument]];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:[self urlThumbnail] atomically:YES];
         [printPageRender release];
+        
     }
     [document release];
 }

@@ -97,7 +97,8 @@
 }
 
 + (id)reportFormatterWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout {
-    return [[MTReportFormatter alloc] initWithDatasource:datasource andLayout:layout];
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDatasource:datasource andLayout:layout];
+    return [result autorelease];
 }
 
 #pragma mark - Reading cached data

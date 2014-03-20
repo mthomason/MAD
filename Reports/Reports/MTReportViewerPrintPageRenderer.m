@@ -108,7 +108,7 @@
     NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
     CGRect letterRect = [MTPaper rectLetter];
     [[self reportFormatter] cachePrintPageRenderDataForSize:letterRect.size];
-    NSUInteger numberOfPages = [self numberOfPages];
+    NSUInteger numberOfPages = [[[self reportFormatter] cachedLayoutByPage] count];
     UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
     
     for (NSUInteger i=0; i<numberOfPages; i++) {
@@ -122,6 +122,10 @@
 
 - (int)getRandomNumberBetween:(int)from to:(int)to {
     return (int)from + arc4random() % (to-from+1);
+}
+
+- (NSInteger)numberOfPages {
+    return [[[self reportFormatter] cachedLayoutByPage] count];
 }
 
 - (UIImage *)thumbnail {

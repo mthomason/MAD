@@ -19,6 +19,9 @@
 #import "RptqQueryCache.h"
 #import "NSError+UserInterface.h"
 #import "MTReportFormatter.h"
+#import "MTCache.h"
+#import "MTQuery.h"
+#import "MTPaper.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate>
@@ -771,7 +774,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         NSString *temporaryDirectoryPath = NSTemporaryDirectory();
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
         NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
+
+        MTApplicationInstance *app = [AppDelegate app];
+        MAReportDocument *doc = [app activeDocument];
+        MTCache *defaultCache = [[doc defaultQuery] cache];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:defaultCache andLayout:[doc activeDocument]];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
+
         [printPageRender writeToPdf:temporaryFile];
         [printPageRender release];
         
