@@ -33,17 +33,17 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "UIDevice+Hack.h"
 
-const NSString *MTReportSectionType = @"MTReportSectionType";
-const NSString *MTReportSectionValues = @"MTReportSectionValues";
-const NSString *MTReportGroupLevel = @"MTReportGroupLevel";
+NSString * const MTReportSectionType = @"MTReportSectionType";
+NSString * const MTReportSectionValues = @"MTReportSectionValues";
+NSString * const MTReportGroupLevel = @"MTReportGroupLevel";
 
-const NSString *MTPageDetail = @"MTPageDetail";
-const NSString *MTPageHeader = @"MTPageHeader";
-const NSString *MTPageFooter = @"MTPageFooter";
-const NSString *MTReportHeader = @"MTReportHeader";
-const NSString *MTReportFooter = @"MTReportFooter";
-const NSString *MTReportGroupHeader = @"MTReportGroupHeader";
-const NSString *MTReportGroupFooter = @"MTReportGroupFooter";
+NSString * const MTPageDetail = @"MTPageDetail";
+NSString * const MTPageHeader = @"MTPageHeader";
+NSString * const MTPageFooter = @"MTPageFooter";
+NSString * const MTReportHeader = @"MTReportHeader";
+NSString * const MTReportFooter = @"MTReportFooter";
+NSString * const MTReportGroupHeader = @"MTReportGroupHeader";
+NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 @interface MAReportDocument ()
 

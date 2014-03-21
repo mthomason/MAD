@@ -14,17 +14,17 @@
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 
-extern const NSString *MTReportSectionType;
-extern const NSString *MTReportSectionValues;
-extern const NSString *MTReportGroupLevel;
+extern NSString * const MTReportSectionType;
+extern NSString * const MTReportSectionValues;
+extern NSString * const MTReportGroupLevel;
 
-extern const NSString *MTPageDetail;
-extern const NSString *MTPageHeader;
-extern const NSString *MTPageFooter;
-extern const NSString *MTReportHeader;
-extern const NSString *MTReportFooter;
-extern const NSString *MTReportGroupHeader;
-extern const NSString *MTReportGroupFooter;
+extern NSString * const MTPageDetail;
+extern NSString * const MTPageHeader;
+extern NSString * const MTPageFooter;
+extern NSString * const MTReportHeader;
+extern NSString * const MTReportFooter;
+extern NSString * const MTReportGroupHeader;
+extern NSString * const MTReportGroupFooter;
 
 @class MTQuery, MTReportFormatter;
 

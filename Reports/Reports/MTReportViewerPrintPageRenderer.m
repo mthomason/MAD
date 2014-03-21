@@ -379,13 +379,13 @@
                                 NSString *key = [sortDescriptor key];
                                 id sortKey = [rowData objectForKey:key];
                                 if (sortKey == nil) {
-                                    sortKey = @"(null)";
+                                    sortKey = MTNullIdentifier;
                                 }
                                 [groupLevelKeys addObject:sortKey];
                                 if (nextRowData != nil) {
                                     id sortKeyNext = [nextRowData objectForKey:key];
                                     if (sortKeyNext == nil) {
-                                        sortKeyNext = @"(null)";
+                                        sortKeyNext = MTNullIdentifier;
                                     }
                                     if (sortKeyNext) {
                                         [nextGroupLevelKeys addObject:sortKeyNext];
@@ -532,7 +532,7 @@
                                             
                                             displayString = [item formattedString:aggregateType
                                                                          forValue:aggregateResult];
-                                            if ([displayString isEqualToString:@"(null)"]) {
+                                            if ([displayString isEqualToString:MTNullIdentifier]) {
                                                 displayString = @"";
                                             }
                                             break;
@@ -578,11 +578,11 @@
                                             MTDataType dataType1 = [dataTypeNumber1 integerValue];
                                             MTDataType dataType2 = [dataTypeNumber2 integerValue];
                                             NSString *input1 = [item formattedString:dataType1 forValue:value1];
-                                            if ([input1 isEqualToString:@"(null)"]) {
+                                            if ([input1 isEqualToString:MTNullIdentifier]) {
                                                 input1 = @"";
                                             }
                                             NSString *input2 = [item formattedString:dataType2 forValue:value2];
-                                            if ([input2 isEqualToString:@"(null)"]) {
+                                            if ([input2 isEqualToString:MTNullIdentifier]) {
                                                 input2 = @"";
                                             }
                                             MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject] retain];
@@ -624,7 +624,7 @@
                                                 NSNumber *dataTypeNumber = [schemaField dataType];
                                                 MTDataType dataType = [dataTypeNumber integerValue];
                                                 displayString = [item formattedString:dataType forValue:value];
-                                                if ([displayString isEqualToString:@"(null)"]) {
+                                                if ([displayString isEqualToString:MTNullIdentifier]) {
                                                     displayString = @"";
                                                 }
                                             } else {

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MTNullIdentifier;
+
 @class MTCache, RptqDocument;
 
 @interface MTReportFormatter : NSObject

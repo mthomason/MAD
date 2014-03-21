@@ -23,6 +23,8 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabase.h"
 
+NSString * const MTNullIdentifier = @"(null)";
+
 @interface MTReportFormatter ()
 
 @property (nonatomic, retain) MTCache *datasource;
@@ -315,7 +317,7 @@
         for (NSDictionary *result in sortedResults) {
             valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
             if (valueForField == nil) {
-                valueForField = @"(null)";
+                valueForField = MTNullIdentifier;
             }
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
                 
@@ -344,7 +346,7 @@
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             if (key == nil) {
                 NSNull *n = [[NSNull alloc] init];
-                key = @"(null)";
+                key = MTNullIdentifier;
                 [n release];
             }
             [resultsDictionary setObject:resultOfNextGroup forKey:key];
@@ -384,14 +386,14 @@
             for (id obj in allKeys) {
                 if ([obj isKindOfClass:[NSString class]]) {
                     NSString *str = (NSString *)obj;
-                    if ([str isEqualToString: @"(null)"]) {
+                    if ([str isEqualToString: MTNullIdentifier]) {
                         nullGroupExist = YES;
                         break;
                     }
                 }
             }
             if (nullGroupExist) {
-                [allKeys removeObject:@"(null)"];
+                [allKeys removeObject:MTNullIdentifier];
             }
             NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
             
@@ -401,7 +403,7 @@
             if (sortSelector != nil) {
                 NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
                 if (nullGroupExist) {
-                    [allKeysSorted insertObject:@"(null)" atIndex:0];
+                    [allKeysSorted insertObject:MTNullIdentifier atIndex:0];
                 }
                 
                 if ([desc ascending] == NO) {
@@ -496,14 +498,14 @@
         for (id obj in allKeys) {
             if ([obj isKindOfClass:[NSString class]]) {
                 NSString *str = (NSString *)obj;
-                if ([str isEqualToString: @"(null)"]) {
+                if ([str isEqualToString: MTNullIdentifier]) {
                     nullGroupExist = YES;
                     break;
                 }
             }
         }
         if (nullGroupExist) {
-            [allKeys removeObject:@"(null)"];
+            [allKeys removeObject:MTNullIdentifier];
         }
         NSSortDescriptor *desc = [[[self cachedSortedSortDescriptorsGroup] objectAtIndex:groupedRowsLevel] retain];
         
@@ -513,7 +515,7 @@
         if (sortSelector != nil) {
             NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
             if (nullGroupExist) {
-                [allKeysSorted insertObject:@"(null)" atIndex:0];
+                [allKeysSorted insertObject:MTNullIdentifier atIndex:0];
             }
             
             if ([desc ascending] == NO) {
