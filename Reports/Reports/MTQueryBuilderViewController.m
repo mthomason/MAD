@@ -8,6 +8,7 @@
 
 #import "MTQueryBuilderViewController.h"
 #import "MTApplicationInstance.h"
+#import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderPredicateFormatViewController.h"
@@ -18,6 +19,8 @@
 #import "UITableViewCellQueryInput.h"
 #import "UITableViewCellQueryGroup.h"
 #import "MTTableViewCellQueryPredicate.h"
+#import "MTTableController.h"
+#import "MTTableLayout.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
 #import "MTReportDesignerViewController.h"
@@ -1155,13 +1158,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             RptqQueryTable *tablea = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
-            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            [[resultR textLabel] setText: [NSString stringWithFormat:@"%@", [tablea alias]]];
-            [[resultR textLabel] setFont: font];
             
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            NSString *title = [NSString stringWithFormat:@"%@", [tablea alias]];
+            [[resultR textLabel] setText: title];
+            [resultR setAccessoryType:UITableViewCellAccessoryDetailButton];
+            [[resultR textLabel] setFont: font];
             [[resultR textLabel] setBackgroundColor:[UIColor clearColor]];
             [resultR setIndentationLevel: 1];
             result = resultR;
+            
             break;
         }
         
@@ -1354,7 +1360,21 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath { }
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    RptqDocument *doc = [reportDocument activeDocument];
+    RptqDatabase *database = [[doc hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    MTQuery *rquery = [MTQuery queryFactory:query];
+    //[rquery getSqlForTable:];
+    //MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount: andRowCount:];
+    //MTTableController *tableController = [[MTTableController alloc] initWithCollectionViewLayout:tableLayout];
+    //[self presentViewController:tableController animated:YES completion:^{
+    
+    //}];
+}
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
 

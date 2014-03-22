@@ -11,7 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class RptqQuery, RptqDatabase, RptqDocument, RptqQueryField, MTDatabase, RptqQueryCache, RptqDatabaseSchemaField,
+@class RptqQuery, RptqDatabase, RptqDocument, RptqQueryField, MTDatabase, RptqQueryCache,
+        RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
         MTDatabaseConnection, MTCache;
 
 @interface MTQuery : NSObject
@@ -20,10 +21,15 @@
 @property (nonatomic, strong, readonly) MTDatabaseConnection *credentials;
 @property (nonatomic, strong) MTCache *cache;
 
-- (id)initWithDatabase:(RptqDatabase *)database;
+- (id)initWithObject:(id)object;
++ (id)queryFactory:(id)object;
+
 - (NSString *)selectPart;
-- (NSString *)getSqlForQuery:(RptqQuery *)query error:(NSError **)error;
-- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
+//- (NSString *)getSqlForQuery:(RptqQuery *)query error:(NSError **)error;
+//- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
+
+- (NSString *)getSqlWithError:(NSError **)error;
+- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                          completion: (void (^)(BOOL success, NSError *error, id results))completion;
@@ -31,10 +37,12 @@
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
-+ (id)queryFactory:(RptqQuery *)rptqQuery;
 
 + (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+- (NSString *)safeQueryField:(RptqQueryField *)queryField;
+- (NSString *)sqlLimitClause;
+
 @end
 
 #endif

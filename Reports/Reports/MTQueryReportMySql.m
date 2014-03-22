@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQueryMySql.h"
+#import "MTQueryReportMySql.h"
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
@@ -15,14 +15,14 @@
 #import "RptqQueryPredicate.h"
 
 
-@implementation MTQueryMySql
+@implementation MTQueryReportMySql
 
 - (NSString *)tableAliasConnector {
     return @" AS ";
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryMySql safeQueryField:queryField];
+    return [MTQueryReportMySql safeQueryField:queryField];
 }
 
 + (NSString *)safeQueryField:(RptqQueryField *)queryField {
@@ -57,11 +57,8 @@
     
     @autoreleasepool {
         
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        
-        RptqQuery *rquery = [[database hasQueries] anyObject];
         NSError *__autoreleasing error = nil;
-        NSString *sql = [self getSqlForQuery:rquery error:&error];
+        NSString *sql = [self getSqlWithError:&error];
         
         if (error) {
             

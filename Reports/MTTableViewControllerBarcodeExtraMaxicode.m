@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTQuery.h"
+#import "RptqQueryField.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 

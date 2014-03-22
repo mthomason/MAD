@@ -6,22 +6,20 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQuerySqlite3.h"
+#import "MTQueryReportSqlite3.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 #import "MTDatabase.h"
 
-@implementation MTQuerySqlite3
+@implementation MTQueryReportSqlite3
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                          completion: (void (^)(BOOL success, NSError *error, id results))completion {
     
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
     NSError *__autoreleasing error = nil;
-    NSString *sql = [self getSqlForQuery:rquery error:&error];
+    NSString *sql = [self getSqlWithError:&error];
     
     if (error) {
         
@@ -29,7 +27,6 @@
         
     } else {
         [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
-                         // FIXME: Return something.
                          completion(success, error, results);
                      }];
         }
@@ -63,7 +60,7 @@
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQuerySqlite3 safeQueryField:queryField];
+    return [MTQueryReportSqlite3 safeQueryField:queryField];
 }
 
 + (NSString *)safeQueryField:(RptqQueryField *)queryField {

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQuerySqlServer.h"
+#import "MTQueryReportSqlServer.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
@@ -14,7 +14,7 @@
 
 NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
-@implementation MTQuerySqlServer
+@implementation MTQueryReportSqlServer
 
 - (NSString *)tableAliasConnector {
     return @" AS ";
@@ -28,7 +28,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQuerySqlServer safeQueryField:queryField];
+    return [MTQueryReportSqlServer safeQueryField:queryField];
 }
 
 + (NSString *)safeQueryField:(RptqQueryField *)queryField {
@@ -48,10 +48,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                          completion: (void (^)(BOOL success, NSError *error, id results))completion {
     
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
     NSError *__autoreleasing error = nil;
-    NSString *sql = [self getSqlForQuery:rquery error:&error];
+    NSString *sql = [self getSqlWithError:&error];
     
     if (error) {
         completion(NO, error, nil);

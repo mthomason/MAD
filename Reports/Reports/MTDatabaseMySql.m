@@ -9,7 +9,7 @@
 // FIXME: Add @try statements around MySQL calls.
 
 #import "MTDatabaseMySql.h"
-#import "MTQueryMySql.h"
+#import "MTQueryReportMySql.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "RptqDatabaseSchemaTable.h"
@@ -41,7 +41,7 @@
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryMySql safeQueryField:queryField];
+    return [MTQueryReportMySql safeQueryField:queryField];
 }
 
 - (void)executeSql:(NSString *)sql

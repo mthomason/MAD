@@ -33,11 +33,8 @@
     MAReportDocument *reportDocument = [app activeDocument];
     MTQuery *query = [reportDocument defaultQuery];
     
-    RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *q = [[database hasQueries] anyObject];
     NSError *error = nil;
-    NSString *sqlStatement = [query getSqlForQuery:q onlyActiveFields:NO error:&error];
+    NSString *sqlStatement = [query getSqlOnlyActiveFields:NO error:&error];
     if (error) {
         sqlStatement = [error localizedDescription];
     }

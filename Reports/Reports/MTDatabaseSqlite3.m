@@ -7,7 +7,7 @@
 //
 
 #import "MTDatabaseSqlite3.h"
-#import "MTQuerySqlite3.h"
+#import "MTQueryReportSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "RptqQueryField+Extras.h"
 
@@ -147,7 +147,7 @@
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQuerySqlite3 safeQueryField:queryField];
+    return [MTQueryReportSqlite3 safeQueryField:queryField];
 }
 - (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
     id results = [[[self resultsForQueryString:sql] retain] autorelease];

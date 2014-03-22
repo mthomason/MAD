@@ -7,7 +7,7 @@
 //
 
 #import "MTDatabaseSqlServer.h"
-#import "MTQuerySqlServer.h"
+#import "MTQueryReportSqlServer.h"
 #import "MTDatabaseConnectionSqlServer.h"
 #import "MTKeyChain.h"
 
@@ -335,7 +335,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 }
 
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQuerySqlServer safeQueryField:queryField];
+    return [MTQueryReportSqlServer safeQueryField:queryField];
 }
 
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {

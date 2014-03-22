@@ -1,5 +1,5 @@
 //
-//  MTQuerySqlServer.h
+//  MTQuerySqlite3.h
 //  MAD
 //
 //  Created by Michael Thomason on 3/18/14.
@@ -7,9 +7,8 @@
 //
 
 #import "MTQuery.h"
+#import "MTQueryReport.h"
 
-extern NSString * const MTSqlSelectTop100;
-
-@interface MTQuerySqlServer : MTQuery
+@interface MTQueryReportSqlite3 : MTQueryReport
 
 @end
