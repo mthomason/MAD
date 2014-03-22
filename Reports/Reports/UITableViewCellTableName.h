@@ -14,7 +14,7 @@
 
 @interface UITableViewCellTableName : UITableViewCell
 
-@property (retain) NSManagedObjectID *tableID;
+@property (nonatomic, strong) NSManagedObjectID *tableID;
 
 + (CGFloat)defaultHeight;
 

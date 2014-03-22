@@ -11,11 +11,6 @@
 
 @implementation UITableViewCellTableName
 
-- (void)dealloc {
-    [_tableID release];
-    [super dealloc];
-}
-
 + (CGFloat)defaultHeight {
     return MNSTableViewCellTableNameHeightDefault;
 }

@@ -14,8 +14,8 @@
 
 @interface UITableViewCellInstruction : MTAutoLayoutTableViewCell
 
-@property (nonatomic, assign) IBOutlet UILabel *labelGroupType;
-@property (nonatomic, assign) IBOutlet UILabel *labelGroupTypeDetail;
+@property (nonatomic, weak) IBOutlet UILabel *labelGroupType;
+@property (nonatomic, weak) IBOutlet UILabel *labelGroupTypeDetail;
 
 + (CGFloat)defaultHeight;
 

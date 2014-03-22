@@ -13,7 +13,7 @@
 
 @interface MTCellEnterText : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UITextField *textField;
+@property (nonatomic, strong) IBOutlet UITextField *textField;
 
 @end
 

@@ -9,20 +9,17 @@
 #import "MTTextView.h"
 
 @interface MTTextView ()
+
 @property (assign) CGRect initalFrame;
+
 @end
 
 @implementation MTTextView
 
-- (void)dealloc {
-    [_textView release];
-    [super dealloc];
-}
-
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+
         [self setClipsToBounds:YES];
         [self setBackgroundColor:[UIColor clearColor]];
         CGRect textViewFrame = CGRectInset(frame, -4.0000f, -4.0000f);
@@ -34,7 +31,6 @@
         [self addSubview:textView];
         [textView setClipsToBounds:YES];
         [self setTextView:textView];
-        [textView release];
 
     }
     return self;

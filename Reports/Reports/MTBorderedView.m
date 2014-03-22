@@ -16,11 +16,6 @@
 
 @implementation MTBorderedView
 
-- (void)dealloc {
-    [_borderColor release];
-    [super dealloc];
-}
-
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {

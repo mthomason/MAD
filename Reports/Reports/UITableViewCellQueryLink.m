@@ -11,11 +11,6 @@
 
 @implementation UITableViewCellQueryLink
 
-- (void)dealloc {
-    [_tableID release];
-    [super dealloc];
-}
-
 + (CGFloat)defaultHeight {
     return MNSTableViewCellQueryLinkHeightDefault;
 }

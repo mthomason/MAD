@@ -17,9 +17,9 @@
 
 @property (retain) NSManagedObjectID *tableID;
 
-@property (nonatomic, assign) IBOutlet UILabel *labelDetail;
-@property (nonatomic, assign) IBOutlet UILabel *labelMain;
-@property (nonatomic, assign) IBOutlet UILabel *labelOpperator;
+@property (nonatomic, weak) IBOutlet UILabel *labelDetail;
+@property (nonatomic, weak) IBOutlet UILabel *labelMain;
+@property (nonatomic, weak) IBOutlet UILabel *labelOpperator;
 
 @end
 

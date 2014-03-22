@@ -17,10 +17,10 @@
 
 @property (retain) NSManagedObjectID *tableID;
 
-@property (nonatomic, assign) IBOutlet UILabel *labelTableLeft;
-@property (nonatomic, assign) IBOutlet UILabel *labelTableRight;
-@property (nonatomic, assign) IBOutlet UILabel *labelJoinArrow;
-@property (nonatomic, assign) IBOutlet UILabel *labelJoinDesc;
+@property (nonatomic, weak) IBOutlet UILabel *labelTableLeft;
+@property (nonatomic, weak) IBOutlet UILabel *labelTableRight;
+@property (nonatomic, weak) IBOutlet UILabel *labelJoinArrow;
+@property (nonatomic, weak) IBOutlet UILabel *labelJoinDesc;
 
 + (CGFloat)defaultHeight;
 

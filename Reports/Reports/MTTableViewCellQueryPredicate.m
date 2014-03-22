@@ -10,11 +10,6 @@
 
 @implementation MTTableViewCellQueryPredicate
 
-- (void)dealloc {
-    [_tableID release];
-    [super dealloc];
-}
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {

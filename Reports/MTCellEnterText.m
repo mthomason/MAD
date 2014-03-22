@@ -10,9 +10,4 @@
 
 @implementation MTCellEnterText
 
-- (void)dealloc {
-    [_textField release];
-    [super dealloc];
-}
-
 @end

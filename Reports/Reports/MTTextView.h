@@ -13,7 +13,7 @@
 
 @interface MTTextView : UIView
 
-@property (nonatomic, retain) UITextView *textView;
+@property (nonatomic, strong) UITextView *textView;
 
 - (void)verticalAlignTop;
 - (void)verticalAlignBottom;

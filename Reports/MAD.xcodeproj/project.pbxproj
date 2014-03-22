@@ -75,12 +75,12 @@
 		4C0E7750163B5AEC003B951E /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4C0E7753163B5AEC003B951E /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4C0E7754163B5AEC003B951E /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
-		4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
-		4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
-		4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D314CD2068003DA079 /* UITableViewCellInstruction.m */; };
-		4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
-		4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
+		4C0E7755163B5AEC003B951E /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D314CD2068003DA079 /* UITableViewCellInstruction.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E775B163B5AEC003B951E /* MTQueryBuilderAddTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE214CEC12B006171A7 /* MTQueryBuilderAddTableViewController.m */; };
 		4C0E775C163B5AEC003B951E /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; };
 		4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; };
@@ -89,8 +89,8 @@
 		4C0E7760163B5AEC003B951E /* MTQueryBuilderAddLinkSecondFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B0E14D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondFieldViewController.m */; };
 		4C0E7761163B5AEC003B951E /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C507B1014D07CA300DE67E3 /* MTQueryBuilderAddLinkSecondTableViewController.m */; };
 		4C0E7762163B5AEC003B951E /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; };
-		4C0E7763163B5AEC003B951E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
-		4C0E7764163B5AEC003B951E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
+		4C0E7763163B5AEC003B951E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0E7764163B5AEC003B951E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E7765163B5AEC003B951E /* MTQueryBuilderAddPredicateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0B14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m */; };
 		4C0E7766163B5AEC003B951E /* MTQueryBuilderAddGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD9CB0E14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m */; };
 		4C0E7767163B5AEC003B951E /* UITableViewControllerFieldOrCustomValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585514DE285300184445 /* UITableViewControllerFieldOrCustomValue.m */; };
@@ -412,12 +412,12 @@
 		4C4EBFB717EDEB9500D10622 /* carat-open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */; };
 		4C4EBFB817EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
 		4C4EBFB917EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
-		4C4EBFBC17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
-		4C4EBFBD17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
+		4C4EBFBC17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C4EBFBD17EE827800D10622 /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C4EBFC217EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
 		4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
-		4C5029EA1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
-		4C5029EB1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; };
+		4C5029EA1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C5029EB1816440100C88CD4 /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029E91816440100C88CD4 /* MADWatermarkView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C5029F21817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */; };
 		4C5029F31817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */; };
 		4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
@@ -1144,7 +1144,6 @@
 		4C92953818C4CC890010AAEF /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C92953918C4CC890010AAEF /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C92953A18C4CC890010AAEF /* NSManagedObject+Rptq.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C434ACA18B40CFC00750B6B /* NSManagedObject+Rptq.m */; };
-		4C92953B18C4CC8D0010AAEF /* MTStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C94AA5217DD8590000F6FCF /* MTStateButton.m */; };
 		4C92953C18C4CC8D0010AAEF /* MTCellEnterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */; };
 		4C92953D18C4CCC10010AAEF /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; };
 		4C92953E18C4CD390010AAEF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
@@ -1200,8 +1199,6 @@
 		4C94AA3817DCB88A000F6FCF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3717DCB88A000F6FCF /* Images.xcassets */; };
 		4C94AA3D17DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */; };
 		4C94AA3E17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */; };
-		4C94AA5317DD8590000F6FCF /* MTStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C94AA5217DD8590000F6FCF /* MTStateButton.m */; };
-		4C94AA5417DD8590000F6FCF /* MTStateButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C94AA5217DD8590000F6FCF /* MTStateButton.m */; };
 		4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C94ADE317C33C3100037FCB /* UIImageJustified@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */; };
 		4C94ADE917C3514200037FCB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
@@ -1443,8 +1440,8 @@
 		4CA16482167EBE5700540A14 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4CA16483167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4CA16484167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
-		4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
-		4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; };
+		4CA226A716C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA226A616C963CC00315EA2 /* MTDocumentSectionView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CA2391717AF660C0066FEAF /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2391617AF660C0066FEAF /* MTKeyChain.m */; };
 		4CA2391817AF660C0066FEAF /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2391617AF660C0066FEAF /* MTKeyChain.m */; };
 		4CA2391917AF660C0066FEAF /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2391617AF660C0066FEAF /* MTKeyChain.m */; };
@@ -1619,12 +1616,12 @@
 		4CC39D6E175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
 		4CC39D6F175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
 		4CC39D70175FEBFA00865CCA /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC39D6B175FEBFA00865CCA /* NSDate+Extras.m */; };
-		4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
-		4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; };
+		4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6BA4F16A13D3B000A69A1 /* MTBorderedView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993114DAF87A0094E17E /* UIImageBolt20.png */; };
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
-		4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; };
-		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; };
+		4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
 		4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
 		4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */; };
@@ -1732,12 +1729,12 @@
 		4CCDFD1317C27F5F00B79D34 /* MTViewControllerAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDFD1117C27F5F00B79D34 /* MTViewControllerAbout.m */; };
 		4CD0F7B914CC3908003DA079 /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
 		4CD0F7C514CC532A003DA079 /* MTQueryBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C314CC532A003DA079 /* MTQueryBuilderViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
-		4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; };
-		4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
-		4CD0F7D414CD2068003DA079 /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D314CD2068003DA079 /* UITableViewCellInstruction.m */; };
-		4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; };
-		4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; };
+		4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7CD14CD2036003DA079 /* UITableViewCellLinkName.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CD0F7D414CD2068003DA079 /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D314CD2068003DA079 /* UITableViewCellInstruction.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D714CD28E1003DA079 /* UITableViewCellOverride.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FDC217F4CBF20015458B /* VerifyStoreReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2FDC117F4CBF20015458B /* VerifyStoreReceipt.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1823,8 +1820,8 @@
 		4CE314321694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4CE314331694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
 		4CE314341694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */; };
-		4CE3143716952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
-		4CE3143816952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
+		4CE3143716952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CE3143816952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE3143916952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
 		4CE3143A16952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
 		4CE3143B16952E3B00114431 /* MTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3143616952E3B00114431 /* MTTextView.m */; };
@@ -2276,8 +2273,8 @@
 		4C4EBFAB17EDEA8D00D10622 /* carat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carat.png; sourceTree = "<group>"; };
 		4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open@2x.png"; sourceTree = "<group>"; };
 		4C4EBFB517EDEB9500D10622 /* carat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat@2x.png"; sourceTree = "<group>"; };
-		4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCellEnterText.h; sourceTree = "<group>"; };
-		4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCellEnterText.m; sourceTree = "<group>"; };
+		4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTCellEnterText.h; path = ../MTCellEnterText.h; sourceTree = "<group>"; };
+		4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTCellEnterText.m; path = ../MTCellEnterText.m; sourceTree = "<group>"; };
 		4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CarbonBlock.ttf; sourceTree = "<group>"; };
 		4C5029E81816440100C88CD4 /* MADWatermarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADWatermarkView.h; path = ../MADWatermarkView.h; sourceTree = "<group>"; };
 		4C5029E91816440100C88CD4 /* MADWatermarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADWatermarkView.m; path = ../MADWatermarkView.m; sourceTree = "<group>"; };
@@ -2499,8 +2496,6 @@
 		4C94AA3717DCB88A000F6FCF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "MAD Viewer/Images.xcassets"; sourceTree = "<group>"; };
 		4C94AA3A17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesPadOS7.storyboard; sourceTree = "<group>"; };
 		4C94AA3C17DCBB01000F6FCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesOS7.storyboard; sourceTree = "<group>"; };
-		4C94AA5117DD8590000F6FCF /* MTStateButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStateButton.h; sourceTree = "<group>"; };
-		4C94AA5217DD8590000F6FCF /* MTStateButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStateButton.m; sourceTree = "<group>"; };
 		4C94ADE117C33C3000037FCB /* UIImageJustified@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageJustified@2x.png"; path = "Reports/UIImageJustified@2x.png"; sourceTree = "<group>"; };
 		4C94ADE817C3514100037FCB /* MAD Launch Images.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Launch Images.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C94ADEE17C3514200037FCB /* MAD Launch Images-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Launch Images-Info.plist"; sourceTree = "<group>"; };
@@ -4142,10 +4137,6 @@
 				4CDB624B14E38C8400A5389E /* Categories */,
 				4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */,
 				4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */,
-				4C94AA5117DD8590000F6FCF /* MTStateButton.h */,
-				4C94AA5217DD8590000F6FCF /* MTStateButton.m */,
-				4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */,
-				4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */,
 				4C95CABF182B6D1F00160E01 /* Barcode */,
 			);
 			name = Classes;
@@ -4752,6 +4743,8 @@
 		4CDC60AE16E48F9C00924676 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
+				4C4EBFBA17EE827800D10622 /* MTCellEnterText.h */,
+				4C4EBFBB17EE827800D10622 /* MTCellEnterText.m */,
 				4CD0F7C714CD201E003DA079 /* UITableViewCellTableName.h */,
 				4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */,
 				4CD0F7CF14CD2050003DA079 /* UITableViewCellQueryInput.h */,
@@ -6058,7 +6051,6 @@
 				4CBABC0418C7E96F00EE5768 /* MTPaperC0.m in Sources */,
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
 				4C25A8CE18BC2209002DA271 /* UAAppReviewManager.m in Sources */,
-				4C94AA5417DD8590000F6FCF /* MTStateButton.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C81BB9C1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
@@ -6672,7 +6664,6 @@
 				4C5625EB1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F01759730200433E88 /* UIImage+Alpha.m in Sources */,
 				4C5625F51759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
-				4C94AA5317DD8590000F6FCF /* MTStateButton.m in Sources */,
 				4C5CB710189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */,
 				4CBABB8318C7E18000EE5768 /* MTPaperA0.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
@@ -6933,7 +6924,6 @@
 				4C9294C118C4CC340010AAEF /* MTDocumentSectionView.m in Sources */,
 				4C9294EC18C4CC7A0010AAEF /* RptqDocumentSectionRows.m in Sources */,
 				4C92949118C4CBF90010AAEF /* MTReportDesignerViewController.m in Sources */,
-				4C92953B18C4CC8D0010AAEF /* MTStateButton.m in Sources */,
 				4C9294CC18C4CC340010AAEF /* MTResizeHandleView.m in Sources */,
 				4C9294C218C4CC340010AAEF /* MTRulerView.m in Sources */,
 				4C9294B918C4CC150010AAEF /* UITableViewCellLinkName.m in Sources */,
