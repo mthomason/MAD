@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryBuilderAdvancedSchemaViewController_h
+#define Reports_MTQueryBuilderAdvancedSchemaViewController_h
+
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
@@ -27,13 +30,6 @@
 @property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
 @property (nonatomic, assign) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
-//@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintX;
-//@property (nonatomic, retain) NSLayoutConstraint *layoutConstraintY;
-
-//@property (nonatomic, readwrite) CGRect bounds;
-//@property (nonatomic, readwrite) CGPoint center;
-//@property (nonatomic, readwrite) CGAffineTransform transform;
-
 - (void)setCenter:(CGPoint)center;
 - (void)setBounds:(CGRect)bounds;
 - (void)setTransform:(CGAffineTransform)transform;
@@ -48,3 +44,5 @@
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView;
 
 @end
+
+#endif

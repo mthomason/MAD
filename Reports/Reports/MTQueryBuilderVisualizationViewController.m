@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTQueryBuilderAdvancedViewController.h"
+#import "MTQueryBuilderVisualizationViewController.h"
 #import "MTApplicationInstance.h"
 #import "CGAffineTransform+Common.h"
 #import "UIDevice+Hack.h"
@@ -27,7 +27,7 @@ NSString * const MTQueryBuilderAdvancedSchemaViewControllerIdentifier = @"MTQuer
 
 typedef void(^MTBlockResultVoid)(void);
 
-@interface MTQueryBuilderAdvancedViewController ()
+@interface MTQueryBuilderVisualizationViewController ()
     <UIGestureRecognizerDelegate,
         UIScrollViewDelegate,
         UIPopoverControllerDelegate,
@@ -71,12 +71,12 @@ typedef void(^MTBlockResultVoid)(void);
 
 @end
 
-@implementation MTQueryBuilderAdvancedViewController
+@implementation MTQueryBuilderVisualizationViewController
 
 - (void)dealloc {
     MAReportDocument *reportDocument = [AppDelegate activeReportDocument];
     RptqDocument *document = [reportDocument activeDocument];
-    [MTQueryBuilderAdvancedViewController removeNotificationsFromObserver:self forObjectContext:[document managedObjectContext]];
+    [MTQueryBuilderVisualizationViewController removeNotificationsFromObserver:self forObjectContext:[document managedObjectContext]];
     NSSet *setToRemove = [NSSet setWithArray:_viewControllers];
     [self removeViewControllers:setToRemove];
 }
@@ -335,7 +335,7 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [MTQueryBuilderAdvancedViewController removeNotificationsFromObserver:observer forObjectContext:objectContext];
+    [MTQueryBuilderVisualizationViewController removeNotificationsFromObserver:observer forObjectContext:objectContext];
     
     [defaultCenter addObserver:observer selector:@selector(managedObjectContextWillSave:) name:NSManagedObjectContextWillSaveNotification object:objectContext];
     [defaultCenter addObserver:observer selector:@selector(managedObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:objectContext];
@@ -696,7 +696,7 @@ typedef void(^MTBlockResultVoid)(void);
     if (documentReport) {
         
         NSManagedObjectContext *objectContext = [documentReport managedObjectContext];
-        [MTQueryBuilderAdvancedViewController addNotificationsToObserver:self forObjectContext:objectContext];
+        [MTQueryBuilderVisualizationViewController addNotificationsToObserver:self forObjectContext:objectContext];
         
         [self clearScreen];
         
@@ -791,7 +791,7 @@ typedef void(^MTBlockResultVoid)(void);
                     CGFloat attachmentPointY = segHeight * (topLevelTableCounter + 1);
                     
                     CGPoint attachmentPoint = CGPointMake(CGPointZero.x, attachmentPointY);
-                    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderAdvancedViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
+                    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
                     [[self dynamicAnimator] addBehavior:attachmentBehavior];
                     [[self attachmentBehaviors] setObject:attachmentBehavior forKey:objectIDView];
                     [[self tableStartingPoints] addObject:table];
@@ -809,7 +809,7 @@ typedef void(^MTBlockResultVoid)(void);
                             MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[self controllersForObjectIds] objectForKey:[leftTable objectID]];
                             NSManagedObjectID *objectIDLink = [link objectID];
                             
-                            UIAttachmentBehavior *attachmentBehaviorLeft = [MTQueryBuilderAdvancedViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:viewController];
+                            UIAttachmentBehavior *attachmentBehaviorLeft = [MTQueryBuilderVisualizationViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:viewController];
                             [[self dynamicAnimator] addBehavior:attachmentBehaviorLeft];
                             [[self attachmentBehaviors] setObject:attachmentBehaviorLeft forKey:objectIDLink];
                             
@@ -903,7 +903,7 @@ typedef void(^MTBlockResultVoid)(void);
         CGFloat y = CGPointZero.y + [[self contentView] frame].size.height / 2.0000f;
         CGPoint attachmentPoint = CGPointMake(x, y);
  
-        UIAttachmentBehavior *anchorBehaviorNew = [MTQueryBuilderAdvancedViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
+        UIAttachmentBehavior *anchorBehaviorNew = [MTQueryBuilderVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:attachmentPoint];
         [[self dynamicAnimator] addBehavior:anchorBehaviorNew];
         [[self attachmentBehaviors] setObject:anchorBehaviorNew forKey: [tableRightDeletedLink objectID]];
         [[self tableStartingPoints] addObject: tableRightDeletedLink];
@@ -957,7 +957,7 @@ typedef void(^MTBlockResultVoid)(void);
     MTQueryBuilderAdvancedSchemaViewController *viewController = [self addSchemaViewControllerForTable:insertedQueryTable animated:YES];
 
     NSManagedObjectID *objectIDView = [[viewController view] objectIdTag];
-    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderAdvancedViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:insertTableAnchorPoint];
+    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderVisualizationViewController attachmentBehaviorAnchorWithItem:viewController attachedToPoint:insertTableAnchorPoint];
 
     [[self dynamicAnimator] addBehavior:attachmentBehavior];
     [[self attachmentBehaviors] setObject:attachmentBehavior forKey:objectIDView];
@@ -1063,7 +1063,7 @@ typedef void(^MTBlockResultVoid)(void);
     }
     
     //Add connections between MTQueryBuilderAdvancedSchemaViewController
-    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderAdvancedViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:rightTableViewController];
+    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderVisualizationViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:rightTableViewController];
     [[self dynamicAnimator] addBehavior:attachmentBehavior];
     [[self attachmentBehaviors] setObject:attachmentBehavior forKey:[insertedQueryLinks objectID]];
 
@@ -1296,7 +1296,7 @@ typedef void(^MTBlockResultVoid)(void);
     NSArray *constraints = nil;
     CGRect desiredFrame = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
     CGRect viewControllerBounds = [[self contentView] bounds];
-    desiredFrame = [MTQueryBuilderAdvancedViewController rectForDesiredRect:desiredFrame inBounds:viewControllerBounds];
+    desiredFrame = [MTQueryBuilderVisualizationViewController rectForDesiredRect:desiredFrame inBounds:viewControllerBounds];
     
     NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.width];
     NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:[viewController view] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.height];

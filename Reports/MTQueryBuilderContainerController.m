@@ -233,7 +233,7 @@
     return [[[self rightViewController] retain] autorelease];
 }
 
-- (MTQueryBuilderAdvancedViewController *)queryBuilderControllerAdvanced {
+- (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced {
     return [[[self leftViewController] retain] autorelease];
 }
 

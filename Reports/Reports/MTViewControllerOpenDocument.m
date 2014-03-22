@@ -648,7 +648,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)displayContentController:(UIViewController *)contentController {
     //If designer application, then load designer query builder.
     //  If viewer, load, well, the viewer.
-    __block MTQueryBuilderAdvancedViewController *advanced = nil;
+    __block MTQueryBuilderVisualizationViewController *advanced = nil;
     __block MTQueryBuilderViewController *standard = nil;
 
     if ([MTApplicationInstance isMadDesigner]) {
@@ -659,8 +659,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 standard = (MTQueryBuilderViewController *)[(UINavigationController *)childNavigationController topViewController];
                 [self setBothContentControllersDisplayed:NO];
             }
-        } else if ([contentController isKindOfClass:[MTQueryBuilderAdvancedViewController class]]) {
-            advanced = (MTQueryBuilderAdvancedViewController *)contentController;
+        } else if ([contentController isKindOfClass:[MTQueryBuilderVisualizationViewController class]]) {
+            advanced = (MTQueryBuilderVisualizationViewController *)contentController;
             [self setBothContentControllersDisplayed:NO];
         } else if ([contentController isKindOfClass:[MTQueryBuilderViewController class]]) {
             standard = (MTQueryBuilderViewController *)contentController;

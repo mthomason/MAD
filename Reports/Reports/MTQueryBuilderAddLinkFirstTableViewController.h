@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryBuilderAddLinkFirstTableViewController_h
+#define Reports_MTQueryBuilderAddLinkFirstTableViewController_h
+
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
 #import "RptqQueryTable.h"
@@ -25,3 +28,5 @@
 - (IBAction)done:(id)sender;
 
 @end
+
+#endif

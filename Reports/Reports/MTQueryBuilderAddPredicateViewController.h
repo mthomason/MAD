@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryBuilderAddPredicateViewController_h
+#define Reports_MTQueryBuilderAddPredicateViewController_h
+
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "UITableViewControllerOpperators.h"
@@ -33,7 +36,6 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
         MTViewControllerValueBasedOnFieldDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 
@@ -51,3 +53,5 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 - (IBAction)cancel:(id)sender;
 
 @end
+
+#endif

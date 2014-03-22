@@ -6074,10 +6074,10 @@
             </objects>
             <point key="canvasLocation" x="2012" y="-3227"/>
         </scene>
-        <!--Query Builder Advanced View Controller-->
+        <!--Query Builder Visualization View Controller-->
         <scene sceneID="inZ-kV-ofv">
             <objects>
-                <viewController id="RJA-Vn-l2B" customClass="MTQueryBuilderAdvancedViewController" sceneMemberID="viewController">
+                <viewController id="RJA-Vn-l2B" customClass="MTQueryBuilderVisualizationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VJy-57-K4h"/>
                         <viewControllerLayoutGuide type="bottom" id="Px0-Ye-Vt0"/>

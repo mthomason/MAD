@@ -1,10 +1,13 @@
 //
-//  UITableViewControllerLinkBuilder.h
+//  MTQueryBuilderLinkBuilderViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/26/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTQueryBuilderLinkBuilderViewController_h
+#define Reports_MTQueryBuilderLinkBuilderViewController_h
 
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
@@ -55,3 +58,5 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 - (IBAction)cancel:(id)sender;
 
 @end
+
+#endif

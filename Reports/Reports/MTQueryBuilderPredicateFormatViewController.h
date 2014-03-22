@@ -1,10 +1,13 @@
 //
-//  UITableViewControllerPredicateFormat.h
+//  MTQueryBuilderPredicateFormatViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 2/8/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTQueryBuilderPredicateFormatViewController_h
+#define Reports_MTQueryBuilderPredicateFormatViewController_h
 
 #import "MTTableViewController.h"
 #import "MTQueryBuilderAddPredicateViewController.h"
@@ -24,3 +27,5 @@
 - (IBAction)done:(id)sender;
 
 @end
+
+#endif

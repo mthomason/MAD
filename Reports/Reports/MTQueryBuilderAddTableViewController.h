@@ -1,10 +1,13 @@
 //
-//  UIViewControllerSchemaAddTable.h
+//  MTQueryBuilderAddTableViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/24/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTQueryBuilderAddTableViewController_h
+#define Reports_MTQueryBuilderAddTableViewController_h
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
@@ -25,3 +28,5 @@
 - (IBAction)done:(id)sender;
 
 @end
+
+#endif

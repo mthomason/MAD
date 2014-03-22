@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTViewControllerDynamicItem_h
+#define Reports_MTViewControllerDynamicItem_h
+
 #import <UIKit/UIKit.h>
 
 @interface MTViewControllerDynamicItem : UIViewController
@@ -19,3 +22,5 @@
 - (CGAffineTransform)transform;
 
 @end
+
+#endif

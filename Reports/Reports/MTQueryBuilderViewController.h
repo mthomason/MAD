@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryBuilderViewController_h
+#define Reports_MTQueryBuilderViewController_h
+
 #import <UIKit/UIKit.h>
 
 @class MAReportDocument;
@@ -26,3 +29,5 @@ extern NSString * const NSFetchedResultsCachePredicates;
 - (IBAction)edit:(id)sender;
 
 @end
+
+#endif

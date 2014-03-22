@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryBuilderAddGroupViewController_h
+#define Reports_MTQueryBuilderAddGroupViewController_h
+
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
@@ -34,3 +37,5 @@
 - (IBAction)save:(id)sender;
 
 @end
+
+#endif

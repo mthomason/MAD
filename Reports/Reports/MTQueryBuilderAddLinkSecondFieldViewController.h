@@ -1,10 +1,13 @@
 //
-//  UIViewControllerSchemaAddLink.h
+//  MTQueryBuilderAddLinkSecondFieldViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/24/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
+
+#ifndef Reports_MTQueryBuilderAddLinkSecondFieldViewController_h
+#define Reports_MTQueryBuilderAddLinkSecondFieldViewController_h
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
@@ -22,3 +25,5 @@
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddLinkSecondFieldDelegate> delegate;
 
 @end
+
+#endif
