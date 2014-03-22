@@ -14,8 +14,6 @@
 @class MAReportDocument, MTReportFormatter;
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
-    <NSCopying>
-
 
 - (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter;
 - (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter andPrintableAreaSize:(CGSize)printableAreaSize;

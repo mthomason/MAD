@@ -277,6 +277,8 @@
 		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
+		4C11BCF718DD4DE7001E3D33 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */; };
+		4C11BCF818DD4DE7001E3D33 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */; };
 		4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
 		4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
 		4C12293016CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2021,6 +2023,8 @@
 		4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesignerPadOS6.storyboard; path = Reports/MTStoryboardReportDesignerPadOS6.storyboard; sourceTree = "<group>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
+		4C11BCF518DD4DE7001E3D33 /* MTTableFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableFormatter.h; sourceTree = "<group>"; };
+		4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableFormatter.m; sourceTree = "<group>"; };
 		4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = Barcodes/Barcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
 		4C12292E16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderAdvancedSchemaViewController.h; sourceTree = "<group>"; };
 		4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderAdvancedSchemaViewController.m; sourceTree = "<group>"; };
@@ -3225,6 +3229,7 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C11BCF418DD4DB7001E3D33 /* Formatters */,
 				4C9E446918D8B5EF00F0F578 /* MTCache.h */,
 				4C9E446A18D8B5EF00F0F578 /* MTCache.m */,
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
@@ -3251,8 +3256,6 @@
 				4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */,
 				4CA14FFE18B7F955001AFAD8 /* MTActivityReportPrintPreview.h */,
 				4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */,
-				4C95C42D18DB6B6D003DFB11 /* MTReportFormatter.h */,
-				4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -3342,6 +3345,17 @@
 				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 			);
 			name = iOS7;
+			sourceTree = "<group>";
+		};
+		4C11BCF418DD4DB7001E3D33 /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				4C11BCF518DD4DE7001E3D33 /* MTTableFormatter.h */,
+				4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */,
+				4C95C42D18DB6B6D003DFB11 /* MTReportFormatter.h */,
+				4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */,
+			);
+			name = Formatters;
 			sourceTree = "<group>";
 		};
 		4C1B7A58163E0D9400E331AA /* MySqlClientTest */ = {
@@ -5931,6 +5945,7 @@
 				4CA1633B167CAD9D00540A14 /* RptqDocumentObjectLabelLink+Extras.m in Sources */,
 				4CA16341167CAE2F00540A14 /* RptqQueryCache+Extras.m in Sources */,
 				4C80A5EC183179E600242703 /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
+				4C11BCF818DD4DE7001E3D33 /* MTTableFormatter.m in Sources */,
 				4CA16347167CAE7600540A14 /* RptqQuerySort+Extras.m in Sources */,
 				4CBABBAC18C7E27200EE5768 /* MTPaperA10.m in Sources */,
 				4CA1634D167CAEA900540A14 /* RptqRelationship+Extras.m in Sources */,
@@ -6541,6 +6556,7 @@
 				4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
 				4CFC3DE416714A270016E1E8 /* MTShowSqlViewController.m in Sources */,
 				4C3ACA3F16715679001BC16D /* RptqQuery+Extras.m in Sources */,
+				4C11BCF718DD4DE7001E3D33 /* MTTableFormatter.m in Sources */,
 				4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */,
 				4CBABBAB18C7E27200EE5768 /* MTPaperA10.m in Sources */,
 				4C8EC0AD167A953C00F37DA7 /* NSManagedObjectID+Extras.m in Sources */,

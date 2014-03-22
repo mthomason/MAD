@@ -490,7 +490,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [MTReportViewerController setDisplayActive:reportViewerController];
     MTApplicationInstance *app = [AppDelegate app];
     MAReportDocument *doc = [app activeDocument];
-    [[doc reportFormatter] cachePrintPageRenderDataForSize:frame.size];
+    [[doc reportFormatter] formatForSize:frame.size];
     
     NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
     [reportViewerController setNumberOfPages:numberOfPages];
@@ -726,7 +726,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         
-        [[doc reportFormatter] cachePrintPageRenderDataForSize:viewBounds];
+        [[doc reportFormatter] formatForSize:viewBounds];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             

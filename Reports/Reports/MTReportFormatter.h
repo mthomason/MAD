@@ -7,28 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTTableFormatter.h"
 
 extern NSString * const MTNullIdentifier;
 
 @class MTCache, RptqDocument;
 
-@interface MTReportFormatter : NSObject
+@interface MTReportFormatter : MTTableFormatter
 
-@property (nonatomic, retain, readonly) NSArray *cachedLayoutByPage;
-@property (nonatomic, retain, readonly) NSArray *cachedDataByPage;
-@property (nonatomic, retain, readonly) NSArray *cachedSortedSortDescriptorsGroup;
-@property (nonatomic, retain, readonly) NSArray *cachedDataByReport;
-@property (nonatomic, retain, readonly) NSDictionary *cachedDataByGroup;
+@property (nonatomic, retain, readonly) NSArray *layoutByPage;
+@property (nonatomic, retain, readonly) NSArray *dataByPage;
+@property (nonatomic, retain, readonly) NSDictionary *dataByGroup;
 
 - (id)initWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout;
 + (id)reportFormatterWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout;
 
-- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
-- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;
+- (void)formatForSize:(CGSize)printableSize;
+- (void)formatForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;
 
 - (NSDictionary *)rowDataForRow:(NSUInteger)row onPage:(NSUInteger)page;
 
-- (id)dataForCachedGroupData:(id)data andKeys:(NSArray *)keys;
++ (id)dataForGroupData:(id)data andKeys:(NSArray *)keys;
 - (NSUInteger)numberOfPages;
 
 @end
