@@ -10,6 +10,7 @@
 #import "MTCache.h"
 
 #import "SectionEnumerator.h"
+#import "MTQuery.h"
 
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
@@ -18,22 +19,12 @@
 
 #import "RptqQuery+Extras.h"
 
-//Why the fuck!!!
-
-#import "MTDatabaseConnection.h"
-#import "MTDatabase.h"
-
-
-
 @interface MTTableFormatter ()
-
-@property (nonatomic, retain, readwrite) MTCache *datasource;
-@property (nonatomic, retain, readwrite) RptqDocument *layout;
 
 @property (nonatomic, assign, readwrite) BOOL didRefresh;
 
-
-
+@property (nonatomic, retain, readwrite) MTCache *datasource;
+@property (nonatomic, retain, readwrite) RptqDocument *layout;
 @property (nonatomic, retain, readwrite) NSArray *sortedQueryGroups;
 @property (nonatomic, retain, readwrite) NSArray *sortDescriptorsByGroupSorted;
 @property (nonatomic, retain, readwrite) NSArray *records;
@@ -85,13 +76,11 @@
         [self setDidRefresh:NO];
         
         RptqDatabase *database = [[[self layout] hasDatabaseSchemas] anyObject];
-        RptqUserCredentals *userCredentals = [database ownedByUser];
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-        MTDatabase *madDatabase = [MTDatabase databaseFactory:databaseConnection];
         
         NSSet *hasQueries = [database hasQueries];
         RptqQuery *query = [hasQueries anyObject];
         
+        MTQuery *madQuery = [[MTQuery queryFactory:query] retain];
         
         NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
                 
@@ -114,9 +103,9 @@
             RptqQueryField *groupField = [queryGroup hasField];
             
             NSString *queryTable = [[groupField inQueryTable] queryAlias];
-            NSString *safeQueryTable = [madDatabase safeIdentifier:queryTable];
+            NSString *safeQueryTable = [madQuery safeIdentifier:queryTable];
             NSString *fieldName = [[groupField databaseSchemaField] name];
-            NSString *safeFieldName = [madDatabase safeIdentifier:fieldName];
+            NSString *safeFieldName = [madQuery safeIdentifier:fieldName];
             NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
             
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
@@ -132,7 +121,8 @@
         NSArray *sortedArray = [[cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self sortDescriptorsByGroupSorted]] retain];
         
         [self setRecords:sortedArray];
-        
+
+        [madQuery release];
         [sortedArray release];
         [sortedSortDescriptorsGroup release];
         [url autorelease];

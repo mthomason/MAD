@@ -32,8 +32,9 @@
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
 + (id)queryFactory:(RptqQuery *)rptqQuery;
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField;
 
++ (NSString *)safeQueryField:(RptqQueryField *)queryField;
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 @end
 
 #endif

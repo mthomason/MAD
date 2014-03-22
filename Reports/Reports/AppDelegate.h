@@ -13,6 +13,7 @@
 
 @class MTApplicationInstance, MAReportDocument,
             RptqDocument, RptqDatabase, RptqQuery;
+
 @interface AppDelegate : UIResponder
     <UIApplicationDelegate,
         UIDocumentInteractionControllerDelegate,
