@@ -11,9 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqDatabaseSchemaField+Extras.h"
 
-@class MTQueryBuilderAddLinkFirstFieldViewController;
+@class MTQueryBuilderAddLinkFirstFieldViewController, RptqQueryField;
 
 @protocol MTQueryBuilderAddLinkFirstFieldDelegate
 - (void)viewControllerSchemaAddLinkFirstFieldDidFinishWith:(RptqQueryField *)result;

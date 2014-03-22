@@ -8,10 +8,14 @@
 
 #import "MTQueryBuilderContainerController.h"
 #import <CoreData/CoreData.h>
-#import "MTStoreKitController+NonRenewableLicensing.h"
-#import "MTReportDesignerViewController.h"
+
 #import "MTApplicationInstance.h"
+#import "MTReportDesignerViewController.h"
+#import "MTQueryBuilderViewController.h"
+#import "MTQueryBuilderVisualizationViewController.h"
+
 #import "UIDevice+Hack.h"
+#import "MTStoreKitController+NonRenewableLicensing.h"
 
 @interface MTQueryBuilderContainerController ()
 

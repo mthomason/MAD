@@ -9,6 +9,14 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "RptqFieldSelectorManager.h"
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
+#import "RptqQueryTable.h"
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqDatabaseSchemaField+Extras.h"
 
 #pragma mark -
 #pragma mark TableViewController

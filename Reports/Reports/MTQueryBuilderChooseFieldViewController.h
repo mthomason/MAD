@@ -11,10 +11,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "RptqFieldSelectorManager.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
+#import "UIViewTableSectionHeaderDatabaseTable.h"
 
-@class MTQueryBuilderChooseFieldViewController;
+@class MTQueryBuilderChooseFieldViewController, RptqQueryField;
 
 @protocol MTQueryBuilderChooseFieldDelegate
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field;

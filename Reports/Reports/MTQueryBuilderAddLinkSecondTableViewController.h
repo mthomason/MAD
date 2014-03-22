@@ -11,9 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqQueryTable.h"
 
-@class MTQueryBuilderAddLinkSecondTableViewController;
+@class MTQueryBuilderAddLinkSecondTableViewController, RptqQueryTable;
 
 @protocol MTQueryBuilderAddLinkSecondTableDelegate
 - (void)viewControllerDidFinishWithSecondTable:(RptqQueryTable *)result;

@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "RptqQueryLinks+Extras.h"
 
-@class MTQueryBuilderAddLinkJoinTypeViewController;
+@class MTQueryBuilderAddLinkJoinTypeViewController, MAReportDocument;
 
 @protocol MTQueryBuilderAddLinkJoinTypeDelegate
 - (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MAReportDocument *)document;

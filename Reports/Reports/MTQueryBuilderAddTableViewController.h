@@ -11,9 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqDatabaseSchemaTable.h"
 
-@class MTQueryBuilderAddTableViewController;
+@class MTQueryBuilderAddTableViewController, RptqDatabaseSchemaTable;
 
 @protocol MTQueryBuilderAddTableDelegate
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)controller;

@@ -7,8 +7,14 @@
 //
 
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
+#import <CoreData/CoreData.h>
+#import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "UIView+NSObjectIdTag.h"
+#import "MTConnectorView.h"
+#import "MTTitleView.h"
 
 @interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
 

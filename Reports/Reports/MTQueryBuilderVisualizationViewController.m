@@ -7,15 +7,31 @@
 //
 
 #import "MTQueryBuilderVisualizationViewController.h"
+#import "AppDelegate.h"
 #import "MTApplicationInstance.h"
-#import "CGAffineTransform+Common.h"
-#import "UIDevice+Hack.h"
+
+#import "Rptqdocument.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryField.h"
+
+
+
+#import "MTConnectionViewController.h"
+#import "MTConnectorView.h"
+
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "MTScrollViewCenter.h"
 #import "MTViewController.h"
-#import "CGGeometry+Extras.h"
-#import "RptqQueryLinks.h"
+
 #import "RptqQuery+Extras.h"
+#import "RptqQueryTable+Extras.h"
+
+#import "CGGeometry+Extras.h"
+#import "CGAffineTransform+Common.h"
+#import "UIDevice+Hack.h"
+
+#import "UIView+NSObjectIdTag.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

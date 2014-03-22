@@ -7,12 +7,9 @@
 //
 
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"
+#import "RptqQueryTable.h"
 
 @implementation MTQueryBuilderAddLinkSecondTableViewController
-
-- (void)dealloc {
-    [super dealloc];
-}
 
 #pragma mark - View lifecycle
 

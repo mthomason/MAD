@@ -22,7 +22,6 @@
 #import "MTReportDesignerToolBoxViewController.h"
 #import "MTRulerView.h"
 #import "MTDocumentSectionView.h"
-#import "UIDevice+Hack.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
 #import "NSManagedObject+Extras.h"
@@ -32,9 +31,11 @@
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 #import "MTLog.h"
+#import "RptqDocumentObject+Extras.h"
+#import "UIColor+EverydayApps.h"
 #import "UIView+NSObjectIdTag.h"
 #import "CGGeometry+Extras.h"
-#import "RptqDocumentObject+Extras.h"
+#import "UIDevice+Hack.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 

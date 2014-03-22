@@ -11,9 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqQueryTable.h"
 
-@class MTQueryBuilderAddLinkFirstTableViewController;
+@class MTQueryBuilderAddLinkFirstTableViewController, RptqQueryTable;
 
 @protocol MTQueryBuilderAddLinkFirstTableDelegate
 @optional

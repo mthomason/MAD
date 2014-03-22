@@ -11,9 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
-#import "RptqDatabaseSchemaField.h"
 
-@class MTQueryBuilderAddLinkSecondFieldViewController;
+@class MTQueryBuilderAddLinkSecondFieldViewController, RptqQueryField;
 
 @protocol MTQueryBuilderAddLinkSecondFieldDelegate
 - (void)viewControllerSchemaAddLinkDidSecondFieldFinishWith:(RptqQueryField *)result;

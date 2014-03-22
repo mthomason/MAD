@@ -22,7 +22,6 @@
     <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 - (IBAction)done:(id)sender;
 

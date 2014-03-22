@@ -16,6 +16,10 @@
 #import "AppDelegate.h"
 #import "MTQuery.h"
 
+#import "RptqQueryField.h"
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
+
 NSString * const MTIdentifierSegueDocumentObjectEditBarcode = @"MTIdentifierSegueDocumentObjectEditBarcode";
 NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
 
@@ -31,10 +35,6 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 @property (nonatomic, retain, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
 
 @property (nonatomic, retain) NSString *barcodeInput;
-
-//@property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
-//@property (nonatomic, retain, readwrite) RptqQueryField *queryField2;
-//@property (nonatomic, retain, readwrite) MTBarcode *barcode;
 
 @property (nonatomic, retain) NSArray *cachedData;
 @property (nonatomic, retain) NSArray *cachedDataMaxicode;

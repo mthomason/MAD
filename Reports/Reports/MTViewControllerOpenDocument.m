@@ -7,6 +7,8 @@
 //
 
 #import "MTViewControllerOpenDocument.h"
+#import <MessageUI/MessageUI.h>
+#import "MTApplicationInstance.h"
 #import "UAAppReviewManager.h"
 #import "MTReportViewerController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
@@ -15,13 +17,14 @@
 #import "MADWatermarkView.h"
 #import "NSURL+Document.h"
 #import "MTUser.h"
-#import "MTApplicationInstance.h"
-#import <MessageUI/MessageUI.h>
 #import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
 #import "MTViewControllerAbout.h"
 #import "MTTableViewCellDocument.h"
+#import "MTQueryBuilderViewController.h"
+#import "MTQueryBuilderVisualizationViewController.h"
+#import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";

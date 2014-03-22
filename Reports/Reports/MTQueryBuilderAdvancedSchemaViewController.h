@@ -11,13 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import <QuartzCore/QuartzCore.h>
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "AppDelegate.h"
 #import "MTSchemaFieldCell.h"
-#import "UIView+NSObjectIdTag.h"
-#import "MTConnectorView.h"
-#import "MTTitleView.h"
 
 @protocol MTQueryBuilderAdvancedSchemaDelegate
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;

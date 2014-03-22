@@ -10,20 +10,16 @@
 #define Reports_MTReportViewerController_h
 
 #import <UIKit/UIKit.h>
-#import "MTReportViewerReportPageViewController.h"
 #import "NSDate+Extras.h"
 #import "MUIViewControllerDelegate.h"
 #import "MTViewControllerAsyncProtocol.h"
-#import "MTActivityReportPrintPreview.h"
 
 @interface MTReportViewerController : UIPageViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
-        UIDocumentInteractionControllerDelegate, MTPrintingProtocol,
-        MTActivityReportPrintPreviewDelegate>
+        UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
 - (IBAction)print:(id)sender;
 - (IBAction)sendToPdf:(id)sender;

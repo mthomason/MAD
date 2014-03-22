@@ -15,6 +15,8 @@ extern NSString * const MTIdentifierSegueDocumentObjectEditBarcode;
 extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier;
 
+@class RptqDocumentObjectBarcode;
+
 @protocol MTViewControllerBarcodeDelegate
 - (void)didUpdateBarcode:(MTBarcode *)barcode withFieldOne:(RptqQueryField *)fieldOne andFieldTwo:(RptqQueryField *)fieldTwo;
 @end

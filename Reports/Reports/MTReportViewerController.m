@@ -22,9 +22,11 @@
 #import "MTCache.h"
 #import "MTQuery.h"
 #import "MTPaper.h"
+#import "MTActivityReportPrintPreview.h"
+#import "MTReportViewerReportPageViewController.h"
 
 @interface MTReportViewerController ()
-    <UIPopoverControllerDelegate>
+    <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate>
 
 @property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
