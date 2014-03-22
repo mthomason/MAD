@@ -40,10 +40,6 @@
     return self;
 }
 
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryReportMySql safeQueryField:queryField];
-}
-
 - (void)executeSql:(NSString *)sql
         completion:(void (^)(BOOL success, NSError *error, id results))completion {
     
@@ -359,6 +355,29 @@
 
 + (NSString *)identifier {
     return [MTDatabaseConnectionMySql identifier];
+}
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return [MTDatabaseMySql safeQueryField:queryField];
+}
+
++ (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[queryField inQueryTable] queryAlias];
+    NSString *fieldName = [[queryField databaseSchemaField] name];
+    return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
+}
+
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[schemaField inTable] name];
+    NSString *fieldName = [schemaField name];
+    return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
+}
+
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
+    // FIXME: Use backticks `` to make more robust.
+    return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
 }
 
 @end

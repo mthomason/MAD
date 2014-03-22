@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
 #import "MTQueryReport.h"
 #import "RptqQuery.h"
 #import "MTGraph.h"
@@ -47,7 +51,7 @@
     
     if ([[[self query] hasQueryTables] count] > 0) {
         
-        [result appendString:[self selectPart]];
+        [result appendString:[[self database] selectPart]];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
@@ -148,7 +152,7 @@
             
             RptqQueryField *leftField = [queryPredicate hasLeftField];
             
-            leftValue = [self safeQueryField:leftField];
+            leftValue = [[self database] safeQueryField:leftField];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
             
@@ -160,7 +164,7 @@
             
             RptqQueryField *rightField = [queryPredicate hasRightField];
             
-            rightValue = [self safeQueryField:rightField];
+            rightValue = [[self database] safeQueryField:rightField];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             MTDataType dataType = [[[[queryPredicate hasLeftField] databaseSchemaField] dataType] integerValue];
@@ -296,9 +300,9 @@
             RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
             if (fieldCounter != 0)  [result appendString:@",\n"];
             NSString *tableName = [[queryField inQueryTable] queryAlias];
-            NSString *safeTableName = [self safeIdentifier:tableName];
+            NSString *safeTableName = [[self database] safeIdentifier:tableName];
             NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-            NSString *fieldName = [self safeIdentifier: [field name]];
+            NSString *fieldName = [[self database] safeIdentifier: [field name]];
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
             fieldCounter++;
@@ -318,7 +322,7 @@
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
                 NSString *tableName = [table queryAlias];
-                NSString *safeTableName = [self safeIdentifier:tableName];
+                NSString *safeTableName = [[self database] safeIdentifier:tableName];
                 NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
                 
                 NSUInteger fieldCounter = 0;
@@ -326,7 +330,7 @@
                     RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
                     if (fieldCounter != 0)  [result appendString:@",\n"];
                     NSString *fieldName = [field name];
-                    NSString *safeFieldName = [self safeIdentifier:fieldName];
+                    NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
                     NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
                     [result appendFormat: @"\t%@", fieldAlias];
                     fieldCounter++;
@@ -365,11 +369,11 @@
                         [result appendString:@"\t"];
                     }
                     NSString *ogTableName = [[table databaseSchemaTable] name];
-                    NSString *safeOgTableName = [self safeIdentifier:ogTableName];
+                    NSString *safeOgTableName = [[self database] safeIdentifier:ogTableName];
                     [result appendString:safeOgTableName];
-                    [result appendString:[self tableAliasConnector]];
+                    [result appendString:[[self database] tableAliasConnector]];
                     NSString *tableName = [table queryAlias];
-                    NSString *safeTableName = [self safeIdentifier:tableName];
+                    NSString *safeTableName = [[self database] safeIdentifier:tableName];
                     [result appendString:safeTableName];
                 }
                 
@@ -421,11 +425,11 @@
                                 RptqQueryField *rightField = [queryLink hasRightField];
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
                                 NSString *ogTableName = [[rightTable databaseSchemaTable] name];
-                                NSString *safeOgTableName = [self safeIdentifier:ogTableName];
+                                NSString *safeOgTableName = [[self database] safeIdentifier:ogTableName];
                                 [result appendString:safeOgTableName];
-                                [result appendString:[self tableAliasConnector]];
+                                [result appendString:[[self database] tableAliasConnector]];
                                 NSString *ogRightTable = [rightTable queryAlias];
-                                NSString *safeOgRightTable = [self safeIdentifier:ogRightTable];
+                                NSString *safeOgRightTable = [[self database] safeIdentifier:ogRightTable];
                                 [result appendString:safeOgRightTable];
                                 [result appendString:@"\n\t"];
                                 for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {
@@ -436,12 +440,12 @@
                                 
                                 RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
-                                    NSString *s = [self safeQueryField:leftField];
+                                    NSString *s = [[self database] safeQueryField:leftField];
                                     [result appendString: s];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    NSString *s = [self safeQueryField:rightField];
+                                    NSString *s = [[self database] safeQueryField:rightField];
                                     [result appendString: s];
                                 }
                             }
@@ -482,12 +486,6 @@
         }
     }
     return result;
-}
-
-- (NSString *)tableAliasConnector {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MTQuery; don't use it directly.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
 }
 
 @end

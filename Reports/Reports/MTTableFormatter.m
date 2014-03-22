@@ -103,9 +103,9 @@
             RptqQueryField *groupField = [queryGroup hasField];
             
             NSString *queryTable = [[groupField inQueryTable] queryAlias];
-            NSString *safeQueryTable = [madQuery safeIdentifier:queryTable];
+            NSString *safeQueryTable = [[madQuery database] safeIdentifier:queryTable];
             NSString *fieldName = [[groupField databaseSchemaField] name];
-            NSString *safeFieldName = [madQuery safeIdentifier:fieldName];
+            NSString *safeFieldName = [[madQuery database] safeIdentifier:fieldName];
             NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
             
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key

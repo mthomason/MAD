@@ -6,7 +6,18 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
 #import "MTQuery.h"
+#import "MTQuerySampleDataField.h"
+#import "MTQuerySampleDataTable.h"
+#import "MTQueryReport.h"
+#import "MTQueryReportMySql.h"
+#import "MTQueryReportSqlServer.h"
+#import "MTQueryReportSqlite3.h"
+
 #import "MTCache.h"
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -29,10 +40,6 @@
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
-
-#import "MTQueryReportMySql.h"
-#import "MTQueryReportSqlServer.h"
-#import "MTQueryReportSqlite3.h"
 
 @interface MTQuery ()
 
@@ -60,6 +67,21 @@
             MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
             MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
             [self setDatabase:db];
+
+        } else if ([object isKindOfClass:[RptqDatabaseSchemaTable class]]) {
+            
+            RptqUserCredentals *userCredentals = [[(RptqDatabaseSchemaTable *)object inDatabase] ownedByUser];
+            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+            MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+            [self setDatabase:db];
+            
+        } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
+
+            RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
+            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+            MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+            [self setDatabase:db];
+
         }
         
     }
@@ -69,40 +91,35 @@
 + (id)queryFactory:(id)object {
     id result = nil;
 
-    Class classRptqQuery = [RptqQuery class];
-    if ([object isKindOfClass:classRptqQuery]) {
+    if ([object isKindOfClass:[RptqQuery class]]) {
         
-        RptqQuery *rptqQuery = object;
-        RptqDatabase *database = [rptqQuery inDatabase];
+        RptqDatabase *database = [(RptqQuery *)object inDatabase];
         RptqUserCredentals *userCredentals = [database ownedByUser];
         
         if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionMySql identifier]]) {
             
-            result = [[MTQueryReportMySql alloc] initWithObject:rptqQuery];
+            result = [[MTQueryReportMySql alloc] initWithObject:object];
             
         } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlServer identifier]]) {
             
-            result = [[MTQueryReportSqlServer alloc] initWithObject:rptqQuery];
+            result = [[MTQueryReportSqlServer alloc] initWithObject:object];
             
         } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
             
-            result = [[MTQueryReportSqlite3 alloc] initWithObject:rptqQuery];
+            result = [[MTQueryReportSqlite3 alloc] initWithObject:object];
             
         }
 
+    } else if ([object isKindOfClass:[RptqDatabaseSchemaTable class]]) {
+        
+        result = [[MTQuerySampleDataTable alloc] initWithObject:object];
+        
+    } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
+        
+        result = [[MTQuerySampleDataField alloc] initWithObject:object];
+        
     }
     return result;
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQuery safeQueryField:queryField];
-}
-
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"%@.%@", queryTable, fieldName];
 }
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
@@ -119,18 +136,6 @@
                                  userInfo: nil];
 }
 
-- (NSString *)tableAliasConnector {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}
-
-- (NSString *)safeIdentifier:(NSString *)s {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}
-
 - (NSString *)getSqlWithError:(NSError **)error {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
@@ -141,10 +146,6 @@
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
-}
-
-- (NSString *)selectPart {
-    return @"SELECT\n";
 }
 
 - (NSString *)getSqlForAllFieldsInTable:(RptqDatabaseSchemaTable *)table {

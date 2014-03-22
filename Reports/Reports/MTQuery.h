@@ -24,10 +24,6 @@
 - (id)initWithObject:(id)object;
 + (id)queryFactory:(id)object;
 
-- (NSString *)selectPart;
-//- (NSString *)getSqlForQuery:(RptqQuery *)query error:(NSError **)error;
-//- (NSString *)getSqlForQuery:(RptqQuery *)query onlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
-
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
 
@@ -37,10 +33,10 @@
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
 
+@end
 
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField;
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
-- (NSString *)safeQueryField:(RptqQueryField *)queryField;
+@interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
+
 - (NSString *)sqlLimitClause;
 
 @end

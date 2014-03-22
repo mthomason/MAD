@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
 #import "MTQueryReportSqlServer.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
@@ -15,35 +19,6 @@
 NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
 @implementation MTQueryReportSqlServer
-
-- (NSString *)tableAliasConnector {
-    return @" AS ";
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName];
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryReportSqlServer safeQueryField:queryField];
-}
-
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName];
-}
-
-- (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
-    return [NSString stringWithFormat:@"[%@]", fieldOrTableName];
-}
-
-- (NSString *)selectPart {
-    return (YES) ? @"SELECT\n" : @"SELECT TOP 50\n";
-}
 
 - (void)cacheReportQueryForDocument:(RptqDocument *)document
                          completion: (void (^)(BOOL success, NSError *error, id results))completion {
@@ -74,8 +49,8 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 }
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
-    NSString *safeField = [self safeQuerySchemaField:schemaField];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *safeField = [[self database] safeQuerySchemaField:schemaField];
+    NSString *safeTable = [[self database] safeIdentifier:schemaField.inTable.name];
     NSString *sql = [NSString stringWithFormat:@"%@ %@ "
                      @"%@"
                      @" %@ ORDER BY %@;",

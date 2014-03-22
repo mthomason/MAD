@@ -73,12 +73,22 @@
     completion(NO, error, nil);
 }
 
++ (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return [MTDatabase safeQueryField:queryField];
+}
+
 - (NSString *)safeQueryField:(RptqQueryField *)queryField {
     return @"";
 }
 
 - (NSString *)safeIdentifier:(NSString *)s {
     return s;
+}
+
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
+    NSString *queryTable = [[schemaField inTable] name];
+    NSString *fieldName = [schemaField name];
+    return [NSString stringWithFormat:@"%@.%@", queryTable, fieldName];
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
@@ -95,9 +105,7 @@
 }
 
 - (NSString *)tableAliasConnector {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
+    return @" AS ";
 }
 
 - (NSString *)identifier {
@@ -108,5 +116,8 @@
     return @"NONE";
 }
 
+- (NSString *)selectPart {
+    return @"SELECT\n";
+}
 
 @end

@@ -28,6 +28,10 @@
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
++ (NSString *)safeQueryField:(RptqQueryField *)queryField;
+- (NSString *)safeQueryField:(RptqQueryField *)queryField;
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+
 - (NSString *)identifier;
 + (NSString *)identifier;
 

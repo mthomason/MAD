@@ -16,6 +16,7 @@
 #import "MTDatabaseTable.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
+
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolCompare, MTProtocolLog>
 
 + (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext

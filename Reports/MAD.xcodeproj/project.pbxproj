@@ -279,12 +279,12 @@
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; };
 		4C11BCF718DD4DE7001E3D33 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */; };
 		4C11BCF818DD4DE7001E3D33 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */; };
-		4C11BCFB18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */; };
-		4C11BCFC18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */; };
-		4C11BCFF18DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; };
-		4C11BD0018DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; };
-		4C11BD0318DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; };
-		4C11BD0418DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; };
+		4C11BCFB18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BCFC18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BCFF18DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BD0018DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BD0318DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BD0418DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
 		4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
 		4C12293016CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -3365,6 +3365,39 @@
 			name = Formatters;
 			sourceTree = "<group>";
 		};
+		4C11BD0518DE01B1001E3D33 /* Full */ = {
+			isa = PBXGroup;
+			children = (
+				4C11BD0118DDEA4B001E3D33 /* MTQueryReport.h */,
+				4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */,
+				4C9E447118D8CA7400F0F578 /* MTQueryReportMySql.h */,
+				4C9E447218D8CA7400F0F578 /* MTQueryReportMySql.m */,
+				4C9E447518D8CAB400F0F578 /* MTQueryReportSqlServer.h */,
+				4C9E447618D8CAB400F0F578 /* MTQueryReportSqlServer.m */,
+				4C9E447918D8CACF00F0F578 /* MTQueryReportSqlite3.h */,
+				4C9E447A18D8CACF00F0F578 /* MTQueryReportSqlite3.m */,
+			);
+			name = Full;
+			sourceTree = "<group>";
+		};
+		4C11BD0618DE01CA001E3D33 /* Field Sample */ = {
+			isa = PBXGroup;
+			children = (
+				4C11BCF918DDE863001E3D33 /* MTQuerySampleDataField.h */,
+				4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */,
+			);
+			name = "Field Sample";
+			sourceTree = "<group>";
+		};
+		4C11BD0718DE01D5001E3D33 /* Table Data */ = {
+			isa = PBXGroup;
+			children = (
+				4C11BCFD18DDE8C0001E3D33 /* MTQuerySampleDataTable.h */,
+				4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */,
+			);
+			name = "Table Data";
+			sourceTree = "<group>";
+		};
 		4C1B7A58163E0D9400E331AA /* MySqlClientTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -4346,20 +4379,11 @@
 		4C9E447D18D8D3B800F0F578 /* Query */ = {
 			isa = PBXGroup;
 			children = (
-				4C11BCF918DDE863001E3D33 /* MTQuerySampleDataField.h */,
-				4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */,
-				4C11BCFD18DDE8C0001E3D33 /* MTQuerySampleDataTable.h */,
-				4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */,
 				4C9E446D18D8C7BF00F0F578 /* MTQuery.h */,
 				4C9E446E18D8C7BF00F0F578 /* MTQuery.m */,
-				4C11BD0118DDEA4B001E3D33 /* MTQueryReport.h */,
-				4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */,
-				4C9E447118D8CA7400F0F578 /* MTQueryReportMySql.h */,
-				4C9E447218D8CA7400F0F578 /* MTQueryReportMySql.m */,
-				4C9E447518D8CAB400F0F578 /* MTQueryReportSqlServer.h */,
-				4C9E447618D8CAB400F0F578 /* MTQueryReportSqlServer.m */,
-				4C9E447918D8CACF00F0F578 /* MTQueryReportSqlite3.h */,
-				4C9E447A18D8CACF00F0F578 /* MTQueryReportSqlite3.m */,
+				4C11BD0518DE01B1001E3D33 /* Full */,
+				4C11BD0618DE01CA001E3D33 /* Field Sample */,
+				4C11BD0718DE01D5001E3D33 /* Table Data */,
 			);
 			name = Query;
 			sourceTree = "<group>";

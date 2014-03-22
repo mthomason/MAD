@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+// This class is built for subclassing.
+
 #ifndef Reports_MTDatabase_h
 #define Reports_MTDatabase_h
 
@@ -34,8 +36,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 
 + (id)databaseFactory:(MTDatabaseConnection *)connection;
 
-- (NSString *)safeQueryField:(RptqQueryField *)queryField;
-
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
 - (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
@@ -45,7 +45,11 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)identifier;
 + (NSString *)identifier;
 
++ (NSString *)safeQueryField:(RptqQueryField *)queryField;
+- (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField;
+- (NSString *)selectPart;
 
 - (NSString *)tableAliasConnector;
 

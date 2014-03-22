@@ -35,8 +35,9 @@ extern NSString * const MTDatabaseConnectionAppName;
 - (NSString *)identifier;
 + (NSString *)identifier;
 
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
++ (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
+- (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
 @end
 

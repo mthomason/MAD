@@ -146,9 +146,6 @@
     return result;
 }
 
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryReportSqlite3 safeQueryField:queryField];
-}
 - (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
     id results = [[[self resultsForQueryString:sql] retain] autorelease];
     completion(YES, nil, results);
@@ -264,9 +261,31 @@
     return [MTDatabaseConnectionSqlite3 identifier];
 }
 
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return [MTDatabaseSqlite3 safeQueryField:queryField];
+}
+
++ (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[queryField inQueryTable] queryAlias];
+    NSString *fieldName = [[queryField databaseSchemaField] name];
+    return [NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName];
+}
+
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     // FIXME: Use backticks `` to make more robust.
     return [NSString stringWithFormat:@"\"%@\"", fieldOrTableName];
+}
+
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[schemaField inTable] name];
+    NSString *fieldName = [schemaField name];
+    return [NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName];
+}
+
+- (NSString *)tableAliasConnector {
+    return @" ";
 }
 
 @end

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
 #import "MTQueryReportMySql.h"
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
@@ -16,37 +20,6 @@
 
 
 @implementation MTQueryReportMySql
-
-- (NSString *)tableAliasConnector {
-    return @" AS ";
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryReportMySql safeQueryField:queryField];
-}
-
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
-}
-
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
-    // FIXME: Use backticks `` to make more robust.
-    return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
-}
-
-- (NSString *)selectPart {
-    return @"SELECT\n";
-}
 
 - (NSString *)sqlLimitClause {
     return (YES) ? @"" : @"\nLIMIT 50";
@@ -88,8 +61,8 @@
 }
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
-    NSString *safeField = [self safeQuerySchemaField:schemaField];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *safeField = [[self database] safeQuerySchemaField:schemaField];
+    NSString *safeTable = [[self database] safeIdentifier:schemaField.inTable.name];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
                      @"%@ %@ "
                      @"LIMIT 100;",

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
 #import "MTQueryReportSqlite3.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
@@ -46,44 +50,13 @@
 }
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
-    NSString *safeField = [self safeQuerySchemaField:schemaField];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *safeField = [[self database] safeQuerySchemaField:schemaField];
+    NSString *safeTable = [[self database] safeIdentifier:schemaField.inTable.name];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
                      @"%@ %@ "
                      @"LIMIT 255;",
                      safeField, MTSqlFrom, safeTable];
     return sql;
-}
-
-- (NSString *)tableAliasConnector {
-    return @" ";
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryReportSqlite3 safeQueryField:queryField];
-}
-
-+ (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[queryField inQueryTable] queryAlias];
-    NSString *fieldName = [[queryField databaseSchemaField] name];
-    return [NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName];
-}
-
-- (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
-    // FIXME: Use backticks `` to make more robust.
-    return [NSString stringWithFormat:@"\"%@\"", fieldOrTableName];
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [NSString stringWithFormat:@"\"%@\".\"%@\"", queryTable, fieldName];
-}
-
-- (NSString *)selectPart {
-    return @"SELECT\n";
 }
 
 - (NSString *)sqlLimitClause {

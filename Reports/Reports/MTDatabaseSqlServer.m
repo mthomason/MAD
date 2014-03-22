@@ -39,10 +39,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     [super dealloc];
 }
 
-- (NSString *)tableAliasConnector {
-    return @" AS ";
-}
-
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     __block MTDatabaseSqlServer *blockSelf = self;
@@ -324,25 +320,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             break;
     }
     return result;
-}
-
-- (NSString *)selectPart {
-    return (YES) ? @"SELECT\n" : @"SELECT TOP 50\n";
-}
-
-- (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
-    return [[[NSString stringWithFormat:@"[%@]", fieldOrTableName] retain] autorelease];
-}
-
-- (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    return [MTQueryReportSqlServer safeQueryField:queryField];
-}
-
-- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
-    NSString *queryTable = [[schemaField inTable] name];
-    NSString *fieldName = [schemaField name];
-    return [[[NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName] retain] autorelease];
 }
 
 - (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
@@ -1499,6 +1476,27 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (id)connectionSettings {
     return [self databaseConnection];
+}
+
+- (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
+    // FIXME: Use backticks `` to make more robust.
+    NSString *queryTable = [[schemaField inTable] name];
+    NSString *fieldName = [schemaField name];
+    return [NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName];
+}
+
+- (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    return [MTDatabaseSqlServer safeQueryField:queryField];
+}
+
++ (NSString *)safeQueryField:(RptqQueryField *)queryField {
+    NSString *queryTable = [[queryField inQueryTable] queryAlias];
+    NSString *fieldName = [[queryField databaseSchemaField] name];
+    return [NSString stringWithFormat:@"[%@].[%@]", queryTable, fieldName];
+}
+
+- (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
+    return [NSString stringWithFormat:@"[%@]", fieldOrTableName];
 }
 
 @end
