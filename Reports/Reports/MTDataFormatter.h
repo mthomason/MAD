@@ -19,6 +19,9 @@ extern NSString * const MTCachedFileUrl;
 @property (nonatomic, retain) NSArray *records;
 @property (nonatomic, assign) BOOL didRefresh;
 
+- (id)initWithQuery:(MTQuery *)query;
+
 - (BOOL)format;
+- (NSDictionary *)dataForRow:(NSUInteger)row;
 
 @end

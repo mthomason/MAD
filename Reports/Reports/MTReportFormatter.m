@@ -663,7 +663,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return [[self layoutByPage] count];
 }
 
-- (NSDictionary *)rowDataForRow:(NSUInteger)row onPage:(NSUInteger)page {
+- (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
     id rowData = nil;
     if (page < [[self dataByPage] count]) {
         NSArray *pageData = [[self dataByPage] objectAtIndex:page];

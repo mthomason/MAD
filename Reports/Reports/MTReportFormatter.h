@@ -26,7 +26,7 @@ extern NSString * const MTNullIdentifier;
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;
 
-- (NSDictionary *)rowDataForRow:(NSUInteger)row onPage:(NSUInteger)page;
+- (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page;
 
 + (id)dataForGroupData:(id)data andKeys:(NSArray *)keys;
 - (NSUInteger)numberOfPages;

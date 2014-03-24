@@ -339,7 +339,7 @@
                     }
                     
                     NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                    NSDictionary *rowData = [[self reportFormatter] rowDataForRow: detailRowToPrint onPage: index];
+                    NSDictionary *rowData = [[self reportFormatter] dataForRow: detailRowToPrint onPage: index];
                     
                     NSNumber *documentSectionType = [documentSection type];
                     
@@ -358,7 +358,7 @@
                         }
                     }
                     
-                    NSDictionary *nextRowData = [[self reportFormatter] rowDataForRow:nextDetailRowToPrint onPage:nextPageIndex];
+                    NSDictionary *nextRowData = [[self reportFormatter] dataForRow:nextDetailRowToPrint onPage:nextPageIndex];
                     
                     [groupLevelKeys removeAllObjects];
                     [nextGroupLevelKeys removeAllObjects];

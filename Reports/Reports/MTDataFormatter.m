@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTDataFormatter.h"
 #import "MTCache.h"
 
@@ -31,13 +35,13 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
 - (id)initWithQuery:(MTQuery *)query {
     self = [super init];
     if (self) {
-        
         [self setQuery:query];
         [self setDatasource:[query cache]];
         [self setDidRefresh:NO];
     }
     return self;
 }
+
 
 + (id)reportFormatterWithQuery:(MTQuery *)query {
     MTDataFormatter *result = [[MTDataFormatter alloc] initWithQuery:query];
@@ -68,5 +72,8 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
     return updatedData;
 }
 
+- (NSDictionary *)dataForRow:(NSUInteger)row {
+    return [[self records] objectAtIndex:row];
+}
 
 @end

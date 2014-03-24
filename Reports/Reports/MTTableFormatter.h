@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MTDataFormatter.h"
 
-@class MTCache, RptqQuery, MTQueryReport;
+@class MTCache, MTQueryReport;
 
 @interface MTTableFormatter : MTDataFormatter
 
@@ -18,7 +18,7 @@
 
 // FIXME: Make initWithQuery andLayout... passlayout to 
 
-- (id)initWithQuery:(MTQueryReport *)query;
-+ (id)reportFormatterWithQuery:(MTQueryReport *)query;
+- (id)initWithQuery:(MTQuery *)query;
++ (id)reportFormatterWithQuery:(MTQuery *)query;
 
 @end

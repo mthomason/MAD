@@ -32,8 +32,8 @@
 
 @implementation MTTableFormatter
 
-- (id)initWithQuery:(MTQueryReport *)query {
-    self = [super init];
+- (id)initWithQuery:(MTQuery *)query {
+    self = [super initWithQuery:query];
     if (self) {
 
         [self setQuery:query];
@@ -43,7 +43,7 @@
     return self;
 }
 
-+ (id)reportFormatterWithQuery:(MTQueryReport *)query {
++ (id)reportFormatterWithQuery:(MTQuery *)query {
     MTTableFormatter *result = [[MTTableFormatter alloc] initWithQuery:query];
     return result;
 }

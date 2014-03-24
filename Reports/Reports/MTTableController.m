@@ -8,13 +8,13 @@
 
 #import "MTTableController.h"
 #import "MTTableLayout.h"
-#import "MTTableFormatter.h"
+#import "MTDataFormatter.h"
 #import "MTQuery.h"
 
 @interface MTTableController ()
     <UICollectionViewDataSource, UICollectionViewDelegate>
 
-@property (nonatomic, retain) MTTableFormatter *tableFormatter;
+@property (nonatomic, retain) MTDataFormatter *tableFormatter;
 
 @end
 
@@ -24,7 +24,7 @@
     self = [super init];
     if (self) {
         
-        //MTTableFormatter *tableFormatter = [[MTTableFormatter alloc] initWithDatasource:[query cache] andLayout:[query d]]
+        MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         
     }
     return self;

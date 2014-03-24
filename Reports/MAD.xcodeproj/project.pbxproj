@@ -285,8 +285,8 @@
 		4C11BD0018DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BD0318DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BD0418DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C11BD1E18E08AEA001E3D33 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */; };
-		4C11BD1F18E08AEA001E3D33 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */; };
+		4C11BD1E18E08AEA001E3D33 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BD1F18E08AEA001E3D33 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
 		4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
 		4C12293016CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12292F16CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
