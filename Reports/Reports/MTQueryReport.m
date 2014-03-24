@@ -7,7 +7,7 @@
 //
 
 #if ! __has_feature(objc_arc)
-#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
 #import "MTQueryReport.h"
@@ -25,8 +25,6 @@
 
 @interface MTQueryReport ()
 
-//@property (nonatomic, strong) RptqQuery *query;
-
 @end
 
 @implementation MTQueryReport
@@ -36,7 +34,7 @@
     if (self) {
         Class classRptqQuery = [RptqQuery class];
         if ([object isKindOfClass:classRptqQuery]) {
-            [self setQuery:object];
+            [self setQueryObject:object];
         }
     }
     return self;
@@ -49,13 +47,13 @@
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     
-    if ([[[self query] hasQueryTables] count] > 0) {
+    if ([[[self queryObject] hasQueryTables] count] > 0) {
         
         [result appendString:[[self database] selectPart]];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
-        NSSet *hasTables = [[self query] hasQueryTables];
+        NSSet *hasTables = [[self queryObject] hasQueryTables];
         
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
@@ -63,7 +61,7 @@
         }
         
         //Create an edge in the graph for each query link.
-        NSSet *hasQueryLinks = [[self query] hasQueryLinks];
+        NSSet *hasQueryLinks = [[self queryObject] hasQueryLinks];
         for (RptqQueryLinks *queryLink in hasQueryLinks) {
             
             RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
@@ -95,7 +93,7 @@
             // MAKR: List each field in the query.
             NSString *sqlSelectExpression = [self sqlSelectExpressionWithTables:[topologicalSort toArray]
                                                           usingOnlyActiveFields:onlyActiveFields
-                                                        forManagedObjectContext:[[self query] managedObjectContext]];
+                                                        forManagedObjectContext:[[self queryObject] managedObjectContext]];
             if ([sqlSelectExpression length] > 0) {
                 [result appendString:sqlSelectExpression];
                 
@@ -112,7 +110,7 @@
                     }
                 }
                 [result appendString:[self sqlTableReferenceWithTables:vertexArray linkDepth:&linkDepth
-                                               forManagedObjectContext:[[self query] managedObjectContext]]];
+                                               forManagedObjectContext:[[self queryObject] managedObjectContext]]];
                 
             } else {
                 NSString *message = NSLocalizedString(@"Empty query while using \"only active fields.\" You may need to reference some query fields.", @"Empty query while using \"only active fields.\" You may need to reference some query fields.");
@@ -124,7 +122,7 @@
         }
         
         if ([result length] > 0) {
-            [result appendString:[self sqlWhereClauseWithQuery:[self query]]];
+            [result appendString:[self sqlWhereClauseWithQuery:[self queryObject]]];
             [result appendString:[self sqlLimitClause]];
         }
         
@@ -486,6 +484,39 @@
         }
     }
     return result;
+}
+
+- (NSArray *)sortedHasQueryGroups {
+    NSSet *hasQueryGroups = [[self queryObject] hasQueryGroups];
+    
+    NSString *sortKey = NSStringFromSelector(@selector(weight));
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];
+    return [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
+}
+
+- (NSArray *)sortDescriptors {
+
+    NSArray *sortedHasQueryGroups = [self sortedHasQueryGroups];
+
+    NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
+    
+    for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
+        
+        BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
+        RptqQueryField *groupField = [queryGroup hasField];
+        
+        NSString *queryTable = [[groupField inQueryTable] queryAlias];
+        NSString *safeQueryTable = [[self database] safeIdentifier:queryTable];
+        NSString *fieldName = [[groupField databaseSchemaField] name];
+        NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
+        NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                                       ascending: sortAscending];
+        [sortedSortDescriptorsGroup addObject:sortDescriptor];
+    }
+    
+    return sortedSortDescriptorsGroup;
 }
 
 @end

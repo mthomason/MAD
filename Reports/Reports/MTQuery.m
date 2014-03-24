@@ -7,7 +7,7 @@
 //
 
 #if ! __has_feature(objc_arc)
-#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
 #import "MTQuery.h"
@@ -166,6 +166,14 @@
 - (NSString *)sqlGroupByExpressionWithQuery:(RptqQuery *)query {
     //Group is done on the reporting client side, so we do not add group by information here.
     return @"";
+}
+
+- (NSArray *)sortedHasQueryGroups {
+    return [NSArray array];
+}
+
+- (NSArray *)sortDescriptors {
+    return [NSArray array];
 }
 
 @end

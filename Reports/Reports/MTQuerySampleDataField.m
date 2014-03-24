@@ -7,7 +7,7 @@
 //
 
 #if ! __has_feature(objc_arc)
-#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
 #import "MTQuerySampleDataField.h"
@@ -18,16 +18,14 @@
 
 @interface MTQuerySampleDataField ()
 
-@property (nonatomic, strong) RptqDatabaseSchemaField *field;
-
 @end
 
 @implementation MTQuerySampleDataField
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    
-    NSString *safeField = [[self database] safeQuerySchemaField:[self field]];
-    NSString *safeTable = [[self database] safeIdentifier:[self field].inTable.name];
+    RptqDatabaseSchemaField *field = [self queryObject];
+    NSString *safeField = [[self database] safeQuerySchemaField:field];
+    NSString *safeTable = [[self database] safeIdentifier:field.inTable.name];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
                      @"%@ %@ "
                      @"LIMIT 100;",
@@ -40,7 +38,7 @@
     if (self) {
         Class classRptqQuery = [RptqDatabaseSchemaField class];
         if ([object isKindOfClass:classRptqQuery]) {
-            [self setField:object];
+            [self setQueryObject:object];
         }
     }
     return self;

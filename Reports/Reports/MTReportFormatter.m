@@ -8,6 +8,7 @@
 
 #import "MTReportFormatter.h"
 #import "MTCache.h"
+#import "MTQueryReport.h"
 
 #import "SectionEnumerator.h"
 
@@ -26,6 +27,9 @@
 NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
+
+@property (nonatomic, retain, readwrite) NSArray *sortedQueryGroups;
+
 @property (nonatomic, retain, readwrite) RptqDocument *layout;
 @property (nonatomic, assign) CGSize printableSize;
 @property (nonatomic, assign) CGRect printableRect;
@@ -116,12 +120,13 @@ NSString * const MTNullIdentifier = @"(null)";
         
 
         if (cacheAgain) {
+            
             if (landscape) {
                 [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeHorizontal"];
             } else {
                 [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeVertical"];
             }
-            [standardUserDefaults setURL:[[self datasource] url] forKey:@"MTCachedFileUrl"];
+            [standardUserDefaults setURL:[[self datasource] url] forKey:MTCachedFileUrl];
             [standardUserDefaults synchronize];
             
             [self setCachedPageSize:printableSize];
@@ -314,6 +319,11 @@ NSString * const MTNullIdentifier = @"(null)";
 // FIXME: Hack... this shit looks just like cacheGroupLevel
 - (void)cacheUntilFirstPageStartingWithGroup:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel detailPrinted:(BOOL *)detailPrinted firstPageComplete:(BOOL *)firstPageComplete {
     
+    if ([self sortedQueryGroups] == nil) {
+        NSArray *sqg = [[self query] sortedHasQueryGroups];
+        [self setSortedQueryGroups:sqg];
+    }
+    
     if (*firstPageComplete == NO) {
         
         if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
@@ -427,6 +437,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel detailPrinted:(BOOL *)detailPrinted {
+    
+    if ([self sortedQueryGroups] == nil) {
+        NSArray *sqg = [[self query] sortedHasQueryGroups];
+        [self setSortedQueryGroups:sqg];
+    }
     
     if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
         

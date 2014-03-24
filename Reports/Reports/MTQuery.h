@@ -24,6 +24,8 @@
 - (id)initWithObject:(id)object;
 + (id)queryFactory:(id)object;
 
+@property (nonatomic, strong) id queryObject;
+
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
 
@@ -37,6 +39,9 @@
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
 - (NSString *)sqlLimitClause;
+
+- (NSArray *)sortedHasQueryGroups;
+- (NSArray *)sortDescriptors;
 
 @end
 

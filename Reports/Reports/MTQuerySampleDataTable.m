@@ -7,7 +7,7 @@
 //
 
 #if ! __has_feature(objc_arc)
-#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
 #import "MTQuerySampleDataTable.h"
@@ -17,14 +17,13 @@
 
 @interface MTQuerySampleDataTable ()
 
-@property (nonatomic, strong) RptqDatabaseSchemaTable *table;
-
 @end
 
 @implementation MTQuerySampleDataTable
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    NSString *tableName = [[self database] safeIdentifier: [[self table] toString]];
+    RptqDatabaseSchemaTable *table = [self queryObject];
+    NSString *tableName = [[self database] safeIdentifier: [table toString]];
     return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
 }
 
@@ -33,7 +32,7 @@
     if (self) {
         Class classRptqQuery = [RptqDatabaseSchemaTable class];
         if ([object isKindOfClass:classRptqQuery]) {
-            [self setTable:object];
+            [self setQueryObject:object];
         }
     }
     return self;
