@@ -194,15 +194,15 @@
         
         [view addSubview:label];
         [view setAlpha:0.0000f];
-        //[[view layer] setCornerRadius: 6.0000f];
+        [[view layer] setCornerRadius: 6.0000f];
         
         [[self view] addSubview:view];
-        [UIView animateWithDuration:0.3000f animations:^{
+        [UIView animateWithDuration:0.3000f delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
             [view setAlpha:1.0000f];
         } completion:^(BOOL finished) {
             if (finished) {
                 [UIView animateWithDuration:0.30000f delay:2.0000f
-                                    options:UIViewAnimationOptionCurveEaseIn animations:^{
+                                    options:UIViewAnimationOptionCurveEaseOut animations:^{
                                         [view setAlpha:0.0000f];
                                     } completion:nil];
             }
@@ -234,13 +234,13 @@
     [numberView setUserInteractionEnabled:NO];
     [labelView setUserInteractionEnabled:NO];
     [labelView setBackgroundColor:[UIColor clearColor]];
-    //[[numberView layer] setCornerRadius: 6.0000f];
+    [[numberView layer] setCornerRadius: 6.0000f];
     [numberView addSubview:labelView];
     [numberView setAlpha:0.0000f];
     [[self view] addSubview:numberView];
     [self setPageNumberView:numberView];
     
-    [UIView animateWithDuration:0.3000f animations:^{
+    [UIView animateWithDuration:0.3000f delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
         
         [[self pageNumberView] setAlpha:1.0000f];
 
@@ -249,7 +249,7 @@
         if (finished) {
 
             [UIView animateWithDuration:0.30000f delay:1.0000f
-                                options:UIViewAnimationOptionCurveEaseIn animations:^{
+                                options:UIViewAnimationOptionCurveEaseOut animations:^{
                                     
                                     [[self pageNumberView] setAlpha:0.0000f];
 

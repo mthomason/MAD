@@ -24,16 +24,9 @@
 
 #import "RptqQuery+Extras.h"
 
-NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
-
 @interface MTTableFormatter ()
 
-@property (nonatomic, retain, readwrite) MTQueryReport *query;
-
-@property (nonatomic, retain, readwrite) MTCache *datasource;
-@property (nonatomic, retain, readwrite) RptqQuery *fullQuery;
 @property (nonatomic, retain, readwrite) NSArray *sortDescriptorsByGroupSorted;
-@property (nonatomic, retain, readwrite) NSArray *records;
 
 @end
 
@@ -45,7 +38,6 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
 
         [self setQuery:query];
         [self setDatasource:[query cache]];
-        [self setFullQuery:[query queryObject]];
         [self setDidRefresh:NO];
     }
     return self;
@@ -62,30 +54,20 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
     
     BOOL updatedData = NO;
     
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    
-    BOOL cacheAgain = [[[self datasource] url] isEqual:[standardUserDefaults objectForKey:MTCachedFileUrl]] == NO;
-    
-    if (cacheAgain || [self didRefresh]) {
-        updatedData = YES;
-
-        [standardUserDefaults setURL:[[self datasource] url] forKey:MTCachedFileUrl];
-        [standardUserDefaults synchronize];
-
+    if ([super format]) {
+        
         MTQueryReport *madQuery = [self query];
-        
-        NSArray *cachedResultsForReportSerialized = [[self datasource] results];
-        
         NSArray *sortDescriptors = [madQuery sortDescriptors];
         [self setSortDescriptorsByGroupSorted:sortDescriptors];
         
-        //Get unique, distinct, and sorted... slowly
-        
+        NSArray *cachedResultsForReportSerialized = [self records];
         NSArray *sortedArray = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self sortDescriptorsByGroupSorted]];
         
         [self setRecords:sortedArray];
 
+        updatedData = YES;
     }
+
     return updatedData;
 }
 
