@@ -53,9 +53,10 @@
     self = [super init];
     if (self) {
         
-        Class classRptqDatabase = [RptqDatabase class];
-        if ([object isKindOfClass:classRptqDatabase]) {
+        if ([object isKindOfClass:[RptqDatabase class]]) {
             
+            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            [self setCache:cache];
             RptqUserCredentals *userCredentals = [(RptqDatabase *)object ownedByUser];
             MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
             MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
@@ -63,6 +64,8 @@
 
         } else if ([object isKindOfClass:[RptqQuery class]]) {
             
+            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            [self setCache:cache];
             RptqUserCredentals *userCredentals = [[(RptqQuery *)object inDatabase] ownedByUser];
             MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
             MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
@@ -70,6 +73,8 @@
 
         } else if ([object isKindOfClass:[RptqDatabaseSchemaTable class]]) {
             
+            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            [self setCache:cache];
             RptqUserCredentals *userCredentals = [[(RptqDatabaseSchemaTable *)object inDatabase] ownedByUser];
             MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
             MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
@@ -77,6 +82,8 @@
             
         } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
 
+            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            [self setCache:cache];
             RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
             MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
             MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
@@ -122,8 +129,7 @@
     return result;
 }
 
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                         completion: (void (^)(BOOL success, NSError *error, id results))completion {
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

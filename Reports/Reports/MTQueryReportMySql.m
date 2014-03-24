@@ -25,8 +25,7 @@
     return (YES) ? @"" : @"\nLIMIT 50";
 }
 
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                         completion:(void (^)(BOOL success, NSError *error, id results))completion {
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
     @autoreleasepool {
         

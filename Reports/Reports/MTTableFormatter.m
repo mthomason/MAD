@@ -11,6 +11,7 @@
 
 #import "SectionEnumerator.h"
 #import "MTQuery.h"
+#import "MTQueryReport.h"
 
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
@@ -21,10 +22,10 @@
 
 @interface MTTableFormatter ()
 
-@property (nonatomic, assign, readwrite) BOOL didRefresh;
+@property (nonatomic, retain, readwrite) MTQueryReport *query;
 
 @property (nonatomic, retain, readwrite) MTCache *datasource;
-@property (nonatomic, retain, readwrite) RptqDocument *layout;
+@property (nonatomic, retain, readwrite) RptqQuery *fullQuery;
 @property (nonatomic, retain, readwrite) NSArray *sortedQueryGroups;
 @property (nonatomic, retain, readwrite) NSArray *sortDescriptorsByGroupSorted;
 @property (nonatomic, retain, readwrite) NSArray *records;
@@ -34,14 +35,15 @@
 @implementation MTTableFormatter
 
 - (void)dealloc {
+    [_query release];
     [_datasource release];
-    [_layout release];
     [_sortDescriptorsByGroupSorted release];
     [_records release];
     [_sortedQueryGroups release]; _sortedQueryGroups = nil;
     [super dealloc];
 }
 
+/*
 - (id)initWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout {
     self = [super init];
     if (self) {
@@ -50,10 +52,22 @@
         [self setDidRefresh:NO];
     }
     return self;
+}*/
+
+- (id)initWithQuery:(MTQueryReport *)query {
+    self = [super init];
+    if (self) {
+
+        [self setQuery:query];
+        [self setDatasource:[query cache]];
+        [self setFullQuery:[query query]];
+        [self setDidRefresh:NO];
+    }
+    return self;
 }
 
-+ (id)reportFormatterWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout {
-    MTTableFormatter *result = [[MTTableFormatter alloc] initWithDatasource:datasource andLayout:layout];
++ (id)reportFormatterWithQuery:(MTQueryReport *)query {
+    MTTableFormatter *result = [[MTTableFormatter alloc] initWithQuery:query];
     return [result autorelease];
 }
 
@@ -72,22 +86,15 @@
 
         [standardUserDefaults setURL:[[self datasource] url] forKey:@"MTCachedFileUrl"];
         [standardUserDefaults synchronize];
-        
-        [self setDidRefresh:NO];
-        
-        RptqDatabase *database = [[[self layout] hasDatabaseSchemas] anyObject];
-        
-        NSSet *hasQueries = [database hasQueries];
-        RptqQuery *query = [hasQueries anyObject];
-        
-        MTQuery *madQuery = [[MTQuery queryFactory:query] retain];
+
+        MTQueryReport *madQuery = [[self query] retain];
         
         NSMutableDictionary *cachedResultsForReport = [[NSMutableDictionary alloc] init];
                 
         NSURL *url = [[[self datasource] url] retain];
         NSArray *cachedResultsForReportSerialized = [[self datasource] results];
         
-        NSSet *hasQueryGroups = [query hasQueryGroups];
+        NSSet *hasQueryGroups = [[madQuery query] hasQueryGroups];
         
         NSString *sortKey = NSStringFromSelector(@selector(weight));
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];

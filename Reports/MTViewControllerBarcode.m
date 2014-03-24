@@ -15,6 +15,7 @@
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTQuery.h"
+#import "MTQueryReport.h"
 
 #import "RptqQueryField.h"
 #import "RptqDocumentObjectBarcode.h"
@@ -115,7 +116,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
         MTApplicationInstance *applicationInstance = [AppDelegate app];
         MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        MTQuery *defaultQuery = [reportDocument defaultQuery];
+        MTQueryReport *defaultQuery = [reportDocument defaultQuery];
         
         __block MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
         if ([self queryField1] != nil) {

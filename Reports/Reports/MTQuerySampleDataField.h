@@ -12,7 +12,4 @@
 
 - (NSString *)getSqlWithError:(NSError **)error;
 
-- (void)dataForObject:(id)object
-           completion:(void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
-
 @end

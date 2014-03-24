@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
+#endif
+
 #import "MTDatabase.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlite3.h"
@@ -32,11 +36,6 @@
 
 @implementation MTDatabase
 
-- (void)dealloc {
-    [_databaseConnection release];
-    [super dealloc];
-}
-
 + (id)databaseFactory:(MTDatabaseConnection *)connection {
 
     NSString *identifier = [connection databaseTypeIdentifier];
@@ -61,7 +60,7 @@
         [result openDatabase];
     }
     
-    return [result autorelease];
+    return result;
 }
 
 - (void)executeSql:(NSString *)sql

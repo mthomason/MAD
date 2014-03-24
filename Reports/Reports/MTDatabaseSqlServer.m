@@ -21,23 +21,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 @interface MTDatabaseSqlServer ()
 
-//@property (nonatomic, retain, readwrite) MTDatabaseConnection *databaseConnection;
-
 @end
 
 @implementation MTDatabaseSqlServer
-
-- (id)initWithConnectionSettings:(MTDatabaseConnection *)connectionSettings {
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     

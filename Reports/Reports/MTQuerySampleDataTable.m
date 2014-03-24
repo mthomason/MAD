@@ -24,7 +24,8 @@
 @implementation MTQuerySampleDataTable
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    return [NSString stringWithFormat:@"SELECT * FROM %@", [[self table] toString]];
+    NSString *tableName = [[self database] safeIdentifier: [[self table] toString]];
+    return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
 }
 
 - (id)initWithObject:(id)object {
@@ -38,8 +39,7 @@
     return self;
 }
 
-- (void)dataForObject:(id)object
-           completion:(void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
     NSError *error = nil;
     NSString *sql = [self getSqlWithError:&error];
@@ -49,6 +49,7 @@
     } else {
         [[self database] executeSql:sql
                          completion:^(BOOL success, NSError *error, id results) {
+                             
                              completion(success, error, results);
                          }];
     }

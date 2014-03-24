@@ -1398,7 +1398,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if (!elementView) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
         if (documentObject) {
-            NSUInteger hash = [documentObject hash];
+            NSUInteger hash = [[documentObject objectID] hash];
             elementView = (MTElementView *)[[self designerContentView] viewWithTag:hash];
             if (!elementView) {
                 elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:[documentObject managedObjectContext]];
@@ -3449,9 +3449,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
         }
         
-    } else {
-        
     }
+        
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {

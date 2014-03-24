@@ -25,7 +25,7 @@
 
 @interface MTQueryReport ()
 
-@property (nonatomic, strong) RptqQuery *query;
+//@property (nonatomic, strong) RptqQuery *query;
 
 @end
 

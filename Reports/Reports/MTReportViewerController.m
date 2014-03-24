@@ -184,28 +184,28 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if ([self asyncDelegate] == nil) {
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        RptqDocument *document = [reportDocument activeDocument];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
+   // if ([self asyncDelegate] == nil) {
+      //  MTApplicationInstance *applicationInstance = [AppDelegate app];
+    //    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+  //      RptqDocument *document = [reportDocument activeDocument];
+//        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+       // RptqQuery *query = [[database hasQueries] anyObject];
         
-        BOOL hasCachedData = ([query hasQueryCache] != nil);
-        if ([self startedRefresh] == NO && hasCachedData == NO) {
-            [self refresh:self];
-        } else {
-            NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
-            if (lastRefresh != nil) {
+    //    BOOL hasCachedData = ([query hasQueryCache] != nil);
+  //      if ([self startedRefresh] == NO && hasCachedData == NO) {
+            //[self refresh:self];
+//        } else {
+            //NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
+            //if (lastRefresh != nil) {
                 
-                NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
-                [self setLastCacheDate: lastD];
-                [lastD release];
-                [self updateLateRefreshedLabel:self];
-                
-            }
-        }
-    }
+               // NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
+               // [self setLastCacheDate: lastD];
+              //  [lastD release];
+            //    [self updateLateRefreshedLabel:self];
+          
+          //  }
+        //}
+   // }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -604,7 +604,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[reportViewer barButtonItemDone] setEnabled:NO];
 
     if ([reportViewer isRefreshing] == NO) {
-
+        [self setStartedRefresh:YES];
+        [self setIsRefreshing:YES];
         [MTReportViewerController setDisplayInactive:reportViewer];
         
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
@@ -727,29 +728,34 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
-        
+        [[doc reportFormatter] setDidRefresh:[self startedRefresh]];
         [[doc reportFormatter] formatForSize:viewBounds];
         
+        __block MAReportDocument *doc2 = doc;
+        __block MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [MTReportViewerController setDisplayActive:blockViewer];
+            [MTReportViewerController setDisplayActive:blockViewer2];
             
             NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
-            [blockViewer setNumberOfPages:numberOfPages];
-            [[blockViewer sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+            [blockViewer2 setNumberOfPages:numberOfPages];
+            [[blockViewer2 sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
             
-            NSInteger pageNumber = [blockViewer currentPageIndex] + 1;
+            NSInteger pageNumber = [blockViewer2 currentPageIndex] + 1;
             MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
                                                                                                                          ofPages:numberOfPages];
-            [[pageOne view] setFrame:[[blockViewer view] bounds]];
+            [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
             
             [pageOne setDelegate:reportViewer];
             
             NSArray *viewControllers = @[pageOne];
-            [blockViewer setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
+            [blockViewer2 setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
             [pageOne release];
+            [blockViewer2 setIsRefreshing:NO];
+            [blockViewer2 setStartedRefresh:NO];
+            [[doc2 reportFormatter] setDidRefresh:NO];
+            [[blockViewer2 barButtonItemDone] setEnabled:YES];
             
-            [[blockViewer barButtonItemDone] setEnabled:YES];
         });
     });
 }
@@ -779,8 +785,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         MTApplicationInstance *app = [AppDelegate app];
         MAReportDocument *doc = [app activeDocument];
-        MTCache *defaultCache = [[doc defaultQuery] cache];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:defaultCache andLayout:[doc activeDocument]];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
 
         [printPageRender writeToPdf:temporaryFile];

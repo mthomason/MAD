@@ -8,18 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
-@class MTCache, RptqDocument;
+@class MTCache, RptqQuery, MTQueryReport;
 
 @interface MTTableFormatter : NSObject
 
 @property (nonatomic, retain, readonly) MTCache *datasource;
-@property (nonatomic, retain, readonly) RptqDocument *layout;
+@property (nonatomic, retain, readonly) RptqQuery *fullQuery;
 @property (nonatomic, retain, readonly) NSArray *sortedQueryGroups;
 @property (nonatomic, retain, readonly) NSArray *sortDescriptorsByGroupSorted;
 @property (nonatomic, retain, readonly) NSArray *records;
-@property (nonatomic, assign, readonly) BOOL didRefresh;
+@property (nonatomic, assign) BOOL didRefresh;
 
-- (id)initWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout;
+- (id)initWithQuery:(MTQueryReport *)query;
++ (id)reportFormatterWithQuery:(MTQueryReport *)query;
+
 - (BOOL)format;
 
 @end

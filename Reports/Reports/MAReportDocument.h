@@ -26,7 +26,7 @@ extern NSString * const MTReportFooter;
 extern NSString * const MTReportGroupHeader;
 extern NSString * const MTReportGroupFooter;
 
-@class MTQuery, MTReportFormatter;
+@class MTQuery, MTReportFormatter, MTQueryReport;
 
 @interface MAReportDocument : MADocument
     <MTDatabaseCacheProtocol>
@@ -55,10 +55,9 @@ extern NSString * const MTReportGroupFooter;
              andConnection:(MTDatabaseConnection *)databaseConnection
                 completion:(void(^)(BOOL success))completion;
 
-+ (NSURL *)cachedDataFileUrlForFileUrl:(NSURL *)fileUrl;
 - (NSURL *)cachedDataUrl;
 
-- (MTQuery *)defaultQuery;
+- (MTQueryReport *)defaultQuery;
 
 // Page caching
 //- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;

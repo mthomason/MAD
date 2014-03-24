@@ -20,8 +20,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
 @implementation MTQueryReportSqlServer
 
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                         completion: (void (^)(BOOL success, NSError *error, id results))completion {
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
     NSError *__autoreleasing error = nil;
     NSString *sql = [self getSqlWithError:&error];

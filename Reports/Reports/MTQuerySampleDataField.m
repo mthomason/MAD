@@ -46,8 +46,7 @@
     return self;
 }
 
-- (void)dataForObject:(id)object
-           completion:(void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
 
     NSError *error = nil;
     NSString *sql = [self getSqlWithError:&error];

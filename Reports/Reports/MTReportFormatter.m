@@ -26,7 +26,7 @@
 NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
-
+@property (nonatomic, retain, readwrite) RptqDocument *layout;
 @property (nonatomic, assign) CGSize printableSize;
 @property (nonatomic, assign) CGRect printableRect;
 
@@ -51,6 +51,7 @@ NSString * const MTNullIdentifier = @"(null)";
 @implementation MTReportFormatter
 
 - (void)dealloc {
+    [_layout release];
     [_layoutByPage release];
     [_dataByPage release];
     [_dataByGroup release];
@@ -61,9 +62,11 @@ NSString * const MTNullIdentifier = @"(null)";
     [super dealloc];
 }
 
-- (id)initWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout {
-    self = [super initWithDatasource:datasource andLayout:layout];
+- (id)initWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout {
+    self = [super initWithQuery:query];
     if (self) {
+        
+        [self setLayout:layout];
         
         NSMutableArray *temporaryLayoutByPage = [[NSMutableArray alloc] init];
         [self setTemporaryLayoutByPage:temporaryLayoutByPage];
@@ -80,12 +83,13 @@ NSString * const MTNullIdentifier = @"(null)";
         NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
         [self setTemporaryDataForPage:temporaryDataForPage];
         [temporaryDataForPage release];
+
     }
     return self;
 }
 
-+ (id)reportFormatterWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithDatasource:datasource andLayout:layout];
++ (id)reportFormatterWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout {
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query andLayout:layout];
     return [result autorelease];
 }
 
@@ -103,10 +107,12 @@ NSString * const MTNullIdentifier = @"(null)";
 
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
         UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-        BOOL landscape = (interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-        CGSize cachedSizeHorizontal = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeHorizontal"]);
-        CGSize cachedSizePortrait   = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeVertical"]);
-        BOOL cacheAgain = landscape ? CGSizeEqualToSize(cachedSizeHorizontal, printableSize) : CGSizeEqualToSize(cachedSizePortrait, printableSize);
+        BOOL landscape = UIInterfaceOrientationIsLandscape(interfaceOrientation);
+        CGSize h = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeHorizontal"]);
+        CGSize v = CGSizeFromString([standardUserDefaults stringForKey:@"MTCachedSizeVertical"]);
+        CGSize cachedSizePortrait = v;
+        CGSize cachedSizeHorizontal = h;
+        BOOL cacheAgain = [self didRefresh] || (landscape ? CGSizeEqualToSize(cachedSizeHorizontal, self.cachedPageSize) == NO : CGSizeEqualToSize(cachedSizePortrait, self.cachedPageSize) == NO);
         
 
         if (cacheAgain) {
@@ -223,7 +229,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
         
     }
-    
 
 }
 

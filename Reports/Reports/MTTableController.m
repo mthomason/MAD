@@ -8,25 +8,24 @@
 
 #import "MTTableController.h"
 #import "MTTableLayout.h"
+#import "MTTableFormatter.h"
+#import "MTQuery.h"
 
 @interface MTTableController ()
+    <UICollectionViewDataSource, UICollectionViewDelegate>
+
+@property (nonatomic, retain) MTTableFormatter *tableFormatter;
 
 @end
 
 @implementation MTTableController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (id)initWithQuery:(MTQuery *)query {
+    self = [super init];
     if (self) {
-        [self initalize];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initalize];
+        
+        //MTTableFormatter *tableFormatter = [[MTTableFormatter alloc] initWithDatasource:[query cache] andLayout:[query d]]
+        
     }
     return self;
 }
@@ -34,8 +33,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount: andRowCount:];
-    //[[self collectionView] setCollectionViewLayout:tableLayout];
 
 }
 
@@ -45,6 +42,34 @@
 
 #pragma mark - Helpers
 
-- (void)initalize { }
+- (void)initalize {
+
+    
+    
+    //MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount: andRowCount:];
+    //[[self collectionView] setCollectionViewLayout:tableLayout];
+    [[self collectionView] setDelegate:self];
+    [[self collectionView] setDataSource:self];
+}
+
+#pragma mark - Delegates
+
+#pragma mark - Collection View Datasource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+}
 
 @end

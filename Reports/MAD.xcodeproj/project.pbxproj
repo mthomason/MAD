@@ -577,7 +577,6 @@
 		4C515EBE1741348F0004A664 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C515EBF1741348F0004A664 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
 		4C515EC5174134960004A664 /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
-		4C515EC6174134960004A664 /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D031689164100683C01 /* UIView+StringTag.m */; };
 		4C515EC7174134960004A664 /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C515EC8174134960004A664 /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C515EC9174134960004A664 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
@@ -1127,7 +1126,6 @@
 		4C92952118C4CC890010AAEF /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E61759730100433E88 /* UIImage+Alpha.m */; };
 		4C92952218C4CC890010AAEF /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */; };
 		4C92952318C4CC890010AAEF /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
-		4C92952418C4CC890010AAEF /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D031689164100683C01 /* UIView+StringTag.m */; };
 		4C92952518C4CC890010AAEF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; };
 		4C92952618C4CC890010AAEF /* NSError+UserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */; };
 		4C92952718C4CC890010AAEF /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
@@ -1750,10 +1748,6 @@
 		4CD52A4C178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD52A4D178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD52A4E178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
-		4CD88D041689164100683C01 /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D031689164100683C01 /* UIView+StringTag.m */; };
-		4CD88D051689164100683C01 /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D031689164100683C01 /* UIView+StringTag.m */; };
-		4CD88D061689164100683C01 /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D031689164100683C01 /* UIView+StringTag.m */; };
-		4CD88D071689164100683C01 /* UIView+StringTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D031689164100683C01 /* UIView+StringTag.m */; };
 		4CD88D0B1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
 		4CD88D0C1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
 		4CD88D0D1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
@@ -1905,8 +1899,8 @@
 		4CFD365A1836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36561836A257000EF14B /* MTBarcodeCode39Extended.h */; };
 		4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
 		4CFF3E7E164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
-		4CFF3E81164CD7DE0070E880 /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E80164CD7DE0070E880 /* MTDatabase.m */; };
-		4CFF3E82164CD7DE0070E880 /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E80164CD7DE0070E880 /* MTDatabase.m */; };
+		4CFF3E81164CD7DE0070E880 /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E80164CD7DE0070E880 /* MTDatabase.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CFF3E82164CD7DE0070E880 /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E80164CD7DE0070E880 /* MTDatabase.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CFF3E85164CD86E0070E880 /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */; };
 		4CFF3E86164CD86E0070E880 /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E84164CD86E0070E880 /* MTDatabaseMySql.m */; };
 		4CFF3F21164D76270070E880 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
@@ -2127,8 +2121,8 @@
 		4C384E3214B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C384E3414B29789007B4F48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
-		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Reports/AppDelegate.h; sourceTree = "<group>"; };
-		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Reports/AppDelegate.m; sourceTree = "<group>"; };
+		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* MTViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTViewControllerOpenDocument.h; sourceTree = "<group>"; };
 		4C3ACA3D16715679001BC16D /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQuery+Extras.h"; sourceTree = "<group>"; };
@@ -2898,8 +2892,6 @@
 		4CD2FDC017F4CBF20015458B /* VerifyStoreReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerifyStoreReceipt.h; sourceTree = "<group>"; };
 		4CD2FDC117F4CBF20015458B /* VerifyStoreReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerifyStoreReceipt.m; sourceTree = "<group>"; };
 		4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeSqlServer.png; path = Reports/UIImageExportTypeSqlServer.png; sourceTree = "<group>"; };
-		4CD88D021689164100683C01 /* UIView+StringTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+StringTag.h"; sourceTree = "<group>"; };
-		4CD88D031689164100683C01 /* UIView+StringTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+StringTag.m"; sourceTree = "<group>"; };
 		4CD88D091689175200683C01 /* UIView+NSObjectIdTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+NSObjectIdTag.h"; sourceTree = "<group>"; };
 		4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+NSObjectIdTag.m"; sourceTree = "<group>"; };
 		4CD88D1016891E7C00683C01 /* UICollectionView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+Extras.h"; sourceTree = "<group>"; };
@@ -3236,11 +3228,12 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C11BCF418DD4DB7001E3D33 /* Formatters */,
-				4C9E446918D8B5EF00F0F578 /* MTCache.h */,
-				4C9E446A18D8B5EF00F0F578 /* MTCache.m */,
+				4C384E3714B29789007B4F48 /* AppDelegate.h */,
+				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
+				4C9E446918D8B5EF00F0F578 /* MTCache.h */,
+				4C9E446A18D8B5EF00F0F578 /* MTCache.m */,
 				4CBABC1218C8945B00EE5768 /* MTUser.h */,
 				4CBABC1318C8945B00EE5768 /* MTUser.m */,
 				4C02F74C18D5DC8800061A83 /* MTReportDesigner.h */,
@@ -3249,6 +3242,7 @@
 				4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */,
 				4C02F75C18D5DCAB00061A83 /* MTReportViewer.h */,
 				4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */,
+				4C11BCF418DD4DB7001E3D33 /* Formatters */,
 				4C8A648818C7C6C200997D22 /* Document */,
 				4C8A649118C7C6D100997D22 /* Database */,
 				4C8A649218C7C71100997D22 /* DatabaseTable */,
@@ -3496,8 +3490,6 @@
 			isa = PBXGroup;
 			children = (
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
-				4C384E3714B29789007B4F48 /* AppDelegate.h */,
-				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4C8EEC881644E6C000FAB2F3 /* Classes */,
 				4C0E785F163B5C51003B951E /* Resources */,
@@ -4180,9 +4172,9 @@
 				4C00815914B6BDB6003DF437 /* Views */,
 				4C00818414B738E9003DF437 /* Model */,
 				4CDB624B14E38C8400A5389E /* Categories */,
+				4C95CABF182B6D1F00160E01 /* Barcode */,
 				4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */,
 				4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */,
-				4C95CABF182B6D1F00160E01 /* Barcode */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -4727,8 +4719,6 @@
 				4C5625E71759730200433E88 /* UIImage+RoundedCorner.m */,
 				4CD88D091689175200683C01 /* UIView+NSObjectIdTag.h */,
 				4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */,
-				4CD88D021689164100683C01 /* UIView+StringTag.h */,
-				4CD88D031689164100683C01 /* UIView+StringTag.m */,
 				4C6362C214E6436C005DBBFF /* CGGeometry+Extras.h */,
 				4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */,
 				4C982DBA166E4819003E9AA0 /* NSError+UserInterface.h */,
@@ -5989,7 +5979,6 @@
 				4C860AB3167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D421168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4CBABC0F18C7ED2100EE5768 /* MTPaperGovernmentLetter.m in Sources */,
-				4CD88D051689164100683C01 /* UIView+StringTag.m in Sources */,
 				4CD88D0C1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4CD88D1316891E7C00683C01 /* UICollectionView+Extras.m in Sources */,
 				4CABE4881837DF7E007EDD9D /* RptqDocumentObjectLabelDataField.m in Sources */,
@@ -6219,7 +6208,6 @@
 				4CA16483167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */,
 				4C860AB5167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D423168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
-				4CD88D071689164100683C01 /* UIView+StringTag.m in Sources */,
 				4CD88D0E1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4CD88D1516891E7C00683C01 /* UICollectionView+Extras.m in Sources */,
 				4C3727B7168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
@@ -6366,7 +6354,6 @@
 				4CA16484167EBE5B00540A14 /* CGGeometry+Extras.m in Sources */,
 				4C860AB4167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D422168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
-				4CD88D061689164100683C01 /* UIView+StringTag.m in Sources */,
 				4CD88D0D1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4CD88D1416891E7C00683C01 /* UICollectionView+Extras.m in Sources */,
 				4C3727B6168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
@@ -6612,7 +6599,6 @@
 				4CBABBDB18C7E96F00EE5768 /* MTPaperC10.m in Sources */,
 				4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
-				4CD88D041689164100683C01 /* UIView+StringTag.m in Sources */,
 				4CBABBFB18C7E96F00EE5768 /* MTPaperC2.m in Sources */,
 				4CABE4731837DF7C007EDD9D /* RptqDatabaseSchemaField.m in Sources */,
 				4CD88D0B1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
@@ -6865,7 +6851,6 @@
 				4C515EB01741347F0004A664 /* RptqQuery+Extras.m in Sources */,
 				4C515EB21741347F0004A664 /* RptqQueryTable+Extras.m in Sources */,
 				4C515EC5174134960004A664 /* UIView+NSObjectIdTag.m in Sources */,
-				4C515EC6174134960004A664 /* UIView+StringTag.m in Sources */,
 				4C515EC7174134960004A664 /* CGGeometry+Extras.m in Sources */,
 				4C515EC8174134960004A664 /* NSError+UserInterface.m in Sources */,
 				4C515EC9174134960004A664 /* NSFileManager+Common.m in Sources */,
@@ -7066,7 +7051,6 @@
 				4C92949018C4CBF90010AAEF /* MTElementView.m in Sources */,
 				4C92950718C4CC7F0010AAEF /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4C92952518C4CC890010AAEF /* CGGeometry+Extras.m in Sources */,
-				4C92952418C4CC890010AAEF /* UIView+StringTag.m in Sources */,
 				4C9294E918C4CC7A0010AAEF /* RptqQueryGroup.m in Sources */,
 				4C9294F118C4CC7A0010AAEF /* RptqDocument.m in Sources */,
 				4C92949E18C4CBF90010AAEF /* MTAggregateFunctionsViewController.m in Sources */,

@@ -15,12 +15,13 @@ extern NSString * const MTNullIdentifier;
 
 @interface MTReportFormatter : MTTableFormatter
 
+@property (nonatomic, retain, readonly) RptqDocument *layout;
 @property (nonatomic, retain, readonly) NSArray *layoutByPage;
 @property (nonatomic, retain, readonly) NSArray *dataByPage;
 @property (nonatomic, retain, readonly) NSDictionary *dataByGroup;
 
-- (id)initWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout;
-+ (id)reportFormatterWithDatasource:(MTCache *)datasource andLayout:(RptqDocument *)layout;
+- (id)initWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout;
++ (id)reportFormatterWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout;
 
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;

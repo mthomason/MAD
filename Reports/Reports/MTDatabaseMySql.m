@@ -29,17 +29,6 @@
 
 @implementation MTDatabaseMySql
  
-- (void)dealloc {
-    [super dealloc];
-}
-
-- (id)init {
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
-
 - (void)executeSql:(NSString *)sql
         completion:(void (^)(BOOL success, NSError *error, id results))completion {
     

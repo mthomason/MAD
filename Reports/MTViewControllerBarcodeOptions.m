@@ -21,6 +21,8 @@
 #import "MTBarcodeCode39Extended.h"
 #import "MTBarcodeDataMatrixIso16022.h"
 #import "MTQuery.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
 
 #import "AppDelegate.h"
 
@@ -239,22 +241,22 @@
 
     
     static NSString *MTIdentifierTvcBarcodeAppearanceBorder             = @"MTIdentifierTvcBarcodeAppearanceBorder";
-    static NSString *MTIdentifierTvcBarcodeAppearanceForegroundColor    = @"MTIdentifierTvcBarcodeAppearanceForegroundColor";
-    static NSString *MTIdentifierTvcBarcodeAppearanceBackgroundColor    = @"MTIdentifierTvcBarcodeAppearanceBackgroundColor";
+    //static NSString *MTIdentifierTvcBarcodeAppearanceForegroundColor    = @"MTIdentifierTvcBarcodeAppearanceForegroundColor";
+    //static NSString *MTIdentifierTvcBarcodeAppearanceBackgroundColor    = @"MTIdentifierTvcBarcodeAppearanceBackgroundColor";
 
     static NSString *MTIdentifierTvcBarcodeAppearanceBorderNone         = @"MTIdentifierTvcBarcodeAppearanceBorderNone";
     static NSString *MTIdentifierTvcBarcodeAppearanceBorderOption2      = @"MTIdentifierTvcBarcodeAppearanceBorderOption2";
     static NSString *MTIdentifierTvcBarcodeAppearanceBorderWidth        = @"MTIdentifierTvcBarcodeAppearanceBorderWidth";
     static NSString *MTIdentifierTvcBarcodeAppearanceSymbolHeight       = @"MTIdentifierTvcBarcodeAppearanceSymbolHeight";
 
-    static NSString *MTIdentifierTvcBarcodeHas2dComponent               = @"MTIdentifierTvcBarcodeHas2dComponent";
+    //static NSString *MTIdentifierTvcBarcodeHas2dComponent               = @"MTIdentifierTvcBarcodeHas2dComponent";
     static NSString *MTIdentifierTvcBarcodeHasOptionalInput             = @"MTIdentifierTvcBarcodeHasOptionalInput";
     
     static NSString *MTIdentifierTvcBarcode2dComponentEnabled           = @"MTIdentifierTvcBarcode2dComponentEnabled";
     static NSString *MTIdentifierTvcBarcode2dComponentType              = @"MTIdentifierTvcBarcode2dComponentType";
     static NSString *MTIdentifierTvcBarcode2dComponentDatasource        = @"MTIdentifierTvcBarcode2dComponentDatasource";
     
-    NSString *displayText = nil;
+    //NSString *displayText = nil;
     UITableViewCell *cell = nil;
     MTBarcode *barcode = [[self delegate] barcodeToDisplay];
     NSInteger section = [indexPath section];

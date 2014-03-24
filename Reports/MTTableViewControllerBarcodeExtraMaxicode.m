@@ -38,7 +38,7 @@
     
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    MTQuery *defaultQuery = [reportDocument defaultQuery];
+    MTQueryReport *defaultQuery = [reportDocument defaultQuery];
     
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
     [defaultQuery sampleDataForSchemaField:schemaField

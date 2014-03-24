@@ -10,4 +10,6 @@
 
 @interface MTQueryReport : MTQuery
 
+@property (nonatomic, strong) RptqQuery *query;
+
 @end

@@ -28,6 +28,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTLog.h"
 #import "MTQuery.h"
 #import "MTCache.h"
+#import "MTQueryReport.h"
 
 #import "MTReportFormatter.h"
 
@@ -101,7 +102,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     [super dealloc];
 }
 
-- (id) initWithFileURL:(NSURL *)url {
+- (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
 
@@ -147,7 +148,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         [document release];
         
         // FIXME: Only one query for a report at this time.
-        RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
+        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *rquery = [[database hasQueries] anyObject];
         MTQuery *query = [[MTQuery queryFactory:rquery] retain];
         if (query) {
@@ -156,13 +157,10 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         [query release];
 
         if ([self reportFormatter] == nil) {
-            MTCache *cache = [[MTCache alloc] initWithUrl:[self cachedDataUrl]];
-            MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithDatasource:cache
+            MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
                                                                                         andLayout:[self activeDocument]] retain];
             [self setReportFormatter:reportFormatter];
             [reportFormatter release];
-            [cache release];
-
         }
     }
     return [[[self document] retain] autorelease];
@@ -178,57 +176,24 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }];
 }
 
-- (MTQuery *)defaultQuery {
-    MTQuery *defaultQuery = [[self reportQueries][@"defaultq"] retain];
+- (MTQueryReport *)defaultQuery {
+    MTQueryReport *defaultQuery = [[self reportQueries][@"defaultq"] retain];
     return [defaultQuery autorelease];
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
-    RptqDocument *document = [self activeDocument];
-    MTQuery *defaultQuery = [[self defaultQuery] retain];
 
-    [[self defaultQuery] cacheReportQueryForDocument:document completion:^(BOOL success, NSError *error, id results) {
-        [MTCache cacheData:results toUrl:[self cachedDataUrl]];
+    MTQuery *defaultQuery = [[self defaultQuery] retain];
+    [[self defaultQuery] performQuery:^(BOOL success, NSError *error, id results) {
+        [[defaultQuery cache] cacheData:results];
         [self setDidRefresh:success];
         completion(success, error);
     }];
-
     [defaultQuery release];
 }
 
-+ (NSURL *)cachedDataFileUrlForFileUrl:(NSURL *)fileUrl {
-    NSString *name = [[[fileUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:@"cache"];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesPath = [paths objectAtIndex:0];
-    NSURL *cachesUrl = [NSURL fileURLWithPath:cachesPath isDirectory:YES];
-    NSURL *url = [[cachesUrl URLByAppendingPathComponent:name isDirectory:NO] retain];
-    return [url autorelease];
-}
-
 - (NSURL *)cachedDataUrl {
-    NSURL *fileUrl = [self fileURL];
-    NSURL *result = [[MAReportDocument cachedDataFileUrlForFileUrl:fileUrl] retain];
-    return [result autorelease];
-}
-
-- (void)emptyCache {
-    RptqDocument *document = [self document];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqQueryCache *queryCache = [[RptqQueryCache initObjectForManagedObjectContext:[self managedObjectContext]] retain];
-    NSError *error = nil;
-    NSArray *emptyArray = @[];
-    NSData *cachedData = [NSPropertyListSerialization dataWithPropertyList:emptyArray format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
-    NSURL *url = [[self cachedDataUrl] retain];
-    [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    if (error) {
-        error = nil;
-        [cachedData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-    }
-    [url release];
-    [queryCache setCacheDate:[NSDate date]];
-    [query setHasQueryCache:queryCache];
-    [queryCache release];
+    return [[[[[self defaultQuery] cache] url] retain] autorelease];
 }
 
 - (void)sendTo {

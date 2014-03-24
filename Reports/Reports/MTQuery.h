@@ -27,8 +27,7 @@
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
 
-- (void)cacheReportQueryForDocument:(RptqDocument *)document
-                         completion: (void (^)(BOOL success, NSError *error, id results))completion;
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion;
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
                       completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
