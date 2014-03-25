@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class MTDataFormatter, MTQuery;
+
 @interface MTTableController : UICollectionViewController
+
+@property (nonatomic, strong, readonly) MTDataFormatter *tableFormatter;
+
+- (id)initWithQuery:(MTQuery *)query;
+- (NSUInteger)rowCount;
+- (NSUInteger)columnCount;
 
 @end

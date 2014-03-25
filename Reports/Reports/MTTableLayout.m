@@ -11,7 +11,9 @@
 @interface MTTableLayout ()
 
 @property (nonatomic, retain) NSArray *columnWidth;
-@property (nonatomic, retain) NSArray *rowHeight;
+@property (nonatomic, assign) NSUInteger rowCount;
+@property (nonatomic, assign) NSUInteger columnCount;
+@property (nonatomic, assign) CGFloat rowHeight;
 
 @end
 
@@ -45,39 +47,63 @@
 
 - (CGSize)collectionViewContentSize {
     CGFloat width = [MTTableLayout sumArrayOfFloats:self.columnWidth];
-    CGFloat height = [MTTableLayout sumArrayOfFloats:self.rowHeight];
+    CGFloat height = self.rowHeight * self.rowCount;
     return CGSizeMake(width, height);
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-
-    __block NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
-
-    block_enumerateObjectsUsingBlock addColumns = ^(id obj, NSUInteger section, BOOL *stop) {
+    NSLog(@"rect: %@", NSStringFromCGRect(rect));
     
-        block_enumerateObjectsUsingBlock addRows = ^(id obj, NSUInteger row, BOOL *stop) {
-            NSIndexPath *elementPath = [NSIndexPath indexPathForRow:row inSection:section];
-            CGRect elementFrame = [self locationOfObjectAtIndexPath:elementPath];
-            BOOL intersection = CGRectIntersectsRect(elementFrame, rect);
-            if (intersection) {
-                UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtIndexPath:elementPath withFrame:elementFrame];
-                [layoutAttributes addObject:elementAttributes];
-            }
-        };
-        [[self rowHeight] enumerateObjectsUsingBlock:addRows];
-    };
-    [[self columnWidth] enumerateObjectsUsingBlock:addColumns];
+    if (CGPointZero.x + rect.origin.x < CGPointZero.x) {
+        rect.size.width += (CGPointZero.x + rect.origin.x);
+        rect.origin.x = CGPointZero.x;
+        NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
+    }
+
+    if (CGPointZero.y + rect.origin.y < CGPointZero.y) {
+        rect.size.height += (CGPointZero.y + rect.origin.y);
+        rect.origin.y = CGPointZero.y;
+        NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
+    }
+    
+
+    NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
+    
+    NSUInteger rowsToDisplay = ceil(rect.size.height / self.rowHeight);
+    NSUInteger columnsToDisplay = ceil( rect.size.width / 75.0000f);
+
+    if (rowsToDisplay > self.rowCount) rowsToDisplay = self.rowCount;
+    if (columnsToDisplay > self.columnCount) columnsToDisplay = self.columnCount;
+    
+    NSInteger firstRow = abs((CGPointZero.y - rect.origin.y)  / self.rowHeight);
+    NSInteger firstColumn = abs((CGPointZero.x - rect.origin.x)  / 75.0000f);
+    
+    if (firstRow > self.rowCount) firstRow = self.rowCount;
+    if (firstColumn > self.columnCount) firstColumn = self.columnCount;
+    
+    NSUInteger lastRow = rowsToDisplay + firstRow;
+    if (lastRow > self.rowCount) lastRow = self.rowCount;
+    for (NSUInteger rowCounter = firstRow; rowCounter < lastRow; rowCounter++) {
+        NSUInteger lastColumn = columnsToDisplay + firstColumn;
+        if (lastColumn > self.columnCount) lastColumn = self.columnCount;
+        for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
+            CGRect elementFrame = [self locationOfObjectAtRow:rowCounter andColumn:colCounter];
+            UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtRow:rowCounter andColumn:colCounter withFrame:elementFrame];
+            [layoutAttributes addObject:elementAttributes];
+            NSLog(@"elem[%ld]: %@", (long)elementAttributes.indexPath.row, NSStringFromCGRect(elementAttributes.frame));
+        }
+    }
     
     return layoutAttributes;
 }
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat x = [MTTableLayout sumArrayOfFloats:self.columnWidth toIndex:indexPath.section];
-    CGFloat y = [MTTableLayout sumArrayOfFloats:self.rowHeight toIndex:indexPath.row];
-    CGFloat w = [self.columnWidth[indexPath.section] floatValue];
-    CGFloat h = [self.rowHeight[indexPath.section] floatValue];
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
+    CGFloat x = powf(75.0000f, column);
+    CGFloat y = self.rowHeight * row;
+    CGFloat w = 75.0000f;
+    CGFloat h = self.rowHeight;
     CGRect f = CGRectMake(x, y, w, h);
-    return [self layoutAttributesForItemAtIndexPath:indexPath withFrame:f];
+    return [self layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:f];
 }
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds { return NO; }
@@ -85,20 +111,20 @@
 #pragma mark - Public methods
 
 - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
-    if (columnCount != self.columnWidth.count ||
-        columnCount != self.rowHeight.count) {
+    if (columnCount != self.columnWidth.count) {
         [self initalizeWithColumnCount:columnCount andRowCount:rowCount];
-        [self invalidateLayout];
     }
+    [self invalidateLayout];
 }
 
 #pragma mark - Helpers
 
 - (void)initalizeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     NSArray *columnWidths = [MTTableLayout defaultColumWidthsForCount:columnCount];
-    NSArray *rowHeights = [MTTableLayout defaultRowHeightsForCount:rowCount];
     [self setColumnWidth:columnWidths];
-    [self setRowHeight:rowHeights];
+    [self setRowCount:rowCount];
+    [self setColumnCount:columnCount];
+    [self setRowHeight:22.0000f];
 }
 
 + (NSArray *)defaultColumWidthsForCount:(NSUInteger)columnConter {
@@ -106,10 +132,6 @@
     return [self fillArray:columnWidth withObject:@(75.0000f) numberOfTimes:columnConter];
 }
 
-+ (NSArray *)defaultRowHeightsForCount:(NSUInteger)rowCounter {
-    NSMutableArray *rowHeights = [[NSMutableArray alloc] initWithCapacity:rowCounter];
-    return [self fillArray:rowHeights withObject:@(22.0000f) numberOfTimes:rowCounter];
-}
 
 + (id)fillArray:(NSMutableArray *)array withObject:(id)object numberOfTimes:(NSUInteger)count {
     [array removeAllObjects];
@@ -118,18 +140,20 @@
 }
 
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath withFrame:(CGRect)frame {
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:(CGRect)frame {
+    NSInteger index = (row*self.columnCount)+column;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
     UICollectionViewLayoutAttributes *layoutAttributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     [layoutAttributes setFrame:frame];
     [layoutAttributes setAlpha:1.0000f];
     return layoutAttributes;
 }
 
-- (CGRect)locationOfObjectAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat x = [MTTableLayout sumArrayOfFloats:self.columnWidth toIndex:indexPath.section];
-    CGFloat y = [MTTableLayout sumArrayOfFloats:self.rowHeight toIndex:indexPath.row];
-    CGFloat w = [self.columnWidth[indexPath.section] floatValue];
-    CGFloat h = [self.columnWidth[indexPath.section] floatValue];
+- (CGRect)locationOfObjectAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
+    CGFloat x = column * 75.0000f;
+    CGFloat y = row * 22.0000f;
+    CGFloat w = 75.0000f;
+    CGFloat h = 22.0000f;
     return CGRectMake(x, y, w, h);
 }
 
@@ -150,6 +174,14 @@
     };
     [array enumerateObjectsUsingBlock:blockSumFloats];
     return sum;
+}
+
+- (NSUInteger)numberOfItemsInSection:(NSUInteger)section {
+    return section == 0 ? self.columnWidth.count * self.rowCount : 0;
+}
+
+- (void)invalidateLayout {
+    [super invalidateLayout];
 }
 
 @end

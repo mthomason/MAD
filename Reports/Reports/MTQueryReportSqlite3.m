@@ -16,6 +16,7 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 #import "MTDatabase.h"
+#import "MTCache.h"
 
 @implementation MTQueryReportSqlite3
 
@@ -44,6 +45,7 @@
     
     [[self database] executeSql:sql
                      completion:^(BOOL success, NSError *error, id results) {
+                         [[self cache] cacheData:results];
                          completion(success, error, results);
                      }];
 }

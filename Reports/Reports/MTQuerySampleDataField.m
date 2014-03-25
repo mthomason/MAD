@@ -15,6 +15,7 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
 #import "Constants.h"
+#import "MTCache.h"
 
 @interface MTQuerySampleDataField ()
 
@@ -54,6 +55,7 @@
     } else {
         [[self database] executeSql:sql
                          completion:^(BOOL success, NSError *error, id results) {
+                             [[self cache] cacheData:results];
                              completion(success, error, results);
                          }];
     }

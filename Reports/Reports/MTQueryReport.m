@@ -297,6 +297,7 @@
         for (RptqQueryField *queryField in queryFields) {
             RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
             if (fieldCounter != 0)  [result appendString:@",\n"];
+            
             NSString *tableName = [[queryField inQueryTable] queryAlias];
             NSString *safeTableName = [[self database] safeIdentifier:tableName];
             NSString *tableAlias = [safeTableName stringByAppendingString:@"."];

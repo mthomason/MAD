@@ -21,12 +21,14 @@
 #import "MTTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 #import "MTTableLayout.h"
+#import "MTDataFormatter.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
 #import "MTReportDesignerViewController.h"
 #import "MTViewTableHeader.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
+#import "MTNavigationController.h"
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
 
@@ -1362,18 +1364,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    RptqDocument *doc = [reportDocument activeDocument];
-    RptqDatabase *database = [[doc hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    MTQuery *rquery = [MTQuery queryFactory:query];
-    //[rquery getSqlForTable:];
-    //MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount: andRowCount:];
-    //MTTableController *tableController = [[MTTableController alloc] initWithCollectionViewLayout:tableLayout];
-    //[self presentViewController:tableController animated:YES completion:^{
-    
-    //}];
+    RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+    RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
+    MTQuery *rquery = [MTQuery queryFactory:schemaTable];
+    MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
+    MTNavigationController *navController = [[MTNavigationController alloc] initWithRootViewController:tableController];
+    [self presentViewController:navController animated:YES completion:^{
+    }];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }

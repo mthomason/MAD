@@ -14,6 +14,7 @@
 #import "MTDatabase.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
+#import "MTCache.h"
 
 @interface MTQuerySampleDataTable ()
 
@@ -22,9 +23,24 @@
 @implementation MTQuerySampleDataTable
 
 - (NSString *)getSqlWithError:(NSError **)error {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
     RptqDatabaseSchemaTable *table = [self queryObject];
-    NSString *tableName = [[self database] safeIdentifier: [table toString]];
-    return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
+    NSString *safeTableName = [[self database] safeIdentifier: [table toString]];
+    
+    NSUInteger *fieldCounter = 0;
+    for (RptqDatabaseSchemaField *field in [table hasFields]) {
+
+        if (fieldCounter != 0)  [sql appendString:@",\n"];
+        
+
+        NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
+        NSString *fieldName = [[self database] safeIdentifier: [field name]];
+        NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
+        [sql appendFormat: @"\t%@", fieldAlias];
+        fieldCounter++;
+    }
+    [sql appendString:@" FROM %@"];
+    return [NSString stringWithFormat:sql, safeTableName];
 }
 
 - (id)initWithObject:(id)object {
@@ -48,7 +64,7 @@
     } else {
         [[self database] executeSql:sql
                          completion:^(BOOL success, NSError *error, id results) {
-                             
+                             [[self cache] cacheData:results];
                              completion(success, error, results);
                          }];
     }

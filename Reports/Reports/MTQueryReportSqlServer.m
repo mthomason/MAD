@@ -15,6 +15,7 @@
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
+#import "MTCache.h"
 
 NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
@@ -43,6 +44,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
     
     [[self database] executeSql:sql
                      completion:^(BOOL success, NSError *error, id results) {
+                         [[self cache] cacheData:results];
                          completion(success, error, results);
                      }];
 }

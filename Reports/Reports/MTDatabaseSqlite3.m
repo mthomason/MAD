@@ -64,9 +64,8 @@
     completion(success, nil, [result autorelease]);
 }
 
-- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
-                     completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-    NSString *tableName = [table name];
+- (void)getFieldsForTableName: (NSString *)tableName
+                   completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
 	sqlite3_stmt *statement;
@@ -81,7 +80,7 @@
             const unsigned char *resultName = sqlite3_column_text(statement, 1);
             const unsigned char *resultType = sqlite3_column_text(statement, 2);
             BOOL isPk = sqlite3_column_int(statement, 5) > 0;
-
+            
             NSString *fieldName = [NSString stringWithUTF8String:(char *)resultName];
             NSString *fieldType = [NSString stringWithUTF8String:(char *)resultType];
             MTDataType dataType = [MTDatabaseSqlite3 dataTypeForNativeType: fieldType];
@@ -98,6 +97,7 @@
 	sqlite3_free(sql);
     completion(success, nil, [result autorelease]);
 }
+
 
 //Converting native type to affinity type
 // using http://www.sqlite.org/datatype3.html
@@ -161,6 +161,8 @@
     NSCharacterSet *trimCharacters = [NSCharacterSet characterSetWithCharactersInString:@","];
     NSArray *components = [queryString componentsSeparatedByCharactersInSet:whitespaceCharacters];
     NSMutableArray *fieldNames = [[NSMutableArray alloc] initWithCapacity:[components count]];
+    
+    // Get field names from
     for (NSString *component in components) {
         if ([component isEqualToString:@"FROM"]) {
             break;
@@ -174,6 +176,25 @@
             }
         }
     }
+    if ([fieldNames count] == 0 && [[components objectAtIndex:1] isEqualToString: @"*"]) {
+        NSString *tableName = [[components objectAtIndex:3] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        __block NSMutableArray *fns = [[NSMutableArray alloc] init];
+        
+        dispatch_semaphore_t semaphoreGetFields = dispatch_semaphore_create(0);
+
+        [self getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
+            [fns addObjectsFromArray:fields];
+            dispatch_semaphore_signal(semaphoreGetFields);
+        }];
+        
+        dispatch_semaphore_wait(semaphoreGetFields, DISPATCH_TIME_FOREVER);
+        dispatch_release(semaphoreGetFields);
+        
+
+        [fieldNames addObjectsFromArray:fns];
+        [fns release];
+    }
+    
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
         //int numberOfColumns = sqlite3_column_count(statement);

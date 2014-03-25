@@ -65,7 +65,9 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
         [standardUserDefaults synchronize];
         
         NSArray *cachedResultsForReportSerialized = [[self datasource] results];
-        
+        if (cachedResultsForReportSerialized == nil) {
+            cachedResultsForReportSerialized = [NSArray array];
+        }
         [self setRecords:cachedResultsForReportSerialized];
         
     }

@@ -150,7 +150,7 @@
 }
 
 
-- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
+- (void)getFieldsForTableName: (NSString *)tableName
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     
@@ -180,7 +180,7 @@
                 NSMutableDictionary *resultsDictionary = nil;
                 
                 if (successConnection) {
-                    NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [table name]];
+                    NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
                     MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
                     if (fetch) {
                         if ([[fetch fields] count] > 0) {
@@ -201,7 +201,7 @@
                         }
                     }
                     
-                    NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [table name]];
+                    NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
                     MysqlFetch *fetch2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
                     if (fetch) {
                         

@@ -185,7 +185,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
     MTQuery *defaultQuery = [[self defaultQuery] retain];
     [[self defaultQuery] performQuery:^(BOOL success, NSError *error, id results) {
-        [[defaultQuery cache] cacheData:results];
         [self setDidRefresh:success];
         completion(success, error);
     }];

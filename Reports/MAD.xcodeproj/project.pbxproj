@@ -706,6 +706,8 @@
 		4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C752E1316EE7F55001FDAA3 /* MTAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C752E1216EE7F55001FDAA3 /* MTAlertView.m */; };
 		4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C752E1216EE7F55001FDAA3 /* MTAlertView.m */; };
+		4C75C9F218E20306006E8526 /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; };
+		4C75C9F318E20306006E8526 /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; };
 		4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
 		4C76B6F6177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
 		4C76B6F7177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */; };
@@ -2374,6 +2376,8 @@
 		4C752E0C16EA3A0C001FDAA3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		4C752E1116EE7F55001FDAA3 /* MTAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAlertView.h; sourceTree = "<group>"; };
 		4C752E1216EE7F55001FDAA3 /* MTAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAlertView.m; sourceTree = "<group>"; };
+		4C75C9F018E20306006E8526 /* MTTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableCell.h; sourceTree = "<group>"; };
+		4C75C9F118E20306006E8526 /* MTTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableCell.m; sourceTree = "<group>"; };
 		4C76B6F3177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeSqlServer@2x.png"; sourceTree = SOURCE_ROOT; };
 		4C76F0B014B4F132005DCE49 /* MTReportDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerViewController.m; sourceTree = "<group>"; };
 		4C76F0B714B51042005DCE49 /* MTReportDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerViewController.h; sourceTree = "<group>"; };
@@ -4855,6 +4859,8 @@
 				4C9E445618D88D7000F0F578 /* MTTableLayout.m */,
 				4C9E446518D8AADE00F0F578 /* MTTableController.h */,
 				4C9E446618D8AADE00F0F578 /* MTTableController.m */,
+				4C75C9F018E20306006E8526 /* MTTableCell.h */,
+				4C75C9F118E20306006E8526 /* MTTableCell.m */,
 			);
 			name = "Report Desinger";
 			path = Reports;
@@ -5912,6 +5918,7 @@
 				4C9E448218D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */,
 				4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */,
+				4C75C9F318E20306006E8526 /* MTTableCell.m in Sources */,
 				4C0E776C163B5AEC003B951E /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C0E776E163B5AEC003B951E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C0E7770163B5AEC003B951E /* UIColor+EverydayApps.m in Sources */,
@@ -6523,6 +6530,7 @@
 				4C9E448118D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */,
 				4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C1A585614DE285400184445 /* UITableViewControllerFieldOrCustomValue.m in Sources */,
+				4C75C9F218E20306006E8526 /* MTTableCell.m in Sources */,
 				4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */,
 				4C1A585D14DE348200184445 /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4CABE4671837DF7A007EDD9D /* RptqQuerySort.m in Sources */,

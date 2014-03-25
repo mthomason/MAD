@@ -232,7 +232,8 @@
                 NSError *error = nil;
                 [[currentDatabase managedObjectContext] save:&error];
                 
-                [database getFieldsForTableSchema:rptqTable completion:^(BOOL success, NSError *error, NSArray *fields) {
+                NSString *tableName = [rptqTable name];
+                [database getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
                     if (success) {
                         for (MTDatabaseField *objField in fields) {
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument

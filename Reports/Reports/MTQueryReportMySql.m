@@ -17,7 +17,7 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryField.h"
 #import "RptqQueryPredicate.h"
-
+#import "MTCache.h"
 
 @implementation MTQueryReportMySql
 
@@ -39,6 +39,7 @@
         } else {
 
             [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
+                [[self cache] cacheData:results];
                 completion(success, error, results);
             }];
             

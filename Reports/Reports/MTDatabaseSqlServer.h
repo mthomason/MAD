@@ -29,7 +29,7 @@ extern NSString * const MTDatabaseConnectionAppName;
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
-- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
+- (void)getFieldsForTableName: (NSString *)tableName
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 - (NSString *)identifier;

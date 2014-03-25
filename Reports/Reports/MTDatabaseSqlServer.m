@@ -106,7 +106,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     });
 }
 
-- (void)getFieldsForTableSchema: (RptqDatabaseSchemaTable *)table
+- (void)getFieldsForTableName: (NSString *)tableName
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
 
     //__block MTDatabaseSqlServer *sqlServer = self;
@@ -120,7 +120,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             RETCODE sqlReturnCode = FAIL;
             
             if (dbconn) {
-                NSString *query = [NSString stringWithFormat:@"SELECT name, system_type_id, max_length, precision, scale FROM sys.columns WHERE object_id = OBJECT_ID('%@')", [table name]];
+                NSString *query = [NSString stringWithFormat:@"SELECT name, system_type_id, max_length, precision, scale FROM sys.columns WHERE object_id = OBJECT_ID('%@')", tableName];
                 dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
                 
                 sqlReturnCode = dbsqlexec(dbconn);
