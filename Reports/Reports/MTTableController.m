@@ -149,8 +149,9 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
            viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     NSString *reuseId = [self reuseIdSupplement];
+    NSString *fieldKey = [self fieldKeyForIndex:[indexPath row]];
     MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
-    [[view label] setText:@"Header Yo"];
+    [[view label] setText:fieldKey];
     return view;
 }
 
