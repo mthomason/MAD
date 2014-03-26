@@ -53,6 +53,9 @@
     self = [super init];
     if (self) {
         
+        NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
+        [self setFields:fieldInfo];
+
         if ([object isKindOfClass:[RptqDatabase class]]) {
             
             MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
@@ -143,9 +146,8 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
+    [[self fields] removeAllObjects];
+    return @"";
 }
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {

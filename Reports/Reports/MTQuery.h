@@ -20,11 +20,13 @@
 @property (nonatomic, strong, readonly) MTDatabase *database;
 @property (nonatomic, strong, readonly) MTDatabaseConnection *credentials;
 @property (nonatomic, strong) MTCache *cache;
+@property (nonatomic, strong) id queryObject;
+@property (nonatomic, strong) NSMutableDictionary *fields;
 
 - (id)initWithObject:(id)object;
 + (id)queryFactory:(id)object;
 
-@property (nonatomic, strong) id queryObject;
+
 
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;

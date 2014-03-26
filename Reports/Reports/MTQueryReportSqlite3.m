@@ -21,7 +21,7 @@
 @implementation MTQueryReportSqlite3
 
 - (void)performQuery: (void (^)(BOOL success, NSError *error, id results))completion {
-    
+
     NSError *__autoreleasing error = nil;
     NSString *sql = [self getSqlWithError:&error];
     

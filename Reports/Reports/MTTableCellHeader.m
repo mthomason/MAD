@@ -11,6 +11,7 @@
 #endif
 
 #import "MTTableCellHeader.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTTableCellHeader ()
 
@@ -46,11 +47,13 @@
 
 - (void)initalize {
     UILabel *lbl = [[UILabel alloc] initWithFrame:[self bounds]];
-    [lbl setBackgroundColor:[UIColor whiteColor]];
+    UIColor *bgcolor = [UIColor tintColor];
+    [lbl setBackgroundColor:bgcolor];
+    [lbl setTextColor:[UIColor tintColor2]];
     [self addSubview:lbl];
     [self setLabel:lbl];
     [[self layer] setBorderWidth:1.0000f];
-    [[self layer] setBorderColor:[UIColor darkGrayColor].CGColor];
+    [[self layer] setBorderColor:[bgcolor CGColor]];
 }
 
 @end

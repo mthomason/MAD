@@ -81,7 +81,7 @@
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSLog(@"rect: %@", NSStringFromCGRect(rect));
+    //NSLog(@"rect: %@", NSStringFromCGRect(rect));
     
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
@@ -90,13 +90,13 @@
     if (CGPointZero.x + rect.origin.x < CGPointZero.x) {
         rect.size.width += (CGPointZero.x + rect.origin.x);
         rect.origin.x = CGPointZero.x;
-        NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
+        //NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
     }
     
     if (CGPointZero.y + rect.origin.y < CGPointZero.y) {
         rect.size.height += (CGPointZero.y + rect.origin.y);
         rect.origin.y = CGPointZero.y;
-        NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
+        //NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
     }
     
     NSUInteger rowsToDisplay = ceil(rect.size.height / self.rowHeight);
@@ -137,7 +137,7 @@
             CGRect elementFrame = [self locationOfObjectAtRow:rowCounter andColumn:colCounter];
             UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtRow:rowCounter andColumn:colCounter withFrame:elementFrame];
             [layoutAttributes addObject:elementAttributes];
-            NSLog(@"elem[%ld]: %@", (long)elementAttributes.indexPath.row, NSStringFromCGRect(elementAttributes.frame));
+            //NSLog(@"elem[%ld]: %@", (long)elementAttributes.indexPath.row, NSStringFromCGRect(elementAttributes.frame));
             
         }
     }

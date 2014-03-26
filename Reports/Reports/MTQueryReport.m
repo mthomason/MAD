@@ -41,6 +41,7 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
+    [super getSqlWithError:error];
     return [self getSqlOnlyActiveFields:YES error:error];
 }
 
@@ -304,6 +305,7 @@
             NSString *fieldName = [[self database] safeIdentifier: [field name]];
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
+            [[self fields] setObject:field forKey:fieldAlias];
             fieldCounter++;
         }
         if (fieldCounter == 0) {

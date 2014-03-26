@@ -24,9 +24,12 @@
 @implementation MTQuerySampleDataField
 
 - (NSString *)getSqlWithError:(NSError **)error {
+    [super getSqlWithError:error];
+    
     RptqDatabaseSchemaField *field = [self queryObject];
     NSString *safeField = [[self database] safeQuerySchemaField:field];
     NSString *safeTable = [[self database] safeIdentifier:field.inTable.name];
+    [[self fields] setObject:field forKey:safeField];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
                      @"%@ %@ "
                      @"LIMIT 100;",

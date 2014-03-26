@@ -14,6 +14,9 @@
 #import "MTDatabase.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "MTDatabaseField.h"
 #import "MTCache.h"
 
 @interface MTQuerySampleDataTable ()
@@ -23,20 +26,23 @@
 @implementation MTQuerySampleDataTable
 
 - (NSString *)getSqlWithError:(NSError **)error {
+    [super getSqlWithError:error];
+
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
     RptqDatabaseSchemaTable *table = [self queryObject];
     NSString *safeTableName = [[self database] safeIdentifier: [table toString]];
     
     NSUInteger *fieldCounter = 0;
+    
     for (RptqDatabaseSchemaField *field in [table hasFields]) {
-
-        if (fieldCounter != 0)  [sql appendString:@",\n"];
         
-
+        if (fieldCounter != 0)  [sql appendString:@",\n"];
         NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
         NSString *fieldName = [[self database] safeIdentifier: [field name]];
         NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
         [sql appendFormat: @"\t%@", fieldAlias];
+        MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
+        [[self fields] setObject:dbField forKey:fieldAlias];
         fieldCounter++;
     }
     [sql appendString:@" FROM %@"];

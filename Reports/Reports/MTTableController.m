@@ -16,12 +16,15 @@
 #import "MTQuery.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
+#import "MTDatabaseField.h"
 
 @interface MTTableController ()
     <UICollectionViewDataSource, UICollectionViewDelegate>
 
+@property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, strong, readwrite) MTDataFormatter *tableFormatter;
 @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
+@property (nonatomic, copy, readwrite) NSArray *fieldSizes;
 
 @end
 
@@ -35,6 +38,7 @@
     if (self) {
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         [self setTableFormatter:tableFormatter];
+        [self setQuery:query];
     }
     return self;
 }
@@ -137,9 +141,11 @@
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
     if ([self fieldKeys] == nil) {
         NSDictionary *rowDataSample = [[self tableFormatter] dataForRow:0];
-        NSMutableArray *a = [[NSMutableArray alloc] initWithCapacity:[rowDataSample count]];
+        NSUInteger numberOfFields = [rowDataSample count];
+        NSMutableArray *a = [[NSMutableArray alloc] initWithCapacity:numberOfFields];
         [rowDataSample enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             [a addObject:key];
+            
         }];
         [self setFieldKeys:a];
     }
@@ -150,12 +156,33 @@
            viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     NSString *reuseId = [self reuseIdSupplement];
     NSString *fieldKey = [self fieldKeyForIndex:[indexPath row]];
+    NSArray *components = [fieldKey componentsSeparatedByString:@"."];
+    NSString *safeFieldName = [components lastObject];
+    NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    
     MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
-    [[view label] setText:fieldKey];
+    [[view label] setText:fieldName];
     return view;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger column =  [(MTTableLayout *)[self collectionViewLayout] columnForIndexPath:indexPath];
+    NSString *fieldKey = [self fieldKeyForIndex:column];
+    MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
+    [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    
+    UIFontDescriptor *fontDescriptorHeadline = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
+    UIFontDescriptor *fontDescriptorBody = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+    CGFloat sizeHeadline = [fontDescriptorHeadline.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
+    CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
+
+    UIFont *headlineFont = [UIFont fontWithDescriptor:fontDescriptorHeadline size:sizeHeadline];
+    UIFont *bodyFont = [UIFont fontWithDescriptor:fontDescriptorBody size:sizeBody];
+
+    NSString *s = [@"" stringByPaddingToLength:[field width] withString:@"X" startingAtIndex:0];
+    CGSize size = [s sizeWithAttributes:@{NSFontAttributeName: bodyFont}];
+   
+    NSArray *fields = [[[self query] fields] objectForKey:fieldKey];
     return CGSizeMake(75.0000f, 22.0000f);
 }
 
