@@ -1368,8 +1368,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
     MTQuery *rquery = [MTQuery queryFactory:schemaTable];
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
-    MTNavigationController *navController = [[MTNavigationController alloc] initWithRootViewController:tableController];
-    [self presentViewController:navController animated:YES completion:^{
+    MTNavigationController *navigationController = [[MTNavigationController alloc] initWithRootViewController:tableController];
+
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissViewControllerAnimated:completion:)];
+    [[tableController navigationItem] setTitle:[schemaTable name]];
+    [[tableController navigationItem] setRightBarButtonItem:doneButton animated:NO];
+    [self presentViewController:navigationController animated:YES completion:^{
+        
     }];
 }
 
@@ -1411,6 +1416,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 #pragma mark - NSFetchedResultsSetup
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
+    [super dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)reloadActiveDocumentAnimated:(BOOL)animated {
     MTApplicationInstance *applicationInstance = [AppDelegate app];
