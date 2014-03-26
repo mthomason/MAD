@@ -131,7 +131,7 @@
     NSUInteger lastRow = rowsToDisplay + firstRow;
     if (lastRow > self.rowCount) lastRow = self.rowCount;
     for (NSUInteger rowCounter = firstRow; rowCounter < lastRow; rowCounter++) {
-        NSUInteger lastColumn = columnsToDisplay + firstColumn;
+        lastColumn = columnsToDisplay + firstColumn;
         if (lastColumn > self.columnCount) lastColumn = self.columnCount;
         for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
             CGRect elementFrame = [self locationOfObjectAtRow:rowCounter andColumn:colCounter];

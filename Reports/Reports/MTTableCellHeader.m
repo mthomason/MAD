@@ -45,7 +45,7 @@
 }
 
 - (void)initalize {
-    UILabel *lbl = [[UILabel alloc] initWithFrame:[self frame]];
+    UILabel *lbl = [[UILabel alloc] initWithFrame:[self bounds]];
     [lbl setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:lbl];
     [self setLabel:lbl];
