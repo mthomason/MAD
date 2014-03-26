@@ -6,16 +6,23 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTTableController.h"
 #import "MTTableLayout.h"
 #import "MTDataFormatter.h"
 #import "MTQuery.h"
 #import "MTTableCell.h"
+#import "MTTableCellHeader.h"
 
 @interface MTTableController ()
     <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic, strong, readwrite) MTDataFormatter *tableFormatter;
+@property (nonatomic, copy, readwrite) NSArray *fieldKeys;
+
 @end
 
 @implementation MTTableController
@@ -68,6 +75,8 @@
     [[self collectionView] setDataSource:self];
     __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
     [[self collectionView] registerClass:classCollectionViewCell forCellWithReuseIdentifier:[self reuseId]];
+    __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
+    [[self collectionView] registerClass:classCollectionViewCellHeader forSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:[self reuseIdSupplement]];
 }
 
 #pragma mark - Methods
@@ -79,6 +88,15 @@
         reuseId = NSStringFromClass(class);
     }
     return reuseId;
+}
+
+- (NSString *)reuseIdSupplement {
+    static NSString * reuseIdSupplement;
+    if (reuseIdSupplement == nil) {
+        __unsafe_unretained Class class = [self class];
+        reuseIdSupplement = [NSStringFromClass(class) stringByAppendingString:@"Sup"];
+    }
+    return reuseIdSupplement;
 }
 
 - (NSUInteger)rowCount {
@@ -93,7 +111,6 @@
 #pragma mark - Collection View Datasource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-   // [[[[self controller] collectionView] collectionViewLayout] invalidateLayout];
     return 1;
 }
 
@@ -107,13 +124,34 @@
     NSString *reuseId = [self reuseId];
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
                                                                            forIndexPath:indexPath];
-    UILabel *lbl = [[UILabel alloc] initWithFrame:[[cell contentView] frame]];
-    [lbl setText:@"Hi"];
-    [lbl setBackgroundColor:[UIColor whiteColor]];
-    [[cell contentView] addSubview:lbl];
-    [[[cell contentView] layer] setBorderWidth:1.0000f];
-    [[[cell contentView] layer] setBorderColor:[UIColor darkGrayColor].CGColor];
+    NSUInteger row = [(MTTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
+    NSUInteger column = [(MTTableLayout *)[self collectionViewLayout] columnForIndexPath:indexPath];
+    NSDictionary *rowData = [[self tableFormatter] dataForRow:row];
+    NSString *fieldKey = [self fieldKeyForIndex:column];
+    id fieldValue = [rowData objectForKey:fieldKey];
+    NSString *fieldString = [NSString stringWithFormat:@"%@", fieldValue];
+    [[cell label] setText:fieldString];
     return cell;
+}
+
+- (NSString *)fieldKeyForIndex:(NSUInteger)index {
+    if ([self fieldKeys] == nil) {
+        NSDictionary *rowDataSample = [[self tableFormatter] dataForRow:0];
+        NSMutableArray *a = [[NSMutableArray alloc] initWithCapacity:[rowDataSample count]];
+        [rowDataSample enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [a addObject:key];
+        }];
+        [self setFieldKeys:a];
+    }
+    return [[self fieldKeys] objectAtIndex:index];
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    NSString *reuseId = [self reuseIdSupplement];
+    MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
+    [[view label] setText:@"Header Yo"];
+    return view;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
