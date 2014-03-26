@@ -36,31 +36,32 @@
     [super viewDidLoad];
     [self initalize];
     [[self collectionView] setBackgroundColor:[UIColor whiteColor]];
-
+    [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error, id results) {
+        [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
-- (void)invalidateLayout {
-    [[self tableFormatter] format];
-    UICollectionView *collectionView = [self collectionView];
-    [collectionView reloadData];
-    [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
-                                                                  andRowCount:self.rowCount];
-}
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error, id results) {
-        [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
-    }];
+    [[self collectionView] flashScrollIndicators];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Helpers
+
+- (void)invalidateLayout {
+    [[self tableFormatter] format];
+    UICollectionView *collectionView = [self collectionView];
+    [collectionView reloadData];
+    [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
+                                                     andRowCount:self.rowCount];
+}
 
 - (void)initalize {
     [[self collectionView] setDelegate:self];
