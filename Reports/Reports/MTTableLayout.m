@@ -16,6 +16,11 @@
 @interface MTTableLayout ()
     <UICollectionViewDelegate>
 
+
+typedef struct _ColumnWidth {
+    CGFloat originX, width;
+} ColumnWidth;
+
 @property (nonatomic, retain) NSArray *columnWidth;
 @property (nonatomic, assign) NSUInteger rowCount;
 @property (nonatomic, assign) NSUInteger columnCount;
@@ -56,7 +61,7 @@
     UIEdgeInsets scrollInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
     [[self collectionView] setScrollIndicatorInsets: scrollInsets];
     
-    NSArray *columnWidths = [MTTableLayout defaultColumWidthsForCount:columnCount];
+    NSArray *columnWidths = [NSArray array];
     [self setColumnWidth:columnWidths];
     [self setRowCount:rowCount];
     [self setColumnCount:columnCount];
@@ -69,9 +74,23 @@
 
 - (void)prepareLayout {
     [super prepareLayout];
-//    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(CGSizeZero.height + 64.0000f + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
-//    [[self collectionView] setContentInset:edgeInsets];
-    
+
+    NSMutableArray *columnWidths = [[NSMutableArray alloc] initWithCapacity:self.columnCount];
+    for (NSInteger i=0; i<self.columnCount; i++) {
+        ColumnWidth lastColumnWidth;
+        if (i == 0) {
+            lastColumnWidth.width = CGSizeZero.width;
+            lastColumnWidth.originX = CGPointZero.x;
+        } else {
+            [[columnWidths lastObject] getValue:&lastColumnWidth];
+        }
+        ColumnWidth columnWidth;
+        columnWidth.originX = lastColumnWidth.originX + lastColumnWidth.width;
+        columnWidth.width = [[self delegate] collectionView:[self collectionView] layout:self widthRequiredColumn:i];
+        NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];;
+        [columnWidths addObject:columnWidthEncoding];
+    }
+    [self setColumnWidth:columnWidths];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
@@ -86,12 +105,6 @@
     [supplementalAttributes setAlpha:0.9000f];
     return supplementalAttributes;
 }
-
-/*
-- (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString*)decorationViewKind
-                                                                  atIndexPath:(NSIndexPath *)indexPath {
-    
-}*/
 
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath {
     return [indexPath row] % [self columnCount];
@@ -109,32 +122,56 @@
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    //NSLog(@"rect: %@", NSStringFromCGRect(rect));
-    
     NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
     //Change bounds so that the origin is positive.  Not drawing this offscreen.
-    
     if (CGPointZero.x + rect.origin.x < CGPointZero.x) {
         rect.size.width += (CGPointZero.x + rect.origin.x);
         rect.origin.x = CGPointZero.x;
-        //NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
     }
-    
     if (CGPointZero.y + rect.origin.y < CGPointZero.y) {
         rect.size.height += (CGPointZero.y + rect.origin.y);
         rect.origin.y = CGPointZero.y;
-        //NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
     }
     
-    NSUInteger rowsToDisplay = ceil(rect.size.height / self.heightRow);
-    NSUInteger columnsToDisplay = ceil( rect.size.width / 75.0000f);
+    NSInteger firstColumn = 0;
+    NSUInteger columnsToDisplay = 0;    //Columns are calculated.
+    NSUInteger columnCounter = 0;
+    BOOL foundFirstColumn = NO;
+    for (NSValue *v in [self columnWidth]) {
+        ColumnWidth cw;
+        [v getValue:&cw];
+        if (foundFirstColumn == NO) {
+            if (cw.originX > rect.origin.x) {
+                firstColumn = (columnCounter == 0) ? 0 : columnCounter - 1;
+                foundFirstColumn = YES;
+            } else if (cw.originX == rect.origin.x) {
+                firstColumn = columnCounter;
+                foundFirstColumn = YES;
+            }
+        }
+        if (foundFirstColumn) {
+            if (cw.originX >= rect.origin.x + rect.size.width) {
+                NSUInteger lastColumn = columnCounter;
+                columnsToDisplay = lastColumn - firstColumn;
+                break;
+            }
+        }
+        columnCounter++;
+    }
+    
+    if (columnsToDisplay == 0 &&
+        [self originXColumnLast] <= rect.origin.x + rect.size.width) {
+        columnsToDisplay = [[self columnWidth] count];
+    }
+    
+    
+    NSUInteger rowsToDisplay = ceil(rect.size.height / self.heightRow); //Rows are fixed height.
     
     if (rowsToDisplay > self.rowCount) rowsToDisplay = self.rowCount;
     if (columnsToDisplay > self.columnCount) columnsToDisplay = self.columnCount;
     
     NSInteger firstRow = abs((CGPointZero.y - rect.origin.y)  / self.heightRow);
-    NSInteger firstColumn = abs((CGPointZero.x - rect.origin.x)  / 75.0000f);
     
     if (firstRow > self.rowCount) firstRow = self.rowCount;
     if (firstColumn > self.columnCount) firstColumn = self.columnCount;
@@ -163,7 +200,7 @@
 }
 
 - (CGSize)collectionViewContentSize {
-    CGFloat width = [MTTableLayout sumArrayOfFloats:self.columnWidth];
+    CGFloat width = [self originXColumnLast];
     CGFloat height = (self.heightRow * self.rowCount) + self.heightHeader;
     return CGSizeMake(width, height);
 }
@@ -185,10 +222,32 @@
 
 #pragma mark - Helpers
 
+- (CGFloat)originXColumn:(NSUInteger)column {
+    ColumnWidth cw = [self columnAttributesAtIndex:column];
+    return cw.originX;
+}
+
+- (CGFloat)widthColumn:(NSUInteger)column {
+    ColumnWidth cw = [self columnAttributesAtIndex:column];
+    return cw.width;
+}
+
+- (CGFloat)originXColumnLast {
+    ColumnWidth cw;
+    [[[self columnWidth] lastObject] getValue:&cw];
+    return cw.originX + cw.width;
+}
+
+- (ColumnWidth)columnAttributesAtIndex:(NSUInteger)column {
+    ColumnWidth cw;
+    [[[self columnWidth] objectAtIndex:column] getValue:&cw];
+    return cw;
+}
+
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
-    CGFloat x = powf(75.0000f, column);
+    CGFloat x = [self originXColumn:column];
     CGFloat y = self.heightRow * row;
-    CGFloat w = 75.0000f;
+    CGFloat w = [self widthColumn:column];
     CGFloat h = self.heightRow;
     CGRect f = CGRectMake(x, y, w, h);
     return [self layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:f];
@@ -203,12 +262,6 @@
     return layoutAttributes;
 }
 
-+ (NSArray *)defaultColumWidthsForCount:(NSUInteger)columnConter {
-    NSMutableArray *columnWidth = [[NSMutableArray alloc] initWithCapacity:columnConter];
-    return [self fillArray:columnWidth withObject:@(75.0000f) numberOfTimes:columnConter];
-}
-
-
 + (id)fillArray:(NSMutableArray *)array withObject:(id)object numberOfTimes:(NSUInteger)count {
     [array removeAllObjects];
     for (NSUInteger i=0; i<count; i++) array[i] = object;
@@ -216,19 +269,19 @@
 }
 
 - (CGRect)locationOfHeaderAtColumn:(NSUInteger)column {
-    CGFloat x = CGPointZero.x + (column * 75.0000f);
+    CGFloat x = [self originXColumn:column];// CGPointZero.x + (column * 75.0000f);
     CGFloat y = (self.collectionView.contentOffset.y < - self.collectionView.contentInset.top) ?
         CGPointZero.y :
         CGPointZero.y + self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
-    CGFloat w = 75.0000f;
+    CGFloat w = [self widthColumn:column];// 75.0000f;
     CGFloat h = self.heightHeader;
     return CGRectMake(x, y, w, h);
 }
 
 - (CGRect)locationOfObjectAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
-    CGFloat x = CGPointZero.x + (column * 75.0000f);
+    CGFloat x = [self originXColumn:column];
     CGFloat y = CGPointZero.y + self.heightHeader + (row * self.heightRow);
-    CGFloat w = 75.0000f;
+    CGFloat w = [self widthColumn:column];
     CGFloat h = self.heightRow;
     return CGRectMake(x, y, w, h);
 }

@@ -15,7 +15,7 @@ typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *s
 
 @protocol MTTableLayoutDelegate <NSObject>
 
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section;
 
 @end
 
@@ -25,6 +25,8 @@ typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *s
 - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath;
 - (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath;
+
+@property (nonatomic, weak) id delegate;
 
 @end
 

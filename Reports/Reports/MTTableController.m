@@ -19,7 +19,7 @@
 #import "MTDatabaseField.h"
 
 @interface MTTableController ()
-    <UICollectionViewDataSource>
+    <UICollectionViewDataSource, MTTableLayoutDelegate>
 
 @property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, strong, readwrite) MTDataFormatter *tableFormatter;
@@ -36,6 +36,7 @@
     MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
+        [tableLayout setDelegate:self];
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         [self setTableFormatter:tableFormatter];
         [self setQuery:query];
@@ -188,6 +189,10 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     return UIEdgeInsetsMake(CGSizeZero.height + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section {
+    return 75.0000f;
 }
 
 @end
