@@ -11,13 +11,16 @@
 #endif
 
 #import "MTTableLayout.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTTableLayout ()
+    <UICollectionViewDelegate>
 
 @property (nonatomic, retain) NSArray *columnWidth;
 @property (nonatomic, assign) NSUInteger rowCount;
 @property (nonatomic, assign) NSUInteger columnCount;
 @property (nonatomic, assign) CGFloat rowHeight;
+@property (nonatomic, assign) CGFloat heightHeader;
 
 @end
 
@@ -48,6 +51,29 @@
     return self;
 }
 
+- (void)initalizeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
+    
+    UIEdgeInsets scrollInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
+    [[self collectionView] setScrollIndicatorInsets: scrollInsets];
+    
+    NSArray *columnWidths = [MTTableLayout defaultColumWidthsForCount:columnCount];
+    [self setColumnWidth:columnWidths];
+    [self setRowCount:rowCount];
+    [self setColumnCount:columnCount];
+    [self setRowHeight:22.0000f];
+    [self setHeightHeader:24.0000f];
+    [[self collectionView] setDelegate:self];
+    
+    [[self collectionView] setBackgroundColor:[UIColor tintColor]];
+}
+
+- (void)prepareLayout {
+    [super prepareLayout];
+//    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(CGSizeZero.height + 64.0000f + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
+//    [[self collectionView] setContentInset:edgeInsets];
+    
+}
+
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
                                                                      atIndexPath:(NSIndexPath *)indexPath {
 
@@ -56,9 +82,11 @@
     CGRect frame = [self locationOfHeaderAtColumn:column];
     [supplementalAttributes setFrame:frame];
     [supplementalAttributes setHidden:NO];
+    [supplementalAttributes setZIndex:999];
     [supplementalAttributes setAlpha:1.0000f];
     return supplementalAttributes;
 }
+
 /*
 - (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString*)decorationViewKind
                                                                   atIndexPath:(NSIndexPath *)indexPath {
@@ -114,19 +142,10 @@
     NSUInteger lastColumn = columnsToDisplay + firstColumn;
     if (lastColumn > self.columnCount) lastColumn = self.columnCount;
     for (NSUInteger colCounter=firstColumn; colCounter < lastColumn; colCounter++) {
-        CGRect cellHeaderRect = [self locationOfHeaderAtColumn:colCounter];
-        if (CGRectIntersectsRect(rect, cellHeaderRect)) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:colCounter inSection:0];
-            UICollectionViewLayoutAttributes *supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind:@"MTTableCellHeader" atIndexPath:indexPath];
-            CGRect frame = [self locationOfHeaderAtColumn:colCounter];
-            [supplementalAttributes setFrame:frame];
-            [supplementalAttributes setHidden:NO];
-            [supplementalAttributes setAlpha:1.0000f];
-            [layoutAttributes addObject:supplementalAttributes];
-        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:colCounter inSection:0];
+        UICollectionViewLayoutAttributes *supplementalAttributes = [self layoutAttributesForSupplementaryViewOfKind:@"MTTableCellHeader" atIndexPath:indexPath];
+        [layoutAttributes addObject:supplementalAttributes];
     }
-
-
     
     NSUInteger lastRow = rowsToDisplay + firstRow;
     if (lastRow > self.rowCount) lastRow = self.rowCount;
@@ -137,8 +156,6 @@
             CGRect elementFrame = [self locationOfObjectAtRow:rowCounter andColumn:colCounter];
             UICollectionViewLayoutAttributes *elementAttributes = [self layoutAttributesForItemAtRow:rowCounter andColumn:colCounter withFrame:elementFrame];
             [layoutAttributes addObject:elementAttributes];
-            //NSLog(@"elem[%ld]: %@", (long)elementAttributes.indexPath.row, NSStringFromCGRect(elementAttributes.frame));
-            
         }
     }
     
@@ -147,11 +164,11 @@
 
 - (CGSize)collectionViewContentSize {
     CGFloat width = [MTTableLayout sumArrayOfFloats:self.columnWidth];
-    CGFloat height = (self.rowHeight * self.rowCount) + 22.0000f;
+    CGFloat height = (self.rowHeight * self.rowCount) + self.heightHeader;
     return CGSizeMake(width, height);
 }
 
-- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds { return NO; }
+- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds { return YES; }
 
 - (void)invalidateLayout {
     [super invalidateLayout];
@@ -186,14 +203,6 @@
     return layoutAttributes;
 }
 
-- (void)initalizeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
-    NSArray *columnWidths = [MTTableLayout defaultColumWidthsForCount:columnCount];
-    [self setColumnWidth:columnWidths];
-    [self setRowCount:rowCount];
-    [self setColumnCount:columnCount];
-    [self setRowHeight:22.0000f];
-}
-
 + (NSArray *)defaultColumWidthsForCount:(NSUInteger)columnConter {
     NSMutableArray *columnWidth = [[NSMutableArray alloc] initWithCapacity:columnConter];
     return [self fillArray:columnWidth withObject:@(75.0000f) numberOfTimes:columnConter];
@@ -208,17 +217,19 @@
 
 - (CGRect)locationOfHeaderAtColumn:(NSUInteger)column {
     CGFloat x = CGPointZero.x + (column * 75.0000f);
-    CGFloat y = CGPointZero.y;
+    CGFloat y = (self.collectionView.contentOffset.y < - self.collectionView.contentInset.top) ?
+        CGPointZero.y :
+        CGPointZero.y + self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
     CGFloat w = 75.0000f;
-    CGFloat h = 22.0000f;
+    CGFloat h = self.heightHeader;
     return CGRectMake(x, y, w, h);
 }
 
 - (CGRect)locationOfObjectAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
     CGFloat x = CGPointZero.x + (column * 75.0000f);
-    CGFloat y = CGPointZero.y + 22.0000f + (row * 22.0000f);
+    CGFloat y = CGPointZero.y + self.heightHeader + (row * self.rowHeight);
     CGFloat w = 75.0000f;
-    CGFloat h = 22.0000f;
+    CGFloat h = self.rowHeight;
     return CGRectMake(x, y, w, h);
 }
 
@@ -243,6 +254,10 @@
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section {
     return section == 0 ? self.columnWidth.count * self.rowCount : 0;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self invalidateLayout];
 }
 
 @end

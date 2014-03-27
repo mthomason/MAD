@@ -19,7 +19,7 @@
 #import "MTDatabaseField.h"
 
 @interface MTTableController ()
-    <UICollectionViewDataSource, UICollectionViewDelegate>
+    <UICollectionViewDataSource>
 
 @property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, strong, readwrite) MTDataFormatter *tableFormatter;
@@ -184,6 +184,10 @@
    
     NSArray *fields = [[[self query] fields] objectForKey:fieldKey];
     return CGSizeMake(75.0000f, 22.0000f);
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsMake(CGSizeZero.height + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
 }
 
 @end

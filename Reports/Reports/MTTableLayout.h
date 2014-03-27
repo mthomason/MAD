@@ -13,6 +13,12 @@
 
 typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *stop);
 
+@protocol MTTableLayoutDelegate <NSObject>
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
+
+@end
+
 @interface MTTableLayout : UICollectionViewLayout
 
 - (id)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
