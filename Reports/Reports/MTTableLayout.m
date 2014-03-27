@@ -133,6 +133,7 @@ typedef struct _ColumnWidth {
         rect.size.height += (CGPointZero.y + rect.origin.y);
         rect.origin.y = CGPointZero.y;
     }
+    CGFloat originRightEdge = rect.origin.x + rect.size.width;
     
     NSInteger firstColumn = 0;
     NSUInteger columnsToDisplay = 0;    //Columns are calculated.
@@ -151,9 +152,9 @@ typedef struct _ColumnWidth {
             }
         }
         if (foundFirstColumn) {
-            if (cw.originX >= rect.origin.x + rect.size.width) {
+            if (cw.originX >= originRightEdge) {
                 NSUInteger lastColumn = columnCounter;
-                columnsToDisplay = lastColumn - firstColumn;
+                columnsToDisplay = lastColumn - firstColumn + 1;
                 break;
             }
         }
@@ -235,7 +236,7 @@ typedef struct _ColumnWidth {
 - (CGFloat)originXColumnLast {
     ColumnWidth cw;
     [[[self columnWidth] lastObject] getValue:&cw];
-    return cw.originX + cw.width;
+    return cw.originX;
 }
 
 - (ColumnWidth)columnAttributesAtIndex:(NSUInteger)column {

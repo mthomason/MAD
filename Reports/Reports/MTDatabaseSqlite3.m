@@ -80,7 +80,6 @@
             const unsigned char *resultName = sqlite3_column_text(statement, 1);
             const unsigned char *resultType = sqlite3_column_text(statement, 2);
             BOOL isPk = sqlite3_column_int(statement, 5) > 0;
-            
             NSString *fieldName = [NSString stringWithUTF8String:(char *)resultName];
             NSString *fieldType = [NSString stringWithUTF8String:(char *)resultType];
             MTDataType dataType = [MTDatabaseSqlite3 dataTypeForNativeType: fieldType];

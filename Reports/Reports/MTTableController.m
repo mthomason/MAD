@@ -166,33 +166,31 @@
     return view;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger column =  [(MTTableLayout *)[self collectionViewLayout] columnForIndexPath:indexPath];
-    NSString *fieldKey = [self fieldKeyForIndex:column];
-    MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
-    [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    
-    UIFontDescriptor *fontDescriptorHeadline = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
-    UIFontDescriptor *fontDescriptorBody = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
-    CGFloat sizeHeadline = [fontDescriptorHeadline.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
-    CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
-
-    UIFont *headlineFont = [UIFont fontWithDescriptor:fontDescriptorHeadline size:sizeHeadline];
-    UIFont *bodyFont = [UIFont fontWithDescriptor:fontDescriptorBody size:sizeBody];
-
-    NSString *s = [@"" stringByPaddingToLength:[field width] withString:@"X" startingAtIndex:0];
-    CGSize size = [s sizeWithAttributes:@{NSFontAttributeName: bodyFont}];
-   
-    NSArray *fields = [[[self query] fields] objectForKey:fieldKey];
-    return CGSizeMake(75.0000f, 22.0000f);
-}
-
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     return UIEdgeInsetsMake(CGSizeZero.height + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section {
-    return 75.0000f;
+    
+    NSUInteger column =  section;
+    NSString *fieldKey = [self fieldKeyForIndex:column];
+    MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
+    [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    
+//    UIFontDescriptor *fontDescriptorHeadline = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
+    UIFontDescriptor *fontDescriptorBody = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+//    CGFloat sizeHeadline = [fontDescriptorHeadline.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
+    CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
+    
+//    UIFont *headlineFont = [UIFont fontWithDescriptor:fontDescriptorHeadline size:sizeHeadline];
+    UIFont *bodyFont = [UIFont fontWithDescriptor:fontDescriptorBody size:sizeBody];
+    
+    NSString *s = [@"" stringByPaddingToLength:[field width] withString:@"X" startingAtIndex:0];
+    CGSize size = [s sizeWithAttributes:@{NSFontAttributeName: bodyFont}];
+    
+    //NSArray *fields = [[[self query] fields] objectForKey:fieldKey];
+    
+    return size.width < 75.0000f ? 75.0000f : (size.width > 175.0000f) ? 175.0000f : size.width;
 }
 
 @end
