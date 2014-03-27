@@ -48,6 +48,7 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
 @property (nonatomic, assign) NSInteger fieldTypeNative;
 @property (nonatomic, assign) NSUInteger width;
 @property (nonatomic, assign) NSUInteger decimals;
+@property (nonatomic, assign) NSUInteger calculatedWidth;
 @property (nonatomic, assign) BOOL primaryKey;
 
 - (BOOL)isNumeric;

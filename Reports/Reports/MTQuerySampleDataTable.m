@@ -45,6 +45,8 @@
         [[self fields] setObject:dbField forKey:fieldAlias];
         fieldCounter++;
     }
+    
+    
     [sql appendString:@" FROM %@"];
     return [NSString stringWithFormat:sql, safeTableName];
 }
@@ -64,6 +66,20 @@
     
     NSError *error = nil;
     NSString *sql = [self getSqlWithError:&error];
+    
+    __block NSMutableArray *fieldNames = [[NSMutableArray alloc] init];
+    [[self fields] enumerateKeysAndObjectsUsingBlock:^(id key, MTDatabaseField *field, BOOL *stop) {
+        [fieldNames addObject:[field name]];
+    }];
+    [[self database] maxLengthForFields:fieldNames inTable:[[self queryObject] toString] completion:^(BOOL success, NSError *error, NSArray *widths) {
+        for (MTDatabaseField *field in [[self fields] objectEnumerator]) {
+            NSString *name = [field name];
+            NSString *key = [[self database]safeIdentifier: name];
+            NSInteger maxSize = [[[widths objectAtIndex:0] objectForKey:key] integerValue];
+            field.calculatedWidth = maxSize;
+        }
+    }];
+    
     
     if (error) {
         completion(NO, error, nil);

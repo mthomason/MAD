@@ -8,6 +8,10 @@
 
 #import "MTDatabaseField.h"
 
+@interface MTDatabaseField ()
+
+@end
+
 @implementation MTDatabaseField
 
 - (void)dealloc {
@@ -22,9 +26,12 @@
     if (self) {
         [self setLabel: name];
         [self setName: name];
+        [self setCalculatedWidth:0];
     }
     return self;
 }
+
+
 
 - (BOOL)isNumeric {
     return [MTDatabaseField isNumeric:[self fieldType]];
@@ -102,5 +109,6 @@
     }
     return result;
 }
+
 
 @end

@@ -175,21 +175,23 @@
     NSUInteger column =  section;
     NSString *fieldKey = [self fieldKeyForIndex:column];
     MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
+    NSInteger maxNumberOfCharacters = [field calculatedWidth];
+    if (maxNumberOfCharacters <= 0) {
+        maxNumberOfCharacters = 24;
+    }
     [UIFont systemFontOfSize:[UIFont systemFontSize]];
     
-//    UIFontDescriptor *fontDescriptorHeadline = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
+    //    UIFontDescriptor *fontDescriptorHeadline = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
+    //    CGFloat sizeHeadline = [fontDescriptorHeadline.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
+    //    UIFont *headlineFont = [UIFont fontWithDescriptor:fontDescriptorHeadline size:sizeHeadline];
     UIFontDescriptor *fontDescriptorBody = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
-//    CGFloat sizeHeadline = [fontDescriptorHeadline.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
     CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
     
-//    UIFont *headlineFont = [UIFont fontWithDescriptor:fontDescriptorHeadline size:sizeHeadline];
     UIFont *bodyFont = [UIFont fontWithDescriptor:fontDescriptorBody size:sizeBody];
     
-    NSString *s = [@"" stringByPaddingToLength:[field width] withString:@"X" startingAtIndex:0];
+    NSString *s = [@"" stringByPaddingToLength:maxNumberOfCharacters withString:@"X" startingAtIndex:0];
     CGSize size = [s sizeWithAttributes:@{NSFontAttributeName: bodyFont}];
-    
-    //NSArray *fields = [[[self query] fields] objectForKey:fieldKey];
-    
+        
     return size.width < 75.0000f ? 75.0000f : (size.width > 175.0000f) ? 175.0000f : size.width;
 }
 
