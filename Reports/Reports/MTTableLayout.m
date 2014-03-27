@@ -19,7 +19,7 @@
 @property (nonatomic, retain) NSArray *columnWidth;
 @property (nonatomic, assign) NSUInteger rowCount;
 @property (nonatomic, assign) NSUInteger columnCount;
-@property (nonatomic, assign) CGFloat rowHeight;
+@property (nonatomic, assign) CGFloat heightRow;
 @property (nonatomic, assign) CGFloat heightHeader;
 
 @end
@@ -60,7 +60,7 @@
     [self setColumnWidth:columnWidths];
     [self setRowCount:rowCount];
     [self setColumnCount:columnCount];
-    [self setRowHeight:22.0000f];
+    [self setHeightRow:22.0000f];
     [self setHeightHeader:24.0000f];
     [[self collectionView] setDelegate:self];
     
@@ -83,7 +83,7 @@
     [supplementalAttributes setFrame:frame];
     [supplementalAttributes setHidden:NO];
     [supplementalAttributes setZIndex:999];
-    [supplementalAttributes setAlpha:1.0000f];
+    [supplementalAttributes setAlpha:0.9000f];
     return supplementalAttributes;
 }
 
@@ -127,13 +127,13 @@
         //NSLog(@"crop rect: %@", NSStringFromCGRect(rect));
     }
     
-    NSUInteger rowsToDisplay = ceil(rect.size.height / self.rowHeight);
+    NSUInteger rowsToDisplay = ceil(rect.size.height / self.heightRow);
     NSUInteger columnsToDisplay = ceil( rect.size.width / 75.0000f);
     
     if (rowsToDisplay > self.rowCount) rowsToDisplay = self.rowCount;
     if (columnsToDisplay > self.columnCount) columnsToDisplay = self.columnCount;
     
-    NSInteger firstRow = abs((CGPointZero.y - rect.origin.y)  / self.rowHeight);
+    NSInteger firstRow = abs((CGPointZero.y - rect.origin.y)  / self.heightRow);
     NSInteger firstColumn = abs((CGPointZero.x - rect.origin.x)  / 75.0000f);
     
     if (firstRow > self.rowCount) firstRow = self.rowCount;
@@ -164,7 +164,7 @@
 
 - (CGSize)collectionViewContentSize {
     CGFloat width = [MTTableLayout sumArrayOfFloats:self.columnWidth];
-    CGFloat height = (self.rowHeight * self.rowCount) + self.heightHeader;
+    CGFloat height = (self.heightRow * self.rowCount) + self.heightHeader;
     return CGSizeMake(width, height);
 }
 
@@ -187,9 +187,9 @@
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
     CGFloat x = powf(75.0000f, column);
-    CGFloat y = self.rowHeight * row;
+    CGFloat y = self.heightRow * row;
     CGFloat w = 75.0000f;
-    CGFloat h = self.rowHeight;
+    CGFloat h = self.heightRow;
     CGRect f = CGRectMake(x, y, w, h);
     return [self layoutAttributesForItemAtRow:(NSUInteger)row andColumn:(NSUInteger)column withFrame:f];
 }
@@ -227,9 +227,9 @@
 
 - (CGRect)locationOfObjectAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
     CGFloat x = CGPointZero.x + (column * 75.0000f);
-    CGFloat y = CGPointZero.y + self.heightHeader + (row * self.rowHeight);
+    CGFloat y = CGPointZero.y + self.heightHeader + (row * self.heightRow);
     CGFloat w = 75.0000f;
-    CGFloat h = self.rowHeight;
+    CGFloat h = self.heightRow;
     return CGRectMake(x, y, w, h);
 }
 
