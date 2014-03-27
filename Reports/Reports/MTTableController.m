@@ -73,15 +73,21 @@
     [collectionView reloadData];
     [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
                                                      andRowCount:self.rowCount];
+    
+    for (NSInteger i=0; i<self.columnCount; i++) {
+
+        __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
+        [[self collectionView] registerClass:classCollectionViewCell forCellWithReuseIdentifier:[self reuseIdForColumn:i]];
+        __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
+        [[self collectionView] registerClass:classCollectionViewCellHeader forSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:[self reuseIdSupplementForColumn:i]];
+
+    }
+
 }
 
 - (void)initalize {
     [[self collectionView] setDelegate:self];
     [[self collectionView] setDataSource:self];
-    __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
-    [[self collectionView] registerClass:classCollectionViewCell forCellWithReuseIdentifier:[self reuseId]];
-    __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
-    [[self collectionView] registerClass:classCollectionViewCellHeader forSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:[self reuseIdSupplement]];
 }
 
 #pragma mark - Methods
@@ -93,6 +99,14 @@
         reuseId = NSStringFromClass(class);
     }
     return reuseId;
+}
+
+- (NSString *)reuseIdForColumn:(NSInteger)column {
+    return [NSString stringWithFormat:@"%@%ld", [self reuseId], (long)column];
+}
+
+- (NSString *)reuseIdSupplementForColumn:(NSInteger)column {
+    return [NSString stringWithFormat:@"%@%ld", [self reuseIdSupplement], (long)column];
 }
 
 - (NSString *)reuseIdSupplement {
@@ -126,17 +140,31 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *reuseId = [self reuseId];
+    NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
+    NSUInteger row = [(MTTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
+    NSString *reuseId = [self reuseIdForColumn:column];
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
                                                                            forIndexPath:indexPath];
-    NSUInteger row = [(MTTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
-    NSUInteger column = [(MTTableLayout *)[self collectionViewLayout] columnForIndexPath:indexPath];
     NSDictionary *rowData = [[self tableFormatter] dataForRow:row];
     NSString *fieldKey = [self fieldKeyForIndex:column];
     id fieldValue = [rowData objectForKey:fieldKey];
     NSString *fieldString = [NSString stringWithFormat:@"%@", fieldValue];
     [[cell label] setText:fieldString];
     return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
+    NSString *reuseId = [self reuseIdSupplementForColumn:column];
+    NSString *fieldKey = [self fieldKeyForIndex:[indexPath row]];
+    NSArray *components = [fieldKey componentsSeparatedByString:@"."];
+    NSString *safeFieldName = [components lastObject];
+    NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+    
+    MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
+    [[view label] setText:fieldName];
+    return view;
 }
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
@@ -151,19 +179,6 @@
         [self setFieldKeys:a];
     }
     return [[self fieldKeys] objectAtIndex:index];
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
-           viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    NSString *reuseId = [self reuseIdSupplement];
-    NSString *fieldKey = [self fieldKeyForIndex:[indexPath row]];
-    NSArray *components = [fieldKey componentsSeparatedByString:@"."];
-    NSString *safeFieldName = [components lastObject];
-    NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-    
-    MTTableCellHeader *view = [collectionView dequeueReusableSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:reuseId forIndexPath:indexPath];
-    [[view label] setText:fieldName];
-    return view;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
