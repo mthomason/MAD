@@ -207,7 +207,7 @@
     NSString *s = [@"" stringByPaddingToLength:maxNumberOfCharacters withString:@"X" startingAtIndex:0];
     CGSize size = [s sizeWithAttributes:@{NSFontAttributeName: bodyFont}];
         
-    return size.width < 75.0000f ? 75.0000f : (size.width > 175.0000f) ? 175.0000f : size.width;
+    return size.width < 75.0000f ? 75.0000f : (size.width > 280.0000f) ? 280.0000f : size.width;
 }
 
 @end

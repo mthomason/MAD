@@ -50,6 +50,7 @@
     UIColor *bgcolor = [UIColor tintColor];
     [lbl setBackgroundColor:bgcolor];
     [lbl setTextColor:[UIColor tintColor2]];
+    [lbl setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
     [self addSubview:lbl];
     [self setLabel:lbl];
     [[self layer] setBorderWidth:1.0000f];

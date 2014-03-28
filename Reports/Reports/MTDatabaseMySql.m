@@ -160,7 +160,9 @@
     [serv setSchema:    [[self databaseConnection] database]];
     [serv setPort:      (unsigned int)[[self databaseConnection] port]];
     
-    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
+    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server]
+                                        port:[[self databaseConnection] port]
+                                 andDatabase:[[self databaseConnection] database]];
     
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
@@ -248,7 +250,11 @@
 
 - (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
+    
+    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server]
+                                        port:[[self databaseConnection] port]
+                                 andDatabase:[[self databaseConnection] database]];
+    
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
         if (success) {
@@ -272,7 +278,7 @@
                     if ([fields count] > 0) {
                         NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
                         for (NSString *field in fields) {
-                            [selectFields appendFormat: @" MAX(LENGTH(%@)) %@ %@,", field, [self tableAliasConnector], field];
+                            [selectFields appendFormat: @" MAX( LENGTH(%@) ) %@ %@,", field, [self tableAliasConnector], field];
                         }
                         NSString *fieldsPart;
                         if ([selectFields length] > 0) {
@@ -289,6 +295,7 @@
                         
                         completion(successConnection, errorConnection, [fetch3 results]);
                     }
+                    
                 } else {
                     [[MTKeyChain sharedObject] deleteKey:key];
                     completion(NO, errorConnection, nil);

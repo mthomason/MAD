@@ -25,6 +25,155 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 @implementation MTDatabaseSqlServer
 
+- (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
+                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+    
+    
+    
+    __block BOOL blockSuccess = NO;
+    __block MTDatabaseSqlServer *blockSelf = self;
+    __block NSMutableArray *result = [[NSMutableArray alloc] init];
+    __block NSError *error = nil;
+    
+    dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    
+    //dispatch_async(queuePriorityBackground, ^{
+    //    dispatch_sync(dispatch_get_main_queue(), ^{
+            
+            
+            [blockSelf connectWithCredentals:[blockSelf databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+                
+                if (success) {
+                    
+                    id results = nil;
+                    NSError *error = nil;
+                    if (dbconn) {
+                        
+
+                        NSString *sqlStr = nil;
+                        
+                        if ([fields count] > 0) {
+                            NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
+                            for (NSString *field in fields) {
+                                [selectFields appendFormat: @" MAX( LENGTH(%@) ) %@ %@,", field, [self tableAliasConnector], field];
+                            }
+                            NSString *fieldsPart;
+                            if ([selectFields length] > 0) {
+                                fieldsPart = [selectFields substringToIndex:[selectFields length] - 1];
+                            } else {
+                                fieldsPart = @"";
+                            }
+                            sqlStr = [NSString stringWithFormat:@"SELECT %@ from %@;", fieldsPart, tableName];
+                            
+                        }
+                        if (sqlStr) {
+
+                            const char *sql = [sqlStr cStringUsingEncoding:NSUTF8StringEncoding];
+
+                            dbcmd(dbconn, sql);
+                            RETCODE success = dbsqlexec(dbconn);
+                            
+                            if (success != SUCCEED) {
+                                blockSuccess = NO;
+                                NSString *message = @"Sql Syntax Error";
+                                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                                error = [NSError errorWithDomain:@"MTDatabaseTds" code:3 userInfo:errorInfo];
+                                
+                            } else {
+                                blockSuccess = YES;
+                                NSInteger numberOfColumns = dbnumcols(dbconn);
+                                
+                                results = [[NSMutableArray alloc] initWithCapacity: numberOfColumns];
+                                
+                                while (dbresults(dbconn) != NO_MORE_RESULTS) {
+                                    
+                                    //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+                                    DBINT columnLength      = dbcollen(dbconn, 1);
+                                    char *sybVarCharBind;
+                                    DBINT sybVarCharBindNull;
+                                    
+                                    sybVarCharBind = malloc( sizeof(char) * ( columnLength + 1 ) );
+                                    dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
+                                    dbnullbind(dbconn, 1, &sybVarCharBindNull);
+                                    
+                                    while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                                        
+                                        if (sybVarCharBindNull != -1) {
+                                            if (sybVarCharBind != nil) {
+                                                NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                                               encoding: NSStringEncodingConversionAllowLossy];
+                                                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                                                //NSLog(@"%@", table);
+                                                [results addObject:table];
+                                                [table release];
+                                                [tableName release];
+                                            }
+                                        }
+                                    }
+                                    
+                                    free(sybVarCharBind);
+                                }
+                            }
+                            dbclose(dbconn);
+
+                        }
+                        
+                    } else {
+                        NSString *message = @"No Connection";
+                        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:24 userInfo:errorInfo];
+                    }
+                    dispatch_semaphore_signal(semaphoreRunQuery);
+                } else {
+
+                    blockSuccess = NO;
+                    error = [[connectionError retain] autorelease];
+                    dispatch_semaphore_signal(semaphoreRunQuery);
+                }
+                
+            }];
+            
+      //  });
+    //});
+    
+    
+    
+    
+
+    
+/*    if (sqlStr) {
+        sqlite3_stmt *statement;
+        const char *queryStartChar = [sqlStr UTF8String];
+        char *sql = sqlite3_mprintf((char *) queryStartChar);
+        
+        if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+            success = YES;
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                NSInteger numberOfColumns = sqlite3_column_count(statement);
+                NSMutableDictionary *resultSet = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+                for (NSInteger i=0; i<numberOfColumns; i++) {
+                    NSInteger resultString = sqlite3_column_int(statement, (int)i);
+                    const  char *columnNameCString = sqlite3_column_name(statement, (int)i);
+                    NSString *columnName = [self safeIdentifier: [NSString stringWithUTF8String:(char *)columnNameCString]];
+                    [resultSet setObject:@(resultString) forKey:columnName];
+                    
+                }
+                [result addObject:resultSet];
+            }
+        }
+        
+        sqlite3_finalize(statement);
+        sqlite3_free(sql);
+        
+    }*/
+    
+    dispatch_semaphore_wait(semaphoreRunQuery, DISPATCH_TIME_FOREVER);
+    dispatch_release(semaphoreRunQuery);
+
+    completion(blockSuccess, error, [result autorelease]);
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     __block MTDatabaseSqlServer *blockSelf = self;
@@ -1298,9 +1447,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 
             }
             
-            
-            
-            
             [janFirst1990 release];
             [janFirst1990Components release];
             [gregorian release];
@@ -1429,12 +1575,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                             
                             
                             connected = (error == nil);
-                            dispatch_sync(dispatch_get_main_queue(), ^{
+                            //dispatch_sync(dispatch_get_main_queue(), ^{
                                 if (connected == NO) {
                                     [[MTKeyChain sharedObject] deleteKey:key];
                                 }
                                 completion(dbconn, connected, error);
-                            });
+                            //});
                             
                         }
                     });

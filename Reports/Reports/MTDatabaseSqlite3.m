@@ -39,6 +39,57 @@
     [super dealloc];
 }
 
+- (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
+                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    BOOL success = NO;
+	NSError *error = nil;
+    NSString *sqlStr = nil;
+    
+    if ([fields count] > 0) {
+        NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
+        for (NSString *field in fields) {
+            [selectFields appendFormat: @" MAX( LENGTH(%@) ) %@ %@,", field, [self tableAliasConnector], field];
+        }
+        NSString *fieldsPart;
+        if ([selectFields length] > 0) {
+            fieldsPart = [selectFields substringToIndex:[selectFields length] - 1];
+        } else {
+            fieldsPart = @"";
+        }
+        sqlStr = [NSString stringWithFormat:@"SELECT %@ from %@;", fieldsPart, tableName];
+
+    }
+
+    if (sqlStr) {
+        sqlite3_stmt *statement;
+        const char *queryStartChar = [sqlStr UTF8String];
+        char *sql = sqlite3_mprintf((char *) queryStartChar);
+        
+        if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+            success = YES;
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                NSInteger numberOfColumns = sqlite3_column_count(statement);
+                NSMutableDictionary *resultSet = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+                for (NSInteger i=0; i<numberOfColumns; i++) {
+                    NSInteger resultString = sqlite3_column_int(statement, (int)i);
+                    const  char *columnNameCString = sqlite3_column_name(statement, (int)i);
+                    NSString *columnName = [self safeIdentifier: [NSString stringWithUTF8String:(char *)columnNameCString]];
+                    [resultSet setObject:@(resultString) forKey:columnName];
+
+                }
+                [result addObject:resultSet];
+            }
+        }
+        
+        sqlite3_finalize(statement);
+        sqlite3_free(sql);
+
+    }
+    completion(success, error, [result autorelease]);
+}
+
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;

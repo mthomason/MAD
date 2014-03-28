@@ -21,7 +21,7 @@ typedef struct _ColumnWidth {
     CGFloat originX, width;
 } ColumnWidth;
 
-@property (nonatomic, retain) NSArray *columnWidth;
+@property (nonatomic, retain) NSMutableArray *columnWidth;
 @property (nonatomic, assign) NSUInteger rowCount;
 @property (nonatomic, assign) NSUInteger columnCount;
 @property (nonatomic, assign) CGFloat heightRow;
@@ -90,7 +90,19 @@ typedef struct _ColumnWidth {
         NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];;
         [columnWidths addObject:columnWidthEncoding];
     }
+
     [self setColumnWidth:columnWidths];
+
+    if ([self.columnWidth count] > 0) {
+        ColumnWidth lastWidth;
+        [[self.columnWidth lastObject] getValue:&lastWidth];
+        CGFloat tableWidth = lastWidth.originX + lastWidth.width;
+        if (tableWidth < self.collectionView.frame.size.width) {
+            lastWidth.width = self.collectionView.frame.size.width - lastWidth.originX;
+        }
+        self.columnWidth[self.columnWidth.count - 1] = [NSValue valueWithBytes:&lastWidth objCType:@encode(ColumnWidth)];
+    }
+
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind

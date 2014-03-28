@@ -48,6 +48,7 @@
     UILabel *lbl = [[UILabel alloc] initWithFrame:[[self contentView] frame]];
     [lbl setBackgroundColor:[UIColor whiteColor]];
     [[self contentView] addSubview:lbl];
+    [lbl setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
     [self setLabel:lbl];
     [[[self contentView] layer] setBorderWidth:1.0000f];
     [[[self contentView] layer] setBorderColor:[UIColor darkGrayColor].CGColor];
