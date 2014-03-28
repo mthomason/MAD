@@ -582,7 +582,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 } else {
                     
                     UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
-                    [[tabBarController view] setTintColor:[UIColor tintColorRed]];
+                    [[tabBarController view] setTintColor:[UIColor greenColor]];
+                    [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
+
+                    //[[tabBarController view] setBackgroundColor:[UIColor greenColor]];
+                    
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
                     __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
                     

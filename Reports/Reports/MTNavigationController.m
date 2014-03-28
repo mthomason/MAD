@@ -21,4 +21,8 @@
     [titleTextAttributes release];
 }
 
+- (UITabBarItem *)tabBarItem {
+    return [[[[self topViewController] tabBarItem] retain] autorelease];
+}
+
 @end

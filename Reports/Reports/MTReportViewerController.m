@@ -112,14 +112,19 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [super dealloc];
 }
 
+- (UITabBarItem *)tabBarItem {
+    UIImage *tabBarImage = [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+    UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    NSString *title = NSLocalizedString(@"Viewer", @"Viewer");
+    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:title
+                                                             image:tabBarImageOg
+                                                               tag:0];
+    //self.tabBarItem = tabBarItem;
+    return [tabBarItem autorelease];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    UIColor *barTintColor = [UIColor tintColor];
-    UIColor *tintColor = [UIColor tintColor2];
-    UIToolbar *toolbar = [[self navigationController] toolbar];
-    [toolbar setBarTintColor:barTintColor];
-    [toolbar setTintColor:tintColor];
     
     [self setEdgesForExtendedLayout: UIRectEdgeNone];
     [self setTitle:@"MAD Viewer"];
@@ -184,6 +189,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColor2];
+    UIToolbar *toolbar = [[self navigationController] toolbar];
+    [toolbar setBarTintColor:barTintColor];
+    [toolbar setTintColor:tintColor];
    // if ([self asyncDelegate] == nil) {
       //  MTApplicationInstance *applicationInstance = [AppDelegate app];
     //    MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -488,6 +499,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
     return [[result retain] autorelease];
 }
+
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     [MTReportViewerController setDisplayActive:reportViewerController];
     MTApplicationInstance *app = [AppDelegate app];
@@ -542,6 +554,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     NSArray *tabBarItems = [[[controller tabBarController] tabBar] items];
     for (UITabBarItem *item in tabBarItems) {
+//        [item.image renderingMode]
         [item setEnabled:YES];
     }
     

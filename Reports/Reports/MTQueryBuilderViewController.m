@@ -82,6 +82,17 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 @implementation MTQueryBuilderViewController
 
+- (UITabBarItem *)tabBarItem {
+    UIImage *tabBarImage = [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+    UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    NSString *title = NSLocalizedString(@"Viewer", @"Viewer");
+    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:title
+                                                             image:tabBarImageOg
+                                                               tag:0];
+    //self.tabBarItem = tabBarItem;
+    return tabBarItem;
+}
+
 - (void)dealloc {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
@@ -111,6 +122,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIImage *tabBarImage = [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+    UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    NSString *title = NSLocalizedString(@"Viewer", @"Viewer");
+    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:title
+                                                             image:tabBarImageOg
+                                                               tag:0];
+    [tabBarItem setSelectedImage:tabBarImageOg];
+    self.tabBarItem = tabBarItem;
+    //return tabBarItem;
     
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
     

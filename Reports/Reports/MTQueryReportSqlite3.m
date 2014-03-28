@@ -31,8 +31,9 @@
         
     } else {
         [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
-                         completion(success, error, results);
-                     }];
+            [[self cache] cacheData:results];
+            completion(success, error, results);
+        }];
         }
     
     

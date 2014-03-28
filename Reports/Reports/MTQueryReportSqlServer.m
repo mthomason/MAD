@@ -30,6 +30,7 @@ NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
         completion(NO, error, nil);
     } else {
         [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
+            [[self cache] cacheData:results];
             completion(success, error, results);
         }];
     }
