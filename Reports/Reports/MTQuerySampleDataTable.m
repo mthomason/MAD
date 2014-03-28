@@ -28,7 +28,7 @@
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
 
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:[[self database] selectPart]];
     RptqDatabaseSchemaTable *table = [self queryObject];
     NSString *safeTableName = [[self database] safeIdentifier: [table toString]];
     
@@ -47,8 +47,9 @@
     }
     
     
-    [sql appendString:@" FROM %@"];
-    return [NSString stringWithFormat:sql, safeTableName];
+    [sql appendString:MTSqlFrom];
+    [sql appendString:safeTableName];
+    return sql;
 }
 
 - (id)initWithObject:(id)object {
@@ -72,24 +73,29 @@
         [fieldNames addObject:[field name]];
     }];
     [[self database] maxLengthForFields:fieldNames inTable:[[self queryObject] toString] completion:^(BOOL success, NSError *error, NSArray *widths) {
-        for (MTDatabaseField *field in [[self fields] objectEnumerator]) {
-            NSString *name = [field name];
-            NSString *key = [[self database]safeIdentifier: name];
-            NSInteger maxSize = [[[widths objectAtIndex:0] objectForKey:key] integerValue];
-            field.calculatedWidth = maxSize;
+        if (success) {
+            for (MTDatabaseField *field in [[self fields] objectEnumerator]) {
+                NSString *name = [field name];
+                NSString *key = [[self database]safeIdentifier: name];
+                NSInteger maxSize = [[[widths objectAtIndex:0] objectForKey:key] integerValue];
+                field.calculatedWidth = maxSize;
+            }
+            
+            if (error) {
+                completion(NO, error, nil);
+            } else {
+                [[self database] executeSql:sql
+                                 completion:^(BOOL success, NSError *error, id results) {
+                                     [[self cache] cacheData:results];
+                                     completion(success, error, results);
+                                 }];
+            }
+
+            
         }
     }];
     
     
-    if (error) {
-        completion(NO, error, nil);
-    } else {
-        [[self database] executeSql:sql
-                         completion:^(BOOL success, NSError *error, id results) {
-                             [[self cache] cacheData:results];
-                             completion(success, error, results);
-                         }];
-    }
 }
 
 @end

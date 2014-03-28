@@ -239,21 +239,26 @@
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                                  withConnecitonId: connectionId];
                             
-                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForManagedObjectContext: managedObjectContext
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [[RptqDatabaseSchemaTable getTableForManagedObjectContext: managedObjectContext
                                                                                               database: currentDatabase
-                                                                                          andTableName: [databaseTable name]];
+                                                                                          andTableName: [databaseTable name]] retain];
                             
-                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
-                                                                                                                       andField: objField];
+                            RptqDatabaseSchemaField *schemaField = [[RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
+                                                                                                                       andField: objField] retain];
                             
                             NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
                             [fieldSet addObject:schemaField];
                             [rptqTableOrigional setHasFields:fieldSet];
-                            [fieldSet release];
 
                             NSError *saveError = nil;
                             [[schemaField managedObjectContext] save:&saveError];
+                            if (saveError) {
+                                NSLog(@"%@", saveError);
+                            }
 
+                            [rptqTableOrigional release];
+                            [schemaField release];
+                            [fieldSet release];
                         }
                         if (tableCounter == numberOfTables - 1) {
                             completion(YES, nil);
