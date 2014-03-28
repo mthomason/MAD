@@ -49,7 +49,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     if ([fields count] > 0) {
         NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
         for (NSString *field in fields) {
-            [selectFields appendFormat: @" MAX( LEN(%@) ) %@ %@,", field, [self tableAliasConnector], field];
+            NSString *safeFieldName = [self safeIdentifier:field];
+            [selectFields appendFormat: @" MAX( LEN(%@) ) %@ %@,", safeFieldName, [self tableAliasConnector], safeFieldName];
         }
         NSString *fieldsPart;
         if ([selectFields length] > 0) {
@@ -57,7 +58,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         } else {
             fieldsPart = @"";
         }
-        sqlStr = [NSString stringWithFormat:@"%@ %@ %@ %@;", self.selectPart, fieldsPart, MTSqlFrom, tableName];
+        NSString *safeTableName = [self safeIdentifier:tableName];
+        sqlStr = [NSString stringWithFormat:@"%@ %@ %@ %@;", self.selectPart, fieldsPart, MTSqlFrom, safeTableName];
         
     }
     if ([sqlStr length] > 0) {

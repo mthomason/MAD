@@ -73,7 +73,8 @@
         [fieldNames addObject:[field name]];
     }];
     [[self database] maxLengthForFields:fieldNames inTable:[[self queryObject] toString] completion:^(BOOL success, NSError *error, NSArray *widths) {
-        if (success) {
+        if (success && [widths count] > 0) {
+            
             for (MTDatabaseField *field in [[self fields] objectEnumerator]) {
                 NSString *name = [field name];
                 NSString *key = [[self database]safeIdentifier: name];
