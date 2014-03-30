@@ -30,6 +30,7 @@
     NSString *safeField = [[self database] safeQuerySchemaField:field];
     NSString *safeTable = [[self database] safeIdentifier:field.inTable.name];
     [[self fields] setObject:field forKey:safeField];
+    [[self fieldKeys] addObject:safeField];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
                      @"%@ %@ "
                      @"LIMIT 100;",

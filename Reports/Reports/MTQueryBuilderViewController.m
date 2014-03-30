@@ -417,6 +417,45 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
 }
 
+- (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
+    [self dismissViewControllerAnimated:YES completion:^{ }];
+    
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    
+    [RptqQueryPredicate addPredicate:predicate toDocument:[reportDocument activeDocument]];
+    [reportDocument saveContext];
+    [reportDocument quickSave];
+}
+
+- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
+    if (groupToRemove) {
+        RptqQuery *query = [groupToRemove inQuery];
+        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
+        
+        NSSet *sectionsToRemove = [groupToRemove hasSection];
+        NSArray *sections = [sectionsToRemove allObjects];
+        if ([sections count] == 2) {
+            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
+            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+        }
+        [[query managedObjectContext] deleteObject: groupToRemove];
+        [query removeHasQueryGroupsObject: groupToRemove];
+        [managedObjectContext save:nil];
+        
+        //Reweight Groups
+        NSString *weight = NSStringFromSelector(@selector(weight));
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        NSUInteger counter = 0;
+        for (RptqQueryGroup *group in sortedQueryGroups) {
+            [group setWeight:@(counter)];
+            counter++;
+        }
+        [managedObjectContext save:nil];
+    }
+}
+
 #pragma mark - Modal helper
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section withNumberOfTables:(NSInteger)numberOfTables {
@@ -500,17 +539,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{ }];
-}
-
-- (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
-
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-    [RptqQueryPredicate addPredicate:predicate toDocument:[reportDocument activeDocument]];
-    [reportDocument saveContext];
-    [reportDocument quickSave];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
@@ -1064,34 +1092,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         }
         default:
             break;
-    }
-}
-
-- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
-    if (groupToRemove) {
-        RptqQuery *query = [groupToRemove inQuery];
-        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
-        
-        NSSet *sectionsToRemove = [groupToRemove hasSection];
-        NSArray *sections = [sectionsToRemove allObjects];
-        if ([sections count] == 2) {
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
-        }
-        [[query managedObjectContext] deleteObject: groupToRemove];
-        [query removeHasQueryGroupsObject: groupToRemove];
-        [managedObjectContext save:nil];
-        
-        //Reweight Groups
-        NSString *weight = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        NSUInteger counter = 0;
-        for (RptqQueryGroup *group in sortedQueryGroups) {
-            [group setWeight:@(counter)];
-            counter++;
-        }
-        [managedObjectContext save:nil];
     }
 }
 

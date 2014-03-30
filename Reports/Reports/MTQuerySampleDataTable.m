@@ -25,25 +25,22 @@
 
 @implementation MTQuerySampleDataTable
 
+
+
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
 
     NSMutableString *sql = [[NSMutableString alloc] initWithString:[[self database] selectPart]];
     RptqDatabaseSchemaTable *table = [self queryObject];
-    NSString *safeTableName = [[self database] safeIdentifier: [table toString]];
     
-    NSUInteger *fieldCounter = 0;
+    [sql appendString:[[self database] sqlAllFieldsInTable:table]];
     
+    NSString *safeTableName = [[self database] tableAliasForTable:table];
     for (RptqDatabaseSchemaField *field in [table hasFields]) {
-        
-        if (fieldCounter != 0)  [sql appendString:@",\n"];
-        NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-        NSString *fieldName = [[self database] safeIdentifier: [field name]];
-        NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
-        [sql appendFormat: @"\t%@", fieldAlias];
         MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
+        NSString *fieldAlias = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
         [[self fields] setObject:dbField forKey:fieldAlias];
-        fieldCounter++;
+        [[self fieldKeys] addObject:fieldAlias];
     }
     
     
@@ -73,6 +70,7 @@
         [fieldNames addObject:[field name]];
     }];
     [[self database] maxLengthForFields:fieldNames inTable:[[self queryObject] toString] completion:^(BOOL success, NSError *error, NSArray *widths) {
+        
         if (success && [widths count] > 0) {
             
             for (MTDatabaseField *field in [[self fields] objectEnumerator]) {

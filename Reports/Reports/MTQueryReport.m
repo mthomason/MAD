@@ -306,6 +306,7 @@
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
             [[self fields] setObject:field forKey:fieldAlias];
+            [[self fieldKeys] addObject:fieldAlias];
             fieldCounter++;
         }
         if (fieldCounter == 0) {

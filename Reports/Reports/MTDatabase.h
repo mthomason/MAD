@@ -50,6 +50,10 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField;
 - (NSString *)selectPart;
+- (NSString *)sqlAllFieldsInTable:(RptqDatabaseSchemaTable *)schemaTable;
+- (NSString *)tableAliasForTable:(RptqDatabaseSchemaTable *)table;
+- (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field
+               withSafeTableName:(NSString *)safeTableName;
 
 - (NSString *)tableAliasConnector;
 

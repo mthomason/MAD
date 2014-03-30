@@ -2321,6 +2321,7 @@
 		4C5625EA1759730200433E88 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4C5626011759865900433E88 /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		4C5626021759865A00433E88 /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
+		4C5BED5818E8999D00BDDDB8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = Resources/Settings.bundle; sourceTree = "<group>"; };
 		4C5CB70E189B8EAD00BB5AF8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../NSData+Base64.h"; sourceTree = "<group>"; };
 		4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../NSData+Base64.m"; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
@@ -3240,20 +3241,9 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E3714B29789007B4F48 /* AppDelegate.h */,
-				4C384E3814B29789007B4F48 /* AppDelegate.m */,
-				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
-				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
-				4C9E446918D8B5EF00F0F578 /* MTCache.h */,
-				4C9E446A18D8B5EF00F0F578 /* MTCache.m */,
+				4C5BED4E18E897FE00BDDDB8 /* App */,
 				4CBABC1218C8945B00EE5768 /* MTUser.h */,
 				4CBABC1318C8945B00EE5768 /* MTUser.m */,
-				4C02F74C18D5DC8800061A83 /* MTReportDesigner.h */,
-				4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */,
-				4C02F75818D5DC9900061A83 /* MTQueryDesigner.h */,
-				4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */,
-				4C02F75C18D5DCAB00061A83 /* MTReportViewer.h */,
-				4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */,
 				4C11BCF418DD4DB7001E3D33 /* Formatters */,
 				4C8A648818C7C6C200997D22 /* Document */,
 				4C8A649118C7C6D100997D22 /* Database */,
@@ -3309,6 +3299,7 @@
 				4C94AA1117DCB3C9000F6FCF /* Images.xcassets */,
 				4C1B7A65163E123200E331AA /* ReportDesigner */,
 				4C0E7860163B5C8D003B951E /* Images */,
+				4C5BED5818E8999D00BDDDB8 /* Settings.bundle */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3849,6 +3840,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4C5BED4E18E897FE00BDDDB8 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4C384E3714B29789007B4F48 /* AppDelegate.h */,
+				4C384E3814B29789007B4F48 /* AppDelegate.m */,
+				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
+				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
+				4C5BED5718E8982400BDDDB8 /* User Interface */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		4C5BED5718E8982400BDDDB8 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				4C02F74C18D5DC8800061A83 /* MTReportDesigner.h */,
+				4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */,
+				4C02F75818D5DC9900061A83 /* MTQueryDesigner.h */,
+				4C02F75918D5DC9900061A83 /* MTQueryDesigner.m */,
+				4C02F75C18D5DCAB00061A83 /* MTReportViewer.h */,
+				4C02F75D18D5DCAB00061A83 /* MTReportViewer.m */,
+			);
+			name = "User Interface";
+			sourceTree = "<group>";
+		};
 		4C5CB7BE189E2A7D00BB5AF8 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -4130,6 +4146,8 @@
 		4C8A649118C7C6D100997D22 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				4C9E446918D8B5EF00F0F578 /* MTCache.h */,
+				4C9E446A18D8B5EF00F0F578 /* MTCache.m */,
 				4C8A649418C7C73B00997D22 /* DatabaseConnection */,
 				4C9E447E18D9E61C00F0F578 /* Database */,
 				4C9E447D18D8D3B800F0F578 /* Query */,

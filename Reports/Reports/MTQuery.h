@@ -22,6 +22,7 @@
 @property (nonatomic, strong) MTCache *cache;
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
+@property (nonatomic, strong) NSMutableArray *fieldKeys;
 
 - (id)initWithObject:(id)object;
 + (id)queryFactory:(id)object;
@@ -44,6 +45,8 @@
 
 - (NSArray *)sortedHasQueryGroups;
 - (NSArray *)sortDescriptors;
+
+- (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end
 

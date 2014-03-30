@@ -28,21 +28,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 - (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
                 completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
-    
-    
     __block BOOL blockSuccess = NO;
-    //__block MTDatabaseSqlServer *blockSelf = self;
-    //__block NSMutableArray *result = [[NSMutableArray alloc] init];
     __block NSError *error = nil;
-    
-    //dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
-    //dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    
-    //dispatch_async(queuePriorityBackground, ^{
-    //    dispatch_sync(dispatch_get_main_queue(), ^{
-    
-    
-    
     
     NSString *sqlStr = nil;
     
@@ -69,10 +56,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     } else {
         completion(blockSuccess, error, nil);
     }
-    
-    
-//    dispatch_semaphore_wait(semaphoreRunQuery, DISPATCH_TIME_FOREVER);
-//    dispatch_release(semaphoreRunQuery);
 
 }
 
@@ -160,8 +143,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 - (void)getFieldsForTableName: (NSString *)tableName
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
 
-    //__block MTDatabaseSqlServer *sqlServer = self;
-    
     [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
         
         if (success) {
@@ -1548,6 +1529,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (NSString *) safeIdentifier:(NSString *)fieldOrTableName {
     return [NSString stringWithFormat:@"[%@]", fieldOrTableName];
+}
+
+- (NSString *)selectPartSaftyLimit {
+    //NSString *limit = [];
+    //return [[self selectPart] stringByAppendingFormat:@" TOP %@ ", ];
 }
 
 @end

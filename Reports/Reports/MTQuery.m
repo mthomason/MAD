@@ -55,6 +55,8 @@
         
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
         [self setFields:fieldInfo];
+        NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
+        [self setFieldKeys:fieldKeys];
 
         if ([object isKindOfClass:[RptqDatabase class]]) {
             
@@ -147,6 +149,7 @@
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [[self fields] removeAllObjects];
+    [[self fieldKeys] removeAllObjects];
     return @"";
 }
 
@@ -176,6 +179,10 @@
 
 - (NSArray *)sortDescriptors {
     return [NSArray array];
+}
+
+- (NSString *)fieldKeyForIndex:(NSUInteger)index {
+    return (index < [[self fieldKeys] count]) ? [[self fieldKeys] objectAtIndex:index] : nil;
 }
 
 @end

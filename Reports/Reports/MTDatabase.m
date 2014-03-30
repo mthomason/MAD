@@ -103,6 +103,33 @@
                                  userInfo: nil];
 }
 
+- (NSString *)tableAliasForTable:(RptqDatabaseSchemaTable *)table {
+    return [self safeIdentifier: [table toString]];
+}
+- (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field
+               withSafeTableName:(NSString *)safeTableName {
+    NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
+    NSString *fieldName = [self safeIdentifier: [field name]];
+    return [tableAlias stringByAppendingString:fieldName];
+}
+
+- (NSString *)sqlAllFieldsInTable:(RptqDatabaseSchemaTable *)schemaTable {
+    NSUInteger *fieldCounter = 0;
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+    NSString *safeTableName = [self tableAliasForTable:schemaTable];
+    
+    for (RptqDatabaseSchemaField *field in [schemaTable hasFields]) {
+        
+        NSString *fieldAlias = [self fieldAliasForField:field withSafeTableName:safeTableName];
+
+        if (fieldCounter > 0)  [sql appendString:@",\n"];
+        [sql appendFormat: @"\t%@", fieldAlias];
+        
+        fieldCounter++;
+    }
+    return sql;
+}
+
 - (NSString *)tableAliasConnector {
     return @" AS ";
 }

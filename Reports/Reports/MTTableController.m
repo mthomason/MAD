@@ -146,7 +146,7 @@
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
                                                                            forIndexPath:indexPath];
     NSDictionary *rowData = [[self tableFormatter] dataForRow:row];
-    NSString *fieldKey = [self fieldKeyForIndex:column];
+    NSString *fieldKey = [[self query] fieldKeyForIndex:column];
     id fieldValue = [rowData objectForKey:fieldKey];
     NSString *fieldString = [NSString stringWithFormat:@"%@", fieldValue];
     [[cell label] setText:fieldString];
@@ -157,7 +157,7 @@
            viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdSupplementForColumn:column];
-    NSString *fieldKey = [self fieldKeyForIndex:[indexPath row]];
+    NSString *fieldKey = [[self query] fieldKeyForIndex:[indexPath row]];
     NSArray *components = [fieldKey componentsSeparatedByString:@"."];
     NSString *safeFieldName = [components lastObject];
     NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -167,20 +167,6 @@
     return view;
 }
 
-- (NSString *)fieldKeyForIndex:(NSUInteger)index {
-    if ([self fieldKeys] == nil) {
-        NSDictionary *rowDataSample = [[self tableFormatter] dataForRow:0];
-        NSUInteger numberOfFields = [rowDataSample count];
-        NSMutableArray *a = [[NSMutableArray alloc] initWithCapacity:numberOfFields];
-        [rowDataSample enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            [a addObject:key];
-            
-        }];
-        [self setFieldKeys:a];
-    }
-    return [[self fieldKeys] objectAtIndex:index];
-}
-
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     return UIEdgeInsetsMake(CGSizeZero.height + 22.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
 }
@@ -188,7 +174,8 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section {
     
     NSUInteger column =  section;
-    NSString *fieldKey = [self fieldKeyForIndex:column];
+    //NSString *fieldKey = [self fieldKeyForIndex:column];
+    NSString *fieldKey = [[self query] fieldKeyForIndex:column];
     MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
     NSInteger maxNumberOfCharacters = [field calculatedWidth];
     if (maxNumberOfCharacters <= 0) {
