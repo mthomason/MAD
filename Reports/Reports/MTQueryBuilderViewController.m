@@ -31,6 +31,7 @@
 #import "MTNavigationController.h"
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
+#import "MTShowSqlViewController.h"
 
 #import "UIViewController+tabBarItem.h"
 
@@ -212,9 +213,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [[segue destinationViewController] setDelegate:self];
 
     } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK:
-        MTViewController *viewController;
+        MTShowSqlViewController *viewController;
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTViewController *)[[segue destinationViewController] topViewController];
+            viewController = (MTShowSqlViewController *)[[segue destinationViewController] topViewController];
         } else {
             viewController = [segue destinationViewController];
         }
@@ -300,12 +301,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         [tvc setInitalNumberOfRows:[[section numberOfRows] integerValue]];
                     }
                 }
-    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportLayout]) {
-        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            [(MTViewController *)[[segue destinationViewController] topViewController] setDelegate: self];
-        } else {
-            [[segue destinationViewController] setDelegate: self];
-        }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
         [[segue destinationViewController] setDelegate: self];
     }

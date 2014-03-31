@@ -9,9 +9,11 @@
 #ifndef Reports_MTLicensingViewController_h
 #define Reports_MTLicensingViewController_h
 
-#import "MTTableViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTLicensingViewController : MTTableViewController
+@interface MTLicensingViewController : UITableViewController
+
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @end
 

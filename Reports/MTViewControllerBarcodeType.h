@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTViewController.h"
 #import "MTBarcode.h"
-
 
 @protocol MTViewControllerBarcodeTypeDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;

@@ -10,9 +10,11 @@
 #define Reports_MTTableViewControllerAbout_h
 
 #import <UIKit/UIKit.h>
-#import "MTTableViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTTableViewControllerAbout : MTTableViewController
+@interface MTTableViewControllerAbout : UITableViewController
+
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)done:(id)sender;

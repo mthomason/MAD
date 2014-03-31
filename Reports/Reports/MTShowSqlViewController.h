@@ -9,10 +9,11 @@
 #ifndef Reports_MTShowSqlViewController_h
 #define Reports_MTShowSqlViewController_h
 
-#import "MTViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTShowSqlViewController : MTViewController
+@interface MTShowSqlViewController : UIViewController
 
+@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 
 - (IBAction)done:(id)sender;

@@ -10,9 +10,11 @@
 #define Reports_MTDatabaseDriverSelectorViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTTableViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTDatabaseDriverSelectorViewController : MTTableViewController
+@interface MTDatabaseDriverSelectorViewController : UITableViewController
+
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @end
 

@@ -16,6 +16,7 @@
 #import "MTQueryBuilderAddLinkFirstFieldViewController.h"
 #import "MTQueryBuilderAddLinkSecondFieldViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderLinkBuilderViewController;
 
@@ -30,7 +31,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)queryLink;
 @end
 
-@interface MTQueryBuilderLinkBuilderViewController : MTTableViewController
+@interface MTQueryBuilderLinkBuilderViewController : UITableViewController
     <UITableViewDataSource, UITableViewDelegate,
         MTQueryBuilderAddLinkJoinTypeDelegate,
         MTQueryBuilderAddLinkFirstTableDelegate,

@@ -9,6 +9,7 @@
 #import "MTQueryBuilderVisualizationViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "MTShowSqlViewController.h"
 
 #import "Rptqdocument.h"
 #import "RptqQueryLinks.h"
@@ -22,7 +23,6 @@
 
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import "MTScrollViewCenter.h"
-#import "MTViewController.h"
 
 #import "RptqQuery+Extras.h"
 #import "RptqQueryTable+Extras.h"
@@ -271,7 +271,7 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:MNSSegueShowSql]) {
-        MTViewController *viewController;
+        MTShowSqlViewController *viewController;
         if ([UIDevice isPad]) {
             [self setShowSqlIsVisable:YES];
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
@@ -283,7 +283,7 @@ typedef void(^MTBlockResultVoid)(void);
         }
         
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTViewController *)[[segue destinationViewController] topViewController];
+            viewController = (MTShowSqlViewController *)[[segue destinationViewController] topViewController];
         } else {
             viewController = [segue destinationViewController];
         }

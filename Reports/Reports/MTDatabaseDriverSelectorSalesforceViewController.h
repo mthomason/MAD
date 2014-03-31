@@ -10,12 +10,14 @@
 #define Reports_MTDatabaseDriverSelectorSalesforceViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTTableViewController.h"
 #import "UIDevice+Hack.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTDatabaseDriverSelectorSalesforceViewController : MTTableViewController
+@interface MTDatabaseDriverSelectorSalesforceViewController : UITableViewController
     <UITableViewDelegate,
         UITextFieldDelegate>
+
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellNickname;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellConnectionCreate;

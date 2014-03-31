@@ -10,14 +10,15 @@
 #define Reports_MTQueryBuilderContainerController_h
 
 #import <UIKit/UIKit.h>
-#import "MTViewController.h"
 #import "MTViewControllerAsyncProtocol.h"
+#import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderViewController, MTQueryBuilderVisualizationViewController;
 
-@interface MTQueryBuilderContainerController : MTViewController
+@interface MTQueryBuilderContainerController : UIViewController
     <MTViewControllerProtocol>
 
+@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> delegateContentController;
 
 - (MTQueryBuilderViewController *)queryBuilderController;

@@ -10,12 +10,14 @@
 #define Reports_MTConnectionViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTTableViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTConnectionViewController : MTTableViewController
+@interface MTConnectionViewController : UITableViewController
     <UITableViewDelegate, UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,
         UITextFieldDelegate, UIAlertViewDelegate>
+
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellDocumentName;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellUsername;

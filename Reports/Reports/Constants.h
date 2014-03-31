@@ -256,6 +256,6 @@ extern NSString * const MNSIdentifierSegueShowAddTableViewController;
 extern NSString * const MNSIdentifierSegueShowAddLinkViewController;
 extern NSString * const MNSIdentifierSegueShowAddPredicateViewController;
 extern NSString * const MNSIdentifierSegueShowAddGroupViewController;
-extern NSString * const MNSIdentifierSegueShowReportLayout;
+//extern NSString * const MNSIdentifierSegueShowReportLayout;
 extern NSString * const MNSIdentifierSegueShowReportViewerFromQuery;
 extern NSString * const MNSSegueShowSql;

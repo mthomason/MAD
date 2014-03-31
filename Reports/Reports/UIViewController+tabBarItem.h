@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTViewController.h"
 
 @protocol MTTabBarImageProtocol <NSObject>
 

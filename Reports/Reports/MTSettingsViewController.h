@@ -10,10 +10,12 @@
 #define Reports_MTSettingsViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTTableViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTSettingsViewController : MTTableViewController
+@interface MTSettingsViewController : UITableViewController
     <UITableViewDelegate>
+
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableCellPrint;
 @property (nonatomic, retain) IBOutlet UITableViewCell *tableCellExport;

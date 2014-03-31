@@ -10,6 +10,7 @@
 #define Reports_MTQueryBuilderViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MUIViewControllerDelegate.h"
 
 @class MAReportDocument;
 
@@ -21,6 +22,7 @@ extern NSString * const NSFetchedResultsCachePredicates;
 
 @interface MTQueryBuilderViewController : UITableViewController
 
+@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
 @property BOOL debug;
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;

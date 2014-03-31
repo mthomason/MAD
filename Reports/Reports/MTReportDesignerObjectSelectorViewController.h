@@ -10,9 +10,9 @@
 #define Reports_MTReportDesignerObjectSelectorViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTViewController.h"
 #import "MTReportDesignerObjectSelectorViewController.h"
 #import "Constants.h"
+#import "MUIViewControllerDelegate.h"
 
 @class NSManagedObjectID, RptqQueryField;
 

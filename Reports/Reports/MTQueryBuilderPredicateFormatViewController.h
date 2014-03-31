@@ -9,8 +9,8 @@
 #ifndef Reports_MTQueryBuilderPredicateFormatViewController_h
 #define Reports_MTQueryBuilderPredicateFormatViewController_h
 
-#import "MTTableViewController.h"
 #import "MTQueryBuilderAddPredicateViewController.h"
+#import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderPredicateFormatViewController;
 
@@ -18,7 +18,7 @@
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate;
 @end
 
-@interface MTQueryBuilderPredicateFormatViewController : MTTableViewController
+@interface MTQueryBuilderPredicateFormatViewController : UITableViewController
     <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
 
 @property (assign, nonatomic) IBOutlet id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;

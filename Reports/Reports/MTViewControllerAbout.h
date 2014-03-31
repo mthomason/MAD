@@ -10,9 +10,11 @@
 #define Reports_MTViewControllerAbout_h
 
 #import <Foundation/Foundation.h>
-#import "MTViewController.h"
+#import "MUIViewControllerDelegate.h"
 
-@interface MTViewControllerAbout : MTViewController
+@interface MTViewControllerAbout : UIViewController
+
+@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)done:(id)sender;

@@ -27,6 +27,9 @@
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 
+#import "MTTableViewController.h"
+#import "MTDatabaseDriverSelectorViewController.h"
+
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
@@ -445,7 +448,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
                     [[self openDocumentPopoverController] setDelegate:self];
                 }
-                [(MTViewController *)[navControl topViewController] setDelegate:self];
+                [(MTDatabaseDriverSelectorViewController *)[navControl topViewController] setDelegate:self];
             }
         }
 
