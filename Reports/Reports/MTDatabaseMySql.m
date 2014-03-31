@@ -32,10 +32,8 @@
 - (void)executeSql:(NSString *)sql
         completion:(void (^)(BOOL success, NSError *error, id results))completion {
     
-    NSString *queryString = sql;
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
-    
-    NSString *key = [[self databaseConnection] connectionString];
+    NSString *key = [connectionSettings connectionString];
 
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key
                                                  completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
@@ -59,7 +57,7 @@
                         
                         @autoreleasepool {
                             
-                            MysqlFetch *fetch = [MysqlFetch fetchWithCommand:queryString onConnection:conn extendedNames:YES];
+                            MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
                             id queryResults = [[fetch results] retain];
                             [[self delegateCacheData] cacheQueryResult:queryResults];
                             completion(YES, nil, queryResults);
