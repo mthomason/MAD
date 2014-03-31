@@ -12,8 +12,6 @@
 
 //BOOL const MTDebug = YES;
 
-NSString * const MTSqlFrom = @"\nFROM\n";
-
 #pragma mark Bundle Ids
 
 // in your project define those two somewhere as such:

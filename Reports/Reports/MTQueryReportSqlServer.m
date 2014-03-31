@@ -11,10 +11,12 @@
 #endif
 
 #import "MTQueryReportSqlServer.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
+#import "MTDatabase.h"
 #import "MTCache.h"
 
 NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";

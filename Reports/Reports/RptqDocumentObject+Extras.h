@@ -13,21 +13,20 @@
 #import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"
 #import "RptqDocumentObjectFactory.h"
-#import "RptqDocument.h"
-#import "MTFont.h"
-#import "Constants.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqQueryField+Extras.h"
-#import "RptqDocumentObjectLabelDataField+Extras.h"
-#import "RptqDocumentObjectLabel+Extras.h"
-#import "RptqDocumentObjectLabelLink+Extras.h"
-#import "RptqDocumentObjectAggregate+Extras.h"
-#import "RptqDocumentObjectChart+Extras.h"
-#import "RptqDocumentObjectGroupKey+Extras.h"
-#import "RptqDocumentObjectImage+Extras.h"
-#import "RptqDocumentObjectFormula+Extras.h"
-#import "RptqDocumentObjectBarcode+Extras.h"
-#import <CoreData/CoreData.h>
+#import "MTDatabaseField.h"
+
+typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
+	MTDocumentObjectTypeLabelDynamic = 0,
+	MTDocumentObjectTypeLabelStatic = 1,
+	MTDocumentObjectTypeImage = 2,
+    MTDocumentObjectTypeChart = 3,
+    MTDocumentObjectTypeFormula = 4,
+    MTDocumentObjectTypeAggregate = 5,
+    MTDocumentObjectTypeGroupKey = 6,
+    MTDocumentObjectTypeAggregateFunctionList = 7,
+    MTDocumentObjectTypeWhtiespace = 8,
+    MTDocumentObjectTypeBarcode = 9
+};
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;

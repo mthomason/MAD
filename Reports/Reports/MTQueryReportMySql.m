@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "MTDatabase.h"
 #import "MTQueryReportMySql.h"
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
@@ -17,6 +18,8 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryField.h"
 #import "RptqQueryPredicate.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 #import "MTCache.h"
 
 @implementation MTQueryReportMySql

@@ -7,6 +7,8 @@
 //
 
 #import "RptqDocumentObjectImage+Extras.h"
+#import "RptqDocument.h"
+#import "RptqDocumentObject+Extras.h"
 
 @implementation RptqDocumentObjectImage (Extras)
 

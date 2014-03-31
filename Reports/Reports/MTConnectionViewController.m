@@ -7,9 +7,9 @@
 //
 
 #import "MTConnectionViewController.h"
+#import "MAReportDocument.h"
 #import "MTViewControllerActivitySpinner.h"
 #import "UIDevice+Hack.h"
-#import "MTTableViewController.h"
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
 

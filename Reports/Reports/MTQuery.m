@@ -25,6 +25,7 @@
 #import "MTGraph.h"
 
 #import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 
 #import "RptqQuery.h"
@@ -40,6 +41,9 @@
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"
+
+#import "RptqDatabase.h"
+#import "RptqUserCredentals.h"
 
 @interface MTQuery ()
 

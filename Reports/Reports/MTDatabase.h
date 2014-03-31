@@ -13,6 +13,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MTSqlFrom;
+
 typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 	MTDatabaseQueryTypeNone = 0,
 	MTDatabaseQueryTypeGetTables,

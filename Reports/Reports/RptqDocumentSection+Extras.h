@@ -10,13 +10,7 @@
 #define Reports_RptqDocumentSection_Extras_h
 
 #import "RptqDocumentSection.h"
-#import "RptqDocument+Extras.h"
-#import "SectionEnumerator.h"
 #import "MTProtocolCompare.h"
-#import "MAReportDocument.h"
-#import "RptqQueryGroup+Extras.h"
-#import "RptqDocumentSectionRows+Extras.h"
-#import "RptqDocumentObject+Extras.h"
 
 //Do not change these enum values, as they are used in core data.
 typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
@@ -28,6 +22,8 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
     MNSDocumentSectionTypeGroupHeader = 6,
     MNSDocumentSectionTypeGroupFooter = 7,
 };
+
+@class RptqQuery, RptqDocumentObject, RptqDocumentSectionRows;
 
 @interface RptqDocumentSection (Extras) <MTProtocolCompare>
 

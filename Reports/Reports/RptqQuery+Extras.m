@@ -11,6 +11,9 @@
 #import "MTPair.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
+#import "RptqDatabase.h"
+#import "MTDatabase.h"
+#import "MTGraph.h"
 
 @implementation RptqQuery (Extras)
 

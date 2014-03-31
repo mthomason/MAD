@@ -8,6 +8,12 @@
 
 #import "SectionEnumerator.h"
 #import "AppDelegate.h"
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
+#import "RptqQueryGroup.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
 
 @interface SectionEnumerator ()
 

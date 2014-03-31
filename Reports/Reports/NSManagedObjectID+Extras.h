@@ -9,6 +9,6 @@
 #import <CoreData/CoreData.h>
 #import "MTProtocolLog.h"
 
-@interface NSManagedObjectID (Extras) //<MTProtocolLog>
+@interface NSManagedObjectID (Extras)
 
 @end

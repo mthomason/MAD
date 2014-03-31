@@ -10,10 +10,9 @@
 #define Reports_RptqQuery_Extras_h
 
 #import "RptqQuery.h"
-#import "RptqDatabase.h"
-#import "MTDatabase.h"
-#import "MTGraph.h"
 #import "MTProtocolCompare.h"
+
+@class MTGraph;
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 

@@ -10,7 +10,7 @@
 
 @interface UIImage (Border)
 
-+ (UIImage*)imageWithBorder:(UIImage *)source;
-+ (UIImage*)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color;
++ (UIImage *)imageWithBorder:(UIImage *)source;
++ (UIImage *)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color;
 
 @end

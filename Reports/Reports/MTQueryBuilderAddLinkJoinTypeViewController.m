@@ -8,6 +8,13 @@
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+Extras.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryLinks+Extras.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 

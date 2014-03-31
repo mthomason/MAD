@@ -8,6 +8,7 @@
 
 #import "MTStoreKitController.h"
 #import "AppDelegate.h"
+#import "MTAlertView.h"
 
 NSString * const MTStoreKitTransactionReceipt                           = @"MTStoreKitTransactionReceipt";
 NSString * const MTStoreKitTransactionDate                              = @"MTStoreKitTransactionDate";

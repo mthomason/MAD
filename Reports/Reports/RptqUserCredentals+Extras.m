@@ -9,6 +9,9 @@
 #import "RptqUserCredentals+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "MTDatabaseSqlite3.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
+#import "NSError+UserInterface.h"
 
 @implementation RptqUserCredentals (Extras)
 

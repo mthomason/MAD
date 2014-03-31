@@ -115,19 +115,6 @@ typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
     MTAggregateFunctionInputTypeFormula
 };
 
-typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
-	MTDocumentObjectTypeLabelDynamic = 0,
-	MTDocumentObjectTypeLabelStatic = 1,
-	MTDocumentObjectTypeImage = 2,
-    MTDocumentObjectTypeChart = 3,
-    MTDocumentObjectTypeFormula = 4,
-    MTDocumentObjectTypeAggregate = 5,
-    MTDocumentObjectTypeGroupKey = 6,
-    MTDocumentObjectTypeAggregateFunctionList = 7,
-    MTDocumentObjectTypeWhtiespace = 8,
-    MTDocumentObjectTypeBarcode = 9
-};
-
 typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
     MTDocumentObjectBuilderType,
     MTDocumentObjectBuilderValue
@@ -166,7 +153,6 @@ typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
 
-extern NSString * const MTSqlFrom;;
 
 extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
 extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1;

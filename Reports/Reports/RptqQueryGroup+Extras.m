@@ -7,6 +7,21 @@
 //
 
 #import "RptqQueryGroup+Extras.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import "Constants.h"
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+
+#import "RptqDocumentSectionRows.h"
 
 @implementation RptqQueryGroup (Extras)
 

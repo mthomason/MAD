@@ -11,12 +11,12 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MUIViewControllerDelegate.h"
+//#import "MUIViewControllerDelegate.h"
 
 @interface UITableViewControllerCoreDataResults : UITableViewController
     <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
+//@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 @property BOOL debug;

@@ -8,6 +8,9 @@
 
 #import "MTQueryBuilderLinkBuilderViewController.h"
 #import "AppDelegate.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 

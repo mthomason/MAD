@@ -11,16 +11,32 @@
 #endif
 
 #import "MTQueryReport.h"
+
+#import "Constants.h"
+
 #import "RptqQuery.h"
 #import "MTGraph.h"
+
 #import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
+
 #import "RptqQueryField.h"
+
 #import "RptqQueryPredicate.h"
 #import "RptqQueryPredicate+Extras.h"
+
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
-#import "Constants.h"
+
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqQueryGroup.h"
+
+#import "MTDatabase.h"
 #import "MTDatabaseField.h"
 
 @interface MTQueryReport ()

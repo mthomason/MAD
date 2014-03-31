@@ -10,7 +10,6 @@
 #define Reports_RptqDatabase_Extras_h
 
 #import "RptqDatabase.h"
-#import "RptqDocument+Extras.h"
 #import "MTProtocolCompare.h"
 
 typedef NS_ENUM(NSUInteger, MNSDatabaseType) {

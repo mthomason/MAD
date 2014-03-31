@@ -11,19 +11,9 @@
 
 #import <Foundation/Foundation.h>
 #import "RptqDocument.h"
-#import <CoreData/CoreData.h>
-#import "Constants.h"
-#import "RptqQuery.h"
-#import "RptqDocumentSection+Extras.h"
+#import "MTProtocolCompare.h"
 
-//#import "MTDatabaseSalesForce.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
-
-#import "RptqDatabase+Extras.h"
-#import "RptqUserCredentals+Extras.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
+@class NSManagedObjectContext, MTDatabase;
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 

@@ -7,9 +7,8 @@
 //
 
 #import "RptqDocumentObjectBarcode.h"
-#import "RptqDatabaseSchemaField+Extras.h"
-#import "RptqQueryField+Extras.h"
-#import "MTBarcode.h"
+
+@class MTBarcode, RptqQueryField;
 
 @interface RptqDocumentObjectBarcode (Extras)
 

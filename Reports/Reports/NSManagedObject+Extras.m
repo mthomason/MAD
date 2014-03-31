@@ -7,6 +7,7 @@
 //
 
 #import "NSManagedObject+Extras.h"
+#import "NSError+UserInterface.h"
 
 @implementation NSManagedObject (Extras)
 

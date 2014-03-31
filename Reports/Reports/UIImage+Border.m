@@ -11,11 +11,11 @@
 
 @implementation UIImage (Border)
 
-+ (UIImage*)imageWithBorder:(UIImage *)source {
++ (UIImage *)imageWithBorder:(UIImage *)source {
     return [UIImage imageWithBorder:source usingColor:[UIColor blackColor]];
 }
 
-+ (UIImage*)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color {
++ (UIImage *)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color {
     CGSize size = [source size];
     UIGraphicsBeginImageContext(size);
     CGRect rect = CGRectMake(0, 0, size.width, size.height);

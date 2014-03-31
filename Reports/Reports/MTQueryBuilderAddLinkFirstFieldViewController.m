@@ -7,6 +7,7 @@
 //
 
 #import "MTQueryBuilderAddLinkFirstFieldViewController.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation MTQueryBuilderAddLinkFirstFieldViewController

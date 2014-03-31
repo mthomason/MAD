@@ -7,7 +7,6 @@
 //
 
 #import <CoreData/CoreData.h>
-#import "NSError+UserInterface.h"
 
 @interface NSManagedObject (Extras)
 

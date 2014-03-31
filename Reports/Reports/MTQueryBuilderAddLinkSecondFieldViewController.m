@@ -8,6 +8,8 @@
 
 #import "MTQueryBuilderAddLinkSecondFieldViewController.h"
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation MTQueryBuilderAddLinkSecondFieldViewController
 

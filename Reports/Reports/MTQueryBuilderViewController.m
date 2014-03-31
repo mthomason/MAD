@@ -33,6 +33,34 @@
 #import "UIColor+EverydayApps.h"
 #import "MTShowSqlViewController.h"
 
+#import "RptqDocument.h"
+
+#import "RptqDocumentObject.h"
+
+#import "RptqQuery.h"
+#import "RptqDatabase.h"
+
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+
+#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
+
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqUserCredentals.h"
+#import "RptqUserCredentals+Extras.h"
+
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectAggregate.h"
+
 #import "UIViewController+tabBarItem.h"
 
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";

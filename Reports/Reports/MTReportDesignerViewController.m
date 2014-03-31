@@ -8,6 +8,7 @@
 
 #import "MTReportDesignerViewController.h"
 #include <math.h>
+#import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTReportDesigner.h"
@@ -31,11 +32,39 @@
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 #import "MTLog.h"
-#import "RptqDocumentObject+Extras.h"
 #import "UIColor+EverydayApps.h"
 #import "UIView+NSObjectIdTag.h"
 #import "CGGeometry+Extras.h"
 #import "UIDevice+Hack.h"
+#import "SectionEnumerator.h"
+#import "MTFont.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
+#import "RptqQueryField.h"
+
+#import "RptqDocumentSectionRows.h"
+
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
+
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+
+#import "RptqDocumentObjectLabel.h"
+
+#import "RptqDocumentObjectLabelDataField.h"
+
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
+
+#import "RptqDocumentObjectImage.h"
+#import "RptqDocumentObjectImage+Extras.h"
+
+
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
+
+#import "Constants.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 

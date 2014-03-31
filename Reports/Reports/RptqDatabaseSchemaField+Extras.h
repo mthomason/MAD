@@ -10,9 +10,10 @@
 #define Reports_RptqDatabaseSchemaField_Extras_h
 
 #import "RptqDatabaseSchemaField.h"
-#import "MTDatabaseField.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
+
+@class MTDatabaseField;
 
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolCompare, MTProtocolLog>
 

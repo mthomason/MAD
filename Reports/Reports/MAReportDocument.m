@@ -33,6 +33,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTReportFormatter.h"
 
 #import "UIDevice+Hack.h"
+#import "MTAlertView.h"
 
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";

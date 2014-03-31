@@ -7,6 +7,7 @@
 //
 
 #import "RptqDocumentObjectLabel+Extras.h"
+#import "RptqDocumentObject+Extras.h"
 
 @implementation RptqDocumentObjectLabel (Extras)
 

@@ -11,12 +11,25 @@
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "UIView+NSObjectIdTag.h"
 #import "MTConnectorView.h"
 #import "MTTitleView.h"
 
-@interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate>
+#import "UIView+NSObjectIdTag.h"
+
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqDatabaseSchemaField.h"
+
+#import "MTSchemaFieldCell.h"
+
+@interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
 @property (nonatomic, strong) IBOutlet MTTitleView *titleView;
 @property (nonatomic, strong) IBOutlet UIToolbar *toolbar;

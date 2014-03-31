@@ -13,7 +13,7 @@
 
 @interface MTShowSqlViewController : UIViewController
 
-@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 
 - (IBAction)done:(id)sender;

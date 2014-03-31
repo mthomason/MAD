@@ -9,6 +9,9 @@
 #ifndef Reports_RptqQueryPredicate_Extras_h
 #define Reports_RptqQueryPredicate_Extras_h
 
+#import "RptqQueryPredicate.h"
+#import "MTProtocolCompare.h"
+
 typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 	MNSPredicateOperatorEqual = 0,
 	MNSPredicateOperatorNotEqual,
@@ -25,9 +28,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 #define MNSPredicateOperatorSymbols [NSArray arrayWithObjects: @"=", @"<>", @">", @">=", @"<", @"<=", nil]
 #define MNSPredicateOperatorSymbolsDisplay [NSArray arrayWithObjects: @"==", @"!=", @">", @">=", @"<", @"<=", nil]
 
-#import "RptqQueryPredicate.h"
-#import "RptqDocument+Extras.h"
-#import "MTProtocolCompare.h"
+@class RptqDocument;
 
 @interface RptqQueryPredicate (Extras) <MTProtocolCompare>
 

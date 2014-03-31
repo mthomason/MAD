@@ -6,8 +6,18 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDocument+ActiveDocument.h"
+#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQuery.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+#import "MTDatabaseTable.h"
 
 @implementation RptqDatabaseSchemaTable (Extras)
 

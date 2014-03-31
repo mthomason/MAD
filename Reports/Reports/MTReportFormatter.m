@@ -7,6 +7,7 @@
 //
 
 #import "MTReportFormatter.h"
+#import "MAReportDocument.h"
 #import "MTCache.h"
 #import "MTQueryReport.h"
 
@@ -16,7 +17,13 @@
 #import "RptqDatabase.h"
 #import "RptqQueryGroup.h"
 #import "RptqQuery.h"
-
+#import "RptqQueryField.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "MTDatabaseField.h"
 #import "RptqQuery+Extras.h"
 
 //Why the fuck!!!

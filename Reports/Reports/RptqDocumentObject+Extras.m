@@ -14,6 +14,22 @@
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectGroupKey.h"
+#import "RptqDocumentObjectFactory.h"
+#import "RptqDocument.h"
+#import "MTFont.h"
+#import "Constants.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDocumentObjectLabelDataField+Extras.h"
+#import "RptqDocumentObjectLabel+Extras.h"
+#import "RptqDocumentObjectLabelLink+Extras.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
+#import "RptqDocumentObjectChart+Extras.h"
+#import "RptqDocumentObjectGroupKey+Extras.h"
+#import "RptqDocumentObjectImage+Extras.h"
+#import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
+#import <CoreData/CoreData.h>
 
 NSString * const MTDocumentObjectDefinationType = @"MTDocumentObjectDefinationType";
 NSString * const MTDocumentObjectDefinationObject = @"MTDocumentObjectDefinationObject";

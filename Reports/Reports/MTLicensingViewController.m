@@ -13,6 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+#import "MTAlertView.h"
 
 @interface MTLicensingViewController ()
 

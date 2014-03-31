@@ -8,6 +8,17 @@
 
 #import "RptqDocument+Extras.h"
 #import "MTDatabaseSqlite3.h"
+#import <CoreData/CoreData.h>
+#import "Constants.h"
+#import "RptqQuery.h"
+#import "RptqDocumentSection+Extras.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
+
+#import "RptqDatabase+Extras.h"
+#import "RptqUserCredentals+Extras.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation RptqDocument (Extras)
 

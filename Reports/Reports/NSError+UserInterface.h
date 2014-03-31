@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
-#import "MTAlertView.h"
 
 @interface NSError (UserInterface)
 

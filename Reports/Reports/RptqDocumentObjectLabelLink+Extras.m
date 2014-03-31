@@ -7,6 +7,7 @@
 //
 
 #import "RptqDocumentObjectLabelLink+Extras.h"
+#import "MTDatabaseField.h"
 
 @implementation RptqDocumentObjectLabelLink (Extras)
 

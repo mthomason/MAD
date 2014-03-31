@@ -11,10 +11,9 @@
 #import <CoreData/CoreData.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MTTableViewController.h"
-
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "Constants.h"
 
 @interface MTQueryBuilderAddGroupViewController ()
 

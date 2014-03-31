@@ -7,6 +7,7 @@
 //
 
 #import "RptqDatabase+Extras.h"
+#import "RptqDocument+Extras.h"
 
 @implementation RptqDatabase (Extras)
 

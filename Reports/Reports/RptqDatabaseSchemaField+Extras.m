@@ -7,6 +7,7 @@
 //
 
 #import "RptqDatabaseSchemaField+Extras.h"
+#import "MTDatabaseField.h"
 
 @implementation RptqDatabaseSchemaField (Extras)
 

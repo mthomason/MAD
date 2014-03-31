@@ -10,8 +10,8 @@
 #define Reports_SectionEnumerator_h
 
 #import <Foundation/Foundation.h>
-#import "RptqDocumentSection+Extras.h"
-#import "RptqQueryGroup.h"
+
+@class RptqDocument;
 
 @interface SectionEnumerator : NSEnumerator
 

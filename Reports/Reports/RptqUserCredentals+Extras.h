@@ -10,7 +10,6 @@
 #define Reports_RptqUserCredentals_Extras_h
 
 #import "RptqUserCredentals.h"
-#import "NSError+UserInterface.h"
 #import "MTProtocolCompare.h"
 
 @interface RptqUserCredentals (Extras) <MTProtocolCompare>

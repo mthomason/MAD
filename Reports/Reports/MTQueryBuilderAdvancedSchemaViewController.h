@@ -10,15 +10,15 @@
 #define Reports_MTQueryBuilderAdvancedSchemaViewController_h
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import "MTSchemaFieldCell.h"
 
 @protocol MTQueryBuilderAdvancedSchemaDelegate
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
+@class MTSchemaFieldCell, NSManagedObjectID;
+
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
-    <MTSchemaFieldCellDelegate, UIDynamicItem>
+    <UIDynamicItem>
 
 @property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;

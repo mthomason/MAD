@@ -7,8 +7,9 @@
 //
 
 #import "RptqQueryLinks+Extras.h"
+#import <CoreData/CoreData.h>
 #import "AppDelegate.h"
-#import "RptqDocument+ActiveDocument.h"
+#import "RptqDocument+Extras.h"
 
 @implementation RptqQueryLinks (Extras)
 

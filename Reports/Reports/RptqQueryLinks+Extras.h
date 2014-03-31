@@ -10,8 +10,6 @@
 #define Reports_RptqQueryLinks_Extras_h
 
 #import "RptqQueryLinks.h"
-#import <CoreData/CoreData.h>
-#import "RptqDocument+Extras.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
@@ -37,6 +35,8 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 
 #define MNSLinkTypeSqlRepresentation [NSArray arrayWithObjects: @"INNER JOIN", @"JOIN", @"NATURAL JOIN", @"CROSS JOIN", @"LEFT OUTER JOIN", @"RIGHT OUTER JOIN", @"FULL OUTER JOIN", nil]
 
+
+@class RptqDocument, RptqQueryLinks;
 
 @interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>
 

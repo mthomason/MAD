@@ -10,12 +10,10 @@
 #define Reports_RptqDatabaseSchemaTable_Extras_h
 
 #import "RptqDatabaseSchemaTable.h"
-#import "RptqDocument+Extras.h"
-#import "RptqDatabase+Extras.h"
-#import "RptqQueryTable+Extras.h"
-#import "MTDatabaseTable.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
+
+@class MTDatabaseTable;
 
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolCompare, MTProtocolLog>
 

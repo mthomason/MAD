@@ -10,7 +10,6 @@
 #define Reports_MTQueryBuilderAddGroupViewController_h
 
 #import <UIKit/UIKit.h>
-#import "Constants.h"
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MUIViewControllerDelegate.h"
@@ -19,6 +18,7 @@
 
 @protocol MTQueryBuilderAddGroupDelegate
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField andSortOrder:(MNSSortOrder)sortOrder;
+- (void)viewControllerDidCancel:(id)sender;
 @end
 
 @interface MTQueryBuilderAddGroupViewController : UITableViewController
@@ -26,7 +26,7 @@
         MTQueryBuilderSortTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddGroupDelegate, MTViewControllerProtocol> delegate;
+@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
 
 @property (retain) IBOutlet UITableViewCell *tableViewCellField;
 @property (retain) IBOutlet UITableViewCell *tableViewCellSort;

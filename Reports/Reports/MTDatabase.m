@@ -20,13 +20,17 @@
 #import "RptqUserCredentals.h"
 #import "RptqDocumentObjectBarcode.h"
 #import "MTDatabaseTable.h"
+#import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryCache.h"
+
+NSString * const MTSqlFrom = @"\nFROM\n";
 
 @interface MTDatabase ()
 
@@ -101,6 +105,12 @@
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
+}
+
+- (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
+                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+    NSArray *emptyResults = [NSArray array];
+    completion(YES, nil, emptyResults);
 }
 
 - (NSString *)tableAliasForTable:(RptqDatabaseSchemaTable *)table {

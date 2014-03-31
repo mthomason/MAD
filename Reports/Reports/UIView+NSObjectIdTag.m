@@ -8,6 +8,7 @@
 
 #import "UIView+NSObjectIdTag.h"
 #import <objc/runtime.h>
+#import <CoreData/CoreData.h>
 
 static char const * const StringTagKey = "ObjectIdTag";
 

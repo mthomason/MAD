@@ -7,8 +7,9 @@
 //
 
 #import "RptqQueryTable.h"
-#import "RptqDocument+ActiveDocument.h"
-#import "RptqDocument+Extras.h"
+#import "MTProtocolCompare.h"
+
+@class RptqDocument, RptqDatabaseSchemaTable, NSManagedObjectID;
 
 @interface RptqQueryTable (Extras) <MTProtocolCompare>
 

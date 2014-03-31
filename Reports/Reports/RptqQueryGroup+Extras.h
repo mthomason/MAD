@@ -10,14 +10,11 @@
 #define Reports_RptqQueryGroup_Extras_h
 
 #import "RptqQueryGroup.h"
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
-#import "Constants.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDocument+Extras.h"
-#import "RptqQueryField.h"
 #import "MTProtocolCompare.h"
 #import "MTProtocolEnumerator.h"
+#import "Constants.h"
+
+@class RptqQueryField;
 
 @interface RptqQueryGroup (Extras) <MTProtocolCompare, MTProtocolEnumerator>
 

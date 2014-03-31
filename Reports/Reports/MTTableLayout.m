@@ -61,7 +61,7 @@ typedef struct _ColumnWidth {
     UIEdgeInsets scrollInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
     [[self collectionView] setScrollIndicatorInsets: scrollInsets];
     
-    NSArray *columnWidths = [NSArray array];
+    NSMutableArray *columnWidths = [NSMutableArray array];
     [self setColumnWidth:columnWidths];
     [self setRowCount:rowCount];
     [self setColumnCount:columnCount];

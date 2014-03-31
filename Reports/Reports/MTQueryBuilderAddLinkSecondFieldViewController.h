@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
+#import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderAddLinkSecondFieldViewController, RptqQueryField;
 
@@ -21,7 +22,7 @@
 @interface MTQueryBuilderAddLinkSecondFieldViewController : UITableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddLinkSecondFieldDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddLinkSecondFieldDelegate> delegate;
 
 @end
 

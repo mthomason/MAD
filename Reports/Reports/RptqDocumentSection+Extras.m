@@ -7,6 +7,24 @@
 //
 
 #import "RptqDocumentSection+Extras.h"
+#import "RptqDocument+Extras.h"
+#import "SectionEnumerator.h"
+#import "MTProtocolCompare.h"
+#import "MAReportDocument.h"
+
+#import "RptqDatabase.h"
+#import "RptqDatabaseSchemaTable.h"
+
+#import "RptqQuery.h"
+
+#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
+
+#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+Extras.h"
+
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
 
 @implementation RptqDocumentSection (Extras)
 

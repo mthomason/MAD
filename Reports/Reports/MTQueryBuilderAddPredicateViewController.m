@@ -8,6 +8,9 @@
 
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "AppDelegate.h"
+#import <CoreData/CoreData.h>
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
 
 @implementation MTQueryBuilderAddPredicateViewController
 

@@ -10,10 +10,8 @@
 #define Reports_RptqDatabaseSchemaFieldSelectorManager_h
 
 #import <Foundation/Foundation.h>
-#import "UIViewTableSectionHeaderDatabaseTable.h"
-#import "RptqQueryTable.h"
-#import "RptqQueryField.h"
-#import "RptqDatabaseSchemaTable.h"
+
+@class RptqQueryTable, UIViewTableSectionHeaderDatabaseTable;
 
 @interface RptqDatabaseSchemaFieldSelectorManager : NSObject 
 

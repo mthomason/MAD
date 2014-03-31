@@ -7,6 +7,7 @@
 //
 
 #import "RptqQueryField+Extras.h"
+#import "RptqQueryTable+Extras.h"
 
 @implementation RptqQueryField (Extras)
 

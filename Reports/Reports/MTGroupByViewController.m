@@ -8,6 +8,9 @@
 
 #import "MTGroupByViewController.h"
 #import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+#import "RptqQueryGroup.h"
+#import "NSError+UserInterface.h"
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
 

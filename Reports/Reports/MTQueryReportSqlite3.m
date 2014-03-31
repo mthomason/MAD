@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryReportSqlite3.h"
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
@@ -34,9 +35,7 @@
             [[self cache] cacheData:results];
             completion(success, error, results);
         }];
-        }
-    
-    
+    }
 }
 
 - (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField

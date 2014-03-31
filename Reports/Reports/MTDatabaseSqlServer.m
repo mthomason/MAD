@@ -9,6 +9,7 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTQueryReportSqlServer.h"
 #import "MTDatabaseConnectionSqlServer.h"
+#import "MTDatabaseTable.h"
 #import "MTKeyChain.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";

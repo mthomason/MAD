@@ -7,6 +7,11 @@
 //
 
 #import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocument.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSectionRows.h"
 
 @implementation RptqDocumentObjectFormula (Extras)
 

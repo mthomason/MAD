@@ -10,11 +10,10 @@
 #define Reports_MTQueryBuilderAddPredicateViewController_h
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
-#import "UITableViewControllerOpperators.h"
+#import "MUIViewControllerDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTViewControllerValueBasedOnField.h"
-#import "MUIViewControllerDelegate.h"
+#import "UITableViewControllerOpperators.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,
@@ -23,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateNone
 };
 
-@class MTQueryBuilderAddPredicateViewController;
+@class MTQueryBuilderAddPredicateViewController, RptqQueryPredicate;
 
 @protocol MTQueryBuilderAddPredicateDelegate
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;

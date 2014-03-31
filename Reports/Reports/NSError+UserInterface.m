@@ -7,6 +7,8 @@
 //
 
 #import "NSError+UserInterface.h"
+#import "Constants.h"
+#import "MTAlertView.h"
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 

@@ -26,9 +26,8 @@
 #import "MTQueryBuilderVisualizationViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
-
-#import "MTTableViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
+#import "MTAlertView.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";

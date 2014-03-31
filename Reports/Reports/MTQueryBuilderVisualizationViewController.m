@@ -11,12 +11,13 @@
 #import "MTApplicationInstance.h"
 #import "MTShowSqlViewController.h"
 
-#import "Rptqdocument.h"
+#import "RptqDocument.h"
+#import "RptqDatabase.h"
+
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
-
-
+#import "RptqDatabaseSchemaTable.h"
 
 #import "MTConnectionViewController.h"
 #import "MTConnectorView.h"
@@ -32,6 +33,9 @@
 #import "UIDevice+Hack.h"
 
 #import "UIView+NSObjectIdTag.h"
+
+#import "MTLinkedList.h"
+#import "MTGraph.h"
 
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 

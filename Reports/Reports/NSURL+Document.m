@@ -7,6 +7,8 @@
 //
 
 #import "NSURL+Document.h"
+#import "NSFileManager+Common.h"
+#import "MACloudManager.h"
 
 @implementation NSURL (Document)
 

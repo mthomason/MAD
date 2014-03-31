@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MTPair.h"
 
 typedef NS_ENUM(NSUInteger, MTDateResolution) {
 	MTDateResolutionYear = 1,
@@ -19,6 +18,8 @@ typedef NS_ENUM(NSUInteger, MTDateResolution) {
     MTDateResolutionSecond,
     MTDateResolutionMillisecond
 };
+
+@class MTPair;
 
 @interface NSDate (Extras)
 

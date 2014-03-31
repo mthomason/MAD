@@ -14,7 +14,6 @@
 + (void)load {
     
     Class class = [self class];
-
     static dispatch_once_t onceTokenTabBarItem;
     SEL originalSelectorTabBarItem = @selector(tabBarItem);
     SEL swizzledSelectorTabBarItem = @selector(mad_tabBarItem);

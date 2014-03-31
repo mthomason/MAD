@@ -9,8 +9,16 @@
 #import "MTDatabaseSqlite3.h"
 #import "MTQueryReportSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
-#import "RptqQueryField+Extras.h"
+#import "MTDatabaseTable.h"
+#import "MTDatabaseField.h"
 
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
 
 @interface MTDatabaseSqlite3 ()
 
