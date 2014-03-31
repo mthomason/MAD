@@ -109,4 +109,8 @@
     return @"NONE";
 }
 
+- (NSString *)connectionString {
+    return [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
+}
+
 @end

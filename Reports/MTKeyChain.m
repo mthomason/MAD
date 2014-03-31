@@ -325,10 +325,6 @@ const NSUInteger tagAlertViewAquire         = 666;
     return YES;
 }
 
-+ (NSString *)keyForServer:(NSString *)server port:(NSInteger)port andDatabase:(NSString *)database {
-    return [[[NSString stringWithFormat:@"[%@:%ld]%@", server,  (long)port, database] retain] autorelease];
-}
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     BOOL success = NO;
     BOOL canceled = [alertView cancelButtonIndex] == buttonIndex;

@@ -146,4 +146,8 @@
     return @"SELECT\n";
 }
 
+- (BOOL)isReachable {
+    return NO;
+}
+
 @end

@@ -1408,7 +1408,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (void)connectWithCredentals:(MTDatabaseConnection *)credentals completion:(void (^)(DBPROCESS *dbconn, BOOL success, NSError *error))completion {
     
-    NSString *key = [MTKeyChain keyForServer:[credentals server] port:[credentals port] andDatabase:[credentals database]];
+    NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
         if (success) {
@@ -1534,6 +1534,10 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 - (NSString *)selectPartSaftyLimit {
     //NSString *limit = [];
     //return [[self selectPart] stringByAppendingFormat:@" TOP %@ ", ];
+}
+
+- (BOOL)isReachable {
+    return NO;
 }
 
 @end

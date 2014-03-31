@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-// FIXME: Add @try statements around MySQL calls.
-
 #import "MTDatabaseMySql.h"
 #import "MTQueryReportMySql.h"
 #import "MTDatabaseConnection.h"
@@ -28,16 +26,16 @@
 @end
 
 @implementation MTDatabaseMySql
- 
+
+
+
 - (void)executeSql:(NSString *)sql
         completion:(void (^)(BOOL success, NSError *error, id results))completion {
     
     NSString *queryString = sql;
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     
-    NSString *key = [MTKeyChain keyForServer:[connectionSettings server]
-                                        port:[connectionSettings port]
-                                 andDatabase:[connectionSettings database]];
+    NSString *key = [[self databaseConnection] connectionString];
 
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key
                                                  completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
@@ -92,7 +90,7 @@
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server] port:[[self databaseConnection] port] andDatabase:[[self databaseConnection] database]];
+    NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
         if (success) {
@@ -160,10 +158,7 @@
     [serv setSchema:    [[self databaseConnection] database]];
     [serv setPort:      (unsigned int)[[self databaseConnection] port]];
     
-    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server]
-                                        port:[[self databaseConnection] port]
-                                 andDatabase:[[self databaseConnection] database]];
-    
+    NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
         if (success) {
@@ -251,10 +246,7 @@
 - (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
-    NSString *key = [MTKeyChain keyForServer:[[self databaseConnection] server]
-                                        port:[[self databaseConnection] port]
-                                 andDatabase:[[self databaseConnection] database]];
-    
+    NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
         
         if (success) {
@@ -433,6 +425,10 @@
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     // FIXME: Use backticks `` to make more robust.
     return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
+}
+
+- (BOOL)isReachable {
+    return NO;
 }
 
 @end

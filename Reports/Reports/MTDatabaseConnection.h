@@ -33,6 +33,8 @@
 - (NSString *)identifier;
 + (NSString *)identifier;
 
+- (NSString *)connectionString;
+
 @end
 
 #endif

@@ -63,6 +63,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
                 completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
+- (BOOL)isReachable;
+
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
 @end

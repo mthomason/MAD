@@ -15,6 +15,5 @@
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion;
 - (void)getUsernameAndPasswordForKey:(NSString *)key completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion;
 - (void)deleteKey:(NSString *)key;
-+ (NSString *)keyForServer:(NSString *)server port:(NSInteger)port andDatabase:(NSString *)database;
 
 @end
