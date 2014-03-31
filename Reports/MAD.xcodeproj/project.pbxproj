@@ -623,6 +623,10 @@
 		4C5626051759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5626061759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5626071759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */; };
+		4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */; };
+		4C5BED6518E8E00000BDDDB8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6418E8E00000BDDDB8 /* objcmad.c */; };
+		4C5BED6618E8E00000BDDDB8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6418E8E00000BDDDB8 /* objcmad.c */; };
 		4C5CB710189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */; };
 		4C5CB711189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */; };
 		4C5CB7C1189E2A7D00BB5AF8 /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7B3189E2A7D00BB5AF8 /* bkpublic.h */; };
@@ -2322,6 +2326,10 @@
 		4C5626011759865900433E88 /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		4C5626021759865A00433E88 /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
 		4C5BED5818E8999D00BDDDB8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = Resources/Settings.bundle; sourceTree = "<group>"; };
+		4C5BED5F18E8C46500BDDDB8 /* UIViewController+tabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+tabBarItem.h"; sourceTree = "<group>"; };
+		4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+tabBarItem.m"; sourceTree = "<group>"; };
+		4C5BED6418E8E00000BDDDB8 /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = objcmad.c; sourceTree = "<group>"; };
+		4C5BED6718E8E01400BDDDB8 /* objcmad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objcmad.h; sourceTree = "<group>"; };
 		4C5CB70E189B8EAD00BB5AF8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../NSData+Base64.h"; sourceTree = "<group>"; };
 		4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../NSData+Base64.m"; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
@@ -3865,6 +3873,15 @@
 			name = "User Interface";
 			sourceTree = "<group>";
 		};
+		4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BED6718E8E01400BDDDB8 /* objcmad.h */,
+				4C5BED6418E8E00000BDDDB8 /* objcmad.c */,
+			);
+			name = ObjectiveC;
+			sourceTree = "<group>";
+		};
 		4C5CB7BE189E2A7D00BB5AF8 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -4191,6 +4208,7 @@
 		4C8EEC881644E6C000FAB2F3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */,
 				4C1E27C018C5B4650007B2BB /* Singletons */,
 				4C5CD3D7181ED424005FC6DD /* Macros */,
 				4C0081E11784968B00874849 /* MTStoreKit */,
@@ -4702,6 +4720,8 @@
 		4CDB624614E38B9600A5389E /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C9F94BB1642280500A562B9 /* MTViewController.h */,
+				4C9F94BC1642280500A562B9 /* MTViewController.m */,
 				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
 				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
 				4C4A68C017EA02D000FD6A73 /* MTViewControllerActivitySpinner.h */,
@@ -4711,8 +4731,6 @@
 				4C8BA98B174533CF00B646E2 /* MTViewControllerValueBasedOnField.h */,
 				4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */,
 				4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */,
-				4C9F94BB1642280500A562B9 /* MTViewController.h */,
-				4C9F94BC1642280500A562B9 /* MTViewController.m */,
 				4C9F94C016423D7300A562B9 /* MTTableViewController.h */,
 				4C9F94C116423D7300A562B9 /* MTTableViewController.m */,
 				4C1A585414DE285300184445 /* UITableViewControllerFieldOrCustomValue.h */,
@@ -4735,6 +4753,8 @@
 		4CDB624B14E38C8400A5389E /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				4C5BED5F18E8C46500BDDDB8 /* UIViewController+tabBarItem.h */,
+				4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */,
 				4C5CB70E189B8EAD00BB5AF8 /* NSData+Base64.h */,
 				4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */,
 				4CDD5ACD17ECDFB00032DF6E /* UIApplication+Extras.h */,
@@ -5989,6 +6009,7 @@
 				4CE17E2216501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4CA14FFD18B7F913001AFAD8 /* MTActivityReportExportToPdf.m in Sources */,
 				4C9E446818D8AADE00F0F578 /* MTTableController.m in Sources */,
+				4C5BED6618E8E00000BDDDB8 /* objcmad.c in Sources */,
 				4CE17E261650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m in Sources */,
 				4CE17E2A1650C6B50002F8EA /* RptqUserCredentals+Extras.m in Sources */,
 				4CABE4741837DF7C007EDD9D /* RptqDatabaseSchemaField.m in Sources */,
@@ -6132,6 +6153,7 @@
 				4CABE4681837DF7A007EDD9D /* RptqQuerySort.m in Sources */,
 				4C5029F31817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */,
 				4CABE4901837DF7F007EDD9D /* RptqQueryLinks.m in Sources */,
+				4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
 				4CBABBF818C7E96F00EE5768 /* MTPaperC3.m in Sources */,
 				4CE9F31D177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
 				4C0081D61781C33000874849 /* MTStoreKitController.m in Sources */,
@@ -6602,6 +6624,7 @@
 				4C9F94C216423D7300A562B9 /* MTTableViewController.m in Sources */,
 				4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
+				4C5BED6518E8E00000BDDDB8 /* objcmad.c in Sources */,
 				4CFF3E81164CD7DE0070E880 /* MTDatabase.m in Sources */,
 				4CFF3E85164CD86E0070E880 /* MTDatabaseMySql.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,
@@ -6745,6 +6768,7 @@
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4C95CAD1182D67CB00160E01 /* MTViewControllerBarcodeType.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
+				4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
 				4CBABBF718C7E96F00EE5768 /* MTPaperC3.m in Sources */,
 				4C81BB9B1771447900E7B98C /* MTDatabaseSqlServer.m in Sources */,
 				4C5029F21817A64900C88CD4 /* MTDatabaseSqlite3.m in Sources */,

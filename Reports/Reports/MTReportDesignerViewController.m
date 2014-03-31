@@ -424,15 +424,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [super didReceiveMemoryWarning];
 }
 
-- (UITabBarItem *)tabBarItem {
-    UIImage *tabBarImage = [UIImage imageNamed:@"UIBarButtonItemDatabase"];
-    UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    NSString *title = NSLocalizedString(@"Viewer", @"Viewer");
-    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:title
-                                                             image:tabBarImageOg
-                                                               tag:0];
-    //self.tabBarItem = tabBarItem;
-    return [tabBarItem autorelease];
+- (UIImage *)tabBarImage {
+    return [UIImage imageNamed:@"UIBarButtonItemMadDesigner"];
+}
+
+- (NSString *)title {
+    return NSLocalizedString(@"MAD Designer", "MAD Designer");
 }
 
 #pragma mark - View lifecycle

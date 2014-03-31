@@ -32,6 +32,8 @@
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
 
+#import "UIViewController+tabBarItem.h"
+
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
 NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
@@ -82,15 +84,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 @implementation MTQueryBuilderViewController
 
-- (UITabBarItem *)tabBarItem {
-    UIImage *tabBarImage = [UIImage imageNamed:@"UIBarButtonItemDatabase"];
-    UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    NSString *title = NSLocalizedString(@"Viewer", @"Viewer");
-    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:title
-                                                             image:tabBarImageOg
-                                                               tag:0];
-    //self.tabBarItem = tabBarItem;
-    return tabBarItem;
+- (UIImage *)tabBarImage {
+    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+}
+
+- (NSString *)title {
+    return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
 - (void)dealloc {
@@ -122,16 +121,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    UIImage *tabBarImage = [UIImage imageNamed:@"UIBarButtonItemDatabase"];
-    UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    NSString *title = NSLocalizedString(@"Viewer", @"Viewer");
-    UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTitle:title
-                                                             image:tabBarImageOg
-                                                               tag:0];
-    [tabBarItem setSelectedImage:tabBarImageOg];
-    self.tabBarItem = tabBarItem;
-    //return tabBarItem;
     
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
     
@@ -976,8 +965,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     }
                     [tableView endUpdates];
                     
-
-
 
                     // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
                     

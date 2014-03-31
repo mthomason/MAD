@@ -9,6 +9,10 @@
 #import "MTViewController.h"
 #import "UIColor+EverydayApps.h"
 
+@interface MTTableViewController : UITableViewController
+
+@end
+
 @implementation MTViewController
 
 - (void)viewDidLoad {
