@@ -16,8 +16,6 @@
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 
-+ (MTGraph *)graphForQuery:(RptqQuery *)query;
-
 - (RptqQueryGroup *)firstQueryGroup;
 
 @end

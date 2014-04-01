@@ -623,6 +623,8 @@
 		4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */; };
 		4C5BED6518E8E00000BDDDB8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6418E8E00000BDDDB8 /* objcmad.c */; };
 		4C5BED6618E8E00000BDDDB8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6418E8E00000BDDDB8 /* objcmad.c */; };
+		4C5BED6B18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */; };
+		4C5BED6C18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */; };
 		4C5CB710189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */; };
 		4C5CB711189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */; };
 		4C5CB7C1189E2A7D00BB5AF8 /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7B3189E2A7D00BB5AF8 /* bkpublic.h */; };
@@ -2301,6 +2303,8 @@
 		4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+tabBarItem.m"; sourceTree = "<group>"; };
 		4C5BED6418E8E00000BDDDB8 /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = objcmad.c; sourceTree = "<group>"; };
 		4C5BED6718E8E01400BDDDB8 /* objcmad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objcmad.h; sourceTree = "<group>"; };
+		4C5BED6918E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseProcessSqlServer.h; sourceTree = "<group>"; };
+		4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseProcessSqlServer.m; sourceTree = "<group>"; };
 		4C5CB70E189B8EAD00BB5AF8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../NSData+Base64.h"; sourceTree = "<group>"; };
 		4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../NSData+Base64.m"; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
@@ -4384,6 +4388,8 @@
 				4C5029F11817A64900C88CD4 /* MTDatabaseSqlite3.m */,
 				4C81BB991771447900E7B98C /* MTDatabaseSqlServer.h */,
 				4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */,
+				4C5BED6918E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.h */,
+				4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -5908,6 +5914,7 @@
 				4C0E7771163B5AEC003B951E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0E7772163B5AEC003B951E /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C0E7774163B5AEC003B951E /* MTNavigationController.m in Sources */,
+				4C5BED6C18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m in Sources */,
 				4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */,
 				4CBABBA018C7E1E300EE5768 /* MTPaperA7.m in Sources */,
 				4C11BCFC18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */,
@@ -6510,6 +6517,7 @@
 				4C1A586714E23DDB00184445 /* RptqFieldSelectorManager.m in Sources */,
 				4CA1500018B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
 				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
+				4C5BED6B18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C11BCFB18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */,
 				4CBABB9F18C7E1E300EE5768 /* MTPaperA7.m in Sources */,

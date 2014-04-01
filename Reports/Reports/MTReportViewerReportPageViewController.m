@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "NSDate+Extras.h"
 #import "MTApplicationInstance.h"
-
+#import "MTPair.h"
 @interface MTReportViewerReportPageViewController ()
 
 @property (nonatomic, assign) NSUInteger pageNumber;
@@ -240,23 +240,15 @@
     [[self view] addSubview:numberView];
     [self setPageNumberView:numberView];
     
-    [UIView animateWithDuration:0.3000f delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        
+    [UIView animateWithDuration:0.3000f delay:0.0000f options:UIViewAnimationOptionCurveEaseIn animations:^{
         [[self pageNumberView] setAlpha:1.0000f];
-
     } completion:^(BOOL finished) {
         
         if (finished) {
-
             [UIView animateWithDuration:0.30000f delay:1.0000f
                                 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                                    
                                     [[self pageNumberView] setAlpha:0.0000f];
-
-                                } completion:^(BOOL finished) {
-                                    
-                                    
-                                }];
+                                } completion:nil];
         }
     }];
     [labelView release];

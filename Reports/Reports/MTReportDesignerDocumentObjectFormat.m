@@ -14,6 +14,9 @@
 #import <CoreData/CoreData.h>
 #import "MTToolboxViewControllerProtocol.h"
 #import "RptqDocumentObject+Extras.h"
+#import "RptqQueryField.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDatabaseSchemaField.h"
 
 @interface MTReportDesignerDocumentObjectFormat ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>

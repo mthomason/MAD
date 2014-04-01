@@ -14,6 +14,8 @@
 #import "RptqDatabase.h"
 #import "MTDatabase.h"
 #import "MTGraph.h"
+#import "RptqQueryTable.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @implementation RptqQuery (Extras)
 
@@ -61,42 +63,6 @@
         default:
             break;
     }
-}
-
-#pragma mark - Static
-
-+ (MTGraph *)graphForQuery:(RptqQuery *)query {
-
-    NSSet *hasQueryTables = [query hasQueryTables];
-    NSMutableSet *vertices = [[NSMutableSet alloc] initWithCapacity:[hasQueryTables count]];
-
-    MTGraph *graph = [[MTGraph alloc] init];
-
-    // MARK: Create vertex in the graph for each query table.
-    for (RptqQueryTable *table in hasQueryTables) {
-        [graph addVertexWithObject:[table objectID]];
-    }
-    
-    // MARK: Create an edge in the graph for each query link.
-    NSSet *hasQueryLinks = [query hasQueryLinks];
-    for (RptqQueryLinks *queryLink in hasQueryLinks) {
- 
-        RptqQueryTable *tableOrigin =        [[queryLink hasLeftField] inQueryTable];
-        RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
-
-        id objectOrigin =               [tableOrigin objectID];
-        id objectDestination =          [tableDestination objectID];
-        id objectQueryLink =            [queryLink objectID];
-        
-        MTVertex *vertexOrigin =        [graph vertexForObject:objectOrigin];
-        MTVertex *vertexDestination =   [graph vertexForObject:objectDestination];
-
-        [graph addEdgeWithOrigin:vertexOrigin destination:vertexDestination object:objectQueryLink andWeight:@(1)];
-        
-    }
-    [vertices release];
-    
-    return  [graph autorelease];
 }
 
 #pragma mark - Actions

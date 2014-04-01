@@ -15,6 +15,7 @@
 #import "MTReportDesignerDocumentObjectFormat.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
+#import "MTFont.h"
 
 @interface MTReportDesignerToolBoxViewController ()
     <UINavigationBarDelegate, MTReportDesignerFontSettingsDelegate,

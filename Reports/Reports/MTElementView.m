@@ -15,6 +15,8 @@
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
 #import "MTBarcode.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0

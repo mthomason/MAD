@@ -8,6 +8,9 @@
 
 #import "RptqDocumentObject+Extras.h"
 #import "MTBarcode.h"
+#import "RptqDocument.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSectionRows.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObjectLabel.h"
 #import "RptqDocumentObjectBarcode.h"

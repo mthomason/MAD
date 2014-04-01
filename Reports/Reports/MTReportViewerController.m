@@ -22,6 +22,7 @@
 #import "MTCache.h"
 #import "MTQuery.h"
 #import "MTPaper.h"
+#import "MTPair.h"
 #import "MTActivityReportPrintPreview.h"
 #import "MTReportViewerReportPageViewController.h"
 

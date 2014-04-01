@@ -12,6 +12,15 @@
 #import "MTDatabaseTable.h"
 #import "MTKeyChain.h"
 
+#import "RptqQueryTable.H"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryField.h"
+#import "sybdb.h"
+
+#import "MTDatabaseProcessSqlServer.h"
+
+#import "NSError+UserInterface.h"
+
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
 NSString * const MTDatabaseConnectionDatabase   = @"MTDatabaseConnectionDatabase";
@@ -70,12 +79,13 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         dispatch_async(dispatch_get_main_queue(), ^{
             
 
-            [blockSelf connectWithCredentals:[blockSelf databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+            [blockSelf connectWithCredentals:[blockSelf databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
                 
                 if (success) {
 
                     id results = nil;
                     NSError *error = nil;
+                    DBPROCESS *dbconn = [process process];
                     if (dbconn) {
                         
                         dbcmd(dbconn, "SELECT name FROM sys.tables");
@@ -144,14 +154,14 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 - (void)getFieldsForTableName: (NSString *)tableName
                      completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
 
-    [self connectWithCredentals:[self databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+    [self connectWithCredentals:[self databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
         
         if (success) {
             
             NSMutableArray *results = nil;
             NSError *error = nil;
             RETCODE sqlReturnCode = FAIL;
-            
+            DBPROCESS *dbconn = [process process];
             if (dbconn) {
                 NSString *query = [NSString stringWithFormat:@"SELECT name, system_type_id, max_length, precision, scale FROM sys.columns WHERE object_id = OBJECT_ID('%@')", tableName];
                 dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
@@ -362,7 +372,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
     */
     
-    [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(DBPROCESS *dbconn, BOOL success, NSError *connectionError) {
+    [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
         
         if (success) {
             
@@ -394,6 +404,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             NSError *error = nil;
             RETCODE success = FAIL;
 
+            DBPROCESS *dbconn = [process process];
             if (dbconn) {
                 
                 if (error == nil) {
@@ -1474,35 +1485,26 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return dbconn;
 }
 
-- (void)connectWithCredentals:(MTDatabaseConnection *)credentals completion:(void (^)(DBPROCESS *dbconn, BOOL success, NSError *error))completion {
+- (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion {
     
-    NSString *key = [[self databaseConnection] connectionString];
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
+    [self getCredentalsWithConnection:connection completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         
         if (success) {
-            [username retain]; [password retain];
             
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                
-                if (success) {
+            NSError *error = nil;
+            DBPROCESS *dbconn = [self connect:username andPassword:password error:&error];
+            
+            if (error) {
+                NSString *key = [[self databaseConnection] connectionString];
+                [[MTKeyChain sharedObject] deleteKey:key];
+            }
+            
+            MTDatabaseProcessSqlServer *dbwrap = [[MTDatabaseProcessSqlServer alloc] initWithProcess:dbconn];
 
-                    NSError *error = nil;
-                    DBPROCESS *dbconn = [self connect:username andPassword:password error:&error];
-
-                    if (error) {
-                        [[MTKeyChain sharedObject] deleteKey:key];
-                    }
-                    
-                    completion(dbconn, error == nil, error);
-
-                } else {
-                    completion(nil, success, error);
-                }
-            }];
-
-            [username release]; [password release];
+            completion(dbwrap, error == nil, error);
+            
         } else {
-            completion(nil, NO, connectionError);
+            completion(nil, NO, error);
         }
 
     }];

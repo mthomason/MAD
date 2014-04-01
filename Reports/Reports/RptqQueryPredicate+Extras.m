@@ -9,6 +9,8 @@
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
 
 @implementation RptqQueryPredicate (Extras)
 

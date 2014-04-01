@@ -11,6 +11,7 @@
 #import <CoreData/CoreData.h>
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "MTApplicationInstance.h"
 
 @implementation MTQueryBuilderAddPredicateViewController
 

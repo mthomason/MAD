@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UITableViewControllerCoreDataResults.h"
+#import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderAddTableViewController, RptqDatabaseSchemaTable;
 
@@ -21,7 +22,7 @@
 @interface MTQueryBuilderAddTableViewController : UITableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddTableDelegate> delegate;
+@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddTableDelegate, MTViewControllerProtocol> delegate;
 @property (nonatomic, copy) NSArray *excludeResults;
 
 - (IBAction)done:(id)sender;

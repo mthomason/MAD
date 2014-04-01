@@ -10,16 +10,33 @@
 #import "MTQueryReportMySql.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
+
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
+#import "RptqQueryCache.h"
 #import "RptqQueryCache+Extras.h"
+
+#import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
+
+#import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
+
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+
+#import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+
+#import "RptqQueryPredicate.h"
 #import "RptqQueryPredicate+Extras.h"
+
 #import "MTKeyChain.h"
+#import "NSError+UserInterface.h"
 
 @interface MTDatabaseMySql ()
 
@@ -27,60 +44,57 @@
 
 @implementation MTDatabaseMySql
 
+- (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
+    [self getCredentalsWithConnection:connection completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
 
+        NSError *connError = nil;
+        
+        MysqlServer *serv = [[MysqlServer alloc] init];
+        
+        [serv setHost:      [connection server]];
+        [serv setSchema:    [connection database]];
+        [serv setPort:      (unsigned int)[connection port]];
+        [serv setUser:      username];
+        [serv setPassword:  password];
+        
+        MysqlConnection *conn = [[MysqlConnection connectToServer: serv error:&connError] retain];
+
+        success = (conn && connError == nil);
+        completion(conn, success, connError);
+        
+        [conn release];
+        [serv release];
+        
+
+    }];
+}
 
 - (void)executeSql:(NSString *)sql
         completion:(void (^)(BOOL success, NSError *error, id results))completion {
     
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
-    NSString *key = [connectionSettings connectionString];
-
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key
-                                                 completion:^(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain) {
-        if (success) {
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                
-                @try {
-
-                    NSError *connError = nil;
-                    
-                    MysqlServer *serv = [[MysqlServer alloc] init];
-                    
-                    [serv setHost:      [connectionSettings server]];
-                    [serv setSchema:    [connectionSettings database]];
-                    [serv setPort:      (unsigned int)[connectionSettings port]];
-                    [serv setUser:      username];
-                    [serv setPassword:  password];
-                    
-                    MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
-                    if (conn && connError == nil) {
-                        
-                        @autoreleasepool {
-                            
-                            MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
-                            id queryResults = [[fetch results] retain];
-                            [[self delegateCacheData] cacheQueryResult:queryResults];
-                            completion(YES, nil, queryResults);
-                            [queryResults release];
-                            
-                        }
-                        
-                    } else {
-                        completion(NO, connError, nil);
-                    }
-                    
-                    [serv release];
-                    
-                } @catch(NSException *ex) {
-                    NSError *connError = [NSError errorWithDomain:[MTDatabase identifier] code:382 userInfo:ex.userInfo];
-                    completion(NO, connError, nil);
-                }
-            }];
-        } else {
-            NSError *connError = [NSError errorWithDomain:[MTDatabase identifier] code:383 userInfo:nil];
-            completion(NO, connError, nil);
-        }
+    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+       [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+           MysqlConnection *conn = [dbconn retain];
+           if (conn && error == nil) {
+               
+               @autoreleasepool {
+                   
+                   MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
+                   id queryResults = [[fetch results] retain];
+                   [[self delegateCacheData] cacheQueryResult:queryResults];
+                   completion(YES, nil, queryResults);
+                   [queryResults release];
+                   
+               }
+               
+           } else {
+               completion(NO, error, nil);
+           }
+           [conn release];
+       }];
     }];
+
     
     [connectionSettings release];
 
@@ -88,61 +102,46 @@
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    NSString *key = [[self databaseConnection] connectionString];
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        if (success) {
-            
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+            MysqlConnection *conn = [dbconn retain];
+            BOOL successConnection = conn != nil;
+            if (successConnection) {
                 
-                __block MysqlServer *serv = [[MysqlServer alloc] init];
+                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
                 
-                [serv setUser:      username];
-                [serv setPassword:  password];
-                [serv setHost:      [[self databaseConnection] server]];
-                [serv setPort:      (unsigned int)[[self databaseConnection] port]];
-                [serv setSchema:    [[self databaseConnection] database]];
+                NSArray *fetchResults = [fetch results], *fetchFields = [fetch fields];
+                NSInteger resultsCount = [fetchResults count], fieldsCount = [fetchFields count];
                 
-                NSError *errorConnection = nil;
-                MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&errorConnection];
-                BOOL successConnection = conn != nil;
-                if (successConnection) {
-                    
-                    MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
-                    
-                    NSArray *fetchResults = [fetch results], *fetchFields = [fetch fields];
-                    NSInteger resultsCount = [fetchResults count], fieldsCount = [fetchFields count];
-                    
-                    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-                    
-                    if (fetch) {
-                        if (fieldsCount > 0) {
-                            MysqlFetchField *resultsTableName = [fetchFields objectAtIndex:0];
+                NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+                
+                if (fetch) {
+                    if (fieldsCount > 0) {
+                        MysqlFetchField *resultsTableName = [fetchFields objectAtIndex:0];
+                        
+                        for (NSDictionary *tableName in [fetch results]) {
                             
-                            for (NSDictionary *tableName in [fetch results]) {
-                                
-                                NSString *tableKey = [resultsTableName name];
-                                NSString *tn = [tableName objectForKey:tableKey];
-                                
-                                MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tn];
-                                [results addObject: databaseTable];
-                                [databaseTable release];
-                            }
+                            NSString *tableKey = [resultsTableName name];
+                            NSString *tn = [tableName objectForKey:tableKey];
+                            
+                            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tn];
+                            [results addObject: databaseTable];
+                            [databaseTable release];
                         }
                     }
-                    completion(successConnection, errorConnection, [results autorelease]);
-                } else {
-                    [[MTKeyChain sharedObject] deleteKey:key];
-                    completion(NO, errorConnection, nil);
                 }
-                
-                [serv release];
-            }];
-            
-        } else {
-            completion(success, credentialsError, nil);
-        }
+                completion(successConnection, error, [results autorelease]);
+            } else {
+                NSString *key = [[self databaseConnection] connectionString];
+                [[MTKeyChain sharedObject] deleteKey:key];
+                completion(NO, error, nil);
+            }
+            [conn release];
+        }];
     }];
+    [connectionSettings release];
+    
 }
 
 
@@ -150,95 +149,79 @@
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     
-    __block MysqlServer *serv = [[MysqlServer alloc] init];
-    
-    [serv setHost:      [[self databaseConnection] server]];
-    [serv setSchema:    [[self databaseConnection] database]];
-    [serv setPort:      (unsigned int)[[self databaseConnection] port]];
-    
-    NSString *key = [[self databaseConnection] connectionString];
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        if (success) {
+    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+            MysqlConnection *conn = [dbconn retain];
+            BOOL successConnection = conn != nil;
+            NSMutableArray *results = nil;
+            NSMutableDictionary *resultsDictionary = nil;
             
-            [serv setUser:      username];
-            [serv setPassword:  password];
-            
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+            if (successConnection) {
                 
-                NSError *errorConnection = nil;
-                MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&errorConnection];
-                
-                NSMutableArray *results = nil;
-                BOOL successConnection = conn != nil;
-                
-                NSMutableDictionary *resultsDictionary = nil;
-                
-                if (successConnection) {
-                    NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
-                    MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
-                    if (fetch) {
-                        if ([[fetch fields] count] > 0) {
-                            
-                            MysqlFetchField *fieldMetaData = [[fetch fields] objectAtIndex:0];
-                            results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
-                            resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:[[fetch results] count]];
-                            
-                            for (NSDictionary *field in [fetch results]) {
-                                NSString *fieldName = [field objectForKey:[fieldMetaData name]];
-                                
-                                MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
-                                //[databaseField setDatatype:[field objectForKey:@"Type"]];
-                                [results addObject: databaseField];
-                                [resultsDictionary setObject:databaseField forKey:fieldName];
-                                [databaseField release];
-                            }
-                        }
-                    }
-                    
-
-                    
-                    NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
-                    MysqlFetch *fetch2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
-                    if (fetch) {
+                NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
+                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
+                if (fetch) {
+                    if ([[fetch fields] count] > 0) {
                         
-                        if ([[fetch2 fields] count] > 0) {
+                        MysqlFetchField *fieldMetaData = [[fetch fields] objectAtIndex:0];
+                        results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
+                        resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:[[fetch results] count]];
+                        
+                        for (NSDictionary *field in [fetch results]) {
+                            NSString *fieldName = [field objectForKey:[fieldMetaData name]];
                             
-                            for (MysqlFetchField *field in [fetch2 fields]) {
-                                
-                                MTDataType dataType = [MTDatabaseMySql dataTypeForNativeType:[field fieldType]];
-                                NSString *fieldNameKey = [field name];
-                                NSArray *fieldNameParts = [fieldNameKey componentsSeparatedByString:@"."];
-                                NSString *fieldNameKeyLastPart = [fieldNameParts lastObject];
-                                NSString *fieldName = [fieldNameKeyLastPart stringByReplacingOccurrencesOfString:@"`" withString:@""];
-                                MTDatabaseField *databaseField = [[resultsDictionary objectForKey:fieldName] retain];
-                                [databaseField setFieldTypeNative:[field fieldType]];
-                                [databaseField setFieldType:dataType];
-                                [databaseField setWidth:[field width]];
-                                [databaseField setDecimals:[field decimals]];
-                                [databaseField setPrimaryKey:[field primaryKey]];
-                                [databaseField release];
-                            }
+                            MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
+                            //[databaseField setDatatype:[field objectForKey:@"Type"]];
+                            [results addObject: databaseField];
+                            [resultsDictionary setObject:databaseField forKey:fieldName];
+                            [databaseField release];
+                        }
+                        
+                        [results release];
+                    }
+                }
+                
+                
+                
+                NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
+                MysqlFetch *fetch2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
+                if (fetch) {
+                    
+                    if ([[fetch2 fields] count] > 0) {
+                        
+                        for (MysqlFetchField *field in [fetch2 fields]) {
+                            
+                            MTDataType dataType = [MTDatabaseMySql dataTypeForNativeType:[field fieldType]];
+                            NSString *fieldNameKey = [field name];
+                            NSArray *fieldNameParts = [fieldNameKey componentsSeparatedByString:@"."];
+                            NSString *fieldNameKeyLastPart = [fieldNameParts lastObject];
+                            NSString *fieldName = [fieldNameKeyLastPart stringByReplacingOccurrencesOfString:@"`" withString:@""];
+                            MTDatabaseField *databaseField = [[resultsDictionary objectForKey:fieldName] retain];
+                            [databaseField setFieldTypeNative:[field fieldType]];
+                            [databaseField setFieldType:dataType];
+                            [databaseField setWidth:[field width]];
+                            [databaseField setDecimals:[field decimals]];
+                            [databaseField setPrimaryKey:[field primaryKey]];
+                            [databaseField release];
                         }
                     }
-                } else {
-                    [[MTKeyChain sharedObject] deleteKey:key];
-                    [error presentErrorToUser];
                 }
-                [serv release];
                 
-                [results release];
-                NSArray *resultsArray = [[resultsDictionary allValues] retain];
-                [resultsDictionary release];
-                
-                completion(successConnection, errorConnection, [resultsArray autorelease]);
-                
-            }];
+
+            } else {
+                NSString *key = [connectionSettings connectionString];
+                [[MTKeyChain sharedObject] deleteKey:key];
+                [error presentErrorToUser];
+            }
+
+            NSArray *resultsArray = [[resultsDictionary allValues] retain];
+            [resultsDictionary release];
             
-        } else {
-            completion(success, credentialsError, nil);
-        }
-    }];
+            completion(successConnection, error, [resultsArray autorelease]);
+            
+        }];
+     }];
 }
 
 - (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName

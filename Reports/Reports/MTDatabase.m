@@ -29,6 +29,7 @@
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryCache.h"
+#import "MTKeyChain.h"
 
 NSString * const MTSqlFrom = @"\nFROM\n";
 
@@ -65,6 +66,25 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     }
     
     return result;
+}
+
+- (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+    
+    NSString *key = [connection connectionString];
+    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
+        if (success) {
+            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+                completion(success, error, username, password);
+            }];
+        } else {
+            completion(NO, connectionError, username, password);
+        }
+    }];
+    
+}
+
+- (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion {
+    completion(nil, YES, nil);
 }
 
 - (void)executeSql:(NSString *)sql

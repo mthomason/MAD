@@ -15,9 +15,17 @@
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 
+#import "RptqDocumentSectionRows.h"
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+
+#import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
+
+#import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation RptqDocument (Extras)

@@ -10,13 +10,15 @@
 #import <CoreData/CoreData.h>
 #import "MAReportDocument.h"
 #import "MTReportViewerPrintPageRenderer.h"
-#import "UIManagedDocument+FileOperations.h"
 #import "MTLog.h"
+#import "MTPaper.h"
+
+#import "UIManagedDocument+FileOperations.h"
 #import "UIColor+EverydayApps.h"
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
-#import "MTPaper.h"
+#import "NSFileManager+Common.h"
 
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 

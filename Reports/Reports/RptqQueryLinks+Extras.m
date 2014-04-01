@@ -9,7 +9,14 @@
 #import "RptqQueryLinks+Extras.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
+
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
+#import "RptqQueryField.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
 
 @implementation RptqQueryLinks (Extras)
 

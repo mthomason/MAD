@@ -13,6 +13,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
+#import "NSFileManager+Common.h"
 
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
@@ -32,8 +33,10 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MTReportFormatter.h"
 
-#import "UIDevice+Hack.h"
 #import "MTAlertView.h"
+
+#import "UIDevice+Hack.h"
+#import "NSError+UserInterface.h"
 
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";

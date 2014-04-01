@@ -15,6 +15,8 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "MTQuery.h"
+#import "NSError+UserInterface.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 
 @interface MTViewControllerValueBasedOnField ()
 

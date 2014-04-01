@@ -7,7 +7,11 @@
 //
 
 #import "RptqQueryTable+Extras.h"
+
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqQuery.h"
 
 @implementation RptqQueryTable (Extras)
 

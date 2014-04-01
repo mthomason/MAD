@@ -14,6 +14,7 @@
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
+#import "RptqQueryField.h"
 #import "RptqDatabaseSchemaField.h"
 
 #import "RptqDatabaseSchemaField+Extras.h"
