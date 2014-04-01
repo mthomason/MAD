@@ -89,6 +89,8 @@
                }
                
            } else {
+               SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+               [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                completion(NO, error, nil);
            }
            [conn release];
@@ -105,6 +107,7 @@
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+            
             MysqlConnection *conn = [dbconn retain];
             BOOL successConnection = conn != nil;
             if (successConnection) {
@@ -133,8 +136,8 @@
                 }
                 completion(successConnection, error, [results autorelease]);
             } else {
-                NSString *key = [[self databaseConnection] connectionString];
-                [[MTKeyChain sharedObject] deleteKey:key];
+                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                 completion(NO, error, nil);
             }
             [conn release];
@@ -210,9 +213,8 @@
                 
 
             } else {
-                NSString *key = [connectionSettings connectionString];
-                [[MTKeyChain sharedObject] deleteKey:key];
-                [error presentErrorToUser];
+                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
             }
 
             NSArray *resultsArray = [[resultsDictionary allValues] retain];
@@ -270,7 +272,8 @@
                     }
                     
                 } else {
-                    [[MTKeyChain sharedObject] deleteKey:key];
+                    SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+                    [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                     completion(NO, errorConnection, nil);
                 }
                 

@@ -72,13 +72,21 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     
     NSString *key = [connection connectionString];
     [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *connectionError, NSString *username, NSString *password, BOOL fromKeyChain) {
+        
         if (success) {
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+            
+            [[MTKeyChain sharedObject] saveUsername:username
+                                        andPassword:password
+                                             forKey:key
+                                       shortCircuit:fromKeyChain
+                                         completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
                 completion(success, error, username, password);
             }];
+            
         } else {
             completion(NO, connectionError, username, password);
         }
+        
     }];
     
 }
@@ -178,6 +186,12 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 - (BOOL)isReachable {
     return NO;
+}
+
+- (void)removeCredentalsBecauseOfError:(NSError *)error {
+    NSString *key = [[self databaseConnection] connectionString];
+    [[MTKeyChain sharedObject] deleteKey:key];
+    [error presentErrorToUser];
 }
 
 @end

@@ -142,9 +142,6 @@ const NSUInteger tagAlertViewAquire         = 666;
     [alertView release];
 }
 
-- (void)askShouldWeKeep {
-}
-
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
     [self setCredentialsKey:key];
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
@@ -203,7 +200,9 @@ const NSUInteger tagAlertViewAquire         = 666;
     }
 }
 
-- (void)getUsernameAndPasswordForKey:(NSString *)key completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion {
+- (void)getUsernameAndPasswordForKey:(NSString *)key
+                          completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain))completion {
+    
     [self setCredentialsCompletion:completion];
     
     const NSInteger stateGetPassword = 1;
@@ -269,56 +268,55 @@ const NSUInteger tagAlertViewAquire         = 666;
         }
         case stateGetPassword: {
             //Username found.  What about password?
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSString *username = [[[NSString alloc] initWithData:queryUsernameData
-                                                                encoding:NSUTF8StringEncoding] autorelease];
-                    [self setCredentialsUsername:username];
-                    
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password"
-                                                                        message:@"Please enter your password."
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"Cancel"
-                                                              otherButtonTitles:@"Continue", nil];
-                    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-                    [alertView setTag:tagAlertViewAquire];
-                    [alertView setDelegate:self];
-                    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
-                    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
-                    [alertView show];
-                    [self setFirstAlertView:alertView];
-                    [alertView release];
-
-                
-                });
-            });
+            NSString *username = [[[NSString alloc] initWithData:queryUsernameData
+                                                        encoding:NSUTF8StringEncoding] autorelease];
+            SEL promptForPasswordGivenUsername = @selector(promptForPasswordGivenUsername:);
+            [self performSelectorOnMainThread:promptForPasswordGivenUsername withObject:username waitUntilDone:NO];
             break;
         }
         case stateGetUsernameAndPassword: {
-            //Username found.  What about password?
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Credentials"
-                                                                        message:@"Please enter your credentials."
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"Cancel"
-                                                              otherButtonTitles:@"Continue", nil];
-                    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-                    [alertView setDelegate:self];
-                    [alertView setTag:tagAlertViewAquire];
-                    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
-                    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
-                    [alertView show];
-                    [self setFirstAlertView:alertView];
-                    [alertView release];
-                });
-            });
+            SEL promptForUsernameAndPassword = @selector(promptForUsernameAndPassword);
+            [self performSelectorOnMainThread:promptForUsernameAndPassword withObject:nil waitUntilDone:NO];
             break;
         }
         default:
             completion(NO, nil, nil, nil, NO);
             break;
     }
+}
+
+- (void)promptForPasswordGivenUsername:(NSString *)username {
+    [self setCredentialsUsername:username];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password"
+                                                        message:@"Please enter your password."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Continue", nil];
+    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    [alertView setTag:tagAlertViewAquire];
+    [alertView setDelegate:self];
+    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
+    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
+    [alertView show];
+    [self setFirstAlertView:alertView];
+    [alertView release];
+}
+
+- (void)promptForUsernameAndPassword {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Credentials"
+                                                        message:@"Please enter your credentials."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Continue", nil];
+    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    [alertView setDelegate:self];
+    [alertView setTag:tagAlertViewAquire];
+    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
+    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
+    [alertView show];
+    [self setFirstAlertView:alertView];
+    [alertView release];
 }
 
 - (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView {

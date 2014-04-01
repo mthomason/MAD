@@ -170,7 +170,9 @@
 }
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
-    [[self delegate] drawPageAtIndex:[self pageNumber] - 1 inRect:rect];
+    NSInteger index = [self pageNumber] - 1;
+    [[self delegate] drawPageAtIndex:index
+                              inRect:rect];
 }
 
 - (void)addTimerView {
