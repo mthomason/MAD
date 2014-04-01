@@ -114,13 +114,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Log uncaught errors.
     //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
-    
-    // FIXME: Have a seperate cache for each app instance, and then for each query even...
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-    [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    [self deleteCoreDataCache];
     
     //Dynamically choose which storyboard to run.
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -144,6 +138,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
     [defaultStore synchronize];
+    
+    [self registerDefaultsFromSettingsBundle];
     
     return YES;
 }
@@ -211,6 +207,52 @@ const NSInteger MATagNewDocument = 3838;
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return [UIDevice isPad] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (void)deleteCoreDataCache {
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(dipatchQueue, ^{
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    });
+}
+
+- (void)registerDefaultsFromSettingsBundle {
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(dipatchQueue, ^{
+
+        NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+        [standardUserDefaults synchronize];
+        
+        NSString *pathSettingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
+        NSAssert(pathSettingsBundle, @"Could not find Settings.bundle");
+        NSString *pathRootPlist = [pathSettingsBundle stringByAppendingPathComponent:@"Root.plist"];
+        
+        
+        NSDictionary *rootPlistSettings = [NSDictionary dictionaryWithContentsOfFile:pathRootPlist];
+        NSArray *preferences = [rootPlistSettings objectForKey:@"PreferenceSpecifiers"];
+        NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
+        
+        for (NSDictionary *prefSpecification in preferences)  {
+            NSString *key = [prefSpecification objectForKey:@"Key"];
+            if (key) {
+                
+                id currentObject = [standardUserDefaults objectForKey:key];
+                if (currentObject == nil) {
+
+                    id objectToSet = [prefSpecification objectForKey:@"DefaultValue"];
+                    [defaultsToRegister setObject:objectToSet forKey:key];
+                }
+            }
+        }
+        
+        [standardUserDefaults registerDefaults:defaultsToRegister];
+        [defaultsToRegister release];
+        [standardUserDefaults synchronize];
+    });
 }
 
 #pragma mark - Key Value Store Notifications
