@@ -36,17 +36,7 @@
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
-    
-    RptqDatabaseSchemaField *field = [self queryObject];
-    NSString *safeField = [[self database] safeQuerySchemaField:field];
-    NSString *safeTable = [[self database] safeIdentifier:field.inTable.name];
-    [[self fields] setObject:field forKey:safeField];
-    [[self fieldKeys] addObject:safeField];
-    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
-                     @"%@ %@ "
-                     @"LIMIT 100;",
-                     safeField, MTSqlFrom, safeTable];
-    return sql;
+    return [[self database] sqlSampleDataForField:[self queryObject]];
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {

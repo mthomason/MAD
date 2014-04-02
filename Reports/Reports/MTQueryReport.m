@@ -40,6 +40,8 @@
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 
+#import "MTQuerySampleDataField.h"
+
 @interface MTQueryReport ()
 
 @end
@@ -79,18 +81,6 @@
             }];
         }
     }
-}
-
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
-    
-    NSString *sql = [[self database] sqlSampleDataForField:schemaField];
-    
-    [[self database] executeSql:sql
-                     completion:^(BOOL success, NSError *error, id results) {
-                         [[self cache] cacheData:results];
-                         completion(success, error, results);
-                     }];
 }
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {

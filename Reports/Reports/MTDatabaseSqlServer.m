@@ -24,7 +24,7 @@
 
 #import "NSError+UserInterface.h"
 
-NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
+NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 511";
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

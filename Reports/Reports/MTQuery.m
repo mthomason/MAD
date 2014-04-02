@@ -111,7 +111,6 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
-
         
     }
     return self;
@@ -152,13 +151,6 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
-}
-
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];

@@ -41,9 +41,6 @@ extern NSString * const MTQueryKeyObject;
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion;
 
-- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
-                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion;
-
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only

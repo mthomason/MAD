@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTQuery.h"
+#import "MTQuerySampleDataField.h"
 #import "RptqQueryField.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
@@ -36,17 +37,14 @@
     
     [[self navigationController] popViewControllerAnimated:YES];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    MTQueryReport *defaultQuery = [reportDocument defaultQuery];
-    
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
-    [defaultQuery sampleDataForSchemaField:schemaField
-                                completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+    
+    MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
+    [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
         if (success) {
-            [resultStrings retain];
-            [[self delegate] barcodeMaxicodeDidChooseSampleData:resultStrings];
-            [resultStrings release];
+            [results retain];
+            [[self delegate] barcodeMaxicodeDidChooseSampleData:results];
+            [results release];
             [[self tableView] reloadData];
         }
     }];

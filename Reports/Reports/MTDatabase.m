@@ -217,7 +217,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
     NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
                      @"%@ %@ "
-                     @"LIMIT 100;",
+                     @"LIMIT 511;",
                      safeField, MTSqlFrom, safeTable];
     return sql;
 }

@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import "MTQuery.h"
 #import "MTQueryReport.h"
+#import "MTQuerySampleDataField.h"
 
 #import "RptqQueryField.h"
 #import "RptqDocumentObjectBarcode.h"
@@ -121,10 +122,11 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         __block MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
         if ([self queryField1] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
-            [defaultQuery sampleDataForSchemaField:schemaField
-                                        completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+            
+            MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
+            [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
                 if (success) {
-                    [optionsViewController setSampleBarcodeData:resultStrings];
+                    [optionsViewController setSampleBarcodeData:results];
                     [[optionsViewController tableView] reloadData];
                 }
             }];
@@ -132,10 +134,10 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         
         if ([self queryField2] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
-            [defaultQuery sampleDataForSchemaField:schemaField
-                                        completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+            MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
+            [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
                 if (success) {
-                    [optionsViewController setSampleBarcodeData2dComponent:resultStrings];
+                    [optionsViewController setSampleBarcodeData2dComponent:results];
                     [[optionsViewController tableView] reloadData];
                 }
             }];

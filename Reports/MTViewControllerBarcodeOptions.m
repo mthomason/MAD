@@ -7,6 +7,7 @@
 //
 
 #import "MTViewControllerBarcodeOptions.h"
+#import "MTQuerySampleDataField.h"
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMicroQrCode.h"
@@ -710,24 +711,22 @@
         [[self delegate] didSetField2:field];
     }
     
-    
-    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-    [[reportDocument defaultQuery] sampleDataForSchemaField:[field databaseSchemaField] completion:^(BOOL success, NSError *error, NSArray *resultStrings) {
+    MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:[field databaseSchemaField]];
+    [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
         if (success) {
-            [resultStrings retain];
+            [results retain];
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");
             NSAssert(([self selectingField1] == YES && [self selectingField2] == YES) == NO, @"Can't be setting both at the same time, now can we?");
             if ([self selectingField1]) {
-                [self setSampleBarcodeData:resultStrings];
+                [self setSampleBarcodeData:results];
             } else if ([self selectingField2]) {
-                [self setSampleBarcodeData2dComponent:resultStrings];
+                [self setSampleBarcodeData2dComponent:results];
             }
-            [resultStrings release];
+            [results release];
             [[self tableView] reloadData];
+
         }
-        
     }];
-    
 }
 
 #pragma mark - MTTableViewControllerBarcodeExtraAztecDelegate
