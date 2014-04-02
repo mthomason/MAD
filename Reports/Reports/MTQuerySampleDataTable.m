@@ -18,6 +18,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDatabaseField.h"
 #import "MTCache.h"
+//#import "MTQuery.h"
 
 @interface MTQuerySampleDataTable ()
 
@@ -64,37 +65,47 @@
     
     NSError *error = nil;
     NSString *sql = [self getSqlWithError:&error];
-    
-    __block NSMutableArray *fieldNames = [[NSMutableArray alloc] init];
-    [[self fields] enumerateKeysAndObjectsUsingBlock:^(id key, MTDatabaseField *field, BOOL *stop) {
-        [fieldNames addObject:[field name]];
-    }];
-    [[self database] maxLengthForFields:fieldNames inTable:[[self queryObject] toString] completion:^(BOOL success, NSError *error, NSArray *widths) {
-        
-        if (success && [widths count] > 0) {
-            
-            for (MTDatabaseField *field in [[self fields] objectEnumerator]) {
-                NSString *name = [field name];
-                NSString *key = [[self database]safeIdentifier: name];
-                NSInteger maxSize = [[[widths objectAtIndex:0] objectForKey:key] integerValue];
-                field.calculatedWidth = maxSize;
-            }
-            
-            if (error) {
-                completion(NO, error, nil);
-            } else {
-                [[self database] executeSql:sql
-                                 completion:^(BOOL success, NSError *error, id results) {
-                                     [[self cache] cacheData:results];
-                                     completion(success, error, results);
-                                 }];
-            }
 
-            
-        }
-    }];
-    
-    
+    if ([sql length] > 0 && error == nil) {
+
+        NSNumber *queryType = @(MTQueryTypeMaxFieldLength);
+        NSOrderedSet *fields = [[self queryObject] hasFields];
+        NSDictionary *queryDefination = @{MTQueryKeyType : queryType, MTQueryKeyObject : fields};
+        
+        MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
+        
+        [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, id widths) {
+            if (success && [widths count] > 0) {
+                
+                [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
+                    
+                    NSString *safeTableName = [[self database] tableAliasForTable:[field inTable]];
+                    NSString *okey = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
+                    NSString *ckey = [[self database] fieldAliasForField:field];
+                    NSDictionary *widthsByField = [widths objectAtIndex:0];
+                    NSInteger maxSize = [[widthsByField objectForKey:ckey] integerValue];
+                    MTDatabaseField *f = [[self fields] objectForKey:okey];
+                    f.calculatedWidth = maxSize;
+                }];
+                
+                if (errorFl) {
+                    completion(NO, error, nil);
+                } else {
+                    [[self database] executeSql:sql
+                                     completion:^(BOOL success, NSError *error, id results) {
+                                         [[self cache] cacheData:results];
+                                         completion(success, error, results);
+                                     }];
+                }
+                
+                
+            }
+        }];
+
+    } else {
+        completion(NO, error, nil);
+    }
+
 }
 
 @end

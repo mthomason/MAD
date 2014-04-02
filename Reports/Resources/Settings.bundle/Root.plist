@@ -16,9 +16,9 @@
 			<key>DefaultValue</key>
 			<true/>
 			<key>Key</key>
-			<string>enabled_preference</string>
+			<string>MTPreferenceKeyLimitResutls</string>
 			<key>Title</key>
-			<string>Limit Results</string>
+			<string>Limit Results (10,000 rows)</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>

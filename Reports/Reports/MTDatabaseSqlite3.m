@@ -20,9 +20,12 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
+#import "NSError+Constructors.h"
+
 @interface MTDatabaseSqlite3 ()
 
 @property (assign) sqlite3 *database;
+@property (nonatomic, assign) BOOL isOpen;
 
 @end
 
@@ -30,12 +33,20 @@
 
 - (void)openDatabase {
 
+    NSError *error = nil;
     //Open conneciton... closed in dealloc.
-    NSString *filepath = [[[self databaseConnection] databaseUrl] path];
-    if (sqlite3_open([filepath UTF8String], &_database) != SQLITE_OK) {
-        NSAssert1(0, @"Error: failed to open database with message '%s'.", sqlite3_errmsg(_database));
-    } else {
-        sqlite3_extended_result_codes(_database, true);
+    if ([self isOpen] == NO) {
+        NSString *filepath = [[[self databaseConnection] databaseUrl] path];
+        BOOL isOpen = sqlite3_open([filepath UTF8String], &_database) == SQLITE_OK;
+        if (isOpen) {
+            sqlite3_extended_result_codes(_database, true);
+        } else {
+            const char *errorMessage = sqlite3_errmsg(_database);
+            NSString *message = [NSString stringWithUTF8String: errorMessage];
+            NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
+            error = [NSError errorWithDomain:@"MTSqlite3" code:4832 title:title andMessage:message];
+        }
+        [self setIsOpen:YES];
     }
     
 }
@@ -47,55 +58,8 @@
     [super dealloc];
 }
 
-- (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
-                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    BOOL success = NO;
-	NSError *error = nil;
-    NSString *sqlStr = nil;
-    
-    if ([fields count] > 0) {
-        NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
-        for (NSString *field in fields) {
-            [selectFields appendFormat: @" MAX( LENGTH(%@) ) %@ %@,", field, [self tableAliasConnector], field];
-        }
-        NSString *fieldsPart;
-        if ([selectFields length] > 0) {
-            fieldsPart = [selectFields substringToIndex:[selectFields length] - 1];
-        } else {
-            fieldsPart = @"";
-        }
-        sqlStr = [NSString stringWithFormat:@"SELECT %@ from %@;", fieldsPart, tableName];
-
-    }
-
-    if (sqlStr) {
-        sqlite3_stmt *statement;
-        const char *queryStartChar = [sqlStr UTF8String];
-        char *sql = sqlite3_mprintf((char *) queryStartChar);
-        
-        if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-            success = YES;
-            while (sqlite3_step(statement) == SQLITE_ROW) {
-                NSInteger numberOfColumns = sqlite3_column_count(statement);
-                NSMutableDictionary *resultSet = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
-                for (NSInteger i=0; i<numberOfColumns; i++) {
-                    NSInteger resultString = sqlite3_column_int(statement, (int)i);
-                    const  char *columnNameCString = sqlite3_column_name(statement, (int)i);
-                    NSString *columnName = [self safeIdentifier: [NSString stringWithUTF8String:(char *)columnNameCString]];
-                    [resultSet setObject:@(resultString) forKey:columnName];
-
-                }
-                [result addObject:resultSet];
-            }
-        }
-        
-        sqlite3_finalize(statement);
-        sqlite3_free(sql);
-
-    }
-    completion(success, error, [result autorelease]);
+- (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
+    [self openDatabase];
 }
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
@@ -207,6 +171,99 @@
 - (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
     id results = [[[self resultsForQueryString:sql] retain] autorelease];
     completion(YES, nil, results);
+}
+
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
+    id results = [[[self resultsForQuery:query] retain] autorelease];
+    completion(YES, nil, results);
+}
+
+- (NSArray *)resultsForQuery:(MTQuery *)query {
+    NSError *error = nil;
+    NSString *queryString = [query getSqlWithError:&error];
+    
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    BOOL success = NO;
+	sqlite3_stmt *statement;
+    const char *queryStartChar = [queryString UTF8String];
+	char *sql = sqlite3_mprintf((char *) queryStartChar);
+
+	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+        success = YES;
+        //int numberOfColumns = sqlite3_column_count(statement);
+        //if (numberOfColumns > 0) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            int numberOfColumns = sqlite3_column_count(statement);
+            NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
+            
+            for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
+                
+                int affentyType = sqlite3_column_type(statement, colCtr);   //http://www.sqlite.org/c3ref/c_blob.html
+                id value = nil;
+                switch (affentyType) {
+                    case SQLITE_INTEGER: {
+                        sqlite3_int64 rint = sqlite3_column_int64(statement, colCtr);
+                        value = [NSNumber numberWithDouble:rint];
+                        break;
+                    }
+                    case SQLITE_FLOAT: {
+                        sqlite3_int64 rint = sqlite3_column_double(statement, colCtr);
+                        value = [NSNumber numberWithDouble:rint];
+                        break;
+                    }
+                    case SQLITE_BLOB: {
+                        const void *blob = sqlite3_column_blob(statement, colCtr);
+                        if (blob != NULL) {
+                            int numBytes = sqlite3_column_bytes16(statement, colCtr);
+                            value = [NSData dataWithBytes:blob length:numBytes];
+                        }
+                        break;
+                    }
+                    case SQLITE_NULL: {
+                        break;
+                    }
+                    case SQLITE3_TEXT: {
+                        
+                        const unsigned char *resultString = sqlite3_column_text(statement, colCtr);
+                        if (resultString != NULL) {
+                            value = [NSString stringWithUTF8String:(char *) resultString];
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                
+                if (value != nil) {
+                    NSString *fieldName = [query fieldKeys][colCtr];
+                    
+                    if (NO) {
+                        const char *columnName = sqlite3_column_name(statement, colCtr);
+                        const char *tableName = sqlite3_column_table_name(statement, colCtr);
+                        const char *originName = sqlite3_column_origin_name(statement, colCtr);
+                        const char *databaseName = sqlite3_column_database_name(statement, colCtr);
+                        NSString *columnName8 = [self safeIdentifier:[NSString stringWithUTF8String:columnName]];
+                        NSString *tableName8 = [self safeIdentifier:[NSString stringWithUTF8String:tableName]];
+                        NSString *key = [NSString stringWithFormat:@"%@.%@", tableName8, columnName8];
+                        NSString *oname = [NSString stringWithUTF8String:originName];
+                        NSString *dbname = [NSString stringWithUTF8String:databaseName];
+                        NSLog(@"%@-%@-%@", dbname, oname, key);
+                    }
+                    
+                    [resultsForRow setObject:value forKey:fieldName];
+                }
+            }
+            [results addObject:resultsForRow];
+            [resultsForRow release];
+            
+        }
+        //}
+	} else {
+        NSLog(@"Caught %s",  sqlite3_errmsg(_database));
+    }
+	sqlite3_finalize(statement);
+	sqlite3_free(sql);
+    return [results autorelease];
 }
 
 - (NSArray *)resultsForQueryString:(NSString *)queryString {

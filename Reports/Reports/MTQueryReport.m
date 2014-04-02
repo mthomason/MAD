@@ -140,7 +140,7 @@
         
         if ([result length] > 0) {
             [result appendString:[self sqlWhereClauseWithQuery:[self queryObject]]];
-            [result appendString:[self sqlLimitClause]];
+            [result appendString:[[self database] sqlLimitClause]];
         }
         
     }

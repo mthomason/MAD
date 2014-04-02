@@ -17,7 +17,6 @@
 - (void)dealloc {
     [_label release];
     [_name release];
-    //[_datatype release];
     [super dealloc];
 }
 

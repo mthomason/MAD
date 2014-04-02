@@ -116,6 +116,12 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return s;
 }
 
+- (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field {
+    RptqDatabaseSchemaTable *table = [field inTable];
+    NSString *fieldAlias = [[field name] stringByAppendingString:[table name]];
+    return [self safeIdentifier:fieldAlias];
+}
+
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
     NSString *queryTable = [[schemaField inTable] name];
     NSString *fieldName = [schemaField name];
@@ -133,12 +139,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     @throw [NSException exceptionWithName: NSInternalInconsistencyException
                                    reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
                                  userInfo: nil];
-}
-
-- (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
-                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-    NSArray *emptyResults = [NSArray array];
-    completion(YES, nil, emptyResults);
 }
 
 - (NSString *)tableAliasForTable:(RptqDatabaseSchemaTable *)table {
@@ -184,6 +184,10 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return @"SELECT\n";
 }
 
+- (NSString *)sqlLimitClause {
+    return [self limitResults] ? @"\nLIMIT 10000" : @"";
+}
+
 - (BOOL)isReachable {
     return NO;
 }
@@ -192,6 +196,20 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] deleteKey:key];
     [error presentErrorToUser];
+}
+
+- (NSString *)sqlAggregateFunctionLength {
+    return @"LENGTH";
+}
+
+- (NSString *)sqlAggregateFunctionMax {
+    return @"MAX";
+}
+
+- (BOOL)limitResults {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *limitResuts = [userDefaults objectForKey:@"MTPreferenceKeyLimitResutls"];
+    return [limitResuts boolValue];
 }
 
 @end

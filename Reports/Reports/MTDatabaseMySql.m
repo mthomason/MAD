@@ -37,6 +37,7 @@
 
 #import "MTKeyChain.h"
 #import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 
 @interface MTDatabaseMySql ()
 
@@ -45,6 +46,7 @@
 @implementation MTDatabaseMySql
 
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
+    
     [self getCredentalsWithConnection:connection completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
 
         NSError *connError = nil;
@@ -69,9 +71,32 @@
     }];
 }
 
+- (void)connectionTest:(void (^)(BOOL success, NSError *error))completion {
+    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+            MysqlConnection *conn = [dbconn retain];
+            if (conn && error == nil) {
+                NSString *key = [self safeIdentifier:@"f1"];
+                NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [self selectPart], key];
+                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
+                id queryResults = [[fetch results] retain];
+                NSNumber *result = queryResults[0][key];
+                BOOL success = [result integerValue] == 255;
+                completion(success, nil);
+            } else {
+                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
+                completion(NO, error);
+            }
+            [conn release];
+        }];
+    }];
+    [connectionSettings release];
+}
+
 - (void)executeSql:(NSString *)sql
         completion:(void (^)(BOOL success, NSError *error, id results))completion {
-    
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
@@ -96,10 +121,40 @@
            [conn release];
        }];
     }];
-
-    
     [connectionSettings release];
+}
 
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
+    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+            MysqlConnection *conn = [dbconn retain];
+            if (conn && error == nil) {
+                
+                @autoreleasepool {
+                    NSError *error = nil;
+                    NSString *sql = [query getSqlWithError:&error];
+                    if (error == nil) {
+                        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
+                        id queryResults = [[fetch results] retain];
+                        [[self delegateCacheData] cacheQueryResult:queryResults];
+                        completion(YES, nil, queryResults);
+                        [queryResults release];
+                    } else {
+                        completion(NO, error, nil);
+                    }
+                    
+                }
+                
+            } else {
+                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
+                completion(NO, error, nil);
+            }
+            [conn release];
+        }];
+    }];
+    [connectionSettings release];
 }
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
@@ -224,66 +279,6 @@
             
         }];
      }];
-}
-
-- (void)maxLengthForFields:(NSArray *)fields inTable:(NSString *)tableName
-                     completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
-    
-    NSString *key = [[self databaseConnection] connectionString];
-    [[MTKeyChain sharedObject] getUsernameAndPasswordForKey:key completion:^(BOOL success, NSError *credentialsError, NSString *username, NSString *password, BOOL fromKeyChain) {
-        
-        if (success) {
-            
-            [[MTKeyChain sharedObject] saveUsername:username andPassword:password forKey:key shortCircuit:fromKeyChain completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-                
-                __block MysqlServer *serv = [[MysqlServer alloc] init];
-                
-                [serv setUser:      username];
-                [serv setPassword:  password];
-                [serv setHost:      [[self databaseConnection] server]];
-                [serv setPort:      (unsigned int)[[self databaseConnection] port]];
-                [serv setSchema:    [[self databaseConnection] database]];
-                
-                NSError *errorConnection = nil;
-                MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&errorConnection];
-                BOOL successConnection = conn != nil;
-                if (successConnection) {
-                    
-                    
-                    if ([fields count] > 0) {
-                        NSMutableString *selectFields = [[NSMutableString alloc] initWithString:@""];
-                        for (NSString *field in fields) {
-                            [selectFields appendFormat: @" MAX( LENGTH(%@) ) %@ %@,", field, [self tableAliasConnector], field];
-                        }
-                        NSString *fieldsPart;
-                        if ([selectFields length] > 0) {
-                            fieldsPart = [selectFields substringToIndex:[selectFields length] - 1];
-                        } else {
-                            fieldsPart = @"";
-                        }
-                        NSString *sql = [NSString stringWithFormat:@"SELECT %@ from %@;", fieldsPart, tableName];
-                        
-                        MysqlFetch *fetch3 = [MysqlFetch fetchWithCommand:sql onConnection:conn];
-                        for (id result in [fetch3 results]) {
-                            NSLog(@"Result %@", result);
-                        }
-                        
-                        completion(successConnection, errorConnection, [fetch3 results]);
-                    }
-                    
-                } else {
-                    SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                    [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
-                    completion(NO, errorConnection, nil);
-                }
-                
-                [serv release];
-            }];
-            
-        } else {
-            completion(success, credentialsError, nil);
-        }
-    }];
 }
 
 + (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {

@@ -60,9 +60,4 @@
     return sql;
 }
 
-- (NSString *)sqlLimitClause {
-    return (YES) ? @"" : @"\nLIMIT 50";
-}
-
-
 @end

@@ -594,6 +594,8 @@
 		4C515ED7174134960004A664 /* UIGestureRecognizer+AnchorPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12293D16CE9FA800B69763 /* UIGestureRecognizer+AnchorPoint.m */; };
 		4C515ED8174134960004A664 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C515ED9174134960004A664 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
+		4C54B7AB18EB80ED00E2A525 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BED5818E8999D00BDDDB8 /* Settings.bundle */; };
+		4C54B7B418EB80ED00E2A525 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BED5818E8999D00BDDDB8 /* Settings.bundle */; };
 		4C5625E01758A17F00433E88 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* MACloudManager.m */; };
 		4C5625E11758A17F00433E88 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* MACloudManager.m */; };
 		4C5625E21758A17F00433E88 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* MACloudManager.m */; };
@@ -625,6 +627,10 @@
 		4C5BED6618E8E00000BDDDB8 /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6418E8E00000BDDDB8 /* objcmad.c */; };
 		4C5BED6B18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */; };
 		4C5BED6C18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */; };
+		4C5BED6F18EB273300BDDDB8 /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6E18EB273300BDDDB8 /* NSError+Constructors.m */; };
+		4C5BED7018EB273300BDDDB8 /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6E18EB273300BDDDB8 /* NSError+Constructors.m */; };
+		4C5BED7418EB356A00BDDDB8 /* MTQueryMaxFieldLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED7318EB356A00BDDDB8 /* MTQueryMaxFieldLength.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C5BED7518EB356A00BDDDB8 /* MTQueryMaxFieldLength.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED7318EB356A00BDDDB8 /* MTQueryMaxFieldLength.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C5CB710189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */; };
 		4C5CB711189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */; };
 		4C5CB7C1189E2A7D00BB5AF8 /* bkpublic.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7B3189E2A7D00BB5AF8 /* bkpublic.h */; };
@@ -2305,6 +2311,10 @@
 		4C5BED6718E8E01400BDDDB8 /* objcmad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objcmad.h; sourceTree = "<group>"; };
 		4C5BED6918E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseProcessSqlServer.h; sourceTree = "<group>"; };
 		4C5BED6A18E94AA200BDDDB8 /* MTDatabaseProcessSqlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseProcessSqlServer.m; sourceTree = "<group>"; };
+		4C5BED6D18EB273300BDDDB8 /* NSError+Constructors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+Constructors.h"; sourceTree = "<group>"; };
+		4C5BED6E18EB273300BDDDB8 /* NSError+Constructors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+Constructors.m"; sourceTree = "<group>"; };
+		4C5BED7218EB356A00BDDDB8 /* MTQueryMaxFieldLength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryMaxFieldLength.h; sourceTree = "<group>"; };
+		4C5BED7318EB356A00BDDDB8 /* MTQueryMaxFieldLength.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryMaxFieldLength.m; sourceTree = "<group>"; };
 		4C5CB70E189B8EAD00BB5AF8 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../NSData+Base64.h"; sourceTree = "<group>"; };
 		4C5CB70F189B8EAD00BB5AF8 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../NSData+Base64.m"; sourceTree = "<group>"; };
 		4C5CB712189C4F5D00BB5AF8 /* compressor.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = compressor.sh; path = ../Compressor/compressor.sh; sourceTree = "<group>"; };
@@ -3856,6 +3866,15 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		4C5BED7118EB353500BDDDB8 /* Field Lengths */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BED7218EB356A00BDDDB8 /* MTQueryMaxFieldLength.h */,
+				4C5BED7318EB356A00BDDDB8 /* MTQueryMaxFieldLength.m */,
+			);
+			name = "Field Lengths";
+			sourceTree = "<group>";
+		};
 		4C5CB7BE189E2A7D00BB5AF8 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -4373,6 +4392,7 @@
 				4C11BD0518DE01B1001E3D33 /* Full */,
 				4C11BD0618DE01CA001E3D33 /* Field Sample */,
 				4C11BD0718DE01D5001E3D33 /* Table Data */,
+				4C5BED7118EB353500BDDDB8 /* Field Lengths */,
 			);
 			name = Query;
 			sourceTree = "<group>";
@@ -4767,6 +4787,8 @@
 				4C84EEB4178B43F20028BF49 /* UIImage+Border.m */,
 				4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */,
 				4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */,
+				4C5BED6D18EB273300BDDDB8 /* NSError+Constructors.h */,
+				4C5BED6E18EB273300BDDDB8 /* NSError+Constructors.m */,
 			);
 			name = Categories;
 			path = Reports;
@@ -5297,6 +5319,7 @@
 				4C0E7817163B5AEC003B951E /* UIImagePatternKraftWaffle@2x.png in Resources */,
 				4C0E7818163B5AEC003B951E /* UIImagePatternLeaf.png in Resources */,
 				4CFD364C18368935000EF14B /* MTBarcodeChannelCode.h in Resources */,
+				4C54B7AB18EB80ED00E2A525 /* Settings.bundle in Resources */,
 				4C0E7819163B5AEC003B951E /* UIImagePatternLeaf@2x.png in Resources */,
 				4C0E781A163B5AEC003B951E /* UIImagePatternLined.png in Resources */,
 				4C0E781B163B5AEC003B951E /* UIImagePatternLined@2x.png in Resources */,
@@ -5520,6 +5543,7 @@
 				4CC8993314DAF87A0094E17E /* UIImageBolt20.png in Resources */,
 				4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */,
 				4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */,
+				4C54B7B418EB80ED00E2A525 /* Settings.bundle in Resources */,
 				4C92957818C4E0770010AAEF /* MTImageLaunchViewerPadPortraitRetina.png in Resources */,
 				4C63631714E65C16005DBBFF /* UIImageDocument20@2x.png in Resources */,
 				4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */,
@@ -6041,6 +6065,7 @@
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
 				4CABE4A81837DF80007EDD9D /* RptqDocumentObjectFormula.m in Sources */,
 				4C9E447818D8CAB400F0F578 /* MTQueryReportSqlServer.m in Sources */,
+				4C5BED7018EB273300BDDDB8 /* NSError+Constructors.m in Sources */,
 				4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */,
 				4C3138EB184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4CBABBE418C7E96F00EE5768 /* MTPaperC8.m in Sources */,
@@ -6071,6 +6096,7 @@
 				4C8BA95D17417FC900B646E2 /* RptqQueryField+Extras.m in Sources */,
 				4CA92ADC17DAFF1700D654C7 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CABE4A41837DF80007EDD9D /* RptqQueryGroup.m in Sources */,
+				4C5BED7518EB356A00BDDDB8 /* MTQueryMaxFieldLength.m in Sources */,
 				4C8BA98E174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */,
 				4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */,
@@ -6644,6 +6670,7 @@
 				4C5E3C2317DF63D600CEEA76 /* MADUpgradeViewController.m in Sources */,
 				4C9E447718D8CAB400F0F578 /* MTQueryReportSqlServer.m in Sources */,
 				4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
+				4C5BED6F18EB273300BDDDB8 /* NSError+Constructors.m in Sources */,
 				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,
 				4CBABBE318C7E96F00EE5768 /* MTPaperC8.m in Sources */,
 				4C752E1316EE7F55001FDAA3 /* MTAlertView.m in Sources */,
@@ -6674,6 +6701,7 @@
 				4CB4574A1705F6DB005269B7 /* RptqRelationship.m in Sources */,
 				4CB4575E1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,
+				4C5BED7418EB356A00BDDDB8 /* MTQueryMaxFieldLength.m in Sources */,
 				4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4CABE4A71837DF80007EDD9D /* RptqDocumentObjectFormula.m in Sources */,
 				4C6C9B271733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,

@@ -179,7 +179,7 @@
     MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
     NSInteger maxNumberOfCharacters = [field calculatedWidth];
     if (maxNumberOfCharacters <= 0) {
-        maxNumberOfCharacters = 24;
+        maxNumberOfCharacters = 4;
     }
     [UIFont systemFontOfSize:[UIFont systemFontSize]];
     

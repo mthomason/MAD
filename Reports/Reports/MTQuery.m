@@ -17,6 +17,7 @@
 #import "MTQueryReportMySql.h"
 #import "MTQueryReportSqlServer.h"
 #import "MTQueryReportSqlite3.h"
+#import "MTQueryMaxFieldLength.h"
 
 #import "MTCache.h"
 #import "MTDatabase.h"
@@ -45,6 +46,9 @@
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
 
+NSString * const MTQueryKeyType = @"MTQueryKeyType";
+NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
+
 @interface MTQuery ()
 
 @property (nonatomic, strong, readwrite) MTDatabase *database;
@@ -62,43 +66,55 @@
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
         [self setFieldKeys:fieldKeys];
 
+        MTCache *cache = nil;
+        RptqUserCredentals *userCredentals;
         if ([object isKindOfClass:[RptqDatabase class]]) {
-            
-            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
-            [self setCache:cache];
-            RptqUserCredentals *userCredentals = [(RptqDatabase *)object ownedByUser];
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-            MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-            [self setDatabase:db];
+
+            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            userCredentals = [(RptqDatabase *)object ownedByUser];
 
         } else if ([object isKindOfClass:[RptqQuery class]]) {
             
-            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
-            [self setCache:cache];
-            RptqUserCredentals *userCredentals = [[(RptqQuery *)object inDatabase] ownedByUser];
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-            MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-            [self setDatabase:db];
+            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            userCredentals = [[(RptqQuery *)object inDatabase] ownedByUser];
 
         } else if ([object isKindOfClass:[RptqDatabaseSchemaTable class]]) {
             
-            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
-            [self setCache:cache];
-            RptqUserCredentals *userCredentals = [[(RptqDatabaseSchemaTable *)object inDatabase] ownedByUser];
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-            MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-            [self setDatabase:db];
+            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            userCredentals = [[(RptqDatabaseSchemaTable *)object inDatabase] ownedByUser];
             
         } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
 
-            MTCache *cache = [[MTCache alloc] initWithObjectID:[object objectID]];
-            [self setCache:cache];
-            RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
-            MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-            MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-            [self setDatabase:db];
+            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
 
+        } else if ([object isKindOfClass:[NSDictionary class]]) {
+            
+            
+            MTQueryType type = [object[MTQueryKeyType] integerValue];
+            switch (type) {
+                case MTQueryTypeMaxFieldLength: {
+                    NSOrderedSet *queryObject = object[MTQueryKeyObject];
+                    NSArray *array = [queryObject array];
+                    [self setQueryObject: array];
+                    RptqDatabaseSchemaField *field = [(NSArray *)queryObject firstObject];
+                    userCredentals = [[[field inTable] inDatabase] ownedByUser];
+                    break;
+                }
+                default:
+                    NSAssert(false, @"Nothing I ever heard of?");
+                    break;
+            }
+        } else {
+            NSAssert(false, @"What type of query do you want?");
         }
+        
+        [self setCache:cache];
+
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        [self setDatabase:db];
+
         
     }
     return self;
@@ -134,7 +150,22 @@
         
         result = [[MTQuerySampleDataField alloc] initWithObject:object];
         
+    } else if ([object isKindOfClass:[NSDictionary class]]) {
+        
+        MTQueryType type = [object[MTQueryKeyType] integerValue];
+        switch (type) {
+            case MTQueryTypeMaxFieldLength:
+                result = [[MTQueryMaxFieldLength alloc] initWithObject:object];
+                break;
+            default:
+                NSAssert(false, @"Nothing I ever heard of?");
+                break;
+        }
+        
+    } else {
+        NSAssert(false, @"What type of query do you want?");
     }
+    
     return result;
 }
 
@@ -166,10 +197,6 @@
 - (NSString *)getSqlForAllFieldsInTable:(RptqDatabaseSchemaTable *)table {
     NSString *tableName = [table toString];
     return [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
-}
-
-- (NSString *)sqlLimitClause {
-    return @"";
 }
 
 - (NSString *)sqlGroupByExpressionWithQuery:(RptqQuery *)query {

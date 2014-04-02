@@ -11,6 +11,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, MTQueryType) {
+	MTQueryTypeMaxFieldLength,
+};
+
+extern NSString * const MTQueryKeyType;
+extern NSString * const MTQueryKeyObject;
+
 @class RptqQuery, RptqDatabase, RptqDocument, RptqQueryField, MTDatabase, RptqQueryCache,
         RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
         MTDatabaseConnection, MTCache;
@@ -40,8 +47,6 @@
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
-
-- (NSString *)sqlLimitClause;
 
 - (NSArray *)sortedHasQueryGroups;
 - (NSArray *)sortDescriptors;

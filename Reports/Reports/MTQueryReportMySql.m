@@ -24,17 +24,13 @@
 
 @implementation MTQueryReportMySql
 
-- (NSString *)sqlLimitClause {
-    return (YES) ? @"" : @"\nLIMIT 50";
-}
-
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
     @autoreleasepool {
         
         NSError *__autoreleasing error = nil;
         NSString *sql = [self getSqlWithError:&error];
-        
+
         if (error) {
             
             completion(NO, error, nil);
