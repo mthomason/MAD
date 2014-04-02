@@ -7,10 +7,10 @@
 //
 
 #import "MTDatabaseSqlite3.h"
-#import "MTQueryReportSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
+#import "MTQuery.h"
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"

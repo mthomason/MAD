@@ -7,10 +7,13 @@
 //
 
 #import "MTDatabaseSqlServer.h"
-#import "MTQueryReportSqlServer.h"
 #import "MTDatabaseConnectionSqlServer.h"
 #import "MTDatabaseTable.h"
+#import "MTQuery.h"
 #import "MTKeyChain.h"
+
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
 
 #import "RptqQueryTable.H"
 #import "RptqQueryTable+Extras.h"
@@ -20,6 +23,8 @@
 #import "MTDatabaseProcessSqlServer.h"
 
 #import "NSError+UserInterface.h"
+
+NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 100";
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
@@ -2581,6 +2586,17 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (NSString *)sqlLimitClause {
     return @"";
+}
+
+- (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
+    NSString *safeField = [self safeQuerySchemaField:schemaField];
+    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *sql = [NSString stringWithFormat:@"%@ %@ "
+                     @"%@"
+                     @" %@ ORDER BY %@;",
+                     MTSqlSelectTop100, safeField, MTSqlFrom, safeTable, safeField];
+    
+    return sql;
 }
 
 @end

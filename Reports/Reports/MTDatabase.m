@@ -212,4 +212,14 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return [limitResuts boolValue];
 }
 
+- (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
+    NSString *safeField = [self safeQuerySchemaField:schemaField];
+    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
+                     @"%@ %@ "
+                     @"LIMIT 100;",
+                     safeField, MTSqlFrom, safeTable];
+    return sql;
+}
+
 @end

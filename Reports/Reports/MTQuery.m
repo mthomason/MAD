@@ -14,9 +14,6 @@
 #import "MTQuerySampleDataField.h"
 #import "MTQuerySampleDataTable.h"
 #import "MTQueryReport.h"
-#import "MTQueryReportMySql.h"
-#import "MTQueryReportSqlServer.h"
-#import "MTQueryReportSqlite3.h"
 #import "MTQueryMaxFieldLength.h"
 
 #import "MTCache.h"
@@ -125,23 +122,8 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
     if ([object isKindOfClass:[RptqQuery class]]) {
         
-        RptqDatabase *database = [(RptqQuery *)object inDatabase];
-        RptqUserCredentals *userCredentals = [database ownedByUser];
+        result = [[MTQueryReport alloc] initWithObject:object];
         
-        if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionMySql identifier]]) {
-            
-            result = [[MTQueryReportMySql alloc] initWithObject:object];
-            
-        } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlServer identifier]]) {
-            
-            result = [[MTQueryReportSqlServer alloc] initWithObject:object];
-            
-        } else if ([[userCredentals database_driver_type] isEqualToString:[MTDatabaseConnectionSqlite3 identifier]]) {
-            
-            result = [[MTQueryReportSqlite3 alloc] initWithObject:object];
-            
-        }
-
     } else if ([object isKindOfClass:[RptqDatabaseSchemaTable class]]) {
         
         result = [[MTQuerySampleDataTable alloc] initWithObject:object];

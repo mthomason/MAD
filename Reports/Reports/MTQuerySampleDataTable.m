@@ -26,7 +26,16 @@
 
 @implementation MTQuerySampleDataTable
 
-
+- (id)initWithObject:(id)object {
+    self = [super initWithObject:object];
+    if (self) {
+        Class classRptqQuery = [RptqDatabaseSchemaTable class];
+        if ([object isKindOfClass:classRptqQuery]) {
+            [self setQueryObject:object];
+        }
+    }
+    return self;
+}
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
@@ -48,17 +57,6 @@
     [sql appendString:MTSqlFrom];
     [sql appendString:safeTableName];
     return sql;
-}
-
-- (id)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
-        Class classRptqQuery = [RptqDatabaseSchemaTable class];
-        if ([object isKindOfClass:classRptqQuery]) {
-            [self setQueryObject:object];
-        }
-    }
-    return self;
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {

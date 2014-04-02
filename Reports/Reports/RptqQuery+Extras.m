@@ -7,8 +7,10 @@
 //
 
 #import "RptqQuery+Extras.h"
+
 #import "MTGraph.h"
 #import "MTPair.h"
+#import "RptqQueryGroup.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
 #import "RptqDatabase.h"

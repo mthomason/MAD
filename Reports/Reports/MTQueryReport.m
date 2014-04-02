@@ -14,9 +14,10 @@
 
 #import "Constants.h"
 
-#import "RptqQuery.h"
 #import "MTGraph.h"
+#import "MTCache.h"
 
+#import "RptqQuery.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
@@ -59,6 +60,37 @@
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     return [self getSqlOnlyActiveFields:YES error:error];
+}
+
+- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
+    
+    @autoreleasepool {
+        
+        NSError *__autoreleasing error = nil;
+        NSString *sql = [self getSqlWithError:&error];
+        
+        if (error) {
+            completion(NO, error, nil);
+        } else {
+            
+            [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
+                [[self cache] cacheData:results];
+                completion(success, error, results);
+            }];
+        }
+    }
+}
+
+- (void)sampleDataForSchemaField:(RptqDatabaseSchemaField *)schemaField
+                      completion: (void (^)(BOOL success, NSError *error, NSArray *resultStrings))completion {
+    
+    NSString *sql = [[self database] sqlSampleDataForField:schemaField];
+    
+    [[self database] executeSql:sql
+                     completion:^(BOOL success, NSError *error, id results) {
+                         [[self cache] cacheData:results];
+                         completion(success, error, results);
+                     }];
 }
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {

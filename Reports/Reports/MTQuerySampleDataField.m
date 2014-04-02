@@ -23,6 +23,17 @@
 
 @implementation MTQuerySampleDataField
 
+- (id)initWithObject:(id)object {
+    self = [super initWithObject:object];
+    if (self) {
+        Class classRptqQuery = [RptqDatabaseSchemaField class];
+        if ([object isKindOfClass:classRptqQuery]) {
+            [self setQueryObject:object];
+        }
+    }
+    return self;
+}
+
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     
@@ -36,17 +47,6 @@
                      @"LIMIT 100;",
                      safeField, MTSqlFrom, safeTable];
     return sql;
-}
-
-- (id)initWithObject:(id)object {
-    self = [super initWithObject:object];
-    if (self) {
-        Class classRptqQuery = [RptqDatabaseSchemaField class];
-        if ([object isKindOfClass:classRptqQuery]) {
-            [self setQueryObject:object];
-        }
-    }
-    return self;
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {

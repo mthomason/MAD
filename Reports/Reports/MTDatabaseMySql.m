@@ -7,9 +7,10 @@
 //
 
 #import "MTDatabaseMySql.h"
-#import "MTQueryReportMySql.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
+
+#import "MTQuery.h"
 
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
