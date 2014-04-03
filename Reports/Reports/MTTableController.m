@@ -17,6 +17,8 @@
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
 #import "MTDatabaseField.h"
+#import "NSError+UserInterface.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTTableController ()
     <UICollectionViewDataSource, MTTableLayoutDelegate>
@@ -36,6 +38,7 @@
     MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
+        
         [tableLayout setDelegate:self];
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         [self setTableFormatter:tableFormatter];
@@ -47,10 +50,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initalize];
-    [[self collectionView] setBackgroundColor:[UIColor whiteColor]];
-    [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error, id results) {
-        [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
-    }];
+//    [[[self navigationController] view] setBackgroundColor:[UIColor clearColor]];
+//    [[self view] setBackgroundColor:[UIColor clearColor]];
+//    [[self collectionView] setBackgroundColor:[UIColor clearColor]];
+    [[self collectionView] setBackgroundColor:[UIColor tintColor]];
+    [[self collectionView] setAlwaysBounceHorizontal:YES];
+    [[self collectionView] setAlwaysBounceVertical:YES];
+    
+    UINavigationItem *navitagionItem = [self navigationItem];
+    UIBarButtonItem *barButtonItemDone = [navitagionItem rightBarButtonItem];
+    [barButtonItemDone setTintColor:[UIColor tintColorRed]];
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator startAnimating];
+    [activityIndicator setHidden:NO];
+    [activityIndicator setHidesWhenStopped:NO];
+    [activityIndicator startAnimating];
+    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+
+    [navitagionItem setRightBarButtonItem:barButtonItemActive];
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+
+        
+        [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error, id results) {
+            
+            [navitagionItem performSelectorOnMainThread:@selector(setRightBarButtonItem:) withObject:barButtonItemDone waitUntilDone:NO];
+            [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
+            [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
+
+        }];
+
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {

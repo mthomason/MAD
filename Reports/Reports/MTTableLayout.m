@@ -69,7 +69,7 @@ typedef struct _ColumnWidth {
     [self setHeightHeader:24.0000f];
     [[self collectionView] setDelegate:self];
     
-    [[self collectionView] setBackgroundColor:[UIColor tintColor]];
+//    [[self collectionView] setBackgroundColor:[UIColor tintColor]];
 }
 
 - (void)prepareLayout {

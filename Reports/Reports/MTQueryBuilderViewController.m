@@ -153,6 +153,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    [[self tableView] registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
+    
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
     
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
@@ -1191,17 +1194,18 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         // MARK: Display the table names that are used in the query
         case MTQuerySectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
-            UITableViewCellTableName *resultR = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
+            result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             RptqQueryTable *tablea = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             NSString *title = [NSString stringWithFormat:@"%@", [tablea alias]];
-            [[resultR textLabel] setText: title];
-            [resultR setAccessoryType:UITableViewCellAccessoryDetailButton];
-            [[resultR textLabel] setFont: font];
-            [[resultR textLabel] setBackgroundColor:[UIColor clearColor]];
-            [resultR setIndentationLevel: 1];
-            result = resultR;
+            [[result textLabel] setText: title];
+            [result setAccessoryType:UITableViewCellAccessoryDetailButton];
+            [[result textLabel] setFont: font];
+            [[result textLabel] setBackgroundColor:[UIColor greenColor]];
+            [result setIndentationLevel: 1];
+            [result setTintColor:[UIColor tintColor]];
+            [result setBackgroundColor:[UIColor whiteColor]];
             
             break;
         }

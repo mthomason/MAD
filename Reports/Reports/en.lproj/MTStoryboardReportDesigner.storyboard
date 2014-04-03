@@ -11419,7 +11419,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="UIBarButtonItemDatabase.png" width="32" height="32"/>
+        <image name="UIBarButtonItemDatabase.png" width="48" height="32"/>
         <image name="UIBarButtonItemMadDesigner.png" width="48" height="32"/>
         <image name="UIBarButtonItemMadViewer.png" width="48" height="32"/>
         <image name="UIImageAlignBottom20.png" width="20" height="20"/>

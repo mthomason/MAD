@@ -46,6 +46,14 @@
     [super dealloc];
 }
 
+- (UIImage *)tabBarImage {
+    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+}
+
+- (NSString *)title {
+    return NSLocalizedString(@"MAD Query", "MAD Query");
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {

@@ -2745,6 +2745,8 @@
 		4CBABC1218C8945B00EE5768 /* MTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUser.h; sourceTree = "<group>"; };
 		4CBABC1318C8945B00EE5768 /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		4CBE1CC718C5A6E6009675CE /* buildcounter.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buildcounter.sh; sourceTree = "<group>"; };
+		4CBF7B7918EDB4E30035FCB9 /* DejalActivityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DejalActivityView.h; sourceTree = "<group>"; };
+		4CBF7B7A18EDB4E30035FCB9 /* DejalActivityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DejalActivityView.m; sourceTree = "<group>"; };
 		4CBFF2EB14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseDriverSelectorSalesforceViewController.h; sourceTree = "<group>"; };
 		4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseDriverSelectorSalesforceViewController.m; sourceTree = "<group>"; };
 		4CC182C916C6040F006FAD93 /* MTReportViewerReportPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerReportPageView.h; sourceTree = "<group>"; };
@@ -3494,6 +3496,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CBF7B7818EDB4C90035FCB9 /* ActivityView */,
 				4C9DBDEE18ED376C003BF927 /* BlurryModalSegue */,
 				4C9DBDE518ED3748003BF927 /* MZAppearance */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
@@ -4580,6 +4583,15 @@
 				4CBABC1318C8945B00EE5768 /* MTUser.m */,
 			);
 			name = User;
+			sourceTree = "<group>";
+		};
+		4CBF7B7818EDB4C90035FCB9 /* ActivityView */ = {
+			isa = PBXGroup;
+			children = (
+				4CBF7B7918EDB4E30035FCB9 /* DejalActivityView.h */,
+				4CBF7B7A18EDB4E30035FCB9 /* DejalActivityView.m */,
+			);
+			name = ActivityView;
 			sourceTree = "<group>";
 		};
 		4CCD8CF1150385A5002B9E77 /* Patterns */ = {
