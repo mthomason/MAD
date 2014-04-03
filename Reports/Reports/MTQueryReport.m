@@ -64,16 +64,6 @@
     return [self getSqlOnlyActiveFields:YES error:error];
 }
 
-- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
-    
-    @autoreleasepool {
-        [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
-            [[self cache] cacheData:results];
-            completion(success, error, results);
-        }];
-    }
-}
-
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
     NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
     

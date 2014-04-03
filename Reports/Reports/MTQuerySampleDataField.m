@@ -41,12 +41,4 @@
     return [[self database] sqlSampleDataForField:[self queryObject]];
 }
 
-- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
-
-    [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
-        //[[self cache] cacheData:results];
-        completion(success, error, results);
-    }];
-}
-
 @end

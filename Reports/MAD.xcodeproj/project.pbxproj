@@ -4414,8 +4414,8 @@
 			children = (
 				4C9E446D18D8C7BF00F0F578 /* MTQuery.h */,
 				4C9E446E18D8C7BF00F0F578 /* MTQuery.m */,
-				4C54B7B518EC806700E2A525 /* Simple Connection Test */,
 				4C11BD0518DE01B1001E3D33 /* Report Query */,
+				4C54B7B518EC806700E2A525 /* Simple Connection Test */,
 				4C11BD0618DE01CA001E3D33 /* Field Sample */,
 				4C11BD0718DE01D5001E3D33 /* Table Data */,
 				4C5BED7118EB353500BDDDB8 /* Field Lengths */,
