@@ -72,30 +72,6 @@
     }];
 }
 
-- (void)connectionTest:(void (^)(BOOL success, NSError *error))completion {
-    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
-    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-            MysqlConnection *conn = [dbconn retain];
-            if (conn && error == nil) {
-                NSString *key = [self safeIdentifier:@"f1"];
-                NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [self selectPart], key];
-                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
-                id queryResults = [[fetch results] retain];
-                NSNumber *result = queryResults[0][key];
-                BOOL success = [result integerValue] == 255;
-                completion(success, nil);
-            } else {
-                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
-                completion(NO, error);
-            }
-            [conn release];
-        }];
-    }];
-    [connectionSettings release];
-}
-
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
@@ -376,10 +352,6 @@
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     // FIXME: Use backticks `` to make more robust.
     return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
-}
-
-- (BOOL)isReachable {
-    return NO;
 }
 
 @end

@@ -179,10 +179,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return [self limitResults] ? @"\nLIMIT 10000" : @"";
 }
 
-- (BOOL)isReachable {
-    return NO;
-}
-
 - (void)removeCredentalsBecauseOfError:(NSError *)error {
     NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] deleteKey:key];

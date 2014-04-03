@@ -34,8 +34,6 @@ extern NSString * const MTQueryKeyObject;
 - (id)initWithObject:(id)object;
 + (id)queryFactory:(id)object;
 
-
-
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
 

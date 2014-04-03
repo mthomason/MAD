@@ -32,8 +32,6 @@
         Class classRptqQuery = [RptqDatabaseSchemaTable class];
         if ([object isKindOfClass:classRptqQuery]) {
             [self setQueryObject:object];
-            
-            
         }
     }
     return self;

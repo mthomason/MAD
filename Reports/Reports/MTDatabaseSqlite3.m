@@ -421,8 +421,4 @@
     return @" ";
 }
 
-- (BOOL)isReachable {
-    return NO;
-}
-
 @end
