@@ -129,7 +129,10 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver: self];
-    
+}
+
+- (CGSize)preferredContentSize {
+    return CGSizeMake(320.0000f, 420.0000f);
 }
 
 #pragma mark - Picker View Data Source

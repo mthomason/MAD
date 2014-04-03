@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MTNavigationController : UINavigationController
+    <UINavigationControllerDelegate>
 
 @end
 

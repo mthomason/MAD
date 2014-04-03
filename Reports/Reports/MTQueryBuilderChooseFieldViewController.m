@@ -72,11 +72,12 @@
     }
 }
 
+- (CGSize)preferredContentSize {
+    return CGSizeMake(320, 480);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    CGSize size = CGSizeMake(320, 480);
-    [self setPreferredContentSize: size];
     
     [[self navigationItem] setLeftItemsSupplementBackButton:YES];
     [[self navigationItem] setHidesBackButton:NO];

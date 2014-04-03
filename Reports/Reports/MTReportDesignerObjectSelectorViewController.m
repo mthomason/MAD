@@ -142,8 +142,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         id destinationViewController = [segue destinationViewController];
         [destinationViewController setDelegate: self];
         if ([UIDevice isPad]) {
-            CGSize contentSize = CGSizeMake(320.0000f, 420.0000f);
-            [destinationViewController setPreferredContentSize:contentSize];
+//            CGSize contentSize = CGSizeMake(320.0000f, 420.0000f);
+            //[destinationViewController setPreferredContentSize:contentSize];
         }
     }
 }

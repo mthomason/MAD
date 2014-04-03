@@ -622,13 +622,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([UIDevice isPad]) {
         UIPopoverController *popoverControllerInformation = [[UIPopoverController alloc] initWithContentViewController:[self viewControllerToolbox]];
         [popoverControllerInformation setDelegate:self];
-        [popoverControllerInformation setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
+        [popoverControllerInformation setPopoverContentSize:CGSizeMake(320.0000f, 480.0000f) animated:NO];
         [self setPopoverControllerInformation:popoverControllerInformation];
         [popoverControllerInformation release];
 
         UIPopoverController *popoverControllerSectionSettings = [[UIPopoverController alloc] initWithContentViewController:[self navigationControllerSectionLayoutSettings]];
         [popoverControllerSectionSettings setDelegate:self];
-        [popoverControllerSectionSettings setPopoverContentSize:CGSizeMake(320.0000f, 320.0000f) animated:NO];
+        [popoverControllerSectionSettings setPopoverContentSize:CGSizeMake(320.0000f, 480.0000f) animated:NO];
         [self setPopoverControllerSectionSettings:popoverControllerSectionSettings];
         [popoverControllerSectionSettings release];
     }
@@ -929,7 +929,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 }
 
-
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -1053,6 +1052,19 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return YES;
 }
 
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+//    NSLog(@"%@", NSStringFromCGRect([[viewController view] frame]));
+    if ([viewController isKindOfClass:[UITableViewController class]]) {
+        NSLog(@"%@", NSStringFromCGRect([[viewController view] frame]));
+        NSLog(@"%@", NSStringFromCGRect([[navigationController view] frame]));
+    }
+//    CGSize contentSize = viewController.preferredContentSize;
+    //[self.popoverControllerObjectSelector setPopoverContentSize:contentSize animated:YES];
+    [[viewController view] setFrame:[[navigationController view] frame]];
+}
+
+//performSegueWithIdentifier:sender
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:@"showObjects"]) {
@@ -1062,20 +1074,27 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [popoverSegue popoverController];
             [popoverController setDelegate:self];
-            CGSize popoverSize = CGSizeMake(320.0000f, 420.0000);
-            [popoverController setPopoverContentSize:popoverSize animated:NO];
+            CGSize popoverSize = CGSizeMake(320.0000f, 480.0000 + 44.0000f);
+            [popoverController setPopoverContentSize:popoverSize animated:YES];
+            
             [self setPopoverControllerObjectSelector:popoverController];
         }
         
+        MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = nil;
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
             UINavigationController *d = [segue destinationViewController];
-            MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)[d topViewController];
+            [d setDelegate:self];
+//            [d setPreferredContentSize:popoverSize];
+            viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)[d topViewController];
             [viewControllerObjectSelector setObjectSelectorDelegate:self];
+
             
         } else {
-            MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = [segue destinationViewController];
+            viewControllerObjectSelector = [segue destinationViewController];
             [viewControllerObjectSelector setObjectSelectorDelegate:self];
         }
+        
+        
 
     } else if ([[segue identifier] isEqualToString:@"MTSegueShowReportViewer"]) {
 

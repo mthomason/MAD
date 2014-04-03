@@ -47,7 +47,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     
     dispatch_async(queuePriorityBackground, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             
 
             [blockSelf connectWithCredentals:[blockSelf databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
@@ -93,7 +93,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                         NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
                                                                                        encoding: NSStringEncodingConversionAllowLossy];
                                         MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                                        //NSLog(@"%@", table);
                                         [results addObject:table];
                                         [table release];
                                         [tableName release];

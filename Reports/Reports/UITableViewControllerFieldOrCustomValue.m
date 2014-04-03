@@ -11,6 +11,10 @@
 
 @implementation UITableViewControllerFieldOrCustomValue
 
+- (CGSize)preferredContentSize {
+    return CGSizeMake(320.0000f, 420.0000f);
+}
+
 - (void)dealloc {
     [_segmentedControlDisplayType release];
     [super dealloc];
