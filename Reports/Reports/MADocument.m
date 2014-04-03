@@ -45,10 +45,6 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 @implementation MADocument
 
-//- (BOOL)hasUnsavedChanges {
-//    return YES;
-//}
-
 - (void)dealloc {
     [_extraInformation release];
     [_thumbnail release];

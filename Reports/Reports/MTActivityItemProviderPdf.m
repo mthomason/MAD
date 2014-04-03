@@ -23,18 +23,10 @@
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *temporaryFile = [[temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"] retain];
 
-   // MTApplicationInstance *app = [AppDelegate app];
-   // MAReportDocument *doc = [app activeDocument];
-    //MTCache *defaultCache = [[doc defaultQuery] cache];
-    //MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithDatasource:defaultCache andLayout:[doc activeDocument]];
-    
-    
     MTApplicationInstance *app = [AppDelegate app];
     MAReportDocument *reportDocument = [app activeDocument];
     
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportDocument reportFormatter]];
-    
-    //MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
     [printPageRender writeToPdf:temporaryFile];
     [printPageRender release];
     return [temporaryFile autorelease];

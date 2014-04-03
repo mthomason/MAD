@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTUser.h"
 #import "NSFileManager+Common.h"
 
@@ -30,7 +34,7 @@
     NSString *key = NSStringFromSelector(selectorPath);
     NSSortDescriptor *sortByFileName = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:selectorSort];
     NSArray *sortDescriptors = @[sortByFileName];
-    return [[[madFiles sortedArrayUsingDescriptors:sortDescriptors] retain] autorelease];
+    return [madFiles sortedArrayUsingDescriptors:sortDescriptors];
 }
 
 @end

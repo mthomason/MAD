@@ -53,17 +53,11 @@ extern NSString * const MTReportGroupFooter;
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention
              andConnection:(MTDatabaseConnection *)databaseConnection
-                completion:(void(^)(BOOL success))completion;
+                completion:(void(^)(BOOL success, NSError *error))completion;
 
 - (NSURL *)cachedDataUrl;
 
 - (MTQueryReport *)defaultQuery;
-
-// Page caching
-//- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize;
-//- (void)cachePrintPageRenderDataForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;
-
-//- (NSInteger)numberOfPages; // Valid after caching.
 
 @end
 

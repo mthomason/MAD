@@ -796,7 +796,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         MTApplicationInstance *app = [AppDelegate app];
         MAReportDocument *doc = [app activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
+                                                                               andLayout:[doc activeDocument]];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
 
         [printPageRender writeToPdf:temporaryFile];

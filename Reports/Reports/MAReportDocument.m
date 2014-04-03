@@ -9,6 +9,7 @@
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MAReportDocument.h"
+#import <UIKit/UIKit.h>
 #import "MTDatabaseSqlite3.h"
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTDatabaseTable.h"
@@ -36,9 +37,11 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTAlertView.h"
 
 #import "UIDevice+Hack.h"
-#import "NSError+UserInterface.h"
 
 #import "MTQueryTest.h"
+
+#import "NSError+UserInterface.h"
+#import "NSError+Constructors.h"
 
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
@@ -61,47 +64,11 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) BOOL didRefresh;
 
-// Below this be page caching fu
-/*
-
-@property (nonatomic, assign) CGSize printableSize;
-@property (nonatomic, assign) CGRect printableRect;
-
-@property (nonatomic, assign) CGSize cachedPageSize;
-
-@property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
-
-@property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
-
-@property (nonatomic, retain) NSArray *cachedDataByPage;
-@property (nonatomic, retain) NSArray *cachedLayoutByPage;
-
-@property (nonatomic, retain) NSArray *sortedQueryGroups;
-@property (nonatomic, retain) NSArray *cachedSortedSortDescriptorsGroup;
-@property (nonatomic, retain) NSArray *cachedDataByReport;
-@property (nonatomic, retain) NSDictionary *cachedDataByGroup;
-
-@property (nonatomic, retain) NSMutableArray *temporaryLayoutForPage;
-@property (nonatomic, retain) NSMutableArray *temporaryDataForPage;
-@property (nonatomic, retain) NSMutableArray *temporaryLayoutByPage;
-@property (nonatomic, retain) NSMutableArray *temporaryDataByPage;
-*/
-
 @end
 
 @implementation MAReportDocument
 
 - (void)dealloc {
-/*    [_cachedLayoutByPage release];
-    [_cachedSortedSortDescriptorsGroup release];
-    [_cachedDataByPage release];
-    [_cachedDataByGroup release];
-    [_cachedDataByReport release];
-    [_temporaryLayoutByPage release]; _temporaryLayoutByPage = nil;
-    [_temporaryLayoutForPage release]; _temporaryLayoutForPage = nil;
-    [_temporaryDataByPage release]; _temporaryDataByPage = nil;
-    [_temporaryDataForPage release]; _temporaryDataForPage = nil;
-    [_sortedQueryGroups release]; _sortedQueryGroups = nil;*/
     [_reportQueries release];
     [_document release];
     [_mom release];
@@ -156,17 +123,19 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         // FIXME: Only one query for a report at this time.
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *rquery = [[database hasQueries] anyObject];
-        MTQuery *query = [[MTQuery queryFactory:rquery] retain];
-        if (query) {
-            [self reportQueries][@"defaultq"] = query;
-        }
-        [query release];
-
-        if ([self reportFormatter] == nil) {
-            MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
+        if (rquery) {
+            MTQuery *query = [[MTQuery queryFactory:rquery] retain];
+            if (query) {
+                [self reportQueries][@"defaultq"] = query;
+            }
+            [query release];
+            
+            if ([self reportFormatter] == nil) {
+                MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
                                                                                         andLayout:[self activeDocument]] retain];
-            [self setReportFormatter:reportFormatter];
-            [reportFormatter release];
+                [self setReportFormatter:reportFormatter];
+                [reportFormatter release];
+            }
         }
     }
     return [[[self document] retain] autorelease];
@@ -362,124 +331,121 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     
 }
 
-+ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion {
++ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
     
     
     MTQueryTest *queryTest = [[MTQueryTest alloc] initWithObject:databaseConnection];
     [queryTest performQuery:^(BOOL success, NSError *error, id results) {
+        
         if (!success) {
-            [error presentErrorToUser];
+            completion(NO, error);
+        } else {
+            
+            [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
+                
+                if (success) {
+                    
+                    __block MAReportDocument *documentReport = managedDocument;
+                    [databaseConnection retain];
+                    
+                    RptqDocument *rptqDocument = [[documentReport activeDocument] retain];
+                    MTDatabase *database = [[MTDatabase databaseFactory:databaseConnection] retain];
+                    
+                    if (database) {
+                        
+                        [self addDatabase:database toDocument:rptqDocument ofDocumentReport:documentReport completion:^(BOOL success, NSError *error){
+                            completion(success, error);
+                        }];
+                        
+                    }
+                    
+                    [rptqDocument release];
+                    [databaseConnection release];
+                    [database release];
+                    
+                } else {
+                    NSError *error = [MAReportDocument errorFailedToCreateReport];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(NO, error);
+                    });
+                }
+            }];
+
         }
     }];
-    
-    
-    [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
-        
-        if (success) {
-            
-            __block MAReportDocument *documentReport = managedDocument;
-            [databaseConnection retain];
-            
-            RptqDocument *rptqDocument = [[documentReport activeDocument] retain];
-            MTDatabase *database = [[MTDatabase databaseFactory:databaseConnection] retain];
-            
-            if (database) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [RptqDocument addDatabase:database toDocument:rptqDocument completion:^(BOOL successAddingDatasource, NSError *error) {
-                        
-                        MTCompletionHandlerSuccess completeSuccess = ^(BOOL success) {
-                            if ([NSThread isMainThread]) {
-                                completion(YES);
-                            } else {
-                                dispatch_sync(dispatch_get_main_queue(), ^{
-                                    completion(YES);
-                                });
-                            }
-                        };
-                        
-                        MTCompletionHandlerSuccess completeFail = ^(BOOL success) {
-                            if ([NSThread isMainThread]) {
-                                completion(YES);
-                            } else {
-                                dispatch_sync(dispatch_get_main_queue(), ^{
-                                    completion(YES);
-                                });
-                            }
-                        };
+}
 
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (successAddingDatasource) {
-                                
-                                MTCompletionHandlerSuccess handlerClose = ^(BOOL success) {
-                                    if (success) {
-                                        [documentReport setSuspended:YES];
-                                        [[documentReport managedObjectContext] lock];
-                                        [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
-                                            [documentReport deleteFromDiskCompletion:completeSuccess];
-                                        }];
-                                    }
-                                };
-                                
-                                [documentReport closeWithCompletionHandler:handlerClose];
-                                
-                            } else {
-                                [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
-                                    if (successClosingReport) {
-                                        
-                                        [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
-                                        
-                                        if (error) {
-                                            
-                                            [error presentErrorToUserWithCompletion:completeFail];
-                                            
-                                        } else {
-                                            
-                                            NSString *connectionProblem = NSLocalizedString(@"Connection Problem", @"Connection Problem");
-                                            NSString *connectionMessage = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
-                                            NSString *connectionCancel = NSLocalizedString(@"Cancel", @"Cancel");
-                                            
-                                            MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: connectionProblem message: connectionMessage cancelButtonTitle: connectionCancel otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) {
-                                                completion(NO);
-                                            } onCancel:^{
-                                                completion(NO);
-                                            }];
-                                            [alertView show];
-                                            [alertView autorelease];
-                                            
-                                        }
-                                    }
-                                }];
-                                
-                            }
++ (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document ofDocumentReport:(MAReportDocument *)documentReport completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
+
+    [RptqDocument addDatabase:database toDocument:document completion:^(BOOL successAddingDatasource, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (successAddingDatasource) {
+
+                [self closeReportDocument:documentReport withCompletion:^(BOOL success, NSError *error) {
+                    completion(success, error);
+                }];
+                
+            } else {
+                [self discardReportDocument:documentReport withCompletion:^(BOOL success, NSError *error) {
+                    completion(success, error);
+                }];
+            }
+        });
+    }];
+
+}
+
+
++ (void)closeReportDocument:(MAReportDocument *)documentReport withCompletion:(void(^)(BOOL success, NSError *error))completion {
+
+    [documentReport closeWithCompletionHandler:^(BOOL success) {
+        if (success) {
+            [documentReport setSuspended:YES];
+            [[documentReport managedObjectContext] lock];
+            [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
+                [documentReport deleteFromDiskCompletion:^(BOOL success) {
+                    if ([NSThread isMainThread]) {
+                        completion(YES, nil);
+                    } else {
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            completion(YES, nil);
                         });
-                    }];
+                    }
+                }];
+            }];
+        }
+    }];
+}
+
++ (void)discardReportDocument:(MAReportDocument *)documentReport withCompletion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
+    [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
+        if (successClosingReport) {
+            [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
+            NSError *error = [MAReportDocument errorConnectionProblem];
+            if ([NSThread isMainThread]) {
+                completion(NO, error);
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(NO, error);
                 });
             }
             
-            [rptqDocument release];
-            [databaseConnection release];
-            [database release];
-            
-        } else {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem)
-                                                                    message: NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport)
-                                                          cancelButtonTitle: NSLocalizedString(MNSInterfaceButtonDismiss, MNSInterfaceButtonDismiss)
-                                                           otherButtonTitle: nil onDismiss:^(NSInteger buttonIndex) {
-                                                               
-                                                           } onCancel:^{
-                                                               
-                                                           }];
-                [alertView show];
-                [alertView autorelease];
-            });
         }
     }];
-    
+
+}
+
++ (NSError *)errorConnectionProblem {
+    NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
+    NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
+    return [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
+}
+
++ (NSError *)errorFailedToCreateReport {
+    NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
+    NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
+    return [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
 }
 
 - (void)regenThumbnail {

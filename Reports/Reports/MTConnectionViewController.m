@@ -12,6 +12,8 @@
 #import "UIDevice+Hack.h"
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
+#import "NSError+Constructors.h"
+#import "NSError+UserInterface.h"
 
 @interface MTConnectionViewController()
 
@@ -158,7 +160,7 @@
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
     
-    [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success) {
+    [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success, NSError *error) {
         if (success) {
             [blockSender setEnabled:YES];
             [[blockSelf delegate] viewControllerDidFinish: blockSelf];

@@ -114,10 +114,6 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
     if ([self editmode]) {
         [[self barButtonItemSave] setEnabled:YES];
-
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        MTQueryReport *defaultQuery = [reportDocument defaultQuery];
         
         __block MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
         if ([self queryField1] != nil) {

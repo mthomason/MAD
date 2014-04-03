@@ -23,8 +23,6 @@
 + (UIWindow *)window;
 
 + (MAReportDocument *)activeReportDocument;
-+ (RptqDocument *)activeRptqDocument;
-+ (RptqDatabase *)activeRptqDatabase;
 + (RptqQuery *)activeRptqQuery;
 
 

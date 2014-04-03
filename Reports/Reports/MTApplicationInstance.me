@@ -29,9 +29,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"3.0.99";
-NSString * const MTGlobalBundleShortVersion                         = @"3.0.99";
-NSString * const MTGlobalBundleRev                                  = @"968";
+NSString * const MTGlobalBundleVersion                              = @"3.0.101";
+NSString * const MTGlobalBundleShortVersion                         = @"3.0.101";
+NSString * const MTGlobalBundleRev                                  = @"970";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -92,11 +92,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         [reportViewer release];
 
         [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
-            // This is the block syntx for showing prompts.
-            // It lets you decide if it should be shown now or not based on
-            // the UAAppReviewManager trackingInfo or any other factor.
-            //NSLog(@"UAAppReviewManager trackingInfo: %@", trackingInfo);
-            // Don't show the prompt now, but do it from the buttons in the example app.
             return NO;
         }];
                 

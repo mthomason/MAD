@@ -328,8 +328,8 @@
 		4C202132163DD4090058F869 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C202133163DD4090058F869 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C20213C163DD40A0058F869 /* ReportsGeneralTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */; };
-		4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; };
-		4C2213AC17D7932B00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; };
+		4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2213AC17D7932B00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		4C2279A8167712D600B1150D /* MTObject.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A6167712D600B1150D /* MTObject.h */; };
 		4C2279A9167712D600B1150D /* MTObject.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A6167712D600B1150D /* MTObject.h */; };
@@ -1601,8 +1601,8 @@
 		4CBABC0B18C7ED1300EE5768 /* MTPaperGovernmentLegal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC0918C7ED1300EE5768 /* MTPaperGovernmentLegal.m */; };
 		4CBABC0E18C7ED2100EE5768 /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC0D18C7ED2100EE5768 /* MTPaperGovernmentLetter.m */; };
 		4CBABC0F18C7ED2100EE5768 /* MTPaperGovernmentLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC0D18C7ED2100EE5768 /* MTPaperGovernmentLetter.m */; };
-		4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC1318C8945B00EE5768 /* MTUser.m */; };
-		4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC1318C8945B00EE5768 /* MTUser.m */; };
+		4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC1318C8945B00EE5768 /* MTUser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CBABC1518C8945B00EE5768 /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBABC1318C8945B00EE5768 /* MTUser.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CBFF2ED14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBFF2EC14C71370000237D3 /* MTDatabaseDriverSelectorSalesforceViewController.m */; };
 		4CC182CB16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
 		4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC182CA16C60410006FAD93 /* MTReportViewerReportPageView.m */; };
@@ -2542,6 +2542,12 @@
 		4C982DBB166E4819003E9AA0 /* NSError+UserInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+UserInterface.m"; sourceTree = "<group>"; };
 		4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabase+Extras.h"; sourceTree = "<group>"; };
 		4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabase+Extras.m"; sourceTree = "<group>"; };
+		4C9DBDEF18ED3784003BF927 /* BlurryModalSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurryModalSegue.h; sourceTree = "<group>"; };
+		4C9DBDF018ED3784003BF927 /* BlurryModalSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurryModalSegue.m; sourceTree = "<group>"; };
+		4C9DBDF318ED379D003BF927 /* MZAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MZAppearance.h; sourceTree = "<group>"; };
+		4C9DBDF418ED379D003BF927 /* MZAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MZAppearance.m; sourceTree = "<group>"; };
+		4C9DBDF518ED379D003BF927 /* NSInvocation+Copy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+Copy.h"; sourceTree = "<group>"; };
+		4C9DBDF618ED379D003BF927 /* NSInvocation+Copy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+Copy.m"; sourceTree = "<group>"; };
 		4C9E445518D88D7000F0F578 /* MTTableLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableLayout.h; sourceTree = "<group>"; };
 		4C9E445618D88D7000F0F578 /* MTTableLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableLayout.m; sourceTree = "<group>"; };
 		4C9E446518D8AADE00F0F578 /* MTTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableController.h; sourceTree = "<group>"; };
@@ -3219,10 +3225,7 @@
 			isa = PBXGroup;
 			children = (
 				4C5BED4E18E897FE00BDDDB8 /* App */,
-				4CBABC1218C8945B00EE5768 /* MTUser.h */,
-				4CBABC1318C8945B00EE5768 /* MTUser.m */,
 				4C11BCF418DD4DB7001E3D33 /* Formatters */,
-				4C8A648818C7C6C200997D22 /* Document */,
 				4C8A649118C7C6D100997D22 /* Database */,
 				4C8A649218C7C71100997D22 /* DatabaseTable */,
 				4C8A649318C7C72900997D22 /* DatabaseField */,
@@ -3491,6 +3494,8 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C9DBDEE18ED376C003BF927 /* BlurryModalSegue */,
+				4C9DBDE518ED3748003BF927 /* MZAppearance */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
 				4C3A969F189F7E30007AF476 /* libbarcodes */,
 				4C3A969E189F7DFC007AF476 /* libsqlite3 */,
@@ -3826,6 +3831,8 @@
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
 				4C5BED5718E8982400BDDDB8 /* User Interface */,
+				4CBF7B7718EDA9E20035FCB9 /* User */,
+				4C8A648818C7C6C200997D22 /* Document */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -4379,6 +4386,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4C9DBDE518ED3748003BF927 /* MZAppearance */ = {
+			isa = PBXGroup;
+			children = (
+				4C9DBDF318ED379D003BF927 /* MZAppearance.h */,
+				4C9DBDF418ED379D003BF927 /* MZAppearance.m */,
+				4C9DBDF518ED379D003BF927 /* NSInvocation+Copy.h */,
+				4C9DBDF618ED379D003BF927 /* NSInvocation+Copy.m */,
+			);
+			name = MZAppearance;
+			sourceTree = "<group>";
+		};
+		4C9DBDEE18ED376C003BF927 /* BlurryModalSegue */ = {
+			isa = PBXGroup;
+			children = (
+				4C9DBDEF18ED3784003BF927 /* BlurryModalSegue.h */,
+				4C9DBDF018ED3784003BF927 /* BlurryModalSegue.m */,
+			);
+			name = BlurryModalSegue;
+			sourceTree = "<group>";
+		};
 		4C9E447D18D8D3B800F0F578 /* Query */ = {
 			isa = PBXGroup;
 			children = (
@@ -4544,6 +4571,15 @@
 				4CBABC0D18C7ED2100EE5768 /* MTPaperGovernmentLetter.m */,
 			);
 			name = Letter;
+			sourceTree = "<group>";
+		};
+		4CBF7B7718EDA9E20035FCB9 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				4CBABC1218C8945B00EE5768 /* MTUser.h */,
+				4CBABC1318C8945B00EE5768 /* MTUser.m */,
+			);
+			name = User;
 			sourceTree = "<group>";
 		};
 		4CCD8CF1150385A5002B9E77 /* Patterns */ = {
