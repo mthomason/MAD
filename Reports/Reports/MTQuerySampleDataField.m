@@ -36,23 +36,17 @@
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
+    NSString *key = [[self database] fieldAliasForField:[self queryObject]];
+    [[self fieldKeys] addObject:key];
     return [[self database] sqlSampleDataForField:[self queryObject]];
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
 
-    NSError *error = nil;
-    NSString *sql = [self getSqlWithError:&error];
-
-    if (error) {
-        completion(NO, error, nil);
-    } else {
-        [[self database] executeSql:sql
-                         completion:^(BOOL success, NSError *error, id results) {
-                             [[self cache] cacheData:results];
-                             completion(success, error, results);
-                         }];
-    }
+    [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
+        //[[self cache] cacheData:results];
+        completion(success, error, results);
+    }];
 }
 
 @end

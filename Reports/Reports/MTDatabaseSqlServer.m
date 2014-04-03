@@ -322,20 +322,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return result;
 }
 
-- (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
-    [self connectWithCredentals:[self databaseConnection] completion:^(id dbconn, BOOL success, NSError *error) {
-        
-        if (success) {
-            id results = [[[self runQueryString:sql onProcess:dbconn] retain] autorelease];
-            completion(YES, nil, results);
-            
-        } else {
-            completion(NO, error, nil);
-        }
-
-    }];
-}
-
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
     [self connectWithCredentals:[self databaseConnection] completion:^(id dbconn, BOOL success, NSError *error) {
         
@@ -375,7 +361,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
         
         //        [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
@@ -2589,13 +2575,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
-    NSString *safeField = [self safeQuerySchemaField:schemaField];
-    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
-    NSString *sql = [NSString stringWithFormat:@"%@ %@ "
-                     @"%@"
-                     @" %@ ORDER BY %@;",
-                     MTSqlSelectTop100, safeField, MTSqlFrom, safeTable, safeField];
     
+    NSString *safeField = [self safeQuerySchemaField:schemaField];
+    NSString *safeFieldAlias = [self fieldAliasForField:schemaField];
+    NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
+    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT TOP 511 "
+                     @"%@ %@ %@ "
+                     @"%@ %@ ",
+                     safeField, [self tableAliasConnector], safeFieldAlias,
+                     MTSqlFrom, safeTable];
     return sql;
 }
 

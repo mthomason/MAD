@@ -96,35 +96,6 @@
     [connectionSettings release];
 }
 
-- (void)executeSql:(NSString *)sql
-        completion:(void (^)(BOOL success, NSError *error, id results))completion {
-    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
-    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-       [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-           MysqlConnection *conn = [dbconn retain];
-           if (conn && error == nil) {
-               
-               @autoreleasepool {
-                   
-                   MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
-                   id queryResults = [[fetch results] retain];
-                   [[self delegateCacheData] cacheQueryResult:queryResults];
-                   completion(YES, nil, queryResults);
-                   [queryResults release];
-                   
-               }
-               
-           } else {
-               SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-               [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
-               completion(NO, error, nil);
-           }
-           [conn release];
-       }];
-    }];
-    [connectionSettings release];
-}
-
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {

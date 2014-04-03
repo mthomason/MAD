@@ -95,15 +95,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     completion(nil, YES, nil);
 }
 
-- (void)executeSql:(NSString *)sql
-        completion:(void (^)(BOOL success, NSError *error, id results))completion {
-    
-    NSString *message = @"Only call this on subclasses.";
-    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:484 userInfo:errorInfo];
-    completion(NO, error, nil);
-}
-
 + (NSString *)safeQueryField:(RptqQueryField *)queryField {
     return [MTDatabase safeQueryField:queryField];
 }
@@ -214,11 +205,15 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
     NSString *safeField = [self safeQuerySchemaField:schemaField];
+    NSString *safeFieldAlias = [self fieldAliasForField:schemaField];
     NSString *safeTable = [self safeIdentifier:schemaField.inTable.name];
-    NSString *sql = [NSString stringWithFormat:@"SELECT DISTINCT %@ "
+    NSString *sql = [NSString stringWithFormat:@"%@ DISTINCT "
+                     @"%@ %@ %@ "
                      @"%@ %@ "
                      @"LIMIT 511;",
-                     safeField, MTSqlFrom, safeTable];
+                     [self selectPart],
+                     safeField, [self tableAliasConnector], safeFieldAlias,
+                     MTSqlFrom, safeTable];
     return sql;
 }
 

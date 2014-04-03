@@ -13,7 +13,6 @@
 #import "MTQueryMaxFieldLength.h"
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
-#import "MTCache.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
@@ -36,7 +35,6 @@
             
             MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
             RptqDatabaseSchemaTable *table = [field inTable];
-            //NSString *safeTableName = [[self database] tableAliasForTable:table];
             [tables addObject:table];
 
             NSString *fieldAliasSafe = [[self database] fieldAliasForField:field];
@@ -81,19 +79,9 @@
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
-    NSError *error = nil;
-    NSString *sql = [self getSqlWithError:&error];
-    
-    if (error) {
-        completion(NO, error, nil);
-    } else {
-        
-        [[self database] executeSql:sql
-                         completion:^(BOOL success, NSError *error, id results) {
-                             [[self cache] cacheData:results];
-                             completion(success, error, results);
-                         }];
-    }
+    [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
+        completion(success, error, results);
+    }];
     
 }
 

@@ -32,6 +32,8 @@
         Class classRptqQuery = [RptqDatabaseSchemaTable class];
         if ([object isKindOfClass:classRptqQuery]) {
             [self setQueryObject:object];
+            
+            
         }
     }
     return self;
@@ -46,13 +48,37 @@
     [sql appendString:[[self database] sqlAllFieldsInTable:table]];
     
     NSString *safeTableName = [[self database] tableAliasForTable:table];
-    for (RptqDatabaseSchemaField *field in [table hasFields]) {
-        MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
-        NSString *fieldAlias = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
-        [[self fields] setObject:dbField forKey:fieldAlias];
-        [[self fieldKeys] addObject:fieldAlias];
+
+    if ([[self fieldKeys] count] <= 0) {
+        for (RptqDatabaseSchemaField *field in [table hasFields]) {
+            MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
+            NSString *fieldAlias = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
+            [[self fields] setObject:dbField forKey:fieldAlias];
+            [[self fieldKeys] addObject:fieldAlias];
+        }
     }
     
+    NSNumber *queryType = @(MTQueryTypeMaxFieldLength);
+    NSOrderedSet *fields = [[self queryObject] hasFields];
+    NSDictionary *queryDefination = @{MTQueryKeyType : queryType, MTQueryKeyObject : fields};
+    
+    MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
+
+    [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, id widths) {
+        if (success && [widths count] > 0) {
+            
+            [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
+                
+                NSString *safeTableName = [[self database] tableAliasForTable:[field inTable]];
+                NSString *okey = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
+                NSString *ckey = [[self database] fieldAliasForField:field];
+                NSDictionary *widthsByField = [widths objectAtIndex:0];
+                NSInteger maxSize = [[widthsByField objectForKey:ckey] integerValue];
+                MTDatabaseField *f = [[self fields] objectForKey:okey];
+                f.calculatedWidth = maxSize;
+            }];
+        }
+    }];
     
     [sql appendString:MTSqlFrom];
     [sql appendString:safeTableName];
@@ -60,49 +86,11 @@
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
-    
-    NSError *error = nil;
-    NSString *sql = [self getSqlWithError:&error];
 
-    if ([sql length] > 0 && error == nil) {
-
-        NSNumber *queryType = @(MTQueryTypeMaxFieldLength);
-        NSOrderedSet *fields = [[self queryObject] hasFields];
-        NSDictionary *queryDefination = @{MTQueryKeyType : queryType, MTQueryKeyObject : fields};
-        
-        MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
-        
-        [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, id widths) {
-            if (success && [widths count] > 0) {
-                
-                [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
-                    
-                    NSString *safeTableName = [[self database] tableAliasForTable:[field inTable]];
-                    NSString *okey = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
-                    NSString *ckey = [[self database] fieldAliasForField:field];
-                    NSDictionary *widthsByField = [widths objectAtIndex:0];
-                    NSInteger maxSize = [[widthsByField objectForKey:ckey] integerValue];
-                    MTDatabaseField *f = [[self fields] objectForKey:okey];
-                    f.calculatedWidth = maxSize;
-                }];
-                
-                if (errorFl) {
-                    completion(NO, error, nil);
-                } else {
-                    [[self database] executeSql:sql
-                                     completion:^(BOOL success, NSError *error, id results) {
-                                         [[self cache] cacheData:results];
-                                         completion(success, error, results);
-                                     }];
-                }
-                
-                
-            }
-        }];
-
-    } else {
-        completion(NO, error, nil);
-    }
+    [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
+        [[self cache] cacheData:results];
+        completion(success, error, results);
+    }];
 
 }
 

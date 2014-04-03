@@ -67,19 +67,10 @@
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
     @autoreleasepool {
-        
-        NSError *__autoreleasing error = nil;
-        NSString *sql = [self getSqlWithError:&error];
-        
-        if (error) {
-            completion(NO, error, nil);
-        } else {
-            
-            [[self database] executeSql:sql completion:^(BOOL success, NSError *error, id results) {
-                [[self cache] cacheData:results];
-                completion(success, error, results);
-            }];
-        }
+        [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
+            [[self cache] cacheData:results];
+            completion(success, error, results);
+        }];
     }
 }
 

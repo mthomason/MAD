@@ -1202,7 +1202,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [[result textLabel] setText: title];
             [result setAccessoryType:UITableViewCellAccessoryDetailButton];
             [[result textLabel] setFont: font];
-            [[result textLabel] setBackgroundColor:[UIColor greenColor]];
+            [[result textLabel] setBackgroundColor:[UIColor whiteColor]];
             [result setIndentationLevel: 1];
             [result setTintColor:[UIColor tintColor]];
             [result setBackgroundColor:[UIColor whiteColor]];

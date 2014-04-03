@@ -170,11 +170,6 @@
     return result;
 }
 
-- (void)executeSql:(NSString *)sql completion:(void (^)(BOOL success, NSError *error, id results))completion {
-    id results = [[[self resultsForQueryString:sql] retain] autorelease];
-    completion(YES, nil, results);
-}
-
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
     id results = [[[self resultsForQuery:query] retain] autorelease];
     completion(YES, nil, results);

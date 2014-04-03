@@ -65,9 +65,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)sqlAggregateFunctionMax;
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField;
 
-- (void)executeSql:(NSString *)sql
-        completion:(void (^)(BOOL success, NSError *error, id results))completion;
-
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion;
 
 - (BOOL)isReachable;
