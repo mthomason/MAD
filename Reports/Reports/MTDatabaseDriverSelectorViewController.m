@@ -50,7 +50,9 @@
         dbId = [[MTDatabaseSqlite3 identifier] retain];
 
     }
-    [(MTConnectionViewController *)[segue destinationViewController] setDatabaseType:dbId];
+    if ([[segue destinationViewController] respondsToSelector:@selector(setDatabaseType:)]) {
+        [(MTConnectionViewController *)[segue destinationViewController] setDatabaseType:dbId];
+    }
     [dbId release];
 }
 
