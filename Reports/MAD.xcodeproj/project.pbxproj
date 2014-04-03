@@ -596,6 +596,8 @@
 		4C515ED9174134960004A664 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
 		4C54B7AB18EB80ED00E2A525 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BED5818E8999D00BDDDB8 /* Settings.bundle */; };
 		4C54B7B418EB80ED00E2A525 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BED5818E8999D00BDDDB8 /* Settings.bundle */; };
+		4C54B7B818EC80AB00E2A525 /* MTQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54B7B718EC80AB00E2A525 /* MTQueryTest.m */; };
+		4C54B7B918EC80AB00E2A525 /* MTQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C54B7B718EC80AB00E2A525 /* MTQueryTest.m */; };
 		4C5625E01758A17F00433E88 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* MACloudManager.m */; };
 		4C5625E11758A17F00433E88 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* MACloudManager.m */; };
 		4C5625E21758A17F00433E88 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5625DF1758A17E00433E88 /* MACloudManager.m */; };
@@ -2287,6 +2289,8 @@
 		4C50DF9116B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportViewerPrintPageRenderer.h; sourceTree = "<group>"; };
 		4C50DF9216B8F9A400CD8BC0 /* MTReportViewerPrintPageRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportViewerPrintPageRenderer.m; sourceTree = "<group>"; };
 		4C5482741672D4A800CA24EB /* TODO.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO.txt; path = Reports/TODO.txt; sourceTree = "<group>"; };
+		4C54B7B618EC80AB00E2A525 /* MTQueryTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryTest.h; sourceTree = "<group>"; };
+		4C54B7B718EC80AB00E2A525 /* MTQueryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryTest.m; sourceTree = "<group>"; };
 		4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentCellProtocol.h; sourceTree = "<group>"; };
 		4C5625DE1758A17D00433E88 /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MACloudManager.h; sourceTree = "<group>"; };
 		4C5625DF1758A17E00433E88 /* MACloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MACloudManager.m; sourceTree = "<group>"; };
@@ -3337,13 +3341,13 @@
 			name = Formatters;
 			sourceTree = "<group>";
 		};
-		4C11BD0518DE01B1001E3D33 /* Full */ = {
+		4C11BD0518DE01B1001E3D33 /* Report Query */ = {
 			isa = PBXGroup;
 			children = (
 				4C11BD0118DDEA4B001E3D33 /* MTQueryReport.h */,
 				4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */,
 			);
-			name = Full;
+			name = "Report Query";
 			sourceTree = "<group>";
 		};
 		4C11BD0618DE01CA001E3D33 /* Field Sample */ = {
@@ -3803,6 +3807,15 @@
 				4C502A331818931E00C88CD4 /* libSqlite3.8Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4C54B7B518EC806700E2A525 /* Simple Connection Test */ = {
+			isa = PBXGroup;
+			children = (
+				4C54B7B618EC80AB00E2A525 /* MTQueryTest.h */,
+				4C54B7B718EC80AB00E2A525 /* MTQueryTest.m */,
+			);
+			name = "Simple Connection Test";
 			sourceTree = "<group>";
 		};
 		4C5BED4E18E897FE00BDDDB8 /* App */ = {
@@ -4371,7 +4384,8 @@
 			children = (
 				4C9E446D18D8C7BF00F0F578 /* MTQuery.h */,
 				4C9E446E18D8C7BF00F0F578 /* MTQuery.m */,
-				4C11BD0518DE01B1001E3D33 /* Full */,
+				4C54B7B518EC806700E2A525 /* Simple Connection Test */,
+				4C11BD0518DE01B1001E3D33 /* Report Query */,
 				4C11BD0618DE01CA001E3D33 /* Field Sample */,
 				4C11BD0718DE01D5001E3D33 /* Table Data */,
 				4C5BED7118EB353500BDDDB8 /* Field Lengths */,
@@ -5996,6 +6010,7 @@
 				4C3727BC168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C3727C3168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
 				4CBABBFC18C7E96F00EE5768 /* MTPaperC2.m in Sources */,
+				4C54B7B918EC80AB00E2A525 /* MTQueryTest.m in Sources */,
 				4C3727DD168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4CDBED25168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4CF339451693E5B400390B3A /* MTFont.m in Sources */,
@@ -6598,6 +6613,7 @@
 				4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4CBABBFB18C7E96F00EE5768 /* MTPaperC2.m in Sources */,
+				4C54B7B818EC80AB00E2A525 /* MTQueryTest.m in Sources */,
 				4CABE4731837DF7C007EDD9D /* RptqDatabaseSchemaField.m in Sources */,
 				4CD88D0B1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */,
 				4C3727B4168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,

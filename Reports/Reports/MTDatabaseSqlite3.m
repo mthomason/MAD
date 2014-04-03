@@ -22,6 +22,8 @@
 
 #import "NSError+Constructors.h"
 
+#import "MTLog.h"
+
 @interface MTDatabaseSqlite3 ()
 
 @property (assign) sqlite3 *database;
@@ -259,7 +261,7 @@
         }
         //}
 	} else {
-        NSLog(@"Caught %s",  sqlite3_errmsg(_database));
+        MTLog(@"Caught %s",  sqlite3_errmsg(_database));
     }
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);

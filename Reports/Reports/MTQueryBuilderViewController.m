@@ -63,6 +63,8 @@
 
 #import "UIViewController+tabBarItem.h"
 
+#import "MTQueryTest.h"
+
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
 NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
@@ -1394,8 +1396,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    
     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+    
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
     MTQuery *rquery = [MTQuery queryFactory:schemaTable];
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];

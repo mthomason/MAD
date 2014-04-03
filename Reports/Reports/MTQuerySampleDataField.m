@@ -53,7 +53,6 @@
                              completion(success, error, results);
                          }];
     }
-    
 }
 
 @end

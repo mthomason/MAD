@@ -64,7 +64,9 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         [self setFieldKeys:fieldKeys];
 
         MTCache *cache = nil;
-        RptqUserCredentals *userCredentals;
+        RptqUserCredentals *userCredentals = nil;
+        MTDatabaseConnection *databaseConnection = nil;
+        
         if ([object isKindOfClass:[RptqDatabase class]]) {
 
             cache = [[MTCache alloc] initWithObjectID:[object objectID]];
@@ -84,6 +86,15 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
             cache = [[MTCache alloc] initWithObjectID:[object objectID]];
             userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
+            
+        } else if ([object isKindOfClass:[RptqUserCredentals class]]) {
+        
+            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            userCredentals = object;
+            
+        } else if ([object isKindOfClass:[MTDatabaseConnection class]]) {
+            
+            databaseConnection = object;
 
         } else if ([object isKindOfClass:[NSDictionary class]]) {
             
@@ -102,13 +113,21 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
                     NSAssert(false, @"Nothing I ever heard of?");
                     break;
             }
+            
         } else {
             NSAssert(false, @"What type of query do you want?");
         }
         
         [self setCache:cache];
 
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+
+        if (databaseConnection == nil) {
+            NSAssert(userCredentals != nil, @"What type of query do you want?");
+            databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+        } else {
+            
+        }
+
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
         

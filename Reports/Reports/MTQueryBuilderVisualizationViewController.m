@@ -37,6 +37,9 @@
 #import "MTLinkedList.h"
 #import "MTGraph.h"
 
+#import "MTQueryTest.h"
+#import "NSError+UserInterface.h"
+
 NSString * const MTKeyIsTopLevel = @"MTKeyIsTopLevel";
 
 NSString * const MTIdentifierCollisionBoundryTop = @"MTIdentifierCollisionBoundryLandscapeTop";

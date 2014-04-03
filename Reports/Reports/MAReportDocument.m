@@ -38,6 +38,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
 
+#import "MTQueryTest.h"
+
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
 NSString * const MTReportGroupLevel = @"MTReportGroupLevel";
@@ -361,6 +363,15 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success))completion {
+    
+    
+    MTQueryTest *queryTest = [[MTQueryTest alloc] initWithObject:databaseConnection];
+    [queryTest performQuery:^(BOOL success, NSError *error, id results) {
+        if (!success) {
+            [error presentErrorToUser];
+        }
+    }];
+    
     
     [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
         
