@@ -196,29 +196,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [self setPrintPageRendererReport: prtingPageRendererReport];
         [prtingPageRendererReport release];
     }
-
-   // if ([self asyncDelegate] == nil) {
-      //  MTApplicationInstance *applicationInstance = [AppDelegate app];
-    //    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-  //      RptqDocument *document = [reportDocument activeDocument];
-//        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-       // RptqQuery *query = [[database hasQueries] anyObject];
-        
-    //    BOOL hasCachedData = ([query hasQueryCache] != nil);
-  //      if ([self startedRefresh] == NO && hasCachedData == NO) {
-            //[self refresh:self];
-//        } else {
-            //NSDate *lastRefresh = [[query hasQueryCache] cacheDate];
-            //if (lastRefresh != nil) {
-                
-               // NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
-               // [self setLastCacheDate: lastD];
-              //  [lastD release];
-            //    [self updateLateRefreshedLabel:self];
-          
-          //  }
-        //}
-   // }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
