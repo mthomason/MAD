@@ -499,7 +499,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
-    [MTReportViewerController setDisplayActive:reportViewerController];
+    [reportViewerController setDisplayActive];
     MTApplicationInstance *app = [AppDelegate app];
     MAReportDocument *doc = [app activeDocument];
     [[doc reportFormatter] formatForSize:frame.size];
@@ -548,56 +548,55 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 #pragma mark - Actions
 
-+ (void)setDisplayActive:(MTReportViewerController *)controller {
+- (void)setDisplayActive {
 
-    NSArray *tabBarItems = [[[controller tabBarController] tabBar] items];
+    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
     for (UITabBarItem *item in tabBarItems) {
-//        [item.image renderingMode]
         [item setEnabled:YES];
     }
     
-    [[controller barButtonItemRefresh] setEnabled:YES];
-    [[controller barButtonItemDone] setEnabled:YES];
-    [[controller barButtonItemPrint] setEnabled:YES];
-    [[controller barButtonItemSendToPdf] setEnabled:YES];
-    [[controller barButtonItemActivity] setEnabled:YES];
+    [[self barButtonItemRefresh] setEnabled:YES];
+    [[self barButtonItemDone] setEnabled:YES];
+    [[self barButtonItemPrint] setEnabled:YES];
+    [[self barButtonItemSendToPdf] setEnabled:YES];
+    [[self barButtonItemActivity] setEnabled:YES];
     
-    [controller setIsRefreshing:NO];
-    [controller setUpdatingOfTimerIsPaused:NO];
-    [[controller barButtonItemRefresh] setEnabled:YES];
-    [[controller labelDateLastRefreshed] setHidden:NO];
-    [[controller labelDateLastRefreshed] setText:@""];
-    [[controller labelDateLastRefreshed] setNeedsDisplay];
+    [self setIsRefreshing:NO];
+    [self setUpdatingOfTimerIsPaused:NO];
+    [[self barButtonItemRefresh] setEnabled:YES];
+    [[self labelDateLastRefreshed] setHidden:NO];
+    [[self labelDateLastRefreshed] setText:@""];
+    [[self labelDateLastRefreshed] setNeedsDisplay];
 
-    [[controller navigationItem] setRightBarButtonItem:[controller barButtonItemRefresh] animated:YES];
+    [[self navigationItem] setRightBarButtonItem:[self barButtonItemRefresh] animated:YES];
 
 }
 
-+ (void)setDisplayInactive:(MTReportViewerController *)controller {
+- (void)setDisplayInactive {
 
-    NSArray *tabBarItems = [[[controller tabBarController] tabBar] items];
+    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
     for (UITabBarItem *item in tabBarItems) {
         [item setEnabled:NO];
     }
 
-    [controller setIsRefreshing:YES];
-    [[controller barButtonItemRefresh] setEnabled:NO];
-    [[controller barButtonItemDone] setEnabled:NO];
-    [[controller barButtonItemPrint] setEnabled:NO];
-    [[controller barButtonItemSendToPdf] setEnabled:NO];
-    [[controller barButtonItemActivity] setEnabled:NO];
-    [controller setUpdatingOfTimerIsPaused:YES];
+    [self setIsRefreshing:YES];
+    [[self barButtonItemRefresh] setEnabled:NO];
+    [[self barButtonItemDone] setEnabled:NO];
+    [[self barButtonItemPrint] setEnabled:NO];
+    [[self barButtonItemSendToPdf] setEnabled:NO];
+    [[self barButtonItemActivity] setEnabled:NO];
+    [self setUpdatingOfTimerIsPaused:YES];
     NSString *refreshing = NSLocalizedString(@"Refreshing data.", @"Refreshing data.");
-    [[controller labelDateLastRefreshed] setText:refreshing];
-    [[controller labelDateLastRefreshed] setNeedsDisplay];
-    [[controller barButtonItemDone] setEnabled:NO];
+    [[self labelDateLastRefreshed] setText:refreshing];
+    [[self labelDateLastRefreshed] setNeedsDisplay];
+    [[self barButtonItemDone] setEnabled:NO];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [[controller navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+    [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
     [barButtonItem release];
     [activityIndicator release];
     
@@ -617,7 +616,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     if ([reportViewer isRefreshing] == NO) {
         [self setStartedRefresh:YES];
         [self setIsRefreshing:YES];
-        [MTReportViewerController setDisplayInactive:reportViewer];
+        [reportViewer setDisplayInactive];
         
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_async(queuePriorityBackground, ^{
@@ -637,7 +636,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     dispatch_async(highpriorityqueue, ^{
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
                         dispatch_sync(dispatch_get_main_queue(), ^{
-                            [MTReportViewerController setDisplayActive:reportViewer4];
+                            [reportViewer4 setDisplayActive];
                             NSDate *lastD = [[NSDate date] retain];
                             [reportViewer4 setLastCacheDate: lastD];
                             [lastD release];
@@ -650,7 +649,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     dispatch_async(highpriorityqueue, ^{
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
                         dispatch_sync(dispatch_get_main_queue(), ^{
-                            [MTReportViewerController setDisplayActive:reportViewer4];
+                            [reportViewer4 setDisplayActive];
                             [reportViewer4 reload:reportViewer4];
                         });
                     });
@@ -729,7 +728,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)reload:(MTReportViewerController *)reportViewer {
     
-    [MTReportViewerController setDisplayInactive:reportViewer];
+    [reportViewer setDisplayInactive];
     
     __block MTReportViewerController *blockViewer = reportViewer;
     CGSize viewBounds = [[reportViewer view] bounds].size;
@@ -746,7 +745,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         __block MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [MTReportViewerController setDisplayActive:blockViewer2];
+            [blockViewer2 setDisplayActive];
             
             NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
             [blockViewer2 setNumberOfPages:numberOfPages];

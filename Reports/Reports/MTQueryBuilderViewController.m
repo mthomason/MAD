@@ -228,8 +228,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                   object: reportDocument];
 }
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {                  // MARK: Prepair to show database drivers.

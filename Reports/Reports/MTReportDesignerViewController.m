@@ -447,6 +447,33 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 }
 
+- (void)setDisplayActive {
+    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
+    for (UITabBarItem *item in tabBarItems) {
+        [item setEnabled:YES];
+        //if ([[[[self tabBarController] tabBar] selectedItem] isEqual:item]) {
+        //    UIImage *imageOg = [[item image] copy];
+        //    [item setImage:[item selectedImage]];
+        //    [item setSelectedImage:imageOg];
+        //}
+    }
+    
+}
+
+- (void)setDisplayInactive {
+    
+    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
+    for (UITabBarItem *item in tabBarItems) {
+        [item setEnabled:NO];
+        //if ([[[[self tabBarController] tabBar] selectedItem] isEqual:item]) {
+        //    UIImage *imageOg = [[item image] copy];
+        //    [item setImage:[item selectedImage]];
+        //    [item setSelectedImage:imageOg];
+        //}
+    }
+    
+}
+
 #pragma mark - UIViewController
 
 - (void)didReceiveMemoryWarning {
@@ -1070,6 +1097,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([[segue identifier] isEqualToString:@"showObjects"]) {
         
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+            [self setDisplayInactive];
+            
             [[self barButtonItemObjects] setEnabled:NO];
             UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
             UIPopoverController *popoverController = [popoverSegue popoverController];
@@ -1765,6 +1794,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                          inView: [self designerContentView]
                                                        permittedArrowDirections: UIPopoverArrowDirectionAny
                                                                        animated: YES];
+                    [self setDisplayInactive];
+
                 }
             }
             
@@ -1793,6 +1824,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 if ([[self selectedObjectIds] count] > 0) {
                     CGRect popoverRect = [self rectForSelectedElements];
                     [[self popoverControllerInformation] presentPopoverFromRect:popoverRect inView:[self designerContentView] permittedArrowDirections:UIPopoverArrowDirectionAny animated:animated];
+                    [self setDisplayInactive];
+
                 } else {
                     [[self popoverControllerInformation] dismissPopoverAnimated:animated];
                 }
@@ -2110,6 +2143,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self popoverControllerInformation] presentPopoverFromBarButtonItem:[self barButtonItemInfo]
                                                     permittedArrowDirections:UIPopoverArrowDirectionAny
                                                                     animated:YES];
+        [self setDisplayInactive];
+
     } else {
         
         MTReportDesigner *reportDesigner = [[AppDelegate app] reportDesigner];
@@ -2306,11 +2341,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self deselectAllElementsAnimated:YES];
     [[self barButtonItemObjects] setEnabled:YES];
+    [self setDisplayActive];
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     return YES;
 }
+
 
 #pragma mark - UIMenuController required methods
 
@@ -2393,12 +2430,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     if ([UIDevice isPad]) {
                         
-                        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
                         NSManagedObjectID *objectId = [objectToEdit objectID];
                         UIView *viewToEdit = [self viewForObjectID:objectId];
 
                         if (viewToEdit != nil) {
                             
+                            CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
                             UIStoryboard *storyboard = [MTApplicationInstance storyboard];
                             
                             UINavigationController *navigationController = [[storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier] retain];
@@ -2423,6 +2460,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                inView:[self designerContentView]
                                              permittedArrowDirections:UIPopoverArrowDirectionAny
                                                              animated:YES];
+                            [self setDisplayInactive];
+
                             
                             [self setPopoverControllerEditBarcode: popoverController];
                             
@@ -2483,7 +2522,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                inView:[self designerContentView]
                                              permittedArrowDirections:UIPopoverArrowDirectionAny
                                                              animated:YES];
-                            
+                            [self setDisplayInactive];
+
                             [self setPopoverControllerEditBarcode: popoverController];
                             
                             [popoverController release];
@@ -2534,7 +2574,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                inView:[self designerContentView]
                                              permittedArrowDirections:UIPopoverArrowDirectionAny
                                                              animated:YES];
-                            
+                            [self setDisplayInactive];
+
                             [self setPopoverControllerEditDataLabel: popoverController];
                             
                             [popoverController release];
@@ -3491,22 +3532,20 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [[self viewControllerSectionLayoutSettings] updateDisplay];
                 
                 if ([UIDevice isPad]) {
-                    
+                    [[self popoverControllerSectionSettings] setPopoverContentSize:CGSizeMake(320.0000f, 260.00000f) animated:NO];
                     [[self popoverControllerSectionSettings] setPassthroughViews:@[[sender view]]];
                     [[self popoverControllerSectionSettings] presentPopoverFromRect:[[sender view] bounds]
                                                                              inView:[sender view]
                                                            permittedArrowDirections:UIPopoverArrowDirectionAny
                                                                            animated:YES];
-                    
+                    [self setDisplayInactive];
+
                 } else {
                     [self showToolbox:MTToolboxTypeSection];
                 }
             }
-            
         }
-        
     }
-        
 }
 
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
