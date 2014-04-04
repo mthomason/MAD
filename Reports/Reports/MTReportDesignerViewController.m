@@ -1789,6 +1789,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     CGRect popoverRect = [MTReportDesignerViewController popoverRectForSelectedElements:[self selectedElementViews]
                                                                                                  inView:[self designerContentView]];
+                    [[self popoverControllerInformation] setPopoverContentSize:CGSizeMake(320.0000f, 300.0000f) animated:NO];
                     
                     [[self popoverControllerInformation] presentPopoverFromRect: popoverRect
                                                                          inView: [self designerContentView]
