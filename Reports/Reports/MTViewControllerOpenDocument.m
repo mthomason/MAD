@@ -519,11 +519,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
             MTApplicationInstance *appInstance = [[[AppDelegate app] retain] autorelease];
             [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [[self reportViewer] reload];
-                    });
-                });
+                if (success) {
+                    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                    //    dispatch_sync(dispatch_get_main_queue(), ^{
+                            [[self reportViewer] reload];
+                    //    });
+                    //});
+                }
             }];
             
             [viewControllerReportViewer release];
@@ -632,10 +634,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [[MTVerificationController sharedInstance] iOS7VerifyReceipt];
-    });
+    // FIXME: Only do this when you are going to disable some feature for copy protection
+    //          Right now it's just a pain in the ass.
+    //static dispatch_once_t onceToken;
+    //dispatch_once(&onceToken, ^{
+        //[MTVerificationController sharedInstance];
+    //});
     
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {

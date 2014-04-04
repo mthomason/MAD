@@ -2279,7 +2279,7 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Predicate Format" id="EKL-8Y-m5O">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="3yg-DW-myo">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="3yg-DW-myo">
                             <connections>
                                 <action selector="done:" destination="NFZ-c1-UCp" id="NUH-F7-sKX"/>
                             </connections>
@@ -5969,7 +5969,7 @@
         <!--Navigation Controller-->
         <scene sceneID="hRz-Bj-rt7">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Ibx-RZ-QzI" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="Ibx-RZ-QzI" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="I8L-Nt-AHw">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>

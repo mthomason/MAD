@@ -167,14 +167,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MTApplicationInstance *app = [AppDelegate app];
-    MAReportDocument *reportDocument = [app activeDocument];
-
-    MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportDocument reportFormatter]];
-    [self setPrintPageRendererReport: prtingPageRendererReport];
-    [prtingPageRendererReport release];
-    
     [[[self navigationController] toolbar] setNeedsLayout];
+    
+    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColor2];
+    UIToolbar *toolbar = [[self navigationController] toolbar];
+    [toolbar setBarTintColor:barTintColor];
+    [toolbar setTintColor:tintColor];
+
     if ([self asyncDelegate]) {
         __block __weak MTReportViewerController *viewController = self;
         [[self asyncDelegate] displayContentController:viewController];
@@ -188,11 +188,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    UIColor *barTintColor = [UIColor tintColor];
-    UIColor *tintColor = [UIColor tintColor2];
-    UIToolbar *toolbar = [[self navigationController] toolbar];
-    [toolbar setBarTintColor:barTintColor];
-    [toolbar setTintColor:tintColor];
+    if ([self printPageRendererReport] == nil) {
+        MTApplicationInstance *app = [AppDelegate app];
+        __block MAReportDocument *doc = [app activeDocument];
+        [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
+        [self setPrintPageRendererReport: prtingPageRendererReport];
+        [prtingPageRendererReport release];
+    }
+
    // if ([self asyncDelegate] == nil) {
       //  MTApplicationInstance *applicationInstance = [AppDelegate app];
     //    MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -735,6 +739,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     MTApplicationInstance *app = [AppDelegate app];
     __block MAReportDocument *doc = [app activeDocument];
+    [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
+    if ([self printPageRendererReport] == nil) {
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
+        [self setPrintPageRendererReport: prtingPageRendererReport];
+        [prtingPageRendererReport release];
+    }
+
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{

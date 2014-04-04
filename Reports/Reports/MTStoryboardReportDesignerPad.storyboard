@@ -1738,7 +1738,7 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Add Table" id="enE-7g-Ohw">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="Zyc-vz-Rca">
+                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="Zyc-vz-Rca">
                             <connections>
                                 <action selector="done:" destination="eYd-TC-lTy" id="D3e-2L-qON"/>
                             </connections>
@@ -2197,7 +2197,7 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Predicate Format" id="pJs-GH-7lq">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="9Ud-dF-7dB">
+                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="9Ud-dF-7dB">
                             <connections>
                                 <action selector="done:" destination="9UR-0v-mkt" id="sFi-vs-yzQ"/>
                             </connections>
