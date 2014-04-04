@@ -1205,6 +1205,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [result setIndentationLevel: 1];
             [result setTintColor:[UIColor tintColor]];
             [result setBackgroundColor:[UIColor whiteColor]];
+            [result setSelectionStyle:UITableViewCellSelectionStyleNone];
             
             break;
         }
