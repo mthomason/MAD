@@ -198,14 +198,15 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }];
     }
-    
+
+    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColor2];
+    UIToolbar *toolbar = [[self navigationController] toolbar];
+    [toolbar setBarTintColor:barTintColor];
+    [toolbar setTintColor:tintColor];
     if ([UIDevice isPad] == NO) {
         
-        UIColor *barTintColor = [UIColor tintColor];
-        UIColor *tintColor = [UIColor tintColor2];
-        UIToolbar *toolbar = [[self navigationController] toolbar];
-        [toolbar setBarTintColor:barTintColor];
-        [toolbar setTintColor:tintColor];
+
         
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
