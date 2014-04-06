@@ -24,6 +24,8 @@
 
 #import "NSError+UserInterface.h"
 
+#import "MTDataTable.h"
+
 NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 511";
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
@@ -321,7 +323,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return result;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
     [self connectWithCredentals:[self databaseConnection] completion:^(id dbconn, BOOL success, NSError *error) {
         
         if (success) {
@@ -362,20 +364,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         [janFirst1990Components setSecond:  0];
         
         NSDate *janFirst1990 = [[gregorian dateFromComponents:janFirst1990Components] retain];
-        
-        //NSRange rangeFrom = [sql rangeOfString:MTSqlFrom];
-        //NSInteger selectPartEndPoint = (rangeFrom.location == NSNotFound) ? [sql length] : rangeFrom.location;
-        //NSString *begining = [sql substringToIndex:selectPartEndPoint];
-        //NSString *selectPart = [sqlServer selectPart];
-        //NSRange rangeOfSelectPart = [begining rangeOfString:selectPart];
-        
-        // FIXME: What is this trying to do?
-        //if (rangeOfSelectPart.location == NSNotFound) {
-        //    rangeOfSelectPart = [begining rangeOfString:MTSqlSelectTop100];
-        //}
-        
-        //NSString *selectColumns = [begining substringFromIndex:rangeOfSelectPart.location + rangeOfSelectPart.length];
-        //NSArray *columns = [selectColumns componentsSeparatedByString:@","];
         
         RETCODE success = FAIL;
         
@@ -630,9 +618,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             for (NSInteger i = 0; i < resultCountForTypeSybnTextBind; i++) {
                                 sybnTextBind[i] = '\0';
                             }
-                            
-                            
-                            
                             
                             resultCountForType = [self numberOfItemsOfType:SYBDATETIME withCounters:counters];
                             DBDATETIME *sybDateTimeBind[resultCountForType];

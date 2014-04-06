@@ -40,6 +40,8 @@
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
 
+#import "MTDataTable.h"
+
 @interface MTDatabaseMySql ()
 
 @end
@@ -72,7 +74,7 @@
     }];
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {

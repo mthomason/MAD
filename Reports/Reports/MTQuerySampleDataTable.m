@@ -18,6 +18,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDatabaseField.h"
 #import "MTCache.h"
+#import "MTDataTable.h"
 //#import "MTQuery.h"
 
 @interface MTQuerySampleDataTable ()
@@ -62,7 +63,7 @@
     
     MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
 
-    [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, id widths) {
+    [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, MTDataTable *widths) {
         if (success && [widths count] > 0) {
             
             [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {

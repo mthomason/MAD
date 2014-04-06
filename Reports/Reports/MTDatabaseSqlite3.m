@@ -24,6 +24,8 @@
 
 #import "MTLog.h"
 
+#import "MTDataTable.h"
+
 @interface MTDatabaseSqlite3 ()
 
 @property (assign) sqlite3 *database;
@@ -170,7 +172,7 @@
     return result;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, id))completion {
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
     id results = [[[self resultsForQuery:query] retain] autorelease];
     completion(YES, nil, results);
 }

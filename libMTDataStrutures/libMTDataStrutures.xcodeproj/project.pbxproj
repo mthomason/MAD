@@ -19,6 +19,7 @@
 		4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; };
 		4C860BCD167F658A00AC1904 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; };
 		4C860BCE167F658A00AC1904 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; };
+		4CF7EBDF18F1B0F6003CA6BD /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF7EBDD18F1B0F6003CA6BD /* MTDataTable.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,6 +65,8 @@
 		4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolCompare.h; sourceTree = "<group>"; };
 		4CA16359167EB5B100540A14 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4CA16362167EB67C00540A14 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4CF7EBDD18F1B0F6003CA6BD /* MTDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTable.m; sourceTree = "<group>"; };
+		4CF7EBDE18F1B0F6003CA6BD /* MTDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 		4C4C6F01167635B8004A3B04 /* libMTDataStrutures */ = {
 			isa = PBXGroup;
 			children = (
+				4CF7EBDE18F1B0F6003CA6BD /* MTDataTable.h */,
+				4CF7EBDD18F1B0F6003CA6BD /* MTDataTable.m */,
 				4C8ECDDF16BF63E2003D3B30 /* MTProtocolEnumerator.h */,
 				4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */,
 				4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */,
@@ -189,6 +194,7 @@
 			files = (
 				4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */,
 				4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */,
+				4CF7EBDF18F1B0F6003CA6BD /* MTDataTable.m in Sources */,
 				4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */,
 				4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */,
 				4C2279A21676C2AB00B1150D /* MTPair.m in Sources */,

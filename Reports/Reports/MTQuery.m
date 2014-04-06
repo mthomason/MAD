@@ -43,6 +43,8 @@
 #import "RptqDatabase.h"
 #import "RptqUserCredentals.h"
 
+#import "MTDataTable.h"
+
 NSString * const MTQueryKeyType = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
@@ -172,7 +174,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 - (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
     
     @autoreleasepool {
-        [[self database] executeQuery:self completion:^(BOOL success, NSError *error, id results) {
+        [[self database] executeQuery:self completion:^(BOOL success, NSError *error, MTDataTable *results) {
             [[self cache] cacheData:results];
             completion(success, error, results);
         }];
