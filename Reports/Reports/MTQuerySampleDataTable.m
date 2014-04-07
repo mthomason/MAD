@@ -64,7 +64,7 @@
     MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
 
     [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, MTDataTable *widths) {
-        if (success && [widths count] > 0) {
+        if (success && [widths numberOfRows] > 0) {
             
             [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
                 

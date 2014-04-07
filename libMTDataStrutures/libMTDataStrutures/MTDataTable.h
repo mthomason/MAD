@@ -8,12 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+@class MTDataTableLocation;
+
 @interface MTDataTable : NSObject
 
-@property (nonatomic, retain, readonly) NSMutableArray *table;
+@property (nonatomic, strong, readonly) NSMutableArray *table;
 
-- (void)addObject:(id)object;
-- (NSInteger)count;
+//- (NSUInteger)count;
+- (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
+- (NSUInteger)numberOfRows;
+
+- (void)addRow:(NSArray *)row;
 - (id)objectAtIndex:(NSInteger)index;
+- (id)value:(MTDataTableLocation *)location;
 
 @end

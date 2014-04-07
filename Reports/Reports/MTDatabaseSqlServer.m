@@ -447,6 +447,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                          
                                                          ];
                         
+                        MTDataTable *datatable = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
+                        
                         for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                             
                             DBINT columnOffsetCtr = columnCtr + 1;
@@ -506,6 +508,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                                                                       MTDatabaseColumnLenId : columnLen,                 //Column lenght
                                                                                                       MTDatabaseColumnPrecision : columPercision             //Column percision
                                                                                                       }];
+                                
+                                //[datatable]
                                 
                                 [columPercision release];
                                 [colmunHolder addObject:dictionary];

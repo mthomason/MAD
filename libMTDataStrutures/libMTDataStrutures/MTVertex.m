@@ -121,7 +121,14 @@
     for (MTEdge *edge in [self edges]) {
         [result appendString:@"->"];
         MTVertex *destination = [edge destination];
-        [result appendString:[[destination object] toStringHumanReadable]];
+        id destinationObject = [destination object];
+        NSString *desc = @"";
+        if ([destinationObject respondsToSelector:@selector(toStringHumanReadable)]) {
+            desc = [destinationObject toStringHumanReadable];
+        } else {
+            desc = [NSString stringWithFormat:@"%@", destinationObject];
+        }
+        [result appendString:desc];
     }
     return [result autorelease];
 }
