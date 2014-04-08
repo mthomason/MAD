@@ -192,7 +192,7 @@ empty_directory() {
 # Globals
 #
 
-readonly version_openssl="1.0.1f"
+readonly version_openssl="1.0.1g”
 readonly version_mysql="6.1.3"
 readonly version_freetds="0.91"
 readonly version_tds=7.1
