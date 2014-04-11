@@ -21,12 +21,12 @@
 		4C7674B918F2F312007CEBD3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
 		4C7674BA18F2F312007CEBD3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
 		4C7674C018F2F312007CEBD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C7674BE18F2F312007CEBD3 /* InfoPlist.strings */; };
-		4C7674C218F2F312007CEBD3 /* MTDataTableTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7674C118F2F312007CEBD3 /* MTDataTableTest.m */; };
+		4C7674C218F2F312007CEBD3 /* MTDataTableTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7674C118F2F312007CEBD3 /* MTDataTableTest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C7674CE18F2F391007CEBD3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC7C27118F2EE9000784F32 /* XCTest.framework */; };
 		4C7674CF18F2F391007CEBD3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
 		4C7674D018F2F391007CEBD3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
 		4C7674D618F2F391007CEBD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C7674D418F2F391007CEBD3 /* InfoPlist.strings */; };
-		4C7674D818F2F391007CEBD3 /* MTGraphTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7674D718F2F391007CEBD3 /* MTGraphTest.m */; };
+		4C7674D818F2F391007CEBD3 /* MTGraphTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7674D718F2F391007CEBD3 /* MTGraphTest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C7674DF18F2F420007CEBD3 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; };
 		4C7674E018F2F424007CEBD3 /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; };
 		4C7674E118F2F427007CEBD3 /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A41677092E00B1150D /* MTObject.m */; };
@@ -95,6 +95,7 @@
 		4C4C6F1716763959004A3B04 /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEdge.m; sourceTree = "<group>"; };
 		4C4C6F191676397A004A3B04 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVertex.h; sourceTree = "<group>"; };
 		4C4C6F1A1676397A004A3B04 /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVertex.m; sourceTree = "<group>"; };
+		4C64365418F7B11300C5104F /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
 		4C7674B718F2F312007CEBD3 /* MTDataTableTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MTDataTableTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7674BD18F2F312007CEBD3 /* MTDataTableTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MTDataTableTest-Info.plist"; sourceTree = "<group>"; };
 		4C7674BF18F2F312007CEBD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -183,6 +184,7 @@
 		4C4C6EFE167635B8004A3B04 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C64365418F7B11300C5104F /* libMTDataStrutures.xcodeproj */,
 				4CC7C27118F2EE9000784F32 /* XCTest.framework */,
 				4C4C6EFF167635B8004A3B04 /* Foundation.framework */,
 				4CA16362167EB67C00540A14 /* UIKit.framework */,
@@ -220,6 +222,11 @@
 				4C4C6F1A1676397A004A3B04 /* MTVertex.m */,
 			);
 			path = libMTDataStrutures;
+			sourceTree = "<group>";
+		};
+		4C64365518F7B11300C5104F /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4C7674BB18F2F312007CEBD3 /* MTDataTableTest */ = {
@@ -376,6 +383,12 @@
 			mainGroup = 4C4C6EF1167635B8004A3B04;
 			productRefGroup = 4C4C6EFD167635B8004A3B04 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4C64365518F7B11300C5104F /* Products */;
+					ProjectRef = 4C64365418F7B11300C5104F /* libMTDataStrutures.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */,
@@ -740,6 +753,7 @@
 				4C7674C718F2F312007CEBD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C7674DC18F2F391007CEBD3 /* Build configuration list for PBXNativeTarget "MTGraphTest" */ = {
 			isa = XCConfigurationList;
@@ -748,6 +762,7 @@
 				4C7674DE18F2F391007CEBD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
