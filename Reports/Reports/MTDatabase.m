@@ -91,6 +91,10 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     
 }
 
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
+    completion(NO, nil, nil);
+}
+
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion {
     completion(nil, YES, nil);
 }
