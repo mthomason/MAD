@@ -10,13 +10,13 @@
 
 extern NSString * const MTCachedFileUrl;
 
-@class MTCache, RptqQuery, MTQuery;
+@class MTCache, RptqQuery, MTQuery, MTDataTable;
 
 @interface MTDataFormatter : NSObject
 
 @property (nonatomic, retain) id query;
 @property (nonatomic, retain) MTCache *datasource;
-@property (nonatomic, retain) NSArray *records;
+@property (nonatomic, retain) MTDataTable *records;
 @property (nonatomic, assign) BOOL didRefresh;
 
 - (id)initWithQuery:(MTQuery *)query;

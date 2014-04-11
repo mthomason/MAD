@@ -23,6 +23,7 @@
 #import "RptqQuery.h"
 
 #import "RptqQuery+Extras.h"
+#import "MTDataTable.h"
 
 NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
 
@@ -64,11 +65,11 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
         [standardUserDefaults setURL:[[self datasource] url] forKey:MTCachedFileUrl];
         [standardUserDefaults synchronize];
         
-        NSArray *cachedResultsForReportSerialized = [[self datasource] results];
-        if (cachedResultsForReportSerialized == nil) {
-            cachedResultsForReportSerialized = [NSArray array];
+        MTDataTable *dataTable = [[self datasource] results];
+        if (dataTable == nil) {
+            dataTable = [[MTDataTable alloc] initWithNumberOfColumns:0];
         }
-        [self setRecords:cachedResultsForReportSerialized];
+        [self setRecords:dataTable];
         
     }
     return updatedData;
