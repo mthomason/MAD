@@ -72,7 +72,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion;
 - (void)removeCredentalsBecauseOfError:(NSError *)error;
 
-- (NSArray *)resultsForQuery:(MTQuery *)query;
 - (BOOL)limitResults;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
