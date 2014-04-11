@@ -20,6 +20,8 @@
 #import "NSError+UserInterface.h"
 #import "UIColor+EverydayApps.h"
 
+#import "MTDataTable.h"
+
 @interface MTTableController ()
     <UICollectionViewDataSource, MTTableLayoutDelegate>
 
@@ -152,11 +154,11 @@
 }
 
 - (NSUInteger)rowCount {
-    return [[[self tableFormatter] records] count];
+    return [[[self tableFormatter] records] numberOfRows];
 }
 
 - (NSUInteger)columnCount {
-    return [[[self tableFormatter] records] count] > 0 ? [[[[self tableFormatter] records] lastObject] count] : 0;
+    return [[[self tableFormatter] records] numberOfColumns];
 }
 #pragma mark - Delegates
 
