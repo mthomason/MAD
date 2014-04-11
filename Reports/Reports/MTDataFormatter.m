@@ -76,7 +76,8 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row {
-    return [[self records] objectAtIndex:row];
+    NSUInteger index = row;
+    return [[self records] objectAtIndex:index];
 }
 
 @end

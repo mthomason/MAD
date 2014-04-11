@@ -13,7 +13,7 @@
 @interface MTDataTable : NSObject
     <NSCoding>
 
-@property (nonatomic, strong, readonly) NSMutableArray *table;
+//@property (nonatomic, strong, readonly) NSMutableArray *table;
 @property (nonatomic, strong, readonly) NSMutableArray *columnKeys;
 @property (nonatomic, strong, readonly) NSMutableDictionary *columns;
 //@property (nonatomic, strong, readonly) NSMutableArray *sortIndex;
@@ -29,7 +29,7 @@
 - (id)objectAtIndex:(NSInteger)index;
 - (id)value:(MTDataTableLocation *)location;
 
-- (NSDictionary *)dataForRow:(NSUInteger)row;
+//- (NSDictionary *)dataForRow:(NSUInteger)row;
 - (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors;
 
 - (NSUInteger)count;

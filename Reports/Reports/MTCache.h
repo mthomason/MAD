@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class NSManagedObjectID;
+@class NSManagedObjectID, MTDataTable;
 
 @interface MTCache : NSObject
 
@@ -19,8 +19,9 @@
 - (id)initWithTag:(NSUInteger)tag;
 - (id)initWithObjectID:(NSManagedObjectID *)objectID;
 
-- (NSArray *)results;
-- (void)cacheData:(id)data;
+- (MTDataTable *)results;
+- (void)cachePlist:(id)data;
+- (void)cacheDataTable:(MTDataTable *)dataTable;
 
 @property (nonatomic, strong, readonly) NSURL *url;
 

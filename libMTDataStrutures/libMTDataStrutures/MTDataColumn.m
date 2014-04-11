@@ -126,6 +126,9 @@
 }
 
 - (id)objectAtIndex:(NSInteger)index {
+    if (index >= [[self column] count]) {
+        NSLog(@"ERROR");
+    }
     return [[self column] objectAtIndex:index];
 }
 

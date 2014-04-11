@@ -446,7 +446,7 @@
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
                                                     for (NSNumber *dataIndex in pageIndices) {
                                                         NSInteger i = [dataIndex integerValue];
-                                                        id objectToAdd = [[[self reportFormatter] records] objectAtIndex: i];
+                                                        id objectToAdd = [[[self reportFormatter] recordsSorted] objectAtIndex: i];
                                                         [(NSMutableArray *)dataForGroup addObject:objectToAdd];
                                                     }
                                                     [dataForGroup autorelease];
@@ -462,11 +462,11 @@
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeReport:
-                                                    dataForGroup = [[self reportFormatter] records];
+                                                    dataForGroup = [[self reportFormatter] recordsSorted];
                                                     break;
                                                     
                                                 default:
-                                                    dataForGroup = [[self reportFormatter] records];
+                                                    dataForGroup = [[self reportFormatter] recordsSorted];
                                                     break;
                                             }
                                             

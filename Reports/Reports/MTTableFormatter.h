@@ -16,6 +16,8 @@
 @property (nonatomic, retain, readonly) NSArray *sortDescriptorsByGroupSorted;
 @property (nonatomic, assign) BOOL didRefresh;
 
+@property (nonatomic, retain) NSArray *recordsSorted;
+
 // FIXME: Make initWithQuery andLayout... passlayout to 
 
 - (id)initWithQuery:(MTQuery *)query;

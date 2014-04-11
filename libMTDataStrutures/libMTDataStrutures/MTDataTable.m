@@ -213,7 +213,25 @@
 }
 
 - (id)objectAtIndex:(NSInteger)index {
-    return [[self table] objectAtIndex:index];
+    NSUInteger sortedIndex;
+    if ([[self sortDescriptors] count] > 0) {
+        sortedIndex = [[self sortIndex] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if ([[obj objectForKey:@"~rowid~"] integerValue] == index) {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+    } else {
+        sortedIndex = index;
+    }
+    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[[self columnKeys] count]];
+    for (NSString *fieldKey in [self columnKeys]) {
+        NSArray *dataInColumn = [[self columns] objectForKey:fieldKey];
+        id objectForField = [dataInColumn objectAtIndex:sortedIndex];
+        [data setObject:objectForField forKey:fieldKey];
+    }
+    return data;
 }
 
 - (void)addRow:(NSArray *)row {
@@ -244,28 +262,6 @@
     [[self sortIndex] addObject:row];
     NSUInteger numberOfRows = [self rowCounter] + 1;
     [self setRowCounter:numberOfRows];
-}
-
-- (NSDictionary *)dataForRow:(NSUInteger)row {
-    NSUInteger sortedIndex;
-    if ([[self sortDescriptors] count] > 0) {
-        sortedIndex = [[self sortIndex] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj objectForKey:@"~rowid~"] integerValue] == row) {
-                *stop = YES;
-                return YES;
-            }
-            return NO;
-        }];
-    } else {
-        sortedIndex = row;
-    }
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[[self columnKeys] count]];
-    for (NSString *fieldKey in [self columnKeys]) {
-        NSArray *dataInColumn = [[self columns] objectForKey:fieldKey];
-        id objectForField = [dataInColumn objectAtIndex:sortedIndex];
-        [data setObject:objectForField forKey:fieldKey];
-    }
-    return data;
 }
 
 - (id)value:(MTDataTableLocation *)location {

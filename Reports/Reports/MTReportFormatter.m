@@ -159,7 +159,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
             [self setTemporaryCachedDetailCounter:0];
             
-            id groupedRows = [self cachedGroupedResults:[self records] level:0];
+            id groupedRows = [self cachedGroupedResults:[self recordsSorted] level:0];
             
             [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
             
@@ -676,8 +676,8 @@ NSString * const MTNullIdentifier = @"(null)";
         NSArray *pageData = [[self dataByPage] objectAtIndex:page];
         if (row < [pageData count]) {
             NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
-            if (cachedDataIndex < [[self records] count]) {
-                rowData = [[self records] objectAtIndex:cachedDataIndex];
+            if (cachedDataIndex < [[self recordsSorted] count]) {
+                rowData = [[self recordsSorted] objectAtIndex:cachedDataIndex];
             }
         }
     }

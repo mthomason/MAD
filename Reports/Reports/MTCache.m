@@ -8,13 +8,14 @@
 
 #import "MTCache.h"
 #import <CoreData/CoreData.h>
+#import "MTDataTable.h"
 
 @interface MTCache ()
 
 @property (nonatomic, strong, readwrite) NSURL *url;
 @property (nonatomic, strong) NSInputStream *inputStream;
 @property (nonatomic, strong) NSOutputStream *outputStream;
-@property (nonatomic, strong) NSArray *cachedResultsSerialized;
+@property (nonatomic, strong) MTDataTable *cachedPlistSerialized;
 
 @end
 
@@ -44,15 +45,14 @@
     return [self initWithTag:hash];
 }
 
-- (NSArray *)results {
-    if ([self cachedResultsSerialized] == nil) [self reload];
-    return [self cachedResultsSerialized];
+- (MTDataTable *)results {
+    if ([self cachedPlistSerialized] == nil) [self reload];
+    return [self cachedPlistSerialized];
 }
 
 - (void)reload {
     NSString *path = [[self url] path];
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: path];
-    //[self setInputStream:inputStream];
     [inputStream open];
     switch ([inputStream streamStatus]) {
         case NSStreamStatusError:
@@ -64,21 +64,27 @@
     }
     NSPropertyListFormat format;
     NSError *error = nil;
-    NSArray *data = [NSPropertyListSerialization propertyListWithStream:inputStream
+    id plist = [NSPropertyListSerialization propertyListWithStream:inputStream
                                                                 options:0
                                                                  format:&format
                                                                   error:&error];
-    [self setCachedResultsSerialized:data];
+    MTDataTable *dataTable = [[MTDataTable alloc] initWithPlist:plist];
+    [self setCachedPlistSerialized:dataTable];
     [inputStream close];
 }
 
-- (void)cacheData:(id)data {
+- (void)cacheDataTable:(MTDataTable *)dataTable {
+    NSDictionary *plist = [[NSDictionary alloc] initWithDictionary:[dataTable plist]];
+    [self cachePlist:plist];
+}
+
+- (void)cachePlist:(id)data {
     NSError *error = nil;
     NSData *cache = [NSPropertyListSerialization dataWithPropertyList:data format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
     if ([self url]) {
         NSDataWritingOptions mask = NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen;
         [cache writeToURL:[self url] options:mask error:&error];
-        [self setCachedResultsSerialized:nil];
+        [self setCachedPlistSerialized:nil];
         if (error) {
             NSLog(@"Error: %@", error);
             error = nil;

@@ -24,6 +24,8 @@
 
 #import "RptqQuery+Extras.h"
 
+#import "MTDataTable.h"
+
 @interface MTTableFormatter ()
 
 @property (nonatomic, retain, readwrite) NSArray *sortDescriptorsByGroupSorted;
@@ -60,10 +62,8 @@
         NSArray *sortDescriptors = [madQuery sortDescriptors];
         [self setSortDescriptorsByGroupSorted:sortDescriptors];
         
-        NSArray *cachedResultsForReportSerialized = [self records];
-        NSArray *sortedArray = [cachedResultsForReportSerialized sortedArrayUsingDescriptors:[self sortDescriptorsByGroupSorted]];
-        
-        [self setRecords:sortedArray];
+        NSArray *sortedObjects = [[self records] sortedRepresentationUsingDescriptors:[self sortDescriptorsByGroupSorted]];
+        [self setRecordsSorted:sortedObjects];
 
         updatedData = YES;
     }

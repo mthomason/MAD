@@ -175,7 +175,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     
     @autoreleasepool {
         [[self database] executeQuery:self completion:^(BOOL success, NSError *error, MTDataTable *results) {
-            [[self cache] cacheData:results];
+            [[self cache] cacheDataTable: results];
             completion(success, error, results);
         }];
     }
