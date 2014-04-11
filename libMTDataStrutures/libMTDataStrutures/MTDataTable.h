@@ -8,18 +8,32 @@
 
 #import <Foundation/Foundation.h>
 
-@class MTDataTableLocation;
+@class MTDataColumn, MTDataTableLocation;
 
 @interface MTDataTable : NSObject
+    <NSCoding>
 
 @property (nonatomic, strong, readonly) NSMutableArray *table;
+@property (nonatomic, strong, readonly) NSMutableArray *columnKeys;
+@property (nonatomic, strong, readonly) NSMutableDictionary *columns;
+//@property (nonatomic, strong, readonly) NSMutableArray *sortIndex;
 
-//- (NSUInteger)count;
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
-- (NSUInteger)numberOfRows;
+- (id)initWithPlist:(id)plist;
+- (id)plist;
 
+- (void)addColumn:(MTDataColumn *)column;
 - (void)addRow:(NSArray *)row;
+- (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
+
 - (id)objectAtIndex:(NSInteger)index;
 - (id)value:(MTDataTableLocation *)location;
+
+- (NSDictionary *)dataForRow:(NSUInteger)row;
+- (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors;
+
+- (NSUInteger)count;
+- (NSUInteger)numberOfColumns;
+- (NSUInteger)numberOfRows;
 
 @end

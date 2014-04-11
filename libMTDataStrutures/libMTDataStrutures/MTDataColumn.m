@@ -15,12 +15,72 @@
 @interface MTDataColumn ()
 
 @property (nonatomic, copy, readwrite) NSString *identifier;
-@property (nonatomic, copy) NSString *caption;
 @property (nonatomic, strong) NSMutableArray *column;
 
 @end
 
 @implementation MTDataColumn
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    
+    [encoder encodeObject: [self identifier]
+                   forKey: [MTDataColumn keyIdentifier]];
+    
+    [encoder encodeObject: [self column]
+                   forKey: [MTDataColumn keyColumn]];
+    
+    [encoder encodeObject: [self defaultValue]
+                   forKey: [MTDataColumn keyDefaultValue]];
+    
+    [encoder encodeObject: [self caption]
+                   forKey: [MTDataColumn keyCaption]];
+    
+    [encoder encodeObject: [self columnType]
+                   forKey: [MTDataColumn keyColumnType]];
+    
+    [encoder encodeObject: [self nativeColumnType]
+                   forKey: [MTDataColumn keyNativeColumnType]];
+    
+    [encoder encodeObject: [self dataLength]
+                   forKey: [MTDataColumn keyDataLength]];
+
+    [encoder encodeObject: [self dataPercision]
+                   forKey: [MTDataColumn keyDataPercision]];
+    
+    
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    self = [super init];
+    if(self) {
+        
+        NSString *identifier = [decoder decodeObjectForKey: [MTDataColumn keyIdentifier]];
+        [self setIdentifier: identifier];
+        
+        NSMutableArray *column = [decoder decodeObjectForKey: [MTDataColumn keyColumn]];
+        [self setColumn: column];
+        
+        id defaultValue = [decoder decodeObjectForKey: [MTDataColumn keyDefaultValue]];
+        [self setDefaultValue: defaultValue];
+        
+        NSString *caption = [decoder decodeObjectForKey: [MTDataColumn keyCaption]];
+        [self setCaption: caption];
+        
+        NSNumber *columnType = [decoder decodeObjectForKey: [MTDataColumn keyColumnType]];
+        [self setColumnType: columnType];
+        
+        NSNumber *nativeColumnType = [decoder decodeObjectForKey: [MTDataColumn keyNativeColumnType]];
+        [self setNativeColumnType: nativeColumnType];
+        
+        NSNumber *dataLength = [decoder decodeObjectForKey: [MTDataColumn keyDataLength]];
+        [self setDataLength: dataLength];
+        
+        NSNumber *dataPercision = [decoder decodeObjectForKey: [MTDataColumn keyDataPercision]];
+        [self setDataPercision: dataPercision];
+        
+    }
+    return self;
+}
 
 - (id)initWithIdentifier:(NSString *)identifier {
     self = [super init];
@@ -39,6 +99,32 @@
     return self;
 }
 
+- (id)initWithPlist:(id)plist {
+    self = [super init];
+    if(self) {
+        
+        NSString *identifier = [plist objectForKey: [MTDataColumn keyIdentifier]];
+        NSMutableArray *column = [plist objectForKey: [MTDataColumn keyColumn]];
+        id defaultValue = [plist objectForKey: [MTDataColumn keyDefaultValue]];
+        NSString *caption = [plist objectForKey: [MTDataColumn keyCaption]];
+        NSNumber *columnType = [plist objectForKey: [MTDataColumn keyColumnType]];
+        NSNumber *nativeColumnType = [plist objectForKey: [MTDataColumn keyNativeColumnType]];
+        NSNumber *dataLength = [plist objectForKey: [MTDataColumn keyDataLength]];
+        NSNumber *dataPercision = [plist objectForKey: [MTDataColumn keyDataPercision]];
+        
+        [self setIdentifier: identifier];
+        [self setColumn: column];
+        [self setDefaultValue: defaultValue];
+        [self setCaption: caption];
+        [self setColumnType: columnType];
+        [self setNativeColumnType: nativeColumnType];
+        [self setDataLength: dataLength];
+        [self setDataPercision: dataPercision];
+        
+    }
+    return self;
+}
+
 - (id)objectAtIndex:(NSInteger)index {
     return [[self column] objectAtIndex:index];
 }
@@ -51,6 +137,75 @@
     for (NSUInteger i = 0; i <= count; i++) {
         [[self column] addObject:[self defaultValue]];
     }
+}
+
+- (id)plist {
+    
+    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity:8];
+    NSString *keyIdentifier = [MTDataColumn keyIdentifier];
+    NSString *keyColumn = [MTDataColumn keyColumn];
+    NSString *keyDefaultValue = [MTDataColumn keyDefaultValue];
+    NSString *keyCaption = [MTDataColumn keyCaption];
+    NSString *keyColumnType = [MTDataColumn keyColumnType];
+    NSString *keyNativeColumnType = [MTDataColumn keyNativeColumnType];
+    NSString *keyDataLength = [MTDataColumn keyDataLength];
+    NSString *keyDataPercision = [MTDataColumn keyDataPercision];
+
+    id defaultValue = [self defaultValue];
+    if ([defaultValue isEqual:[NSNull null]]) {
+        defaultValue = @"~MTNull~";
+    }
+    
+    [plist setObject: [self identifier]         forKey: keyIdentifier];
+    [plist setObject: [self column]             forKey: keyColumn];
+    [plist setObject: defaultValue              forKey: keyDefaultValue];
+    [plist setObject: [self caption]            forKey: keyCaption];
+    [plist setObject: [self columnType]         forKey: keyColumnType];
+    [plist setObject: [self nativeColumnType]   forKey: keyNativeColumnType];
+    [plist setObject: [self dataLength]         forKey: keyDataLength];
+    [plist setObject: [self dataPercision]      forKey: keyDataPercision];
+
+    return plist;
+}
+
++ (NSString *)keyDefaultValue {
+    SEL sel = @selector(defaultValue);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyCaption {
+    SEL sel = @selector(caption);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyColumnType {
+    SEL sel = @selector(columnType);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyNativeColumnType {
+    SEL sel = @selector(nativeColumnType);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyDataLength {
+    SEL sel = @selector(dataLength);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyDataPercision {
+    SEL sel = @selector(dataPercision);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyIdentifier {
+    SEL sel = @selector(identifier);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyColumn {
+    SEL sel = @selector(column);
+    return NSStringFromSelector(sel);
 }
 
 @end

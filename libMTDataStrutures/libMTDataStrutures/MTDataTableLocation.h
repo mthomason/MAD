@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface MTDataTableLocation : NSObject
+    <NSCoding>
 
 @property (nonatomic, assign) NSUInteger column;
 @property (nonatomic, assign) NSUInteger row;

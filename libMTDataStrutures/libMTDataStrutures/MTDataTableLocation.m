@@ -10,6 +10,29 @@
 
 @implementation MTDataTableLocation
 
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    
+    [encoder encodeInteger: [self row]
+                    forKey: [MTDataTableLocation keyRow]];
+    
+    [encoder encodeInteger: [self column]
+                    forKey: [MTDataTableLocation keyColumn]];
+    
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    self = [super init];
+    if(self) {
+        
+        NSUInteger row = [decoder decodeIntegerForKey: [MTDataTableLocation keyRow]];
+        NSUInteger column = [decoder decodeIntegerForKey: [MTDataTableLocation keyColumn]];
+        [self setRow: row];
+        [self setColumn: column];
+    }
+    
+    return self;
+}
+
 - (id)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column {
     self = [super init];
     if (self) {
@@ -22,6 +45,16 @@
 + (id)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
     id result = [[MTDataTableLocation alloc] initWithRow:row inColumn:column];
     return result;
+}
+
++ (NSString *)keyRow {
+    SEL sel = @selector(identifier);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyColumn {
+    SEL sel = @selector(column);
+    return NSStringFromSelector(sel);
 }
 
 @end
