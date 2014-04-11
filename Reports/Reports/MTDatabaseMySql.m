@@ -41,6 +41,7 @@
 #import "NSError+Constructors.h"
 
 #import "MTDataTable.h"
+#import "MTDataColumn.h"
 
 @interface MTDatabaseMySql ()
 
@@ -85,11 +86,17 @@
                     NSError *error = nil;
                     NSString *sql = [query getSqlWithError:&error];
                     if (error == nil) {
-                        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES];
-                        id queryResults = [[fetch results] retain];
-                        [[self delegateCacheData] cacheQueryResult:queryResults];
-                        completion(YES, nil, queryResults);
-                        [queryResults release];
+                        MTDataTable *fetch = [[MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES] retain];
+                        //These native types are not set by the mysql lib.
+                        for (MTDataColumn *column in [[fetch columns] objectEnumerator]) {
+                            NSNumber *cType = @([MTDatabaseMySql dataTypeForNativeType:column.columnType.integerValue]);
+                            [column setNativeColumnType:cType];
+                            
+                        }
+                        //Fixme set native column types
+                        [[self delegateCacheData] cacheQueryResult:fetch];
+                        completion(YES, nil, fetch);
+                        [fetch release];
                     } else {
                         completion(NO, error, nil);
                     }
@@ -117,7 +124,7 @@
             BOOL successConnection = conn != nil;
             if (successConnection) {
                 
-                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+                MTDataTable *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
                 
                 NSArray *fetchResults = [fetch results], *fetchFields = [fetch fields];
                 NSInteger resultsCount = [fetchResults count], fieldsCount = [fetchFields count];

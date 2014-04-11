@@ -25,6 +25,7 @@
 #import "NSError+UserInterface.h"
 
 #import "MTDataTable.h"
+#import "MTDataColumn.h"
 
 NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 511";
 
@@ -339,16 +340,12 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 - (id)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
     __block NSMutableArray *results = [[NSMutableArray alloc] init];
-    //__block MTDatabaseSqlServer *sqlServer = self;
+    __block MTDataTable *datatable = nil;
     
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
-        
-        //        [sqlServer connectWithCredentals:[sqlServer databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
-        
-        //            if (success) {
         
         NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
@@ -447,7 +444,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                          
                                                          ];
                         
-                        MTDataTable *datatable = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
+                        datatable = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
                         
                         for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                             
@@ -509,7 +506,19 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                                                                       MTDatabaseColumnPrecision : columPercision             //Column percision
                                                                                                       }];
                                 
-                                //[datatable]
+
+                                
+                                NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnTypeNumber.intValue];
+                                
+                                MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:columnNameString];
+                                [dataColumn setNativeColumnType:columnTypeNumber];
+                                [dataColumn setDataLength:columnLen];
+                                [dataColumn setDataPercision:columPercision];
+                                [dataColumn setColumnType:@(fieldTypeCalculated)];
+                                
+                                [datatable addColumn:dataColumn];
+                                
+                                [dataColumn release];
                                 
                                 [columPercision release];
                                 [colmunHolder addObject:dictionary];
@@ -1276,6 +1285,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     [columnMetaData release];
                                     columnCounter++;
                                 }
+
+                                [datatable addRowWithDataForFieldKeys:resultsForRow];
                                 
                                 [results addObject: resultsForRow];
                                 [resultsForRow release];
@@ -1322,10 +1333,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         [janFirst1990 release];
         [janFirst1990Components release];
         [gregorian release];
-        //}
-        
+
         dispatch_semaphore_signal(semaphoreRunQuery);
-        //}];
         
     });
     
@@ -1333,8 +1342,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     dispatch_semaphore_wait(semaphoreRunQuery, DISPATCH_TIME_FOREVER);
     dispatch_release(semaphoreRunQuery);
     
-    
-    return [results autorelease];
+    [results release];
+    return [datatable autorelease];
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
