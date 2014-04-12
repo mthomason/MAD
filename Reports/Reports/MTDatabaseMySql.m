@@ -163,12 +163,10 @@
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
                 MTDataTable *dataTable = [MysqlFetch fetchWithCommand:command onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
-                NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
                 resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
                 for (NSInteger i=0; i<[dataTable count]; i++) {
                     NSString *name = [dataTable objectAtRow:i column:0];
                     MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
-                    [results addObject:field];
                     [resultsDictionary setObject:field forKey:name];
                     [field release];
                 }
