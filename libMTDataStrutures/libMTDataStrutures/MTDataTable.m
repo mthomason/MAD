@@ -151,8 +151,9 @@
         NSString *name = [plist objectForKey: [MTDataTable keyName]];
         [self setName: name];
         
-        
-        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:[plist objectForKey: [MTDataTable keyColumnKeys]]];
+        NSString *keyColumnKeys = [MTDataTable keyColumnKeys];
+        id columnKeysArray = [plist objectForKey: keyColumnKeys];
+        NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:columnKeysArray];
         [self setColumnKeys: columnKeys];
         
         NSArray *sortDescriptors = [plist objectForKey:[MTDataTable keySortDescriptors]];
@@ -163,7 +164,8 @@
 
         NSDictionary *columnsPlist = [plist objectForKey: [MTDataTable keyColumns]];
 
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:[columnsPlist count]];
+        NSUInteger count = [columnsPlist count];
+        NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:count];
         for (NSString *key in [columnsPlist keyEnumerator]) {
             @autoreleasepool {
                 NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];

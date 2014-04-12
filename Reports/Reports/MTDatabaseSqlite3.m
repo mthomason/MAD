@@ -42,7 +42,8 @@
     //Open conneciton... closed in dealloc.
     if ([self isOpen] == NO) {
         NSString *filepath = [[[self databaseConnection] databaseUrl] path];
-        BOOL isOpen = sqlite3_open([filepath UTF8String], &_database) == SQLITE_OK;
+        const char *path = [filepath UTF8String];
+        BOOL isOpen = sqlite3_open(path, &_database) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);
         } else {
