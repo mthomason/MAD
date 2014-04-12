@@ -124,27 +124,14 @@
             BOOL successConnection = conn != nil;
             if (successConnection) {
                 
-                MTDataTable *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
-                
-                NSArray *fetchResults = [fetch results], *fetchFields = [fetch fields];
-                NSInteger resultsCount = [fetchResults count], fieldsCount = [fetchFields count];
-                
+                MTDataTable *dataTable = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+                NSInteger resultsCount = [dataTable count];
                 NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-                
-                if (fetch) {
-                    if (fieldsCount > 0) {
-                        MysqlFetchField *resultsTableName = [fetchFields objectAtIndex:0];
-                        
-                        for (NSDictionary *tableName in [fetch results]) {
-                            
-                            NSString *tableKey = [resultsTableName name];
-                            NSString *tn = [tableName objectForKey:tableKey];
-                            
-                            MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tn];
-                            [results addObject: databaseTable];
-                            [databaseTable release];
-                        }
-                    }
+                for (NSInteger i=0; i<[dataTable count]; i++) {
+                    NSString *tableName = [dataTable objectAtRow:i column:0];
+                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                    [results addObject:table];
+                    [table release];
                 }
                 completion(successConnection, error, [results autorelease]);
             } else {
@@ -175,54 +162,31 @@
             if (successConnection) {
                 
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
-                MysqlFetch *fetch = [MysqlFetch fetchWithCommand:command onConnection:conn];
-                if (fetch) {
-                    if ([[fetch fields] count] > 0) {
-                        
-                        MysqlFetchField *fieldMetaData = [[fetch fields] objectAtIndex:0];
-                        results = [[NSMutableArray alloc] initWithCapacity: [[fetch results] count]];
-                        resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:[[fetch results] count]];
-                        
-                        for (NSDictionary *field in [fetch results]) {
-                            NSString *fieldName = [field objectForKey:[fieldMetaData name]];
-                            
-                            MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
-                            //[databaseField setDatatype:[field objectForKey:@"Type"]];
-                            [results addObject: databaseField];
-                            [resultsDictionary setObject:databaseField forKey:fieldName];
-                            [databaseField release];
-                        }
-                        
-                        [results release];
-                    }
+                MTDataTable *dataTable = [MysqlFetch fetchWithCommand:command onConnection:conn];
+                NSInteger resultsCount = [dataTable count];
+                NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+                resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
+                for (NSInteger i=0; i<[dataTable count]; i++) {
+                    NSString *name = [dataTable objectAtRow:i column:0];
+                    MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
+                    [results addObject:field];
+                    [resultsDictionary setObject:field forKey:name];
+                    [field release];
                 }
-                
-                
                 
                 NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
-                MysqlFetch *fetch2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
-                if (fetch) {
-                    
-                    if ([[fetch2 fields] count] > 0) {
-                        
-                        for (MysqlFetchField *field in [fetch2 fields]) {
-                            
-                            MTDataType dataType = [MTDatabaseMySql dataTypeForNativeType:[field fieldType]];
-                            NSString *fieldNameKey = [field name];
-                            NSArray *fieldNameParts = [fieldNameKey componentsSeparatedByString:@"."];
-                            NSString *fieldNameKeyLastPart = [fieldNameParts lastObject];
-                            NSString *fieldName = [fieldNameKeyLastPart stringByReplacingOccurrencesOfString:@"`" withString:@""];
-                            MTDatabaseField *databaseField = [[resultsDictionary objectForKey:fieldName] retain];
-                            [databaseField setFieldTypeNative:[field fieldType]];
-                            [databaseField setFieldType:dataType];
-                            [databaseField setWidth:[field width]];
-                            [databaseField setDecimals:[field decimals]];
-                            [databaseField setPrimaryKey:[field primaryKey]];
-                            [databaseField release];
-                        }
-                    }
-                }
+                MTDataTable *dataTable2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
                 
+                for (NSString *fieldKey in [[dataTable2 columns] keyEnumerator]) {
+                    MTDataColumn *dataColumn = [[dataTable2 columns] objectForKey:fieldKey];
+                    MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[dataColumn caption]] retain];
+                    [databaseField setFieldTypeNative:[[dataColumn nativeColumnType] integerValue]];
+                    [databaseField setFieldType:[[dataColumn columnType] integerValue]];
+                    [databaseField setWidth:[[dataColumn dataLength] integerValue]];
+                    [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
+                    [databaseField setPrimaryKey:[dataColumn isPrimaryKey]];
+                    [databaseField release];
+                }
 
             } else {
                 SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);

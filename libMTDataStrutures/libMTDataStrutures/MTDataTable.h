@@ -29,7 +29,8 @@
 - (id)objectAtIndex:(NSInteger)index;
 - (id)value:(MTDataTableLocation *)location;
 
-//- (NSDictionary *)dataForRow:(NSUInteger)row;
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
+
 - (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors;
 
 - (NSUInteger)count;

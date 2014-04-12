@@ -47,6 +47,8 @@
     [encoder encodeObject: [self dataPercision]
                    forKey: [MTDataColumn keyDataPercision]];
     
+    [encoder encodeBool: [self isPrimaryKey]
+                   forKey: [MTDataColumn keyIsPrimaryKey]];
     
 }
 
@@ -77,7 +79,10 @@
         
         NSNumber *dataPercision = [decoder decodeObjectForKey: [MTDataColumn keyDataPercision]];
         [self setDataPercision: dataPercision];
-        
+
+        BOOL isPrimaryKey = [decoder decodeBoolForKey: [MTDataColumn keyIsPrimaryKey]];
+        [self setIsPrimaryKey: isPrimaryKey];
+
     }
     return self;
 }
@@ -208,6 +213,11 @@
 
 + (NSString *)keyColumn {
     SEL sel = @selector(column);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyIsPrimaryKey {
+    SEL sel = @selector(keyIsPrimaryKey);
     return NSStringFromSelector(sel);
 }
 

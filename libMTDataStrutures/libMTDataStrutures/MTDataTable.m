@@ -212,7 +212,16 @@
     return [self rowCounter];
 }
 
-- (id)objectAtIndex:(NSInteger)index {
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
+    NSString *fieldKey = [[self columnKeys] objectAtIndex:column];
+//    NSDictionary *objectsForFieldKeys = [self objectAtIndex:row];
+    NSArray *dataInColumn = [[self columns] objectForKey:fieldKey];
+    NSUInteger sortedIndex = [self sortedIndexForIndex:row];
+    id objectForField = [dataInColumn objectAtIndex:sortedIndex];
+    return objectForField;
+}
+
+- (NSUInteger)sortedIndexForIndex:(NSUInteger)index {
     NSUInteger sortedIndex;
     if ([[self sortDescriptors] count] > 0) {
         sortedIndex = [[self sortIndex] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -225,6 +234,12 @@
     } else {
         sortedIndex = index;
     }
+    return sortedIndex;
+}
+
+- (id)objectAtIndex:(NSInteger)index {
+    NSUInteger sortedIndex = [self sortedIndexForIndex:index];
+
     NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[[self columnKeys] count]];
     for (NSString *fieldKey in [self columnKeys]) {
         NSArray *dataInColumn = [[self columns] objectForKey:fieldKey];
