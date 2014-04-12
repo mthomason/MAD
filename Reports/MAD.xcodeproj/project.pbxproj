@@ -542,8 +542,8 @@
 		4C66355717D5C721004AC646 /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
 		4C66355817D5C73B004AC646 /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
 		4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
-		4C68B71416600245002682CB /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MTDatabaseConnection.m */; };
-		4C68B71516600245002682CB /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MTDatabaseConnection.m */; };
+		4C68B71416600245002682CB /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MTDatabaseConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C68B71516600245002682CB /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MTDatabaseConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */; };
 		4C6C9B1E17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */; };
 		4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B2217318965000E1161 /* MTReportDesignerSectionBackgroundView.m */; };
@@ -802,7 +802,7 @@
 		4C9294DC18C4CC5B0010AAEF /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C81BB9A1771447900E7B98C /* MTDatabaseSqlServer.m */; };
 		4C9294DD18C4CC5F0010AAEF /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E371658F0A00002F8EA /* MTDatabaseTable.m */; };
 		4C9294DE18C4CC630010AAEF /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E3B1658F10F0002F8EA /* MTDatabaseField.m */; };
-		4C9294DF18C4CC670010AAEF /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MTDatabaseConnection.m */; };
+		4C9294DF18C4CC670010AAEF /* MTDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68B71316600245002682CB /* MTDatabaseConnection.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9294E018C4CC6A0010AAEF /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; };
 		4C9294E118C4CC6D0010AAEF /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF2F2721754F8F200DC34E3 /* MTPaper.m */; };
 		4C9294E318C4CC7A0010AAEF /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */; };
@@ -982,12 +982,12 @@
 		4C9E446C18D8B5EF00F0F578 /* MTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446A18D8B5EF00F0F578 /* MTCache.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E446F18D8C7BF00F0F578 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446E18D8C7BF00F0F578 /* MTQuery.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9E447018D8C7BF00F0F578 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446E18D8C7BF00F0F578 /* MTQuery.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C9E448118D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */; };
-		4C9E448218D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */; };
-		4C9E448518D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */; };
-		4C9E448618D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */; };
-		4C9E448918D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */; };
-		4C9E448A18D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */; };
+		4C9E448118D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E448218D9E93D00F0F578 /* MTDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448018D9E93D00F0F578 /* MTDatabaseConnectionMySql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E448518D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E448618D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448418D9E94C00F0F578 /* MTDatabaseConnectionSqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E448918D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C9E448A18D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E448818D9E95800F0F578 /* MTDatabaseConnectionSqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9F400816F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; };
 		4CA14FF818B7D42A001AFAD8 /* MTActivityItemProviderPdf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */; };
@@ -1521,6 +1521,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C267A9D18F9B8860097D166 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C7674B718F2F312007CEBD3;
+			remoteInfo = MTDataTableTest;
+		};
+		4C267A9F18F9B8860097D166 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C7674CD18F2F391007CEBD3;
+			remoteInfo = MTGraphTest;
+		};
 		4C4C6F11167635B9004A3B04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
@@ -1548,13 +1562,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4CD98B9B163F7CDD0096D7BC;
 			remoteInfo = MySqlClientObjectiveC;
-		};
-		4CC7C26218F2EC4400784F32 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CC7C24E18F2EB4000784F32;
-			remoteInfo = "libMTDataStrutures Tests";
 		};
 		4CDA76FA1825E8D500E462F6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3365,7 +3372,8 @@
 			isa = PBXGroup;
 			children = (
 				4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */,
-				4CC7C26318F2EC4400784F32 /* libMTDataStrutures Tests.xctest */,
+				4C267A9E18F9B8860097D166 /* MTDataTableTest.xctest */,
+				4C267AA018F9B8860097D166 /* MTGraphTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4739,6 +4747,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4C267A9E18F9B8860097D166 /* MTDataTableTest.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MTDataTableTest.xctest;
+			remoteRef = 4C267A9D18F9B8860097D166 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4C267AA018F9B8860097D166 /* MTGraphTest.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MTGraphTest.xctest;
+			remoteRef = 4C267A9F18F9B8860097D166 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -4765,13 +4787,6 @@
 			fileType = archive.ar;
 			path = libMySqlClientObjectiveC.a;
 			remoteRef = 4C9962F416401CF800B7BACC /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CC7C26318F2EC4400784F32 /* libMTDataStrutures Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "libMTDataStrutures Tests.xctest";
-			remoteRef = 4CC7C26218F2EC4400784F32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4CDA76FB1825E8D500E462F6 /* libBarcodes.a */ = {

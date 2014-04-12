@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTCache.h"
 #import <CoreData/CoreData.h>
 #import "MTDataTable.h"
@@ -64,10 +68,7 @@
     }
     NSPropertyListFormat format;
     NSError *error = nil;
-    id plist = [NSPropertyListSerialization propertyListWithStream:inputStream
-                                                                options:0
-                                                                 format:&format
-                                                                  error:&error];
+    id plist = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
     MTDataTable *dataTable = [[MTDataTable alloc] initWithPlist:plist];
     [self setCachedPlistSerialized:dataTable];
     [inputStream close];

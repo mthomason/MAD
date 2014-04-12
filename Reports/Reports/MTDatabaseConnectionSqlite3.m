@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTDatabaseConnectionSqlite3.h"
 
 @implementation MTDatabaseConnectionSqlite3
@@ -16,7 +20,6 @@
     if (self) {
         NSURL *databaseUrl = [url copy];
         [self setDatabaseUrl: databaseUrl];
-        [databaseUrl release];
         
         [self setDatabaseTypeIdentifier: [MTDatabaseConnectionSqlite3 identifier]];
 
