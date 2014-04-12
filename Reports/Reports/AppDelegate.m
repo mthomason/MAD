@@ -73,6 +73,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     RptqDatabase *databaseSchema = [[databaseSchemas anyObject] retain];
     NSSet *queries = [databaseSchema hasQueries];
     RptqQuery *query = [[queries anyObject] retain];
+    [databaseSchema autorelease];
     return [query autorelease];
 }
 
