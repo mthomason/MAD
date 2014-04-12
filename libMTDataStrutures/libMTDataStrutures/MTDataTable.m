@@ -165,9 +165,11 @@
 
         NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:[columnsPlist count]];
         for (NSString *key in [columnsPlist keyEnumerator]) {
-            NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
-            MTDataColumn *column = [[MTDataColumn alloc] initWithPlist: columnPlist];
-            columns[key] = column;
+            @autoreleasepool {
+                NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
+                MTDataColumn *column = [[MTDataColumn alloc] initWithPlist: columnPlist];
+                columns[key] = column;
+            }
         }
         [self setColumns: columns];
         
@@ -269,9 +271,10 @@
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
-    for (id key in [row keyEnumerator]) {
+    for (id key in [self columnKeys]) {
         MTDataColumn *column = [[self columns] objectForKey:key];
         id obj = [row objectForKey:key];
+        if (obj == nil) obj = @"";
         [column addObject:obj];
     }
     [[self sortIndex] addObject:row];

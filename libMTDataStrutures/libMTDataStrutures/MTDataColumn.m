@@ -153,9 +153,7 @@
 }
 
 - (id)objectAtIndex:(NSInteger)index {
-    if (index >= [[self column] count]) {
-        NSLog(@"ERROR");
-    }
+    NSAssert(index < [[self column] count], @"Column doesn't exit!");
     return [[self column] objectAtIndex:index];
 }
 
