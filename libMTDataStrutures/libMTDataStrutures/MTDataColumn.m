@@ -23,6 +23,9 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
+    [encoder encodeObject: [self fieldName]
+                   forKey: [MTDataColumn keyFieldName]];
+    
     [encoder encodeObject: [self identifier]
                    forKey: [MTDataColumn keyIdentifier]];
     
@@ -61,7 +64,10 @@
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if(self) {
-        
+
+        NSString *fieldName = [decoder decodeObjectForKey: [MTDataColumn keyFieldName]];
+        [self setIdentifier: fieldName];
+
         NSString *identifier = [decoder decodeObjectForKey: [MTDataColumn keyIdentifier]];
         [self setIdentifier: identifier];
         
@@ -122,6 +128,7 @@
     self = [super init];
     if(self) {
         
+        NSString *fieldName = [plist objectForKey: [MTDataColumn keyFieldName]];
         NSString *identifier = [plist objectForKey: [MTDataColumn keyIdentifier]];
         NSMutableArray *column = [plist objectForKey: [MTDataColumn keyColumn]];
         id defaultValue = [plist objectForKey: [MTDataColumn keyDefaultValue]];
@@ -135,6 +142,7 @@
         BOOL isNotNull = [[plist objectForKey: [MTDataColumn keyIsNotNull]] boolValue];
         BOOL isAutoIncrement = [[plist objectForKey: [MTDataColumn keyIsAutoIncrement]] boolValue];
         
+        [self setFieldName:fieldName];
         [self setIdentifier: identifier];
         [self setColumn: column];
         [self setDefaultValue: defaultValue];
@@ -170,6 +178,7 @@
 - (id)plist {
     
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity:8];
+    NSString *keyFieldName = [MTDataColumn keyFieldName];
     NSString *keyIdentifier = [MTDataColumn keyIdentifier];
     NSString *keyColumn = [MTDataColumn keyColumn];
     NSString *keyDefaultValue = [MTDataColumn keyDefaultValue];
@@ -191,6 +200,7 @@
         defaultValue = @"~MTNull~";
     }
     
+    [plist setObject: [self fieldName]          forKey: keyFieldName];
     [plist setObject: [self identifier]         forKey: keyIdentifier];
     [plist setObject: [self column]             forKey: keyColumn];
     [plist setObject: defaultValue              forKey: keyDefaultValue];
@@ -199,7 +209,7 @@
     [plist setObject: [self nativeColumnType]   forKey: keyNativeColumnType];
     [plist setObject: [self dataLength]         forKey: keyDataLength];
     [plist setObject: [self dataPercision]      forKey: keyDataPercision];
-    [plist setObject: primaryKey                forKey:keyIsPrimaryKey];
+    [plist setObject: primaryKey                forKey: keyIsPrimaryKey];
     [plist setObject: notNull                   forKey: keyIsNotNull];
     [plist setObject: autoIncrement             forKey: keyIsAutoIncrement];
 
@@ -258,6 +268,11 @@
 
 + (NSString *)keyIsAutoIncrement {
     SEL sel = @selector(isAutoIncrement);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyFieldName {
+    SEL sel = @selector(fieldName);
     return NSStringFromSelector(sel);
 }
 

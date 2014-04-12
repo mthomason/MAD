@@ -219,7 +219,7 @@
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
     NSString *fieldKey = [[self columnKeys] objectAtIndex:column];
 //    NSDictionary *objectsForFieldKeys = [self objectAtIndex:row];
-    NSArray *dataInColumn = [[self columns] objectForKey:fieldKey];
+    MTDataColumn *dataInColumn = [[self columns] objectForKey:fieldKey];
     NSUInteger sortedIndex = [self sortedIndexForIndex:row];
     id objectForField = [dataInColumn objectAtIndex:sortedIndex];
     return objectForField;

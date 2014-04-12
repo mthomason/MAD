@@ -164,10 +164,12 @@
                 MTDataTable *dataTable = [MysqlFetch fetchWithCommand:command onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
                 resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
-                for (NSInteger i=0; i<[dataTable count]; i++) {
+
+                for (NSInteger i=0; i<[dataTable numberOfRows]; i++) {
                     NSString *name = [dataTable objectAtRow:i column:0];
+                    NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
                     MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
-                    [resultsDictionary setObject:field forKey:name];
+                    [resultsDictionary setObject:field forKey:safeId];
                     [field release];
                 }
                 
@@ -176,9 +178,11 @@
                 
                 for (NSString *fieldKey in [[dataTable2 columns] keyEnumerator]) {
                     MTDataColumn *dataColumn = [[dataTable2 columns] objectForKey:fieldKey];
-                    MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[dataColumn caption]] retain];
-                    [databaseField setFieldTypeNative:[[dataColumn nativeColumnType] integerValue]];
-                    [databaseField setFieldType:[[dataColumn columnType] integerValue]];
+                    MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[dataColumn fieldName]] retain];
+                    NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
+                    [databaseField setFieldTypeNative:nativeColumnType];
+                    MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];
+                    [databaseField setFieldType:fieldType];
                     [databaseField setWidth:[[dataColumn dataLength] integerValue]];
                     [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
                     [databaseField setPrimaryKey:[dataColumn isPrimaryKey]];
@@ -306,21 +310,22 @@
 }
 
 + (NSString *)safeQueryField:(RptqQueryField *)queryField {
-    // FIXME: Use backticks `` to make more robust.
     NSString *queryTable = [[queryField inQueryTable] queryAlias];
     NSString *fieldName = [[queryField databaseSchemaField] name];
     return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
 }
 
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
-    // FIXME: Use backticks `` to make more robust.
     NSString *queryTable = [[schemaField inTable] name];
     NSString *fieldName = [schemaField name];
     return [NSString stringWithFormat:@"`%@`.`%@`", queryTable, fieldName];
 }
 
+- (NSString *)safeIdentifierForTable:(NSString *)tableName andField:(NSString *)fieldName {
+    return [NSString stringWithFormat:@"`%@`.`%@`", tableName, fieldName];
+}
+
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
-    // FIXME: Use backticks `` to make more robust.
     return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
 }
 

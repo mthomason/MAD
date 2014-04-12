@@ -223,6 +223,7 @@
                         
                         sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
                         
+                        [dataColumn setFieldName: fieldName];
                         [dataColumn setNativeColumnType:nativeColumnType];
                         [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
                         [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];

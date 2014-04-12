@@ -15,6 +15,7 @@
 @property (nonatomic, strong) id defaultValue;
 
 @property (nonatomic, copy) NSString *caption;
+@property (nonatomic, copy) NSString *fieldName;
 @property (nonatomic, strong) NSNumber *columnType;
 @property (nonatomic, strong) NSNumber *nativeColumnType;
 @property (nonatomic, strong) NSNumber *dataLength;
