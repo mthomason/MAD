@@ -199,33 +199,36 @@
         
         NSUInteger rowCounter = 0;
         while (sqlite3_step(statement) == SQLITE_ROW) {
-            
             if (rowCounter == 0) {
-                for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
-                    NSString *fieldName = [query fieldKeys][colCtr];
-                    MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
-                    
-                    int affentyType = sqlite3_column_type(statement, colCtr);
-                    NSNumber *nativeColumnType = @(affentyType);
-                    
-                    const char *columnName = sqlite3_column_name(statement, colCtr);
-                    const char *tableName = sqlite3_column_table_name(statement, colCtr);
-                    //const char *originName = sqlite3_column_origin_name(statement, colCtr);
-                    const char *databaseName = sqlite3_column_database_name(statement, colCtr);
-                    
-                    char const **pzDataType = NULL;
-                    char const **pzCollSeq = NULL;
-                    int *pNotNull = 0;
-                    int *pPrimaryKey = 0;
-                    int *pAutoinc = 0;
-                    
-                    sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
-                    
-                    [dataColumn setNativeColumnType:nativeColumnType];
-                    [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
-                    [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
-                    [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
-                    [results addColumn:dataColumn];
+                for (NSUInteger columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
+
+                    @autoreleasepool {
+                        NSString *fieldName = [query fieldKeys][columnCounter];
+                        MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
+                        
+                        int affentyType = sqlite3_column_type(statement, (int)columnCounter);
+                        NSNumber *nativeColumnType = @(affentyType);
+                        
+                        const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
+                        const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
+                        //const char *originName = sqlite3_column_origin_name(statement, columnCounter);
+                        const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
+                        
+                        char const **pzDataType = NULL;
+                        char const **pzCollSeq = NULL;
+                        int *pNotNull = 0;
+                        int *pPrimaryKey = 0;
+                        int *pAutoinc = 0;
+                        
+                        sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
+                        
+                        [dataColumn setNativeColumnType:nativeColumnType];
+                        [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
+                        [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
+                        [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
+                        [results addColumn:dataColumn];
+                        [dataColumn release];
+                    }
                     
                 }
             }
