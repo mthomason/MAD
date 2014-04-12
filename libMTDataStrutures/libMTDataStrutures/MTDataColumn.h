@@ -19,7 +19,9 @@
 @property (nonatomic, strong) NSNumber *nativeColumnType;
 @property (nonatomic, strong) NSNumber *dataLength;
 @property (nonatomic, strong) NSNumber *dataPercision;
-@property (nonatomic, assign) BOOL isPrimaryKey;
+@property (nonatomic, assign, getter = isPrimaryKey) BOOL primaryKey;
+@property (nonatomic, assign, getter = isNotNull) BOOL notNull;
+@property (nonatomic, assign, getter = isAutoIncrement) BOOL autoIncrement;
 
 - (id)initWithIdentifier:(NSString *)identifier;  //Init with a caption
 

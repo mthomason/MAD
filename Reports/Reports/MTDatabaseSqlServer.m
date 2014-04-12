@@ -328,7 +328,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     [self connectWithCredentals:[self databaseConnection] completion:^(id dbconn, BOOL success, NSError *error) {
         
         if (success) {
-            id results = [[[self runQuery:query onProcess:dbconn] retain] autorelease];
+            MTDataTable *results = [[[self runQuery:query onProcess:dbconn] retain] autorelease];
             completion(YES, nil, results);
             
         } else {
@@ -338,7 +338,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     }];
 }
 
-- (id)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
+- (MTDataTable *)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
     __block NSMutableArray *results = [[NSMutableArray alloc] init];
     __block MTDataTable *datatable = nil;
     

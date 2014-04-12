@@ -49,7 +49,13 @@
     
     [encoder encodeBool: [self isPrimaryKey]
                    forKey: [MTDataColumn keyIsPrimaryKey]];
-    
+
+    [encoder encodeBool: [self isNotNull]
+                 forKey: [MTDataColumn keyIsNotNull]];
+
+    [encoder encodeBool: [self isAutoIncrement]
+                 forKey: [MTDataColumn keyIsAutoIncrement]];
+
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -81,7 +87,7 @@
         [self setDataPercision: dataPercision];
 
         BOOL isPrimaryKey = [decoder decodeBoolForKey: [MTDataColumn keyIsPrimaryKey]];
-        [self setIsPrimaryKey: isPrimaryKey];
+        [self setPrimaryKey: isPrimaryKey];
 
     }
     return self;
@@ -100,6 +106,14 @@
         id defaultValue = [NSNull null];
         [self setDefaultValue:defaultValue];
         
+        [self setColumnType: @(0)];
+        [self setNativeColumnType: @(0)];
+        [self setDataLength: @(0)];
+        [self setDataPercision: @(0)];
+        [self setPrimaryKey: NO];
+        [self setNotNull: NO];
+        [self setAutoIncrement: NO];
+        
     }
     return self;
 }
@@ -117,6 +131,10 @@
         NSNumber *dataLength = [plist objectForKey: [MTDataColumn keyDataLength]];
         NSNumber *dataPercision = [plist objectForKey: [MTDataColumn keyDataPercision]];
         
+        BOOL isPrimaryKey = [[plist objectForKey: [MTDataColumn keyIsPrimaryKey]] boolValue];
+        BOOL isNotNull = [[plist objectForKey: [MTDataColumn keyIsNotNull]] boolValue];
+        BOOL isAutoIncrement = [[plist objectForKey: [MTDataColumn keyIsAutoIncrement]] boolValue];
+        
         [self setIdentifier: identifier];
         [self setColumn: column];
         [self setDefaultValue: defaultValue];
@@ -125,6 +143,10 @@
         [self setNativeColumnType: nativeColumnType];
         [self setDataLength: dataLength];
         [self setDataPercision: dataPercision];
+        
+        [self setPrimaryKey: isPrimaryKey];
+        [self setNotNull: isNotNull];
+        [self setAutoIncrement: isAutoIncrement];
         
     }
     return self;
@@ -158,6 +180,13 @@
     NSString *keyNativeColumnType = [MTDataColumn keyNativeColumnType];
     NSString *keyDataLength = [MTDataColumn keyDataLength];
     NSString *keyDataPercision = [MTDataColumn keyDataPercision];
+    NSString *keyIsPrimaryKey = [MTDataColumn keyIsPrimaryKey];
+    NSString *keyIsNotNull = [MTDataColumn keyIsNotNull];
+    NSString *keyIsAutoIncrement = [MTDataColumn keyIsAutoIncrement];
+    
+    NSNumber *primaryKey = @([self isPrimaryKey]);
+    NSNumber *notNull = @([self isNotNull]);
+    NSNumber *autoIncrement = @([self isAutoIncrement]);
 
     id defaultValue = [self defaultValue];
     if ([defaultValue isEqual:[NSNull null]]) {
@@ -172,6 +201,9 @@
     [plist setObject: [self nativeColumnType]   forKey: keyNativeColumnType];
     [plist setObject: [self dataLength]         forKey: keyDataLength];
     [plist setObject: [self dataPercision]      forKey: keyDataPercision];
+    [plist setObject: primaryKey                forKey:keyIsPrimaryKey];
+    [plist setObject: notNull                   forKey: keyIsNotNull];
+    [plist setObject: autoIncrement             forKey: keyIsAutoIncrement];
 
     return plist;
 }
@@ -217,7 +249,17 @@
 }
 
 + (NSString *)keyIsPrimaryKey {
-    SEL sel = @selector(keyIsPrimaryKey);
+    SEL sel = @selector(isPrimaryKey);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyIsNotNull {
+    SEL sel = @selector(isNotNull);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyIsAutoIncrement {
+    SEL sel = @selector(isAutoIncrement);
     return NSStringFromSelector(sel);
 }
 

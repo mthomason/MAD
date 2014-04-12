@@ -156,7 +156,6 @@
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             MysqlConnection *conn = [dbconn retain];
             BOOL successConnection = conn != nil;
-            NSMutableArray *results = nil;
             NSMutableDictionary *resultsDictionary = nil;
             
             if (successConnection) {

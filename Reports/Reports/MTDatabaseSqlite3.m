@@ -25,6 +25,7 @@
 #import "MTLog.h"
 
 #import "MTDataTable.h"
+#import "MTDataColumn.h"
 
 @interface MTDatabaseSqlite3 ()
 
@@ -173,29 +174,66 @@
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
-    id results = [[[self resultsForQuery:query] retain] autorelease];
+    MTDataTable *results = [[[self resultsForQuery:query] retain] autorelease];
     completion(YES, nil, results);
 }
 
-- (NSArray *)resultsForQuery:(MTQuery *)query {
+- (MTDataTable *)resultsForQuery:(MTQuery *)query {
     NSError *error = nil;
     NSString *queryString = [query getSqlWithError:&error];
     
-    NSMutableArray *results = [[NSMutableArray alloc] init];
+//    NSMutableArray *results = [[NSMutableArray alloc] init];
+    MTDataTable *results = nil;
     BOOL success = NO;
 	sqlite3_stmt *statement;
     const char *queryStartChar = [queryString UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
+    
 
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+
         success = YES;
-        //int numberOfColumns = sqlite3_column_count(statement);
-        //if (numberOfColumns > 0) {
+
+        int numberOfColumns = sqlite3_column_count(statement);
+        results = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
+        
+        NSUInteger rowCounter = 0;
         while (sqlite3_step(statement) == SQLITE_ROW) {
-            int numberOfColumns = sqlite3_column_count(statement);
+            
+            if (rowCounter == 0) {
+                for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
+                    NSString *fieldName = [query fieldKeys][colCtr];
+                    MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
+                    
+                    int affentyType = sqlite3_column_type(statement, colCtr);
+                    NSNumber *nativeColumnType = @(affentyType);
+                    
+                    const char *columnName = sqlite3_column_name(statement, colCtr);
+                    const char *tableName = sqlite3_column_table_name(statement, colCtr);
+                    //const char *originName = sqlite3_column_origin_name(statement, colCtr);
+                    const char *databaseName = sqlite3_column_database_name(statement, colCtr);
+                    
+                    char const **pzDataType = NULL;
+                    char const **pzCollSeq = NULL;
+                    int *pNotNull = 0;
+                    int *pPrimaryKey = 0;
+                    int *pAutoinc = 0;
+                    
+                    sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, pzDataType, pzCollSeq, pNotNull, pPrimaryKey, pAutoinc);
+                    
+                    [dataColumn setNativeColumnType:nativeColumnType];
+                    [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
+                    [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
+                    [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
+                    [results addColumn:dataColumn];
+                    
+                }
+            }
+            
             NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
             
             for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
+
                 
                 int affentyType = sqlite3_column_type(statement, colCtr);   //http://www.sqlite.org/c3ref/c_blob.html
                 id value = nil;
@@ -235,154 +273,20 @@
                 
                 if (value != nil) {
                     NSString *fieldName = [query fieldKeys][colCtr];
-                    
-                    if (NO) {
-                        const char *columnName = sqlite3_column_name(statement, colCtr);
-                        const char *tableName = sqlite3_column_table_name(statement, colCtr);
-                        const char *originName = sqlite3_column_origin_name(statement, colCtr);
-                        const char *databaseName = sqlite3_column_database_name(statement, colCtr);
-                        NSString *columnName8 = [self safeIdentifier:[NSString stringWithUTF8String:columnName]];
-                        NSString *tableName8 = [self safeIdentifier:[NSString stringWithUTF8String:tableName]];
-                        NSString *key = [NSString stringWithFormat:@"%@.%@", tableName8, columnName8];
-                        NSString *oname = [NSString stringWithUTF8String:originName];
-                        NSString *dbname = [NSString stringWithUTF8String:databaseName];
-                        NSLog(@"%@-%@-%@", dbname, oname, key);
-                    }
-                    
                     [resultsForRow setObject:value forKey:fieldName];
                 }
             }
-            [results addObject:resultsForRow];
+            
+            [results addRowWithDataForFieldKeys:resultsForRow];
             [resultsForRow release];
             
+            
+            rowCounter++;
         }
-        //}
+        
 	} else {
         MTLog(@"Caught %s",  sqlite3_errmsg(_database));
     }
-	sqlite3_finalize(statement);
-	sqlite3_free(sql);
-    return [results autorelease];
-}
-
-- (NSArray *)resultsForQueryString:(NSString *)queryString {
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    BOOL success = NO;
-	sqlite3_stmt *statement;
-    const char *queryStartChar = [queryString UTF8String];
-	char *sql = sqlite3_mprintf((char *) queryStartChar);
-    NSCharacterSet *whitespaceCharacters = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSCharacterSet *trimCharacters = [NSCharacterSet characterSetWithCharactersInString:@","];
-    NSArray *components = [queryString componentsSeparatedByCharactersInSet:whitespaceCharacters];
-    NSMutableArray *fieldNames = [[NSMutableArray alloc] initWithCapacity:[components count]];
-    
-    // Get field names from
-    for (NSString *component in components) {
-        if ([component isEqualToString:@"FROM"]) {
-            break;
-        }
-        NSString *componentCleaned = [component stringByTrimmingCharactersInSet:trimCharacters];
-        NSRange doubleQuoteLocation = [componentCleaned rangeOfString:@"\""];
-        if (doubleQuoteLocation.location == 0) {
-            NSRange connectorLocatoin = [componentCleaned rangeOfString:@"\".\""];
-            if (connectorLocatoin.location != NSNotFound) {
-                [fieldNames addObject:componentCleaned];
-            }
-        }
-    }
-    if ([fieldNames count] == 0 && [[components objectAtIndex:1] isEqualToString: @"*"]) {
-        NSString *tableName = [[components objectAtIndex:3] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-        __block NSMutableArray *fns = [[NSMutableArray alloc] init];
-        
-        dispatch_semaphore_t semaphoreGetFields = dispatch_semaphore_create(0);
-
-        [self getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
-            [fns addObjectsFromArray:fields];
-            dispatch_semaphore_signal(semaphoreGetFields);
-        }];
-        
-        dispatch_semaphore_wait(semaphoreGetFields, DISPATCH_TIME_FOREVER);
-        dispatch_release(semaphoreGetFields);
-        
-
-        [fieldNames addObjectsFromArray:fns];
-        [fns release];
-    }
-    
-	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-        success = YES;
-        //int numberOfColumns = sqlite3_column_count(statement);
-        //if (numberOfColumns > 0) {
-            while (sqlite3_step(statement) == SQLITE_ROW) {
-                int numberOfColumns = sqlite3_column_count(statement);
-                NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
-
-                for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
-                    
-                    int affentyType = sqlite3_column_type(statement, colCtr);   //http://www.sqlite.org/c3ref/c_blob.html
-                    id value = nil;
-                    switch (affentyType) {
-                        case SQLITE_INTEGER: {
-                            sqlite3_int64 rint = sqlite3_column_int64(statement, colCtr);
-                            value = [NSNumber numberWithDouble:rint];
-                            break;
-                        }
-                        case SQLITE_FLOAT: {
-                            sqlite3_int64 rint = sqlite3_column_double(statement, colCtr);
-                            value = [NSNumber numberWithDouble:rint];
-                            break;
-                        }
-                        case SQLITE_BLOB: {
-                            const void *blob = sqlite3_column_blob(statement, colCtr);
-                            if (blob != NULL) {
-                                int numBytes = sqlite3_column_bytes16(statement, colCtr);
-                                value = [NSData dataWithBytes:blob length:numBytes];
-                            }
-                            break;
-                        }
-                        case SQLITE_NULL: {
-                            break;
-                        }
-                        case SQLITE3_TEXT: {
-                            
-                            const unsigned char *resultString = sqlite3_column_text(statement, colCtr);
-                            if (resultString != NULL) {
-                                value = [NSString stringWithUTF8String:(char *) resultString];
-                            }
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    
-                    if (value != nil) {
-                        NSString *fieldName = fieldNames[colCtr];
-                        
-                        if (NO) {
-                            const char *columnName = sqlite3_column_name(statement, colCtr);
-                            const char *tableName = sqlite3_column_table_name(statement, colCtr);
-                            const char *originName = sqlite3_column_origin_name(statement, colCtr);
-                            const char *databaseName = sqlite3_column_database_name(statement, colCtr);
-                            NSString *columnName8 = [self safeIdentifier:[NSString stringWithUTF8String:columnName]];
-                            NSString *tableName8 = [self safeIdentifier:[NSString stringWithUTF8String:tableName]];
-                            NSString *key = [NSString stringWithFormat:@"%@.%@", tableName8, columnName8];
-                            NSString *oname = [NSString stringWithUTF8String:originName];
-                            NSString *dbname = [NSString stringWithUTF8String:databaseName];
-                            NSLog(@"%@-%@-%@", dbname, oname, key);
-                        }
-                        
-                        [resultsForRow setObject:value forKey:fieldName];
-                    }
-                }
-                [results addObject:resultsForRow];
-                [resultsForRow release];
-
-            }
-        //}
-	} else {
-        NSLog(@"Caught %s",  sqlite3_errmsg(_database));
-    }
-    [fieldNames release];
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
     return [results autorelease];
