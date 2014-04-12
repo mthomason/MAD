@@ -75,7 +75,7 @@
     }];
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
@@ -94,11 +94,15 @@
                             
                         }
                         //Fixme set native column types
-                        [[self delegateCacheData] cacheQueryResult:fetch];
-                        completion(YES, nil, fetch);
+                        NSURL *cacheUrl = [[[query datatable] url] copy];
+                        [fetch setUrl: cacheUrl];
+                        [cacheUrl release];
+                        
+                        [query setDatatable:fetch];
+                        completion(YES, nil);
                         [fetch release];
                     } else {
-                        completion(NO, error, nil);
+                        completion(NO, error);
                     }
                     
                 }
@@ -106,7 +110,7 @@
             } else {
                 SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
                 [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
-                completion(NO, error, nil);
+                completion(NO, error);
             }
             [conn release];
         }];

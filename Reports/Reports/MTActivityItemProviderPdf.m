@@ -12,7 +12,7 @@
 #import "MTApplicationInstance.h"
 #import "MAReportDocument.h"
 #import "MTQuery.h"
-#import "MTCache.h"
+//#import "MTCache.h"
 #import "MTReportFormatter.h"
 #import "MTReportViewerPrintPageRenderer.h"
 

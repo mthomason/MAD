@@ -15,7 +15,6 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
 #import "Constants.h"
-#import "MTCache.h"
 
 @interface MTQuerySampleDataField ()
 

@@ -76,7 +76,7 @@
     dispatch_async(queue, ^{
 
         
-        [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error, id results) {
+        [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error) {
             
             [navitagionItem performSelectorOnMainThread:@selector(setRightBarButtonItem:) withObject:barButtonItemDone waitUntilDone:NO];
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
@@ -154,11 +154,11 @@
 }
 
 - (NSUInteger)rowCount {
-    return [[[self tableFormatter] records] numberOfRows];
+    return [[[[self tableFormatter] query] datatable] numberOfRows];
 }
 
 - (NSUInteger)columnCount {
-    return [[[self tableFormatter] records] numberOfColumns];
+    return [[[[self tableFormatter] query] datatable] numberOfColumns];
 }
 #pragma mark - Delegates
 

@@ -14,6 +14,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTDatabaseTable.h"
 #import "MTDatabaseField.h"
+#import "MTDataTable.h"
 #import "NSFileManager+Common.h"
 
 #import "RptqDocument+Extras.h"
@@ -29,7 +30,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MTLog.h"
 #import "MTQuery.h"
-#import "MTCache.h"
+//#import "MTCache.h"
 #import "MTQueryReport.h"
 
 #import "MTReportFormatter.h"
@@ -42,6 +43,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
+
 
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
@@ -105,10 +107,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     return MTPersistentStoreAliasMad;
 }
 
-- (void)cacheQueryResult:(id)queryResult {
-    [[self delegateCacheData] cacheQueryResult:queryResult];
-}
-
 - (RptqDocument *)activeDocument {
     if ([self document] == nil) {
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
@@ -161,7 +159,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
 
     MTQuery *defaultQuery = [[self defaultQuery] retain];
-    [[self defaultQuery] performQuery:^(BOOL success, NSError *error, id results) {
+    [[self defaultQuery] performQuery:^(BOOL success, NSError *error) {
         [self setDidRefresh:success];
         completion(success, error);
     }];
@@ -169,7 +167,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSURL *)cachedDataUrl {
-    return [[[[[self defaultQuery] cache] url] retain] autorelease];
+    return [[[[[self defaultQuery] datatable] url] retain] autorelease];
 }
 
 - (void)sendTo {
@@ -337,7 +335,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     
     
     MTQueryTest *queryTest = [[MTQueryTest alloc] initWithObject:databaseConnection];
-    [queryTest performQuery:^(BOOL success, NSError *error, id results) {
+    [queryTest performQuery:^(BOOL success, NSError *error) {
         
         if (!success) {
             completion(NO, error);

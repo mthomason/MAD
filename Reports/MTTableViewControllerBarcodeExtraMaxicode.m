@@ -40,11 +40,9 @@
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
     
     MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
-    [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
+    [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
-            [results retain];
-            [[self delegate] barcodeMaxicodeDidChooseSampleData:results];
-            [results release];
+            [[self delegate] barcodeMaxicodeDidChooseSampleData:[querySampleDataField datatable]];
             [[self tableView] reloadData];
         }
     }];

@@ -712,17 +712,15 @@
     }
     
     MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:[field databaseSchemaField]];
-    [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
+    [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
-            [results retain];
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");
             NSAssert(([self selectingField1] == YES && [self selectingField2] == YES) == NO, @"Can't be setting both at the same time, now can we?");
             if ([self selectingField1]) {
-                [self setSampleBarcodeData:results];
+                [self setSampleBarcodeData:[querySampleDataField datatable]];
             } else if ([self selectingField2]) {
-                [self setSampleBarcodeData2dComponent:results];
+                [self setSampleBarcodeData2dComponent:[querySampleDataField datatable]];
             }
-            [results release];
             [[self tableView] reloadData];
 
         }

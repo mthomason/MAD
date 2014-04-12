@@ -324,23 +324,23 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return result;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     [self connectWithCredentals:[self databaseConnection] completion:^(id dbconn, BOOL success, NSError *error) {
         
         if (success) {
-            MTDataTable *results = [[[self runQuery:query onProcess:dbconn] retain] autorelease];
-            completion(YES, nil, results);
+            [self runQuery:query onProcess:dbconn];
+            completion(YES, nil);
             
         } else {
-            completion(NO, error, nil);
+            completion(NO, error);
         }
         
     }];
 }
 
-- (MTDataTable *)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
-    __block NSMutableArray *results = [[NSMutableArray alloc] init];
-    __block MTDataTable *datatable = nil;
+- (void)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
+
+    __block MTDataTable *datatable = [query datatable];
     
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     
@@ -443,8 +443,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                            }
                                                          
                                                          ];
-                        
-                        datatable = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
+                        [datatable removeAllObjects];
+                        //datatable = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
                         
                         for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                             
@@ -1288,7 +1288,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
                                 [datatable addRowWithDataForFieldKeys:resultsForRow];
                                 
-                                [results addObject: resultsForRow];
                                 [resultsForRow release];
                                 
                             }
@@ -1342,8 +1341,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     dispatch_semaphore_wait(semaphoreRunQuery, DISPATCH_TIME_FOREVER);
     dispatch_release(semaphoreRunQuery);
     
-    [results release];
-    return [datatable autorelease];
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {

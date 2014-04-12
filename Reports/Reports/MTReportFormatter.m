@@ -8,7 +8,6 @@
 
 #import "MTReportFormatter.h"
 #import "MAReportDocument.h"
-#import "MTCache.h"
 #import "MTQueryReport.h"
 
 #import "SectionEnumerator.h"
@@ -95,6 +94,11 @@ NSString * const MTNullIdentifier = @"(null)";
         [self setTemporaryDataForPage:temporaryDataForPage];
         [temporaryDataForPage release];
 
+        NSArray *layoutByPage = [NSArray array];
+        [self setLayoutByPage:layoutByPage];
+        
+        NSArray *dataByPage = [NSArray array];
+        [self setDataByPage:dataByPage];
     }
     return self;
 }
@@ -133,7 +137,6 @@ NSString * const MTNullIdentifier = @"(null)";
             } else {
                 [standardUserDefaults setObject:NSStringFromCGSize(printableSize) forKey:@"MTCachedSizeVertical"];
             }
-            [standardUserDefaults setURL:[[self datasource] url] forKey:MTCachedFileUrl];
             [standardUserDefaults synchronize];
             
             [self setCachedPageSize:printableSize];

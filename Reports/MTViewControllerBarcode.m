@@ -120,9 +120,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             
             MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
-            [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
+            [querySampleDataField performQuery:^(BOOL success, NSError *error) {
                 if (success) {
-                    [optionsViewController setSampleBarcodeData:results];
+                    [optionsViewController setSampleBarcodeData:[querySampleDataField datatable]];
                     [[optionsViewController tableView] reloadData];
                 }
             }];
@@ -131,9 +131,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         if ([self queryField2] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
             MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
-            [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
+            [querySampleDataField performQuery:^(BOOL success, NSError *error) {
                 if (success) {
-                    [optionsViewController setSampleBarcodeData2dComponent:results];
+                    [optionsViewController setSampleBarcodeData2dComponent:[querySampleDataField datatable]];
                     [[optionsViewController tableView] reloadData];
                 }
             }];

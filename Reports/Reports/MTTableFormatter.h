@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MTDataFormatter.h"
 
-@class MTCache, MTQueryReport;
+@class MTQueryReport;
 
 @interface MTTableFormatter : MTDataFormatter
 

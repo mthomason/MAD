@@ -26,14 +26,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @class RptqDocument, RptqDatabase, RptqQuery, RptqQueryField, RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
         RptqQueryCache, RptqUserCredentals, MTDatabaseConnection, MTQuery, MTDataTable;
 
-@protocol MTDatabaseCacheProtocol <NSObject>
-@required
-- (void)cacheQueryResult:(id)queryResult;
-@end
-
 @interface MTDatabase : NSObject
 
-@property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
 @property (nonatomic, retain) MTDatabaseConnection *databaseConnection;
 
 + (id)databaseFactory:(MTDatabaseConnection *)connection;
@@ -65,7 +59,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)sqlAggregateFunctionMax;
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField;
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion;
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion;
 
 - (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection
                          completion:(void (^)(BOOL success, NSError *error, NSString *username, NSString *password))completion;

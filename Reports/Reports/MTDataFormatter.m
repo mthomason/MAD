@@ -11,7 +11,6 @@
 #endif
 
 #import "MTDataFormatter.h"
-#import "MTCache.h"
 
 #import "SectionEnumerator.h"
 #import "MTQuery.h"
@@ -25,8 +24,6 @@
 #import "RptqQuery+Extras.h"
 #import "MTDataTable.h"
 
-NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
-
 @interface MTDataFormatter ()
 
 @end
@@ -37,7 +34,6 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
     self = [super init];
     if (self) {
         [self setQuery:query];
-        [self setDatasource:[query cache]];
         [self setDidRefresh:NO];
     }
     return self;
@@ -55,21 +51,14 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
     
     BOOL updatedData = NO;
     
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    NSAssert([[self query] datatable] != nil, @"We need a datatable way before here");
     
-    BOOL cacheAgain = [[[self datasource] url] isEqual:[standardUserDefaults objectForKey:MTCachedFileUrl]] == NO;
+    NSURL *url = [[[self query] datatable] url];
+    BOOL cacheExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+
     
-    if (cacheAgain || [self didRefresh]) {
+    if (cacheExist == YES || [self didRefresh]) {
         updatedData = YES;
-        
-        [standardUserDefaults setURL:[[self datasource] url] forKey:MTCachedFileUrl];
-        [standardUserDefaults synchronize];
-        
-        MTDataTable *dataTable = [[self datasource] results];
-        if (dataTable == nil) {
-            dataTable = [[MTDataTable alloc] initWithNumberOfColumns:0];
-        }
-        [self setRecords:dataTable];
         
     }
     return updatedData;
@@ -77,7 +66,7 @@ NSString * const MTCachedFileUrl = @"MTCachedFileUrl";
 
 - (NSDictionary *)dataForRow:(NSUInteger)row {
     NSUInteger index = row;
-    return [[self records] objectAtIndex:index];
+    return [[[self query] datatable] objectAtIndex:index];
 }
 
 @end

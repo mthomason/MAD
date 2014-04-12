@@ -19,7 +19,6 @@
 #import "RptqQueryCache.h"
 #import "NSError+UserInterface.h"
 #import "MTReportFormatter.h"
-#import "MTCache.h"
 #import "MTQuery.h"
 #import "MTPaper.h"
 #import "MTPair.h"

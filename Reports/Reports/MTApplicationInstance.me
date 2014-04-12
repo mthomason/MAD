@@ -29,9 +29,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"4.0.22";
-NSString * const MTGlobalBundleShortVersion                         = @"4.0.22";
-NSString * const MTGlobalBundleRev                                  = @"1004";
+NSString * const MTGlobalBundleVersion                              = @"4.0.23";
+NSString * const MTGlobalBundleShortVersion                         = @"4.0.23";
+NSString * const MTGlobalBundleRev                                  = @"1005";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -176,7 +176,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
          [self setCurrentDocument:url];
          [[self documents] setObject:managedDocument forKey:url];
          [self setReportState:MTReportStateOpen];
-         [managedDocument setDelegateCacheData:(id<MTDatabaseCacheProtocol>)self];
          completionHandler([managedDocument autorelease], success);
      }];
 }
@@ -433,19 +432,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     NSString *storyboardName = [MTApplicationInstance storyboardName];
     UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:storyboardName bundle:nil] retain];
     return [storyboard autorelease];
-}
-
-- (void)cacheQueryResult:(id)queryResult {
-    NSError *error = nil;
-    NSData *data = [NSPropertyListSerialization dataWithPropertyList:queryResult format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
-    NSURL *url = [[self activeDocument] cachedDataUrl];
-    if (url) {
-        [data writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-        if (error) {
-            error = nil;
-            [data writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&error];
-        }
-    }
 }
 
 + (NSAttributedString *)waterMarkStringMad {

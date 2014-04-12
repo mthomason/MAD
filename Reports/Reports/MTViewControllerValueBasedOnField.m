@@ -97,11 +97,9 @@
                                                                     fromObjectContext: objectContext];
         
         MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:field];
-        [querySampleDataField performQuery:^(BOOL success, NSError *error, id results) {
+        [querySampleDataField performQuery:^(BOOL success, NSError *error) {
             if (success) {
-                [results retain];
-                [self setPickerData:results];
-                [results release];
+                [self setPickerData:[querySampleDataField datatable]];
                 [[self pickerView] reloadAllComponents];
             } else {
                 [error presentErrorToUser];

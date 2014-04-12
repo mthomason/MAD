@@ -16,7 +16,6 @@
 #import "MTQueryReport.h"
 #import "MTQueryMaxFieldLength.h"
 
-#import "MTCache.h"
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
 
@@ -65,33 +64,34 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
         [self setFieldKeys:fieldKeys];
 
-        MTCache *cache = nil;
+        MTDataTable *datatable = nil;
         RptqUserCredentals *userCredentals = nil;
         MTDatabaseConnection *databaseConnection = nil;
-        
+
+        NSManagedObjectID *objectId = nil;
         if ([object isKindOfClass:[RptqDatabase class]]) {
 
-            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            objectId = [object objectID];
             userCredentals = [(RptqDatabase *)object ownedByUser];
 
         } else if ([object isKindOfClass:[RptqQuery class]]) {
             
-            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            objectId = [object objectID];
             userCredentals = [[(RptqQuery *)object inDatabase] ownedByUser];
 
         } else if ([object isKindOfClass:[RptqDatabaseSchemaTable class]]) {
             
-            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            objectId = [object objectID];
             userCredentals = [[(RptqDatabaseSchemaTable *)object inDatabase] ownedByUser];
             
         } else if ([object isKindOfClass:[RptqDatabaseSchemaField class]]) {
 
-            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+            objectId = [object objectID];
             userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
             
         } else if ([object isKindOfClass:[RptqUserCredentals class]]) {
-        
-            cache = [[MTCache alloc] initWithObjectID:[object objectID]];
+
+            objectId = [object objectID];
             userCredentals = object;
             
         } else if ([object isKindOfClass:[MTDatabaseConnection class]]) {
@@ -120,8 +120,12 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
             NSAssert(false, @"What type of query do you want?");
         }
         
-        [self setCache:cache];
+        if (objectId) {
+            NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
+            datatable = [[MTDataTable alloc] initWithId:hash];
+        }
 
+        [self setDatatable:datatable];
 
         if (databaseConnection == nil) {
             NSAssert(userCredentals != nil, @"What type of query do you want?");
@@ -171,12 +175,12 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     return result;
 }
 
-- (void)performQuery:(void (^)(BOOL success, NSError *error, id results))completion {
+- (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     
     @autoreleasepool {
-        [[self database] executeQuery:self completion:^(BOOL success, NSError *error, MTDataTable *results) {
-            [[self cache] cacheDataTable: results];
-            completion(success, error, results);
+        [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
+            [[self datatable] cache];
+            completion(success, error);
         }];
     }
 }
@@ -188,9 +192,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 }
 
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error {
-    @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
+    return @"";
 }
 
 - (NSString *)getSqlForAllFieldsInTable:(RptqDatabaseSchemaTable *)table {

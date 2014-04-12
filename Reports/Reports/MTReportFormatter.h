@@ -11,7 +11,7 @@
 
 extern NSString * const MTNullIdentifier;
 
-@class MTCache, RptqDocument;
+@class RptqDocument;
 
 @interface MTReportFormatter : MTTableFormatter
 

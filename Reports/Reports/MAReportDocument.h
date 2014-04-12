@@ -29,9 +29,6 @@ extern NSString * const MTReportGroupFooter;
 @class MTQuery, MTReportFormatter, MTQueryReport;
 
 @interface MAReportDocument : MADocument
-    <MTDatabaseCacheProtocol>
-
-@property (nonatomic, assign) id <MTDatabaseCacheProtocol> delegateCacheData;
 
 @property (nonatomic, retain) MTReportFormatter *reportFormatter;
 

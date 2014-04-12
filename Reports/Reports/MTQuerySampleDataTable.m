@@ -17,9 +17,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDatabaseField.h"
-#import "MTCache.h"
 #import "MTDataTable.h"
-//#import "MTQuery.h"
 
 @interface MTQuerySampleDataTable ()
 
@@ -63,15 +61,15 @@
     
     MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
 
-    [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl, MTDataTable *widths) {
-        if (success && [widths numberOfRows] > 0) {
+    [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
+        if (success && [[queryMaxFieldLenght datatable] numberOfRows] > 0) {
             
             [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
                 
                 NSString *safeTableName = [[self database] tableAliasForTable:[field inTable]];
                 NSString *okey = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
                 NSString *ckey = [[self database] fieldAliasForField:field];
-                NSDictionary *widthsByField = [widths objectAtIndex:0];
+                NSDictionary *widthsByField = [[queryMaxFieldLenght datatable] objectAtIndex:0];
                 NSInteger maxSize = [[widthsByField objectForKey:ckey] integerValue];
                 MTDatabaseField *f = [[self fields] objectForKey:okey];
                 f.calculatedWidth = maxSize;

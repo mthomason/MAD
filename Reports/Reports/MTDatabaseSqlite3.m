@@ -174,17 +174,16 @@
     return result;
 }
 
-- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *, MTDataTable *))completion {
-    MTDataTable *results = [[[self resultsForQuery:query] retain] autorelease];
-    completion(YES, nil, results);
+- (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
+    [self resultsForQuery:query];
+    completion(YES, nil);
 }
 
-- (MTDataTable *)resultsForQuery:(MTQuery *)query {
+- (void)resultsForQuery:(MTQuery *)query {
     NSError *error = nil;
     NSString *queryString = [query getSqlWithError:&error];
     
-//    NSMutableArray *results = [[NSMutableArray alloc] init];
-    MTDataTable *results = nil;
+    //MTDataTable *results = nil;
     BOOL success = NO;
 	sqlite3_stmt *statement;
     const char *queryStartChar = [queryString UTF8String];
@@ -196,7 +195,8 @@
         success = YES;
 
         int numberOfColumns = sqlite3_column_count(statement);
-        results = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
+
+        [[query datatable] removeAllObjects];
         
         NSUInteger rowCounter = 0;
         while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -228,7 +228,7 @@
                         [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
                         [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
                         [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
-                        [results addColumn:dataColumn];
+                        [[query datatable] addColumn:dataColumn];
                         [dataColumn release];
                     }
                     
@@ -282,7 +282,7 @@
                 }
             }
             
-            [results addRowWithDataForFieldKeys:resultsForRow];
+            [[query datatable] addRowWithDataForFieldKeys:resultsForRow];
             [resultsForRow release];
             
             
@@ -294,7 +294,6 @@
     }
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
-    return [results autorelease];
 }
 
 - (NSString *)identifier {

@@ -42,10 +42,10 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIDevice+Hack.h"
 #import "MTPaper.h"
-#import "MTCache.h"
 #import "RptqQuery+Extras.h"
 
 #import "MTReportFormatter.h"
+#import "MTDataTable.h"
 
 #import "MTBarcode.h"
 #import "MTFont.h"

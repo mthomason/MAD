@@ -11,7 +11,6 @@
 #endif
 
 #import "MTTableFormatter.h"
-#import "MTCache.h"
 
 #import "SectionEnumerator.h"
 #import "MTQuery.h"
@@ -39,7 +38,6 @@
     if (self) {
 
         [self setQuery:query];
-        [self setDatasource:[query cache]];
         [self setDidRefresh:NO];
     }
     return self;
@@ -62,7 +60,7 @@
         NSArray *sortDescriptors = [madQuery sortDescriptors];
         [self setSortDescriptorsByGroupSorted:sortDescriptors];
         
-        NSArray *sortedObjects = [[self records] sortedRepresentationUsingDescriptors:[self sortDescriptorsByGroupSorted]];
+        NSArray *sortedObjects = [[[self query] datatable] sortedRepresentationUsingDescriptors:[self sortDescriptorsByGroupSorted]];
         [self setRecordsSorted:sortedObjects];
 
         updatedData = YES;
