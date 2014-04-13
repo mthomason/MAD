@@ -14,5 +14,4 @@
 
 void mad_swizzle_selectors(Class class, SEL originalSelector, SEL swizzledSelector, dispatch_once_t *onceToken);
 
-
 #endif
