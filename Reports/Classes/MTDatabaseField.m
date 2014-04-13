@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTDatabaseField.h"
 
 @interface MTDatabaseField ()
@@ -13,12 +17,6 @@
 @end
 
 @implementation MTDatabaseField
-
-- (void)dealloc {
-    [_label release];
-    [_name release];
-    [super dealloc];
-}
 
 - (id)initWithName:(NSString *)name {
     self = [super init];

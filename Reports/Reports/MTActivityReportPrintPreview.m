@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTActivityReportPrintPreview.h"
 #import "UIDevice+Hack.h"
 
@@ -19,18 +23,12 @@
 
 @implementation MTActivityReportPrintPreview
 
-- (void)dealloc {
-    [_interactionController release];
-    [_pdfurl release];
-    [super dealloc];
-}
-
 - (NSString *)activityType {
     return @"MTActivityReportPrintPreview";
 }
 
 - (NSString *)activityTitle {
-    return @"Print Preview";
+    return NSLocalizedString(@"Print Preview", @"Print Preview");
 }
 
 - (UIImage *)activityImage {
@@ -55,7 +53,7 @@
 }
 
 - (void)performActivity {
-    UIDocumentInteractionController *c = [[UIDocumentInteractionController  interactionControllerWithURL:[self pdfurl]] retain];
+    UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:[self pdfurl]];
     [c setDelegate:self];
     [self setInteractionController:c];
     [[self delegate] prepareForInteractionController:c withCompletionHandler:^(BOOL success) {
@@ -63,7 +61,6 @@
             [c presentPreviewAnimated:YES];
         }
     }];
-    [c release];
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
@@ -71,8 +68,8 @@
 }
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
-    UIViewController *result = [[[self delegate] previewViewControllerForInteractionController:controller] retain];
-    return [result autorelease];
+    UIViewController *result = [[self delegate] previewViewControllerForInteractionController:controller];
+    return result;
 }
 
 @end
