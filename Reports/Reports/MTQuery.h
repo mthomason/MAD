@@ -18,9 +18,7 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
 
-@class RptqQuery, RptqDatabase, RptqDocument, RptqQueryField, MTDatabase, RptqQueryCache,
-        RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
-        MTDatabaseConnection, MTDataTable;
+@class MTDatabase, MTDatabaseConnection, MTDataTable;
 
 @interface MTQuery : NSObject
 

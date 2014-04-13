@@ -117,7 +117,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)formatForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage {
-    
+#warning only run when sizes change... Should not depend on super... Always run users, and let super do its thing, like only running on refresh.
     if ([super format]) {
 
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];

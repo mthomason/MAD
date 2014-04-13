@@ -11,18 +11,8 @@
 #endif
 
 #import "MTTableFormatter.h"
-
-#import "SectionEnumerator.h"
 #import "MTQuery.h"
 #import "MTQueryReport.h"
-
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqQueryGroup.h"
-#import "RptqQuery.h"
-
-#import "RptqQuery+Extras.h"
-
 #import "MTDataTable.h"
 
 @interface MTTableFormatter ()

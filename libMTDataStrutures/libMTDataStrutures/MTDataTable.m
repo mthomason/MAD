@@ -11,7 +11,6 @@
 #endif
 
 #import "MTDataTable.h"
-#import "MTDataTableLocation.h"
 #import "MTDataColumn.h"
 
 @interface MTDataTable ()
@@ -329,12 +328,6 @@
     [[self sortIndex] addObject:row];
     NSUInteger numberOfRows = [self rowCounter] + 1;
     [self setRowCounter:numberOfRows];
-}
-
-- (id)value:(MTDataTableLocation *)location {
-    NSString *key =[self columnKeys][[location column]];
-    MTDataColumn *column = [self columns][key];
-    return [column objectAtIndex:[location row]];
 }
 
 - (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors {

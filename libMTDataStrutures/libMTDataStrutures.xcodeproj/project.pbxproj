@@ -37,11 +37,8 @@
 		4C7674E618F2F43A007CEBD3 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; };
 		4C7674E718F2F43E007CEBD3 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; };
 		4C7674E818F2F491007CEBD3 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; };
-		4C80F2FE18F2253E00AA5773 /* MTDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C80F2FD18F2253E00AA5773 /* MTDataColumn.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C80F30118F25E6000AA5773 /* MTDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C80F30018F25E6000AA5773 /* MTDataTableLocation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C860BCD167F658A00AC1904 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; };
 		4C860BCE167F658A00AC1904 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; };
-		4CF7EBDF18F1B0F6003CA6BD /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF7EBDD18F1B0F6003CA6BD /* MTDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,10 +103,6 @@
 		4C7674D518F2F391007CEBD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C7674D718F2F391007CEBD3 /* MTGraphTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTGraphTest.m; sourceTree = "<group>"; };
 		4C7674D918F2F391007CEBD3 /* MTGraphTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MTGraphTest-Prefix.pch"; sourceTree = "<group>"; };
-		4C80F2FC18F2253E00AA5773 /* MTDataColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataColumn.h; sourceTree = "<group>"; };
-		4C80F2FD18F2253E00AA5773 /* MTDataColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataColumn.m; sourceTree = "<group>"; };
-		4C80F2FF18F25E6000AA5773 /* MTDataTableLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableLocation.h; sourceTree = "<group>"; };
-		4C80F30018F25E6000AA5773 /* MTDataTableLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableLocation.m; sourceTree = "<group>"; };
 		4C860BC9167F658900AC1904 /* NSNumber+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+Extras.h"; sourceTree = "<group>"; };
 		4C860BCA167F658900AC1904 /* NSNumber+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+Extras.m"; sourceTree = "<group>"; };
 		4C860BCB167F658900AC1904 /* NSNumber+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+MTProtocol.h"; sourceTree = "<group>"; };
@@ -123,8 +116,6 @@
 		4CC7C25918F2EB4000784F32 /* libMTDataStrutures_Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libMTDataStrutures_Test.m; sourceTree = "<group>"; };
 		4CC7C25B18F2EB4000784F32 /* libMTDataStrutures Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libMTDataStrutures Tests-Prefix.pch"; sourceTree = "<group>"; };
 		4CC7C27118F2EE9000784F32 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		4CF7EBDD18F1B0F6003CA6BD /* MTDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTable.m; sourceTree = "<group>"; };
-		4CF7EBDE18F1B0F6003CA6BD /* MTDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,7 +186,6 @@
 		4C4C6F01167635B8004A3B04 /* libMTDataStrutures */ = {
 			isa = PBXGroup;
 			children = (
-				4C80F2FB18F2252900AA5773 /* DataTable */,
 				4C8ECDDF16BF63E2003D3B30 /* MTProtocolEnumerator.h */,
 				4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */,
 				4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */,
@@ -265,19 +255,6 @@
 				4C7674D918F2F391007CEBD3 /* MTGraphTest-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4C80F2FB18F2252900AA5773 /* DataTable */ = {
-			isa = PBXGroup;
-			children = (
-				4CF7EBDE18F1B0F6003CA6BD /* MTDataTable.h */,
-				4CF7EBDD18F1B0F6003CA6BD /* MTDataTable.m */,
-				4C80F2FC18F2253E00AA5773 /* MTDataColumn.h */,
-				4C80F2FD18F2253E00AA5773 /* MTDataColumn.m */,
-				4C80F2FF18F25E6000AA5773 /* MTDataTableLocation.h */,
-				4C80F30018F25E6000AA5773 /* MTDataTableLocation.m */,
-			);
-			name = DataTable;
 			sourceTree = "<group>";
 		};
 		4CC7C25318F2EB4000784F32 /* Tests */ = {
@@ -424,13 +401,10 @@
 			files = (
 				4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */,
 				4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */,
-				4CF7EBDF18F1B0F6003CA6BD /* MTDataTable.m in Sources */,
 				4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */,
-				4C80F30118F25E6000AA5773 /* MTDataTableLocation.m in Sources */,
 				4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */,
 				4C2279A21676C2AB00B1150D /* MTPair.m in Sources */,
 				4C2279A51677092E00B1150D /* MTObject.m in Sources */,
-				4C80F2FE18F2253E00AA5773 /* MTDataColumn.m in Sources */,
 				4C2279B01677AFFB00B1150D /* MTStack.m in Sources */,
 				4C2279B31677B00F00B1150D /* MTQueue.m in Sources */,
 				4C860BCD167F658A00AC1904 /* NSNumber+Extras.m in Sources */,

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MTDataColumn, MTDataTableLocation;
+@class MTDataColumn;
 
 @interface MTDataTable : NSObject
     <NSCoding>
@@ -18,9 +18,12 @@
 @property (nonatomic, strong, readwrite) NSURL *url;
 
 - (id)initWithId:(NSUInteger)objectId;
-- (void)setObjectId:(NSUInteger)objectId;   //Object id needs to be set for caching.
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
-- (id)initWithPlist:(id)plist;
+
+- (void)setObjectId:(NSUInteger)objectId;   //Object id needs to be set for caching.
+
+- (void)cache;
+- (void)removeAllObjects;
 
 - (id)plist;
 
@@ -29,8 +32,6 @@
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
 
 - (id)objectAtIndex:(NSInteger)index;
-- (id)value:(MTDataTableLocation *)location;
-
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
 
 - (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors;
@@ -38,9 +39,5 @@
 - (NSUInteger)count;
 - (NSUInteger)numberOfColumns;
 - (NSUInteger)numberOfRows;
-
-- (void)cache;
-
-- (void)removeAllObjects;
 
 @end

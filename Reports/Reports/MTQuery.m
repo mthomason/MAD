@@ -142,8 +142,8 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 }
 
 + (id)queryFactory:(id)object {
-    id result = nil;
 
+    id result = nil;
     if ([object isKindOfClass:[RptqQuery class]]) {
         
         result = [[MTQueryReport alloc] initWithObject:object];

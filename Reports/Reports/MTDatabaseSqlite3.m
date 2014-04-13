@@ -175,11 +175,6 @@
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
-    [self resultsForQuery:query];
-    completion(YES, nil);
-}
-
-- (void)resultsForQuery:(MTQuery *)query {
     NSError *error = nil;
     NSString *queryString = [query getSqlWithError:&error];
     
@@ -189,20 +184,20 @@
     const char *queryStartChar = [queryString UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
     
-
+    
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
-
+        
         success = YES;
-
+        
         int numberOfColumns = sqlite3_column_count(statement);
-
+        
         [[query datatable] removeAllObjects];
         
         NSUInteger rowCounter = 0;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             if (rowCounter == 0) {
                 for (NSUInteger columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
-
+                    
                     @autoreleasepool {
                         NSString *fieldName = [query fieldKeys][columnCounter];
                         MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:fieldName];
@@ -238,7 +233,7 @@
             NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
             
             for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
-
+                
                 
                 int affentyType = sqlite3_column_type(statement, colCtr);   //http://www.sqlite.org/c3ref/c_blob.html
                 id value = nil;
@@ -294,7 +289,9 @@
     }
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
+    completion(success, error);
 }
+
 
 - (NSString *)identifier {
     return [MTDatabaseConnectionSqlite3 identifier];
