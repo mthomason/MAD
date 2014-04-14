@@ -39,6 +39,8 @@
 		4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0AFCE816B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
+		4C0CAB4918FC618F0044D866 /* MTArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C0CAB4A18FC618F0044D866 /* MTArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0E7721163B5AEC003B951E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; };
 		4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; };
 		4C0E7725163B5AEC003B951E /* MTReportDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0B014B4F132005DCE49 /* MTReportDesignerViewController.m */; };
@@ -1583,6 +1585,8 @@
 		4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
 		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewTableHeader.m; sourceTree = "<group>"; };
+		4C0CAB4718FC618F0044D866 /* MTArrayCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayCaching.h; sourceTree = "<group>"; };
+		4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayCaching.m; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
 		4C0EF6CD178A96BC007BF2AE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewerOS6.storyboard; sourceTree = "<group>"; };
@@ -2885,6 +2889,8 @@
 		4C11BCF418DD4DB7001E3D33 /* Formatters */ = {
 			isa = PBXGroup;
 			children = (
+				4C0CAB4718FC618F0044D866 /* MTArrayCaching.h */,
+				4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */,
 				4C11BD1C18E08AEA001E3D33 /* MTDataFormatter.h */,
 				4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */,
 				4C11BCF518DD4DE7001E3D33 /* MTTableFormatter.h */,
@@ -5569,6 +5575,7 @@
 				4C6C9B281733681C000E1161 /* MTReportDesignerSectionViewLayoutLiquid.m in Sources */,
 				4CB53B4C17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
 				4C8BA95D17417FC900B646E2 /* RptqQueryField+Extras.m in Sources */,
+				4C0CAB4A18FC618F0044D866 /* MTArrayCaching.m in Sources */,
 				4CA92ADC17DAFF1700D654C7 /* MTReportDesignerObjectSelectorViewController.m in Sources */,
 				4CABE4A41837DF80007EDD9D /* RptqQueryGroup.m in Sources */,
 				4C23FAF518FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m in Sources */,
@@ -5999,6 +6006,7 @@
 				4C23FBB418FAE4F7009F234F /* MTPaperB1.m in Sources */,
 				4C8155C017009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m in Sources */,
 				4C23FB3518FADEBB009F234F /* UIApplication+Extras.m in Sources */,
+				4C0CAB4918FC618F0044D866 /* MTArrayCaching.m in Sources */,
 				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */,
 				4C23FBD818FAE4F7009F234F /* MTPaperC8.m in Sources */,

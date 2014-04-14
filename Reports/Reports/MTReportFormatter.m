@@ -581,11 +581,7 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL pageFooterIsVisable = [[pageFooterSection visibility] boolValue];
     CGFloat pageFooterSectionHeight = pageFooterIsVisable ? [[pageFooterSection layoutHeight] floatValue] : CGSizeZero.height;
     
-    //if (CGRectIsEmpty([self printableRect])) {
     pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);
-    //} else {
-    //    pageRect = [self paperRect];
-    //}
     
     if ([self printableSpaceUsedPageHeight] + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
         

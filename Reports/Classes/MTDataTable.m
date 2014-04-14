@@ -225,7 +225,6 @@
     if ([self url]) {
         NSDataWritingOptions mask = NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen;
         [cache writeToURL:[self url] options:mask error:&error];
-        //[self setCachedPlistSerialized:nil];
         if (error) {
             NSLog(@"Error: %@", error);
             error = nil;
