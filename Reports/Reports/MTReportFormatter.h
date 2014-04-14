@@ -20,8 +20,8 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic, retain, readonly) NSArray *dataByPage;
 @property (nonatomic, retain, readonly) NSDictionary *dataByGroup;
 
-- (id)initWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout;
-+ (id)reportFormatterWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout;
+- (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout;
++ (id)reportFormatterWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout;
 
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;

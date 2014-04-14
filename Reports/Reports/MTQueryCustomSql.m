@@ -14,4 +14,16 @@
 
 @implementation MTQueryCustomSql
 
+- (id)initWithObject:(id)object {
+    self = [super initWithObject:object];
+    if (self) {
+        
+        NSAssert([object isKindOfClass:[NSString class]], @"MTQueryCustomSql expects NSString.");
+        
+        [self setExpectsResults:YES];
+        
+    }
+    return self;
+}
+
 @end

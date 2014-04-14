@@ -26,7 +26,7 @@ extern NSString * const MTReportFooter;
 extern NSString * const MTReportGroupHeader;
 extern NSString * const MTReportGroupFooter;
 
-@class MTQuery, MTReportFormatter, MTQueryReport;
+@class MTQuery, MTReportFormatter, MTQueryFull;
 
 @interface MAReportDocument : MADocument
 
@@ -54,7 +54,7 @@ extern NSString * const MTReportGroupFooter;
 
 - (NSURL *)cachedDataUrl;
 
-- (MTQueryReport *)defaultQuery;
+- (MTQueryFull *)defaultQuery;
 
 @end
 

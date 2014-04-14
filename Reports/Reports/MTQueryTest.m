@@ -13,16 +13,28 @@
 #import "MTQueryTest.h"
 #import "MTDatabase.h"
 #import "RptqUserCredentals.h"
+#import "MTDataTable.h"
+#import "MTDatabaseConnection.h"
 
 @implementation MTQueryTest
 
 - (id)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
-        Class classRptqUserCredentals = [RptqUserCredentals class];
-        if ([object isKindOfClass:classRptqUserCredentals]) {
-            [self setQueryObject:object];
-        }
+        
+        NSAssert([object isKindOfClass:[MTDatabaseConnection class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
+        
+        [self setExpectsResults:YES];
+
+        NSManagedObjectID *objectId = [object objectID];
+        NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
+        MTDataTable *datatable = [[MTDataTable alloc] initWithId:hash];
+        [self setDatatable:datatable];
+    
+        MTDatabase *db = [MTDatabase databaseFactory:object];
+        [self setDatabase:db];
+        [self setQueryObject:object];
+        
     }
     return self;
 }

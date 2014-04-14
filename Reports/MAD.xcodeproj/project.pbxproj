@@ -262,8 +262,8 @@
 		4C11BCFC18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BCFF18DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BD0018DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C11BD0318DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C11BD0418DDEA4B001E3D33 /* MTQueryReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BD0318DDEA4B001E3D33 /* MTQueryFull.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryFull.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C11BD0418DDEA4B001E3D33 /* MTQueryFull.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD0218DDEA4B001E3D33 /* MTQueryFull.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BD1E18E08AEA001E3D33 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BD1F18E08AEA001E3D33 /* MTDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */; };
@@ -1599,8 +1599,8 @@
 		4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySampleDataField.m; sourceTree = "<group>"; };
 		4C11BCFD18DDE8C0001E3D33 /* MTQuerySampleDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySampleDataTable.h; sourceTree = "<group>"; };
 		4C11BCFE18DDE8C0001E3D33 /* MTQuerySampleDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySampleDataTable.m; sourceTree = "<group>"; };
-		4C11BD0118DDEA4B001E3D33 /* MTQueryReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryReport.h; sourceTree = "<group>"; };
-		4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryReport.m; sourceTree = "<group>"; };
+		4C11BD0118DDEA4B001E3D33 /* MTQueryFull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryFull.h; sourceTree = "<group>"; };
+		4C11BD0218DDEA4B001E3D33 /* MTQueryFull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryFull.m; sourceTree = "<group>"; };
 		4C11BD1C18E08AEA001E3D33 /* MTDataFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataFormatter.h; sourceTree = "<group>"; };
 		4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataFormatter.m; sourceTree = "<group>"; };
 		4C11C7191836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeDataMatrixIso16022.h; path = Barcodes/Barcodes/MTBarcodeDataMatrixIso16022.h; sourceTree = "<group>"; };
@@ -2899,8 +2899,8 @@
 		4C11BD0518DE01B1001E3D33 /* Report Query */ = {
 			isa = PBXGroup;
 			children = (
-				4C11BD0118DDEA4B001E3D33 /* MTQueryReport.h */,
-				4C11BD0218DDEA4B001E3D33 /* MTQueryReport.m */,
+				4C11BD0118DDEA4B001E3D33 /* MTQueryFull.h */,
+				4C11BD0218DDEA4B001E3D33 /* MTQueryFull.m */,
 			);
 			name = "Report Query";
 			sourceTree = "<group>";
@@ -5431,7 +5431,7 @@
 				4C23FBCB18FAE4F7009F234F /* MTPaperC1.m in Sources */,
 				4C0E7798163B5AEC003B951E /* RptqQueryLinks+Extras.m in Sources */,
 				4C23FC1518FAE633009F234F /* MTDatabaseTable.m in Sources */,
-				4C11BD0418DDEA4B001E3D33 /* MTQueryReport.m in Sources */,
+				4C11BD0418DDEA4B001E3D33 /* MTQueryFull.m in Sources */,
 				4C23FC0F18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */,
 				4C23FB0318FADCE4009F234F /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
 				4C0E7799163B5AEC003B951E /* MTRulerView.m in Sources */,
@@ -5860,7 +5860,7 @@
 				4C85C6A714FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
 				4C85C6AA14FF72F3003785AC /* MTReportViewerController.m in Sources */,
 				4CCD8DB8150386CB002B9E77 /* UIColor+PaperPatterns.m in Sources */,
-				4C11BD0318DDEA4B001E3D33 /* MTQueryReport.m in Sources */,
+				4C11BD0318DDEA4B001E3D33 /* MTQueryFull.m in Sources */,
 				4CABE4AB1837DF81007EDD9D /* RptqQueryTable.m in Sources */,
 				4CC24AA51503E3AB00C4EE98 /* MTGradientView.m in Sources */,
 				4C87407A15052D3D007FC473 /* MTClipboardView.m in Sources */,

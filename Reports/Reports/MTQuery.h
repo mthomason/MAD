@@ -27,18 +27,17 @@ extern NSString * const MTQueryKeyObject;
 
 @interface MTQuery : NSObject
 
-@property (nonatomic, strong, readonly) MTDatabase *database;
-@property (nonatomic, strong, readonly) MTDatabaseConnection *credentials;
+@property (nonatomic, strong, readwrite) MTDatabase *database;
 @property (nonatomic, strong, readwrite) MTDataTable *datatable;
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;
+@property (nonatomic, assign) BOOL expectsResults;
 
 - (id)initWithQueryType:(MTQueryType)type object:(id)object;
-- (id)initWithObject:(id)object;
 
 - (NSString *)getSqlWithError:(NSError **)error;
-- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;
+- (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
 
@@ -46,9 +45,9 @@ extern NSString * const MTQueryKeyObject;
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
+- (id)initWithObject:(id)object;
 - (NSArray *)sortedHasQueryGroups;
 - (NSArray *)sortDescriptors;
-
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 @end

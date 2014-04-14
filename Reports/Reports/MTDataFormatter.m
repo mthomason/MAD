@@ -14,7 +14,7 @@
 
 #import "SectionEnumerator.h"
 #import "MTQuery.h"
-#import "MTQueryReport.h"
+#import "MTQueryFull.h"
 
 #import "RptqDocument.h"
 #import "RptqDatabase.h"

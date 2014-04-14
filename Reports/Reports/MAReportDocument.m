@@ -122,7 +122,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             [query release];
             
             if ([self reportFormatter] == nil) {
-                MTQueryReport *defaultQuery = [self defaultQuery];
+                MTQueryFull *defaultQuery = [self defaultQuery];
                 RptqDocument *activeDocument = [self activeDocument];
                 MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithQuery:defaultQuery
                                                                                         andLayout:activeDocument] retain];
@@ -144,8 +144,8 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }];
 }
 
-- (MTQueryReport *)defaultQuery {
-    MTQueryReport *defaultQuery = [[self reportQueries][@"defaultq"] retain];
+- (MTQueryFull *)defaultQuery {
+    MTQueryFull *defaultQuery = [[self reportQueries][@"defaultq"] retain];
     return [defaultQuery autorelease];
 }
 

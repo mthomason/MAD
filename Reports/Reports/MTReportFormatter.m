@@ -8,7 +8,7 @@
 
 #import "MTReportFormatter.h"
 #import "MAReportDocument.h"
-#import "MTQueryReport.h"
+#import "MTQueryFull.h"
 
 #import "SectionEnumerator.h"
 
@@ -72,7 +72,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [super dealloc];
 }
 
-- (id)initWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout {
+- (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
     self = [super initWithQuery:query];
     if (self) {
         
@@ -103,7 +103,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
-+ (id)reportFormatterWithQuery:(MTQueryReport *)query andLayout:(RptqDocument *)layout {
++ (id)reportFormatterWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query andLayout:layout];
     return [result autorelease];
 }

@@ -15,6 +15,9 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
 #import "Constants.h"
+#import "MTDataTable.h"
+#import "RptqDatabase.h"
+#import "MTDatabaseConnection.h"
 
 @interface MTQuerySampleDataField ()
 
@@ -22,16 +25,30 @@
 
 @implementation MTQuerySampleDataField
 
+
 - (id)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
-        Class classRptqQuery = [RptqDatabaseSchemaField class];
-        if ([object isKindOfClass:classRptqQuery]) {
-            [self setQueryObject:object];
-        }
+        
+        NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]], @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
+        
+        [self setExpectsResults:YES];
+
+        NSManagedObjectID *objectId = [object objectID];
+        NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
+        MTDataTable *datatable = [[MTDataTable alloc] initWithId:hash];
+        [self setDatatable:datatable];
+        
+        RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        [self setDatabase:db];
+        [self setQueryObject:object];
+        
     }
     return self;
 }
+
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];

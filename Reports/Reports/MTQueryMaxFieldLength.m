@@ -13,11 +13,41 @@
 #import "MTQueryMaxFieldLength.h"
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
+#import "RptqDatabase.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+#import "MTDataTable.h"
+#import "MTDatabaseConnection.h"
 
 @implementation MTQueryMaxFieldLength
+
+- (id)initWithObject:(id)object {
+    self = [super initWithObject:object];
+    if (self) {
+        
+        NSAssert([object respondsToSelector:@selector(array)], @"MTQueryMaxFieldLength expects to respond to array (hint, send an order set..");
+
+        NSArray *array = [object array];
+        
+        NSAssert([[array firstObject] isKindOfClass:[RptqDatabaseSchemaField class]], @"Need RptqDatabaseSchemaField's!");
+
+        [self setExpectsResults:YES];
+
+        [self setQueryObject: array];
+        RptqDatabaseSchemaField *field = [array firstObject];
+        
+        MTDataTable *datatable = [[MTDataTable alloc] initWithId:[field hash]];
+        [self setDatatable:datatable];
+
+        RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        [self setDatabase:db];
+    }
+    
+    return self;
+}
 
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
