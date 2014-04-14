@@ -7,7 +7,6 @@
 //
 
 #import "MTViewControllerBarcodeOptions.h"
-#import "MTQuerySampleDataField.h"
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMicroQrCode.h"
@@ -711,7 +710,7 @@
         [[self delegate] didSetField2:field];
     }
     
-    MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:[field databaseSchemaField]];
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:[field databaseSchemaField]];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");

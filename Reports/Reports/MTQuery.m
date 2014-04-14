@@ -15,6 +15,8 @@
 #import "MTQuerySampleDataTable.h"
 #import "MTQueryReport.h"
 #import "MTQueryMaxFieldLength.h"
+#import "MTQueryTest.h"
+#import "MTQueryCustomSql.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -55,18 +57,49 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
 @implementation MTQuery
 
+- (id)initWithQueryType:(MTQueryType)type object:(id)object {
+    switch (type) {
+        case MTQueryTypeMaxFieldLength:
+            self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
+            break;
+        case MTQueryTypeCustomSql:
+            self = [[MTQueryCustomSql alloc] initWithObject:object];
+            break;
+        case MTQueryTypeFull:
+            self = [[MTQueryReport alloc] initWithObject:object];
+            break;
+        case MTQueryTypeConnectionTest:
+            self = [[MTQueryTest alloc] initWithObject:object];
+            break;
+        case MTQueryTypeSampleDataField:
+            self = [[MTQuerySampleDataField alloc] initWithObject:object];
+            break;
+        case MTQueryTypeSampleDataTable:
+            self = [[MTQuerySampleDataTable alloc] initWithObject:object];
+            break;
+            
+        default:
+            break;
+    }
+    
+    return self;
+}
+
 - (id)initWithObject:(id)object {
+    
     self = [super init];
     if (self) {
         
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
-        [self setFields:fieldInfo];
+        
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
-        [self setFieldKeys:fieldKeys];
 
         MTDataTable *datatable = nil;
         RptqUserCredentals *userCredentals = nil;
         MTDatabaseConnection *databaseConnection = nil;
+
+        [self setFields:fieldInfo];
+        [self setFieldKeys:fieldKeys];
 
         NSManagedObjectID *objectId = nil;
         if ([object isKindOfClass:[RptqDatabase class]]) {
@@ -97,7 +130,15 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         } else if ([object isKindOfClass:[MTDatabaseConnection class]]) {
             
             databaseConnection = object;
-
+            
+        } else if ([object isKindOfClass:[NSOrderedSet class]]) {
+            
+            NSArray *array = [object array];
+            [self setQueryObject: array];
+            RptqDatabaseSchemaField *field = [array firstObject];
+            userCredentals = [[[field inTable] inDatabase] ownedByUser];
+            datatable = [[MTDataTable alloc] initWithId:[field hash]];
+            
         } else if ([object isKindOfClass:[NSDictionary class]]) {
             
             
@@ -140,7 +181,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     }
     return self;
 }
-
+/*
 + (id)queryFactory:(id)object {
 
     id result = nil;
@@ -173,7 +214,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     }
     
     return result;
-}
+}*/
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     

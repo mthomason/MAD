@@ -30,16 +30,9 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MTLog.h"
 #import "MTQuery.h"
-//#import "MTCache.h"
-#import "MTQueryReport.h"
-
 #import "MTReportFormatter.h"
-
 #import "MTAlertView.h"
-
 #import "UIDevice+Hack.h"
-
-#import "MTQueryTest.h"
 
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
@@ -122,7 +115,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *rquery = [[database hasQueries] anyObject];
         if (rquery) {
-            MTQuery *query = [[MTQuery queryFactory:rquery] retain];
+            MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:rquery];
             if (query) {
                 [self reportQueries][@"defaultq"] = query;
             }
@@ -334,7 +327,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
     
     
-    MTQueryTest *queryTest = [[MTQueryTest alloc] initWithObject:databaseConnection];
+    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType:MTQueryTypeConnectionTest object:databaseConnection];
     [queryTest performQuery:^(BOOL success, NSError *error) {
         
         if (!success) {
@@ -373,6 +366,8 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
         }
     }];
+
+    [queryTest release];
 }
 
 + (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document ofDocumentReport:(MAReportDocument *)documentReport completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {

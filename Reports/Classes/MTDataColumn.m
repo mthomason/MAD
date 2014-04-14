@@ -130,7 +130,10 @@
         
         NSString *fieldName = [plist objectForKey: [MTDataColumn keyFieldName]];
         NSString *identifier = [plist objectForKey: [MTDataColumn keyIdentifier]];
-        NSMutableArray *column = [plist objectForKey: [MTDataColumn keyColumn]];
+        
+        NSArray *columnImmutable = [plist objectForKey: [MTDataColumn keyColumn]];
+        NSMutableArray *column = [[NSMutableArray alloc] initWithArray: columnImmutable];
+        
         id defaultValue = [plist objectForKey: [MTDataColumn keyDefaultValue]];
         NSString *caption = [plist objectForKey: [MTDataColumn keyCaption]];
         NSNumber *columnType = [plist objectForKey: [MTDataColumn keyColumnType]];
@@ -214,6 +217,10 @@
     [plist setObject: autoIncrement             forKey: keyIsAutoIncrement];
 
     return plist;
+}
+
+- (void)removeAllObjects {
+    [[self column] removeAllObjects];
 }
 
 + (NSString *)keyDefaultValue {

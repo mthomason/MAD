@@ -15,8 +15,6 @@
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTQuery.h"
-#import "MTQueryReport.h"
-#import "MTQuerySampleDataField.h"
 
 #import "RptqQueryField.h"
 #import "RptqDocumentObjectBarcode.h"
@@ -119,7 +117,8 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         if ([self queryField1] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             
-            MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
+            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
+
             [querySampleDataField performQuery:^(BOOL success, NSError *error) {
                 if (success) {
                     [optionsViewController setSampleBarcodeData:[querySampleDataField datatable]];
@@ -130,7 +129,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         
         if ([self queryField2] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
-            MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
+            MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
             [querySampleDataField performQuery:^(BOOL success, NSError *error) {
                 if (success) {
                     [optionsViewController setSampleBarcodeData2dComponent:[querySampleDataField datatable]];

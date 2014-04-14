@@ -17,7 +17,6 @@
 #import "MTQuery.h"
 #import "NSError+UserInterface.h"
 #import "RptqDatabaseSchemaField+Extras.h"
-#import "MTQuerySampleDataField.h"
 
 @interface MTViewControllerValueBasedOnField ()
 
@@ -96,7 +95,7 @@
         RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
                                                                     fromObjectContext: objectContext];
         
-        MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:field];
+        MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
         [querySampleDataField performQuery:^(BOOL success, NSError *error) {
             if (success) {
                 [self setPickerData:[querySampleDataField datatable]];

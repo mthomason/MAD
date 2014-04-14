@@ -55,20 +55,16 @@
         }
     }
     
-    NSNumber *queryType = @(MTQueryTypeMaxFieldLength);
     NSOrderedSet *fields = [[self queryObject] hasFields];
-    NSDictionary *queryDefination = @{MTQueryKeyType : queryType, MTQueryKeyObject : fields};
-    
-    MTQuery *queryMaxFieldLenght = [MTQuery queryFactory:queryDefination];
-
-    [[self database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
+    MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType:MTQueryTypeMaxFieldLength object:fields];
+    [[queryMaxFieldLenght database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
         if (success && [[queryMaxFieldLenght datatable] numberOfRows] > 0) {
             
             [fields enumerateObjectsUsingBlock:^(RptqDatabaseSchemaField *field, NSUInteger idx, BOOL *stop) {
                 
-                NSString *safeTableName = [[self database] tableAliasForTable:[field inTable]];
-                NSString *okey = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
-                NSString *ckey = [[self database] fieldAliasForField:field];
+                NSString *safeTableName = [[queryMaxFieldLenght database] tableAliasForTable:[field inTable]];
+                NSString *okey = [[queryMaxFieldLenght database] fieldAliasForField:field withSafeTableName:safeTableName];
+                NSString *ckey = [[queryMaxFieldLenght database] fieldAliasForField:field];
                 NSDictionary *widthsByField = [[queryMaxFieldLenght datatable] objectAtIndex:0];
                 NSInteger maxSize = [[widthsByField objectForKey:ckey] integerValue];
                 MTDatabaseField *f = [[self fields] objectForKey:okey];

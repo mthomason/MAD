@@ -24,7 +24,7 @@
 
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
 
-@property (nonatomic, strong, readwrite) NSArray *sortDescriptors;
+@property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
 
 @property (nonatomic, strong, readwrite) NSMutableArray *sortIndex;     // A sorted array of dictionaries
                                                                         // @[
@@ -121,7 +121,7 @@
         NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
         [self setColumnKeys:columnKeys];
         
-        NSArray *sortDescriptors = [NSArray array];
+        NSMutableArray *sortDescriptors = [[NSMutableArray alloc] init];
         [self setSortDescriptors:sortDescriptors];
         
         NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
@@ -150,16 +150,19 @@
     
     NSString *keyColumnKeys = [MTDataTable keyColumnKeys];
     id columnKeysArray = [plist objectForKey: keyColumnKeys];
+    
     NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithArray:columnKeysArray];
     [self setColumnKeys: columnKeys];
     
-    NSArray *sortDescriptors = [plist objectForKey:[MTDataTable keySortDescriptors]];
+    NSArray *sortDescriptorsArray = [plist objectForKey:[MTDataTable keySortDescriptors]];
+    NSMutableArray *sortDescriptors = [[NSMutableArray alloc] initWithArray:sortDescriptorsArray];
     [self setSortDescriptors:sortDescriptors];
     
-    NSMutableArray *sortIndex = [[plist objectForKey:[MTDataTable keySortIndex]] mutableCopy];
+    NSArray *sortIndexArray = [plist objectForKey:[MTDataTable keySortIndex]];
+    NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
     [self setSortIndex:sortIndex];
     
-    NSDictionary *columnsPlist = [plist objectForKey: [MTDataTable keyColumns]];
+    NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:[plist objectForKey: [MTDataTable keyColumns]]];
     
     NSUInteger count = [columnsPlist count];
     NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:count];
@@ -334,7 +337,8 @@
     NSArray *sortedIndex = [[self sortIndex] sortedArrayUsingDescriptors:sortDescriptors];
     NSMutableArray *index = [[NSMutableArray alloc] initWithArray:sortedIndex];
     [self setSortIndex:index];
-    [self setSortDescriptors:sortDescriptors];
+    [[self sortDescriptors] removeAllObjects];
+    [[self sortDescriptors] addObjectsFromArray:sortDescriptors];
     return sortedIndex;
 }
 
@@ -417,6 +421,15 @@
 }
 
 - (void)removeAllObjects {
-    NSAssert(false, @"Not implemented");
+    for (MTDataColumn *column in [[self columns] objectEnumerator]) {
+        [column removeAllObjects];
+    }
+    [[self columns] removeAllObjects];
+    [[self columnKeys] removeAllObjects];
+    [[self sortIndex] removeAllObjects];
+    [[self sortDescriptors] removeAllObjects];
+    [self setRowCounter:0];
+    // FIXME: What is this all about?
+    //NSAssert(false, @"Not implemented");
 }
 @end

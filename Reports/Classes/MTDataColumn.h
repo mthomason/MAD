@@ -28,6 +28,7 @@
 
 - (id)initWithPlist:(id)plist;
 - (id)plist;
+- (void)removeAllObjects;
 
 - (void)addObject:(id)object;               //Adds to end of column data
 - (id)objectAtIndex:(NSInteger)index;       //Object at row number

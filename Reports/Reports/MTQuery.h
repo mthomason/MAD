@@ -13,6 +13,11 @@
 
 typedef NS_ENUM(NSUInteger, MTQueryType) {
 	MTQueryTypeMaxFieldLength,
+    MTQueryTypeCustomSql,
+    MTQueryTypeFull,
+    MTQueryTypeConnectionTest,
+    MTQueryTypeSampleDataField,
+    MTQueryTypeSampleDataTable,
 };
 
 extern NSString * const MTQueryKeyType;
@@ -29,9 +34,8 @@ extern NSString * const MTQueryKeyObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;
 
-
+- (id)initWithQueryType:(MTQueryType)type object:(id)object;
 - (id)initWithObject:(id)object;
-+ (id)queryFactory:(id)object;
 
 - (NSString *)getSqlWithError:(NSError **)error;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;

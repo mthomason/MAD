@@ -1403,7 +1403,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
     
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
-    MTQuery *rquery = [MTQuery queryFactory:schemaTable];
+    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
     MTNavigationController *navigationController = [[MTNavigationController alloc] initWithRootViewController:tableController];
 

@@ -50,10 +50,12 @@
 - (id)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
+        
         Class classRptqQuery = [RptqQuery class];
         if ([object isKindOfClass:classRptqQuery]) {
             [self setQueryObject:object];
         }
+        
     }
     return self;
 }

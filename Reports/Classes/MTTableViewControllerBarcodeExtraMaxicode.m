@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTQuery.h"
-#import "MTQuerySampleDataField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
@@ -39,7 +39,7 @@
     
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
     
-    MTQuerySampleDataField *querySampleDataField = [[MTQuerySampleDataField alloc] initWithObject:schemaField];
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             [[self delegate] barcodeMaxicodeDidChooseSampleData:[querySampleDataField datatable]];

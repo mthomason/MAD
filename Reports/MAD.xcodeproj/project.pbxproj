@@ -2129,7 +2129,6 @@
 		4C80A6021831F28200242703 /* MTBarcodeMicroPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMicroPdf417Iso24728.h; path = Barcodes/Barcodes/MTBarcodeMicroPdf417Iso24728.h; sourceTree = "<group>"; };
 		4C80A6031831F28200242703 /* MTBarcodePdf417Iso15438.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodePdf417Iso15438.h; path = Barcodes/Barcodes/MTBarcodePdf417Iso15438.h; sourceTree = "<group>"; };
 		4C80A60C183203C500242703 /* MTBarcodeMaxicodeIso16023.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeMaxicodeIso16023.h; path = Barcodes/Barcodes/MTBarcodeMaxicodeIso16023.h; sourceTree = "<group>"; };
-		4C80F2EF18F1B1ED00AA5773 /* MTDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataTable.h; path = ../libMTDataStrutures/libMTDataStrutures/MTDataTable.h; sourceTree = "<group>"; };
 		4C8155BE17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewAggregateViewController.h; sourceTree = "<group>"; };
 		4C8155BF17009A9700D5330E /* MTDocumentObjectNewAggregateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewAggregateViewController.m; sourceTree = "<group>"; };
 		4C8155C217009E7000D5330E /* MTAggregateFunctionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAggregateFunctionsViewController.h; sourceTree = "<group>"; };
@@ -2279,7 +2278,6 @@
 		4CA54D3D18938801006B301A /* libSystem.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libSystem.dylib; path = usr/lib/libSystem.dylib; sourceTree = SDKROOT; };
 		4CA57A59179FD46200B58871 /* DesignerSectionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerSectionLabel.h; sourceTree = "<group>"; };
 		4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerSectionLabel.m; sourceTree = "<group>"; };
-		4CA6965D18F26E1E000986FB /* MTDataTableLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataTableLocation.h; path = ../libMTDataStrutures/libMTDataStrutures/MTDataTableLocation.h; sourceTree = "<group>"; };
 		4CA96E8D17BD94460076F66A /* MTViewControllerAsyncProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerAsyncProtocol.h; sourceTree = "<group>"; };
 		4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
@@ -3370,8 +3368,6 @@
 				4C23FB4D18FAE1B7009F234F /* NSNumber+Extras.h */,
 				4C23FB4B18FAE153009F234F /* MTProtocolEnumerator.h */,
 				4C23FB4C18FAE153009F234F /* NSNumber+MTProtocol.h */,
-				4C80F2EF18F1B1ED00AA5773 /* MTDataTable.h */,
-				4CA6965D18F26E1E000986FB /* MTDataTableLocation.h */,
 				4C8EC092167A487600F37DA7 /* MTProtocolLog.h */,
 				4CA162BD167B8F2000540A14 /* MTProtocolCompare.h */,
 				4C8EC0A6167A489200F37DA7 /* libMTDataStrutures.h */,
