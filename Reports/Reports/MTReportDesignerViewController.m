@@ -537,6 +537,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
     [self setBorderAppliedToView:d];
     [d release];
+
+    NSArray *viewDidAppearDesignerScrollViewConstraints = [[NSArray alloc] init];
+    NSArray *viewDidAppearDesignerContentViewConstraints = [[NSArray alloc] init];
+    [self setViewDidAppearDesignerScrollViewConstraints:viewDidAppearDesignerScrollViewConstraints];
+    [self setViewDidAppearDesignerContentViewConstraints:viewDidAppearDesignerContentViewConstraints];
+    [viewDidAppearDesignerScrollViewConstraints release];
+    [viewDidAppearDesignerContentViewConstraints release];
+
     
     [self setEditAggregate:NO];
     
