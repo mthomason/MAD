@@ -2776,6 +2776,7 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C23FC2118FC323C009F234F /* Activities */,
 				4C5BED4E18E897FE00BDDDB8 /* App */,
 				4C8A649418C7C73B00997D22 /* DatabaseConnection */,
 				4C11BCF418DD4DB7001E3D33 /* Formatters */,
@@ -2783,15 +2784,13 @@
 				4C9E447D18D8D3B800F0F578 /* Query */,
 				4C8A649118C7C6D100997D22 /* Database */,
 				4CBABB7018C7E11F00EE5768 /* Paper */,
+				4CDB624B14E38C8400A5389E /* Categories */,
+				4C95CABF182B6D1F00160E01 /* Barcode */,
+				4C0081E11784968B00874849 /* MTStoreKit */,
+				4C8F7DE414CFFA13006171A7 /* Rptq */,
+				4C1E27C018C5B4650007B2BB /* Singletons */,
 				4CF339421693E5B400390B3A /* MTFont.h */,
 				4CF339431693E5B400390B3A /* MTFont.m */,
-				4C8F7DE414CFFA13006171A7 /* Rptq */,
-				4CA14FFA18B7F913001AFAD8 /* MTActivityReportExportToPdf.h */,
-				4CA14FFB18B7F913001AFAD8 /* MTActivityReportExportToPdf.m */,
-				4CA14FF618B7D42A001AFAD8 /* MTActivityItemProviderPdf.h */,
-				4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */,
-				4CA14FFE18B7F955001AFAD8 /* MTActivityReportPrintPreview.h */,
-				4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -2811,6 +2810,7 @@
 				4C23FB4218FAE0CA009F234F /* VerifyStoreReceipt.m */,
 			);
 			name = MTStoreKit;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4C0E785F163B5C51003B951E /* Resources */ = {
@@ -2961,6 +2961,7 @@
 				4C23FB1318FADD4C009F234F /* MACloudManager.m */,
 			);
 			name = Singletons;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4C202134163DD4090058F869 /* ReportsGeneralTest */ = {
@@ -3009,6 +3010,19 @@
 			path = ../../libMTDataStrutures/libMTDataStrutures;
 			sourceTree = "<group>";
 		};
+		4C23FC2118FC323C009F234F /* Activities */ = {
+			isa = PBXGroup;
+			children = (
+				4CA14FFA18B7F913001AFAD8 /* MTActivityReportExportToPdf.h */,
+				4CA14FFB18B7F913001AFAD8 /* MTActivityReportExportToPdf.m */,
+				4CA14FF618B7D42A001AFAD8 /* MTActivityItemProviderPdf.h */,
+				4CA14FF718B7D42A001AFAD8 /* MTActivityItemProviderPdf.m */,
+				4CA14FFE18B7F955001AFAD8 /* MTActivityReportPrintPreview.h */,
+				4CA14FFF18B7F955001AFAD8 /* MTActivityReportPrintPreview.m */,
+			);
+			name = Activities;
+			sourceTree = "<group>";
+		};
 		4C25A83D18BC2208002DA271 /* UAAppReviewManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -3049,14 +3063,10 @@
 				4C3A969A189F7CB6007AF476 /* Scripts */,
 				4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */,
 				4C5BED6818E9081F00BDDDB8 /* Protocols */,
-				4C1E27C018C5B4650007B2BB /* Singletons */,
 				4C5CD3D7181ED424005FC6DD /* Macros */,
-				4CDB624614E38B9600A5389E /* View Controllers */,
+				4CDB624614E38B9600A5389E /* Controllers */,
 				4C00815914B6BDB6003DF437 /* Views */,
 				4C00818414B738E9003DF437 /* Model */,
-				4CDB624B14E38C8400A5389E /* Categories */,
-				4C95CABF182B6D1F00160E01 /* Barcode */,
-				4C0081E11784968B00874849 /* MTStoreKit */,
 				4C0E785F163B5C51003B951E /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C860AB6167EDD7500AC1904 /* Test */,
@@ -3941,6 +3951,7 @@
 				4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */,
 			);
 			name = Barcode;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4C95CAD3182F0D0E00160E01 /* Table View Cells */ = {
@@ -4256,7 +4267,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4CDB624614E38B9600A5389E /* View Controllers */ = {
+		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				4C6DF38E16D5F5D500BDC0C1 /* Open Document */,
@@ -4288,7 +4299,7 @@
 				4CB46B6317C3EC26000D3F3C /* MTTableViewControllerAbout.h */,
 				4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */,
 			);
-			name = "View Controllers";
+			name = Controllers;
 			path = Reports;
 			sourceTree = "<group>";
 		};
@@ -4361,7 +4372,6 @@
 				4C5BED6E18EB273300BDDDB8 /* NSError+Constructors.m */,
 			);
 			name = Categories;
-			path = Reports;
 			sourceTree = "<group>";
 		};
 		4CDC60AE16E48F9C00924676 /* Table View Cells */ = {
