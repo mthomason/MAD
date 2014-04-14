@@ -146,6 +146,9 @@
 
 - (void)loadWithPlist:(id)plist {
     NSString *name = [plist objectForKey: [MTDataTable keyName]];
+    if (name == nil) {
+        name = @"";
+    }
     [self setName: name];
     
     NSString *keyColumnKeys = [MTDataTable keyColumnKeys];
@@ -363,6 +366,7 @@
     
     NSArray *columnKeys = [[NSArray alloc] initWithArray:[self columnKeys]];
     NSDictionary *columnsPlist = [self columnsPlist];
+
     return @{
              keyName        : [self name],
              keyColumnKeys  : columnKeys,
