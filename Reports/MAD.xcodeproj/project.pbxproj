@@ -311,7 +311,6 @@
 		4C2279AC167712D600B1150D /* MTPair.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C2279A7167712D600B1150D /* MTPair.h */; };
 		4C23FADD18FADA40009F234F /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD718FADA40009F234F /* MTDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FADE18FADA40009F234F /* MTDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD918FADA40009F234F /* MTDataColumn.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FADF18FADA40009F234F /* MTDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FADC18FADA40009F234F /* MTDataTableLocation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FAEA18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE218FADC68009F234F /* MTViewControllerBarcodeType.m */; };
 		4C23FAEB18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE218FADC68009F234F /* MTViewControllerBarcodeType.m */; };
 		4C23FAEC18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAE418FADC68009F234F /* MTViewControllerBarcodePreview.m */; };
@@ -468,7 +467,6 @@
 		4C23FC1918FAE649009F234F /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1718FAE649009F234F /* MTDatabaseField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1D18FAEB0B009F234F /* MTDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD918FADA40009F234F /* MTDataColumn.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1E18FAEB48009F234F /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD718FADA40009F234F /* MTDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FC1F18FAEB4C009F234F /* MTDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FADC18FADA40009F234F /* MTDataTableLocation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C25A8CD18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C25A8CE18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AA918FA6BA80097D166 /* MTQueryCustomSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomSql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2783,6 +2781,7 @@
 				4C23FAA018FAD672009F234F /* DataTable */,
 				4C9E447D18D8D3B800F0F578 /* Query */,
 				4C8A649118C7C6D100997D22 /* Database */,
+				4C23FC2018FAEFFE009F234F /* Database Schema */,
 				4CBABB7018C7E11F00EE5768 /* Paper */,
 				4CDB624B14E38C8400A5389E /* Categories */,
 				4C95CABF182B6D1F00160E01 /* Barcode */,
@@ -3753,7 +3752,6 @@
 		4C8A649118C7C6D100997D22 /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				4C23FC2018FAEFFE009F234F /* Database Schema */,
 				4C23FBFE18FAE610009F234F /* MTDatabase.h */,
 				4C23FBFF18FAE610009F234F /* MTDatabase.m */,
 				4C23FC0018FAE610009F234F /* MTDatabaseMySql.h */,
@@ -5510,7 +5508,6 @@
 				4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
 				4C23FB1118FADD17009F234F /* objcmad.c in Sources */,
 				4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
-				4C23FC1F18FAEB4C009F234F /* MTDataTableLocation.m in Sources */,
 				4CABE4601837DF7A007EDD9D /* RptqDatabase.m in Sources */,
 				4C23FBAD18FAE4F7009F234F /* MTPaperA8.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
@@ -5948,7 +5945,6 @@
 				4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8E16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
-				4C23FADF18FADA40009F234F /* MTDataTableLocation.m in Sources */,
 				4C23FBC818FAE4F7009F234F /* MTPaperC0.m in Sources */,
 				4C95C42F18DB6B6D003DFB11 /* MTReportFormatter.m in Sources */,
 				4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,

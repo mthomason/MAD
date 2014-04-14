@@ -15,7 +15,7 @@
 #import "MTDatabase.h"
 #import "MTAlertView.h"
 #import "MTQuery.h"
-#import "MTQueryReport.h"
+//#import "MTQueryReport.h"
 
 @interface MTShowSqlViewController ()
 

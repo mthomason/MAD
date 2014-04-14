@@ -122,7 +122,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             [query release];
             
             if ([self reportFormatter] == nil) {
-                MTQueryFull *defaultQuery = [self defaultQuery];
+                MTQuery *defaultQuery = [self defaultQuery];
                 RptqDocument *activeDocument = [self activeDocument];
                 MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithQuery:defaultQuery
                                                                                         andLayout:activeDocument] retain];

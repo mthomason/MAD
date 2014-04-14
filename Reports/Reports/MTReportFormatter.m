@@ -103,7 +103,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
-+ (id)reportFormatterWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
++ (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query andLayout:layout];
     return [result autorelease];
 }

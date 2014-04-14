@@ -54,7 +54,7 @@ extern NSString * const MTReportGroupFooter;
 
 - (NSURL *)cachedDataUrl;
 
-- (MTQueryFull *)defaultQuery;
+- (MTQuery *)defaultQuery;
 
 @end
 
