@@ -668,10 +668,14 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)numberOfPages {
+    NSUInteger numberOfPages = 0;
     if ([self layoutByPage] == nil) {
         [self formatForSize:[self printableRect].size];
     }
-    return [[self layoutByPage] count];
+    if ([self layoutByPage] != nil) {
+        numberOfPages = [[self layoutByPage] count];
+    }
+    return numberOfPages;
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {

@@ -26,8 +26,7 @@
         
         [self setExpectsResults:YES];
 
-        NSManagedObjectID *objectId = [object objectID];
-        NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
+        NSUInteger hash = [object hash];
         MTDataTable *datatable = [[MTDataTable alloc] initWithId:hash];
         [self setDatatable:datatable];
     

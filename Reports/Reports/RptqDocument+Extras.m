@@ -167,11 +167,11 @@
     NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
     [docFetchRequest setFetchLimit:1];
     NSError *error = nil;
-    NSArray *documents = [[objectContext executeFetchRequest:docFetchRequest error:&error] retain];
+    NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
+    RptqDocument *result = [documents lastObject];
+    
     [docFetchRequest release];
-    RptqDocument *result = [[documents lastObject] retain];
-    [documents release];
-    return [result autorelease];
+    return [[result retain] autorelease];
 }
 
 + (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document

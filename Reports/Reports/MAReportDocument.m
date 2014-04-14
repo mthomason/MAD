@@ -107,9 +107,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         if (document == nil) {
             document = [RptqDocument createMainDocumentForManagedObjectContext:managedObjectContext];
         }
-        [document retain];
         [self setDocument:document];
-        [document release];
         
         // FIXME: Only one query for a report at this time.
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
