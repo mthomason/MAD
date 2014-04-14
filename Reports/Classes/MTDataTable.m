@@ -336,6 +336,12 @@
     [self setRowCounter:numberOfRows];
 }
 
+- (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+    [[self sortIndex] sortUsingDescriptors:sortDescriptors];
+    [[self sortDescriptors] removeAllObjects];
+    [[self sortDescriptors] addObjectsFromArray:sortDescriptors];
+}
+
 - (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors {
     NSArray *sortedIndex = [[self sortIndex] sortedArrayUsingDescriptors:sortDescriptors];
     NSMutableArray *index = [[NSMutableArray alloc] initWithArray:sortedIndex];

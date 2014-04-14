@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong, readonly) NSMutableArray *columnKeys;
 @property (nonatomic, strong, readonly) NSMutableDictionary *columns;
+@property (nonatomic, strong, readonly) NSMutableArray *sortIndex;
 @property (nonatomic, strong, readwrite) NSURL *url;
 
 - (id)initWithId:(NSUInteger)objectId;
@@ -34,6 +35,7 @@
 - (id)objectAtIndex:(NSInteger)index;
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
 
+- (void)sortUsingDescriptors:(NSArray *)sortDescriptors;
 - (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors;
 
 - (NSUInteger)count;

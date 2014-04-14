@@ -24,6 +24,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDatabaseField.h"
 #import "RptqQuery+Extras.h"
+#import "MTDataTable.h"
 
 //Why the fuck!!!
 
@@ -161,8 +162,8 @@ NSString * const MTNullIdentifier = @"(null)";
             [[self temporaryDataByPage] removeAllObjects];
             [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
             [self setTemporaryCachedDetailCounter:0];
-            
-            id groupedRows = [self cachedGroupedResults:[self recordsSorted] level:0];
+
+            id groupedRows = [self cachedGroupedResults:[[[self query] datatable] sortIndex] level:0];
             
             [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
             
@@ -679,8 +680,8 @@ NSString * const MTNullIdentifier = @"(null)";
         NSArray *pageData = [[self dataByPage] objectAtIndex:page];
         if (row < [pageData count]) {
             NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
-            if (cachedDataIndex < [[self recordsSorted] count]) {
-                rowData = [[self recordsSorted] objectAtIndex:cachedDataIndex];
+            if (cachedDataIndex < [[[[self query] datatable] sortIndex] count]) {
+                rowData = [[[[self query] datatable] sortIndex] objectAtIndex:cachedDataIndex];
             }
         }
     }

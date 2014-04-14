@@ -45,6 +45,7 @@
 #import "RptqQuery+Extras.h"
 
 #import "MTReportFormatter.h"
+#import "MTQuery.h"
 #import "MTDataTable.h"
 
 #import "MTBarcode.h"
@@ -446,7 +447,7 @@
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
                                                     for (NSNumber *dataIndex in pageIndices) {
                                                         NSInteger i = [dataIndex integerValue];
-                                                        id objectToAdd = [[[self reportFormatter] recordsSorted] objectAtIndex: i];
+                                                        id objectToAdd = [[[[[self reportFormatter] query] datatable] sortIndex] objectAtIndex: i];
                                                         [(NSMutableArray *)dataForGroup addObject:objectToAdd];
                                                     }
                                                     [dataForGroup autorelease];
@@ -462,11 +463,11 @@
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeReport:
-                                                    dataForGroup = [[self reportFormatter] recordsSorted];
+                                                    dataForGroup = [[[[self reportFormatter] query] datatable] sortIndex];
                                                     break;
                                                     
                                                 default:
-                                                    dataForGroup = [[self reportFormatter] recordsSorted];
+                                                    dataForGroup = [[[[self reportFormatter] query] datatable] sortIndex];
                                                     break;
                                             }
                                             

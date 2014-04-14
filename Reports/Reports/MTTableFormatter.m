@@ -12,7 +12,6 @@
 
 #import "MTTableFormatter.h"
 #import "MTQuery.h"
-#import "MTQueryFull.h"
 #import "MTDataTable.h"
 
 @interface MTTableFormatter ()
@@ -46,12 +45,11 @@
     
     if ([super format]) {
         
-        MTQueryFull *madQuery = [self query];
+        MTQuery *madQuery = [self query];
         NSArray *sortDescriptors = [madQuery sortDescriptors];
         [self setSortDescriptorsByGroupSorted:sortDescriptors];
         
-        NSArray *sortedObjects = [[[self query] datatable] sortedRepresentationUsingDescriptors:[self sortDescriptorsByGroupSorted]];
-        [self setRecordsSorted:sortedObjects];
+        [[[self query] datatable] sortUsingDescriptors:sortDescriptors];
 
         updatedData = YES;
     }
