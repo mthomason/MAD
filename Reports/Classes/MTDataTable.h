@@ -36,7 +36,6 @@
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors;
-- (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors;
 
 - (NSUInteger)count;
 - (NSUInteger)numberOfColumns;

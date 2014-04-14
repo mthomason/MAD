@@ -342,15 +342,6 @@
     [[self sortDescriptors] addObjectsFromArray:sortDescriptors];
 }
 
-- (NSArray *)sortedRepresentationUsingDescriptors:(NSArray *)sortDescriptors {
-    NSArray *sortedIndex = [[self sortIndex] sortedArrayUsingDescriptors:sortDescriptors];
-    NSMutableArray *index = [[NSMutableArray alloc] initWithArray:sortedIndex];
-    [self setSortIndex:index];
-    [[self sortDescriptors] removeAllObjects];
-    [[self sortDescriptors] addObjectsFromArray:sortDescriptors];
-    return sortedIndex;
-}
-
 - (NSDictionary *)columnsPlist {
     
     NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
