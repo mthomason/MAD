@@ -1,4 +1,11 @@
-Before Release
+MTQuery
+    query types
+        Specifiy no results to short circ building of data table.
+        
+MTDataTable
+    Make the cache (data store) based on SQLite3.
+
+How To
     Document Interaction
     Display YouTube Demo Video
     In App Purchase

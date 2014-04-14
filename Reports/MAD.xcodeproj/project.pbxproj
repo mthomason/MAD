@@ -462,10 +462,10 @@
 		4C23FC0F18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0518FAE610009F234F /* MTDatabaseSqlite3.m */; };
 		4C23FC1018FAE610009F234F /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */; };
 		4C23FC1118FAE610009F234F /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */; };
-		4C23FC1418FAE633009F234F /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1318FAE633009F234F /* MTDatabaseTable.m */; };
-		4C23FC1518FAE633009F234F /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1318FAE633009F234F /* MTDatabaseTable.m */; };
-		4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1718FAE649009F234F /* MTDatabaseField.m */; };
-		4C23FC1918FAE649009F234F /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1718FAE649009F234F /* MTDatabaseField.m */; };
+		4C23FC1418FAE633009F234F /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1318FAE633009F234F /* MTDatabaseTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FC1518FAE633009F234F /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1318FAE633009F234F /* MTDatabaseTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1718FAE649009F234F /* MTDatabaseField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FC1918FAE649009F234F /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1718FAE649009F234F /* MTDatabaseField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1D18FAEB0B009F234F /* MTDataColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD918FADA40009F234F /* MTDataColumn.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1E18FAEB48009F234F /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD718FADA40009F234F /* MTDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1F18FAEB4C009F234F /* MTDataTableLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FADC18FADA40009F234F /* MTDataTableLocation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2784,8 +2784,6 @@
 				4C23FAA018FAD672009F234F /* DataTable */,
 				4C9E447D18D8D3B800F0F578 /* Query */,
 				4C8A649118C7C6D100997D22 /* Database */,
-				4C8A649218C7C71100997D22 /* DatabaseTable */,
-				4C8A649318C7C72900997D22 /* DatabaseField */,
 				4CBABB7018C7E11F00EE5768 /* Paper */,
 				4CF339421693E5B400390B3A /* MTFont.h */,
 				4CF339431693E5B400390B3A /* MTFont.m */,
@@ -2998,6 +2996,18 @@
 				4C23FADC18FADA40009F234F /* MTDataTableLocation.m */,
 			);
 			name = DataTable;
+			path = ../../libMTDataStrutures/libMTDataStrutures;
+			sourceTree = "<group>";
+		};
+		4C23FC2018FAEFFE009F234F /* Database Schema */ = {
+			isa = PBXGroup;
+			children = (
+				4C23FC1218FAE633009F234F /* MTDatabaseTable.h */,
+				4C23FC1318FAE633009F234F /* MTDatabaseTable.m */,
+				4C23FC1618FAE649009F234F /* MTDatabaseField.h */,
+				4C23FC1718FAE649009F234F /* MTDatabaseField.m */,
+			);
+			name = "Database Schema";
 			path = ../../libMTDataStrutures/libMTDataStrutures;
 			sourceTree = "<group>";
 		};
@@ -3737,6 +3747,7 @@
 		4C8A649118C7C6D100997D22 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				4C23FC2018FAEFFE009F234F /* Database Schema */,
 				4C23FBFE18FAE610009F234F /* MTDatabase.h */,
 				4C23FBFF18FAE610009F234F /* MTDatabase.m */,
 				4C23FC0018FAE610009F234F /* MTDatabaseMySql.h */,
@@ -3749,24 +3760,6 @@
 				4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */,
 			);
 			name = Database;
-			sourceTree = "<group>";
-		};
-		4C8A649218C7C71100997D22 /* DatabaseTable */ = {
-			isa = PBXGroup;
-			children = (
-				4C23FC1218FAE633009F234F /* MTDatabaseTable.h */,
-				4C23FC1318FAE633009F234F /* MTDatabaseTable.m */,
-			);
-			name = DatabaseTable;
-			sourceTree = "<group>";
-		};
-		4C8A649318C7C72900997D22 /* DatabaseField */ = {
-			isa = PBXGroup;
-			children = (
-				4C23FC1618FAE649009F234F /* MTDatabaseField.h */,
-				4C23FC1718FAE649009F234F /* MTDatabaseField.m */,
-			);
-			name = DatabaseField;
 			sourceTree = "<group>";
 		};
 		4C8A649418C7C73B00997D22 /* DatabaseConnection */ = {
