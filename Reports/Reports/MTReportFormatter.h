@@ -17,7 +17,7 @@ extern NSString * const MTNullIdentifier;
 
 @property (nonatomic, retain, readonly) RptqDocument *layout;
 @property (nonatomic, retain, readonly) NSArray *layoutByPage;
-@property (nonatomic, retain, readonly) NSArray *dataByPage;
+@property (nonatomic, retain, readonly) NSArray *indexesByPage;
 @property (nonatomic, retain, readonly) NSDictionary *dataByGroup;
 
 - (id)initWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;

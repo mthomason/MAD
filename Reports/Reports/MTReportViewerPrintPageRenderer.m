@@ -297,7 +297,6 @@
                 @autoreleasepool {
                     
                     NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
-                    //id reportSectionValues = nil;
                     
                     NSNumber *groupLevel = nil;
                     
@@ -377,7 +376,7 @@
                     NSInteger nextPageIndex = index;
                     
                     if (useNextRowData) {
-                        NSArray *pageData = [[[self reportFormatter] dataByPage] objectAtIndex:index];
+                        NSArray *pageData = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
                         NSInteger numberOfItemsOnPage = [pageData count];
                         if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
                             nextDetailRowToPrint++;
@@ -443,7 +442,7 @@
                                                     // FIXME: Check to see which ones of these are correct.
                                                 case MTAggregateGroupByTypePage: {
                                                     
-                                                    NSArray *pageIndices = [[[self reportFormatter] dataByPage] objectAtIndex:index];
+                                                    NSArray *pageIndices = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
                                                     for (NSNumber *dataIndex in pageIndices) {
                                                         NSInteger i = [dataIndex integerValue];
@@ -579,7 +578,7 @@
                                             NSNumber *sectionType = [documentSection type];
                                             BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                             if (useNextRowData) {
-                                                NSArray *pageData = [[[self reportFormatter] dataByPage] objectAtIndex:index];
+                                                NSArray *pageData = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
                                                 NSInteger numberOfItemsOnPage = [pageData count];
                                                 if (rowToPrint < numberOfItemsOnPage - 1) {
                                                     rowToPrint++;
@@ -630,7 +629,7 @@
                                                 NSNumber *sectionType = [documentSection type];
                                                 BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                                 if (useNextRowData) {
-                                                    NSArray *pageData = [[[self reportFormatter] dataByPage] objectAtIndex:index];
+                                                    NSArray *pageData = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
                                                     NSInteger numberOfItemsOnPage = [pageData count];
                                                     if (rowToPrint < numberOfItemsOnPage - 1) {
                                                         rowToPrint++;
