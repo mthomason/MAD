@@ -16,7 +16,7 @@
 #import "MTQueryFull.h"
 #import "MTQueryMaxFieldLength.h"
 #import "MTQueryTest.h"
-#import "MTQueryCustomSql.h"
+#import "MTQueryCustomNoResults.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -61,7 +61,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
             self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
             break;
         case MTQueryTypeCustomSql:
-            self = [[MTQueryCustomSql alloc] initWithObject:object];
+            self = [[MTQueryCustomNoResults alloc] initWithObject:object];
             break;
         case MTQueryTypeFull:
             self = [[MTQueryFull alloc] initWithObject:object];
@@ -81,6 +81,10 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     }
     
     return self;
+}
+
+- (BOOL)returnsResults {
+    return YES;
 }
 
 - (id)initWithObject:(id)object {

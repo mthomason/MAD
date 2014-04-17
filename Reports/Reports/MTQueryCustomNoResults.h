@@ -8,6 +8,6 @@
 
 #import "MTQuery.h"
 
-@interface MTQueryCustomSql : MTQuery
+@interface MTQueryCustomNoResults : MTQuery
 
 @end

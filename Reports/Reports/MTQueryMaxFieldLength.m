@@ -32,7 +32,6 @@
         
         NSAssert([[array firstObject] isKindOfClass:[RptqDatabaseSchemaField class]], @"Need RptqDatabaseSchemaField's!");
 
-        [self setExpectsResults:YES];
 
         [self setQueryObject: array];
         RptqDatabaseSchemaField *field = [array firstObject];

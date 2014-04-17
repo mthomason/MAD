@@ -10,9 +10,9 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryCustomSql.h"
+#import "MTQueryCustomNoResults.h"
 
-@implementation MTQueryCustomSql
+@implementation MTQueryCustomNoResults
 
 - (id)initWithObject:(id)object {
     self = [super initWithObject:object];
@@ -21,10 +21,13 @@
         NSAssert([object isKindOfClass:[NSString class]], @"MTQueryCustomSql expects NSString.");
         NSString *queryString = [[NSString alloc] initWithString:object];
         [self setQueryObject:queryString];
-        [self setExpectsResults:YES];
         
     }
     return self;
+}
+
+- (BOOL)returnsResults {
+    return NO;
 }
 
 @end

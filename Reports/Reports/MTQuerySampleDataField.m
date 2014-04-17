@@ -32,7 +32,6 @@
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]], @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
         
-        [self setExpectsResults:YES];
 
         NSManagedObjectID *objectId = [object objectID];
         NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];

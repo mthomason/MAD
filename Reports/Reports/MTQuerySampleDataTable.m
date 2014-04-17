@@ -34,7 +34,6 @@
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaTable class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
-        [self setExpectsResults:YES];
 
         NSManagedObjectID *objectId = [object objectID];
         NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];

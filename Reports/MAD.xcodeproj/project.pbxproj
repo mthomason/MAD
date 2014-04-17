@@ -471,8 +471,8 @@
 		4C23FC1E18FAEB48009F234F /* MTDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FAD718FADA40009F234F /* MTDataTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C25A8CD18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C25A8CE18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C267AA918FA6BA80097D166 /* MTQueryCustomSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomSql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C267AAA18FA6BA80097D166 /* MTQueryCustomSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomSql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C28FB8E16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */; };
 		4C28FB8F16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
@@ -1826,8 +1826,8 @@
 		4C23FC1A18FAEA24009F234F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
-		4C267AA718FA6BA80097D166 /* MTQueryCustomSql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCustomSql.h; sourceTree = "<group>"; };
-		4C267AA818FA6BA80097D166 /* MTQueryCustomSql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCustomSql.m; sourceTree = "<group>"; };
+		4C267AA718FA6BA80097D166 /* MTQueryCustomNoResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCustomNoResults.h; sourceTree = "<group>"; };
+		4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCustomNoResults.m; sourceTree = "<group>"; };
 		4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
 		4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeMySQL.png; path = Reports/UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -3041,8 +3041,8 @@
 		4C267AA618FA6B300097D166 /* Custom SQL */ = {
 			isa = PBXGroup;
 			children = (
-				4C267AA718FA6BA80097D166 /* MTQueryCustomSql.h */,
-				4C267AA818FA6BA80097D166 /* MTQueryCustomSql.m */,
+				4C267AA718FA6BA80097D166 /* MTQueryCustomNoResults.h */,
+				4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */,
 			);
 			name = "Custom SQL";
 			sourceTree = "<group>";
@@ -5538,7 +5538,7 @@
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4C23FB0718FADCE4009F234F /* MTTableViewControllerBarcodeExtraGridMatrix.m in Sources */,
 				4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
-				4C267AAA18FA6BA80097D166 /* MTQueryCustomSql.m in Sources */,
+				4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */,
 				4C5CB711189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */,
 				4CF8670E16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
 				4CF8671616D8259400F716A8 /* MTTitleView.m in Sources */,
@@ -5974,7 +5974,7 @@
 				4C23FBB218FAE4F7009F234F /* MTPaperB0.m in Sources */,
 				4C23FBDE18FAE4F7009F234F /* MTPaperGovernmentLegal.m in Sources */,
 				4C23FB2218FADDAA009F234F /* MADUpgradeViewController.m in Sources */,
-				4C267AA918FA6BA80097D166 /* MTQueryCustomSql.m in Sources */,
+				4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */,
 				4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,

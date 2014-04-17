@@ -673,10 +673,12 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (BOOL)nullKeyExist:(NSArray *)keys {
     BOOL nullGroupExist = NO;
-    for (id str in keys) {
-        if ([str isEqualToString: MTNullIdentifier]) {
-            nullGroupExist = YES;
-            break;
+    for (id keyObj in keys) {
+        if ([keyObj isKindOfClass:[NSString class]]) {
+            if ([keyObj isEqualToString: MTNullIdentifier]) {
+                nullGroupExist = YES;
+                break;
+            }
         }
     }
     return nullGroupExist;

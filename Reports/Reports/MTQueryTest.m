@@ -24,8 +24,6 @@
         
         NSAssert([object isKindOfClass:[MTDatabaseConnection class]], @"MTQuerySampleDataTable expects RptqDatabaseSchemaTable.");
         
-        [self setExpectsResults:YES];
-
         NSUInteger hash = [object hash];
         MTDataTable *datatable = [[MTDataTable alloc] initWithId:hash];
         [self setDatatable:datatable];

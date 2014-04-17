@@ -50,6 +50,8 @@ extern NSString * const MTQueryKeyObject;
 - (NSArray *)sortDescriptors;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
+- (BOOL)returnsResults;
+
 @end
 
 #endif

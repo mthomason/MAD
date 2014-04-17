@@ -57,7 +57,6 @@
     if (self) {
         
         NSAssert([object isKindOfClass:[RptqQuery class]], @"MTQueryReport expects RptqQuery.");
-        [self setExpectsResults:YES];
         
         NSManagedObjectID *objectId = [object objectID];
         NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
