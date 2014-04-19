@@ -15,8 +15,6 @@ extern NSString * const MTNullIdentifier;
 
 @interface MTReportFormatter : MTTableFormatter
 
-//@property (nonatomic, retain, readonly) RptqDocument *layout;
-
 - (id)initWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
 
