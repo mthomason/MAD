@@ -12,6 +12,7 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
+#import "NSFileManager+Common.h"
 
 @interface MTDataTable ()
 
@@ -57,7 +58,7 @@
 @implementation MTDataTable
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-    
+
     [encoder encodeObject:  [self name]         forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]   forKey: [MTDataTable keyColumnKeys]];
     [encoder encodeObject:  [self columns]      forKey: [MTDataTable keyColumns]];
@@ -235,8 +236,8 @@
 
 
 - (void)setObjectId:(NSUInteger)objectId {
-    NSString *filename = [MTDataTable filename:objectId];
-    NSURL *cacheDirectory = [MTDataTable cacheDirectory];
+    NSString *filename = [NSFileManager filenameId:objectId extention:@"mcache"];
+    NSURL *cacheDirectory = [NSFileManager cacheDirectory];
     NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
     [self setUrl:fileUrl];
 }
@@ -431,12 +432,6 @@
 + (NSString *)keySortIndex {
     SEL selSortIndex = @selector(sortIndex);
     return NSStringFromSelector(selSortIndex);
-}
-
-+ (NSString *)filename:(NSUInteger)tag {
-    NSString *filename = [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-    NSString *extention = @"mcache";
-    return [filename stringByAppendingPathExtension:extention];
 }
 
 + (NSURL *)cacheDirectory {
