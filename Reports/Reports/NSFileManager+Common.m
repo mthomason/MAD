@@ -124,7 +124,15 @@
 }
 
 + (NSURL *)localTemporaryDirectory {
-    return  [[NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES] URLByAppendingPathComponent:@"tmp" isDirectory:YES];
+    NSString *homeDirectory = NSHomeDirectory();
+    NSURL *fileUrlWithPath = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
+    return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
+}
+
++ (NSURL *)cacheDirectory {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cachesPath = [paths firstObject];
+    return [NSURL fileURLWithPath:cachesPath isDirectory:YES];
 }
 
 + (void)wrapFile:(NSURL *)fileToAttach withExtention:(NSString *)extention overwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion {
@@ -160,6 +168,12 @@
     } else {
         [resultUrl autorelease];
     }
+}
+
++ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
+    NSString *filename = [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+    NSString *extention = @"mcache";
+    return [filename stringByAppendingPathExtension:extention];
 }
 
 @end
