@@ -12,8 +12,6 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
-@class RptqUserCredentals;
-
 @interface MTDatabaseConnection : NSObject
 
 @property (nonatomic, strong) NSString  *databaseTypeIdentifier;
@@ -28,7 +26,7 @@
 - (NSString *)appname;
 
 + (id)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier;
-+ (id)databaseConnectionFactory:(RptqUserCredentals *)credentals;
++ (id)databaseConnectionFactory:(id)credentals;
 
 - (NSString *)identifier;
 + (NSString *)identifier;
