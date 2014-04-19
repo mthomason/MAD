@@ -88,7 +88,7 @@
                     if (error == nil) {
                         MTDataTable *fetch = [[MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES] retain];
                         //These native types are not set by the mysql lib.
-                        for (MTDataColumn *column in [[fetch columns] objectEnumerator]) {
+                        for (MTDataColumn *column in [fetch columnsEnumerator]) {
                             NSNumber *cType = @([MTDatabaseMySql dataTypeForNativeType:column.columnType.integerValue]);
                             [column setNativeColumnType:cType];
                             
@@ -180,8 +180,7 @@
                 NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
                 MTDataTable *dataTable2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
                 
-                for (NSString *fieldKey in [[dataTable2 columns] keyEnumerator]) {
-                    MTDataColumn *dataColumn = [[dataTable2 columns] objectForKey:fieldKey];
+                for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
                     MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[dataColumn fieldName]] retain];
                     NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
                     [databaseField setFieldTypeNative:nativeColumnType];

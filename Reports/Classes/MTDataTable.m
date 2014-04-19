@@ -306,6 +306,10 @@
     return [_sortIndex countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
+- (NSEnumerator *)columnsEnumerator {
+    return [[self columns] objectEnumerator];
+}
+
 - (id)objectAtRow:(NSInteger)row {
     return [self sortIndex][row];
 }
