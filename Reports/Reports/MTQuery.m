@@ -92,6 +92,9 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     self = [super init];
     if (self) {
         
+        NSMutableArray *binaryBindings = [[NSMutableArray alloc] init];
+        [self setBinaryBindings:binaryBindings];
+
         NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
         
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
