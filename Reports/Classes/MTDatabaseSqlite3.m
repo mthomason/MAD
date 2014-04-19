@@ -27,6 +27,8 @@
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
 
+#import "MTDatabaseDataBinding.h"
+
 @interface MTDatabaseSqlite3 ()
 
 @property (assign) sqlite3 *database;
@@ -174,6 +176,7 @@
     return result;
 }
 
+
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     NSError *error = nil;
     NSString *queryString = [query getSqlWithError:&error];
@@ -287,6 +290,24 @@
                 rowCounter++;
             }
             
+        } else if ([[query binaryBindings] count] > 0) {
+            sqlite3_stmt *statement = NULL;
+            
+            for (MTDatabaseDataBinding *databinding in [query binaryBindings]) {
+                switch ([databinding datatype]) {
+                    case MTDataTypeBlob:
+                        NSAssert([[databinding value] isKindOfClass:[NSData class]], @"Only accepts binary values.");
+                        NSData *data = [databinding value];
+                        success = sqlite3_bind_blob(statement, [databinding fieldIndex], [data bytes], [data length], SQLITE_TRANSIENT);
+                        break;
+                    default:
+                        NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
+                        break;
+                }
+            }
+
+            success = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK;
+            success = sqlite3_step(statement);
         } else {
             errorMessage = (char *)sqlite3_errmsg(_database);
         }
