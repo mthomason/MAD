@@ -164,7 +164,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
             [self setTemporaryCachedDetailCounter:0];
 
-            id groupedRows = [self cachedGroupedResults:[[[self query] datatable] allObjects] level:0];
+            id groupedRows = [self cachedGroupedData:[[[self query] datatable] objectEnumerator] level:0];
             [self setDataByGroup: groupedRows];
             
             [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
@@ -230,12 +230,64 @@ NSString * const MTNullIdentifier = @"(null)";
             
             [tdbp release];
         }
-        
-
-        
     }
-
 }
+
+- (id)cachedGroupedData:(NSEnumerator *)objectEnumerator level:(NSUInteger)level {
+    
+    BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
+    id results = nil;
+    
+    if (detailLevel) {
+        results = [[objectEnumerator allObjects] retain];
+    } else {
+        
+        results = [[NSMutableDictionary alloc] init];
+        NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
+        
+        NSSortDescriptor *sortDescriptor = detailLevel ? nil : [[self sortDescriptorsByGroupSorted] objectAtIndex:level];
+        
+        NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
+        
+        id valueForField = nil, lastValueForField = nil;
+        
+        NSUInteger groupResultIndexForLevel = 0;
+        
+        for (NSDictionary *result in objectEnumerator) {
+            valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
+            if (valueForField == nil) {
+                valueForField = MTNullIdentifier;
+            }
+            if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
+                
+                id resultOfNextGroup = [self cachedGroupedData: [resultsForGroup objectEnumerator]
+                                                            level: (level + 1)];
+                
+                [results setObject:resultOfNextGroup forKey:lastValueForField];
+                
+                [resultsForGroup removeAllObjects];
+                
+            }
+            [resultsForGroup addObject:result];
+            lastValueForField = valueForField;
+            groupResultIndexForLevel++;
+        }
+        
+        id resultOfNextGroup = [self cachedGroupedData: [resultsForGroup objectEnumerator]
+                                                 level: (level + 1)];
+        NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
+        if (key == nil) {
+            NSNull *n = [[NSNull alloc] init];
+            key = MTNullIdentifier;
+            [n release];
+        }
+        [results setObject:resultOfNextGroup forKey:key];
+        
+        [resultsForGroup release];
+    }
+    return [results autorelease];
+}
+
 
 //Roll through the groups
 //Returns dictionary for group levels (level < n), and array of dictionaries for details/results (level == n-1).

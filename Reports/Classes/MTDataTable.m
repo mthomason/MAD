@@ -251,7 +251,6 @@
 
 - (NSArray *)allObjects {
     return [self sortIndex];
-    
 }
 
 
@@ -274,14 +273,6 @@
     return [self rowCounter];
 }
 
-- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
-    NSString *fieldKey = [[self columnKeys] objectAtIndex:column];
-    MTDataColumn *dataInColumn = [[self columns] objectForKey:fieldKey];
-    NSUInteger sortedIndex = [self sortedIndexForIndex:row];
-    id objectForField = [dataInColumn objectAtIndex:sortedIndex];
-    return objectForField;
-}
-
 - (NSUInteger)sortedIndexForIndex:(NSUInteger)index {
     NSUInteger sortedIndex;
     if ([[self sortDescriptors] count] > 0) {
@@ -299,11 +290,15 @@
 }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
-    return [self objectAtIndex:idx];
+    return [self objectAtRow:idx];
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
     return [_sortIndex countByEnumeratingWithState:state objects:stackbuf count:len];
+}
+
+- (NSEnumerator *)objectEnumerator {
+    return [[self sortIndex] objectEnumerator];
 }
 
 - (NSEnumerator *)columnsEnumerator {
@@ -312,6 +307,14 @@
 
 - (id)objectAtRow:(NSInteger)row {
     return [self sortIndex][row];
+}
+
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
+    NSString *fieldKey = [[self columnKeys] objectAtIndex:column];
+    MTDataColumn *dataInColumn = [[self columns] objectForKey:fieldKey];
+    NSUInteger sortedIndex = [self sortedIndexForIndex:row];
+    id objectForField = [dataInColumn objectAtIndex:sortedIndex];
+    return objectForField;
 }
 
 - (id)objectAtIndex:(NSInteger)index {
@@ -451,8 +454,6 @@
     [[self sortIndex] removeAllObjects];
     [[self sortDescriptors] removeAllObjects];
     [self setRowCounter:0];
-    // FIXME: What is this all about?
-    //NSAssert(false, @"Not implemented");
 }
 
 @end

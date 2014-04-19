@@ -79,7 +79,7 @@
                 NSString *safeTableName = [[queryMaxFieldLenght database] tableAliasForTable:[field inTable]];
                 NSString *okey = [[queryMaxFieldLenght database] fieldAliasForField:field withSafeTableName:safeTableName];
                 NSString *ckey = [[queryMaxFieldLenght database] fieldAliasForField:field];
-                NSDictionary *widthsByField = [[queryMaxFieldLenght datatable] objectAtIndex:0];
+                NSDictionary *widthsByField = [[queryMaxFieldLenght datatable] objectAtRow:0];
                 NSInteger maxSize = [[widthsByField objectForKey:ckey] integerValue];
                 MTDatabaseField *f = [[self fields] objectForKey:okey];
                 f.calculatedWidth = maxSize;
