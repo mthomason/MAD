@@ -249,6 +249,12 @@
 
 }
 
+- (NSArray *)allObjects {
+    return [self sortIndex];
+    
+}
+
+
 - (void)addColumnWithIdentifier:(NSString *)identifier  {
 
     [self addColumnWithIdentifier:identifier andDefaultValue:[NSNull null]];
@@ -290,6 +296,18 @@
         sortedIndex = index;
     }
     return sortedIndex;
+}
+
+- (id)objectAtIndexedSubscript:(NSUInteger)idx {
+    return [self objectAtIndex:idx];
+}
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
+    return [_sortIndex countByEnumeratingWithState:state objects:stackbuf count:len];
+}
+
+- (id)objectAtRow:(NSInteger)row {
+    return [self sortIndex][row];
 }
 
 - (id)objectAtIndex:(NSInteger)index {
@@ -432,4 +450,5 @@
     // FIXME: What is this all about?
     //NSAssert(false, @"Not implemented");
 }
+
 @end

@@ -164,7 +164,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
             [self setTemporaryCachedDetailCounter:0];
 
-            id groupedRows = [self cachedGroupedResults:[[[self query] datatable] sortIndex] level:0];
+            id groupedRows = [self cachedGroupedResults:[[[self query] datatable] allObjects] level:0];
             [self setDataByGroup: groupedRows];
             
             [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
@@ -242,12 +242,13 @@ NSString * const MTNullIdentifier = @"(null)";
 - (id)cachedGroupedResults:(NSArray *)sortedResults level:(NSUInteger)level {
     
     BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
-    id resultsDictionary = nil;
+    id results = nil;
     
     if (detailLevel) {
-        resultsDictionary = [sortedResults copy];
+        results = [sortedResults copy];
     } else {
-        resultsDictionary = [[NSMutableDictionary alloc] init];
+
+        results = [[NSMutableDictionary alloc] init];
         NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
         
         NSSortDescriptor *sortDescriptor = detailLevel ? nil : [[self sortDescriptorsByGroupSorted] objectAtIndex:level];
@@ -268,7 +269,7 @@ NSString * const MTNullIdentifier = @"(null)";
                 id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                             level: (level + 1)];
                 
-                [resultsDictionary setObject:resultOfNextGroup forKey:lastValueForField];
+                [results setObject:resultOfNextGroup forKey:lastValueForField];
                 
                 [resultsForGroup removeAllObjects];
                 
@@ -283,7 +284,7 @@ NSString * const MTNullIdentifier = @"(null)";
             id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                         level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
-            [resultsDictionary setObject:resultOfNextGroup forKey:key];
+            [results setObject:resultOfNextGroup forKey:key];
         } else {
             id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                         level: (level + 1)];
@@ -293,7 +294,7 @@ NSString * const MTNullIdentifier = @"(null)";
                 key = MTNullIdentifier;
                 [n release];
             }
-            [resultsDictionary setObject:resultOfNextGroup forKey:key];
+            [results setObject:resultOfNextGroup forKey:key];
         }
         
         //[resultsCopy release];
@@ -301,7 +302,7 @@ NSString * const MTNullIdentifier = @"(null)";
         [resultsForGroup removeAllObjects];
         [resultsForGroup release];
     }
-    return [resultsDictionary autorelease];
+    return [results autorelease];
 }
 
 - (void)cacheReportHeader {
@@ -634,11 +635,11 @@ NSString * const MTNullIdentifier = @"(null)";
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
     id rowData = nil;
     if (page < [[self indexesByPage] count]) {
-        NSArray *pageData = [[self indexesByPage] objectAtIndex:page];
-        if (row < [pageData count]) {
-            NSUInteger cachedDataIndex = [[pageData objectAtIndex:row] integerValue];
-            if (cachedDataIndex < [[[[self query] datatable] sortIndex] count]) {
-                rowData = [[[[self query] datatable] sortIndex] objectAtIndex:cachedDataIndex];
+        NSArray *pageIndexes = [[self indexesByPage] objectAtIndex:page];
+        if (row < [pageIndexes count]) {
+            NSUInteger cachedDataIndex = [pageIndexes[row] integerValue];
+            if (cachedDataIndex < [[[self query] datatable] numberOfRows]) {
+                rowData = [[[self query] datatable] objectAtRow:cachedDataIndex];
             }
         }
     }

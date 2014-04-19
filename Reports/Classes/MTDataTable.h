@@ -11,10 +11,9 @@
 @class MTDataColumn;
 
 @interface MTDataTable : NSObject
-    <NSCoding>
+    <NSCoding, NSFastEnumeration>
 
 @property (nonatomic, strong, readonly) NSMutableDictionary *columns;
-@property (nonatomic, strong, readonly) NSMutableArray *sortIndex;
 @property (nonatomic, strong, readwrite) NSURL *url;
 
 - (id)initWithId:(NSUInteger)objectId;
@@ -28,13 +27,16 @@
 - (void)addRow:(NSArray *)row;
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row;
 
-- (id)objectAtIndex:(NSInteger)index;
-- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
-
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors;
 
 - (void)removeAllObjects;
 
+- (id)objectAtIndexedSubscript:(NSUInteger)idx;
+- (id)objectAtRow:(NSInteger)row;
+- (id)objectAtIndex:(NSInteger)index;
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
+
+- (NSArray *)allObjects;
 - (NSUInteger)count;
 - (NSUInteger)numberOfColumns;
 - (NSUInteger)numberOfRows;
