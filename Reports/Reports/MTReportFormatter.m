@@ -698,6 +698,10 @@ NSString * const MTNullIdentifier = @"(null)";
     return rowData;
 }
 
+- (id)dataForGroupKeys:(NSArray *)keys {
+    return [MTReportFormatter dataForGroupData:[self dataByGroup] andKeys:keys];
+}
+
 + (id)dataForGroupData:(id)data andKeys:(NSArray *)keys {
     id resultData = nil;
     if ([data isKindOfClass:[NSArray class]]) {
@@ -735,6 +739,18 @@ NSString * const MTNullIdentifier = @"(null)";
         }
     }
     return nullGroupExist;
+}
+
+- (NSUInteger)countOnPageIndex:(NSUInteger)pageNumber {
+    return [[[self indexesByPage] objectAtIndex:pageNumber] count];
+}
+
+- (NSEnumerator *)objectEnumeratorForPage:(NSUInteger)pageIndex {
+    return [[self indexesByPage][pageIndex] objectEnumerator];
+}
+
+- (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex {
+    return [[self layoutByPage][pageIndex] objectEnumerator];
 }
 
 @end

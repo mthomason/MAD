@@ -15,10 +15,7 @@ extern NSString * const MTNullIdentifier;
 
 @interface MTReportFormatter : MTTableFormatter
 
-@property (nonatomic, retain, readonly) RptqDocument *layout;
-@property (nonatomic, retain, readonly) NSArray *layoutByPage;
-@property (nonatomic, retain, readonly) NSArray *indexesByPage;
-@property (nonatomic, retain, readonly) NSDictionary *dataByGroup;
+//@property (nonatomic, retain, readonly) RptqDocument *layout;
 
 - (id)initWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
@@ -28,7 +25,11 @@ extern NSString * const MTNullIdentifier;
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page;
 
-+ (id)dataForGroupData:(id)data andKeys:(NSArray *)keys;
+- (id)dataForGroupKeys:(NSArray *)keys;
 - (NSUInteger)numberOfPages;
+- (NSUInteger)countOnPageIndex:(NSUInteger)pageIndex;
+
+- (NSEnumerator *)objectEnumeratorForPage:(NSUInteger)pageIndex;
+- (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 
 @end

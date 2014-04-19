@@ -110,7 +110,7 @@
     NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
     CGRect letterRect = [MTPaper rectLetter];
     [[self reportFormatter] formatForSize:letterRect.size];
-    NSUInteger numberOfPages = [[[self reportFormatter] layoutByPage] count];
+    NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
     UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
     
     for (NSUInteger i=0; i<numberOfPages; i++) {
@@ -127,7 +127,7 @@
 }
 
 - (NSInteger)numberOfPages {
-    return [[[self reportFormatter] layoutByPage] count];
+    return [[self reportFormatter] numberOfPages];
 }
 
 - (UIImage *)thumbnail {
@@ -282,17 +282,14 @@
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         
-        NSUInteger numberOfPages = [[[self reportFormatter] layoutByPage] count];
+        NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
         if (index < numberOfPages) {
             
-            NSArray *pageSectionsToPrint = [[[self reportFormatter] layoutByPage] objectAtIndex:index];
-            
             CGRect sectionRect = CGRectZero;
-            
             UIColor *whiteColor = [[UIColor whiteColor] retain];
             
-            for (NSDictionary *pageSection in pageSectionsToPrint) {
+            for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:index]) {
                 
                 @autoreleasepool {
                     
@@ -376,8 +373,7 @@
                     NSInteger nextPageIndex = index;
                     
                     if (useNextRowData) {
-                        NSArray *pageData = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
-                        NSInteger numberOfItemsOnPage = [pageData count];
+                        NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:index];
                         if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
                             nextDetailRowToPrint++;
                         } else {
@@ -442,11 +438,11 @@
                                                     // FIXME: Check to see which ones of these are correct.
                                                 case MTAggregateGroupByTypePage: {
                                                     
-                                                    NSArray *pageIndices = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
-                                                    dataForGroup = [[NSMutableArray alloc] initWithCapacity:[pageIndices count]];
-                                                    for (NSNumber *dataIndex in pageIndices) {
+                                                    NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:index];
+                                                    dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
+                                                    for (NSNumber *dataIndex in [[self reportFormatter] objectEnumeratorForPage:index]) {
                                                         NSInteger i = [dataIndex integerValue];
-                                                        id objectToAdd = [[[[[self reportFormatter] query] datatable] allObjects] objectAtIndex: i];
+                                                        id objectToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: i];
                                                         [(NSMutableArray *)dataForGroup addObject:objectToAdd];
                                                     }
                                                     [dataForGroup autorelease];
@@ -454,11 +450,9 @@
                                                 }
                                                 case MTAggregateGroupByTypeSection: {
                                                     BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
-                                                    if (useNextRowData) {
-                                                        dataForGroup = [MTReportFormatter dataForGroupData:[[self reportFormatter] dataByGroup] andKeys:nextGroupLevelKeys];
-                                                    } else {
-                                                        dataForGroup = [MTReportFormatter dataForGroupData:[[self reportFormatter] dataByGroup] andKeys:groupLevelKeys];
-                                                    }
+                                                    NSArray *keys = useNextRowData ? nextGroupLevelKeys : groupLevelKeys;
+                                                    dataForGroup = [[self reportFormatter] dataForGroupKeys:keys];
+
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeReport:
@@ -578,8 +572,7 @@
                                             NSNumber *sectionType = [documentSection type];
                                             BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                             if (useNextRowData) {
-                                                NSArray *pageData = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
-                                                NSInteger numberOfItemsOnPage = [pageData count];
+                                                NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:index];
                                                 if (rowToPrint < numberOfItemsOnPage - 1) {
                                                     rowToPrint++;
                                                 } else {
@@ -629,8 +622,7 @@
                                                 NSNumber *sectionType = [documentSection type];
                                                 BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                                 if (useNextRowData) {
-                                                    NSArray *pageData = [[[self reportFormatter] indexesByPage] objectAtIndex:index];
-                                                    NSInteger numberOfItemsOnPage = [pageData count];
+                                                    NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:index];
                                                     if (rowToPrint < numberOfItemsOnPage - 1) {
                                                         rowToPrint++;
                                                     } else {
@@ -639,7 +631,6 @@
                                                     }
                                                 }
                                                 NSDictionary *rd = useNextRowData ? nextRowData : rowData;
-                                                
                                                 NSString *tableFieldKey = [database safeQueryField:queryField];
                                                 id value = [rd objectForKey: tableFieldKey];
                                                 RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
