@@ -1,0 +1,310 @@
+//
+//  MTDataTableFast.m
+//  MAD
+//
+//  Created by Michael Thomason on 4/19/14.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//
+
+#import "MTDataTableFast.h"
+#import "NSFileManager+Common.h"
+#import "MTQuery.h"
+#import "MTDataColumn.h"
+#import "MTDatabaseField.h"
+#import "MTDataTableFastObjectEnumerator.h"
+#import "MTDatabaseConnection.h"
+#import "libSqlite3_8.h"
+#import "MTLog.h"
+
+@interface MTDataTableFast ()
+
+@property (assign) sqlite3 *database;
+@property (assign) sqlite3_stmt *statement;
+
+@property (nonatomic, assign, readwrite) NSUInteger tag;
+@property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *columns;
+@property (nonatomic, strong, readwrite) NSArray *sortDescriptors;
+
+@property (nonatomic, strong, readwrite) NSString *sqlQuery;
+
+@property (nonatomic, assign, readwrite) NSUInteger rowCounter;
+
+@end
+
+@implementation MTDataTableFast
+
+- (void)dealloc {
+    sqlite3_close_v2(_database);
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    // FIXME: Implement this.
+    //[super encodeWithCoder:encoder];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    // FIXME: Implement this.
+    return nil;
+}
+
+- (id)initWithId:(NSUInteger)objectId {
+    self = [super init];
+    if (self) {
+    
+        [self setTag:objectId];
+        
+        NSString *filename = [NSFileManager filenameId:objectId extention:@"maddb"];
+        NSURL *cacheDirectory = [NSFileManager cacheDirectory];
+        NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+        [self setUrl:fileUrl];
+        
+        NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
+        [self setColumns:columns];
+        
+        NSMutableArray *columnKeys = [[NSMutableArray alloc] init];
+        [self setColumnKeys:columnKeys];
+        
+        NSArray *sortDescriptors = [NSArray array];
+        [self setSortDescriptors:sortDescriptors];
+        
+        [self setRowCounter:0];
+        
+        [self setupSqlite];
+
+    }
+    return self;
+}
+
+- (void)setupSqlite {
+    _statement = NULL;
+    const char *path = [[[self url] path] UTF8String];
+    
+    BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
+    if (success == NO) {
+        const char *errorMessage = sqlite3_errmsg(_database);
+        NSString *message = [NSString stringWithUTF8String: errorMessage];
+        NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
+        NSLog(@"%@ %@", message, title);
+    }
+    success = sqlite3_extended_result_codes(_database, true) == SQLITE_OK;
+
+}
+
+- (NSString *)sqlQuery {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
+    NSUInteger columnCounter = 0;
+    
+    NSAssert([[self columnKeys] count] != 0, @"Bad parameter data.");  // FIXME: Handle case where no columns.
+    
+    for (NSString *key in [self columnKeys]) {
+        if (columnCounter != 0) {
+            [sql appendString:@", "];
+        }
+        [sql appendFormat:@"\"%@\"", key];
+        columnCounter++;
+    }
+    [sql appendFormat:@" FROM %@", [self tableName]];
+    
+    return sql;
+}
+
+- (NSString *)sqlQueryRemoveAll {
+    return [NSString stringWithFormat:@"DELETE FROM %@", [self tableName]];
+}
+
+- (NSString *)sqlQueryWithLimit:(NSUInteger)limit {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:[self sqlQuery]];
+    [sql appendFormat:@" LIMIT %ld ", limit];
+    return sql;
+}
+
+- (NSString *)sqlQueryWithLimit:(NSUInteger)limit offset:(NSUInteger)offset {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:[self sqlQueryWithLimit:limit]];
+    [sql appendFormat:@" OFFSET %ld ", offset];
+    return sql;
+}
+
+- (void)cache {
+    // FIXME: Implement this.
+    //[super cache];
+}
+- (id)plist {
+    // FIXME: Implement this.
+    return nil;
+}
+
+
+- (NSString *)tableName {
+    return [NSString stringWithFormat:@"t%lu", (unsigned long)[self tag]];
+}
+
+- (void)addColumn:(MTDataColumn *)column {
+    
+    NSUInteger columnId = [[self columnKeys] count];
+    NSString *columnName = [NSString stringWithFormat:@"c%lu", (unsigned long)columnId];
+    
+    [[self columns] setObject:column forKey:columnName];
+    [[self columnKeys] addObject:columnName];
+    
+    NSNumber *createTable = @(columnId == 0);
+    NSDictionary *queryDefination = @{
+                                      @(MTQueryCacheAddColumnDataColumn) : column,
+                                      @(MTQueryCacheAddColumnTableName) : [self tableName],
+                                      @(MTQueryCacheAddColumnUrl) : [self url],
+                                      @(MTQueryCacheAddColumnColumnName) : columnName,
+                                      @(MTQueryCacheAddColumnCreateTable) : createTable
+                                      };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    [query performQuery:^(BOOL success, NSError *error) {
+    }];
+
+}
+
+- (void)addRow:(NSArray *)row {
+        
+    NSDictionary *queryDefination = @{
+                                      @(MTQueryCacheAddRowColumnKeys) : [self columnKeys],
+                                      @(MTQueryCacheAddRowColumns) : [self columns],
+                                      @(MTQueryCacheAddRowData) : row,
+                                      @(MTQueryCacheAddRowTableName) : [self tableName],
+                                      @(MTQueryCacheAddRowUrl) : [self url]
+                                      };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
+    __block NSUInteger rowCounter = [self rowCounter];
+    [query performQuery:^(BOOL success, NSError *error) {
+        if (success) rowCounter++;
+    }];
+    [self setRowCounter:rowCounter];
+}
+
+- (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
+    
+    NSMutableArray *rowData = [[NSMutableArray alloc] init];
+    for (id columnDefKey in [self columnKeys]) {
+        MTDataColumn *columnDef = [[self columns] objectForKey:columnDefKey];
+        NSString *fieldKey = [columnDef fieldName];
+        id obj = row[fieldKey];
+        if (obj == nil) obj = [NSNull null];
+        [rowData addObject:obj];
+    }
+    [self addRow:rowData];
+}
+
+- (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+    [self setSortDescriptors:sortDescriptors];
+    // FIXME: reset cache after setting the sort descriptors    
+}
+
+- (void)removeAllObjects {
+    NSString *sql = [self sqlQueryRemoveAll];
+    const char *sqlcc = [sql UTF8String];
+    char *sqlc = sqlite3_mprintf((char *) sqlcc);
+    char *errmsg = NULL;
+    sqlite3_exec(_database, sqlc, NULL, NULL, &errmsg);
+    if (errmsg != NULL) {
+        MTLog(@"Detele all faied with %@.", [NSString stringWithUTF8String: errmsg]);
+    }
+    [self setRowCounter:0];
+}
+
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
+    // FIXME: Query just this field.
+    NSDictionary *objForRow = [self objectAtRow:row];
+    NSString *key = [[self columnKeys] objectAtIndex:0];
+    MTDataColumn *columnMetaData = [self columns][key];
+    NSString *fieldName = [columnMetaData fieldName];
+    return [objForRow objectForKey:fieldName];
+}
+
+- (NSDictionary *)objectAtRow:(NSInteger)row {
+    // FIXME: Implement this.
+    NSDictionary *currentObject = nil;
+    _statement = NULL;
+    NSString *sql = [self sqlQueryWithLimit:1 offset:row];
+    const char *sqlc = [sql UTF8String];
+    char *queryString = sqlite3_mprintf((char *) sqlc);
+    BOOL success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
+    //NSMutableArray *results = nil;
+    if (success) {
+        if (sqlite3_step(_statement) == SQLITE_ROW) {
+            NSDictionary *currentD = [self currentObject];
+            currentObject = [NSDictionary dictionaryWithDictionary:currentD];
+        }
+    } else {
+        const char *errorMessage = sqlite3_errmsg(_database);
+        NSString *message = [NSString stringWithUTF8String: errorMessage];
+        NSLog(@"%@", message);
+    }
+    sqlite3_finalize(_statement);
+    return currentObject;
+}
+
+- (NSEnumerator *)columnsEnumerator {
+    // FIXME: Implement this.
+    return [[self columns] keyEnumerator];
+}
+
+- (NSEnumerator *)objectEnumerator {
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+    MTDataTableFastObjectEnumerator *objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection columns:[self columns] columnKeys:[self columnKeys] tableName:[self tableName] andSortDescriptors:[self sortDescriptors]];
+    return objectEnumerator;
+}
+
+- (NSArray *)allObjects {
+    // FIXME: Implement this.
+    return nil;
+}
+
+- (NSUInteger)count {
+    return [self numberOfRows];
+}
+
+- (NSUInteger)numberOfColumns {
+    return  [[self columnKeys] count];
+}
+
+- (NSUInteger)numberOfRows {
+    return [self rowCounter];
+}
+
+- (id)currentObject {
+    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
+    int columnCounter = 0;
+    for (id key in [self columnKeys]) {
+        MTDataColumn *dataColumn = [self columns][key];
+        id columnValue;
+        switch ([[dataColumn columnType] integerValue]) {
+            case MTDataTypeInteger:
+                columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
+                break;
+            case MTDataTypeBlob:
+                columnValue = [NSData dataWithBytes: sqlite3_column_blob(_statement, columnCounter)
+                                             length: sqlite3_column_bytes(_statement, columnCounter)];
+                break;
+            case MTDataTypeFloat:
+                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                break;
+            case MTDataTypeDouble:
+                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                break;
+            case MTDataTypeDecimal:
+                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                break;
+            case MTDataTypeString:
+                columnValue = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(_statement, columnCounter)];
+                break;
+            default:
+                NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
+                columnValue = sqlite3_column_type(_statement, columnCounter) == SQLITE_TEXT ? [NSString stringWithUTF8String:(const char *)sqlite3_column_text(_statement, columnCounter)] : nil;
+                break;
+        }
+        if (columnValue != nil) {
+            [currentObject setValue:columnValue forKey:[dataColumn fieldName]];
+        }
+        columnCounter++;
+    }
+    return currentObject;
+}
+
+@end
