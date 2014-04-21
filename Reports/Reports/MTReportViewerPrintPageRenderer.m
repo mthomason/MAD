@@ -47,6 +47,7 @@
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
 #import "MTDataTable.h"
+#import "MTDataTableFast.h"
 
 #import "MTBarcode.h"
 #import "MTFont.h"
@@ -440,11 +441,10 @@
                                                     
                                                     NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:index];
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
-                                                    for (NSNumber *dataIndex in [[self reportFormatter] objectEnumeratorForPage:index]) {
-                                                        NSInteger i = [dataIndex integerValue];
-                                                        id objectToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: i];
-                                                        [(NSMutableArray *)dataForGroup addObject:objectToAdd];
-                                                    }
+                                                    NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:index];
+                                                    NSArray *objectsToAdd = [(MTDataTableFast *)[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
+                                                                                                                                                 limit: [indexSet count]];
+                                                    [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
                                                     [dataForGroup autorelease];
                                                     break;
                                                 }

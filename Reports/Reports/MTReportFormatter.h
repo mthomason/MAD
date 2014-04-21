@@ -27,7 +27,7 @@ extern NSString * const MTNullIdentifier;
 - (NSUInteger)numberOfPages;
 - (NSUInteger)countOnPageIndex:(NSUInteger)pageIndex;
 
-- (NSEnumerator *)objectEnumeratorForPage:(NSUInteger)pageIndex;
+- (NSIndexSet *)objectEnumeratorForPage:(NSUInteger)pageIndex;
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 
 @end

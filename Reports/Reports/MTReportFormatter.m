@@ -26,6 +26,8 @@
 #import "RptqQuery+Extras.h"
 #import "MTDataTable.h"
 
+#import "MTDataTableFast.h"
+
 //Why the fuck!!!
 
 #import "MTDatabaseConnection.h"
@@ -55,8 +57,11 @@ NSString * const MTNullIdentifier = @"(null)";
 @property (nonatomic, retain) NSMutableArray *temporaryLayoutForPage;
 @property (nonatomic, retain) NSMutableArray *temporaryLayoutByPage;
 
-@property (nonatomic, retain) NSMutableArray *temporaryIndexesForPage;
+@property (nonatomic, retain) NSMutableIndexSet *temporaryIndexesForPage;
 @property (nonatomic, retain) NSMutableArray *temporaryIndexesByPage;
+
+@property (nonatomic, assign) NSUInteger cachedPageNumber;
+@property (nonatomic, retain) NSArray *objectsForPage;
 
 @end
 
@@ -92,7 +97,7 @@ NSString * const MTNullIdentifier = @"(null)";
         [self setTemporaryIndexesByPage:temporaryDataByPage];
         [temporaryDataByPage release];
         
-        NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
+        NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
         [self setTemporaryIndexesForPage:temporaryDataForPage];
         [temporaryDataForPage release];
 
@@ -101,6 +106,8 @@ NSString * const MTNullIdentifier = @"(null)";
         
         NSArray *dataByPage = [NSArray array];
         [self setIndexesByPage:dataByPage];
+        
+        [self setCachedPageNumber: NSNotFound];
     }
     return self;
 }
@@ -217,7 +224,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [[self temporaryLayoutByPage] addObject:tlfp];
             [tlfp release];
             
-            NSArray *tdfp = [[self temporaryIndexesForPage] retain];
+            NSIndexSet *tdfp = [[self temporaryIndexesForPage] retain];
             [[self temporaryIndexesByPage] addObject:tdfp];
             [tdfp release];
             
@@ -359,7 +366,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)cacheReportHeader {
     [[self temporaryLayoutForPage] removeAllObjects];
-    [[self temporaryIndexesForPage] removeAllObjects];
+    [[self temporaryIndexesForPage] removeAllIndexes];
     NSDictionary *d = @{MTReportSectionType : MTReportHeader};
     [[self temporaryLayoutForPage] addObject: d];
 }
@@ -610,7 +617,7 @@ NSString * const MTNullIdentifier = @"(null)";
         [dataToAdd release];
         
         [[self temporaryLayoutForPage] removeAllObjects];
-        [[self temporaryIndexesForPage] removeAllObjects];
+        [[self temporaryIndexesForPage] removeAllIndexes];
         
         RptqDocumentSection *pageHeaderSection = [document hasPageHeaderSection];
         BOOL pageHeaderIsVisable = [[pageHeaderSection visibility] boolValue];
@@ -667,8 +674,7 @@ NSString * const MTNullIdentifier = @"(null)";
     NSDictionary *detail = @{MTReportSectionType : MTPageDetail};
     [[self temporaryLayoutForPage] addObject: detail];
     NSUInteger ctr = [self temporaryCachedDetailCounter];
-    NSNumber *counter = @(ctr);
-    [[self temporaryIndexesForPage] addObject:counter];
+    [[self temporaryIndexesForPage] addIndex:ctr];
     ctr++;
     [self setTemporaryCachedDetailCounter:ctr];
 }
@@ -687,12 +693,17 @@ NSString * const MTNullIdentifier = @"(null)";
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
     id rowData = nil;
     if (page < [[self indexesByPage] count]) {
-        NSArray *pageIndexes = [[self indexesByPage] objectAtIndex:page];
+        NSIndexSet *pageIndexes = [[self indexesByPage] objectAtIndex:page];
         if (row < [pageIndexes count]) {
-            NSUInteger cachedDataIndex = [pageIndexes[row] integerValue];
-            if (cachedDataIndex < [[[self query] datatable] numberOfRows]) {
-                rowData = [[[self query] datatable] objectAtRow:cachedDataIndex];
+            
+            if (page != [self cachedPageNumber]) {
+                [self setCachedPageNumber:page];
+                NSArray *objectsForPage = [(MTDataTableFast *)[[self query] datatable] objectAtRow:[pageIndexes firstIndex]
+                                                                                             limit:[pageIndexes count]];
+                [self setObjectsForPage:objectsForPage];
             }
+            NSDictionary *data = [self objectsForPage][row];
+            rowData = [NSDictionary dictionaryWithDictionary:data];
         }
     }
     return rowData;
@@ -745,8 +756,8 @@ NSString * const MTNullIdentifier = @"(null)";
     return [[[self indexesByPage] objectAtIndex:pageNumber] count];
 }
 
-- (NSEnumerator *)objectEnumeratorForPage:(NSUInteger)pageIndex {
-    return [[self indexesByPage][pageIndex] objectEnumerator];
+- (NSIndexSet *)objectEnumeratorForPage:(NSUInteger)pageIndex {
+    return [self indexesByPage][pageIndex];
 }
 
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex {

@@ -218,26 +218,37 @@
 }
 
 - (NSDictionary *)objectAtRow:(NSInteger)row {
-    // FIXME: Implement this.
-    NSDictionary *currentObject = nil;
-    _statement = NULL;
-    NSString *sql = [self sqlQueryWithLimit:1 offset:row];
-    const char *sqlc = [sql UTF8String];
-    char *queryString = sqlite3_mprintf((char *) sqlc);
-    BOOL success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
-    //NSMutableArray *results = nil;
-    if (success) {
-        if (sqlite3_step(_statement) == SQLITE_ROW) {
-            NSDictionary *currentD = [self currentObject];
-            currentObject = [NSDictionary dictionaryWithDictionary:currentD];
+    return [[self objectAtRow:row limit:1] firstObject];
+}
+
+- (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
+    id results = nil;
+    if (row != NSNotFound && limit > 0) {
+        results = [[NSMutableArray alloc] initWithCapacity:limit];
+        NSDictionary *currentObject = nil;
+        _statement = NULL;
+        NSString *sql = [self sqlQueryWithLimit:limit offset:row];
+        const char *sqlc = [sql UTF8String];
+        char *queryString = sqlite3_mprintf((char *) sqlc);
+        BOOL success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
+        //NSMutableArray *results = nil;
+        if (success) {
+            while (sqlite3_step(_statement) == SQLITE_ROW) {
+                NSDictionary *currentD = [self currentObject];
+                currentObject = [NSDictionary dictionaryWithDictionary:currentD];
+                [results addObject:currentObject];
+            }
+        } else {
+            const char *errorMessage = sqlite3_errmsg(_database);
+            NSString *message = [NSString stringWithUTF8String: errorMessage];
+            NSLog(@"%@", message);
         }
+        sqlite3_finalize(_statement);
     } else {
-        const char *errorMessage = sqlite3_errmsg(_database);
-        NSString *message = [NSString stringWithUTF8String: errorMessage];
-        NSLog(@"%@", message);
+        results = [NSArray array];
     }
-    sqlite3_finalize(_statement);
-    return currentObject;
+
+    return results;
 }
 
 - (NSEnumerator *)columnsEnumerator {
@@ -247,7 +258,11 @@
 
 - (NSEnumerator *)objectEnumerator {
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
-    MTDataTableFastObjectEnumerator *objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection columns:[self columns] columnKeys:[self columnKeys] tableName:[self tableName] andSortDescriptors:[self sortDescriptors]];
+    MTDataTableFastObjectEnumerator *objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
+                                                                                                                    columns:[self columns]
+                                                                                                                 columnKeys:[self columnKeys]
+                                                                                                                  tableName:[self tableName]
+                                                                                                         andSortDescriptors:[self sortDescriptors]];
     return objectEnumerator;
 }
 

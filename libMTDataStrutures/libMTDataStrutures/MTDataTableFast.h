@@ -32,6 +32,7 @@
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
 - (id)objectAtRow:(NSInteger)row;
+- (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit;
 
 - (NSEnumerator *)columnsEnumerator;
 - (NSEnumerator *)objectEnumerator;
