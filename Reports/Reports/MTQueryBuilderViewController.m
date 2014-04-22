@@ -626,7 +626,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     NSDictionary *oldLayout = [self datamodel];
     NSArray *oldLayoutSectionTypes = [oldLayout objectForKey:MTTableSectionSectionsKey];
     
-    RptqQueryTable *newQueryTable = [RptqDatabaseSchemaTable addTableToQuery:table forManagedObjectContext:managedObjectContext];
+    RptqQueryTable *newQueryTable = [RptqQueryTable queryTableWithSchemaTable:table];
     
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
     NSArray *queryTablesArray = [[query hasQueryTables] sortedArrayUsingDescriptors:@[namesAccending]];

@@ -29,7 +29,7 @@
     sqlite3_close_v2(_database);
 }
 
-- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors {
+- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys sql:(NSString *)sql {
     self = [super init];
     if (self) {
         
@@ -40,6 +40,7 @@
             _statement = NULL;
             const char *path = [[[databaseConnection databaseUrl] path] UTF8String];
             
+            
             BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READONLY | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
             if (success == NO) {
                 const char *errorMessage = sqlite3_errmsg(_database);
@@ -49,19 +50,6 @@
             }
             success = sqlite3_extended_result_codes(_database, true) == SQLITE_OK;
             
-            NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
-            NSUInteger columnCounter = 0;
-            
-            NSAssert([columnKeys count] != 0, @"Bad parameter data.");  // FIXME: Handle case where no columns.
-            
-            for (NSString *key in columnKeys) {
-                if (columnCounter != 0) {
-                    [sql appendString:@", "];
-                }
-                [sql appendFormat:@"\"%@\"", key];
-                columnCounter++;
-            }
-            [sql appendFormat:@" FROM %@", tableName];
             
             const char *queryStringConstChar = [sql UTF8String];
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);

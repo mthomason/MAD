@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryCacheAddRow.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabase.h"
@@ -72,50 +76,97 @@
         MTDataColumn *column = [self columns][fieldName];
         NSString *columnValue = nil;
         MTDataType type = [[column columnType] integerValue];
-        
         NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
-        [colmunNames appendString:safeFieldName];
-        switch (type) {
-            case MTDataTypeInteger:
-                columnValue = [NSString stringWithFormat:@"%d", [object integerValue]];
-                break;
-            case MTDataTypeString:
-                columnValue = [NSString stringWithFormat:@"\"%@\"", object];
-                break;
-            case MTDataTypeBlob: {
-                
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeBlob fieldIndex:columnCounter value:object];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = @"?";
-                break;
-            }
-            case MTDataTypeDouble:
-                columnValue = [NSString stringWithFormat:@"%lf", [object floatValue]];
-                break;
-            case MTDataTypeNumber:
-                columnValue = [NSString stringWithFormat:@"%lf", [object floatValue]];
-                break;
-            default:
-                columnValue = [NSString stringWithFormat:@"%@", object];
-                NSAssert(false, @"Fill this out!");
-                columnValue = @"NULL";
-                break;
-        }
-        [values appendString:columnValue];
         
         if (columnCounter > 0) {
             [colmunNames appendString:@", "];
             [values appendString:@", "];
         }
         
+        [colmunNames appendString:safeFieldName];
+        switch (type) {
+            case MTDataTypeBit:
+            case MTDataTypeInteger:
+            case MTDataTypeShort:
+            case MTDataTypeLong:
+            case MTDataTypeLongLong:
+            case MTDataTypeInt24:
+            case MTDataTypeEnum: {
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeInteger
+                                                                                          fieldIndex:columnCounter
+                                                                                               value:object];
+                [[self binaryBindings] addObject:databinding];
+                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+                break;
+            }
+            case MTDataTypeSet:
+            case MTDataTypeTime:
+            case MTDataTypeTimeStamp:
+            case MTDataTypeYear:
+            case MTDataTypeDate:
+            case MTDataTypeDateTime:
+            case MTDataTypeString:
+            case MTDataTypeVarChar:
+            case MTDataTypeGeometry: {
+                
+                
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeString
+                                                                                          fieldIndex:columnCounter
+                                                                                               value:object];
+                [[self binaryBindings] addObject:databinding];
+                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+                break;
+            }
+            case MTDataTypeImage:
+            case MTDataTypeBlob: {
+                
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeBlob
+                                                                                          fieldIndex:columnCounter
+                                                                                               value:object];
+                [[self binaryBindings] addObject:databinding];
+                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+                break;
+            }
+            case MTDataTypeFloat: {
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeFloat
+                                                                                          fieldIndex:columnCounter
+                                                                                               value:object];
+                [[self binaryBindings] addObject:databinding];
+                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+                break;
+            }
+            case MTDataTypeDouble:
+            case MTDataTypeDecimal:
+            case MTDataTypeNumber: {
+                
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeDouble
+                                                                                          fieldIndex:columnCounter
+                                                                                               value:object];
+                [[self binaryBindings] addObject:databinding];
+                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+                break;
+            }
+            case MTDataTypeUnknown:
+            default: {
+                NSString *safeObject = [NSString stringWithFormat:@"%@", object];
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeString
+                                                                                          fieldIndex:columnCounter
+                                                                                               value:safeObject];
+                [[self binaryBindings] addObject:databinding];
+                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+
+                break;
+            }
+        }
+        [values appendString:columnValue];
+        
         columnCounter++;
     }
-    
     
     return [NSString stringWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", [self tableName], colmunNames, values];
 }
 
-- (BOOL)expectsResults {
+- (BOOL)returnsResults {
     return NO;
 }
 

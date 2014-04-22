@@ -12,6 +12,7 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/Foundation.h>
+#import "MTDatabaseField.h"
 
 extern NSString * const MTSqlFrom;
 
@@ -67,6 +68,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)removeCredentalsBecauseOfError:(NSError *)error;
 
 - (BOOL)limitResults;
+- (NSString *)nativeTypeForDataType:(MTDataType)dataType;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 

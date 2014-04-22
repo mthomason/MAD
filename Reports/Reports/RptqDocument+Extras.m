@@ -258,8 +258,7 @@
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                                  withConnecitonId: connectionId];
                             
-                            RptqDatabaseSchemaTable *rptqTableOrigional = [[RptqDatabaseSchemaTable getTableForManagedObjectContext: managedObjectContext
-                                                                                              database: currentDatabase
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [[RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
                                                                                           andTableName: [databaseTable name]] retain];
                             
                             RptqDatabaseSchemaField *schemaField = [[RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext

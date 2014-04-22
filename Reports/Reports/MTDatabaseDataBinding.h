@@ -11,10 +11,12 @@
 
 @interface MTDatabaseDataBinding : NSObject
 
+@property (nonatomic, strong, readonly) id value;
+@property (nonatomic, assign, readonly) MTDataType datatype;
+@property (nonatomic, assign, readonly) NSUInteger fieldIndex;
+
 - (id)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value;
 
-- (MTDataType)datatype;
-- (NSUInteger)fieldIndex;
 - (id)value;
 
 @end

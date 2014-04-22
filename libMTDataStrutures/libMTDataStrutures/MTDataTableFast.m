@@ -105,7 +105,16 @@
         columnCounter++;
     }
     [sql appendFormat:@" FROM %@", [self tableName]];
-    
+    if ([[self sortDescriptors] count] > 0) {
+        [sql appendString:@" ORDER BY "];
+        NSUInteger sortCounter = 0;
+        for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
+            if (sortCounter != 0) [sql appendString:@", "];
+            NSString *sortDirection = [sortDescriptor ascending] ? @"ASC" : @"DESC";
+            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
+            sortCounter++;
+        }
+    }
     return sql;
 }
 
@@ -115,13 +124,15 @@
 
 - (NSString *)sqlQueryWithLimit:(NSUInteger)limit {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:[self sqlQuery]];
-    [sql appendFormat:@" LIMIT %ld ", limit];
+    [sql appendFormat:@" LIMIT %ld ", (unsigned long)limit];
+    NSLog(@"%@", sql);
     return sql;
 }
 
 - (NSString *)sqlQueryWithLimit:(NSUInteger)limit offset:(NSUInteger)offset {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:[self sqlQueryWithLimit:limit]];
-    [sql appendFormat:@" OFFSET %ld ", offset];
+    [sql appendFormat:@" OFFSET %ld ", (unsigned long)offset];
+    NSLog(@"%@", sql);
     return sql;
 }
 
@@ -171,11 +182,10 @@
                                       @(MTQueryCacheAddRowUrl) : [self url]
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
-    __block NSUInteger rowCounter = [self rowCounter];
+    self.rowCounter++;
     [query performQuery:^(BOOL success, NSError *error) {
-        if (success) rowCounter++;
+        if (!success) NSLog(@"Error %@", error);
     }];
-    [self setRowCounter:rowCounter];
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
@@ -192,20 +202,48 @@
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
-    [self setSortDescriptors:sortDescriptors];
+    NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
+    for (NSSortDescriptor *sort in sortDescriptors) {
+        for (NSString *columnKey in [[self columns] keyEnumerator]) {
+            MTDataColumn *column = [[self columns] objectForKey:columnKey];
+            if ([[column fieldName] isEqualToString:[sort key]]) {
+                NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey  ascending:[sort ascending]];
+                [newSorts addObject:sortn];
+                break;
+            }
+        }
+    }
+    [self setSortDescriptors:newSorts];
     // FIXME: reset cache after setting the sort descriptors    
 }
 
 - (void)removeAllObjects {
+    
     NSString *sql = [self sqlQueryRemoveAll];
     const char *sqlcc = [sql UTF8String];
     char *sqlc = sqlite3_mprintf((char *) sqlcc);
     char *errmsg = NULL;
-    sqlite3_exec(_database, sqlc, NULL, NULL, &errmsg);
-    if (errmsg != NULL) {
-        MTLog(@"Detele all faied with %@.", [NSString stringWithUTF8String: errmsg]);
-    }
+    BOOL success = SQLITE_OK == sqlite3_exec(_database, sqlc, NULL, NULL, &errmsg);
     [self setRowCounter:0];
+    
+    NSString *sqlDropTable = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", [self tableName]];
+    const char *sqldtc = [sqlDropTable UTF8String];
+    char *sqldt = sqlite3_mprintf((char *) sqldtc);
+    success = SQLITE_OK == sqlite3_exec(_database, sqldt, NULL, NULL, &errmsg);
+    if (errmsg != NULL) {
+        MTLog(@"Drop table faied with %@.", [NSString stringWithUTF8String: errmsg]);
+    }
+    
+    const char *sqlvc = "VACUUM";
+    char *sqldv = sqlite3_mprintf((char *) sqlvc);
+    success = SQLITE_OK == sqlite3_exec(_database, sqldv, NULL, NULL, &errmsg);
+    if (errmsg != NULL) {
+        MTLog(@"Vaccuum faied with %@.", [NSString stringWithUTF8String: errmsg]);
+    }
+
+    [[self columnKeys] removeAllObjects];
+    [[self columns] removeAllObjects];
+    
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
@@ -257,12 +295,16 @@
 }
 
 - (NSEnumerator *)objectEnumerator {
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
-    MTDataTableFastObjectEnumerator *objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
-                                                                                                                    columns:[self columns]
-                                                                                                                 columnKeys:[self columnKeys]
-                                                                                                                  tableName:[self tableName]
-                                                                                                         andSortDescriptors:[self sortDescriptors]];
+    NSEnumerator *objectEnumerator = nil;
+    if ([[self columns] count] > 0) {
+        NSString *sql = [self sqlQuery];
+        NSLog(@"objectEnumerator: %@", sql);
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+        objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
+                                                                                       columns:[self columns]
+                                                                                    columnKeys:[self columnKeys]
+                                                                                           sql:sql];
+    }
     return objectEnumerator;
 }
 

@@ -12,6 +12,6 @@
 
 @interface MTDataTableFastObjectEnumerator : NSEnumerator
 
-- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors;
+- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys sql:(NSString *)sql;
 
 @end

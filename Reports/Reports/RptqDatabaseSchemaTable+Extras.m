@@ -97,8 +97,7 @@
     return [rptqTable autorelease];
 }
 
-+ (RptqDatabaseSchemaTable *)getTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                      database:(RptqDatabase *)database
++ (RptqDatabaseSchemaTable *)getTableForDatabase:(RptqDatabase *)database
                                   andTableName:(NSString *)name {
 
     NSSet *tables = [database hasTables];
@@ -115,34 +114,6 @@
 + (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return result;
-}
-
-+ (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqDatabase *database = [table inDatabase];
-    RptqDocument *document = [database ownedByQueryAsStaticResource];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
-    
-    RptqQueryTable *newQueryTable = [[RptqQueryTable createNewQueryTableForTable:table inDocument:document] retain];
-    
-    NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
-    for (RptqDatabaseSchemaField *field in [table hasFields]) {
-        RptqQueryField *newQueryField = [[RptqQueryField createNewQueryFieldForManagedObjectContext:managedObjectContext] retain];
-        [newQueryField setInQueryTable:newQueryTable];
-        [newQueryField setDatabaseSchemaField:field];
-        [newQueryTable setInQuery:query];
-        [newQueryFields addObject:newQueryField];
-        [newQueryField release];
-    }
-    [newQueryTable setHasQueryFields:newQueryFields];
-    [tablesInQuery addObject:newQueryTable];
-    
-    [query setHasQueryTables:tablesInQuery];
-    [managedObjectContext save:nil];
-
-    [newQueryFields release];
-    [tablesInQuery release];
-    return [newQueryTable autorelease];
 }
 
 #pragma mark - MTProtocolCompare

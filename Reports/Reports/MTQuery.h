@@ -38,6 +38,16 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheAddRowParameters) {
     MTQueryCacheAddRowColumnKeys
 };
 
+typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
+	MTQuerySelectConnection,
+    MTQuerySelectTableName,
+    MTQuerySelectFieldKeys,
+    MTQuerySelectLimit,
+    MTQuerySelectOffset,
+    MTQuerySelectSortDescriptors,
+    MTQuerySelectPredicates
+};
+
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
 
@@ -50,7 +60,6 @@ extern NSString * const MTQueryKeyObject;
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;
-@property (nonatomic, assign) BOOL expectsResults;
 
 @property (nonatomic, strong) NSMutableArray *binaryBindings; // Used by database to bind NSData to insert statements
 

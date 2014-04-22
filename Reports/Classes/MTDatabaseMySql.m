@@ -332,4 +332,9 @@
     return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
 }
 
+- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
+    // FIXME: Not implemented.  Needed for insert statement generation.
+    return @"";
+}
+
 @end

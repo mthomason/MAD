@@ -1547,4 +1547,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return sql;
 }
 
+- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
+    // FIXME: Not implemented.  Needed for insert statement generation.
+    return @"";
+}
+
 @end

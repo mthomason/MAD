@@ -12,6 +12,7 @@
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
+#import "RptqQueryField+Extras.h"
 
 @implementation RptqQueryTable (Extras)
 
@@ -50,14 +51,40 @@
     return result;
 }
 
+
++ (RptqQueryTable *)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table {
+     RptqDatabase *database = [table inDatabase];
+     RptqDocument *document = [database ownedByQueryAsStaticResource];
+     RptqQuery *query = [[database hasQueries] anyObject];
+     NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
+     
+     RptqQueryTable *newQueryTable = [[RptqQueryTable createNewQueryTableForTable:table inDocument:document] retain];
+     
+     NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
+     for (RptqDatabaseSchemaField *field in [table hasFields]) {
+         RptqQueryField *newQueryField = [[RptqQueryField createNewQueryFieldForManagedObjectContext:[table managedObjectContext]] retain];
+         [newQueryField setInQueryTable:newQueryTable];
+         [newQueryField setDatabaseSchemaField:field];
+         [newQueryTable setInQuery:query];
+         [newQueryFields addObject:newQueryField];
+         [newQueryField release];
+     }
+     [newQueryTable setHasQueryFields:newQueryFields];
+     [tablesInQuery addObject:newQueryTable];
+     
+     [query setHasQueryTables:tablesInQuery];
+     [[table managedObjectContext] save:nil];
+     
+     [newQueryFields release];
+     [tablesInQuery release];
+     return [newQueryTable autorelease];
+ }
+ 
+
 + (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable inDocument:(RptqDocument *)document {
 
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    
-    //for (RptqDatabaseSchemaTable *t in [database hasTables]) {
-    //    NSLog(@"T: %@", [t name]);
-    //}
     
     NSSet *queryTables = [query hasQueryTables];
     NSInteger dupeCtr = 0;

@@ -46,6 +46,9 @@
 
 #import "MTDataTable.h"
 
+#import "MTQueryCacheAddColumn.h"
+#import "MTQueryCacheAddRow.h"
+
 NSString * const MTQueryKeyType = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
@@ -74,6 +77,12 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
             break;
         case MTQueryTypeSampleDataTable:
             self = [[MTQuerySampleDataTable alloc] initWithObject:object];
+            break;
+        case MTQueryTypeCacheAddColumn:
+            self = [[MTQueryCacheAddColumn alloc] initWithObject:object];
+            break;
+        case MTQueryTypeCacheAddRow:
+            self = [[MTQueryCacheAddRow alloc] initWithObject:object];
             break;
             
         default:

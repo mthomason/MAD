@@ -26,11 +26,8 @@
 + (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andTable:(MTDatabaseTable *)table;
 
-+ (RptqDatabaseSchemaTable *)getTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                      database:(RptqDatabase *)database
++ (RptqDatabaseSchemaTable *)getTableForDatabase:(RptqDatabase *)database
                                   andTableName:(NSString *)name;
-
-+ (RptqQueryTable *)addTableToQuery:(RptqDatabaseSchemaTable *)table forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 + (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

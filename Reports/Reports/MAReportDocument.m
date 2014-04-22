@@ -150,6 +150,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
 
     MTQuery *defaultQuery = [[self defaultQuery] retain];
+    
     [[self defaultQuery] performQuery:^(BOOL success, NSError *error) {
         [self setDidRefresh:success];
         completion(success, error);
