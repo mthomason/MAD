@@ -408,10 +408,8 @@ NSString * const MTNullIdentifier = @"(null)";
 // FIXME: Hack... this shit looks just like cacheGroupLevel
 - (void)cacheUntilFirstPageStartingWithGroup:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel firstPageComplete:(BOOL *)firstPageComplete {
     
-    if ([self sortedQueryGroups] == nil) {
-        NSArray *sqg = [[self query] sortedHasQueryGroups];
-        [self setSortedQueryGroups:sqg];
-    }
+    NSArray *sqg = [[self query] sortedHasQueryGroups];
+    [self setSortedQueryGroups:sqg];
     
     if (*firstPageComplete == NO) {
         
@@ -516,10 +514,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)cacheGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel {
     
-    if ([self sortedQueryGroups] == nil) {
-        NSArray *sqg = [[self query] sortedHasQueryGroups];
-        [self setSortedQueryGroups:sqg];
-    }
+    NSArray *sqg = [[self query] sortedHasQueryGroups];
+    [self setSortedQueryGroups:sqg];
     
     if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
         
