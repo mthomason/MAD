@@ -59,6 +59,8 @@
         NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
         [self setUrl:fileUrl];
         
+        NSLog(@"Cache URL %@", fileUrl);
+        
         NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
         [self setColumns:columns];
         

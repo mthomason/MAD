@@ -73,7 +73,8 @@
     NSMutableArray *results = [[NSMutableArray alloc] init];
     if ([self empty] == NO) {
         while (sqlite3_step(_statement) == SQLITE_ROW) {
-            [results addObject:[self currentObject]];
+            NSDictionary *newObject = [NSDictionary dictionaryWithDictionary:[self currentObject]];
+            [results addObject:newObject];
         }
     }
     return results;
@@ -123,6 +124,7 @@
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn fieldName]];
         }
+        columnCounter++;
     }
     return currentObject;
 }

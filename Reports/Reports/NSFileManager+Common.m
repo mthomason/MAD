@@ -172,8 +172,7 @@
 
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
     NSString *filename = [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-    NSString *extention = @"mcache";
-    return [filename stringByAppendingPathExtension:extention];
+    return [filename stringByAppendingPathExtension:fileExtention];
 }
 
 @end

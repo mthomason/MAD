@@ -236,7 +236,7 @@
 
 
 - (void)setObjectId:(NSUInteger)objectId {
-    NSString *filename = [NSFileManager filenameId:objectId extention:@"mcache"];
+    NSString *filename = [NSFileManager filenameId:objectId extention:@"maddb"];
     NSURL *cacheDirectory = [NSFileManager cacheDirectory];
     NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
     [self setUrl:fileUrl];

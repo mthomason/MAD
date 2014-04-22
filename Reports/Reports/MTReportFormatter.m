@@ -113,11 +113,14 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setTemporaryIndexesForPage:temporaryDataForPage];
     [temporaryDataForPage release];
     
-    NSArray *layoutByPage = [NSArray array];
+    NSArray *layoutByPage = @[];
     [self setLayoutByPage:layoutByPage];
     
-    NSArray *dataByPage = [NSArray array];
+    NSArray *dataByPage = @[];
     [self setIndexesByPage:dataByPage];
+    
+    NSDictionary *dataByGroup = @{};
+    [self setDataByGroup:dataByGroup];
     
     [self setCachedPageNumber: NSNotFound];
 }
@@ -182,7 +185,8 @@ NSString * const MTNullIdentifier = @"(null)";
             NSEnumerator *objectEnumerator = [[[[self query] datatable] objectEnumerator] retain];
             if (objectEnumerator != nil) {
                 
-                id groupedRows = [self cachedGroupedData:objectEnumerator level:0];
+                id allObjects = [objectEnumerator allObjects];
+                id groupedRows = [self cachedGroupedResults:allObjects level:0];
                 [self setDataByGroup: groupedRows];
                 
                 [self setPrintableSpaceUsedPageHeight: CGSizeZero.height];
@@ -255,13 +259,15 @@ NSString * const MTNullIdentifier = @"(null)";
     }
 }
 
-- (id)cachedGroupedData:(NSEnumerator *)objectEnumerator level:(NSUInteger)level {
+- (id)cachedGroupedData:(NSArray *)sortedResults level:(NSUInteger)level {
+    
+    
     
     BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
     id results = nil;
     
     if (detailLevel) {
-        results = [[objectEnumerator allObjects] retain];
+        results = [sortedResults copy];
     } else {
         
         results = [[NSMutableDictionary alloc] init];
@@ -275,14 +281,16 @@ NSString * const MTNullIdentifier = @"(null)";
         
         NSUInteger groupResultIndexForLevel = 0;
         
-        for (NSDictionary *result in objectEnumerator) {
+        for (NSDictionary *result in sortedResults) {
             valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
             if (valueForField == nil) {
                 valueForField = MTNullIdentifier;
             }
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
                 
-                id resultOfNextGroup = [self cachedGroupedData: [resultsForGroup objectEnumerator]
+                NSLog(@"%@", valueForField);
+                
+                id resultOfNextGroup = [self cachedGroupedData: resultsForGroup
                                                             level: (level + 1)];
                 
                 [results setObject:resultOfNextGroup forKey:lastValueForField];
@@ -295,7 +303,7 @@ NSString * const MTNullIdentifier = @"(null)";
             groupResultIndexForLevel++;
         }
         
-        id resultOfNextGroup = [self cachedGroupedData: [resultsForGroup objectEnumerator]
+        id resultOfNextGroup = [self cachedGroupedData: resultsForGroup
                                                  level: (level + 1)];
         NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
         if (key == nil) {
@@ -340,6 +348,12 @@ NSString * const MTNullIdentifier = @"(null)";
             }
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
                 
+                NSMutableString *t = [[NSMutableString alloc] initWithString:@""];
+                for (int i = 0; i < level; i++) {
+                    [t appendString:@"\t"];
+                }
+                NSLog(@"%@%@", t, lastValueForField);
+
                 id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                             level: (level + 1)];
                 
