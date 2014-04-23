@@ -17,6 +17,9 @@
 #import "MTDatabaseField.h"
 #import "MTDatabaseDataBinding.h"
 
+// FIXME: Remove dependency on MTDatabaseSqlite3
+#import "MTDatabaseSqlite3.h"
+
 @interface MTQueryCacheAddRow ()
 
 @property (nonatomic, strong) NSURL *url;
@@ -55,6 +58,7 @@
 
         MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
         MTDatabase *db = [MTDatabase databaseFactory:connection];
+        NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]] == YES, @"Only allow Sqlite3. Fix this sometime.");
         [self setDatabase:db];
         [self setQueryObject:object];
         

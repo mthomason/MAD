@@ -327,6 +327,7 @@ NSString * const MTNullIdentifier = @"(null)";
     id results = nil;
     
     if (detailLevel) {
+        
         results = [sortedResults copy];
     } else {
 

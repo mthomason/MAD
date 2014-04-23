@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
+#pragma mark Types of queries
+
 typedef NS_ENUM(NSUInteger, MTQueryType) {
 	MTQueryTypeMaxFieldLength,
     MTQueryTypeCustomSql,
@@ -20,7 +22,12 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
     MTQueryTypeSampleDataTable,
     MTQueryTypeCacheAddColumn,
     MTQueryTypeCacheAddRow,
+    MTQueryTypeCacheDeleteAllFromTable,
+    MTQueryTypeCacheDropTable,
+    MTQueryTypeCacheVacuum,
 };
+
+#pragma mark Types of specific paramamters accepted for each query
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheAddColumnParameters) {
 	MTQueryCacheAddColumnDataColumn,
@@ -36,6 +43,20 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheAddRowParameters) {
     MTQueryCacheAddRowTableName,
     MTQueryCacheAddRowColumns,
     MTQueryCacheAddRowColumnKeys
+};
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheDeleteAllFromTableParameters) {
+    MTQueryCacheDeleteAllFromTableConnection,
+    MTQueryCacheDeleteAllFromTableTableName
+};
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheDropTableParameters) {
+    MTQueryCacheDropTableConnection,
+    MTQueryCacheDropTableTableName
+};
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheVacuumParameters) {
+    MTQueryCacheVacuumConnection,
 };
 
 typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {

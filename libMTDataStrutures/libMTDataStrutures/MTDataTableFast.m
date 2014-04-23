@@ -94,6 +94,10 @@
 }
 
 - (NSString *)sqlQuery {
+    return [self sqlQueryWithFilters:nil];
+}
+
+- (NSString *)sqlQueryWithFilters:(NSDictionary *)predicates {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
     NSUInteger columnCounter = 0;
     
@@ -107,6 +111,7 @@
         columnCounter++;
     }
     [sql appendFormat:@" FROM %@", [self tableName]];
+
     if ([[self sortDescriptors] count] > 0) {
         [sql appendString:@" ORDER BY "];
         NSUInteger sortCounter = 0;
@@ -118,6 +123,7 @@
         }
     }
     return sql;
+    
 }
 
 - (NSString *)sqlQueryRemoveAll {
@@ -153,6 +159,7 @@
 }
 
 - (void)addColumn:(MTDataColumn *)column {
+    NSLog(@"Add Column");
     
     NSUInteger columnId = [[self columnKeys] count];
     NSString *columnName = [NSString stringWithFormat:@"c%lu", (unsigned long)columnId];
@@ -221,31 +228,72 @@
 
 - (void)removeAllObjects {
     
-    NSString *sql = [self sqlQueryRemoveAll];
-    const char *sqlcc = [sql UTF8String];
-    char *sqlc = sqlite3_mprintf((char *) sqlcc);
-    char *errmsg = NULL;
-    BOOL success = SQLITE_OK == sqlite3_exec(_database, sqlc, NULL, NULL, &errmsg);
-    [self setRowCounter:0];
-    
-    NSString *sqlDropTable = [NSString stringWithFormat:@"DROP TABLE IF EXISTS main.%@", [self tableName]];
-    const char *sqldtc = [sqlDropTable UTF8String];
-    char *sqldt = sqlite3_mprintf((char *) sqldtc);
-    success = SQLITE_OK == sqlite3_exec(_database, sqldt, NULL, NULL, &errmsg);
-    if (errmsg != NULL) {
-        MTLog(@"Drop table faied with %@.", [NSString stringWithUTF8String: errmsg]);
-    }
-    
-    const char *sqlvc = "VACUUM";
-    char *sqldv = sqlite3_mprintf((char *) sqlvc);
-    success = SQLITE_OK == sqlite3_exec(_database, sqldv, NULL, NULL, &errmsg);
-    if (errmsg != NULL) {
-        MTLog(@"Vaccuum faied with %@.", [NSString stringWithUTF8String: errmsg]);
-    }
+    dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        [self deleteAllFromTable];
+        [self dropTable];
+        [self vacuumCacheDb];
+        dispatch_semaphore_signal(semaphoreRemoveAll);
+    });
+    dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
 
     [[self columnKeys] removeAllObjects];
     [[self columns] removeAllObjects];
     
+}
+
+- (void)vacuumCacheDb {
+    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+    NSNumber *tableConnectionKey = @(MTQueryCacheVacuumConnection);
+    NSDictionary *queryVacuumDefination = @{
+                                            tableConnectionKey : connection
+                                            };
+    MTQuery *queryVacuum = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheVacuum object:queryVacuumDefination];
+
+    dispatch_semaphore_t semaphoreVacuum = dispatch_semaphore_create(0);
+    [queryVacuum performQuery:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(semaphoreVacuum);
+    }];
+    dispatch_semaphore_wait(semaphoreVacuum, DISPATCH_TIME_FOREVER);
+
+}
+
+- (void)dropTable {
+    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+    NSNumber *tableConnectionKey = @(MTQueryCacheDropTableConnection);
+    NSNumber *tableNameKey = @(MTQueryCacheDropTableTableName);
+    NSDictionary *queryDefination = @{
+                                      tableConnectionKey : connection,
+                                      tableNameKey : [self tableName]
+                                      };
+    
+    MTQuery *queryDropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDropTable object:queryDefination];
+
+    dispatch_semaphore_t semaphoreDropTable = dispatch_semaphore_create(0);
+    [queryDropTable performQuery:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(semaphoreDropTable);
+    }];
+    dispatch_semaphore_wait(semaphoreDropTable, DISPATCH_TIME_FOREVER);
+    
+}
+
+- (void)deleteAllFromTable {
+    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+    NSNumber *tableConnectionKey = @(MTQueryCacheDeleteAllFromTableConnection);
+    NSNumber *tableNameKey = @(MTQueryCacheDeleteAllFromTableTableName);
+    NSDictionary *queryDefination = @{
+                                      tableConnectionKey : connection,
+                                      tableNameKey : [self tableName]
+                                      };
+    MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
+                                                                   object: queryDefination];
+    
+    dispatch_semaphore_t semaphoreDeleteAll = dispatch_semaphore_create(0);
+    [queryDeleteAllFromTable performQuery:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(semaphoreDeleteAll);
+    }];
+    dispatch_semaphore_wait(semaphoreDeleteAll, DISPATCH_TIME_FOREVER);
+
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
@@ -365,5 +413,16 @@
     }
     return currentObject;
 }
+/*
+- (NSArray *)getDetalForGroupLevel:(NSUInteger)level andKeys:(NSArray *)keys {
+    
+    [[[self query] datatable] getDetalForGroupLevel:level keys:];
+}
+
+- (NSArray *)getKeysForGroupLevel:(NSUInteger)level andKeys:(NSArray *)keys {
+    
+    [[[self query] datatable] getDetalForGroupLevel:level keys:];
+}*/
+
 
 @end

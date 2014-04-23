@@ -17,6 +17,12 @@
 #import "MTQueryMaxFieldLength.h"
 #import "MTQueryTest.h"
 #import "MTQueryCustomNoResults.h"
+#import "MTQueryCacheDropTable.h"
+
+#import "MTQueryCacheAddColumn.h"
+#import "MTQueryCacheAddRow.h"
+#import "MTQueryCacheDeleteAllFromTable.h"
+#import "MTQueryCacheVacuum.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -46,9 +52,6 @@
 
 #import "MTDataTable.h"
 
-#import "MTQueryCacheAddColumn.h"
-#import "MTQueryCacheAddRow.h"
-
 NSString * const MTQueryKeyType = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
@@ -59,33 +62,55 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 @implementation MTQuery
 
 - (id)initWithQueryType:(MTQueryType)type object:(id)object {
+
     switch (type) {
+        
         case MTQueryTypeMaxFieldLength:
             self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
             break;
+
         case MTQueryTypeCustomSql:
             self = [[MTQueryCustomNoResults alloc] initWithObject:object];
             break;
+        
         case MTQueryTypeFull:
             self = [[MTQueryFull alloc] initWithObject:object];
             break;
+        
         case MTQueryTypeConnectionTest:
             self = [[MTQueryTest alloc] initWithObject:object];
             break;
+        
         case MTQueryTypeSampleDataField:
             self = [[MTQuerySampleDataField alloc] initWithObject:object];
             break;
+        
         case MTQueryTypeSampleDataTable:
             self = [[MTQuerySampleDataTable alloc] initWithObject:object];
             break;
+        
         case MTQueryTypeCacheAddColumn:
             self = [[MTQueryCacheAddColumn alloc] initWithObject:object];
             break;
+        
         case MTQueryTypeCacheAddRow:
             self = [[MTQueryCacheAddRow alloc] initWithObject:object];
             break;
+        
+        case MTQueryTypeCacheDropTable:
+            self = [[MTQueryCacheDropTable alloc] initWithObject:object];
+            break;
+            
+        case MTQueryTypeCacheDeleteAllFromTable:
+            self = [[MTQueryCacheDeleteAllFromTable alloc] initWithObject:object];
+            break;
+        
+        case MTQueryTypeCacheVacuum:
+            self = [[MTQueryCacheVacuum alloc] initWithObject:object];
+            break;
             
         default:
+            NSAssert(false, @"Did you forget a constructor?");
             break;
     }
     
