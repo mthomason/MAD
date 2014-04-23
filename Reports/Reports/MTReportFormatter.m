@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportFormatter.h"
 #import "MAReportDocument.h"
 #import "MTQueryFull.h"
@@ -67,18 +71,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @implementation MTReportFormatter
 
-- (void)dealloc {
-    [_layout release];
-    [_layoutByPage release];
-    [_indexesByPage release];
-    [_dataByGroup release];
-    [_temporaryLayoutByPage release]; _temporaryLayoutByPage = nil;
-    [_temporaryLayoutForPage release]; _temporaryLayoutForPage = nil;
-    [_temporaryIndexesByPage release]; _temporaryIndexesByPage = nil;
-    [_temporaryIndexesForPage release]; _temporaryIndexesForPage = nil;
-    [super dealloc];
-}
-
 - (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
     self = [super initWithQuery:query];
     if (self) {
@@ -92,26 +84,22 @@ NSString * const MTNullIdentifier = @"(null)";
 
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query andLayout:layout];
-    return [result autorelease];
+    return result;
 }
 
 - (void)initilize {
     
     NSMutableArray *temporaryLayoutByPage = [[NSMutableArray alloc] init];
     [self setTemporaryLayoutByPage:temporaryLayoutByPage];
-    [temporaryLayoutByPage release];
     
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setTemporaryLayoutForPage:temporaryLayoutForPage];
-    [temporaryLayoutForPage release];
     
     NSMutableArray *temporaryDataByPage = [[NSMutableArray alloc] init];
     [self setTemporaryIndexesByPage:temporaryDataByPage];
-    [temporaryDataByPage release];
-    
+
     NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
     [self setTemporaryIndexesForPage:temporaryDataForPage];
-    [temporaryDataForPage release];
     
     NSArray *layoutByPage = @[];
     [self setLayoutByPage:layoutByPage];
@@ -169,20 +157,20 @@ NSString * const MTNullIdentifier = @"(null)";
             
             SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:[self layout]];
             for (RptqDocumentSection *sec in enumerator) {
-                CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
-                NSNumber *lh = [[NSNumber alloc] initWithFloat:layoutHight];
-                [sec setLayoutHeight:lh];
-                [lh release];
+                @autoreleasepool {
+                    CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
+                    NSNumber *lh = @(layoutHight);
+                    [sec setLayoutHeight:lh];
+                }
             }
-            [enumerator release];
-            
+
             [[self temporaryLayoutByPage] removeAllObjects];
             [[self temporaryIndexesByPage] removeAllObjects];
             [self setPrintableSpaceUsedPageHeight:CGSizeZero.height];
             [self setTemporaryCachedDetailCounter:0];
 
 
-            NSEnumerator *objectEnumerator = [[[[self query] datatable] objectEnumerator] retain];
+            NSEnumerator *objectEnumerator = [[[self query] datatable] objectEnumerator];
             if (objectEnumerator != nil) {
                 
                 id allObjects = [objectEnumerator allObjects];
@@ -235,33 +223,24 @@ NSString * const MTNullIdentifier = @"(null)";
                 [self setPrintableSpaceUsedPageHeight: printableSpaceUsed];
                 [self cacheReportFooter];
                 
-                NSArray *tlfp = [[self temporaryLayoutForPage] retain];
+                NSArray *tlfp = [[NSArray alloc] initWithArray:[self temporaryLayoutForPage]];
                 [[self temporaryLayoutByPage] addObject:tlfp];
-                [tlfp release];
                 
-                NSIndexSet *tdfp = [[self temporaryIndexesForPage] retain];
+                NSIndexSet *tdfp = [[NSIndexSet alloc] initWithIndexSet:[self temporaryIndexesForPage]];
                 [[self temporaryIndexesByPage] addObject:tdfp];
-                [tdfp release];
                 
-                NSArray *tlbp = [[self temporaryLayoutByPage] retain];
+                NSArray *tlbp = [[NSArray alloc] initWithArray:[self temporaryLayoutByPage]];
                 [self setLayoutByPage: tlbp];
-                [tlbp release];
                 
-                NSArray *tdbp = [[self temporaryIndexesByPage] retain];
+                NSArray *tdbp = [[NSArray alloc] initWithArray:[self temporaryIndexesByPage]];
                 [self setIndexesByPage: tdbp];
                 
-                [tdbp release];
-                
             }
-            [objectEnumerator release];
-
         }
     }
 }
 
 - (id)cachedGroupedData:(NSArray *)sortedResults level:(NSUInteger)level {
-    
-    
     
     BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
     id results = nil;
@@ -307,15 +286,11 @@ NSString * const MTNullIdentifier = @"(null)";
                                                  level: (level + 1)];
         NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
         if (key == nil) {
-            NSNull *n = [[NSNull alloc] init];
             key = MTNullIdentifier;
-            [n release];
         }
         [results setObject:resultOfNextGroup forKey:key];
-        
-        [resultsForGroup release];
     }
-    return [results autorelease];
+    return results;
 }
 
 
@@ -379,9 +354,7 @@ NSString * const MTNullIdentifier = @"(null)";
                                                         level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             if (key == nil) {
-                NSNull *n = [[NSNull alloc] init];
                 key = MTNullIdentifier;
-                [n release];
             }
             [results setObject:resultOfNextGroup forKey:key];
         }
@@ -389,9 +362,8 @@ NSString * const MTNullIdentifier = @"(null)";
         //[resultsCopy release];
         
         [resultsForGroup removeAllObjects];
-        [resultsForGroup release];
     }
-    return [results autorelease];
+    return results;
 }
 
 - (void)cacheReportHeader {
@@ -423,8 +395,7 @@ NSString * const MTNullIdentifier = @"(null)";
             if (nullGroupExist) {
                 [allKeys removeObject:MTNullIdentifier];
             }
-            NSSortDescriptor *desc = [[[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel] retain];
-            
+            NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
             
             NSEnumerator *loopEnumerator = nil;
             
@@ -435,20 +406,16 @@ NSString * const MTNullIdentifier = @"(null)";
                 }
                 
                 if ([desc ascending] == NO) {
-                    loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
+                    loopEnumerator = [allKeysSorted reverseObjectEnumerator];
                 } else {
-                    loopEnumerator = [[allKeysSorted objectEnumerator] retain];
+                    loopEnumerator = [allKeysSorted objectEnumerator];
                 }
-                [allKeysSorted release];
             } else {
-                loopEnumerator = [[allKeys objectEnumerator] retain];
+                loopEnumerator = [allKeys objectEnumerator];
             }
             
-            [desc release];
-            
-            
             for (id key in loopEnumerator) {
-                id obj = [[groupedRows objectForKey:key] retain];
+                id obj = [groupedRows objectForKey:key];
                 
                 //Group header section
                 for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
@@ -497,15 +464,10 @@ NSString * const MTNullIdentifier = @"(null)";
                     [self cacheGroupFooterAtLevel:groupedRowsLevel];
                     
                 }
-                
-                [obj release];
                 if (*firstPageComplete) {
                     break;
                 }
             }
-            [loopEnumerator release];
-            [allKeys release];
-            
         } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
             
             [self cacheDetailLevelWithDetails:(NSArray *)groupedRows];
@@ -528,8 +490,7 @@ NSString * const MTNullIdentifier = @"(null)";
         if (nullGroupExist) {
             [allKeys removeObject:MTNullIdentifier];
         }
-        NSSortDescriptor *desc = [[[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel] retain];
-        
+        NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
         
         NSEnumerator *loopEnumerator = nil;
         
@@ -540,20 +501,16 @@ NSString * const MTNullIdentifier = @"(null)";
             }
             
             if ([desc ascending] == NO) {
-                loopEnumerator = [[allKeysSorted reverseObjectEnumerator] retain];
+                loopEnumerator = [allKeysSorted reverseObjectEnumerator];
             } else {
-                loopEnumerator = [[allKeysSorted objectEnumerator] retain];
+                loopEnumerator = [allKeysSorted objectEnumerator];
             }
-            [allKeysSorted release];
         } else {
-            loopEnumerator = [[allKeys objectEnumerator] retain];
+            loopEnumerator = [allKeys objectEnumerator];
         }
         
-        [desc release];
-        
-        
         for (id key in loopEnumerator) {
-            id obj = [[groupedRows objectForKey:key] retain];
+            id obj = [groupedRows objectForKey:key];
             
             //Group header section
             for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
@@ -599,11 +556,7 @@ NSString * const MTNullIdentifier = @"(null)";
             }
             
             [self cacheGroupFooterAtLevel:groupedRowsLevel];
-            
-            [obj release];
         }
-        [loopEnumerator release];
-        [allKeys release];
         
     } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
         
@@ -636,11 +589,9 @@ NSString * const MTNullIdentifier = @"(null)";
         
         id layoutToAdd = [[self temporaryLayoutForPage] copy];
         [[self temporaryLayoutByPage] addObject:layoutToAdd];
-        [layoutToAdd release];
         
         id dataToAdd = [[self temporaryIndexesForPage] copy];
         [[self temporaryIndexesByPage] addObject:dataToAdd];
-        [dataToAdd release];
         
         [[self temporaryLayoutForPage] removeAllObjects];
         [[self temporaryIndexesForPage] removeAllIndexes];
@@ -693,7 +644,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSDictionary *d = @{MTReportSectionType : MTReportGroupFooter,
                         MTReportGroupLevel : gl};
     [[self temporaryLayoutForPage] addObject: d];
-    [gl release];
 }
 
 - (void)cacheDetail {
@@ -723,10 +673,13 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setObjectsForPage:emptyArray];
     return [super format];
 }
+
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
     id rowData = nil;
     if (page < [[self indexesByPage] count]) {
-        NSIndexSet *pageIndexes = [[self indexesByPage] objectAtIndex:page];
+        
+        NSIndexSet *pageIndexes = [[NSIndexSet alloc] initWithIndexSet:[[self indexesByPage] objectAtIndex:page]];
+
         if (row < [pageIndexes count]) {
             
             // FIXME: Filter all through MTDataTable.
@@ -759,27 +712,26 @@ NSString * const MTNullIdentifier = @"(null)";
 + (id)dataForGroupData:(id)data andKeys:(NSArray *)keys {
     id resultData = nil;
     if ([data isKindOfClass:[NSArray class]]) {
-        resultData = [data retain];
+        resultData = [[NSArray alloc] initWithArray:data];
     } else {
         if ([keys count] > 0) {
-            id subData = [[data objectForKey:[keys objectAtIndex:0]] retain];
+            id subData = [data objectForKey:[keys objectAtIndex:0]];
             NSArray *subKeys = nil;
             if ([keys count] > 1) {
                 NSRange range = NSMakeRange(1, [keys count] - 1);
-                subKeys = [[[keys objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]] retain] autorelease];
-                resultData = [[MTReportFormatter dataForGroupData:subData andKeys:subKeys] retain];
+                subKeys = [keys objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+                resultData = [MTReportFormatter dataForGroupData:subData andKeys:subKeys];
             } else if ([keys count] == 1) {
-                resultData = [subData retain];
+                resultData = subData;
             } else {
-                resultData = [subData retain];
+                resultData = subData;
             }
-            [subData release];
         } else {
             resultData = @[];
-            [resultData retain];
         }
+        resultData = [[NSArray alloc] initWithArray:resultData];
     }
-    return [resultData autorelease];
+    return resultData;
 }
 
 - (BOOL)nullKeyExist:(NSArray *)keys {

@@ -1062,8 +1062,8 @@
 		4C94ADFB17C3514200037FCB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADFA17C3514200037FCB /* Default@2x.png */; };
 		4C94ADFD17C3514200037FCB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C94ADFC17C3514200037FCB /* Default-568h@2x.png */; };
 		4C94AE0617C3514200037FCB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C94AE0517C3514200037FCB /* ViewController.m */; };
-		4C95C42F18DB6B6D003DFB11 /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */; };
-		4C95C43018DB6B6D003DFB11 /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */; };
+		4C95C42F18DB6B6D003DFB11 /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C95C43018DB6B6D003DFB11 /* MTReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C95CACA182CB36000160E01 /* zint.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CAC9182CB36000160E01 /* zint.h */; };
 		4C95CACB182CB36000160E01 /* zint.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CAC9182CB36000160E01 /* zint.h */; };
 		4C95CACD182CCA3F00160E01 /* MTBarcode.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C95CACC182CCA3F00160E01 /* MTBarcode.h */; };
