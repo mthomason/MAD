@@ -1498,12 +1498,12 @@
 		4CFD36581836A257000EF14B /* MTBarcodeCode39Iso16388.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36551836A257000EF14B /* MTBarcodeCode39Iso16388.h */; };
 		4CFD36591836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36561836A257000EF14B /* MTBarcodeCode39Extended.h */; };
 		4CFD365A1836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36561836A257000EF14B /* MTBarcodeCode39Extended.h */; };
-		4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
-		4CFF3E7E164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
+		4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CFF3E7E164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CFF3F21164D76270070E880 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
-		4CFF3F25164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
-		4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
+		4CFF3F25164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

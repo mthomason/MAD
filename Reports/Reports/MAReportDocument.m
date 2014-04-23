@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MAReportDocument.h"
@@ -63,21 +67,12 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 @implementation MAReportDocument
 
-- (void)dealloc {
-    [_reportQueries release];
-    [_document release];
-    [_mom release];
-    [super dealloc];
-}
-
 - (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
 
         NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
         [self setReportQueries:reportQueries];
-        [reportQueries release];
-        
         [self setDidRefresh:NO];
         
     }
@@ -91,7 +86,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
         NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
         [self setMom:mom];
-        [mom release];
     }
     return [self mom];
 }
@@ -117,19 +111,17 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             if (query) {
                 [self reportQueries][@"defaultq"] = query;
             }
-            [query release];
             
             if ([self reportFormatter] == nil) {
                 MTQuery *defaultQuery = [self defaultQuery];
                 RptqDocument *activeDocument = [self activeDocument];
-                MTReportFormatter *reportFormatter = [[MTReportFormatter reportFormatterWithQuery:defaultQuery
-                                                                                        andLayout:activeDocument] retain];
+                MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:defaultQuery
+                                                                                       andLayout:activeDocument];
                 [self setReportFormatter:reportFormatter];
-                [reportFormatter release];
             }
         }
     }
-    return [[[self document] retain] autorelease];
+    return [self document];
 }
 
 //Add a new connection to the report
@@ -143,23 +135,19 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (MTQueryFull *)defaultQuery {
-    MTQueryFull *defaultQuery = [[self reportQueries][@"defaultq"] retain];
-    return [defaultQuery autorelease];
+    return [self reportQueries][@"defaultq"];
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
 
-    MTQuery *defaultQuery = [[self defaultQuery] retain];
-    
     [[self defaultQuery] performQuery:^(BOOL success, NSError *error) {
         [self setDidRefresh:success];
         completion(success, error);
     }];
-    [defaultQuery release];
 }
 
 - (NSURL *)cachedDataUrl {
-    return [[[[[self defaultQuery] datatable] url] retain] autorelease];
+    return [[[self defaultQuery] datatable] url];
 }
 
 - (void)sendTo {
@@ -181,14 +169,11 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 + (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *destinationName = [[[[madUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive] retain];
-    NSURL *destinationDirectoryUrl = [[NSFileManager localTemporaryDirectory] retain];
+    NSString *destinationName = [[[madUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
     NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
     [directories lastObject];
-    NSURL *destinationUrl = [[destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES] retain];
-    [destinationName release];
-    [destinationDirectoryUrl release];
-    return [destinationUrl autorelease];
+    return [destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES];
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
@@ -200,28 +185,15 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheDirectory = [directoryPaths lastObject];
     NSURL *thumbnailPath = [NSURL fileURLWithPath: cacheDirectory];
-    NSURL *result = [[thumbnailPath URLByAppendingPathComponent:fileName isDirectory:NO] retain];
-    return [result autorelease];
+    return [thumbnailPath URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
-    return [[[self thumbnailUrlForMadUrl:madUrl] retain] autorelease];
-/*
-    NSString *lastPathComponent = [madUrl lastPathComponent];
-    NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
-    NSString *fileNameWithBorder = [fileName stringByAppendingString:@"WithBorder"];
-    NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
-    fileNameWithBorder = [fileNameWithBorder stringByAppendingString:extention];
-    NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [directoryPaths lastObject];
-    NSURL *thumbnailPath = [NSURL fileURLWithPath: cacheDirectory];
-    NSURL *result = [[thumbnailPath URLByAppendingPathComponent:fileNameWithBorder isDirectory:NO] retain];
-    return [result autorelease];
- */
+    return [self thumbnailUrlForMadUrl:madUrl];
 }
 
 + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
-    NSFileManager *fileManager = [[NSFileManager defaultManager] retain];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL isDirectory;
     BOOL exists = [fileManager fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
     if (exists) {
@@ -246,7 +218,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             [fileManager removeItemAtURL:destinationUrl error:&deleteError];
         }
     }
-    [fileManager release];
 }
 
 + (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl {
@@ -264,14 +235,12 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
         }
         if (fileWrittingError == nil) {
-            urlToOpen = [destinationUrl retain];
+            urlToOpen = destinationUrl;
         }
-        [fileWrapper release];
-        [data release];
     } else {
-        urlToOpen = [url retain];
+        urlToOpen = url;
     }
-    return [urlToOpen autorelease];
+    return urlToOpen;
 }
 
 + (NSDictionary *)optionsPersistentStore{
@@ -288,26 +257,24 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     NSURL *urlToOpen = nil;
     if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
         
-        NSURL *destinationUrl = [[MAReportDocument archiveUrlForMadUrl:url] retain];
+        NSURL *destinationUrl = [MAReportDocument archiveUrlForMadUrl:url];
         [MAReportDocument deleteCoreDataFilesAtDirectory:destinationUrl];
-        urlToOpen = [[MAReportDocument unpackMadFile:url toDestinationUrl:destinationUrl] retain];
-        [destinationUrl release];
+        urlToOpen = [MAReportDocument unpackMadFile:url toDestinationUrl:destinationUrl];
         
     } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
-        urlToOpen = [url retain];
+        urlToOpen = url;
     }
     
     if (urlToOpen != nil) {
 
         NSDictionary *options = [MAReportDocument optionsPersistentStore];
-        MAReportDocument *managedDocumentAtUrl = [[[MAReportDocument alloc] initWithFileURL:urlToOpen] retain];
+        MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
         __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
         MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-            MAReportDocument *activeDocument = [blockManagedDocumentAtUrl retain];
+            MAReportDocument *activeDocument = blockManagedDocumentAtUrl;
             completionHandler(activeDocument, success);
-            [activeDocument release];
         };
 
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
@@ -317,9 +284,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
         }
 
-        [managedDocumentAtUrl release];
     }
-    [urlToOpen release];
     
 }
 
@@ -338,10 +303,9 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                 if (success) {
                     
                     __block MAReportDocument *documentReport = managedDocument;
-                    [databaseConnection retain];
-                    
-                    RptqDocument *rptqDocument = [[documentReport activeDocument] retain];
-                    MTDatabase *database = [[MTDatabase databaseFactory:databaseConnection] retain];
+
+                    RptqDocument *rptqDocument = [documentReport activeDocument];
+                    MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
                     
                     if (database) {
                         
@@ -350,10 +314,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                         }];
                         
                     }
-                    
-                    [rptqDocument release];
-                    [databaseConnection release];
-                    [database release];
                     
                 } else {
                     NSError *error = [MAReportDocument errorFailedToCreateReport];
@@ -366,7 +326,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         }
     }];
 
-    [queryTest release];
 }
 
 + (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document ofDocumentReport:(MAReportDocument *)documentReport completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
@@ -443,17 +402,14 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (void)regenThumbnail {
-    RptqDocument *document = [[self activeDocument] retain];
-    if (document != nil) {
 
+    if ([self activeDocument] != nil) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:[self urlThumbnail] atomically:YES];
-        [printPageRender release];
-        
     }
-    [document release];
+    
 }
 
 @end

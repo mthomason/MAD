@@ -20,7 +20,7 @@
 @interface MTDataTableFast ()
 
 @property (assign) sqlite3 *database;
-@property (assign) sqlite3_stmt *statement;
+@property (assign, readwrite) sqlite3_stmt *statement;
 
 @property (nonatomic, strong) MTDatabase *db;
 
@@ -66,10 +66,7 @@
         NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
         [self setUrl:fileUrl];
         
-        MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
-        MTDatabase *database = [MTDatabase databaseFactory:connection];
-        [self setDb:database];
-        
+        [self reopenDbConnection];
         
         NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
         [self setColumns:columns];
@@ -86,6 +83,12 @@
 
     }
     return self;
+}
+
+- (void)reopenDbConnection {
+    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+    MTDatabase *database = [MTDatabase databaseFactory:connection];
+    [self setDb:database];
 }
 
 - (void)setupSqlite {
@@ -184,10 +187,12 @@
                                       @(MTQueryCacheAddColumnCreateTable) : createTable
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         if (!success) NSLog(@"Error %@", error);
+        dispatch_semaphore_signal(semaphoreQuery);
     }];
-
+    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
 }
 
 - (void)addRow:(NSArray *)row {
@@ -200,9 +205,12 @@
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
     self.rowCounter++;
+    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         if (!success) NSLog(@"Error %@", error);
+        dispatch_semaphore_signal(semaphoreQuery);
     }];
+    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {

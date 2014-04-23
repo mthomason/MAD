@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MADocument.h"
 #import <CoreData/CoreData.h>
 #import "MAReportDocument.h"
@@ -45,21 +49,13 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 @implementation MADocument
 
-- (void)dealloc {
-    [_extraInformation release];
-    [_thumbnail release];
-    [_fileWrapper release];
-    [super dealloc];
-}
-
 - (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
         
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
         [self setExtraInformation:extraInfo];
-        [extraInfo release];
-                
+        
     }
     return self;
 }
@@ -141,25 +137,22 @@ NSString * MTDocumentParentContextName          = @"moc";
     if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
         data = [NSData dataWithContentsOfURL: url options:NSDataReadingUncached error:&readError];
     }
-    return [[data retain] autorelease];
+    return data;
 }
 
 - (NSURL *)urlThumbnail {
     NSURL *fileurl = [self fileURL];
-    NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:fileurl];
-    return [[thumbnailUrl retain] autorelease];
+    return [MAReportDocument thumbnailUrlForMadUrl:fileurl];
 }
 
 - (NSURL *)urlMetaPlaylist {
     NSURL *fileurl = [self fileURL];
-    NSURL *resultUrl = [fileurl URLByAppendingPathComponent:@"meta.plist"];
-    return [[resultUrl retain] autorelease];
+    return [fileurl URLByAppendingPathComponent:@"meta.plist"];
 }
 
 - (NSData *)thumbnailData {
     NSURL *thumbnailUrl = [self urlThumbnail];
-    NSData *imageData = [MADocument dataForUrl:thumbnailUrl];
-    return [[imageData retain] autorelease];
+    return [MADocument dataForUrl:thumbnailUrl];
 }
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
@@ -169,36 +162,28 @@ NSString * MTDocumentParentContextName          = @"moc";
     if (imageData != nil) {
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
-            UIImage *extraImage = [[UIImage imageWithData:imageData] retain];
-            NSString *key = [[MADocument thumbnailSaveName] retain];
+            UIImage *extraImage = [UIImage imageWithData:imageData];
+            NSString *key = [MADocument thumbnailSaveName];
             [[self extraInformation] setObject:extraImage
                                         forKey:key];
-            [extraImage release];
         }
     }
     
     NSURL *metaUrl = [self urlMetaPlaylist];
 
     NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:metaUrl];
-    
-    NSString *lastGenerator = [[dicionary objectForKey:MTDocumentInfoKeyGenerator] retain];
-    if (lastGenerator == nil) {
-        lastGenerator = [@"MAD Designer" retain];
-    }
+    NSString *lastGenerator = [dicionary objectForKey:MTDocumentInfoKeyGenerator];
+    NSNumber *lastVersion = [dicionary objectForKey:MTDocumentInfoKeyGenerator];
+
+    if (lastGenerator == nil) lastGenerator = @"MAD Designer";
+    if (lastVersion == nil) lastVersion = @(1.0);
     
     [[self extraInformation] setObject:lastGenerator
                                 forKey:MTDocumentInfoKeyGenerator];
-    [lastGenerator release];
-
-    NSNumber *lastVersion = [[dicionary objectForKey:MTDocumentInfoKeyGenerator] retain];
-    if (lastVersion == nil) {
-        lastVersion = [@(1.0) retain];
-    }
     
     [[self extraInformation] setObject:lastVersion
                                 forKey:MTDocumentInfoKeyVersion];
-    [lastVersion release];
-
+ 
     return YES;
 }
 
@@ -212,12 +197,11 @@ NSString * MTDocumentParentContextName          = @"moc";
         if ([self extraInformation] == nil) {
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
             [self setExtraInformation:extraInfo];
-            [extraInfo release];
         }
         NSNumber *dataVersion = @(1.0);
         [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];
         [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
-        result = [[[self extraInformation] retain] autorelease];
+        result = [self extraInformation];
     }
 
     return result;
@@ -394,7 +378,6 @@ NSString * MTDocumentParentContextName          = @"moc";
             [documentReport performAsynchronousFileAccessUsingBlock:asyncBlock];
         }
     }
-    [documentReport release];
 }
 
 + (void)deleteFromDiskQuick:(MAReportDocument *)documentReport completion:(void (^)(BOOL success))completion {
