@@ -25,6 +25,12 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
     MTQueryTypeCacheDeleteAllFromTable,
     MTQueryTypeCacheDropTable,
     MTQueryTypeCacheVacuum,
+    MTQueryTypeCacheBeginTransaction,
+    MTQueryTypeCacheEndTransaction,
+    MTQueryTypeCacheSyncModeOff,
+    MTQueryTypeCacheSyncModeDefault,
+    MTQueryTypeCacheJournalModeOverride,
+    MTQueryTypeCacheJournalModeDefault,
 };
 
 #pragma mark Types of specific paramamters accepted for each query
@@ -59,6 +65,10 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheVacuumParameters) {
     MTQueryCacheVacuumConnection,
 };
 
+typedef NS_ENUM(NSUInteger, MTQueryCacheConnectionParameters) {
+    MTQueryCacheConnection,
+};
+
 typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
 	MTQuerySelectConnection,
     MTQuerySelectTableName,
@@ -90,6 +100,7 @@ extern NSString * const MTQueryKeyObject;
 - (NSString *)getSqlOnlyActiveFields:(BOOL)onlyActiveFields error:(NSError **)error;    //Only on MTQueryFull
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
+- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion;
 
 @end
 
@@ -101,6 +112,8 @@ extern NSString * const MTQueryKeyObject;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 - (BOOL)returnsResults;
+
+- (BOOL)partOfTransactionSet;
 
 @end
 

@@ -451,4 +451,7 @@
     [self setRowCounter:0];
 }
 
+- (void)beginBulkInsert {}
+- (void)endBulkInsert {}
+
 @end

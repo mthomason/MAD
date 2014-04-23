@@ -56,10 +56,13 @@
         [self setColumns:columns];
         [self setColumnKeys:columnKeys];
 
-        MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
-        MTDatabase *db = [MTDatabase databaseFactory:connection];
-        NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]] == YES, @"Only allow Sqlite3. Fix this sometime.");
-        [self setDatabase:db];
+        if (url != nil) {
+            MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
+            MTDatabase *db = [MTDatabase databaseFactory:connection];
+            NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]] == YES, @"Only allow Sqlite3. Fix this sometime.");
+            [self setDatabase:db];
+        }
+        
         [self setQueryObject:object];
         
     }
@@ -172,6 +175,10 @@
 
 - (BOOL)returnsResults {
     return NO;
+}
+
+- (BOOL)partOfTransactionSet {
+    return YES;
 }
 
 @end

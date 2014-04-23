@@ -32,11 +32,21 @@
 @interface MTDatabaseSqlite3 ()
 
 @property (assign) sqlite3 *database;
+@property (assign) sqlite3_stmt *bulkStatement;
+
 @property (nonatomic, assign) BOOL isOpen;
 
 @end
 
 @implementation MTDatabaseSqlite3
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        _bulkStatement = NULL;
+    }
+    return self;
+}
 
 - (void)openDatabase {
 
@@ -287,19 +297,20 @@
     return columnAffinity;
 }
 
-
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
+    sqlite3_stmt *statement = [query partOfTransactionSet] ? _bulkStatement : NULL;
     NSError *error = nil;
     NSString *queryString = [query getSqlWithError:&error];
     
     char *errorMessage = NULL;
-    sqlite3_stmt *statement = NULL;
-
     const char *queryStartChar = [queryString UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
     
-    BOOL success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
-
+    BOOL success = YES;
+    if (statement == NULL) {
+        success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
+    }
+    
     if ([[query binaryBindings] count] > 0) {
         for (MTDatabaseDataBinding *databinding in [query binaryBindings]) {
             switch ([databinding datatype]) {
@@ -351,8 +362,12 @@
             [[query datatable] removeAllObjects];
             
             NSUInteger rowCounter = 0;
+            
+            [[query datatable] beginBulkInsert];
+            
             while (SQLITE_ROW == sqlite3_step(statement)) {
-                if (rowCounter == 0) {
+                
+                if (rowCounter == 0) {  //If first time around, calculate column information.
                     for (NSUInteger columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
                         
                         @autoreleasepool {
@@ -443,20 +458,22 @@
                 
                 rowCounter++;
             }
+            [[query datatable] endBulkInsert];
             
         }
-        sqlite3_finalize(statement);
     } else {
         int result = sqlite3_step(statement);
         NSAssert(SQLITE_ROW == result || SQLITE_DONE == result, @"%s", (char *)sqlite3_errmsg(_database));
-        success = SQLITE_OK == sqlite3_finalize(statement);
         NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
+    }
+    if ([query partOfTransactionSet] == NO) {
+        success = SQLITE_OK == sqlite3_finalize(statement);
     }
     
     if (success == NO) {
         errorMessage = (char *)sqlite3_errmsg(_database);
     }
-
+    
     NSString *message = nil;
     if (errorMessage != NO) {
         success = NO;
@@ -469,9 +486,18 @@
         error = [NSError errorWithDomain:@"MTDatabaseSqlite3" code:4784 title:title andMessage:message];
         NSLog(@"Sqlite3Error: %@\nQuery\n%@", error, queryString);
     }
-//    NSAssert(<#condition#>, <#desc, ...#>)
+    //    NSAssert(<#condition#>, <#desc, ...#>)
 	sqlite3_free(sql);
     completion(success, error);
+}
+
+- (void)cleanupBulkInsert {
+    BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);
+    NSAssert(success, @"Bulk insert sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(_database));
+}
+
+- (void)executeQuery:(MTQuery *)query withStatement:(sqlite3_stmt *)statement completion:(void (^)(BOOL, NSError *))completion {
+
 }
 
 

@@ -36,6 +36,9 @@
 - (NSEnumerator *)columnsEnumerator;
 - (NSEnumerator *)objectEnumerator;
 
+- (void)beginBulkInsert;
+- (void)endBulkInsert;
+
 - (NSArray *)allObjects;
 - (NSUInteger)count;
 - (NSUInteger)numberOfColumns;

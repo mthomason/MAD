@@ -217,4 +217,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return sql;
 }
 
+- (void)cleanupBulkInsert {}
+
 @end

@@ -13,6 +13,7 @@
 #import "MTDatabaseField.h"
 #import "MTDataTableFastObjectEnumerator.h"
 #import "MTDatabaseConnection.h"
+#import "MTDatabase.h"
 #import "libSqlite3_8.h"
 #import "MTLog.h"
 
@@ -20,6 +21,8 @@
 
 @property (assign) sqlite3 *database;
 @property (assign) sqlite3_stmt *statement;
+
+@property (nonatomic, strong) MTDatabase *db;
 
 @property (nonatomic, assign, readwrite) NSUInteger tag;
 @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
@@ -29,6 +32,8 @@
 @property (nonatomic, strong, readwrite) NSString *sqlQuery;
 
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
+
+@property (nonatomic, assign) BOOL bulkInsertLoop;
 
 @end
 
@@ -51,7 +56,9 @@
 - (id)initWithId:(NSUInteger)objectId {
     self = [super init];
     if (self) {
-    
+        
+        [self setBulkInsertLoop:NO];
+        
         [self setTag:objectId];
         
         NSString *filename = [NSFileManager filenameId:objectId extention:@"maddb"];
@@ -59,7 +66,10 @@
         NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
         [self setUrl:fileUrl];
         
-        NSLog(@"Cache URL %@", fileUrl);
+        MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+        MTDatabase *database = [MTDatabase databaseFactory:connection];
+        [self setDb:database];
+        
         
         NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
         [self setColumns:columns];
@@ -159,7 +169,6 @@
 }
 
 - (void)addColumn:(MTDataColumn *)column {
-    NSLog(@"Add Column");
     
     NSUInteger columnId = [[self columnKeys] count];
     NSString *columnName = [NSString stringWithFormat:@"c%lu", (unsigned long)columnId];
@@ -171,12 +180,12 @@
     NSDictionary *queryDefination = @{
                                       @(MTQueryCacheAddColumnDataColumn) : column,
                                       @(MTQueryCacheAddColumnTableName) : [self tableName],
-                                      @(MTQueryCacheAddColumnUrl) : [self url],
                                       @(MTQueryCacheAddColumnColumnName) : columnName,
                                       @(MTQueryCacheAddColumnCreateTable) : createTable
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
-    [query performQuery:^(BOOL success, NSError *error) {
+    [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        if (!success) NSLog(@"Error %@", error);
     }];
 
 }
@@ -187,12 +196,11 @@
                                       @(MTQueryCacheAddRowColumnKeys) : [self columnKeys],
                                       @(MTQueryCacheAddRowColumns) : [self columns],
                                       @(MTQueryCacheAddRowData) : row,
-                                      @(MTQueryCacheAddRowTableName) : [self tableName],
-                                      @(MTQueryCacheAddRowUrl) : [self url]
+                                      @(MTQueryCacheAddRowTableName) : [self tableName]
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
     self.rowCounter++;
-    [query performQuery:^(BOOL success, NSError *error) {
+    [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         if (!success) NSLog(@"Error %@", error);
     }];
 }
@@ -230,7 +238,6 @@
     
     dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-        [self deleteAllFromTable];
         [self dropTable];
         [self vacuumCacheDb];
         dispatch_semaphore_signal(semaphoreRemoveAll);
@@ -243,15 +250,11 @@
 }
 
 - (void)vacuumCacheDb {
-    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
-    NSNumber *tableConnectionKey = @(MTQueryCacheVacuumConnection);
-    NSDictionary *queryVacuumDefination = @{
-                                            tableConnectionKey : connection
-                                            };
+    NSDictionary *queryVacuumDefination = @{ };
     MTQuery *queryVacuum = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheVacuum object:queryVacuumDefination];
 
     dispatch_semaphore_t semaphoreVacuum = dispatch_semaphore_create(0);
-    [queryVacuum performQuery:^(BOOL success, NSError *error) {
+    [queryVacuum performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         dispatch_semaphore_signal(semaphoreVacuum);
     }];
     dispatch_semaphore_wait(semaphoreVacuum, DISPATCH_TIME_FOREVER);
@@ -259,37 +262,31 @@
 }
 
 - (void)dropTable {
-    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
-    NSNumber *tableConnectionKey = @(MTQueryCacheDropTableConnection);
     NSNumber *tableNameKey = @(MTQueryCacheDropTableTableName);
     NSDictionary *queryDefination = @{
-                                      tableConnectionKey : connection,
                                       tableNameKey : [self tableName]
                                       };
     
     MTQuery *queryDropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDropTable object:queryDefination];
 
     dispatch_semaphore_t semaphoreDropTable = dispatch_semaphore_create(0);
-    [queryDropTable performQuery:^(BOOL success, NSError *error) {
+    [queryDropTable performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         dispatch_semaphore_signal(semaphoreDropTable);
     }];
     dispatch_semaphore_wait(semaphoreDropTable, DISPATCH_TIME_FOREVER);
     
 }
 
-- (void)deleteAllFromTable {
-    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
-    NSNumber *tableConnectionKey = @(MTQueryCacheDeleteAllFromTableConnection);
+- (void)deleteAll {
     NSNumber *tableNameKey = @(MTQueryCacheDeleteAllFromTableTableName);
     NSDictionary *queryDefination = @{
-                                      tableConnectionKey : connection,
                                       tableNameKey : [self tableName]
                                       };
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     
     dispatch_semaphore_t semaphoreDeleteAll = dispatch_semaphore_create(0);
-    [queryDeleteAllFromTable performQuery:^(BOOL success, NSError *error) {
+    [queryDeleteAllFromTable performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         dispatch_semaphore_signal(semaphoreDeleteAll);
     }];
     dispatch_semaphore_wait(semaphoreDeleteAll, DISPATCH_TIME_FOREVER);
@@ -413,6 +410,64 @@
     }
     return currentObject;
 }
+
+- (void)beginBulkInsert {
+    [self setBulkInsertLoop:YES];
+    
+
+
+
+    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    [querySyncMode performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s1);
+    }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeOverride object:@{}];
+    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
+    [queryJournalMode performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s2);
+    }];
+    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+    
+
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
+    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s3);
+    }];
+    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+}
+
+- (void)endBulkInsert {
+    [self setBulkInsertLoop:NO];
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s1);
+    }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
+    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
+    [querySyncMode performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s2);
+    }];
+    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+
+    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
+    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
+    [queryJournalMode performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s3);
+    }];
+    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+
+    [[self db] cleanupBulkInsert];
+}
+
+
 /*
 - (NSArray *)getDetalForGroupLevel:(NSUInteger)level andKeys:(NSArray *)keys {
     

@@ -18,11 +18,16 @@
 #import "MTQueryTest.h"
 #import "MTQueryCustomNoResults.h"
 #import "MTQueryCacheDropTable.h"
-
 #import "MTQueryCacheAddColumn.h"
 #import "MTQueryCacheAddRow.h"
 #import "MTQueryCacheDeleteAllFromTable.h"
 #import "MTQueryCacheVacuum.h"
+#import "MTQueryCacheBeginTransaction.h"
+#import "MTQueryCacheEndTransaction.h"
+#import "MTQueryCacheSyncDefault.h"
+#import "MTQueryCacheSyncOff.h"
+#import "MTQueryCacheJournalModeDefault.h"
+#import "MTQueryCacheJournalModeOverride.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -108,6 +113,30 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         case MTQueryTypeCacheVacuum:
             self = [[MTQueryCacheVacuum alloc] initWithObject:object];
             break;
+        
+        case MTQueryTypeCacheBeginTransaction:
+            self = [[MTQueryCacheBeginTransaction alloc] initWithObject:object];
+            break;
+            
+        case MTQueryTypeCacheEndTransaction:
+            self = [[MTQueryCacheEndTransaction alloc] initWithObject:object];
+            break;
+            
+        case MTQueryTypeCacheSyncModeOff:
+            self = [[MTQueryCacheSyncOff alloc] initWithObject:object];
+            break;
+        
+        case MTQueryTypeCacheSyncModeDefault:
+            self = [[MTQueryCacheSyncDefault alloc] initWithObject:object];
+            break;
+        
+        case MTQueryTypeCacheJournalModeOverride:
+            self = [[MTQueryCacheJournalModeOverride alloc] initWithObject:object];
+            break;
+
+        case MTQueryTypeCacheJournalModeDefault:
+            self = [[MTQueryCacheJournalModeDefault alloc] initWithObject:object];
+            break;
             
         default:
             NSAssert(false, @"Did you forget a constructor?");
@@ -119,6 +148,10 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
 - (BOOL)returnsResults {
     return YES;
+}
+
+- (BOOL)partOfTransactionSet {
+    return NO;
 }
 
 - (id)initWithObject:(id)object {
@@ -142,6 +175,16 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     
+    @autoreleasepool {
+        [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
+            [[self datatable] cache];
+            completion(success, error);
+        }];
+    }
+}
+
+- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion {
+    [self setDatabase:database];
     @autoreleasepool {
         [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
             [[self datatable] cache];
