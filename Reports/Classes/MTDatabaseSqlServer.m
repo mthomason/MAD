@@ -511,6 +511,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:columnTypeNumber.intValue];
                                 
                                 MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:columnNameString];
+                                [dataColumn setFieldName:columnNameString];
                                 [dataColumn setNativeColumnType:columnTypeNumber];
                                 [dataColumn setDataLength:columnLen];
                                 [dataColumn setDataPercision:columPercision];

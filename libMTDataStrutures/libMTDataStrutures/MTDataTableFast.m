@@ -215,7 +215,6 @@
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
     self.rowCounter++;
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    NSLog(@"Add Row %@", row);
     [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         if (!success) NSLog(@"Error %@", error);
         dispatch_semaphore_signal(semaphoreQuery);
@@ -224,7 +223,6 @@
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
-    NSLog(@"Add Row %@", row);
     NSMutableArray *rowData = [[NSMutableArray alloc] init];
     for (id columnDefKey in [self columnKeys]) {
         MTDataColumn *columnDef = [[self columns] objectForKey:columnDefKey];
@@ -415,16 +413,30 @@
             case MTDataTypeDecimal:
                 columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
                 break;
-            case MTDataTypeString:
-                columnValue = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(_statement, columnCounter)];
+            case MTDataTypeString: {
+                const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
+                if (text == NULL) {
+                    columnValue = [NSNull null];
+                } else {
+                    columnValue = [NSString stringWithUTF8String:(const char *) text];
+                }
                 break;
-            default:
+            }
+            default: {
                 NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
-                columnValue = sqlite3_column_type(_statement, columnCounter) == SQLITE_TEXT ? [NSString stringWithUTF8String:(const char *)sqlite3_column_text(_statement, columnCounter)] : nil;
+                if (sqlite3_column_type(_statement, columnCounter) == SQLITE_TEXT) {
+                    const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
+                    if (text == NULL) {
+                        columnValue = [NSNull null];
+                    } else {
+                        columnValue = [NSString stringWithUTF8String:(const char *) text];
+                    }
+                }
                 break;
+            }
         }
         if (columnValue != nil) {
-            [currentObject setValue:columnValue forKey:[dataColumn fieldName]];
+            [currentObject setValue:columnValue forKey:[dataColumn identifier]];
         }
         columnCounter++;
     }

@@ -369,8 +369,8 @@
 		4C23FB1118FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; };
 		4C23FB1618FADD4C009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
 		4C23FB1718FADD4D009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
-		4C23FB1818FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; };
-		4C23FB1918FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; };
+		4C23FB1818FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FB1918FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1C18FADD67009F234F /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1A18FADD67009F234F /* MTLog.m */; };
 		4C23FB1D18FADD67009F234F /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1A18FADD67009F234F /* MTLog.m */; };
 		4C23FB2218FADDAA009F234F /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1F18FADDAA009F234F /* MADUpgradeViewController.m */; };
