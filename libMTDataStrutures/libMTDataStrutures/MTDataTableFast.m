@@ -341,7 +341,9 @@
             NSString *message = [NSString stringWithUTF8String: errorMessage];
             NSLog(@"%@", message);
         }
+        
         sqlite3_finalize(_statement);
+        sqlite3_free(queryString);
     } else {
         results = [NSArray array];
     }

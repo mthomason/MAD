@@ -60,6 +60,7 @@
                 NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
                 NSLog(@"%@ %@", message, title);
             }
+            sqlite3_free(queryString);
         }
         
         [self setColumnKeys:columnKeys];

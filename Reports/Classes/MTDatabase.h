@@ -27,8 +27,16 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @class RptqDocument, RptqDatabase, RptqQuery, RptqQueryField, RptqDatabaseSchemaTable, RptqDatabaseSchemaField,
         RptqQueryCache, RptqUserCredentals, MTDatabaseConnection, MTQuery, MTDataTable;
 
+@protocol MTDatabaseProtocol <NSObject>
+@required
+@optional
+- (void)receivedResults:(NSUInteger)resultCount ofTotalResults:(NSUInteger)results;
+@end
+
+
 @interface MTDatabase : NSObject
 
+@property (nonatomic, assign) id <MTDatabaseProtocol> delegate;
 @property (nonatomic, retain) MTDatabaseConnection *databaseConnection;
 
 + (id)databaseFactory:(MTDatabaseConnection *)connection;
