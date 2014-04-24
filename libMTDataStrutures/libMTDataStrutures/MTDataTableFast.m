@@ -89,6 +89,11 @@
     return self;
 }
 
+- (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
+    NSAssert(false, @"Not implemented");
+    return nil;
+}
+
 - (void)reopenDbConnection {
     MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
     MTDatabase *database = [MTDatabase databaseFactory:connection];

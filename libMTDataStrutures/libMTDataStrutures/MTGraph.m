@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTGraph.h"
 
 @interface MTGraph ()
@@ -23,11 +27,6 @@
 
 #pragma mark - NSObject Overrides
 
-- (void)dealloc {
-    [_vertices release];
-    [super dealloc];
-}
-
 - (id)init {
     return [self initWithVertices:[NSSet set]];
 }
@@ -39,7 +38,6 @@
     if (self) {
         NSMutableArray *vertices = [[NSMutableArray alloc] initWithArray: [verticesSet allObjects]];
         [self setVertices: vertices];
-        [vertices release];
         
         [self setIdUniqueEdges:0];
         [self setIdUniqueVertices:0];
@@ -54,7 +52,7 @@
     MTVertex *vertex = [[MTVertex alloc] initWithID:[self idUniqueVertices] andObject:object];
     [self setIdUniqueVertices: ([self idUniqueVertices] + 1)];
     [[self vertices] addObject:vertex];
-    return [vertex autorelease];
+    return vertex;
 }
 
 // MARK: Add new edge to the graph.
@@ -86,7 +84,6 @@
             }
         }
     }
-    [edge autorelease];
     return result ? edge : nil;
 }
 
@@ -109,15 +106,13 @@
     for (MTVertex *vertex in [self allVertices]) {
         [allEdges addObjectsFromArray:[vertex incidentEdges]];
     }
-    NSUInteger result = [allEdges count];
-    [allEdges release];
-    return result;
+    return [allEdges count];
 }
 
 - (NSArray *)allVertices {
     NSArray *results;
     @synchronized(self) {
-        results = [[[self vertices] retain] autorelease];
+        results = [self vertices];
     }
     return results;
 }
@@ -127,7 +122,7 @@
     for (MTVertex *vertex in [self allVertices]) {
         [allEdges addObjectsFromArray:[vertex incidentEdges]];
     }
-    return [allEdges autorelease];
+    return allEdges;
 }
 
 - (MTVertex *)vertexForObject:(MTObject *)object {
@@ -173,9 +168,7 @@
         [resultList addObject:u];
     } while ([greyVertices count] > 0);
     
-    [greyVertices release];
-    
-    return [resultList autorelease];
+    return resultList;
 }
 
 - (MTLinkedList *)depthFirstSearch:(MTVertex *)root {
@@ -195,8 +188,7 @@
             [self depthFirstSearchVisitWithCurrentVertex:vertex counter:&counter listOfEdges:&resultEdges listOfVertices:&resultVertices];
         }
     }
-    [resultVertices autorelease];
-    return [resultEdges autorelease];
+    return resultEdges;
 }
 
 
@@ -235,11 +227,7 @@
         }
     }
 
-    [resultEdges autorelease];
-
     [resultVertices reverse];
-    
-    [resultVertices autorelease];
     return resultVertices;
 
 }
@@ -270,9 +258,8 @@
             }
         }
         
-        MTPair *pairEdge = [[MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)] retain];
+        MTPair *pairEdge = [MTPair pairWithFormer:incidentEdge andLatter:@(edgeType)];
         [*listOfEdges add:pairEdge];
-        [pairEdge release];
         
         if ([neighborVertex dfsVertexColor] == MTColorWhite) {
             [neighborVertex setDfsPredecessor: vertex];
@@ -285,9 +272,8 @@
     [vertex setDfsTimestampFinished:*counter];
     [vertex setDfsFoundCounter:*counter];
     
-    MTPair *pairVertices = [[MTPair pairWithFormer:vertex andLatter:*counter] retain];
+    MTPair *pairVertices = [MTPair pairWithFormer:vertex andLatter:*counter];
     [*listOfVertices add:pairVertices];
-    [pairVertices release];
 }
 
 #pragma mark - MTProtocolLog
@@ -298,7 +284,7 @@
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
     [result appendString:@"--------------------\n"];
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toString {
@@ -306,7 +292,7 @@
     for (MTVertex *vertex in [self allVertices]) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toStringDebug {
@@ -314,7 +300,7 @@
     for (MTVertex *vertex in [self allVertices]) {
         [result appendFormat:@"%@\n", [vertex toStringHumanReadable]];
     }
-    return [result autorelease];
+    return result;
 }
 
 @end

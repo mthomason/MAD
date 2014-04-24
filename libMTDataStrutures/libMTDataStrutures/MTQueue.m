@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueue.h"
 
 @interface MTQueue ()
@@ -17,17 +21,11 @@
 
 @implementation MTQueue
 
-- (void)dealloc {
-    [_queue release];
-    [super dealloc];
-}
-
 - (id)init {
     self = [super init];
     if (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] init];
         [self setQueue:queue];
-        [queue release];
         [self setCounter: 0];
     }
     return self;
@@ -38,7 +36,6 @@
     if (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] initWithCapacity:capacity];
         [self setQueue:queue];
-        [queue release];
         [self setCounter: 0];
     }
     return self;
@@ -60,9 +57,8 @@
     id result;
     @synchronized(self) {
         [self setCounter:([self counter] - 1)];
-        result = [[[self queue] objectAtIndex:[self counter]] retain];
+        result = [[self queue] objectAtIndex:[self counter]];
         [[self queue] removeObjectAtIndex:[self counter]];
-        [result autorelease];
     }
     return result;
 }
@@ -71,7 +67,7 @@
     return [self counter];
 }
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
     return [[self queue] countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 

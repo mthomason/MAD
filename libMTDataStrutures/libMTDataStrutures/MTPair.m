@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTPair.h"
 #import "MTObject.h"
 
@@ -15,12 +19,6 @@
 
 @implementation MTPair
 
-- (void)dealloc {
-    [_former release];
-    [_latter release];
-    [super dealloc];
-}
-
 - (id)init {
     return [self initWithFormer:nil andLatter:nil];
 }
@@ -28,14 +26,9 @@
 - (id)initWithFormer:(id)former andLatter:(id)latter {
     self = [super init];
     if (self) {
-
-        id f = [former retain];
-        [self setFormer:f];
-        [f release];
         
-        id l = [latter retain];
-        [self setLatter:l];
-        [latter release];
+        [self setFormer:former];
+        [self setLatter:latter];
         
     }
     return self;
@@ -43,7 +36,7 @@
 
 + (id)pairWithFormer:(id)former andLatter:(id)latter {
     id result = [[self alloc] initWithFormer:former andLatter:latter];
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toStringHumanReadable {

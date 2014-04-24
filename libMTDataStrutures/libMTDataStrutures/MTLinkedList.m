@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTLinkedList.h"
 
 @interface MTLinkedList()
@@ -17,18 +21,12 @@
 
 @implementation MTLinkedList
 
-- (void)dealloc {
-    [_list release];
-	[super dealloc];
-}
-
 - (id)init {
     self = [super init];
     if (self) {
         [self setLocation: 0];
         NSMutableArray *list = [[NSMutableArray alloc] init];
         [self setList:list];
-        [list release];
     }
     return self;
 }
@@ -61,7 +59,7 @@
 - (id)head {
     id result;
     @synchronized(self) {
-        result = [[[[self list] objectAtIndex:0] retain] autorelease];
+        result = [[self list] objectAtIndex:0];
     }
     return result;
 }
@@ -71,7 +69,7 @@
     @synchronized(self) {
         if ([self isNext]) {
             self.location++;
-            result = [[[[self list] objectAtIndex:[self location]] retain] autorelease];
+            result = [[self list] objectAtIndex:[self location]];
         } else {
             result = nil;
         }
@@ -84,7 +82,7 @@
     @synchronized(self) {
         if ([self isPrevious]) {
             self.location--;
-            result = [[[[self list] objectAtIndex:[self location]] retain] autorelease];
+            result = [[self list] objectAtIndex:[self location]];
         } else {
             result = nil;
         }
@@ -104,7 +102,7 @@
     return [[self list] objectAtIndex:index];
 }
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
     return [[self list] countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 
@@ -118,7 +116,7 @@
         }
     }
     [result appendString:@"*"];
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toString {
@@ -133,7 +131,6 @@
     NSArray *reverse = [[[self list] reverseObjectEnumerator] allObjects];
     NSMutableArray *newList = [[NSMutableArray alloc] initWithArray:reverse];
     [self setList:newList];
-    [newList release];
 }
 
 - (NSArray *)toArray {

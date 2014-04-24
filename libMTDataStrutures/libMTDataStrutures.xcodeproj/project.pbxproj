@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; };
-		4C2279A21676C2AB00B1150D /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A11676C2AB00B1150D /* MTPair.m */; };
-		4C2279A51677092E00B1150D /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A41677092E00B1150D /* MTObject.m */; };
-		4C2279B01677AFFB00B1150D /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279AF1677AFFB00B1150D /* MTStack.m */; };
-		4C2279B31677B00F00B1150D /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279B21677B00F00B1150D /* MTQueue.m */; };
+		4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2279A21676C2AB00B1150D /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A11676C2AB00B1150D /* MTPair.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2279A51677092E00B1150D /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A41677092E00B1150D /* MTObject.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2279B01677AFFB00B1150D /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279AF1677AFFB00B1150D /* MTStack.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2279B31677B00F00B1150D /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279B21677B00F00B1150D /* MTQueue.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C4C6F00167635B8004A3B04 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
 		4C4C6F05167635B8004A3B04 /* libMTDataStrutures.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4C4C6F04167635B8004A3B04 /* libMTDataStrutures.h */; };
-		4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; };
-		4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; };
-		4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; };
+		4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C7674B818F2F312007CEBD3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC7C27118F2EE9000784F32 /* XCTest.framework */; };
 		4C7674B918F2F312007CEBD3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
 		4C7674BA18F2F312007CEBD3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
@@ -27,18 +27,18 @@
 		4C7674D018F2F391007CEBD3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
 		4C7674D618F2F391007CEBD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C7674D418F2F391007CEBD3 /* InfoPlist.strings */; };
 		4C7674D818F2F391007CEBD3 /* MTGraphTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7674D718F2F391007CEBD3 /* MTGraphTest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C7674DF18F2F420007CEBD3 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; };
-		4C7674E018F2F424007CEBD3 /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; };
-		4C7674E118F2F427007CEBD3 /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A41677092E00B1150D /* MTObject.m */; };
-		4C7674E218F2F42B007CEBD3 /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A11676C2AB00B1150D /* MTPair.m */; };
-		4C7674E318F2F42E007CEBD3 /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279B21677B00F00B1150D /* MTQueue.m */; };
-		4C7674E418F2F432007CEBD3 /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279AF1677AFFB00B1150D /* MTStack.m */; };
-		4C7674E518F2F435007CEBD3 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; };
-		4C7674E618F2F43A007CEBD3 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; };
-		4C7674E718F2F43E007CEBD3 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; };
-		4C7674E818F2F491007CEBD3 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; };
-		4C860BCD167F658A00AC1904 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; };
-		4C860BCE167F658A00AC1904 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; };
+		4C7674DF18F2F420007CEBD3 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E018F2F424007CEBD3 /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E118F2F427007CEBD3 /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A41677092E00B1150D /* MTObject.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E218F2F42B007CEBD3 /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A11676C2AB00B1150D /* MTPair.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E318F2F42E007CEBD3 /* MTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279B21677B00F00B1150D /* MTQueue.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E418F2F432007CEBD3 /* MTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279AF1677AFFB00B1150D /* MTStack.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E518F2F435007CEBD3 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E618F2F43A007CEBD3 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E718F2F43E007CEBD3 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C7674E818F2F491007CEBD3 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C860BCD167F658A00AC1904 /* NSNumber+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCA167F658900AC1904 /* NSNumber+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C860BCE167F658A00AC1904 /* NSNumber+MTProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C860BCC167F658900AC1904 /* NSNumber+MTProtocol.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -487,6 +487,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -513,6 +514,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;

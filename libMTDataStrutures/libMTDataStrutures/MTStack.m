@@ -6,28 +6,26 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTStack.h"
 
 @interface MTStack ()
 
-@property (retain) NSMutableArray *stack;
+@property (strong) NSMutableArray *stack;
 @property (assign) NSUInteger counter;
 
 @end
 
 @implementation MTStack
 
-- (void)dealloc {
-    [_stack release];
-    [super dealloc];
-}
-
 - (id)init {
     self = [super init];
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] init];
         [self setStack:stack];
-        [stack release];
     }
     return self;
 }
@@ -37,7 +35,6 @@
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];
         [self setStack:stack];
-        [stack release];
     }
     return self;
 }
@@ -48,22 +45,19 @@
 }
 
 - (id)pop {
-    if ([self counter] <= 0) {
-        @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                       reason: @"Underflow error."
-                                     userInfo: nil];
-    }
-    id result = [[[self stack] lastObject] retain];
+    NSAssert([self counter] > 0, @"Underflow error.  Nothing to pop.");
+    id result = [[self stack] lastObject];
     [[self stack] removeLastObject];
     self.counter--;
-    return [result autorelease];
+    return result;
 }
 
 - (BOOL)isEmpty {
     return [self counter] <= 0;
 }
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len {
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained [])stackbuf count:(NSUInteger)len {
     return [[self stack] countByEnumeratingWithState:state objects:stackbuf count:len];
 }
 

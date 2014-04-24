@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTObject.h"
 
 @interface MTObject ()
@@ -21,20 +25,13 @@
 - (id)initWithObject:(id)object {
     self = [super init];
     if (self) {
-        id obj = [object retain];
-        [self setObject:obj];
-        [obj release];
+        [self setObject:object];
     }
     return self;
 }
 
 + (id)objectWithObject:(id)object {
-    return [[[self alloc] initWithObject:object] autorelease];
-}
-
-- (void)dealloc {
-    [_object release];
-    [super dealloc];
+    return [[self alloc] initWithObject:object];
 }
 
 #pragma mark - MTProtocolCompare

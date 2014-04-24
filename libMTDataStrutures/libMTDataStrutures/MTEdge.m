@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTEdge.h"
 #import "MTPair.h"
+#import "MTVertex.h"
 
 @interface MTEdge ()
 
@@ -19,13 +24,6 @@
 @end
 
 @implementation MTEdge
-
-- (void)dealloc {
-    [_uniqueIdForStructure release];
-    [_vertices release];
-    [_weight release];
-    [super dealloc];
-}
 
 - (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2 {
     return [self initWithUniqueID:uniqueID origin:vertex1 destination:vertex2 andObject:nil];
@@ -43,8 +41,7 @@
         
         MTPair *pair = [[MTPair alloc] initWithFormer:vertex1 andLatter:vertex2];
         [self setVertices:pair];
-        [pair release];
-        
+
         [self setObject: object];
         [self setWeight:weight];
         [self setUniqueIdForStructure:uniqueID];

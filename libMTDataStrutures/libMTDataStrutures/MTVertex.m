@@ -6,30 +6,21 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTVertex.h"
 #import "MTEdge.h"
 
 @interface MTVertex()
 
-@property (nonatomic, retain) NSMutableArray *edges;     // MARK: The edges this node has
-@property (nonatomic, retain) NSNumber *uniqueIdForStructure;
+@property (nonatomic, strong) NSMutableArray *edges;     // MARK: The edges this node has
+@property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 @end
 
 @implementation MTVertex
-
-- (void)dealloc {
-    [_uniqueIdForStructure release];
-    [_dfsTimestampDiscovered release];
-    [_dfsTimestampFinished release];
-    [_dfsFoundCounter release];
-    [_dfsPredecessor release];
-    [_dfsDistance release];
-    [_bfsPredecessor release];
-    [_bfsDistance release];
-    [_edges release];
-    [super dealloc];
-}
 
 - (id)init {
     return [self initWithID:0];
@@ -45,15 +36,11 @@
         
         NSNumber *number = [[NSNumber alloc] initWithInteger:idnumber];
         [self setUniqueIdForStructure:number];
-        [number release];
 
         NSMutableArray *array = [[NSMutableArray alloc] init];
         [self setEdges:array];
-        [array release];
         
-        id obj = [object retain];
-        [self setObject: obj];
-        [obj release];
+        [self setObject: object];
 
     }
     return self;
@@ -66,7 +53,7 @@
 - (NSArray *)incidentEdges {
     NSArray *results;
     @synchronized(self) {
-        results = [[[self edges] retain] autorelease];
+        results = [self edges];
     }
     return results;
 }
@@ -77,7 +64,6 @@
     } else {
         NSMutableArray *arrayEmpty = [[NSMutableArray alloc] initWithObjects:edge, nil];
         [self setEdges:arrayEmpty];
-        [arrayEmpty release];
     }
 }
 
@@ -130,7 +116,7 @@
         }
         [result appendString:desc];
     }
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toString {
@@ -139,7 +125,7 @@
         [result appendString:@"\tEdge->"];
         [result appendString:[edge toStringDebug]];
     }
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toStringDebug {
