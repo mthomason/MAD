@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTDataTableFast.h"
 #import "NSFileManager+Common.h"
 #import "MTQuery.h"
@@ -206,6 +210,7 @@
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
     self.rowCounter++;
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
+    NSLog(@"Add Row %@", row);
     [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         if (!success) NSLog(@"Error %@", error);
         dispatch_semaphore_signal(semaphoreQuery);
@@ -214,7 +219,7 @@
 }
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
-    
+    NSLog(@"Add Row %@", row);
     NSMutableArray *rowData = [[NSMutableArray alloc] init];
     for (id columnDefKey in [self columnKeys]) {
         MTDataColumn *columnDef = [[self columns] objectForKey:columnDefKey];

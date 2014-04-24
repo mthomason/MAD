@@ -328,7 +328,7 @@ NSString * const MTNullIdentifier = @"(null)";
                 for (int i = 0; i < level; i++) {
                     [t appendString:@"\t"];
                 }
-                NSLog(@"%@%@", t, lastValueForField);
+                //NSLog(@"%@%@", t, lastValueForField);
 
                 id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
                                                             level: (level + 1)];

@@ -178,7 +178,7 @@
 }
 
 - (BOOL)partOfTransactionSet {
-    return YES;
+    return NO;  //Can't use YES here, because insert is bound with different values on each run.
 }
 
 @end

@@ -323,7 +323,6 @@
     
     if (statement == NULL) {
         success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
-        
         if ([[query binaryBindings] count] > 0) {
             for (MTDatabaseDataBinding *databinding in [query binaryBindings]) {
                 switch ([databinding datatype]) {
@@ -364,7 +363,6 @@
                 }
             }
         }
-        
     }
     
     if ([query returnsResults]) {
