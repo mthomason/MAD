@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTPaper.h"
 #import "MTPaperLegal.h"
 #import "MTPaperLetter.h"
@@ -53,167 +57,162 @@
 //}
 
 - (id)initWithType:(MTPaperType)papertype {
-    
+    id result = nil;
     switch (papertype) {
         
         case MTPaperTypeLetter:
-            self = [MTPaperLetter init];
+            result = [[MTPaperLetter alloc] init];
             break;
 
         case MTPaperTypeLegal:
-            self = [MTPaperLegal init];
+            result = [MTPaperLegal init];
             break;
 
         case MTPaperTypeGovernmentLetter:
-            self = [MTPaperGovernemntLetter init];
+            result = [MTPaperGovernemntLetter init];
             break;
 
         case MTPaperTypeGovernmentLegal:
-            self = [MTPaperGovernemntLegal init];
+            result = [MTPaperGovernemntLegal init];
             break;
 
         case MTPaperTypeA0:
-            self = [MTPaperA0 init];
+            result = [[MTPaperA0 alloc] init];
             break;
 
         case MTPaperTypeA1:
-            self = [MTPaperA1 init];
+            result = [[MTPaperA1 alloc] init];
             break;
 
         case MTPaperTypeA2:
-            self = [MTPaperA2 init];
+            result = [[MTPaperA2 alloc] init];
             break;
 
         case MTPaperTypeA3:
-            self = [MTPaperA3 init];
+            result = [[MTPaperA3 alloc] init];
             break;
 
         case MTPaperTypeA4:
-            self = [MTPaperA4 init];
+            result = [[MTPaperA4 alloc] init];
             break;
 
         case MTPaperTypeA5:
-            self = [MTPaperA5 init];
+            result = [[MTPaperA5 alloc] init];
             break;
 
         case MTPaperTypeA6:
-            self = [MTPaperA6 init];
+            result = [[MTPaperA6 alloc] init];
             break;
 
         case MTPaperTypeA7:
-            self = [MTPaperA7 init];
+            result = [[MTPaperA7 alloc] init];
             break;
 
         case MTPaperTypeA8:
-            self = [MTPaperA8 init];
+            result = [[MTPaperA8 alloc] init];
             break;
 
         case MTPaperTypeA9:
-            self = [MTPaperA9 init];
+            result = [[MTPaperA9 alloc] init];
             break;
 
         case MTPaperTypeA10:
-            self = [MTPaperA10 init];
+            result = [[MTPaperA10 alloc] init];
             break;
 
         case MTPaperTypeB0:
-            self = [MTPaperB0 init];
+            result = [[MTPaperB0 alloc] init];
             break;
             
         case MTPaperTypeB1:
-            self = [MTPaperB1 init];
+            result = [[MTPaperB1 alloc] init];
             break;
             
         case MTPaperTypeB2:
-            self = [MTPaperB2 init];
+            result = [[MTPaperB2 alloc] init];
             break;
             
         case MTPaperTypeB3:
-            self = [MTPaperB3 init];
+            result = [[MTPaperB3 alloc] init];
             break;
             
         case MTPaperTypeB4:
-            self = [MTPaperB4 init];
+            result = [[MTPaperB4 alloc] init];
             break;
             
         case MTPaperTypeB5:
-            self = [MTPaperB5 init];
+            result = [[MTPaperB5 alloc] init];
             break;
             
         case MTPaperTypeB6:
-            self = [MTPaperB6 init];
+            result = [[MTPaperB6 alloc] init];
             break;
             
         case MTPaperTypeB7:
-            self = [MTPaperB7 init];
+            result = [[MTPaperB7 alloc] init];
             break;
             
         case MTPaperTypeB8:
-            self = [MTPaperB8 init];
+            result = [[MTPaperB8 alloc] init];
             break;
             
         case MTPaperTypeB9:
-            self = [MTPaperB9 init];
+            result = [[MTPaperB9 alloc] init];
             break;
             
         case MTPaperTypeB10:
-            self = [MTPaperB10 init];
+            result = [[MTPaperB10 alloc] init];
             break;
 
         case MTPaperTypeC0:
-            self = [MTPaperC0 init];
+            result = [[MTPaperC0 alloc] init];
             break;
             
         case MTPaperTypeC1:
-            self = [MTPaperC1 init];
+            result = [[MTPaperC1 alloc] init];
             break;
             
         case MTPaperTypeC2:
-            self = [MTPaperC2 init];
+            result = [[MTPaperC2 alloc] init];
             break;
             
         case MTPaperTypeC3:
-            self = [MTPaperC3 init];
+            result = [[MTPaperC3 alloc] init];
             break;
             
         case MTPaperTypeC4:
-            self = [MTPaperC4 init];
+            result = [[MTPaperC4 alloc] init];
             break;
             
         case MTPaperTypeC5:
-            self = [MTPaperC5 init];
+            result = [[MTPaperC5 alloc] init];
             break;
             
         case MTPaperTypeC6:
-            self = [MTPaperC6 init];
+            result = [[MTPaperC6 alloc] init];
             break;
             
         case MTPaperTypeC7:
-            self = [MTPaperC7 init];
+            result = [[MTPaperC7 alloc] init];
             break;
             
         case MTPaperTypeC8:
-            self = [MTPaperC8 init];
+            result = [[MTPaperC8 alloc] init];
             break;
             
         case MTPaperTypeC9:
-            self = [MTPaperC9 init];
+            result = [[MTPaperC9 alloc] init];
             break;
             
         case MTPaperTypeC10:
-            self = [MTPaperC10 init];
+            result = [[MTPaperC10 alloc] init];
             break;
 
-            
         default:
+            result = self = [super init];
             break;
     }
-    
-    self = [super init];
-    if (self) {
-
-    }
-    return self;
+    return result;
 }
 
 + (CGRect)boundsForSize:(CGSize)size {
