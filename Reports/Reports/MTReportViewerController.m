@@ -698,7 +698,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)reload {
     __block MTReportViewerController *blockself = self;
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             [blockself reload:blockself];
@@ -723,7 +723,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 
 
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
         [[doc reportFormatter] setDidRefresh:[self startedRefresh]];
         [[doc reportFormatter] formatForSize:viewBounds];
