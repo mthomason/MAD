@@ -115,8 +115,6 @@ static size_t const kDashedCount            = (2.0f);
         [[self displayBarcode] setForgroundColor:[UIColor lightGrayColor]];
         [[self displayBarcode] drawInRect:rect];
     } else {
-        //CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y);
-        //CGRect drawingBounds = CGRectApplyAffineTransform([self drawingRect], transformPaddingBorderMargin);
         [[self displayStringAttributed] drawWithRect:rect options:[self drawingOptions] context:nil];
     }
     

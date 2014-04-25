@@ -19,23 +19,23 @@
 
 @property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellDocumentName;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellUsername;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellPassword;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellHost;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellPort;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellDatabase;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDocumentName;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellUsername;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPassword;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellHost;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellPort;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellDatabase;
 
-@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 
 
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
-@property (nonatomic, retain) IBOutlet UITextField *textFieldUsername;
-@property (nonatomic, retain) IBOutlet UITextField *textFieldPassword;
-@property (nonatomic, retain) IBOutlet UITextField *textFieldHost;
-@property (nonatomic, retain) IBOutlet UITextField *textFieldPort;
-@property (nonatomic, retain) IBOutlet UITextField *textFieldDatabase;
-@property (nonatomic, retain) IBOutlet UITextField *textFieldReportName;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldUsername;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldPassword;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
+@property (nonatomic, weak) IBOutlet UITextField *textFieldReportName;
 
 @property (nonatomic, copy) NSString *databaseType;
 

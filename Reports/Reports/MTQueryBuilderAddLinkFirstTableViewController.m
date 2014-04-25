@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "RptqQueryTable.h"
 
 @implementation MTQueryBuilderAddLinkFirstTableViewController
-
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -39,13 +39,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
     }
     
-    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqQueryTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[cell textLabel] setText: [tablea alias]];
     [[cell detailTextLabel] setText: @""];
-    [tablea release];
 
     return cell;
 }
@@ -55,9 +54,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqQueryTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[self delegate] viewControllerDidFinishWithTable:tablea];
-    [tablea release];
 }
 
 @end

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -26,9 +30,9 @@
 // Private TableViewController properties and methods.
 @interface MTQueryBuilderChooseFieldViewController ()
 
-@property (nonatomic, retain) NSMutableArray *sectionInfoArray;
-@property (nonatomic, retain) NSIndexPath *pinchedIndexPath;
-@property (nonatomic, retain) NSArray *dataTables;
+@property (nonatomic, strong) NSMutableArray *sectionInfoArray;
+@property (nonatomic, strong) NSIndexPath *pinchedIndexPath;
+@property (nonatomic, strong) NSArray *dataTables;
 
 @property (nonatomic, assign) NSInteger openSectionIndex;
 @property (nonatomic, assign) CGFloat initialPinchHeight;
@@ -42,15 +46,6 @@
 #define HEADER_HEIGHT 45
 
 @implementation MTQueryBuilderChooseFieldViewController
-
-- (void)dealloc {
-    [_queryField release];
-    [_excludeTables release];
-    [_dataTables release];
-    [_pinchedIndexPath release];
-    [_sectionInfoArray release];
-    [super dealloc];
-}
 
 #pragma mark Initialization and configuration
 
@@ -84,22 +79,17 @@
     
     [[self tableView] setSectionHeaderHeight: HEADER_HEIGHT];
 
-    //rowHeight = DEFAULT_ROW_HEIGHT;
     _openSectionIndex = NSNotFound;
 
-    
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
-    NSSet *queryTables = [[query hasQueryTables] retain];
+    NSSet *queryTables = [query hasQueryTables];
 
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
-    NSArray *queryTablesArray = [[queryTables sortedArrayUsingDescriptors:@[namesAccending]] retain];
+    NSArray *queryTablesArray = [queryTables sortedArrayUsingDescriptors:@[namesAccending]];
     [self setDataTables:queryTablesArray];
-    [queryTablesArray release];
-    [queryTables release];
-    [namesAccending release];
 
 }
 
@@ -121,12 +111,9 @@
 			}
 			
 			[infoArray addObject:sectionInfo];
-            [sectionInfo release];
 		}
 		
 		[self setSectionInfoArray: infoArray];
-
-        [infoArray release];
 	}
 	
 }
@@ -172,7 +159,6 @@
         [[cell textLabel] setText: [field name]];
         [[cell detailTextLabel] setText: [[field fieldTypeDisplay] lowercaseString]];
     }
-    [namesAccending release];
 
     return cell;
 }
@@ -188,7 +174,6 @@
                                                                                                            section: section
                                                                                                           delegate: self];
         [sectionInfo setHeaderView: vsht];
-        [vsht release];
     }
     return [sectionInfo headerView];
 }
@@ -217,12 +202,10 @@
         NSSet *fields = [[sectionInfo table] hasQueryFields];
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
         NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
-        queryField = [[fieldsArray objectAtIndex: [indexPath row]] retain];
+        queryField = [fieldsArray objectAtIndex: [indexPath row]];
         [self setQueryField:queryField];
-        //[[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
-        [namesAccending release];
     }
-    return [queryField autorelease];
+    return queryField;
 }
 
 #pragma mark Section header delegate
@@ -278,9 +261,6 @@
     [[self tableView] endUpdates];
     [self setOpenSectionIndex: sectionOpened];
     
-    [indexPathsToDelete release];
-    [indexPathsToInsert release];
-    
 }
 
 
@@ -301,7 +281,6 @@
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:sectionClosed]];
         }
         [[self tableView] deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
-        [indexPathsToDelete release];
     }
     [self setOpenSectionIndex: NSNotFound];
 }

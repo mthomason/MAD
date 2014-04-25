@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTConnectionViewController.h"
 #import "UIDevice+Hack.h"
@@ -15,10 +19,6 @@
 #import "MTDatabaseSqlite3.h"
 
 @implementation MTDatabaseDriverSelectorViewController
-
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -37,23 +37,22 @@
     if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         [[segue destinationViewController] setDelegate:self];
-        dbId = [[MTDatabaseMySql identifier] retain];
+        dbId = [MTDatabaseMySql identifier];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         [[segue destinationViewController] setDelegate:self];
-        dbId = [[MTDatabaseSqlServer identifier] retain];
+        dbId = [MTDatabaseSqlServer identifier];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         [[segue destinationViewController] setDelegate:self];
-        dbId = [[MTDatabaseSqlite3 identifier] retain];
+        dbId = [MTDatabaseSqlite3 identifier];
 
     }
     if ([[segue destinationViewController] respondsToSelector:@selector(setDatabaseType:)]) {
         [(MTConnectionViewController *)[segue destinationViewController] setDatabaseType:dbId];
     }
-    [dbId release];
 }
 
 - (void)viewControllerDidFinish:(id)sender {

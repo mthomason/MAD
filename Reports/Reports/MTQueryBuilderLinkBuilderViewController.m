@@ -6,39 +6,29 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderLinkBuilderViewController.h"
 #import "AppDelegate.h"
+#import "RptqQuery.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaField.h"
 
 @interface MTQueryBuilderLinkBuilderViewController ()
 
-@property (nonatomic, retain) RptqQueryTable *firstTableName;
-@property (nonatomic, retain) RptqQueryTable *secondTableName;
-@property (nonatomic, retain) RptqQueryField *firstFieldName;
-@property (nonatomic, retain) RptqQueryField *secondFieldName;
-@property (nonatomic, retain) IBOutlet UILabel *labelRightField;
+@property (nonatomic, strong) RptqQueryTable *firstTableName;
+@property (nonatomic, strong) RptqQueryTable *secondTableName;
+@property (nonatomic, strong) RptqQueryField *firstFieldName;
+@property (nonatomic, strong) RptqQueryField *secondFieldName;
+@property (nonatomic, strong) IBOutlet UILabel *labelRightField;
 
 @end
 
 @implementation MTQueryBuilderLinkBuilderViewController
-
-- (void)dealloc {
-    [_firstTableName release];
-    [_firstFieldName release];
-    [_secondTableName release];
-    [_secondFieldName release];
-    [_tableViewCellJoinType release];
-    [_tableViewCellTableOne release];
-    [_tableViewCellFieldOne release];
-    [_tableViewCellTableTwo release];
-    [_tableViewCellFieldTwo release];
-    [_tableViewCellTableFieldOne release];
-    [_tableViewCellTableFieldTwo release];
-    [_labelRightField release];
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -106,7 +96,6 @@
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [tvc setFetchedResultsController: frc];
-                    [frc release];
                 }
             }
 
@@ -126,7 +115,6 @@
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
-                    [frc release];
                 }
             }
 
@@ -150,7 +138,6 @@
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
-                    [frc release];
                 }
             }
         } else if ([[segue identifier] isEqualToString:@"showSelectFieldTwo"]) {
@@ -170,7 +157,6 @@
                                                                                             sectionNameKeyPath: nil
                                                                                                      cacheName: nil];
                     [vcFf setFetchedResultsController: frc];
-                    [frc release];
                 }
             }
         } else if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldOne"]) {
@@ -220,16 +206,12 @@
     [[self navigationController] popToViewController: self animated: YES];
     
     RptqQueryTable *queryTable = [queryField inQueryTable];
-    //RptqDatabaseSchemaTable *tableName = [queryTable databaseSchemaTable];
-    //NSString *fieldName = [field name];
-    //NSString *tableFieldName = [[NSString stringWithFormat:@"%@.%@", tableName, fieldName] retain];
-    NSString *tableFieldName = [[queryField toString] retain];
+    NSString *tableFieldName = [queryField toString];
     switch ([self currentlyEditingPart]) {
-        case MNSLinkLeft:
+        case MNSLinkLeft: {
             [[[self tableViewCellTableFieldOne] detailTextLabel] setText: [tableFieldName lowercaseString]];
             [self setFirstTableName:queryTable];
             [self setFirstFieldName:queryField];
-//            [self setFirstTableFieldName:tableFieldName];
 
             [[self tableViewCellTableFieldTwo] setUserInteractionEnabled:YES];
             [[[self tableViewCellTableFieldTwo] textLabel] setEnabled:YES];
@@ -237,23 +219,20 @@
             [[self labelRightField] setEnabled:YES];
             [[self labelRightField] setTextColor:[UIColor darkTextColor]];
             
-            //[[[self tableViewCellTableFieldTwo] textLabel] setTextColor:[UIColor darkTextColor]];
             NSString *required = [NSLocalizedString(@"Required", @"Shows that this field is required.") lowercaseString];
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: required];
             [[self tableViewCellTableFieldTwo] setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             break;
-        case MNSLinkRight:
+        }
+        case MNSLinkRight: {
             [[[self tableViewCellTableFieldTwo] detailTextLabel] setText: [tableFieldName lowercaseString]];
             [self setSecondTableName:queryTable];
             [self setSecondFieldName:queryField];
-//            [self setSecondTableFieldName:tableFieldName];
             break;
+        }
         default:
             break;
     }
-    //NSLog(@"%@", NSStringFromCGRect([[self tableViewCellTableFieldOne] detailTextLabel].frame));
-    //[[[self tableViewCellFieldOne] detailTextLabel] setNeedsLayout];
-    [tableFieldName release];
 }
 
 - (void)viewControllerDidFinishWithTable:(RptqQueryTable *)result {

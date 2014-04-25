@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportViewerPrintPageRenderer.h"
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
@@ -55,7 +59,7 @@
 @interface MTReportViewerPrintPageRenderer ()
 
 
-@property (nonatomic, retain) MTReportFormatter *reportFormatter;
+@property (nonatomic, strong) MTReportFormatter *reportFormatter;
 
 @property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
 
@@ -69,11 +73,6 @@
 @end
 
 @implementation MTReportViewerPrintPageRenderer
-
-- (void)dealloc {
-    [_reportFormatter release];
-    [super dealloc];
-}
 
 - (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter {
     return [self initWithReportFormatter:reportFormatter andPrintableAreaSize:[MTPaper sizeLetter]];
@@ -226,10 +225,10 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomRect);
 
-    UIImage *croppedImage = [[UIImage imageWithCGImage:imageRef] retain];
+    UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
     UIGraphicsEndImageContext();
-    return [croppedImage autorelease];
+    return croppedImage;
 }
 
 #pragma mark - UIPrintPageRenderer Overrides
@@ -288,7 +287,7 @@
         if (index < numberOfPages) {
             
             CGRect sectionRect = CGRectZero;
-            UIColor *whiteColor = [[UIColor whiteColor] retain];
+            UIColor *whiteColor = [UIColor whiteColor];
             
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:index]) {
                 
@@ -445,7 +444,6 @@
                                                     NSArray *objectsToAdd = [(MTDataTableFast *)[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
                                                                                                                                                  limit: [indexSet count]];
                                                     [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
-                                                    [dataForGroup autorelease];
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeSection: {
@@ -555,7 +553,7 @@
                                         }
                                             
                                         case MTDocumentObjectTypeImage: {
-                                            drawingObject = [[[item isImage] image] retain];
+                                            drawingObject = [[item isImage] image];
                                             displayString = @"";
                                             break;
                                         }
@@ -563,8 +561,8 @@
                                         case MTDocumentObjectTypeBarcode: {
                                             
                                             RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
-                                            RptqQueryField *queryField1 = [[barcodeObject referencesField1] retain];
-                                            RptqQueryField *queryField2 = [[barcodeObject referencesField2] retain];
+                                            RptqQueryField *queryField1 = [barcodeObject referencesField1];
+                                            RptqQueryField *queryField2 = [barcodeObject referencesField2];
                                             
                                             NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
                                             NSInteger pageIndex = index;
@@ -600,14 +598,11 @@
                                             if ([input2 isEqualToString:MTNullIdentifier]) {
                                                 input2 = @"";
                                             }
-                                            MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject] retain];
+                                            MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeObject];
                                             
                                             [barcode setInput:              input1];
                                             [barcode setPrimaryData:        input2];
-                                            drawingObject = [barcode retain];
-                                            [barcode release];
-                                            [queryField1 release];
-                                            [queryField2 release];
+                                            drawingObject = barcode;
                                             break;
                                         }
                                             
@@ -690,11 +685,7 @@
                                     } else {
                                         [drawingObject drawInRect:elementCanvasRect];
                                     }
-                                    
-                                    [drawingObject release];
                                     drawingObject = nil;
-                                    
-                                    
                                 }
                             }
                         }
@@ -702,13 +693,8 @@
                     originY += sizeHeight;
                 }
             }
-            [whiteColor release];
         }
-        [nextGroupLevelKeys release];
-        [groupLevelKeys release];
     }
-
-    
 }
 
 - (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
@@ -756,9 +742,6 @@
         } while (logoRect.origin.x + logoRect.size.width < pageRect.size.width);
         rowCounter++;
     } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
-    
-    [paragraphStyle release];
-    [getMad release];
 }
 
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
@@ -794,18 +777,13 @@
     NSNumber *baselineOffset = @(0.0000f);
     NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
     NSNumber *strikethroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    NSDictionary *results = @{
-                              NSFontAttributeName : customFont,
-                              NSBaselineOffsetAttributeName : baselineOffset,
-                              NSUnderlineStyleAttributeName : underlineStyle,
-                              NSStrikethroughStyleAttributeName : strikethroughStyle,
-                              NSParagraphStyleAttributeName: paragraphStyle
-                              };
-    [results retain];
-    [paragraphStyle release];
-    [font release];
-    return [results autorelease];
-    
+    return  @{
+              NSFontAttributeName : customFont,
+              NSBaselineOffsetAttributeName : baselineOffset,
+              NSUnderlineStyleAttributeName : underlineStyle,
+              NSStrikethroughStyleAttributeName : strikethroughStyle,
+              NSParagraphStyleAttributeName: paragraphStyle
+              };
 }
 
 - (NSDictionary *)coreTextAttributesForDocumentObject:(RptqDocumentObject *)documentObject {
@@ -845,13 +823,12 @@
 
     
     CFRelease(style);
-    [font autorelease];
     NSNumber *underline = [[documentObject underline] boolValue] ? @(kCTUnderlineStyleSingle) : @(kCTUnderlineStyleNone);
     NSNumber *strikethough = [[documentObject strike] boolValue] ? @(kCTUnderlineStyleSingle) : @(kCTUnderlineStyleNone);
-    NSDictionary *result = @{(NSString *)kCTFontAttributeName : (id)customFont,
+    NSDictionary *result = @{(NSString *)kCTFontAttributeName : (id)CFBridgingRelease(customFont),
                              (NSString *)kCTUnderlineStyleAttributeName : underline,
                              (NSString *)NSStrikethroughStyleAttributeName : strikethough,
-                             (NSString *)kCTParagraphStyleAttributeName: [paragraphStyle autorelease]};
+                             (NSString *)kCTParagraphStyleAttributeName: paragraphStyle};
     CFRelease(customFont);
     return result;
     

@@ -6,15 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAddTableViewController.h"
 #import "RptqDatabaseSchemaTable.h"
 
 @implementation MTQueryBuilderAddTableViewController
-
-- (void)dealloc {
-    [_excludeResults release];
-    [super dealloc];
-}
 
 #pragma mark - View lifecycle
 
@@ -36,12 +35,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
     }
     
-    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[cell textLabel] setText: [tablea name]];
-    [tablea release];
     
     return cell;
 }
@@ -51,9 +49,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqDatabaseSchemaTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[self delegate] viewControllerSchemaAddTableDidSelectTable: tablea];
-    [tablea release];
 }
 
 @end

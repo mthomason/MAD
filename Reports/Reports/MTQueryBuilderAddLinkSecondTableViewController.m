@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAddLinkSecondTableViewController.h"
 #import "RptqQueryTable.h"
 
@@ -27,12 +31,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: CellIdentifier];
     }
     
-    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqQueryTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[cell textLabel] setText: [tablea alias]];
-    [tablea release];
     
     return cell;
 }
@@ -42,9 +45,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    RptqQueryTable *tablea = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqQueryTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[self delegate] viewControllerDidFinishWithSecondTable: tablea];
-    [tablea release];
 }
 
 @end

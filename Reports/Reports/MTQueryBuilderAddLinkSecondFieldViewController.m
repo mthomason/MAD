@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAddLinkSecondFieldViewController.h"
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation MTQueryBuilderAddLinkSecondFieldViewController
-
-- (void)dealloc {
-    [super dealloc];
-}
 
 #pragma mark - View lifecycle
 
@@ -33,13 +33,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: CellIdentifier];
     }
     
-    RptqDatabaseSchemaField *field = [[[self fetchedResultsController] objectAtIndexPath: indexPath] retain];
+    RptqDatabaseSchemaField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
     [[cell textLabel] setText: [field name]];
     [[cell detailTextLabel] setText: [field fieldTypeDisplay]];
-    [field release];
     
     return cell;
 }

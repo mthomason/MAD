@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderPredicateFormatViewController.h"
 
 @implementation MTQueryBuilderPredicateFormatViewController
-
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -35,15 +35,13 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
-            MTQueryBuilderAddPredicateViewController *tvcSC = [[segue destinationViewController] retain];
+            MTQueryBuilderAddPredicateViewController *tvcSC = [segue destinationViewController];
             [tvcSC setDelegate:self];
-            [tvcSC release];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
-            MTQueryBuilderAddPredicateViewController *tvcSC = [[segue destinationViewController] retain];
+            MTQueryBuilderAddPredicateViewController *tvcSC = [segue destinationViewController];
             [tvcSC setDelegate:self];
-            [tvcSC release];
         }
     }
 }

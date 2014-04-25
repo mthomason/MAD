@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTConnectionViewController.h"
 #import "MAReportDocument.h"
 #import "MTViewControllerActivitySpinner.h"
@@ -18,33 +22,12 @@
 @interface MTConnectionViewController()
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
-@property (nonatomic, retain) MTViewControllerActivitySpinner *activitySpinnerViewController;
-@property (nonatomic, retain) UIBarButtonItem *holderButton;
+@property (nonatomic, strong) MTViewControllerActivitySpinner *activitySpinnerViewController;
+@property (nonatomic, strong) UIBarButtonItem *holderButton;
 
 @end
 
 @implementation MTConnectionViewController
-
-- (void)dealloc {
-    [_holderButton release];
-    [_activitySpinnerViewController release];
-    [_tableViewCellUsername release];
-    [_tableViewCellPassword release];
-    [_tableViewCellHost release];
-    [_tableViewCellPort release];
-    [_activityIndicatorTestConnection release];
-    [_textFieldUsername release];
-    [_textFieldPassword release];
-    [_textFieldHost release];
-    [_textFieldPort release];
-    [_tableViewCellDatabase release];
-    [_textFieldDatabase release];
-    [_textFieldReportName release];
-    [_databaseType release];
-    [_tableViewCellDocumentName release];
-    [_tableViewCells release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -134,10 +117,8 @@
     [activityIndicator setHidesWhenStopped:NO];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
-    [barButtonItem release];
-    [activityIndicator release];
     
-    __block MTConnectionViewController *blockSelf = self;
+    __block __weak MTConnectionViewController *blockSelf = self;
     
     UITextField *textFieldServer    = [blockSelf textFieldHost];
     UITextField *textFieldDatabae   = [blockSelf textFieldDatabase];
@@ -150,12 +131,12 @@
     NSString *textPort      = [textPortText length] > 0 ? textPortText : @"0";   // FIXME: A very poor guess.
     NSInteger blockPort     = [textPort integerValue];
     
-    __block id blockSender = sender;
+    __block __weak id blockSender = sender;
     
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
 
-    MTDatabaseConnection *dbDetails = [[MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]] retain];
+    MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]];
     [dbDetails setServer:                  blockServer];
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
@@ -170,11 +151,6 @@
             [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
         }
     }];
-    
-    [dbDetails release];
-    [blockServer release];
-    [blockDatabase release];
-
 }
 
 - (IBAction)done:(id)sender {
@@ -182,8 +158,11 @@
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
+
 - (IBAction)schemaDidEndOnExit:(id)sender { }
+
 - (IBAction)usernameDidEndOnExit:(id)sender { }
+
 - (IBAction)passwordDidEndOnExit:(id)sender {
     if ([[self textFieldHost] canBecomeFirstResponder]) {
         [[self textFieldHost] becomeFirstResponder];
@@ -217,4 +196,5 @@
     [self setTableViewCells:nil];
     [super viewDidUnload];
 }
+
 @end

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTCollectionViewCellDocument.h"
 #import "UIDevice+Hack.h"
 #import <QuartzCore/QuartzCore.h>
@@ -16,11 +20,6 @@
 @end
 
 @implementation MTCollectionViewCellDocument
-
-- (void)dealloc {
-    [_bgColor release];
-    [super dealloc];
-}
 
 - (void)awakeFromNib {
     CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
@@ -63,21 +62,14 @@
     [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [attributedString addAttribute:NSFontAttributeName value:fonta range:range];
     [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-    //[attributedString addAttribute:NSStrokeWidthAttributeName value:@(1.0) range:range];
-    //[attributedString addAttribute:NSStrokeColorAttributeName value:[UIColor whiteColor] range:range];
-    //[attributedString addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
     [[self labelTitle] setAttributedText:attributedString];
-    [attributedString release];
-    [paragraphStyle release];
-
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        UIColor *bgColor = [[[UIColor tintColor] colorWithAlphaComponent:0.70000f] retain];
+        UIColor *bgColor = [[UIColor tintColor] colorWithAlphaComponent:0.70000f];
         [self setBgColor:bgColor];
-        [bgColor release];
         
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
         if ([UIDevice isLagacyOS]) {
@@ -89,9 +81,6 @@
         }
         
         [self setSelectedBackgroundView:selectedBackground];
-        [selectedBackground release];
-        
-        
     }
     return self;
 }
@@ -105,9 +94,6 @@
     }
     return result;
 }
-
-//- (void)setSelected:(BOOL)selected {
-//}
 
 - (BOOL)resignFirstResponder {
     [[self labelTitle] setTextColor:[UIColor tintColor]];

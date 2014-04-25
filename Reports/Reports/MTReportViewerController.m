@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportViewerController.h"
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
@@ -28,38 +32,38 @@
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate>
 
-@property (nonatomic, retain) MTReportViewerPrintPageRenderer *printPageRendererReport;
+@property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
-@property (nonatomic, retain) IBOutlet UIView *sliderView;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSliderView;
-@property (nonatomic, retain) IBOutlet UISlider *sliderPagination;
+@property (nonatomic, strong) IBOutlet UIView *sliderView;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSliderView;
+@property (nonatomic, strong) IBOutlet UISlider *sliderPagination;
 
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemPrint;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRefresh;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemDone;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemActivity;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemPrint;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSendToPdf;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemDone;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemActivity;
 
-@property (nonatomic, retain) IBOutlet UILabel *labelDateLastRefreshed;
-@property (nonatomic, retain) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
+@property (nonatomic, strong) IBOutlet UILabel *labelDateLastRefreshed;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *statusLabelWidthConstraint;
 
 @property (nonatomic, assign) NSUInteger numberOfPages;
 @property (nonatomic, assign) NSUInteger currentPageIndex;
 
 @property (nonatomic, assign) CGRect lastLayoutBounds;
 
-@property (nonatomic, retain) NSDate *lastCacheDate;
-@property (nonatomic, retain) NSTimer *timerLabelTimeSinceRefreh;
+@property (nonatomic, strong) NSDate *lastCacheDate;
+@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
 @property (nonatomic, assign) BOOL startedRefresh;
 @property (nonatomic, assign) BOOL pageIsAnimating;
 @property (atomic,    assign) BOOL isRefreshing;
 @property (nonatomic, assign) BOOL updatingOfTimerIsPaused;
 
-@property (nonatomic, retain) UIPopoverController *popoverControllerActivity;
+@property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
-@property (nonatomic, retain) UIImageView *snapshotBeforeRotation;
-@property (nonatomic, retain) UIImageView *snapshotAfterRotation;
+@property (nonatomic, strong) UIImageView *snapshotBeforeRotation;
+@property (nonatomic, strong) UIImageView *snapshotAfterRotation;
 
 @property (nonatomic, assign) CGRect frameBeforeRotation;
 @property (nonatomic, assign) CGRect frameAfterRotation;
@@ -78,38 +82,19 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
     [snapshotView setFrame:[targetView frame]];
-    return [snapshotView autorelease];
+    return snapshotView;
 }
 
 - (void)dealloc {
-    [_snapshotAfterRotation release];
-    [_snapshotBeforeRotation release];
-    [_popoverControllerActivity release];
-    [_printPageRendererReport release];
-    [_sliderPagination release];
     _asyncDelegate = nil;
-    
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if ([_timerLabelTimeSinceRefreh isValid]) {
                 [_timerLabelTimeSinceRefreh invalidate];
             }
         }
-        [_timerLabelTimeSinceRefreh release];
         _timerLabelTimeSinceRefreh = nil;
     }
-    
-    [_barButtonItemRefresh release];
-    [_barButtonItemPrint release];
-    [_barButtonItemSendToPdf release];
-    [_barButtonItemActivity release];
-    [_labelDateLastRefreshed release];
-    [_statusLabelWidthConstraint release];
-    [_barButtonItemDone release];
-    [_sliderView release];
-    [_barButtonItemSliderView release];
-    [_lastCacheDate release];
-    [super dealloc];
 }
 
 - (UIImage *)tabBarImage {
@@ -135,8 +120,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[[self navigationItem] titleView] sizeToFit];
         _timerLabelTimeSinceRefreh = nil;
     
-    [labelMadDesigner release];
-    
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
     _lastCacheDate = nil;
@@ -154,7 +137,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
     [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
-    [blankPage release];
     
     [[self sliderPagination] setValue:0.0000f];
     [[self sliderPagination] addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
@@ -193,7 +175,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
-        [prtingPageRendererReport release];
     }
 }
 
@@ -234,13 +215,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 [[pageOne view] setNeedsDisplay];
                 [[reportViewer labelDateLastRefreshed] setHidden:NO];
                 [reportViewer setUpdatingOfTimerIsPaused:NO];
-                //[sender updateLateRefreshedLabel:sender];
                 [reportViewer setIsRefreshing:NO];
 
             }
-            
         }];
-        [pageOne release];
     }
 }
 
@@ -305,9 +283,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         if ([reportViewer lastCacheDate] == nil) {
 
             RptqQuery *query = [AppDelegate activeRptqQuery];
-            NSDate *lastD = [[[query hasQueryCache] cacheDate] retain];
+            NSDate *lastD = [[query hasQueryCache] cacheDate];
             [reportViewer setLastCacheDate: lastD];
-            [lastD release];
             if ([reportViewer lastCacheDate] == nil) {  //I give up
                 [reportViewer setLastCacheDate:[NSDate date]];
             }
@@ -351,11 +328,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [reportViewer setTimerLabelTimeSinceRefreh:nil];
         }
         
-        NSTimer *t = [[NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:reportViewer
-                                                     selector:@selector(updateLateRefreshedLabel:) userInfo:nil
-                                                      repeats:NO] retain];
+        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:reportViewer
+                                                    selector:@selector(updateLateRefreshedLabel:) userInfo:nil
+                                                     repeats:NO];
         [reportViewer setTimerLabelTimeSinceRefreh:t];
-        [t release];
         
     }
 }
@@ -391,18 +367,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 labelWidth = 170.000;
                 break;
         }
-        
-        //__block MTReportViewerController *reportViewer = self;
-        //[UIView animateWithDuration:duration animations:^{
-            //[[reportViewer statusLabelWidthConstraint] setConstant:labelWidth];
-        //}];
     }
 }
 
 - (MTReportViewerReportPageViewController *)currentPageviewController {
     NSInteger pageIndex = [self currentPageIndex];
-    MTReportViewerReportPageViewController *pageViewController = [self pageViewControllerAtIndex:pageIndex];
-    return [[pageViewController retain] autorelease];
+    return [self pageViewControllerAtIndex:pageIndex];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -442,7 +412,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [[self snapshotBeforeRotation] setAlpha:0.0000f];
     }
     
-    [self.snapshotAfterRotation setFrame:self.frameAfterRotation];
+    [[self snapshotAfterRotation] setFrame:self.frameAfterRotation];
     framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
     [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
     
@@ -475,7 +445,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     } else {
         result = [viewControllers lastObject];
     }
-    return [[result retain] autorelease];
+    return result;
 }
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
@@ -501,7 +471,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [[pageOne view] setNeedsDisplay];
         }
     }];
-    [pageOne release];
     
     [[reportViewerController barButtonItemDone] setEnabled:YES];
     
@@ -577,8 +546,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [activityIndicator setHidesWhenStopped:NO];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
-    [barButtonItem release];
-    [activityIndicator release];
     
 }
 
@@ -603,8 +570,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
             __block MTReportViewerController *reportViewer2 = reportViewer;
             
-            MTApplicationInstance *applicationInstance = [[AppDelegate app] retain];
-            MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
+            MTApplicationInstance *applicationInstance = [AppDelegate app];
+            MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
             [reportDocument refresh:^(BOOL success, NSError *error) {
             
@@ -617,9 +584,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
                         dispatch_sync(dispatch_get_main_queue(), ^{
                             [reportViewer4 setDisplayActive];
-                            NSDate *lastD = [[NSDate date] retain];
+                            NSDate *lastD = [NSDate date];
                             [reportViewer4 setLastCacheDate: lastD];
-                            [lastD release];
                             [reportViewer4 reload:reportViewer4];
                         });
                     });
@@ -635,8 +601,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     });
                 }
             }];
-            [reportDocument release];
-            [applicationInstance release];
         });
     }
 }
@@ -645,7 +609,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
-    NSURL *urlEmpty = [[temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"] retain];
+    NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     MTActivityItemProviderPdf *activityItemProviderPdf = [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
     NSArray *activityItems = @[activityItemProviderPdf];
     
@@ -668,19 +632,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [popoverController setDelegate:self];
             [popoverController presentPopoverFromBarButtonItem:[self barButtonItemActivity] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             [self setPopoverControllerActivity:popoverController];
-            [popoverController release];
         }
     } else {
         [self presentViewController:activityViewController animated:YES completion:^{ }];
     }
-    
-    [activityViewController release];
-    [urlEmpty release];
-    [activityItemProviderPdf release];
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
-    return [[self retain] autorelease];
+    return self;
 }
 
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
@@ -719,17 +678,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     if ([self printPageRendererReport] == nil) {
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
-        [prtingPageRendererReport release];
     }
-
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
         [[doc reportFormatter] setDidRefresh:[self startedRefresh]];
         [[doc reportFormatter] formatForSize:viewBounds];
         
-        __block MAReportDocument *doc2 = doc;
-        __block MTReportViewerController *blockViewer2 = blockViewer;
+        __block __weak MAReportDocument *doc2 = doc;
+        __block __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             [blockViewer2 setDisplayActive];
@@ -747,7 +704,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
             NSArray *viewControllers = @[pageOne];
             [blockViewer2 setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
-            [pageOne release];
             [blockViewer2 setIsRefreshing:NO];
             [blockViewer2 setStartedRefresh:NO];
             [[doc2 reportFormatter] setDidRefresh:NO];
@@ -787,7 +743,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
 
         [printPageRender writeToPdf:temporaryFile];
-        [printPageRender release];
         
         __block MTReportViewerController *blockself2 = blockself;
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -800,7 +755,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [[blockself2 barButtonItemActivity] setEnabled:YES];
             
             for (UITabBarItem *i in [[[blockself2 tabBarController] tabBar] items]) {
-                
                 [i setEnabled:YES];
             }
             UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
@@ -813,12 +767,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (IBAction)sendToPdf:(id)sender {
-    
-    [self sendToPdfWithCompletionHandler:^(BOOL success){
-     
-    }];
-    
-    
+    [self sendToPdfWithCompletionHandler:^(BOOL success){ }];
 }
 
 - (IBAction)print:(id)sender {
@@ -856,7 +805,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         controller.showsPageRange = YES;
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
         [controller setPrintPageRenderer:printPageRender];
-        [printPageRender release];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [controller presentFromBarButtonItem:[self barButtonItemPrint]
@@ -888,11 +836,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [[result view] setFrame:[[self view] bounds]];
             [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
-            //[[result view] setBackgroundColor:[UIColor redColor]];
-            //[[self view] setBackgroundColor:[UIColor blueColor]];
-
-            [result autorelease];
-            
         }
     }
     return result;
@@ -914,7 +857,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [[result view] setFrame:[[self view] bounds]];
             [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
             [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
-            [result autorelease];
         }
     }
     return result;

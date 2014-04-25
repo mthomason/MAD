@@ -27,8 +27,8 @@
 @property (nonatomic, assign) IBOutlet id <MTQueryBuilderChooseFieldDelegate> delegate;
 @property (assign) IBOutlet UITableViewCell *fieldCells;
 
-@property (nonatomic, retain) RptqQueryField *queryField;
-@property (nonatomic, retain) NSArray *excludeTables;
+@property (nonatomic, strong) RptqQueryField *queryField;
+@property (nonatomic, strong) NSArray *excludeTables;
 
 @end
 

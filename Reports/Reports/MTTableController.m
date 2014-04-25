@@ -209,7 +209,6 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout widthRequiredColumn:(NSInteger)section {
     
     NSUInteger column =  section;
-    //NSString *fieldKey = [self fieldKeyForIndex:column];
     NSString *fieldKey = [[self query] fieldKeyForIndex:column];
     MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
     NSInteger maxNumberOfCharacters = [field calculatedWidth];
@@ -218,9 +217,6 @@
     }
     [UIFont systemFontOfSize:[UIFont systemFontSize]];
     
-    //    UIFontDescriptor *fontDescriptorHeadline = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
-    //    CGFloat sizeHeadline = [fontDescriptorHeadline.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
-    //    UIFont *headlineFont = [UIFont fontWithDescriptor:fontDescriptorHeadline size:sizeHeadline];
     UIFontDescriptor *fontDescriptorBody = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
     CGFloat sizeBody = [fontDescriptorBody.fontAttributes[UIFontDescriptorSizeAttribute] floatValue];
     

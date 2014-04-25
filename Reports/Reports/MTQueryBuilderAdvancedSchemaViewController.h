@@ -20,7 +20,7 @@
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
     <UIDynamicItem>
 
-@property (nonatomic, retain) IBOutlet UITableView *schemaTableViewController;
+@property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
 @property (nonatomic, assign) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 

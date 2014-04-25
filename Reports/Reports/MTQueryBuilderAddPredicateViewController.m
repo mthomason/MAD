@@ -6,25 +6,19 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "MTApplicationInstance.h"
+#import "RptqDatabaseSchemaField.h"
 
 @implementation MTQueryBuilderAddPredicateViewController
-
-- (void)dealloc {
-    [_fieldLeft release];
-    [_fieldRight release];
-    [_leftValue release];
-    [_rightValue release];
-    [_tableViewCellLeftSide release];
-    [_tableViewCellRightSide release];
-    [_tableViewCellOperator release];
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];

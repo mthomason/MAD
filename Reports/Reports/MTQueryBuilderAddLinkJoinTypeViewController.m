@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -18,20 +22,13 @@
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController ()
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellEquiJoin;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellEquiJoin;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellNaturalJoin;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellFullOuterJoin;
 
 @end
 
 @implementation MTQueryBuilderAddLinkJoinTypeViewController
-
-- (void)dealloc {
-    [_tableViewCellEquiJoin release];
-    [_tableViewCellNaturalJoin release];
-    [_tableViewCellFullOuterJoin release];
-    [super dealloc];
-}
 
 #pragma mark - View lifecycle
 

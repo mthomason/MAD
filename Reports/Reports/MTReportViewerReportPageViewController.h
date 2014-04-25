@@ -20,7 +20,7 @@
 @property (nonatomic, assign) id <MTPrintingProtocol> delegate;
 
 @property (nonatomic, assign, readonly) NSUInteger pageNumber;
-@property (nonatomic, retain) NSDate *lastCacheDate;
+@property (nonatomic, strong) NSDate *lastCacheDate;
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
 

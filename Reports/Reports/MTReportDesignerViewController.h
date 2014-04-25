@@ -15,8 +15,6 @@ typedef void(^MTBlockCompletionNoReturn)(void);
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 
-//extern const CGFloat MTReportDesignerBorderPadding;
-
 @interface MTReportDesignerViewController : UIViewController
 
 @property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;

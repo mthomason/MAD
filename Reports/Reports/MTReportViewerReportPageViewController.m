@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportViewerReportPageViewController.h"
 #import "AppDelegate.h"
 #import "NSDate+Extras.h"
@@ -17,12 +21,12 @@
 @property (nonatomic, assign) NSUInteger numberOfPages;
 @property (nonatomic, assign) BOOL showPageNumberDisplay;
 
-@property (nonatomic, retain) UIView *pageNumberDisplay;
-@property (nonatomic, retain) NSTimer *timerLabelTimeSinceRefreh;
+@property (nonatomic, strong) UIView *pageNumberDisplay;
+@property (nonatomic, strong) NSTimer *timerLabelTimeSinceRefreh;
 
-@property (nonatomic, retain) UIView *timeSinceRefreshView;
-@property (nonatomic, retain) UIView *pageNumberView;
-@property (nonatomic, retain) UILabel *timeSinceRefrehLabel;
+@property (nonatomic, strong) UIView *timeSinceRefreshView;
+@property (nonatomic, strong) UIView *pageNumberView;
+@property (nonatomic, strong) UILabel *timeSinceRefrehLabel;
 
 @end
 
@@ -35,16 +39,9 @@
                 [_timerLabelTimeSinceRefreh invalidate];
             }
         }
-        [_timerLabelTimeSinceRefreh release];
         _timerLabelTimeSinceRefreh = nil;
     }
-    [_lastCacheDate release];
-    [_timeSinceRefreshView release];
-    [_timeSinceRefrehLabel release];
-    [_pageNumberView release];
-    [_pageNumberDisplay release];
     _delegate = nil;
-    [super dealloc];
 }
 
 - (void)updateLateRefreshedLabel:(id)sender {
@@ -57,9 +54,8 @@
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
         if (error == nil) {
-            NSDate *lastD = [[attributes fileModificationDate] retain];
+            NSDate *lastD = [attributes fileModificationDate];
             [self setLastCacheDate: lastD];
-            [lastD release];
         }
     }
     
@@ -123,7 +119,6 @@
 }
 
 - (void)loadView {
-    //[super loadView];
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:CGRectZero];
     [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [renderedReportView setTranslatesAutoresizingMaskIntoConstraints:YES];
@@ -131,8 +126,6 @@
     [renderedReportView setBackgroundColor:whiteColor];
     [renderedReportView setDelegate:self];
     [self setView:renderedReportView];
-    [renderedReportView release];
-    
 }
 
 - (void)viewDidLoad {
@@ -212,8 +205,6 @@
 
         [self setTimeSinceRefrehLabel:label];
         [self setTimeSinceRefreshView: view];
-        [label release];
-        [view release];
     }
 
 }
@@ -253,8 +244,6 @@
                                 } completion:nil];
         }
     }];
-    [labelView release];
-    [numberView release];
     return nil;
 }
 

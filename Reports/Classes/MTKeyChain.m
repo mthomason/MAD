@@ -22,18 +22,18 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
     <UIAlertViewDelegate>
 
 @property (copy) MTKeyChainCredentialsCompletion credentialsCompletion;
-@property (nonatomic, retain) NSString *credentialsUsername;
-@property (nonatomic, retain) NSString *credentialsKey;
+@property (nonatomic, strong) NSString *credentialsUsername;
+@property (nonatomic, strong) NSString *credentialsKey;
 
 @property (copy) MTKeyChainSaveCompletion saveCompletion;
-@property (nonatomic, retain) NSString *saveUsername;
-@property (nonatomic, retain) NSString *savePassword;
-@property (nonatomic, retain) NSString *saveKey;
+@property (nonatomic, strong) NSString *saveUsername;
+@property (nonatomic, strong) NSString *savePassword;
+@property (nonatomic, strong) NSString *saveKey;
 
-@property (nonatomic, retain) UIAlertView *firstAlertView;
+@property (nonatomic, strong) UIAlertView *firstAlertView;
 
-@property (nonatomic, retain) UITextField *textFieldOne;
-@property (nonatomic, retain) UITextField *textFieldTwo;
+@property (nonatomic, strong) UITextField *textFieldOne;
+@property (nonatomic, strong) UITextField *textFieldTwo;
 
 @end
 
@@ -136,26 +136,27 @@ const NSUInteger tagAlertViewAquire         = 666;
                                     (id)CFBridgingRelease(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
                                     (id)CFBridgingRelease(kSecReturnData) : @YES};
     CFDataRef queryUsernameData = NULL;
-    OSStatus queryUsernameStatus = SecItemCopyMatching((CFDictionaryRef) CFBridgingRetain(queryUsername), (CFTypeRef *)&queryUsernameData);
+    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
     if (queryUsernameStatus == errSecItemNotFound) {
         NSDictionary *queryAddUsername = @{(id)CFBridgingRelease(kSecClass) : (id)CFBridgingRelease(kSecClassGenericPassword),
                                         (id)CFBridgingRelease(kSecAttrService) : keyUsername,
                                         (id)CFBridgingRelease(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
                                         (id)CFBridgingRelease(kSecValueData) : [username dataUsingEncoding:NSUTF8StringEncoding]};
-        OSStatus queryAddStatus = SecItemAdd((CFDictionaryRef)CFBridgingRetain(queryAddUsername), NULL);
+        OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
         if (queryAddStatus != errSecSuccess) {
-            SecItemAdd((CFDictionaryRef)CFBridgingRetain(queryAddUsername), NULL);
+            SecItemAdd((__bridge CFDictionaryRef)queryAddUsername, NULL);
         }
     } else {
         NSDictionary *updateQueryUsername = @{(id)CFBridgingRelease(kSecClass): (id)CFBridgingRelease(kSecClassGenericPassword),
                                               (id)CFBridgingRelease(kSecAttrService): keyUsername,
                                               (id)CFBridgingRelease(kSecAttrAccount): MTKeyChainUsernameAccountDesc};
         NSDictionary *changesUsername = @{(id)CFBridgingRelease(kSecValueData): [password dataUsingEncoding: NSUTF8StringEncoding]};
-        OSStatus statusUsernameUpdate = SecItemUpdate((CFDictionaryRef)CFBridgingRetain(updateQueryUsername), (CFDictionaryRef)CFBridgingRetain(changesUsername));
+        OSStatus statusUsernameUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
         if (statusUsernameUpdate != errSecSuccess) {
-            SecItemUpdate((CFDictionaryRef)CFBridgingRetain(updateQueryUsername), (CFDictionaryRef)CFBridgingRetain(changesUsername));
+            SecItemUpdate((__bridge CFDictionaryRef)updateQueryUsername, (__bridge CFDictionaryRef)changesUsername);
         }
     }
+    
     
     NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
     NSDictionary *queryPassword = @{(id)CFBridgingRelease(kSecClass) : (id)CFBridgingRelease(kSecClassGenericPassword),
@@ -164,24 +165,24 @@ const NSUInteger tagAlertViewAquire         = 666;
                                     (id)CFBridgingRelease(kSecReturnData) : @YES};
     
     CFDataRef queryPasswordData = NULL;
-    OSStatus queryPasswordStatus = SecItemCopyMatching((CFDictionaryRef) CFBridgingRetain(queryPassword), (CFTypeRef *)&queryPasswordData);
+    OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
     if (queryPasswordStatus == errSecItemNotFound) {
         NSDictionary *queryAddPassword = @{(id)CFBridgingRelease(kSecClass) : (id)CFBridgingRelease(kSecClassGenericPassword),
                                            (id)CFBridgingRelease(kSecAttrService) : keyPassword,
                                            (id)CFBridgingRelease(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
                                            (id)CFBridgingRelease(kSecValueData) : [password dataUsingEncoding:NSUTF8StringEncoding]};
-        OSStatus queryAddStatus = SecItemAdd((CFDictionaryRef)CFBridgingRetain(queryAddPassword), NULL);
+        OSStatus queryAddStatus = SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
         if (queryAddStatus != errSecSuccess) {
-            SecItemAdd((CFDictionaryRef)CFBridgingRetain(queryAddPassword), NULL);
+            SecItemAdd((__bridge CFDictionaryRef)queryAddPassword, NULL);
         }
     } else {
         NSDictionary *updateQueryPassword = @{(id)CFBridgingRelease(kSecClass): (id)CFBridgingRelease(kSecClassGenericPassword),
                                               (id)CFBridgingRelease(kSecAttrService): [MTKeyChain keyForPasswordWithMainKey: key],
                                               (id)CFBridgingRelease(kSecAttrAccount): MTKeyChainPasswordAccountDesc};
         NSDictionary *changesPassword = @{(id)CFBridgingRelease(kSecValueData): [password dataUsingEncoding: NSUTF8StringEncoding]};
-        OSStatus statusPasswordUpdate = SecItemUpdate((CFDictionaryRef)CFBridgingRetain(updateQueryPassword), (CFDictionaryRef)CFBridgingRetain(changesPassword));
+        OSStatus statusPasswordUpdate = SecItemUpdate((__bridge CFDictionaryRef)updateQueryPassword, (__bridge CFDictionaryRef)changesPassword);
         if (statusPasswordUpdate != errSecSuccess) {
-            SecItemUpdate((CFDictionaryRef)CFBridgingRetain(updateQueryPassword), (CFDictionaryRef)CFBridgingRetain(changesPassword));
+            SecItemUpdate((__bridge CFDictionaryRef)updateQueryPassword, (__bridge CFDictionaryRef)changesPassword);
         }
     }
 }
@@ -214,8 +215,8 @@ const NSUInteger tagAlertViewAquire         = 666;
     //SecItemDelete((CFDictionaryRef)queryUsername);
     //SecItemDelete((CFDictionaryRef)queryPassword);
     
-    OSStatus queryUsernameStatus = SecItemCopyMatching((CFDictionaryRef) CFBridgingRetain(queryUsername), (CFTypeRef *)&queryUsernameData);
-    OSStatus queryPasswordStatus = SecItemCopyMatching((CFDictionaryRef) CFBridgingRetain(queryPassword), (CFTypeRef *)&queryPasswordData);
+    OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+    OSStatus queryPasswordStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
     
     //Check items doesn't exist
     if (queryUsernameStatus == errSecItemNotFound) {
@@ -362,10 +363,10 @@ const NSUInteger tagAlertViewAquire         = 666;
                                                 (id)CFBridgingRelease(kSecAttrAccount) : MTKeyChainUsernameAccountDesc,
                                                 (id)CFBridgingRelease(kSecReturnData) : @YES};
                 CFDataRef queryUsernameData = NULL;
-                OSStatus deleteStatus = SecItemCopyMatching((CFDictionaryRef) CFBridgingRetain(queryUsername), (CFTypeRef *)&queryUsernameData);
+                OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
                 if (deleteStatus == errSecSuccess) {
                     
-                    deleteStatus = SecItemDelete((CFDictionaryRef)CFBridgingRetain(queryUsername));
+                    deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
                     
                     
                 }
@@ -376,14 +377,12 @@ const NSUInteger tagAlertViewAquire         = 666;
                                                 (id)CFBridgingRelease(kSecAttrService) : keyPassword,
                                                 (id)CFBridgingRelease(kSecAttrAccount) : MTKeyChainPasswordAccountDesc,
                                                 (id)CFBridgingRelease(kSecReturnData) : @YES};
-                deleteStatus = SecItemCopyMatching((CFDictionaryRef) CFBridgingRetain(queryPassword), (CFTypeRef *)&queryPasswordData);
+                deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
                 
                 if (deleteStatus == errSecSuccess) {
-                    deleteStatus = SecItemDelete((CFDictionaryRef)CFBridgingRetain(queryPassword));
+                    deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryPassword);
                 }
             }
-//            return deleteStatus;
-            
             break;
         }
             

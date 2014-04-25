@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
@@ -42,8 +46,6 @@
 @implementation MTQueryBuilderAdvancedSchemaViewController
 
 - (void)setCenter:(CGPoint)center {
-    //NSLog(@"Set Center :%@", NSStringFromCGPoint(center));
-    //NSLog(@"View %@)", [self view]);
     [[self view] setCenter:center];
     [[self delegate] didMoveFieldRect:self animated:NO];
 }

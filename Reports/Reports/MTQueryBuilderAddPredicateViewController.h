@@ -39,15 +39,15 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellLeftSide;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellRightSide;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellOperator;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellLeftSide;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellRightSide;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellOperator;
 
 @property (assign) MNSPredicateOperator predicateOperator;
 @property (copy) NSString *leftValue;
 @property (copy) NSString *rightValue;
-@property (nonatomic, retain) RptqQueryField *fieldLeft;
-@property (nonatomic, retain) RptqQueryField *fieldRight;
+@property (nonatomic, strong) RptqQueryField *fieldLeft;
+@property (nonatomic, strong) RptqQueryField *fieldRight;
 
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

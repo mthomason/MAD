@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTQueryBuilderContainerController.h"
 #import <CoreData/CoreData.h>
 
@@ -19,32 +23,21 @@
 
 @interface MTQueryBuilderContainerController ()
 
-@property (nonatomic, retain) IBOutlet UIView *leftView;
-@property (nonatomic, retain) IBOutlet UIView *rightView;
-@property (nonatomic, retain) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *barButtonItemRevealQuery;
+@property (nonatomic, strong) IBOutlet UIView *leftView;
+@property (nonatomic, strong) IBOutlet UIView *rightView;
+@property (nonatomic, strong) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemRevealQuery;
 
-@property (nonatomic, retain) NSArray *constraintsViewWillAppear;
+@property (nonatomic, strong) NSArray *constraintsViewWillAppear;
 
-@property (nonatomic, retain) UIPopoverController *popover;
+@property (nonatomic, strong) UIPopoverController *popover;
 
 @property (nonatomic, assign) BOOL isEditing;
 
 @end
 
 @implementation MTQueryBuilderContainerController
-
-- (void)dealloc {
-    [_constraintsViewWillAppear release];
-    [_leftView release];
-    [_rightView release];
-    [_bogusConstraints release];
-    [_barButtonItemEdit release];
-    [_barButtonItemRevealQuery release];
-    [_popover release];
-    [super dealloc];
-}
 
 - (UIImage *)tabBarImage {
     return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
@@ -59,12 +52,10 @@
     if (self) {
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        NSAttributedString *attributedString = [[MTApplicationInstance localizedAttributedApplicationNameMadQuery] retain];
+        NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
         [labelMadDesigner setAttributedText:attributedString];
         [[self navigationItem] setTitleView:labelMadDesigner];
         [[[self navigationItem] titleView] sizeToFit];
-        [attributedString release];
-        [labelMadDesigner release];
     }
     return self;
 }
@@ -105,7 +96,6 @@
             NSMutableArray *mutableItems = [items mutableCopy];
             [mutableItems removeObject:[blockSelf barButtonItemRevealQuery]];
             [blockSelf setToolbarItems:mutableItems];
-            [mutableItems release];
         }
     }];
     
@@ -166,16 +156,15 @@
                 [(UIScrollView *)view setScrollIndicatorInsets: [(UIScrollView *)view contentInset]];
             }
         }
-        [subviews release];
     }
 }
 
 - (id)leftViewController {
-    return [[[[self childViewControllers] objectAtIndex:0] retain] autorelease];
+    return [[self childViewControllers] objectAtIndex:0];
 }
 
 - (id)rightViewController {
-    return [[[[self childViewControllers] objectAtIndex:1] retain] autorelease];
+    return [[self childViewControllers] objectAtIndex:1];
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
@@ -220,9 +209,7 @@
             [tbItems replaceObjectAtIndex:buttonIndex withObject: barButtonItem];
             [[[self navigationController] toolbar] setItems: tbItems animated:YES];
             [self setBarButtonItemEdit:barButtonItem];
-            [barButtonItem release];
         }
-        [tbItems release];
     } else {
         [[self queryBuilderController] edit:sender];
         BOOL isEditing = [self isEditing];
@@ -236,17 +223,15 @@
         [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
         
         [self setBarButtonItemEdit:barButtonItem];
-        [barButtonItem release];
     }
-
 }
 
 - (MTQueryBuilderViewController *)queryBuilderController {
-    return [[[self rightViewController] retain] autorelease];
+    return [self rightViewController];
 }
 
 - (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced {
-    return [[[self leftViewController] retain] autorelease];
+    return [self leftViewController];
 }
 
 - (void)viewControllerDidFinish:(id)controller {
