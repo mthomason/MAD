@@ -656,7 +656,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)reload {
-    __block MTReportViewerController *blockself = self;
+    __block __weak MTReportViewerController *blockself = self;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -669,11 +669,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [reportViewer setDisplayInactive];
     
-    __block MTReportViewerController *blockViewer = reportViewer;
+    __block __weak MTReportViewerController *blockViewer = reportViewer;
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
     MTApplicationInstance *app = [AppDelegate app];
-    __block MAReportDocument *doc = [app activeDocument];
+    __block __weak MAReportDocument *doc = [app activeDocument];
     [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
     if ([self printPageRendererReport] == nil) {
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];

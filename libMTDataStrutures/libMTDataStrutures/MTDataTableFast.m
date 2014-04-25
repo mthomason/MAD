@@ -446,8 +446,7 @@
 - (void)beginBulkInsert {
     [self setBulkInsertLoop:YES];
     
-
-
+    [self reopenDbConnection];
 
     MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
@@ -498,18 +497,5 @@
 
     [[self db] cleanupBulkInsert];
 }
-
-
-/*
-- (NSArray *)getDetalForGroupLevel:(NSUInteger)level andKeys:(NSArray *)keys {
-    
-    [[[self query] datatable] getDetalForGroupLevel:level keys:];
-}
-
-- (NSArray *)getKeysForGroupLevel:(NSUInteger)level andKeys:(NSArray *)keys {
-    
-    [[[self query] datatable] getDetalForGroupLevel:level keys:];
-}*/
-
 
 @end

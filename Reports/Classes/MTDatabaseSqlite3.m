@@ -508,6 +508,8 @@
     BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);
     _bulkStatement = NULL;
     NSAssert(success, @"Bulk insert sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(_database));
+    sqlite3_close(_database);
+    _database = NULL;
 }
 
 - (void)executeQuery:(MTQuery *)query withStatement:(sqlite3_stmt *)statement completion:(void (^)(BOOL, NSError *))completion {
