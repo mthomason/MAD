@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqQueryTable+Extras.h"
 
 #import "RptqDocument.h"
@@ -13,6 +17,7 @@
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
 #import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @implementation RptqQueryTable (Extras)
 
@@ -58,16 +63,17 @@
      RptqQuery *query = [[database hasQueries] anyObject];
      NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
      
-     RptqQueryTable *newQueryTable = [[RptqQueryTable createNewQueryTableForTable:table inDocument:document] retain];
+     RptqQueryTable *newQueryTable = [RptqQueryTable createNewQueryTableForTable:table inDocument:document];
      
      NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
      for (RptqDatabaseSchemaField *field in [table hasFields]) {
-         RptqQueryField *newQueryField = [[RptqQueryField createNewQueryFieldForManagedObjectContext:[table managedObjectContext]] retain];
-         [newQueryField setInQueryTable:newQueryTable];
-         [newQueryField setDatabaseSchemaField:field];
-         [newQueryTable setInQuery:query];
-         [newQueryFields addObject:newQueryField];
-         [newQueryField release];
+         @autoreleasepool {
+             RptqQueryField *newQueryField = [RptqQueryField createNewQueryFieldForManagedObjectContext:[table managedObjectContext]];
+             [newQueryField setInQueryTable:newQueryTable];
+             [newQueryField setDatabaseSchemaField:field];
+             [newQueryTable setInQuery:query];
+             [newQueryFields addObject:newQueryField];
+         }
      }
      [newQueryTable setHasQueryFields:newQueryFields];
      [tablesInQuery addObject:newQueryTable];
@@ -75,9 +81,7 @@
      [query setHasQueryTables:tablesInQuery];
      [[table managedObjectContext] save:nil];
      
-     [newQueryFields release];
-     [tablesInQuery release];
-     return [newQueryTable autorelease];
+     return newQueryTable;
  }
  
 
@@ -89,8 +93,10 @@
     NSSet *queryTables = [query hasQueryTables];
     NSInteger dupeCtr = 0;
     for (RptqQueryTable *queryTable in queryTables) {
-        if ([[[queryTable databaseSchemaTable] objectID] isEqual:[databaseSchemaTable objectID]]) {
-            dupeCtr++;
+        @autoreleasepool {
+            if ([[[queryTable databaseSchemaTable] objectID] isEqual:[databaseSchemaTable objectID]]) {
+                dupeCtr++;
+            }
         }
     }
     
@@ -107,7 +113,7 @@
     [queryTable setAlias:[queryTable tableAlias]];
 
     [queryTable setInQuery:query];
-    return [queryTable autorelease];
+    return queryTable;
 }
 
 - (NSString *)tableAlias {

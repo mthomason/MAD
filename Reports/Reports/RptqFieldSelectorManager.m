@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqFieldSelectorManager.h"
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "RptqQueryTable.h"
@@ -14,23 +18,12 @@
 
 @implementation RptqDatabaseSchemaFieldSelectorManager
 
-- (void)dealloc {
-    
-    [_table release];
-    [_fields release];
-    [_headerView release];
-    [_rowHeights release];
-
-    [super dealloc];
-}
-
 - (id)initWithTable:(RptqQueryTable *)sectionTable {
 	self = [super init];
 	if (self) {
 
         NSMutableArray *rh = [[NSMutableArray alloc] init];
 		[self setRowHeights: rh];
-        [rh release];
         
         [self setTable: sectionTable];
 
@@ -40,8 +33,6 @@
 
         NSArray *sectionFields = [[NSArray alloc] initWithArray: fieldsArray];
         [self setFields: sectionFields];
-        [sectionFields release];
-        [namesAccending release];
 	}
 	return self;
 }

@@ -22,25 +22,5 @@ static char const * const StringTagKey = "ObjectIdTag";
 - (void)setObjectIdTag:(id)newObjectTag {
     objc_setAssociatedObject(self, StringTagKey, newObjectTag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-/*
-- (UIView *)viewWithTagObjectId:(NSManagedObjectID *)object {
-    
-    if (object == nil) {
-        [NSException raise:NSInternalInconsistencyException format:@"Argument must not be nil."];
-    }
-    
-    if ([[self objectIdTag] isEqual:object]) {
-        return self;
-    }
-
-    for (UIView *subview in self.subviews) {
-        UIView *resultView = [subview viewWithTagObjectId:object];
-        if (resultView != nil) {
-            return resultView;
-        }
-    }
-    return nil;
-}
-*/
 
 @end

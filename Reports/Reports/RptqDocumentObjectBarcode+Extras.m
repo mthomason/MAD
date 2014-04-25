@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocumentObjectBarcode+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryField+Extras.h"
@@ -78,11 +82,8 @@
 
 + (MTBarcode *)barcodeWithDocumentObject:(RptqDocumentObjectBarcode *)documentObject {
     
-    RptqQueryField *queryField1 = [[documentObject referencesField1] retain];
-    RptqQueryField *queryField2 = [[documentObject referencesField2] retain];
-
     MTBarcodeType type = [[documentObject type] integerValue];
-    MTBarcode *barcode = [[MTBarcode barcodeWithType:type] retain];
+    MTBarcode *barcode = [MTBarcode barcodeWithType:type];
 
     [barcode setHas2dComponentEnabled:[[documentObject add2dComponent] boolValue]];
     [barcode setBorderStyle:        [[documentObject borderStyle] integerValue]];
@@ -97,9 +98,7 @@
     [barcode setScale:              [[documentObject scale] floatValue]];
     [barcode setInput:              @"Sample data"];
     [barcode setPrimaryData:        @""];
-    [queryField1 release];
-    [queryField2 release];
-    return [barcode autorelease];
+    return barcode;
 }
 
 + (RptqDocumentObjectBarcode *)barcodeWithMtBarcode:(MTBarcode *)barcode queryFieldOne:(RptqQueryField *)queryFieldOne queryFieldTwo:(RptqQueryField *)queryFieldTwo {
@@ -155,7 +154,7 @@
 
     }
     
-    return [reportObject autorelease];
+    return reportObject;
 }
 
 @end

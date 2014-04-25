@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqQueryCache+Extras.h"
 
 @implementation RptqQueryCache (Extras)
@@ -59,7 +63,7 @@
 + (id)initObjectForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryCache class]) inManagedObjectContext:managedObjectContext];
     RptqQueryCache *queryCache = [[RptqQueryCache alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:managedObjectContext];
-    return [queryCache autorelease];
+    return queryCache;
 }
 
 #pragma mark - MTProtocolCompare

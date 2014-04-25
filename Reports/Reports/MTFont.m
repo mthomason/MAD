@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTFont.h"
 
 // MARK: Keys for each type of font.
@@ -44,18 +48,13 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 
 @interface MTFont()
 
-@property (nonatomic, retain) NSString *familyName;
+@property (nonatomic, strong) NSString *familyName;
 @property (nonatomic, assign) BOOL bold;
 @property (nonatomic, assign) BOOL italic;
 
 @end
 
 @implementation MTFont
-
-- (void)dealloc {
-    [_familyName release];
-    [super dealloc];
-}
 
 + (NSArray *)familyNames {
     return @[ MTFontFamilyAmericanTypewriter, MTFontFamilyArial, MTFontFamilyCourierNew, MTFontFamilyCourier, MTFontFamilyGeorgia, MTFontFamilyHelvetica, MTFontFamilyHelveticaNeue, MTFontFamilyTimesNewRoman, MTFontFamilyTrebuchet, MTFontFamilyVerdana, MTFontFamilyZapfino ];
@@ -229,7 +228,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
         familyName = MTFontFamilyHelveticaNeue;
     }
     MTFont *font = [[MTFont alloc] initWithFamilyName:familyName];
-    return [font autorelease];
+    return font;
 }
 
 - (id)init {

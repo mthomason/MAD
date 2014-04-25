@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqQueryPredicate+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -73,7 +77,7 @@
     [queryPredicate setFieldrightpred:  nil];
     [queryPredicate setFieldleftpred:   nil];
     [queryPredicate setComparson:       @(comparsonOperator)];
-    return [queryPredicate autorelease];
+    return queryPredicate;
 }
 
 + (id)createPredicateWithLeftField:(RptqQueryField *)leftField
@@ -87,7 +91,7 @@
     [queryPredicate setFieldrightpred:  rightUserValue];
     [queryPredicate setFieldleftpred:   nil];
     [queryPredicate setComparson:       @(comparsonOperator)];
-    return [queryPredicate autorelease];
+    return queryPredicate;
 }
 
 + (id)createPredicateWithLeftValue:(NSString *)leftUserValue
@@ -101,7 +105,7 @@
     [queryPredicate setFieldrightpred:  rightUserValue];
     [queryPredicate setFieldleftpred:   leftUserValue];
     [queryPredicate setComparson:       @(comparsonOperator)];
-    return [queryPredicate autorelease];
+    return queryPredicate;
 }
 
 + (id)createPredicateWithLeftValue:(NSString *)leftUserValue
@@ -115,7 +119,7 @@
     [queryPredicate setFieldrightpred:  nil];
     [queryPredicate setFieldleftpred:   leftUserValue];
     [queryPredicate setComparson:       @(comparsonOperator)];
-    return [queryPredicate autorelease];    
+    return queryPredicate;
 }
 
 
@@ -128,11 +132,10 @@
 
 + (void)deletePredicate:(RptqQueryPredicate *)predicate {
     if (predicate) {
-        NSManagedObjectContext *objectContext = [[predicate managedObjectContext] retain];
+        NSManagedObjectContext *objectContext = [predicate managedObjectContext];
         if (objectContext) {
             [objectContext deleteObject:predicate];
         }
-        [objectContext release];
     }
 }
 

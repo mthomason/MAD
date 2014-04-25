@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocument+Extras.h"
 #import "MTDatabaseSqlite3.h"
 #import <CoreData/CoreData.h>
@@ -107,38 +111,33 @@
 
     RptqDocumentSectionRows *headerRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                        inManagedObjectContext: objectContext];
-    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: headerRow];
-    [[document hasReportHeaderSection] setHasRows:hasRows];
+    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];
+    [[document hasReportHeaderSection] setHasRows:hasRows1];
     [headerRow setInSection:[document hasReportHeaderSection]];
-    [hasRows release]; hasRows = nil;
 
     RptqDocumentSectionRows *footerRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                        inManagedObjectContext: objectContext];
-    hasRows = [[NSOrderedSet alloc] initWithObject: footerRow];
-    [[document hasReportFooterSection] setHasRows:hasRows];
+    NSOrderedSet *hasRows2 = [[NSOrderedSet alloc] initWithObject: footerRow];
+    [[document hasReportFooterSection] setHasRows:hasRows2];
     [footerRow setInSection:[document hasReportFooterSection]];
-    [hasRows release]; hasRows = nil;
 
     RptqDocumentSectionRows *pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                            inManagedObjectContext: objectContext];
-    hasRows = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
-    [[document hasPageHeaderSection] setHasRows:hasRows];
+    NSOrderedSet *hasRows3 = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
+    [[document hasPageHeaderSection] setHasRows:hasRows3];
     [pageHeaderRow setInSection:[document hasPageHeaderSection]];
-    [hasRows release]; hasRows = nil;
     
     RptqDocumentSectionRows *pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                            inManagedObjectContext: objectContext];
-    hasRows = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
-    [[document hasPageFooterSection] setHasRows:hasRows];
+    NSOrderedSet *hasRows4 = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
+    [[document hasPageFooterSection] setHasRows:hasRows4];
     [pageFooterRow setInSection:[document hasPageFooterSection]];
-    [hasRows release]; hasRows = nil;
     
     RptqDocumentSectionRows *detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                               inManagedObjectContext: objectContext];
-    hasRows = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
-    [[document hasDetailSection] setHasRows:hasRows];
+    NSOrderedSet *hasRows5 = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
+    [[document hasDetailSection] setHasRows:hasRows5];
     [detailSectionRow setInSection:[document hasDetailSection]];
-    [hasRows release]; hasRows = nil;
     
     [[document hasReportHeaderSection] setType:      @(MNSDocumentSectionTypeReportHeader)];
     [[document hasReportFooterSection] setType:      @(MNSDocumentSectionTypeReportFooter)];
@@ -158,7 +157,7 @@
     [[document hasPageFooterSection] setVisibility:@YES];
     [[document hasDetailSection] setVisibility:@YES];
 
-    return [document autorelease];
+    return document;
 }
 
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
@@ -168,10 +167,7 @@
     [docFetchRequest setFetchLimit:1];
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-    RptqDocument *result = [documents lastObject];
-    
-    [docFetchRequest release];
-    return [[result retain] autorelease];
+    return [documents lastObject];
 }
 
 + (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
@@ -258,11 +254,11 @@
                             RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
                                                                                  withConnecitonId: connectionId];
                             
-                            RptqDatabaseSchemaTable *rptqTableOrigional = [[RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
-                                                                                          andTableName: [databaseTable name]] retain];
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
+                                                                                          andTableName: [databaseTable name]];
                             
-                            RptqDatabaseSchemaField *schemaField = [[RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
-                                                                                                                       andField: objField] retain];
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
+                                                                                                                       andField: objField];
                             
                             NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
                             [fieldSet addObject:schemaField];
@@ -274,9 +270,6 @@
                                 NSLog(@"%@", saveError);
                             }
 
-                            [rptqTableOrigional release];
-                            [schemaField release];
-                            [fieldSet release];
                         }
                         if (tableCounter == numberOfTables - 1) {
                             completion(YES, nil);

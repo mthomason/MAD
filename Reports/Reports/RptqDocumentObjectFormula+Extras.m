@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocumentObjectFormula+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocumentObject.h"
@@ -94,10 +98,8 @@
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[[document hasDetailSection] hasRows] objectAtIndex:0] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
     [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
-    [hasObjects release];
-    [reportObject release];
     
-    return [dataObject autorelease];
+    return dataObject;
 }
 
 #pragma mark - MTProtocolLog

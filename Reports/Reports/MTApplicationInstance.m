@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTApplicationInstance.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
@@ -29,9 +33,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"4.0.82";
-NSString * const MTGlobalBundleShortVersion                         = @"4.0.82";
-NSString * const MTGlobalBundleRev                                  = @"1064";
+NSString * const MTGlobalBundleVersion                              = @"4.0.83";
+NSString * const MTGlobalBundleShortVersion                         = @"4.0.83";
+NSString * const MTGlobalBundleRev                                  = @"1065";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -60,36 +64,21 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 @implementation MTApplicationInstance
 
-- (void)dealloc {
-    [_user release];
-    [_reportDesigner release];
-    [_reportViewer release];
-    [_queryDesigner release];
-    [_currentDocument release];
-    [_documents removeAllObjects];
-    [_documents release];
-    [super dealloc];
-}
-
 - (id)init {
     self = [super init];
     if (self) {
 
         MTUser *user = [[MTUser alloc] init];
         [self setUser:user];
-        [user release];
 
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
         [self setReportDesigner:reportDesigner];
-        [reportDesigner release];
 
         MTQueryDesigner *queryDesigner = [[MTQueryDesigner alloc] init];
         [self setQueryDesigner:queryDesigner];
-        [queryDesigner release];
         
         MTReportViewer *reportViewer = [[MTReportViewer alloc] init];
         [self setReportViewer:reportViewer];
-        [reportViewer release];
 
         [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
             return NO;
@@ -105,7 +94,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         
         NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
         [self setDocuments:documents];
-        [documents release];
         
         [self setupAppReviewManager:self];
     }
@@ -172,11 +160,10 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
      [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
-         [managedDocument retain];
          [self setCurrentDocument:url];
          [[self documents] setObject:managedDocument forKey:url];
          [self setReportState:MTReportStateOpen];
-         completionHandler([managedDocument autorelease], success);
+         completionHandler(managedDocument, success);
      }];
 }
 
@@ -225,7 +212,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localizedPrefix = NSLocalizedString(@"MAD", @"MAD");
-        [localizedPrefix retain];
     });
     return localizedPrefix;
 }
@@ -235,7 +221,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localizedPrefix = NSLocalizedString(@"MAD %@", @"MAD %@");
-        [localizedPrefix retain];
     });
     return localizedPrefix;
 }
@@ -245,9 +230,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         result = [MTApplicationInstance isMadDesigner] ?
-            NSLocalizedString(@"Designer", @"Designer") :
-            NSLocalizedString(@"Viewer", @"Viewer");;
-        [result retain];
+        NSLocalizedString(@"Designer", @"Designer") :
+        NSLocalizedString(@"Viewer", @"Viewer");;
     });
     return result;
 }
@@ -259,7 +243,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         result = [MTApplicationInstance isMadDesigner] ?
                     MTApplicationIdMadDesigner :
                     MTApplicationIdMadViewer;
-        [result retain];
     });
     return result;
 }
@@ -271,25 +254,25 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 + (NSString *)applicationName {
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = [MTApplicationInstance applicationNameSufixPart];
-    return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
+    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
 + (NSString *)madDesigner {
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Designer", @"Designer");
-    return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
+    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
 + (NSString *)madViewer {
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Viewer", @"Viewer");
-    return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
+    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
 + (NSString *)madQuery {
     NSString *localizedPrefix = [MTApplicationInstance applicationNamePrefixPartFormat];
     NSString *localizedSuffix = NSLocalizedString(@"Query", @"Query");
-    return [[[NSString stringWithFormat: localizedPrefix, localizedSuffix] retain] autorelease];
+    return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
 - (MAReportDocument *)activeDocument {
@@ -299,7 +282,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         NSURL *currentUrl = [self currentDocument];
         result = [documents objectForKey:currentUrl];
     }
-    return [[result retain] autorelease];
+    return result;
 }
 
 + (BOOL)isMadViewer {
@@ -331,7 +314,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         } else if ([MTApplicationInstance isMadViewer]) {
             _bundleId = MTBundleIdMadViewer;
         }
-        [_bundleId retain];
     });
     return _bundleId;
 }
@@ -340,7 +322,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     static NSString *_bundleVersion;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _bundleVersion = [MTGlobalBundleVersion retain];
+        _bundleVersion = MTGlobalBundleVersion;
     });
     return _bundleVersion;
 }
@@ -350,28 +332,28 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
     [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
-    return [paragraphStyle autorelease];
+    return paragraphStyle;
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner {
     NSString *title = [MTApplicationInstance madDesigner];
-    return [[[MTApplicationInstance logoForTitle:title] retain] autorelease];
+    return [MTApplicationInstance logoForTitle:title];
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadViewer {
     NSString *title = [MTApplicationInstance madViewer];
-    return [[[MTApplicationInstance logoForTitle:title] retain] autorelease];
+    return [MTApplicationInstance logoForTitle:title];
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadQuery {
     NSString *title = [MTApplicationInstance madQuery];
-    return [[[MTApplicationInstance logoForTitle:title] retain] autorelease];
+    return [MTApplicationInstance logoForTitle:title];
 }
             
 + (NSAttributedString *)logoForTitle:(NSString *)title {
     
     
-    NSParagraphStyle *paragraphStyle = [[MTApplicationInstance paragraphStyleTitleBar] retain];
+    NSParagraphStyle *paragraphStyle = [MTApplicationInstance paragraphStyleTitleBar];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
     
@@ -396,9 +378,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
     
     [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
-    [paragraphStyle release];
-    return [attributedStringMadDesigner autorelease];
-    
+    return attributedStringMadDesigner;
 }
 
 + (NSString *)storyboardName {
@@ -423,15 +403,14 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
             }
         }
-        [_storyboardName retain];
     });
     return _storyboardName;
 }
 
 + (UIStoryboard *)storyboard {
     NSString *storyboardName = [MTApplicationInstance storyboardName];
-    UIStoryboard *storyboard = [[UIStoryboard storyboardWithName:storyboardName bundle:nil] retain];
-    return [storyboard autorelease];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:storyboardName bundle:nil];
+    return storyboard;
 }
 
 + (NSAttributedString *)waterMarkStringMad {
@@ -447,7 +426,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                                      NSFontAttributeName : customFont
                                      };
         attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
-        [attributedString retain];
     });
     return attributedString;
 }
@@ -468,8 +446,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                        NSParagraphStyleAttributeName : paragraphStyle
                        };
         attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
-        [attributedString retain];
-        [paragraphStyle release];
     });
     return attributedString;
 }
@@ -480,7 +456,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     NSAttributedString *displayString2 = [MTApplicationInstance waterMarkStringDesigner];
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    NSStringDrawingContext *sctx = [[NSStringDrawingContext alloc] init];
     
     NSInteger rowCounter = 0, columnCounter = 0;
     CGSize logoSize = [displayString size];
@@ -496,49 +471,52 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         columnCounter = 0;
         
         do {
-            BOOL moveLeft = rowCounter % 2 == 0;
-            CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width + xOffset;
-            CGFloat xQuarterSize = xOffset / 2;
-            if (moveLeft) {
-                x -= xQuarterSize;
-            } else {
-                x += xQuarterSize;
-            }
-            CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height + logoSize2.height + yOffset;
-            logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
-            CGFloat y2 = y + logoSize.height;
-            logoRect2 = CGRectMake(x, y2, logoSize2.width, logoSize2.height);
-            
-            //if (logoRect.size.width > logoRect2.size.width) {
-            //    logoRect2.origin.x = logoRect2.origin.x + ((logoRect.size.width - logoRect2.size.width) / 2.0000f);
-            //}
-            
-            CGContextSaveGState(ctx);
-            
-            {
-                CGFloat yResolved = columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f);
-                CGFloat yt = logoRect.size.height - 24.0000f;
-                CGFloat firstT = yResolved + yt;
-                x += 2.000f;
-                CGContextTranslateCTM(ctx, x, firstT);
+            @autoreleasepool {
+
+                BOOL moveLeft = rowCounter % 2 == 0;
+                CGFloat x = ((columnCounter * 2) + 1) * logoMargin.width + columnCounter * logoSize.width + xOffset;
+                CGFloat xQuarterSize = xOffset / 2;
+                if (moveLeft) {
+                    x -= xQuarterSize;
+                } else {
+                    x += xQuarterSize;
+                }
+                CGFloat y = ((rowCounter * 2) + 1) * logoMargin.height + rowCounter * logoSize.height + logoSize2.height + yOffset;
+                logoRect = CGRectMake(x, y, logoSize.width, logoSize.height);
+                CGFloat y2 = y + logoSize.height;
+                logoRect2 = CGRectMake(x, y2, logoSize2.width, logoSize2.height);
                 
-                CGFloat rect2Offset = 0.0000f;
                 //if (logoRect.size.width > logoRect2.size.width) {
-                //    rect2Offset = (logoRect.size.width - logoRect2.size.width) / 2.0000f;
+                //    logoRect2.origin.x = logoRect2.origin.x + ((logoRect.size.width - logoRect2.size.width) / 2.0000f);
                 //}
                 
-                CGRect rect2 = CGRectMake(rect2Offset, 0.0000f, logoRect2.size.width, logoRect2.size.height);
-                [displayString2 drawInRect:rect2];
-                CGContextTranslateCTM(ctx, -2.0000f, -yt);
-                CGRect rect1 = CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height);
-                [displayString drawInRect:rect1];
+                CGContextSaveGState(ctx);
+                
+                {
+                    CGFloat yResolved = columnCounter % 2 == 0 ? y : y + ((logoRect.size.height + (logoMargin.height * 2)) / 2.0000f);
+                    CGFloat yt = logoRect.size.height - 24.0000f;
+                    CGFloat firstT = yResolved + yt;
+                    x += 2.000f;
+                    CGContextTranslateCTM(ctx, x, firstT);
+                    
+                    CGFloat rect2Offset = 0.0000f;
+                    //if (logoRect.size.width > logoRect2.size.width) {
+                    //    rect2Offset = (logoRect.size.width - logoRect2.size.width) / 2.0000f;
+                    //}
+                    
+                    CGRect rect2 = CGRectMake(rect2Offset, 0.0000f, logoRect2.size.width, logoRect2.size.height);
+                    [displayString2 drawInRect:rect2];
+                    CGContextTranslateCTM(ctx, -2.0000f, -yt);
+                    CGRect rect1 = CGRectMake(0.0000f, 0.0000f, logoRect.size.width, logoRect.size.height);
+                    [displayString drawInRect:rect1];
+                }
+                CGContextRestoreGState(ctx);
+
             }
-            CGContextRestoreGState(ctx);
             columnCounter++;
         } while (logoRect.origin.x + logoRect.size.width < rect.size.width);
         rowCounter++;
     } while (logoRect.origin.y + logoRect.size.height < rect.size.height);
-    [sctx release];
 }
 
 @end

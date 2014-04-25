@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqQueryLinks+Extras.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
@@ -13,6 +17,7 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryTable.h"
@@ -78,8 +83,7 @@
     RptqQuery *query = [[database hasQueries] anyObject];
     NSSet *queryLinks = [query hasQueryLinks];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
-    NSArray *results = [[queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]] retain];
-    return [results autorelease];
+    return [queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
 + (id)getQueryLinkWithID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -114,7 +118,7 @@
     [queryLinks setJointype:        [MNSLinkTypeReuseIds objectAtIndex: joinType]];
     [queryLinks setJointypeenum:    [NSNumber numberWithInteger: joinType]];
 
-    return [queryLinks autorelease];
+    return queryLinks;
 }
 
 + (void)insertQueryLink:(RptqQueryLinks *)queryLink intoDocument:(RptqDocument *)document {
@@ -148,7 +152,7 @@
     NSMutableString *result = [[NSMutableString alloc] initWithString:[[[self hasLeftField] databaseSchemaField] name]];
     [result appendFormat:@" %@ ", [self linkDescription]];
     [result appendString:[[[self hasRightField] databaseSchemaField] name]];
-    return [result autorelease];
+    return result;
 }
 
 - (NSString *)toString {

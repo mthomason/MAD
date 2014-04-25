@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqQueryField+Extras.h"
 #import "RptqQueryTable+Extras.h"
+#import "RptqDatabaseSchemaField.h"
 
 @implementation RptqQueryField (Extras)
 
@@ -60,12 +65,11 @@
     NSString *entityName = NSStringFromClass([RptqQueryField class]);
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
     RptqQueryField *queryField = [[RptqQueryField alloc] initWithEntity:entityDescription insertIntoManagedObjectContext: managedObjectContext];
-    return [queryField autorelease];
+    return queryField;
 }
 
 - (NSString *)tableFieldKey {
     return [self toString];
-//    return [[self toString] lowercaseString];
 }
 
 - (NSString *)display {

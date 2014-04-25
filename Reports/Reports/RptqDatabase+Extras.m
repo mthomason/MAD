@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDatabase+Extras.h"
 #import "RptqDocument+Extras.h"
 
@@ -85,7 +89,7 @@
                                    insertIntoManagedObjectContext:objectContext];
     [database setDatabaseDriverType: driverIdentifier];
     [database setIdentifier:connectionId];
-    return [database autorelease];
+    return database;
 }
 
 #pragma mark - MTProtocolCompare

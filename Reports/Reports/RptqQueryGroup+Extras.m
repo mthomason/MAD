@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqQueryGroup+Extras.h"
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
@@ -22,6 +26,8 @@
 #import "RptqDocumentSection+Extras.h"
 
 #import "RptqDocumentSectionRows.h"
+
+#import "RptqQuery.h"
 
 @implementation RptqQueryGroup (Extras)
 
@@ -104,23 +110,19 @@
 
     RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                               inManagedObjectContext: managedObjectContext];
-    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
+    NSOrderedSet *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerSectionRow];
     
     RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
     [dsHeader setType: HeaderType];
-    [dsHeader setHasRows:hasRows];
+    [dsHeader setHasRows:hasRows1];
     [dsHeader setVisibility:@YES];
     [headerSectionRow setInSection:dsHeader];
     [queryGroup addHasSectionObject:dsHeader];
-    [dsHeader release];
-  
-    [hasRows release]; hasRows = nil;
 
     RptqDocumentSectionRows *footerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                               inManagedObjectContext: managedObjectContext];
-
-    hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
+    NSOrderedSet *hasRows = [[NSOrderedSet alloc] initWithObject: footerSectionRow];
 
     RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
@@ -129,12 +131,8 @@
     [dsFooter setVisibility:@YES];
     [footerSectionRow setInSection:dsFooter];
     [queryGroup addHasSectionObject:dsFooter];
-    [dsFooter release];
 
-    [hasRows release]; hasRows = nil;
-
-    return [queryGroup autorelease];
-
+    return queryGroup;
 }
 
 #pragma mark - Member functions
@@ -150,12 +148,6 @@
 }
 
 - (id)next {
-    //RptqQuery *query = [self inQuery];
-    //NSArray *hasQueryGroups = [query hasQueryGroups];
-    //NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight)) ascending:YES];
-//    [request setSortDescriptors:@[sortDescriptor]];
-    //NSArray *hasQueryGroupsSorted = [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
-    //return [hasQueryGroupsSorted lastObject];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[self weight] integerValue] + 1)];
     [request setPredicate:predicate];
@@ -178,11 +170,11 @@
 }
 
 - (NSString *)fieldNameNice {
-    return [[[[self hasField] toStringHumanReadable] retain] autorelease];
+    return [[self hasField] toStringHumanReadable];
 }
 
 - (NSString *)fieldNameQuery {
-    return [[[[self hasField] toString] retain] autorelease];
+    return [[self hasField] toString];
 }
 
 - (NSString *)sortDisplayNice {

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "AppDelegate.h"
 #import "MTQueryBuilderViewController.h"
 #import "MTApplicationInstance.h"
@@ -36,10 +40,10 @@
 
 @interface AppDelegate()
 
-@property (nonatomic, retain) MTApplicationInstance *applicationInstance;
+@property (nonatomic, strong) MTApplicationInstance *applicationInstance;
 
-@property (nonatomic, retain) UIFontDescriptor *mainFontDescriptor;
-@property (nonatomic, retain) UIFontDescriptor *detailFontDescriptor;
+@property (nonatomic, strong) UIFontDescriptor *mainFontDescriptor;
+@property (nonatomic, strong) UIFontDescriptor *detailFontDescriptor;
 
 @end
 
@@ -51,39 +55,33 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (MTApplicationInstance *)app {
-    AppDelegate *appDelegate = [[(AppDelegate *)[[UIApplication sharedApplication] delegate] retain] autorelease];
-    MTApplicationInstance *result = [[appDelegate applicationInstance] retain];
-    return [result autorelease];
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    MTApplicationInstance *result = [appDelegate applicationInstance];
+    return result;
 }
 
 + (UIWindow *)window {
-    return [[[[[UIApplication sharedApplication] windows] objectAtIndex:0] retain] autorelease];
+    return [[[UIApplication sharedApplication] windows] objectAtIndex:0];
 }
 
 + (MAReportDocument *)activeReportDocument {
     MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [[applicationInstance activeDocument] retain];
-    return [reportDocument autorelease];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    return reportDocument;
 }
 
 + (RptqQuery *)activeRptqQuery {
     MAReportDocument *managedDocument = [AppDelegate activeReportDocument];
     RptqDocument *document = [managedDocument activeDocument];
     NSSet *databaseSchemas = [document hasDatabaseSchemas];
-    RptqDatabase *databaseSchema = [[databaseSchemas anyObject] retain];
+    RptqDatabase *databaseSchema = [databaseSchemas anyObject];
     NSSet *queries = [databaseSchema hasQueries];
-    RptqQuery *query = [[queries anyObject] retain];
-    [databaseSchema autorelease];
-    return [query autorelease];
+    RptqQuery *query = [queries anyObject];
+    return query;
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
-    [_applicationInstance release];
-    [_mainFontDescriptor release];
-    [_detailFontDescriptor release];
-    [_window release];
-    [super dealloc];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -92,8 +90,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
     [self setApplicationInstance:appInstance];
-    [appInstance release];
-    
     
     UIColor *titleTextColor = [UIColor tintColor2];
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : titleTextColor};
@@ -115,7 +111,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     [window setRootViewController:initViewController];
     [window makeKeyAndVisible];
     [self setWindow: window];
-    [window release];
 
     //Startup strore kit.
     [MTStoreKitController sharedObject];
@@ -146,19 +141,18 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (void)applicationDidBecomeActive:(UIApplication *)application { }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MAReportDocument *documentReport = [[[self applicationInstance] activeDocument] retain];
+    MAReportDocument *documentReport = [[self applicationInstance] activeDocument];
     [documentReport quickSave];
-    [documentReport release];
 }
 
 const NSInteger MATagNewDocument = 3838;
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 
-    NSString *openDocumentName = [[[url lastPathComponent] stringByDeletingPathExtension] retain];
-    NSString *openDocumentExt = [[url pathExtension] retain];
-    NSURL *destinationUrl = [[NSURL uniqueUrlForDocumentWithName:openDocumentName withExtension:openDocumentExt] retain];
-    NSString *uniqueName = [[[destinationUrl lastPathComponent] stringByDeletingPathExtension] retain];
+    NSString *openDocumentName = [[url lastPathComponent] stringByDeletingPathExtension];
+    NSString *openDocumentExt = [url pathExtension];
+    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:openDocumentName withExtension:openDocumentExt];
+    NSString *uniqueName = [[destinationUrl lastPathComponent] stringByDeletingPathExtension];
     
     NSError *fileWrittingError = nil;
     [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:&fileWrittingError];
@@ -168,16 +162,6 @@ const NSInteger MATagNewDocument = 3838;
         [fileWrittingError presentErrorToUser];
     } else {
         result = YES;
-        /*
-        MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] topViewController];
-        if (openDocumentViewController != nil) {
-            if ([MTApplicaitonInstance isMadDesigner]) {
-                [openDocumentViewController performSegueWithIdentifier:MTSegueShowOpenDocument sender:destinationUrl];
-            } else if ([MTApplicaitonInstance isMadViewer]) {
-                [openDocumentViewController performSegueWithIdentifier:MTSegueOpenInViewer sender:destinationUrl];
-            }
-        }
-         */
         UIAlertView *alertView = [[UIAlertView alloc]  initWithTitle:@"New Document"
                                                              message:[NSString stringWithFormat:@"Added document %@.", uniqueName]
                                                             delegate:nil
@@ -186,13 +170,7 @@ const NSInteger MATagNewDocument = 3838;
         [alertView setTag:MATagNewDocument];
         [alertView setDelegate:self];
         [alertView show];
-        [alertView release];
     }
-    
-    [uniqueName release];
-    [openDocumentName release];
-    [openDocumentExt release];
-    [destinationUrl release];
     return result;
 }
 
@@ -241,7 +219,6 @@ const NSInteger MATagNewDocument = 3838;
         }
         
         [standardUserDefaults registerDefaults:defaultsToRegister];
-        [defaultsToRegister release];
         [standardUserDefaults synchronize];
     });
 }
@@ -309,15 +286,12 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MTCellSkinner"];
         
         UIFont *detailFont = [[cell detailTextLabel] font];
-        UIFontDescriptor *detailFontDescriptor = [[detailFont fontDescriptor] retain];
+        UIFontDescriptor *detailFontDescriptor = [detailFont fontDescriptor];
         [self setDetailFontDescriptor:detailFontDescriptor];
         
         UIFont *mainFont = [[cell textLabel] font];
-        UIFontDescriptor *mainFontDescriptor = [[mainFont fontDescriptor] retain];
+        UIFontDescriptor *mainFontDescriptor = [mainFont fontDescriptor];
         [self setMainFontDescriptor:mainFontDescriptor];
-        [mainFontDescriptor release];
-        [detailFontDescriptor release];
-        [cell release];
     });
 }
 

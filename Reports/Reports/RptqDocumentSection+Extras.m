@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
@@ -148,10 +152,9 @@
     
     [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
     [sectionRow setHasObjects:hasObjects];
-    [hasObjects release];
     
     [[self managedObjectContext] save:nil];
-    return [[indexInsert retain] autorelease];
+    return indexInsert;
     
 }
 
@@ -202,42 +205,38 @@
 + (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
     RptqDocumentSection *resultSection = nil;
     RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
-    NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
+    NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
     for (RptqQueryGroup *group in groupsUnsorted) {
         if ([[group weight] integerValue] == groupLevel) {
-            NSSet *sections = [[group hasSection] retain];
+            NSSet *sections = [group hasSection];
             for (RptqDocumentSection *section in sections) {
                 if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
                     resultSection = section;
                     break;
                 }
             }
-            [sections release];
             break;
         }
     }
-    [groupsUnsorted release];
     return resultSection;
 }
 
 + (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
     RptqDocumentSection *resultSection = nil;
     RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
-    NSSet *groupsUnsorted = [[[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups] retain];
+    NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
     for (RptqQueryGroup *group in groupsUnsorted) {
         if ([[group weight] integerValue] == groupLevel) {
-            NSSet *sections = [[group hasSection] retain];
+            NSSet *sections = [group hasSection];
             for (RptqDocumentSection *section in sections) {
                 if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
                     resultSection = section;
                     break;
                 }
             }
-            [sections release];
             break;
         }
     }
-    [groupsUnsorted release];
     return resultSection;
 }
 
@@ -253,43 +252,40 @@
         switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
 
             case MNSDocumentSectionTypeReportHeader:
-                resultSection = [[[document hasReportHeaderSection] retain] autorelease];
+                resultSection = [document hasReportHeaderSection];
                 break;
             
             case MNSDocumentSectionTypePageHeader:
-                resultSection = [[[document hasPageHeaderSection] retain] autorelease];
+                resultSection = [document hasPageHeaderSection];
                 break;
             
             case MNSDocumentSectionTypeBody:
-                resultSection = [[[document hasDetailSection] retain] autorelease];
+                resultSection = [document hasDetailSection];
                 break;
             
             case MNSDocumentSectionTypePageFooter:
-                resultSection = [[[document hasPageFooterSection] retain] autorelease];
+                resultSection = [document hasPageFooterSection];
                 break;
             
             case MNSDocumentSectionTypeReportFooter:
-                resultSection = [[[document hasReportFooterSection] retain] autorelease];
+                resultSection = [document hasReportFooterSection];
                 break;
             
             case MNSDocumentSectionTypeGroupHeader: {
                 NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
-                NSSet *groupsUnsorted = [[query hasQueryGroups] retain];
+                NSSet *groupsUnsorted = [query hasQueryGroups];
                 NSString *weight = NSStringFromSelector(@selector(weight));
                 NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
                 NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
                 RptqQueryGroup *group = sortedArray[groupNumber];
 
-                NSSet *sections = [[group hasSection] retain];
+                NSSet *sections = [group hasSection];
                 for (RptqDocumentSection *section in sections) {
                     if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                        resultSection = [[section retain] autorelease];
+                        resultSection = section;
                         break;
                     }
                 }
-                [sections release];
-
-                [groupsUnsorted release];
                 break;
             }
             
@@ -297,20 +293,18 @@
                 NSInteger body          = 2 + numberOfGroups;
                 NSInteger indentLevel   = body - (row - body);
                 NSInteger groupNumber   = indentLevel - 2;
-                NSSet *groupsUnsorted   = [[query hasQueryGroups] retain];
+                NSSet *groupsUnsorted   = [query hasQueryGroups];
                 NSString *weight = NSStringFromSelector(@selector(weight));
                 NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
                 NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
                 RptqQueryGroup *group = sortedArray[groupNumber];
-                NSSet *sections = [[group hasSection] retain];
+                NSSet *sections = [group hasSection];
                 for (RptqDocumentSection *section in sections) {
                     if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                        resultSection = [[section retain] autorelease];
+                        resultSection = section;
                         break;
                     }
                 }
-                [sections release];
-                [groupsUnsorted release];
                 break;
             }
             
@@ -340,7 +334,6 @@
                 resultHeight = totalHeight;
                 NSNumber *h = [[NSNumber alloc] initWithFloat:resultHeight];
                 [section setLayoutHeight:h];
-                [h release];
             }
         }
     }
@@ -394,7 +387,6 @@
         [newRowToAppend setInSection:section];
         [hasRows addObject:newRowToAppend];
         [section setHasRows:hasRows];
-        [hasRows release]; hasRows = nil;
         
     } else if (numberOfRows < [[section numberOfRows] integerValue]) {
 
@@ -404,7 +396,6 @@
         [[hasRows lastObject] setInSection:nil];
         [hasRows removeObjectAtIndex:[hasRows count] - 1];
         [section setHasRows:hasRows];
-        [hasRows release]; hasRows = nil;
         [rowToDelete setInSection:nil];
 
     }
@@ -453,40 +444,38 @@
     BOOL breakNow = NO;
     RptqDocument *document = [RptqDocumentSection rptqDocumentForSection:section];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
-    NSURL *urlNeedle = [[[section objectID] URIRepresentation] retain];
+    NSURL *urlNeedle = [[section objectID] URIRepresentation];
     for (RptqDocumentSection *sec in enumerator) {
-        NSURL *urlInHaystack = [[[sec objectID] URIRepresentation] retain];
-        breakNow = [urlNeedle isEqual:urlInHaystack];
-        [urlInHaystack release];
-        if (breakNow) break;
-        result++;
+        @autoreleasepool {
+            NSURL *urlInHaystack = [[sec objectID] URIRepresentation];
+            breakNow = [urlNeedle isEqual:urlInHaystack];
+            if (breakNow) break;
+            result++;
+        }
     }
-    [enumerator release];
-    [urlNeedle release];
     return result;
 }
 
 - (RptqDocument *)inRptqDocument {
-    RptqDocument *result = [[RptqDocumentSection rptqDocumentForSection:self] retain];
-    return [result autorelease];
+    return [RptqDocumentSection rptqDocumentForSection:self];
 }
 
 + (RptqDocument *)rptqDocumentForSection:(RptqDocumentSection *)section {
     RptqDocument *result = nil;
     if ([section inGroup]) {
-        result = [[[[[section inGroup] inQuery] inDatabase] ownedByQueryAsStaticResource] retain];
+        result = [[[[section inGroup] inQuery] inDatabase] ownedByQueryAsStaticResource];
     } else if ([section inReport]) {
-        result = [[section inReport] retain];
+        result = [section inReport];
     } else if ([section inReportPageFooter]) {
-        result = [[section inReportPageFooter] retain];
+        result = [section inReportPageFooter];
     } else if ([section inReportPageHeader]) {
-        result = [[section inReportPageHeader] retain];
+        result = [section inReportPageHeader];
     } else if ([section inReportReportFooter]) {
-        result = [[section inReportReportFooter] retain];
+        result = [section inReportReportFooter];
     } else if ([section inReportReportHeader]) {
-        result = [[section inReportReportHeader] retain];
+        result = [section inReportReportHeader];
     }
-    return [result autorelease];
+    return result;
 }
 
 - (MNSDocumentSectionType)getDocumentSectionType {

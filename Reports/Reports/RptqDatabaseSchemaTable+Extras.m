@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
@@ -82,7 +86,7 @@
     [rptqTable setLabel_plural: labelPlural];
     [rptqTable setName: name];
     [rptqTable setQueryable: [NSNumber numberWithBool: queryable]];
-    return [rptqTable autorelease];
+    return rptqTable;
 }
 
 + (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
@@ -94,7 +98,7 @@
     [rptqTable setLabel_plural: [table labelPlural]];
     [rptqTable setName: [table name]];
     [rptqTable setQueryable: [NSNumber numberWithBool: [table queryable]]];
-    return [rptqTable autorelease];
+    return rptqTable;
 }
 
 + (RptqDatabaseSchemaTable *)getTableForDatabase:(RptqDatabase *)database

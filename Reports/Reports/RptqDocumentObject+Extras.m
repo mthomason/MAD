@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocumentObject+Extras.h"
 #import "MTBarcode.h"
 #import "RptqDocument.h"
@@ -290,8 +294,6 @@ static NSNumberFormatter *currencyNumberFormatter;
 
             [documentObject setType: @(MTDocumentObjectTypeLabelDynamic)];
             
-            [reportObject release];
-            
             break;
         }
         case MTDocumentObjectTypeLabelStatic: {
@@ -308,8 +310,6 @@ static NSNumberFormatter *currencyNumberFormatter;
             [[documentObject isLabel] setText: labelText];
             
             [documentObject setType: @(MTDocumentObjectTypeLabelStatic)];
-            
-            [reportObject release];
             
             break;
         }
@@ -353,8 +353,6 @@ static NSNumberFormatter *currencyNumberFormatter;
             [documentObject setIsAggregate: reportObject];
             [documentObject setType: @(MTDocumentObjectTypeAggregate)];
 
-            [reportObject release];
-
             break;
         }
         case MTDocumentObjectTypeImage: {
@@ -371,8 +369,6 @@ static NSNumberFormatter *currencyNumberFormatter;
             [documentObject setSizeheight:@([image size].height)];
             [documentObject setSizewidth:@([image size].width)];
             [documentObject setType: @(MTDocumentObjectTypeImage)];
-            
-            [reportObject release];
 
             break;
         }
@@ -389,12 +385,10 @@ static NSNumberFormatter *currencyNumberFormatter;
             NSManagedObjectID *field2ObjectId = [documentObjectDefination objectForKey:MTDocumentObjectDefinationField2];
             RptqQueryField *field1 = [RptqQueryField getQueryFieldForObjectID:field1ObjectId fromObjectContext:mangedObjectContext];
             RptqQueryField *field2 = [RptqQueryField getQueryFieldForObjectID:field2ObjectId fromObjectContext:mangedObjectContext];
-            RptqDocumentObjectBarcode *reportObject = [[RptqDocumentObjectBarcode barcodeWithMtBarcode:barcode queryFieldOne:field1 queryFieldTwo:field2] retain];
+            RptqDocumentObjectBarcode *reportObject = [RptqDocumentObjectBarcode barcodeWithMtBarcode:barcode queryFieldOne:field1 queryFieldTwo:field2];
             
             [documentObject setIsBarcode: reportObject];
             [documentObject setType: @(MTDocumentObjectTypeBarcode)];
-
-            [reportObject release];
             
             break;
         }
@@ -405,9 +399,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[[document hasDetailSection] hasRows] objectAtIndex:0] hasObjects]];
     [hasObjects insertObject:documentObject atIndex:0];
     [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
-    [hasObjects release];
-    //[[document managedObjectContext] save:nil];
-    return [documentObject autorelease];
+    return documentObject;
 }
 
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
@@ -517,7 +509,6 @@ static NSNumberFormatter *currencyNumberFormatter;
                     [formatString appendFormat:@"%ld", (long)[[self formatNumericDecimals] integerValue]];
                     [formatString appendString:@"f"];
                     result = [NSString stringWithFormat:formatString, [value floatValue]];
-                    [formatString release];
                 }
             } else {
                 result = [NSString stringWithFormat:@"%@", value];
@@ -556,7 +547,7 @@ static NSNumberFormatter *currencyNumberFormatter;
         result = [(RptqDocumentObjectLabelDataField *)managedObject parentObjectLabelDataField];
         
     }
-    return [[result retain] autorelease];
+    return result;
 }
 
 #pragma mark - MTProtocolLog
@@ -566,11 +557,11 @@ static NSNumberFormatter *currencyNumberFormatter;
 }
 
 - (NSString *)toStringDebug {
-    return [[[NSString stringWithFormat: @"%@-%@", self, [self designerRepresentationText]] retain] autorelease];
+    return [NSString stringWithFormat: @"%@-%@", self, [self designerRepresentationText]];
 }
 
 - (NSString *)toStringHumanReadable {
-    return [[[NSString stringWithFormat: @"%@", [self designerRepresentationText]] retain] autorelease];
+    return [NSString stringWithFormat: @"%@", [self designerRepresentationText]];
 }
 
 - (NSAttributedString *)toAttributedString {

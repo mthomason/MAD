@@ -6,8 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqDocumentObjectLabelLink+Extras.h"
 #import "MTDatabaseField.h"
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
 
 @implementation RptqDocumentObjectLabelLink (Extras)
 

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "RptqUserCredentals+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "MTDatabaseSqlite3.h"
@@ -96,8 +100,7 @@
             result = @"unknown";
             break;
     }
-    result = [[result stringByDeletingPathExtension] capitalizedString];
-    return [[result retain] autorelease];
+    return [[result stringByDeletingPathExtension] capitalizedString];
 }
 
 #pragma mark - Static
@@ -105,7 +108,7 @@
 + (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
     RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
-    return [userCredentals autorelease];
+    return userCredentals;
 }
 
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
@@ -116,8 +119,7 @@
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
     NSArray *results = [[NSArray alloc] initWithArray:fetchResults];
     if (error) [error presentErrorToUser];
-    [request release];
-    return [results autorelease];
+    return results;
 }
 
 #pragma mark - MTProtocolCompare

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "SectionEnumerator.h"
 #import "AppDelegate.h"
 #import "RptqDocument.h"
@@ -22,11 +26,6 @@
 @end
 
 @implementation SectionEnumerator
-
-- (void)dealloc {
-    [_document release];
-    [super dealloc];
-}
 
 - (id)initWithDocument:(RptqDocument *)document {
     self = [super init];
@@ -57,7 +56,7 @@
             [result addObject:section];
         }
     }
-    return [result autorelease];
+    return result;
 }
 
 - (id)nextObject {
