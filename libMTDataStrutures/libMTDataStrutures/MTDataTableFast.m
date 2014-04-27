@@ -25,18 +25,10 @@
 
 @property (assign) sqlite3 *database;
 @property (assign, readwrite) sqlite3_stmt *statement;
-
 @property (nonatomic, strong) MTDatabase *db;
 
+@property (nonatomic, strong) NSURL *urlFastCache;
 @property (nonatomic, assign, readwrite) NSUInteger tag;
-@property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
-@property (nonatomic, strong, readwrite) NSMutableDictionary *columns;
-@property (nonatomic, strong, readwrite) NSArray *sortDescriptors;
-
-@property (nonatomic, strong, readwrite) NSString *sqlQuery;
-
-@property (nonatomic, assign, readwrite) NSUInteger rowCounter;
-
 @property (nonatomic, assign) BOOL bulkInsertLoop;
 
 @end
@@ -47,46 +39,114 @@
     sqlite3_close_v2(_database);
 }
 
+//- (void)loadFromCache {
+//    [super loadFromCache];
+    
+//}
+
+- (id)plist {
+    
+    NSDictionary *superPlist = [super plist];
+    NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
+    
+    NSString *keyUrlFastCache = [MTDataTableFast keyUrlFastCache];
+    NSString *keyTag = [MTDataTableFast keyTag];
+    NSString *keyBulkInsertLoop = [MTDataTableFast keyBulkInsertLoop];
+
+    plist[keyUrlFastCache] = [[self urlFastCache] absoluteString];
+    plist[keyTag] = @([self tag]);
+    plist[keyBulkInsertLoop] = @([self bulkInsertLoop]);
+
+    return plist;
+}
+
+-(void)loadWithPlist:(NSDictionary *)plist {
+    [super loadWithPlist:plist];
+    
+    NSString *absoluteString = [plist objectForKey: [MTDataTableFast keyUrlFastCache]];
+    NSURL *url = [NSURL URLWithString:absoluteString];
+    [self setUrlFastCache: url];
+    
+    NSNumber *tagWrapper = [plist objectForKey: [MTDataTableFast keyTag]];
+
+     NSUInteger tag = [tagWrapper integerValue];
+    [self setTag:tag];
+    
+    NSNumber *bulkInsertLoopWrapper = [plist objectForKey: [MTDataTableFast keyBulkInsertLoop]];
+    BOOL bulkInsertLoop = [bulkInsertLoopWrapper boolValue];
+    [self setBulkInsertLoop:bulkInsertLoop];
+}
+
++ (NSString *)keyUrlFastCache {
+    SEL sel = @selector(urlFastCache);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyTag {
+    SEL sel = @selector(tag);
+    return NSStringFromSelector(sel);
+}
+
++ (NSString *)keyBulkInsertLoop {
+    SEL sel = @selector(bulkInsertLoop);
+    return NSStringFromSelector(sel);
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder {
-    // FIXME: Implement this.
-    //[super encodeWithCoder:encoder];
+    [super encodeWithCoder:encoder];
+
+    [encoder encodeObject:  [_urlFastCache absoluteString]      forKey: [MTDataTableFast keyUrlFastCache]];
+    [encoder encodeInteger: _tag                                forKey: [MTDataTableFast keyTag]];
+    [encoder encodeBool: _bulkInsertLoop                        forKey: [MTDataTableFast keyBulkInsertLoop]];
+
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    // FIXME: Implement this.
-    return nil;
+    self = [super initWithCoder:decoder];
+    if(self) {
+        
+        NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
+        NSURL *url = [NSURL URLWithString:absoluteString];
+        [self setUrlFastCache: url];
+        
+        NSUInteger tag = [decoder decodeIntegerForKey: [MTDataTableFast keyTag]];
+        [self setTag:tag];
+
+        BOOL bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]];;
+        [self setBulkInsertLoop:bulkInsertLoop];
+        
+        [self reopenDbConnection];
+        [self setupSqlite];
+        
+    }
+    return self;
+}
+
++ (NSString *)keyColumns {
+    SEL selColumns = @selector(columns);
+    return NSStringFromSelector(selColumns);
 }
 
 - (id)initWithId:(NSUInteger)objectId {
-    self = [super init];
+    self = [super initWithId:objectId];
     if (self) {
         
         [self setBulkInsertLoop:NO];
-        
         [self setTag:objectId];
         
-        NSString *filename = [NSFileManager filenameId:objectId extention:@"maddb"];
-        NSURL *cacheDirectory = [NSFileManager cacheDirectory];
-        NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-        [self setUrl:fileUrl];
-        
         [self reopenDbConnection];
-        
-        NSMutableDictionary *columns = [[NSMutableDictionary alloc] init];
-        [self setColumns:columns];
-        
-        NSMutableArray *columnKeys = [[NSMutableArray alloc] init];
-        [self setColumnKeys:columnKeys];
-        
-        NSArray *sortDescriptors = [NSArray array];
-        [self setSortDescriptors:sortDescriptors];
-        
-        [self setRowCounter:0];
-        
         [self setupSqlite];
 
     }
     return self;
+}
+
+- (void)setObjectId:(NSUInteger)objectId {
+    [super setObjectId:objectId];
+    NSString *filename = [NSFileManager filenameId:objectId extention:@"maddb"];
+    NSURL *cacheDirectory = [NSFileManager cacheDirectory];
+    NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
+    [self setUrlFastCache:fileUrl];
 }
 
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
@@ -95,14 +155,14 @@
 }
 
 - (void)reopenDbConnection {
-    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     [self setDb:database];
 }
 
 - (void)setupSqlite {
     _statement = NULL;
-    const char *path = [[[self url] path] UTF8String];
+    const char *path = [[[self urlFastCache] path] UTF8String];
     
     BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
     if (success == NO) {
@@ -165,16 +225,6 @@
     NSLog(@"%@", sql);
     return sql;
 }
-
-- (void)cache {
-    // FIXME: Implement this.
-    //[super cache];
-}
-- (id)plist {
-    // FIXME: Implement this.
-    return nil;
-}
-
 
 - (NSString *)tableName {
     return [NSString stringWithFormat:@"t%lu", (unsigned long)[self tag]];
@@ -332,7 +382,7 @@
         const char *sqlc = [sql UTF8String];
         char *queryString = sqlite3_mprintf((char *) sqlc);
         BOOL success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
-        //NSMutableArray *results = nil;
+
         if (success) {
             while (sqlite3_step(_statement) == SQLITE_ROW) {
                 NSDictionary *currentD = [self currentObject];
@@ -363,8 +413,7 @@
     NSEnumerator *objectEnumerator = nil;
     if ([[self columns] count] > 0) {
         NSString *sql = [self sqlQuery];
-        NSLog(@"objectEnumerator: %@", sql);
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self url]];
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
         objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
                                                                                        columns:[self columns]
                                                                                     columnKeys:[self columnKeys]

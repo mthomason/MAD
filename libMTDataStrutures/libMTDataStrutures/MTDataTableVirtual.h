@@ -1,13 +1,13 @@
 //
-//  MTDataTableVirtual.m
+//  MTDataTableVirtual.h
 //  MAD
 //
 //  Created by Michael Thomason on 4/25/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTDataTableVirtual.h"
+#import "MTDataTable.h"
 
-@implementation MTDataTableVirtual
+@interface MTDataTableVirtual : MTDataTable
 
 @end

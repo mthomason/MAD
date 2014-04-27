@@ -182,10 +182,8 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
     fileName = [fileName stringByAppendingString:extention];
     
-    NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheDirectory = [directoryPaths lastObject];
-    NSURL *thumbnailPath = [NSURL fileURLWithPath: cacheDirectory];
-    return [thumbnailPath URLByAppendingPathComponent:fileName isDirectory:NO];
+    NSURL *cacheDirectory = [NSFileManager cacheDirectory];
+    return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {

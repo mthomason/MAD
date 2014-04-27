@@ -444,7 +444,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                          
                                                          ];
                         [datatable removeAllObjects];
-                        //datatable = [[MTDataTable alloc] initWithNumberOfColumns:numberOfColumns];
                         
                         for (DBINT columnCtr = 0; columnCtr < numberOfColumns; columnCtr++) {
                             

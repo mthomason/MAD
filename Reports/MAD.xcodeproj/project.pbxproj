@@ -735,6 +735,8 @@
 		4C76F0D814B53F73005DCE49 /* UIImageArrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D614B53F73005DCE49 /* UIImageArrowDown.png */; };
 		4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */; };
 		4C76F0FA14B5E747005DCE49 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
+		4C773228190AA301005AE7C2 /* MTDataTableVirtual.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C773227190AA301005AE7C2 /* MTDataTableVirtual.m */; };
+		4C773229190AA301005AE7C2 /* MTDataTableVirtual.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C773227190AA301005AE7C2 /* MTDataTableVirtual.m */; };
 		4C7C8AF31660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */; };
 		4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */; };
 		4C7C8B0016606F6700F2B88B /* MTTableViewCellDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6CDFC314B85BFD00DABF86 /* MTTableViewCellDocument.m */; };
@@ -2189,6 +2191,8 @@
 		4C76F0D714B53F73005DCE49 /* UIImageArrowDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageArrowDown@2x.png"; path = "Reports/UIImageArrowDown@2x.png"; sourceTree = "<group>"; };
 		4C76F0F814B5E720005DCE49 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Reports/Constants.h; sourceTree = "<group>"; };
 		4C76F0F914B5E746005DCE49 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Reports/Constants.m; sourceTree = SOURCE_ROOT; };
+		4C773226190AA301005AE7C2 /* MTDataTableVirtual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableVirtual.h; sourceTree = "<group>"; };
+		4C773227190AA301005AE7C2 /* MTDataTableVirtual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableVirtual.m; sourceTree = "<group>"; };
 		4C7C8AF11660348D00F2B88B /* UIManagedDocument+FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIManagedDocument+FileOperations.h"; sourceTree = "<group>"; };
 		4C7C8AF21660348D00F2B88B /* UIManagedDocument+FileOperations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIManagedDocument+FileOperations.m"; sourceTree = "<group>"; };
 		4C80A5DE183145F600242703 /* MTBarcodeAztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAztec.h; path = Barcodes/Barcodes/MTBarcodeAztec.h; sourceTree = "<group>"; };
@@ -3123,6 +3127,8 @@
 			children = (
 				4C23FADA18FADA40009F234F /* MTDataTable.h */,
 				4C23FAD718FADA40009F234F /* MTDataTable.m */,
+				4C773226190AA301005AE7C2 /* MTDataTableVirtual.h */,
+				4C773227190AA301005AE7C2 /* MTDataTableVirtual.m */,
 				4C0CAB551902C14B0044D866 /* MTDataTableFast.h */,
 				4C0CAB561902C14B0044D866 /* MTDataTableFast.m */,
 				4C23FADB18FADA40009F234F /* MTDataColumn.h */,
@@ -4111,10 +4117,10 @@
 		4C9E447D18D8D3B800F0F578 /* Query */ = {
 			isa = PBXGroup;
 			children = (
-				4C0CAB6E1904DB530044D866 /* Database Definition */,
-				4C0CAB691904DB1B0044D866 /* Query Definition */,
 				4C9E446D18D8C7BF00F0F578 /* MTQuery.h */,
 				4C9E446E18D8C7BF00F0F578 /* MTQuery.m */,
+				4C0CAB6E1904DB530044D866 /* Database Definition */,
+				4C0CAB691904DB1B0044D866 /* Query Definition */,
 				4C1680831907840B00980D8D /* MTQueryCache */,
 				4C267AA618FA6B300097D166 /* Custom SQL */,
 				4C11BD0518DE01B1001E3D33 /* Report Query */,
@@ -5562,6 +5568,7 @@
 				4C0E7775163B5AEC003B951E /* CGGeometry+Extras.m in Sources */,
 				4C11BCFC18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */,
 				4C0E7776163B5AEC003B951E /* RptqDocument+Extras.m in Sources */,
+				4C773229190AA301005AE7C2 /* MTDataTableVirtual.m in Sources */,
 				4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */,
 				4C0E7778163B5AEC003B951E /* SectionEnumerator.m in Sources */,
 				4C23FBBB18FAE4F7009F234F /* MTPaperB4.m in Sources */,
@@ -6007,6 +6014,7 @@
 				4C23FAEA18FADC68009F234F /* MTViewControllerBarcodeType.m in Sources */,
 				4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */,
 				4C23FBBE18FAE4F7009F234F /* MTPaperB6.m in Sources */,
+				4C773228190AA301005AE7C2 /* MTDataTableVirtual.m in Sources */,
 				4C23FBDA18FAE4F7009F234F /* MTPaperC9.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C11BCFB18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */,

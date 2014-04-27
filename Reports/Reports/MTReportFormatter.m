@@ -30,8 +30,6 @@
 #import "RptqQuery+Extras.h"
 #import "MTDataTable.h"
 
-#import "MTDataTableFast.h"
-
 //Why the fuck!!!
 
 #import "MTDatabaseConnection.h"
@@ -125,7 +123,7 @@ NSString * const MTNullIdentifier = @"(null)";
 #warning only run when sizes change... Should not depend on super... Always run users, and let super do its thing, like only running on refresh.
     if ([super format]) {
         
-        [self initilize];
+        //[self initilize];
         
         NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
         UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -686,12 +684,10 @@ NSString * const MTNullIdentifier = @"(null)";
             SEL objectAtRowLimit = @selector(objectAtRow:limit:);
             if ([[[self query] datatable] respondsToSelector:objectAtRowLimit]) {
 
-                
                 if (page != [self cachedPageNumber]) {
                     [self setCachedPageNumber:page];
-                    NSArray *objectsForPage = nil;
-                        objectsForPage = [(MTDataTableFast *)[[self query] datatable] objectAtRow:[pageIndexes firstIndex]
-                                                                                            limit:[pageIndexes count]];
+                    NSArray *objectsForPage = [[[self query] datatable] objectAtRow:[pageIndexes firstIndex]
+                                                                                                 limit:[pageIndexes count]];
                     [self setObjectsForPage:objectsForPage];
                 }
                 NSDictionary *data = [self objectsForPage][row];

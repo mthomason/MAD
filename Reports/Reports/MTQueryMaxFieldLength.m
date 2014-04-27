@@ -36,7 +36,14 @@
         [self setQueryObject: array];
         RptqDatabaseSchemaField *field = [array firstObject];
         
-        MTDataTable *datatable = [[MTDataTable alloc] initWithId:[field hash]];
+        NSNumber *typeKey = @(MTDataTableTypeOfTable);
+        NSNumber *type = @(MTDataTableTypeVirtual);
+        NSNumber *objectIdKey = @(MTDataTableObjectId);
+        NSNumber *objectId =  @([field hash]);
+        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
+                                                    typeKey : type,
+                                                    objectIdKey : objectId}];
+        
         [self setDatatable:datatable];
 
         RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];

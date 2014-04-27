@@ -51,7 +51,6 @@
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
 #import "MTDataTable.h"
-#import "MTDataTableFast.h"
 
 #import "MTBarcode.h"
 #import "MTFont.h"
@@ -150,7 +149,7 @@
     CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
     CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
     
-    [[self reportFormatter] formatForSize:letterRect.size onlyFirstPage:YES];
+    //[[self reportFormatter] formatForSize:letterRect.size onlyFirstPage:YES];
     UIGraphicsBeginImageContextWithOptions(letterRect.size, NO, 0.0000f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -441,8 +440,8 @@
                                                     NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:index];
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
                                                     NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:index];
-                                                    NSArray *objectsToAdd = [(MTDataTableFast *)[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
-                                                                                                                                                 limit: [indexSet count]];
+                                                    NSArray *objectsToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
+                                                                                                                              limit: [indexSet count]];
                                                     [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
                                                     break;
                                                 }

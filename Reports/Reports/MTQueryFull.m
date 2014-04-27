@@ -42,7 +42,6 @@
 #import "MTQuerySampleDataField.h"
 
 #import "MTDataTable.h"
-#import "MTDataTableFast.h"
 
 #import "MTDatabaseConnection.h"
 #import "RptqDatabase.h"
@@ -62,7 +61,14 @@
         
         NSManagedObjectID *objectId = [object objectID];
         NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
-        MTDataTable *datatable = [[MTDataTableFast alloc] initWithId:hash];
+        
+        NSNumber *typeKey = @(MTDataTableTypeOfTable);
+        NSNumber *type = @(MTDataTableTypePhysical);
+        NSNumber *objectIdKey = @(MTDataTableObjectId);
+        NSNumber *objectIdV =  @(hash);
+        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
+                                                                 typeKey : type,
+                                                                 objectIdKey : objectIdV}];
         [self setDatatable:datatable];
         RptqUserCredentals *userCredentals = [[(RptqQuery *)object inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
