@@ -127,6 +127,12 @@
             case MTDataTypeImage:
             case MTDataTypeBlob: {
                 
+                //MTDataType realType = MTDataTypeBlob;
+                //Class classString = [NSString class];
+                //if ([object isKindOfClass:classString]) {
+                //    realType = MTDataTypeString;
+                //}
+                
                 MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeBlob
                                                                                           fieldIndex:columnCounter
                                                                                                value:object];

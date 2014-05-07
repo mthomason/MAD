@@ -59,6 +59,7 @@ show_help=$false
 # Process flags
 #
 
+
 if [[ $# == 0 ]];
 then
    show_help=$true

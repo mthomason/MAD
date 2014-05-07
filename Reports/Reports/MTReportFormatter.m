@@ -482,7 +482,8 @@ NSString * const MTNullIdentifier = @"(null)";
         
         SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
 
-        NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray: [groupedRows allKeys] copyItems:NO];
+        NSArray *allKeysFixed = [groupedRows allKeys];
+        NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray:allKeysFixed copyItems:NO];
 
         BOOL nullGroupExist = [self nullKeyExist:allKeys];
         if (nullGroupExist) {
@@ -493,7 +494,8 @@ NSString * const MTNullIdentifier = @"(null)";
         NSEnumerator *loopEnumerator = nil;
         
         if (sortSelector != nil) {
-            NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:[allKeys sortedArrayUsingSelector:sortSelector] copyItems:NO];
+            NSArray *sortedArray = [allKeys sortedArrayUsingSelector:sortSelector];
+            NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:sortedArray copyItems:NO];
             if (nullGroupExist) {
                 [allKeysSorted insertObject:MTNullIdentifier atIndex:0];
             }

@@ -33,7 +33,8 @@
 
 #import "MTSchemaFieldCell.h"
 
-@interface MTQueryBuilderAdvancedSchemaViewController () <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
+@interface MTQueryBuilderAdvancedSchemaViewController ()
+    <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
 @property (nonatomic, strong) IBOutlet MTTitleView *titleView;
 @property (nonatomic, strong) IBOutlet UIToolbar *toolbar;

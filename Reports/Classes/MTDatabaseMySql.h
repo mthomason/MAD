@@ -10,10 +10,6 @@
 #define Reports_MTDatabaseMySql_h
 
 #import "MTDatabase.h"
-#import <MySqlClientObjectiveC/MysqlConnection.h>
-#import <MySqlClientObjectiveC/MysqlServer.h>
-#import <MySqlClientObjectiveC/MysqlFetch.h>
-#import <MySqlClientObjectiveC/MysqlFetchField.h>
 
 #import "MTGraph.h"
 
@@ -34,6 +30,8 @@
 
 - (NSString *)identifier;
 + (NSString *)identifier;
+
++ (MTDataType)dataTypeForNativeType:(NSInteger)nativeType;
 
 @end
 

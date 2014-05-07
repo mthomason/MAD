@@ -36,6 +36,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 
 - (id)initWithId:(NSUInteger)objectId;
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
+
 - (void)setObjectId:(NSUInteger)objectId;   //Object id needs to be set for caching.
 
 - (void)cache;

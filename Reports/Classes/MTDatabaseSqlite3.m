@@ -332,7 +332,13 @@
                     switch ([databinding datatype]) {
                         case MTDataTypeBlob: {
                             NSData *data = [databinding value];
-                            success = SQLITE_OK == sqlite3_bind_blob(statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+                            //if ([data isKindOfClass:[NSString class]]) {
+                            //    const char *cstr = [(NSString *)data UTF8String];
+                            //    int len = strlen(cstr);
+                            //    success = SQLITE_OK == sqlite3_bind_text(statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
+                            //} else if ([data isKindOfClass:[NSData class]]) {
+                                success = SQLITE_OK == sqlite3_bind_blob(statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+                            //}
                             NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
                             break;
                         }

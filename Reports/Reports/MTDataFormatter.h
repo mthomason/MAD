@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+
+
 #import <Foundation/Foundation.h>
 
 @class RptqQuery, MTQuery, MTDataTable;
@@ -15,7 +17,7 @@
 @property (nonatomic, retain) MTQuery *query;
 @property (nonatomic, assign) BOOL didRefresh;
 
-- (id)initWithQuery:(MTQuery *)query;
+ - (id)initWithQuery:(MTQuery *)query;
 
 - (BOOL)format;
 - (NSDictionary *)dataForRow:(NSUInteger)row;

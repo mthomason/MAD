@@ -33,9 +33,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"4.0.87";
-NSString * const MTGlobalBundleShortVersion                         = @"4.0.87";
-NSString * const MTGlobalBundleRev                                  = @"1069";
+NSString * const MTGlobalBundleVersion                              = @"4.0.90";
+NSString * const MTGlobalBundleShortVersion                         = @"4.0.90";
+NSString * const MTGlobalBundleRev                                  = @"1072";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -386,21 +386,22 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        
         if ([MTApplicationInstance isMadDesigner]) {
             if ([UIDevice isModernOS]) {
                 _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+                                        MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
             } else {
                 _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
+                                        MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
             }
         } else if ([MTApplicationInstance isMadViewer]) {
             if ([UIDevice isModernOS]) {
                 _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportViewerPad : MTStoryboardReportViewer;
+                                        MTStoryboardReportViewerPad : MTStoryboardReportViewer;
             } else {
                 _storyboardName = [UIDevice isPad] ?
-                MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
+                                        MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
             }
         }
     });

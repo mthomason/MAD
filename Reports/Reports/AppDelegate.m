@@ -107,6 +107,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
     [window setTintColor:[UIColor tintColor]];
+    
+    //Getting inital view controller
     id initViewController = [storyBoard instantiateInitialViewController];
     [window setRootViewController:initViewController];
     [window makeKeyAndVisible];

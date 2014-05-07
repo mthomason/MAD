@@ -10,6 +10,11 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
 
+#import "MysqlConnection.h"
+#import "MysqlServer.h"
+#import "MysqlFetch.h"
+#import "MysqlFetchField.h"
+
 #import "MTQuery.h"
 
 #import "RptqDatabaseSchemaTable.h"
@@ -81,30 +86,9 @@
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             MysqlConnection *conn = [dbconn retain];
             if (conn && error == nil) {
-                
                 @autoreleasepool {
-                    NSError *error = nil;
-                    NSString *sql = [query getSqlWithError:&error];
-                    if (error == nil) {
-                        MTDataTable *fetch = [[MysqlFetch fetchWithCommand:sql onConnection:conn extendedNames:YES] retain];
-                        //These native types are not set by the mysql lib.
-                        for (MTDataColumn *column in [fetch columnsEnumerator]) {
-                            NSNumber *cType = @([MTDatabaseMySql dataTypeForNativeType:column.columnType.integerValue]);
-                            [column setNativeColumnType:cType];
-                            
-                        }
-                        //Fixme set native column types
-                        NSURL *cacheUrl = [[[query datatable] url] copy];
-                        [fetch setUrl: cacheUrl];
-                        [cacheUrl release];
-                        
-                        [query setDatatable:fetch];
-                        completion(YES, nil);
-                        [fetch release];
-                    } else {
-                        completion(NO, error);
-                    }
-                    
+                    [MysqlFetch performQuery:query onConnection:conn];
+                    completion(YES, nil);
                 }
                 
             } else {

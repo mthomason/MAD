@@ -130,9 +130,9 @@
 - (id)initWithId:(NSUInteger)objectId {
     self = [super initWithId:objectId];
     if (self) {
-        
         [self setBulkInsertLoop:NO];
         [self setTag:objectId];
+        [self setObjectId:objectId];
         
         [self reopenDbConnection];
         [self setupSqlite];
@@ -285,9 +285,13 @@
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+    
     NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
+
     for (NSSortDescriptor *sort in sortDescriptors) {
+    
         for (NSString *columnKey in [[self columns] keyEnumerator]) {
+        
             MTDataColumn *column = [[self columns] objectForKey:columnKey];
             if ([[column fieldName] isEqualToString:[sort key]]) {
                 NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey  ascending:[sort ascending]];
@@ -297,6 +301,7 @@
         }
     }
     [self setSortDescriptors:newSorts];
+    
     // FIXME: reset cache after setting the sort descriptors    
 }
 
@@ -304,6 +309,7 @@
     
     dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+        [self reopenDbConnection];
         [self dropTable];
         [self vacuumCacheDb];
         dispatch_semaphore_signal(semaphoreRemoveAll);
@@ -446,6 +452,8 @@
         MTDataColumn *dataColumn = [self columns][key];
         id columnValue;
         switch ([[dataColumn columnType] integerValue]) {
+            case MTDataTypeLong:
+            case MTDataTypeLongLong:
             case MTDataTypeInteger:
                 columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
                 break;
