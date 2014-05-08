@@ -30,6 +30,7 @@
 @property (nonatomic, strong) NSURL *urlFastCache;
 @property (nonatomic, assign, readwrite) NSUInteger tag;
 @property (nonatomic, assign) BOOL bulkInsertLoop;
+@property (nonatomic, assign) BOOL sortDescriptorsSet;
 
 @end
 
@@ -98,6 +99,7 @@
     [encoder encodeObject:  [_urlFastCache absoluteString]      forKey: [MTDataTableFast keyUrlFastCache]];
     [encoder encodeInteger: _tag                                forKey: [MTDataTableFast keyTag]];
     [encoder encodeBool: _bulkInsertLoop                        forKey: [MTDataTableFast keyBulkInsertLoop]];
+    [encoder encodeBool:_sortDescriptorsSet forKey:[MTDataTableFast keySortDescriptorsSet]];
 
 }
 
@@ -114,6 +116,10 @@
 
         BOOL bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]];;
         [self setBulkInsertLoop:bulkInsertLoop];
+
+        BOOL sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]];;
+        [self setSortDescriptorsSet:sortDescriptorsSet];
+
         
         [self reopenDbConnection];
         [self setupSqlite];
@@ -126,14 +132,17 @@
     SEL selColumns = @selector(columns);
     return NSStringFromSelector(selColumns);
 }
-
++ (NSString *)keySortDescriptorsSet {
+    SEL selector = @selector(sortDescriptorsSet);
+    return NSStringFromSelector(selector);
+}
 - (id)initWithId:(NSUInteger)objectId {
     self = [super initWithId:objectId];
     if (self) {
         [self setBulkInsertLoop:NO];
         [self setTag:objectId];
         [self setObjectId:objectId];
-        
+        [self setSortDescriptorsSet:NO];
         [self reopenDbConnection];
         [self setupSqlite];
 
@@ -176,10 +185,6 @@
 }
 
 - (NSString *)sqlQuery {
-    return [self sqlQueryWithFilters:nil];
-}
-
-- (NSString *)sqlQueryWithFilters:(NSDictionary *)predicates {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
     NSUInteger columnCounter = 0;
     
@@ -252,21 +257,24 @@
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+    
+    //[NSSortDescriptor alloc] initWithKey:<#(NSString *)#> ascending:<#(BOOL)#>];
 }
 
 - (void)addRow:(NSArray *)row {
-        
+    
     NSDictionary *queryDefination = @{
-                                      @(MTQueryCacheAddRowColumnKeys) : [self columnKeys],
-                                      @(MTQueryCacheAddRowColumns) : [self columns],
-                                      @(MTQueryCacheAddRowData) : row,
-                                      @(MTQueryCacheAddRowTableName) : [self tableName]
+                                      @(MTQueryCacheAddRowColumnKeys)   : [self columnKeys],
+                                      @(MTQueryCacheAddRowColumns)      : [self columns],
+                                      @(MTQueryCacheAddRowData)         : row,
+                                      @(MTQueryCacheAddRowTableName)    : [self tableName]
                                       };
+    
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
     self.rowCounter++;
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
-        if (!success) NSLog(@"Error %@", error);
+        NSAssert(success, @"Error %@", error);
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
@@ -286,30 +294,47 @@
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
     
-    NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
-
-    for (NSSortDescriptor *sort in sortDescriptors) {
-    
-        for (NSString *columnKey in [[self columns] keyEnumerator]) {
+    if ([[self columnKeys] count] > 0 && [[self columns] count] > 0) {
         
-            MTDataColumn *column = [[self columns] objectForKey:columnKey];
-            if ([[column fieldName] isEqualToString:[sort key]]) {
-                NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey  ascending:[sort ascending]];
-                [newSorts addObject:sortn];
-                break;
+        if ([sortDescriptors count] > 0 && self.sortDescriptorsSet == NO) {
+            NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
+            
+            for (NSSortDescriptor *sort in sortDescriptors) {
+                for (NSString *columnKey in [[self columns] keyEnumerator]) {
+                    
+                    MTDataColumn *column = [[self columns] objectForKey:columnKey];
+                    if ([[column fieldName] isEqualToString:[sort key]]) {
+                        NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey  ascending:[sort ascending]];
+                        [newSorts addObject:sortn];
+                        break;
+                    }
+                }
+                if ([newSorts count] == [sortDescriptors count]) {
+                    [self setSortDescriptorsSet:YES];
+                    [self setSortDescriptors:newSorts];
+                }
             }
         }
+    } else {
+        NSMutableArray *sd = [[NSMutableArray alloc] initWithArray:sortDescriptors];
+        [self setSortDescriptors:sd];
     }
-    [self setSortDescriptors:newSorts];
     
     // FIXME: reset cache after setting the sort descriptors    
 }
+
+//- (void)setSortDescriptorsWhileReplacingKeys:(NSArray *)sortDescriptors {
+    //for (type *object in [self columns]) {
+    //    statements
+    //}
+//}
 
 - (void)removeAllObjects {
     
     dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         [self reopenDbConnection];
+        [self dropIndex];
         [self dropTable];
         [self vacuumCacheDb];
         dispatch_semaphore_signal(semaphoreRemoveAll);
@@ -318,7 +343,44 @@
 
     [[self columnKeys] removeAllObjects];
     [[self columns] removeAllObjects];
+    [self setRowCounter:0];
     
+}
+
+- (void)createIndex {
+    
+    [self sortUsingDescriptors:[self sortDescriptors]];
+    
+    NSDictionary *parametersCreateIndex = @{
+                                            @(MTQueryCacheIndexCreateIndexName)         : @"i1",
+                                            @(MTQueryCacheIndexCreateTableName)         : [self tableName],
+                                            @(MTQueryCacheIndexCreateSortDescriptors)   : [self sortDescriptors]
+                                            };
+    MTQuery *queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
+                                                            object: parametersCreateIndex];
+    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
+    [queryCreateIndex performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"Error %@", error);
+        dispatch_semaphore_signal(semaphoreQuery);
+    }];
+    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+}
+
+- (void)dropIndex {
+    NSDictionary *parameters = @{
+                                 @(MTQueryCacheIndexDropIndexName) : @"i1",
+                                 };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexDropParameters
+                                                 object: parameters];
+    
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:[self db]
+                         completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"Error %@", error);
+        dispatch_semaphore_signal(semaphore);
+    }];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
 }
 
 - (void)vacuumCacheDb {
@@ -519,13 +581,17 @@
     }];
     dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
     
-
+    [self setSortDescriptorsSet:NO];
+    [self createIndex];
+    
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
     dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self db] completion:^(BOOL success, NSError *error) {
         dispatch_semaphore_signal(s3);
     }];
     dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+
+
 }
 
 - (void)endBulkInsert {

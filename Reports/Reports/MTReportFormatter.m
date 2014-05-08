@@ -39,8 +39,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
 
-@property (nonatomic, retain, readwrite) NSArray *sortedQueryGroups;
-
 @property (nonatomic, retain, readwrite) RptqDocument *layout;
 @property (nonatomic, assign) CGSize printableSize;
 @property (nonatomic, assign) CGRect printableRect;

@@ -28,6 +28,8 @@
 #import "MTQueryCacheSyncOff.h"
 #import "MTQueryCacheJournalModeDefault.h"
 #import "MTQueryCacheJournalModeOverride.h"
+#import "MTQueryCacheIndexCreate.h"
+#import "MTQueryCacheIndexDrop.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -136,6 +138,14 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
         case MTQueryTypeCacheJournalModeDefault:
             self = [[MTQueryCacheJournalModeDefault alloc] initWithObject:object];
+            break;
+            
+        case MTQueryTypeCacheIndexCreateParameters:
+            self = [[MTQueryCacheIndexCreate alloc] initWithObject:object];
+            break;
+            
+        case MTQueryTypeCacheIndexDropParameters:
+            self = [[MTQueryCacheIndexDrop alloc] initWithObject:object];
             break;
             
         default:

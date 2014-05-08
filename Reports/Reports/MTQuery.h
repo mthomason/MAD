@@ -31,6 +31,8 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
     MTQueryTypeCacheSyncModeDefault,
     MTQueryTypeCacheJournalModeOverride,
     MTQueryTypeCacheJournalModeDefault,
+    MTQueryTypeCacheIndexCreateParameters,
+    MTQueryTypeCacheIndexDropParameters
 };
 
 #pragma mark Types of specific paramamters accepted for each query
@@ -49,6 +51,16 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheAddRowParameters) {
     MTQueryCacheAddRowTableName,
     MTQueryCacheAddRowColumns,
     MTQueryCacheAddRowColumnKeys
+};
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheIndexDropParameters) {
+    MTQueryCacheIndexDropIndexName,
+};
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheIndexCreateParameters) {
+    MTQueryCacheIndexCreateIndexName,
+    MTQueryCacheIndexCreateTableName,
+    MTQueryCacheIndexCreateSortDescriptors
 };
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheDeleteAllFromTableParameters) {

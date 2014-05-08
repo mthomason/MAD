@@ -75,6 +75,10 @@
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
         [self setQueryObject:object];
+
+        NSMutableArray *sortDesc = [[NSMutableArray alloc] initWithArray:[self sortDescriptors]];
+        [datatable sortUsingDescriptors:sortDesc];
+
         
     }
     return self;

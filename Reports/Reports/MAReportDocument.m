@@ -117,6 +117,9 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                 RptqDocument *activeDocument = [self activeDocument];
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:defaultQuery
                                                                                        andLayout:activeDocument];
+                //NSArray *sortedGroups = [NSArray arrayWithArray:[defaultQuery sortDescriptors]];
+//                [reportFormatter setSortedQueryGroups:sortedGroups];
+                //[reportFormatter setSortDescriptorsByGroupSorted:sortedGroups];
                 [self setReportFormatter:reportFormatter];
             }
         }

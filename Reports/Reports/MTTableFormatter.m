@@ -16,8 +16,6 @@
 
 @interface MTTableFormatter ()
 
-@property (nonatomic, retain, readwrite) NSArray *sortDescriptorsByGroupSorted;
-
 @end
 
 @implementation MTTableFormatter
