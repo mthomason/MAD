@@ -35,11 +35,13 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabase.h"
 
+#import "MTPageCaching.h"
+
 NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
 
-@property (nonatomic, retain, readwrite) RptqDocument *layout;
+@property (nonatomic, strong, readwrite) RptqDocument *layout;
 @property (nonatomic, assign) CGSize printableSize;
 @property (nonatomic, assign) CGRect printableRect;
 
@@ -49,19 +51,21 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
 
-@property (nonatomic, retain, readwrite) NSArray *indexesByPage;
-@property (nonatomic, retain, readwrite) NSArray *layoutByPage;
+@property (nonatomic, strong, readwrite) NSArray *indexesByPage;
+@property (nonatomic, strong, readwrite) NSArray *layoutByPage;
 
-@property (nonatomic, retain, readwrite) NSDictionary *dataByGroup;
+@property (nonatomic, strong, readwrite) NSDictionary *dataByGroup;
 
-@property (nonatomic, retain) NSMutableArray *temporaryLayoutForPage;
-@property (nonatomic, retain) NSMutableArray *temporaryLayoutByPage;
+@property (nonatomic, strong) NSMutableArray *temporaryLayoutForPage;
+@property (nonatomic, strong) NSMutableArray *temporaryLayoutByPage;
 
-@property (nonatomic, retain) NSMutableIndexSet *temporaryIndexesForPage;
-@property (nonatomic, retain) NSMutableArray *temporaryIndexesByPage;
+@property (nonatomic, strong) NSMutableIndexSet *temporaryIndexesForPage;
+@property (nonatomic, strong) NSMutableArray *temporaryIndexesByPage;
 
-@property (nonatomic, assign) NSUInteger cachedPageNumber;
-@property (nonatomic, retain) NSArray *objectsForPage;
+//@property (nonatomic, assign) NSUInteger cachedPageNumber;
+//@property (nonatomic, retain) NSArray *objectsForPage;
+
+@property (nonatomic, strong) MTPageCaching *pageCaching;
 
 @end
 
@@ -94,6 +98,9 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryDataByPage = [[NSMutableArray alloc] init];
     [self setTemporaryIndexesByPage:temporaryDataByPage];
 
+    MTPageCaching *pageCaching = [[MTPageCaching alloc] init];
+    [self setPageCaching:pageCaching];
+    
     NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
     [self setTemporaryIndexesForPage:temporaryDataForPage];
     
@@ -106,7 +113,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSDictionary *dataByGroup = @{};
     [self setDataByGroup:dataByGroup];
     
-    [self setCachedPageNumber: NSNotFound];
 }
 
 #pragma mark - Reading cached data
@@ -628,7 +634,8 @@ NSString * const MTNullIdentifier = @"(null)";
     RptqDocumentSection *detailSection = [document hasDetailSection];
     BOOL isVisible = [[detailSection visibility] boolValue];
     CGFloat layoutHeight = isVisible ? [[detailSection layoutHeight] floatValue] : CGSizeZero.height;
-    for (NSDictionary *resultDictionary in containerDetails) {
+    
+    for (NSInteger i=0; i<[containerDetails count]; i++) {
         [self cachePageBreakWithNextItemHeight: layoutHeight];
         [self cacheDetail];
         CGFloat printableHeightUsed = [self printableSpaceUsedPageHeight] + layoutHeight;
@@ -666,13 +673,14 @@ NSString * const MTNullIdentifier = @"(null)";
 
 
 - (BOOL)format {
-    [self setCachedPageNumber:NSNotFound];
-    NSArray *emptyArray = [NSArray array];
-    [self setObjectsForPage:emptyArray];
+    [[self pageCaching] dumpCache];
     return [super format];
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
+
+    NSLog(@"Row: %d \tPage: %d", row, page);
+    
     id rowData = nil;
     if (page < [[self indexesByPage] count]) {
         
@@ -684,13 +692,13 @@ NSString * const MTNullIdentifier = @"(null)";
             SEL objectAtRowLimit = @selector(objectAtRow:limit:);
             if ([[[self query] datatable] respondsToSelector:objectAtRowLimit]) {
 
-                if (page != [self cachedPageNumber]) {
-                    [self setCachedPageNumber:page];
-                    NSArray *objectsForPage = [[[self query] datatable] objectAtRow:[pageIndexes firstIndex]
-                                                                                                 limit:[pageIndexes count]];
-                    [self setObjectsForPage:objectsForPage];
+                NSArray *pageCache = [[self pageCaching] objectsForPage:page];
+                if (pageCache == nil) {
+                    NSArray *objectsForPage = [[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
+                                                                              limit: [pageIndexes count]];
+                    [[self pageCaching] cacheObjects:objectsForPage forPage:page];
                 }
-                NSDictionary *data = [self objectsForPage][row];
+                NSDictionary *data = pageCache[row];
                 rowData = [NSDictionary dictionaryWithDictionary:data];
                 
             } else {

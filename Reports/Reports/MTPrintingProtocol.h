@@ -18,7 +18,7 @@
 @optional
 
 - (void)drawView:(id)sender inRect:(CGRect)rect;
-- (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect;
+- (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect;
 
 @end
 

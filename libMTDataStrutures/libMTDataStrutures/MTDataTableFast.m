@@ -220,7 +220,7 @@
 - (NSString *)sqlQueryWithLimit:(NSUInteger)limit {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:[self sqlQuery]];
     [sql appendFormat:@" LIMIT %ld ", (unsigned long)limit];
-    NSLog(@"%@", sql);
+    //NSLog(@"%@", sql);
     return sql;
 }
 

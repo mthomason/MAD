@@ -640,6 +640,8 @@
 		4C5626031759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5626041759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C5626061759865A00433E88 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
+		4C590B28191BC3A400C4E211 /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C590B29191BC3A400C4E211 /* MTPageCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C590B27191BC3A400C4E211 /* MTPageCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */; };
 		4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */; };
 		4C5BED6F18EB273300BDDDB8 /* NSError+Constructors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BED6E18EB273300BDDDB8 /* NSError+Constructors.m */; };
@@ -2145,6 +2147,8 @@
 		4C5625EA1759730200433E88 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		4C5626011759865900433E88 /* NSData+AES256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES256.h"; sourceTree = "<group>"; };
 		4C5626021759865A00433E88 /* NSData+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES256.m"; sourceTree = "<group>"; };
+		4C590B26191BC3A400C4E211 /* MTPageCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPageCaching.h; sourceTree = "<group>"; };
+		4C590B27191BC3A400C4E211 /* MTPageCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPageCaching.m; sourceTree = "<group>"; };
 		4C5BED5818E8999D00BDDDB8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = Resources/Settings.bundle; sourceTree = "<group>"; };
 		4C5BED5F18E8C46500BDDDB8 /* UIViewController+tabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+tabBarItem.h"; sourceTree = "<group>"; };
 		4C5BED6018E8C46500BDDDB8 /* UIViewController+tabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+tabBarItem.m"; sourceTree = "<group>"; };
@@ -3035,6 +3039,8 @@
 				4C1E27C018C5B4650007B2BB /* Singletons */,
 				4CF339421693E5B400390B3A /* MTFont.h */,
 				4CF339431693E5B400390B3A /* MTFont.m */,
+				4C590B26191BC3A400C4E211 /* MTPageCaching.h */,
+				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -5896,6 +5902,7 @@
 				4C0E7779163B5AEC003B951E /* MTElementView.m in Sources */,
 				4CABE4641837DF7A007EDD9D /* RptqDocumentObjectLabel.m in Sources */,
 				4C7732A3190FFD6A005AE7C2 /* NSString_MysqlEscape.m in Sources */,
+				4C590B29191BC3A400C4E211 /* MTPageCaching.m in Sources */,
 				4C0E777A163B5AEC003B951E /* MTResizeHandleView.m in Sources */,
 				4C0E777B163B5AEC003B951E /* RptqDocumentObject+Extras.m in Sources */,
 				4C0E778F163B5AEC003B951E /* RptqDocumentObjectLabelDataField+Extras.m in Sources */,
@@ -6359,6 +6366,7 @@
 				4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */,
 				4C7732A2190FFD6A005AE7C2 /* NSString_MysqlEscape.m in Sources */,
+				4C590B28191BC3A400C4E211 /* MTPageCaching.m in Sources */,
 				4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */,
 				4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */,
 				4C23FC1418FAE633009F234F /* MTDatabaseTable.m in Sources */,

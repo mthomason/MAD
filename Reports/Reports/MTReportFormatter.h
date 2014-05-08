@@ -30,6 +30,6 @@ extern NSString * const MTNullIdentifier;
 - (NSIndexSet *)objectEnumeratorForPage:(NSUInteger)pageIndex;
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 
-@property (nonatomic, retain, readwrite) NSArray *sortedQueryGroups;
+@property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 
 @end

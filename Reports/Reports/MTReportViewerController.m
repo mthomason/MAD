@@ -476,7 +476,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
 }
 
-- (void)drawPageAtIndex:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
+- (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
     [[self printPageRendererReport] drawPageAtIndex:pageIndex inRect:printableRect];
 }
 

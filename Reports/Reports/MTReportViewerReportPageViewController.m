@@ -164,7 +164,7 @@
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
     NSInteger index = [self pageNumber] - 1;
-    [[self delegate] drawPageAtIndex:index
+    [[self delegate] drawPage:index
                               inRect:rect];
 }
 
