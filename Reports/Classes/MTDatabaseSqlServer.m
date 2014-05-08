@@ -545,6 +545,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                         }
                         
+                        [datatable beginBulkInsert];
+                        
                         while (dbresults(dbconn) != NO_MORE_RESULTS) {
                             
                             //SYBREAL, SYBFLTN, and SYBFLT8
@@ -1314,6 +1316,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                             
                         }
+                        
+                        [datatable endBulkInsert];
                         
                         [colmunHolder release];
                         [counters release];
