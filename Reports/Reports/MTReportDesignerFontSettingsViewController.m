@@ -6,12 +6,17 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportDesignerFontSettingsViewController.h"
 #import "RptqDocumentObject+Extras.h"
 #import "AppDelegate.h"
 #import "UIDevice+Hack.h"
 #import "MTApplicationInstance.h"
 #import "MTFont.h"
+#import "NSManagedObject+Extras.h"
 
 @interface MTReportDesignerFontSettingsViewController()
     <UITableViewDelegate>
@@ -70,52 +75,6 @@
 @end
 
 @implementation MTReportDesignerFontSettingsViewController
-
-
-- (void)dealloc {
-    [_userSelectedObjectIds release];
-    [_labelFontName release];
-    [_segControlFontStyle release];
-    [_fontLabelTableViewCell release];
-    [_labelFontSize release];
-    [_stepperFontSize release];
-    [_buttonBold release];
-    [_buttonItalic release];
-    [_buttonStrike release];
-    [_buttonUnderline release];
-    [_segmentedControlHorizontalAlignment release];
-    
-    [_labelPaddingTop release];
-    [_labelPaddingBottom release];
-    [_labelPaddingLeft release];
-    [_labelPaddingRight release];
-    
-    [_stepperPaddingTop release];
-    [_stepperPaddingBottom release];
-    [_stepperPaddingLeft release];
-    [_stepperPaddingRight release];
-    
-    [_stepperMarginTop release];
-    [_stepperMarginBottom release];
-    [_stepperMarginLeft release];
-    [_stepperMarginRight release];
-    
-    [_labelMarginTop release];
-    [_labelMarginBottom release];
-    [_labelMarginLeft release];
-    [_labelMarginRight release];
-    
-    [_segmentedControlVerticalAlignment release];
-    [_steppers release];
-    [_stepperSizeWidth release];
-    [_stepperSizeHeight release];
-    
-    [_labelSizeWidth release];
-    [_labelSizeHeight release];
-    [_groupTableViewCellStyle release];
-    [_groupTableViewCellLayout release];
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 
@@ -603,7 +562,7 @@
     NSAttributedString *normalValue = [self systemString:[@" " stringByAppendingString:value] ofSize:pointSize];
     NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithAttributedString:boldSubject];
     [result appendAttributedString:normalValue];
-    return [result autorelease];
+    return result;
 }
 
 - (NSAttributedString *)fontSizeStringForSizeInPoints:(CGFloat)points {
@@ -620,9 +579,8 @@
     NSString *pointsString = [@" " stringByAppendingFormat:localizedFormatPoints, points];
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];
-    [messageSuffix release];
     [[self labelFontSize] setAttributedText:localizedAttributedMessage];
-    return [localizedAttributedMessage autorelease];
+    return localizedAttributedMessage;
 }
 
 - (NSAttributedString *)boldSystemString:(NSString *)string ofSize:(CGFloat)fontSize {
@@ -633,7 +591,7 @@
     }
     NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:string
                                                                                                    attributes:boldAttributes];
-    return [localizedAttributedMessage autorelease];
+    return localizedAttributedMessage;
 }
 
 - (NSAttributedString *)systemString:(NSString *)string ofSize:(CGFloat)fontSize {
@@ -644,7 +602,7 @@
     }
     NSMutableAttributedString *localizedAttributedMessage = [[NSMutableAttributedString alloc] initWithString:string
                                                                                                    attributes:boldAttributes];
-    return [localizedAttributedMessage autorelease];
+    return localizedAttributedMessage;
 }
 
 - (void)chooseFont:(MTFont *)font {
@@ -791,84 +749,141 @@
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
     SEL valueChangedAction = @selector(emptySelector:);
-    id valueThatChanged = nil;
     
     if ([sender isEqual:[self stepperFontSize]]) {
         valueChangedAction = @selector(setFontsize:);
-        valueThatChanged = @([[self stepperFontSize] value]);
-        [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[valueThatChanged floatValue]]];
+        NSNumber *value = @([[self stepperFontSize] value]);
+        [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[value floatValue]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setFontsize:value];
+            [documentObject saveContext];
+        }
 
     } else if ([sender isEqual:[self stepperSizeHeight]]) {
         valueChangedAction = @selector(setSizeheight:);
-        valueThatChanged = @([[self stepperSizeHeight] value]);
+        NSNumber *value = @([[self stepperSizeHeight] value]);
         CGFloat fontSize = [[[self labelSizeHeight] font] pointSize];
-        NSAttributedString *displayHeight = [self sizeHeightForValue:valueThatChanged andFontSize:fontSize];
+        NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
         [[self labelSizeHeight] setAttributedText:displayHeight];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setSizeheight:value];
+            [documentObject saveContext];
+        }
 
     } else if ([sender isEqual:[self stepperSizeWidth]]) {
         valueChangedAction = @selector(setSizewidth:);
-        valueThatChanged = @([[self stepperSizeWidth] value]);
+        NSNumber *value = @([[self stepperSizeWidth] value]);
         CGFloat fontSize = [[[self labelSizeWidth] font] pointSize];
-        NSAttributedString *displayWidth = [self sizeWidthForValue:valueThatChanged andFontSize:fontSize];
+        NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
         [[self labelSizeWidth] setAttributedText:displayWidth];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setSizewidth:value];
+            [documentObject saveContext];
+        }
         
     } else if ([sender isEqual:[self segmentedControlHorizontalAlignment]]) {
         valueChangedAction = @selector(setHorizontalAlignment:);
         MTHorizontalAlignment horizontalAlignment = [[self segmentedControlHorizontalAlignment] selectedSegmentIndex];
-        valueThatChanged = @(horizontalAlignment);
+        NSNumber *value = @(horizontalAlignment);
         [[self segmentedControlHorizontalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setHorizontalAlignment:value];
+            [documentObject saveContext];
+        }
         
     } else if ([sender isEqual:[self segmentedControlVerticalAlignment]]) {
         valueChangedAction = @selector(setVerticalAlignment:);
         MTVerticalAlignment verticalAlignment = [[self segmentedControlVerticalAlignment] selectedSegmentIndex];
-        valueThatChanged = @(verticalAlignment);
+        NSNumber *value = @(verticalAlignment);
         [[self segmentedControlVerticalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setVerticalAlignment:value];
+            [documentObject saveContext];
+        }
         
     } else if ([sender isEqual:[self stepperPaddingBottom]]) {
         valueChangedAction = @selector(setPaddingBottom:);
-        valueThatChanged = @([[self stepperPaddingBottom] value]);
-        [[self labelPaddingBottom] setAttributedText:[self marginBottomForValue:valueThatChanged andFontSize:[[[self labelPaddingBottom] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperPaddingBottom] value]);
+        [[self labelPaddingBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelPaddingBottom] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setPaddingBottom:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperPaddingLeft]]) {
         valueChangedAction = @selector(setPaddingLeft:);
-        valueThatChanged = @([[self stepperPaddingLeft] value]);
-        [[self labelPaddingLeft] setAttributedText:[self marginLeftForValue:valueThatChanged andFontSize:[[[self labelPaddingLeft] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperPaddingLeft] value]);
+        [[self labelPaddingLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelPaddingLeft] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setPaddingLeft:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperPaddingRight]]) {
         valueChangedAction = @selector(setPaddingRight:);
-        valueThatChanged = @([[self stepperPaddingRight] value]);
-        [[self labelPaddingRight] setAttributedText:[self marginRightForValue:valueThatChanged andFontSize:[[[self labelPaddingRight] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperPaddingRight] value]);
+        [[self labelPaddingRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelPaddingRight] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setPaddingRight:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperPaddingTop]]) {
         valueChangedAction = @selector(setPaddingTop:);
-        valueThatChanged = @([[self stepperPaddingTop] value]);
-        [[self labelPaddingTop] setAttributedText:[self marginTopForValue:valueThatChanged andFontSize:[[[self labelPaddingTop] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperPaddingTop] value]);
+        [[self labelPaddingTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelPaddingTop] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setPaddingTop:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperMarginBottom]]) {
         valueChangedAction = @selector(setMarginBottom:);
-        valueThatChanged = @([[self stepperMarginBottom] value]);
-        [[self labelMarginBottom] setAttributedText:[self marginBottomForValue:valueThatChanged andFontSize:[[[self labelMarginBottom] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperMarginBottom] value]);
+        [[self labelMarginBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelMarginBottom] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setMarginBottom:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperMarginTop]]) {
         valueChangedAction = @selector(setMarginTop:);
-        valueThatChanged = @([[self stepperMarginTop] value]);
-        [[self labelMarginTop] setAttributedText:[self marginTopForValue:valueThatChanged andFontSize:[[[self labelMarginTop] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperMarginTop] value]);
+        [[self labelMarginTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelMarginTop] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setMarginTop:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperMarginLeft]]) {
         valueChangedAction = @selector(setMarginLeft:);
-        valueThatChanged = @([[self stepperMarginLeft] value]);
-        [[self labelMarginLeft] setAttributedText:[self marginLeftForValue:valueThatChanged andFontSize:[[[self labelMarginLeft] font] pointSize]]];
-    
+        NSNumber *value = @([[self stepperMarginLeft] value]);
+        [[self labelMarginLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelMarginLeft] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setMarginLeft:value];
+            [documentObject saveContext];
+        }
+
     } else if ([sender isEqual:[self stepperMarginRight]]) {
-        valueChangedAction = @selector(setMarginRight:);
-        valueThatChanged = @([[self stepperMarginRight] value]);
-        [[self labelMarginRight] setAttributedText:[self marginRightForValue:valueThatChanged andFontSize:[[[self labelMarginRight] font] pointSize]]];
-    }
-
-
-    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-        [documentObject performSelector:valueChangedAction withObject:valueThatChanged];
+        NSNumber *value = @([[self stepperMarginRight] value]);
+        [[self labelMarginRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelMarginRight] font] pointSize]]];
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            [documentObject setMarginRight:value];
+            [documentObject saveContext];
+        }
     }
     [activeDocument saveContext];
 }

@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTTableViewControllerAbout.h"
 #import <MessageUI/MessageUI.h>
 #import "MTApplicationInstance.h"
@@ -76,7 +80,6 @@
             [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
             [mFMailComposeViewController setSubject:@"MAD Designer"];
             [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
-            [mFMailComposeViewController release];
         } else {
             NSString *title = NSLocalizedString(@"Alert", @"Alert title");
             NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
@@ -87,7 +90,6 @@
                                                         cancelButtonTitle:dismiss
                                                         otherButtonTitles:nil];
             [uIAlertView show];
-            [uIAlertView release];
         }
     }
 }
@@ -105,9 +107,4 @@
     }
 }
 
-- (void)dealloc {
-    [_labelVersion release];
-    [_labelBuild release];
-    [super dealloc];
-}
 @end

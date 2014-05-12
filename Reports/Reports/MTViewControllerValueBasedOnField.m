@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTCellEnterText.h"
 #import "AppDelegate.h"
@@ -32,18 +36,6 @@
 
 @implementation MTViewControllerValueBasedOnField
 
-- (void)dealloc {
-    [_schemaFieldObjectId release];
-    [_pickerData release];
-    [_textField release];
-    [_pickerView release];
-    [_pickerViewBackground release];
-    [_tableViewMain release];
-    [_longStyleDateFormatter release];
-    [_tableViewCellEnterText release];
-    [super dealloc];
-}
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -53,8 +45,6 @@
         [longStyleDateFormatter setTimeStyle:NSDateFormatterLongStyle];
         [longStyleDateFormatter setLocale:[NSLocale currentLocale]];
         [self setLongStyleDateFormatter:longStyleDateFormatter];
-        [longStyleDateFormatter release];
-        
     }
     return self;
 }
@@ -158,9 +148,9 @@
             NSDate *newDate = [localCalendar dateFromComponents:resultDate];
             result = [[self longStyleDateFormatter] stringFromDate:newDate];
         } else if ([resultObject isKindOfClass:[NSString class]]) {
-            result = [[resultObject retain] autorelease];
+            result = [NSString stringWithString: resultObject];
         } else if ([resultObject isKindOfClass:[NSNumber class]]) {
-            result = [[[(NSNumber *)resultObject stringValue] retain] autorelease];
+            result = [(NSNumber *)resultObject stringValue];
         } else if (resultObject == nil) {
             result = @"NULL";
         } else {

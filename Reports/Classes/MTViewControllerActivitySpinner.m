@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTViewControllerActivitySpinner.h"
 
 @interface MTViewControllerActivitySpinner ()
@@ -15,11 +19,6 @@
 @end
 
 @implementation MTViewControllerActivitySpinner
-
-- (void)dealloc {
-    [_activitySpinner release];
-    [super dealloc];
-}
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

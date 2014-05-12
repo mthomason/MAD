@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTGroupByViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
@@ -37,14 +41,7 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 
 @implementation MTDocumentObjectNewAggregateViewController
 
-- (void)dealloc {
-    [_fieldObject release];
-    [_fieldObjectId release];
-    [_tableViewCellAggrageFunction release];
-    [_tableViewCellAggregateInput release];
-    [_tableViewCellAggregateGroupBy release];
-    [super dealloc];
-}
+
 
 - (void)updateDisplay {
     

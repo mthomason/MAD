@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTShowSqlViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -15,7 +19,6 @@
 #import "MTDatabase.h"
 #import "MTAlertView.h"
 #import "MTQuery.h"
-//#import "MTQueryReport.h"
 
 @interface MTShowSqlViewController ()
 
@@ -53,7 +56,6 @@
                                                       onDismiss: ^(NSInteger buttonIndex) { }
                                                        onCancel: ^{ }];
         [alert show];
-        [alert release];
     }
 }
 
@@ -67,11 +69,6 @@
 
 - (IBAction)done:(id)sender {
     [[self delegate] viewControllerDidFinish:self];
-}
-
-- (void)dealloc {
-    [_textView release];
-    [super dealloc];
 }
 
 @end

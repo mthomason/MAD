@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "NSError+UserInterface.h"
 #import "Constants.h"
 #import "MTAlertView.h"
@@ -17,9 +21,6 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 - (void)presentErrorToUser {
     
     NSString *cancelButtonTitle = NSLocalizedString(@"Dismiss", @"Cancel button title");
-    //NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
-    //NSString *abortButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc);
- 
     NSString *localizedDescription = [self localizedDescription];
     NSString *localizedFailureReason = [self localizedFailureReason];
     NSError *underlyingError = [[self userInfo] objectForKey:NSUnderlyingErrorKey];
@@ -51,14 +52,11 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                                                       onDismiss: dismissBlock
                                                        onCancel: nil];
     [alertView show];
-    [alertView autorelease];
-
 }
 
 - (void)presentErrorToUserWithContinue:(void (^)(BOOL tryagain))completion {
     NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
-    NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleTryAgain, MNSStringInterfaceButtonTitleTryAgainDesc)/*,
-    NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc)*/];
+    NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleTryAgain, MNSStringInterfaceButtonTitleTryAgainDesc)];
     
     MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: [self localizedDescription]
                                                         message: [self localizedFailureReason]
@@ -80,7 +78,6 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                                                    completion(NO);
                                                }];
     [alertView show];
-    [alertView autorelease];
 }
 
 - (void)presentErrorToUserWithTryAgain:(void (^)(BOOL tryagain))tryAgain andCompletion:(void (^)(BOOL success))completion {
@@ -111,7 +108,6 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
                                                    completion(YES);
                                                }];
     [alertView show];
-    [alertView autorelease];
 }
 
 - (void)presentErrorToUserWithCompletion:(void (^)(BOOL success))completion {
@@ -132,7 +128,6 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
                                                       }];
     [alertView show];
-    [alertView autorelease];
 }
 
 + (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message {

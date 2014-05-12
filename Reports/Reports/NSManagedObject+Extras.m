@@ -25,4 +25,10 @@
     }
 }
 
+- (BOOL)saveContext {
+    NSError *__autoreleasing error = nil;
+    [[self managedObjectContext] save:&error];
+    return error == nil;
+}
+
 @end

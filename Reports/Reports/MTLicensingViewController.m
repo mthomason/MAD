@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTLicensingViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
@@ -51,34 +55,6 @@
 @end
 
 @implementation MTLicensingViewController
-
-- (void)dealloc {
-    [_swipeDone release];
-    [_standardCompletion release];
-    [_licenseUserCompletion release];
-    [_buttonBuyNowDesignerOneYear release];
-    [_buttonBuyNowDesignerOneMonth release];
-    [_buttonBuyNowViewerOneMonth release];
-    [_buttonBuyNowViewerOneYear release];
-    [_labelDesignerLicenseOneYearTitle release];
-    [_labelDesignerLicenseOneYearDesc1 release];
-    [_labelDesignerLicenseOneYearDesc2 release];
-    [_labelDesignerLicenseOneYearDesc3 release];
-    [_labelDesignerLicenseOneYearDesc4 release];
-    [_activityIndicator2 release];
-    [_activityIndicatorDesignerLicenseOneYear release];
-    [_buttonRestore release];
-    [_buttonDone release];
-    [_labelDesignerKeyActivated release];
-    [_labelDesignerKeyExpires release];
-    [_labelDesignerValueActivated release];
-    [_labelDesignerValueExpires release];
-    [_labelsShowWhenActivated release];
-    [_labelsHideWhenActivated release];
-    [_viewBuyButtonsBackground release];
-    [_swipeDone release];
-    [super dealloc];
-}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -210,7 +186,6 @@
                         
                     }
                 }
-                [priceFormatter release];
             };
             [[MTStoreKitController sharedObject] initalizeProductsWithIdentifiers: productIds
                                                                        completion: initalizationComplete];
@@ -361,11 +336,6 @@
                                                   
                                               }];
     [alertView show];
-    [alertView autorelease];
-    
-/*    [self disableUserInterface];
-    MTStoreKitController *storeKit = [MTStoreKitController sharedObject];
-    [storeKit restorePurchases:[self standardCompletion]];*/
 }
 
 @end

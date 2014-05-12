@@ -6,23 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTSettingsViewController.h"
 
-
 @implementation MTSettingsViewController
-
-- (void)dealloc {
-    [_tableCellPrint release];
-    [_tableCellExport release];
-    [_tableCellFind release];
-    [_tableCellReportSetup release];
-    [_tableCellRuler release];
-    [_tableCellFind release];
-    [_tableCellSettings release];
-    [_tableCellHelp release];
-    [_tableCellStore release];
-    [super dealloc];
-}
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];

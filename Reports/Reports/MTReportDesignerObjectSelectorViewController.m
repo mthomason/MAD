@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportDesignerObjectSelectorViewController.h"
 #import <CoreData/CoreData.h>
 #import "UIDevice+Hack.h"
@@ -92,41 +96,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @implementation MTReportDesignerObjectSelectorViewController
 
-- (void)dealloc {
-    [_saveButton release];
-    [_viewControllerToPush release];
-    [_visibleViewController release];
-    [_childDisplayedView release];
-    [_containerView release];
-    [_navigationBar release];
-    [_navigationItemMain release];
-    //[_documentObjectSelectorViewController release];
-    [_childViewController release];
-    [_groupByViewController release];
-    [_fieldOrFormulaViewController release];
-    [_aggregateFunctionsViewController release];
-    [_fieldOrFormulaFieldPickerViewController release];
-    [_fieldOrFormulaFormulaPickerViewController release];
-    [_aggregateInputFormula release];
-    [_aggregateInputField release];
-    [_aggregateViewController release];
-    [_aggregateInputField release];
-    [_imagePicker release];
-    [super dealloc];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-    }
-    return self;
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     if ([UIDevice isPad]) {
@@ -141,22 +110,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelIdentifer"]) {
         id destinationViewController = [segue destinationViewController];
         [destinationViewController setDelegate: self];
-        if ([UIDevice isPad]) {
-//            CGSize contentSize = CGSizeMake(320.0000f, 420.0000f);
-            //[destinationViewController setPreferredContentSize:contentSize];
-        }
     }
-}
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-    
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:YES];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 #pragma mark - Actions
@@ -236,7 +190,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
         [selectedBackgroundView setBackgroundColor:bgColor];
         [result setSelectedBackgroundView:selectedBackgroundView];
-        [selectedBackgroundView release];
     }
     [[result contentView] setTag: tag];
     return result;
@@ -307,10 +260,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
-
-//- (void)pressedCancelButton:(id)sender {
-//    [[self objectSelectorDelegate] viewControllerDidFinish: self];
-//}
 
 - (IBAction)saveDocumentObjectAggregate:(id)sender {
     
@@ -477,7 +426,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowFieldOrFormulaFieldPickerViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
-                    [itemToPush release];
                     break;
 
                 }
@@ -487,7 +435,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowFieldOrFormulaFormulaPickerViewerController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
-                    [itemToPush release];
                     break;
 
                 }
@@ -508,7 +455,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowAggregateFunctionsViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
-                    [itemToPush release];
                     break;
                     
                 }
@@ -518,8 +464,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowFieldOrFormulaViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
-                    [itemToPush release];
-                    
                     break;
                 }
                 case 2: {   //Group By *For Each*
@@ -527,7 +471,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowGroupByViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
-                    [itemToPush release];
                     break;
                 }
                 default:

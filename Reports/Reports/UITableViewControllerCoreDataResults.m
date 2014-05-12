@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "UITableViewControllerCoreDataResults.h"
 
 @interface UITableViewControllerCoreDataResults()
@@ -17,11 +21,6 @@
 @implementation UITableViewControllerCoreDataResults
 
 #pragma mark - Properties
-
-- (void)dealloc {
-    [_fetchedResultsController release];
-    [super dealloc];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -40,8 +39,6 @@
 - (void)setFetchedResultsController:(NSFetchedResultsController *)newfrc {
     NSFetchedResultsController *oldfrc = _fetchedResultsController;
     if (newfrc != oldfrc) {
-        [_fetchedResultsController release];
-        [newfrc retain];
         _fetchedResultsController = newfrc;
         newfrc.delegate = self;
         if ((!self.title || [self.title isEqualToString:oldfrc.fetchRequest.entity.name]) && (!self.navigationController || !self.navigationItem.title)) {

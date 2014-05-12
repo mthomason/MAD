@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportDesignerFontSelectorViewController.h"
 #import "UIDevice+Hack.h"
 #import "MTFont.h"
@@ -19,27 +23,8 @@
 
 @implementation MTReportDesignerFontSelectorViewController
 
-- (void)dealloc {
-    [_initalSelectedFont release];
-    [_tableViewCellFontAmericanTypewriter release];
-    [_tableViewCellFontArial release];
-    [_tableViewCellFontCourierNew release];
-    [_tableViewCellFontCourier release];
-    [_tableViewCellFontGeorgia release];
-    [_tableViewCellFontHelvetica release];
-    [_tableViewCellFontHelveticaNeue release];
-    [_tableViewCellFontTimesNewRoman release];
-    [_tableViewCellFontTrebuchet release];
-    [_tableViewCellFontVerdana release];
-    [_tableViewCellFontZapfino release];
-    [super dealloc];
-}
-
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
@@ -81,7 +66,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    UITableViewCell *cell = [[[self tableView] cellForRowAtIndexPath:indexPath] retain];
+    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
 
     if ([cell isEqual:[self tableViewCellFontAmericanTypewriter]]) {
         [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyAmericanTypewriter];
@@ -115,8 +100,6 @@
     }
     
     [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    
-    [cell release];
     
 }
 

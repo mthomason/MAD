@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTGroupByViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -21,11 +25,6 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 @end
 
 @implementation MTGroupByViewController
-
-- (void)dealloc {
-    [_fetchedResultsControllerGroups release];
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -52,7 +51,6 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         if (error != nil) {
             [error presentErrorToUser];
         }
-        [frc release];
         frc = nil;
         
     }
@@ -127,9 +125,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
     }
     
-    UITableViewCell *cell = [[tableView cellForRowAtIndexPath:indexPath] retain];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-    [cell release];
     
     switch ([indexPath row]) {
         
@@ -207,7 +204,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *tableViewCellIdentifier = @"MTGroupByTableViewCell";
-    UITableViewCell *cell = [[tableView dequeueReusableCellWithIdentifier: tableViewCellIdentifier] retain];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: tableViewCellIdentifier];
 
     switch ([indexPath row]) {
 
@@ -238,7 +235,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
     }
     
-    return [cell autorelease];
+    return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {

@@ -19,8 +19,6 @@
 
 @property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlDisplayType;
 
-- (IBAction)segmentedControlValueChanged:(id)sender;
-
 @end
 
 #endif

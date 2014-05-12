@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTReportDesignerToolBoxViewController.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -37,24 +41,6 @@
 @end
 
 @implementation MTReportDesignerToolBoxViewController
-
-- (void)dealloc {
-    [_tableViewControllerDocumentObjectFormat release];
-    [_tableViewControllerFontSelector release];
-    [_tableViewControllerTextLayoutSettings release];
-    [_selectedObjectIds release];
-    [_navigationBar release];
-    [_navigationItemStyle release];
-    [_navigationItemFontSelector release];
-    [_navigationItemLayout release];
-    [_contentView release];
-    [_sceneSelector release];
-    [super dealloc];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 
 - (id)init {
     self = [super init];
@@ -275,14 +261,8 @@
 
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName {
     CGFloat currentPointSize = [[[[self tableViewControllerTextLayoutSettings] labelFontName] font] pointSize];
-    
     MTFont *font = [[MTFont alloc] initWithFamilyName:fontName andPointSize:currentPointSize];
-    
-    
     [[self tableViewControllerTextLayoutSettings] chooseFont:font];
-    
-    [font release];
-
 }
 
 #pragma mark - FontSettingsTableViewControllerDelegate

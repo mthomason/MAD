@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTAggregateFunctionsViewController.h"
 
 NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFunctionsViewControllerIdentifier";
@@ -27,11 +31,6 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
         [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
         [self setSelectedFunctionType: [tableViewCell tag]];
     }
-}
-
-- (void)dealloc {
-    [_tableViewCells release];
-    [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -104,10 +103,9 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
         [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
     }
     
-    UITableViewCell *tableViewCell = [[tableView cellForRowAtIndexPath:indexPath] retain];
+    UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
     [self setSelectedFunctionType: [tableViewCell tag]];
-    [tableViewCell release];
     
     if ([self delegate] != nil) {
         [[self delegate] didSelectFunction: [self selectedFunctionType]];

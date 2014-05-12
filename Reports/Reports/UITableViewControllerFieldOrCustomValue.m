@@ -6,38 +6,16 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "UITableViewControllerFieldOrCustomValue.h"
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
 
+#import "UITableViewControllerFieldOrCustomValue.h"
 
 @implementation UITableViewControllerFieldOrCustomValue
 
 - (CGSize)preferredContentSize {
     return CGSizeMake(320.0000f, 420.0000f);
-}
-
-- (void)dealloc {
-    [_segmentedControlDisplayType release];
-    [super dealloc];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) { }
-    return self;
-}
-
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) { }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (IBAction)segmentedControlValueChanged:(id)sender {
-    
 }
 
 #pragma mark - View lifecycle
