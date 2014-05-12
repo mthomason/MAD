@@ -13,13 +13,13 @@
 
 @interface RptqDatabase : NSManagedObject
 
-@property (nonatomic, retain) NSString * databaseDriverType;
-@property (nonatomic, retain) NSNumber * databaseDriverTypeEnum;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSSet *hasQueries;
-@property (nonatomic, retain) NSSet *hasTables;
-@property (nonatomic, retain) RptqDocument *ownedByQueryAsStaticResource;
-@property (nonatomic, retain) RptqUserCredentals *ownedByUser;
+@property (nonatomic, strong) NSString * databaseDriverType;
+@property (nonatomic, strong) NSNumber * databaseDriverTypeEnum;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSSet *hasQueries;
+@property (nonatomic, strong) NSSet *hasTables;
+@property (nonatomic, strong) RptqDocument *ownedByQueryAsStaticResource;
+@property (nonatomic, strong) RptqUserCredentals *ownedByUser;
 @end
 
 @interface RptqDatabase (CoreDataGeneratedAccessors)

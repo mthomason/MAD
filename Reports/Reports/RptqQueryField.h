@@ -13,19 +13,19 @@
 
 @interface RptqQueryField : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;
-@property (nonatomic, retain) NSSet *inAggregateObject;
-@property (nonatomic, retain) NSManagedObject *inBarcodeField1;
-@property (nonatomic, retain) NSManagedObject *inBarcodeField2;
-@property (nonatomic, retain) NSSet *inDataObject;
-@property (nonatomic, retain) NSSet *inQueryGroup;
-@property (nonatomic, retain) NSSet *inQueryLinkLeft;
-@property (nonatomic, retain) NSSet *inQueryLinkRight;
-@property (nonatomic, retain) NSSet *inQueryPredicateLeft;
-@property (nonatomic, retain) NSSet *inQueryPredicateRight;
-@property (nonatomic, retain) NSSet *inQuerySort;
-@property (nonatomic, retain) RptqQueryTable *inQueryTable;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqDatabaseSchemaField *databaseSchemaField;
+@property (nonatomic, strong) NSSet *inAggregateObject;
+@property (nonatomic, strong) NSManagedObject *inBarcodeField1;
+@property (nonatomic, strong) NSManagedObject *inBarcodeField2;
+@property (nonatomic, strong) NSSet *inDataObject;
+@property (nonatomic, strong) NSSet *inQueryGroup;
+@property (nonatomic, strong) NSSet *inQueryLinkLeft;
+@property (nonatomic, strong) NSSet *inQueryLinkRight;
+@property (nonatomic, strong) NSSet *inQueryPredicateLeft;
+@property (nonatomic, strong) NSSet *inQueryPredicateRight;
+@property (nonatomic, strong) NSSet *inQuerySort;
+@property (nonatomic, strong) RptqQueryTable *inQueryTable;
 @end
 
 @interface RptqQueryField (CoreDataGeneratedAccessors)

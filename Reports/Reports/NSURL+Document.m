@@ -14,30 +14,26 @@
 
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
     
-    NSURL *documentsDirectoryURL = [[[MACloudManager sharedManager] documentsDirectoryURL] retain];
+    NSURL *documentsDirectoryURL = [[MACloudManager sharedManager] documentsDirectoryURL];
 
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-    NSURL *baseUrl = [[documentsDirectoryURL URLByAppendingPathComponent: name] retain];
+    NSURL *baseUrl = [documentsDirectoryURL URLByAppendingPathComponent: name];
     NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
-                                                [[baseUrl URLByAppendingPathExtension: extension] retain] :
-                                                [baseUrl retain];
-    [baseUrl release];
+                                                [baseUrl URLByAppendingPathExtension: extension] :
+                                                baseUrl;
     
     NSInteger ctr = 0;
     while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
-        [applicationFileUrlWithExtention release];
         
-        NSURL *baseUrlFormatted = [[documentsDirectoryURL
-                                    URLByAppendingPathComponent: [name stringByAppendingFormat:@" %ld", (long)ctr]] retain];
+        NSURL *baseUrlFormatted = [documentsDirectoryURL
+                                    URLByAppendingPathComponent: [name stringByAppendingFormat:@" %ld", (long)ctr]];
         
         
-        applicationFileUrlWithExtention = [[baseUrlFormatted
-                                            URLByAppendingPathExtension: extension] retain];
-        [baseUrlFormatted release];
+        applicationFileUrlWithExtention = [baseUrlFormatted
+                                            URLByAppendingPathExtension: extension];
         ctr++;
     }
-    [documentsDirectoryURL release];
-    return [applicationFileUrlWithExtention autorelease];
+    return applicationFileUrlWithExtention;
 }
 
 @end

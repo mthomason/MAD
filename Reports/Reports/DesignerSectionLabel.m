@@ -18,10 +18,6 @@
 
 @implementation DesignerSectionLabel
 
-- (void)dealloc {
-    [_labelSectionIdentifer release];
-    [super dealloc];
-}
 
 - (id)initWithDisplayText:(NSString *)displayText {
     CGRect frame = CGRectZero;
@@ -39,7 +35,6 @@
         [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self addSubview:labelSectionIdentifer];
         [self setLabelSectionIdentifer:labelSectionIdentifer];
-        [labelSectionIdentifer release];
 
     }
     return self;

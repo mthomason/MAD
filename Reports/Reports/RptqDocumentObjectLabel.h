@@ -13,8 +13,8 @@
 
 @interface RptqDocumentObjectLabel : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * text;
-@property (nonatomic, retain) RptqDocumentObject *parentObjectLabel;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * text;
+@property (nonatomic, strong) RptqDocumentObject *parentObjectLabel;
 
 @end

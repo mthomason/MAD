@@ -13,26 +13,26 @@
 
 @interface RptqUserCredentals : NSManagedObject
 
-@property (nonatomic, retain) NSString * database_driver_type;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSNumber * inUse;
-@property (nonatomic, retain) NSString * mysql_database;
-@property (nonatomic, retain) NSString * mysql_host;
-@property (nonatomic, retain) NSString * mysql_password;
-@property (nonatomic, retain) NSNumber * mysql_port;
-@property (nonatomic, retain) NSString * mysql_username;
-@property (nonatomic, retain) NSString * sf_login_domain;
-@property (nonatomic, retain) NSString * sf_login_identifier;
-@property (nonatomic, retain) NSString * sf_login_key;
-@property (nonatomic, retain) NSString * sf_login_redirect_uri;
-@property (nonatomic, retain) NSString * sf_password;
-@property (nonatomic, retain) NSString * sf_username;
-@property (nonatomic, retain) NSString * tds_database;
-@property (nonatomic, retain) NSString * tds_host;
-@property (nonatomic, retain) NSString * tds_password;
-@property (nonatomic, retain) NSNumber * tds_port;
-@property (nonatomic, retain) NSString * tds_server;
-@property (nonatomic, retain) NSString * tds_username;
-@property (nonatomic, retain) RptqDatabase *inDatabase;
+@property (nonatomic, strong) NSString * database_driver_type;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSNumber * inUse;
+@property (nonatomic, strong) NSString * mysql_database;
+@property (nonatomic, strong) NSString * mysql_host;
+@property (nonatomic, strong) NSString * mysql_password;
+@property (nonatomic, strong) NSNumber * mysql_port;
+@property (nonatomic, strong) NSString * mysql_username;
+@property (nonatomic, strong) NSString * sf_login_domain;
+@property (nonatomic, strong) NSString * sf_login_identifier;
+@property (nonatomic, strong) NSString * sf_login_key;
+@property (nonatomic, strong) NSString * sf_login_redirect_uri;
+@property (nonatomic, strong) NSString * sf_password;
+@property (nonatomic, strong) NSString * sf_username;
+@property (nonatomic, strong) NSString * tds_database;
+@property (nonatomic, strong) NSString * tds_host;
+@property (nonatomic, strong) NSString * tds_password;
+@property (nonatomic, strong) NSNumber * tds_port;
+@property (nonatomic, strong) NSString * tds_server;
+@property (nonatomic, strong) NSString * tds_username;
+@property (nonatomic, strong) RptqDatabase *inDatabase;
 
 @end

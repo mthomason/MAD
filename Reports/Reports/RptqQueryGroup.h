@@ -13,12 +13,12 @@
 
 @interface RptqQueryGroup : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSNumber * sort;
-@property (nonatomic, retain) NSNumber * weight;
-@property (nonatomic, retain) RptqQueryField *hasField;
-@property (nonatomic, retain) NSSet *hasSection;
-@property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSNumber * sort;
+@property (nonatomic, strong) NSNumber * weight;
+@property (nonatomic, strong) RptqQueryField *hasField;
+@property (nonatomic, strong) NSSet *hasSection;
+@property (nonatomic, strong) RptqQuery *inQuery;
 @end
 
 @interface RptqQueryGroup (CoreDataGeneratedAccessors)

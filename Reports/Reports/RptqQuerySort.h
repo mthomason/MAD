@@ -13,10 +13,10 @@
 
 @interface RptqQuerySort : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * ascending;
-@property (nonatomic, retain) NSString * fields;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqQueryField *hasField;
-@property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, strong) NSNumber * ascending;
+@property (nonatomic, strong) NSString * fields;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqQueryField *hasField;
+@property (nonatomic, strong) RptqQuery *inQuery;
 
 @end

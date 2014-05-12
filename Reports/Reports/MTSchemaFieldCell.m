@@ -22,10 +22,5 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)dealloc {
-    [_detailLabel release];
-    [_parentContainerView release];
-    [super dealloc];
-}
 
 @end

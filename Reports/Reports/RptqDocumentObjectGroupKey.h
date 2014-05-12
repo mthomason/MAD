@@ -13,8 +13,8 @@
 
 @interface RptqDocumentObjectGroupKey : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * groupNumber;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqDocumentObject *parentObject;
+@property (nonatomic, strong) NSNumber * groupNumber;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqDocumentObject *parentObject;
 
 @end

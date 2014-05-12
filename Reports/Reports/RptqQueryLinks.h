@@ -13,20 +13,20 @@
 
 @interface RptqQueryLinks : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * designerInitalLayout;
-@property (nonatomic, retain) NSNumber * designerOriginX;
-@property (nonatomic, retain) NSNumber * designerOriginY;
-@property (nonatomic, retain) NSNumber * designerSizeHeight;
-@property (nonatomic, retain) NSNumber * designerSizeWidth;
-@property (nonatomic, retain) NSString * fieldleft;
-@property (nonatomic, retain) NSString * fieldright;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * jointype;
-@property (nonatomic, retain) NSNumber * jointypeenum;
-@property (nonatomic, retain) NSString * tableleft;
-@property (nonatomic, retain) NSString * tableright;
-@property (nonatomic, retain) RptqQueryField *hasLeftField;
-@property (nonatomic, retain) RptqQueryField *hasRightField;
-@property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, strong) NSNumber * designerInitalLayout;
+@property (nonatomic, strong) NSNumber * designerOriginX;
+@property (nonatomic, strong) NSNumber * designerOriginY;
+@property (nonatomic, strong) NSNumber * designerSizeHeight;
+@property (nonatomic, strong) NSNumber * designerSizeWidth;
+@property (nonatomic, strong) NSString * fieldleft;
+@property (nonatomic, strong) NSString * fieldright;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * jointype;
+@property (nonatomic, strong) NSNumber * jointypeenum;
+@property (nonatomic, strong) NSString * tableleft;
+@property (nonatomic, strong) NSString * tableright;
+@property (nonatomic, strong) RptqQueryField *hasLeftField;
+@property (nonatomic, strong) RptqQueryField *hasRightField;
+@property (nonatomic, strong) RptqQuery *inQuery;
 
 @end

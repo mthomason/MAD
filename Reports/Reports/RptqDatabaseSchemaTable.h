@@ -13,14 +13,14 @@
 
 @interface RptqDatabaseSchemaTable : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSString * label_plural;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * queryable;
-@property (nonatomic, retain) NSOrderedSet *hasFields;
-@property (nonatomic, retain) RptqDatabase *inDatabase;
-@property (nonatomic, retain) NSOrderedSet *inQueryTable;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * label;
+@property (nonatomic, strong) NSString * label_plural;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSNumber * queryable;
+@property (nonatomic, strong) NSOrderedSet *hasFields;
+@property (nonatomic, strong) RptqDatabase *inDatabase;
+@property (nonatomic, strong) NSOrderedSet *inQueryTable;
 @end
 
 @interface RptqDatabaseSchemaTable (CoreDataGeneratedAccessors)

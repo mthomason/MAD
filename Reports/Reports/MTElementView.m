@@ -31,18 +31,6 @@
 
 #pragma mark - NSObject
 
-- (void)dealloc {
-    [_displayBarcode release];
-    [_displayImage release];
-    [_underlineStyle release];
-    [_strikeThroughStyle release];
-    [_managedObjectContext release];
-    [_displayFont release];
-    [_displayText release];
-    [_paragraphStyle release];
-    [_displayStringAttributed release];
-	[super dealloc];
-}
 
 #pragma mark - UIView
 
@@ -62,7 +50,6 @@
     [super setAlpha:alpha];
     UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
     [self setBackgroundColor:labelBackgroundColor];
-    [labelBackgroundColor release];
 }
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -79,7 +66,6 @@
         [tapGestureRecognizer setNumberOfTouchesRequired:1];
         [tapGestureRecognizer setDelegate: self];
         [self addGestureRecognizer:tapGestureRecognizer];
-        [tapGestureRecognizer release];
         
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];

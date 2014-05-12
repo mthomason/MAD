@@ -26,7 +26,7 @@
 
 @interface MTCollectionViewCellElement : UICollectionViewCell
 
-@property (nonatomic, assign) id <MTCollectionViewCellElementDelegate> delegate;
+@property (nonatomic, weak) id <MTCollectionViewCellElementDelegate> delegate;
 
 @end
 

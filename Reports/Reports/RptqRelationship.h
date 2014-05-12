@@ -13,10 +13,10 @@
 
 @interface RptqRelationship : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * type;
-@property (nonatomic, retain) NSSet *hasFields;
-@property (nonatomic, retain) RptqDatabase *inDatabase;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * type;
+@property (nonatomic, strong) NSSet *hasFields;
+@property (nonatomic, strong) RptqDatabase *inDatabase;
 @end
 
 @interface RptqRelationship (CoreDataGeneratedAccessors)

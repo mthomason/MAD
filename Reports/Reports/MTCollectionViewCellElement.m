@@ -44,9 +44,6 @@
         [menuItems addObject:menuItemEdit];
         [menuItems addObject:menuItemFormat];
         [menu setMenuItems:menuItems];
-        [menuItemEdit release];
-        [menuItemFormat release];
-        [menuItems release];
     });
     
 

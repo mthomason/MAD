@@ -21,33 +21,23 @@
 @interface MTReportDesignerDocumentObjectFormat ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
-@property (nonatomic, retain) NSSet *userSelectedObjectIds;
+@property (nonatomic, strong) NSSet *userSelectedObjectIds;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellDecimals;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellCurrency;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellDecimals;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCurrency;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellCurrencyLocation;
 
-@property (retain, nonatomic) IBOutlet UIStepper *stepperNumberOfDecimals;
-@property (retain, nonatomic) IBOutlet UILabel *labelNumberOfDecimals;
+@property (strong, nonatomic) IBOutlet UIStepper *stepperNumberOfDecimals;
+@property (strong, nonatomic) IBOutlet UILabel *labelNumberOfDecimals;
 
-@property (nonatomic, retain) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
-@property (nonatomic, retain) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
+@property (nonatomic, strong) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
+@property (nonatomic, strong) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
 
 
 @end
 
 @implementation MTReportDesignerDocumentObjectFormat
 
-- (void)dealloc {
-    [_userSelectedObjectIds release];
-    [_tableViewCellDecimals release];
-    [_tableViewCellCurrency release];
-    [_tableViewCellCurrencyLocation release];
-    [_viewsToDisableNumeric release];
-    [_stepperNumberOfDecimals release];
-    [_labelNumberOfDecimals release];
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     
@@ -122,7 +112,6 @@
         }
     }
     [self setUserSelectedObjectIds:keepers];
-    [keepers release];
     
     for (UIView *view in [self viewsToDisableNumeric]) {
         [view setUserInteractionEnabled:numericTypeInSet];
@@ -188,7 +177,6 @@
             } else {
                 NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@""];
                 [[self labelNumberOfDecimals] setAttributedText:attributedString];
-                [attributedString release];
             }
             [[self stepperNumberOfDecimals] setValue:lastInteger];
         }
@@ -238,9 +226,8 @@
     }
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];
-    [messageSuffix release];
     [[self labelNumberOfDecimals] setAttributedText:localizedAttributedMessage];
-    return [localizedAttributedMessage autorelease];
+    return localizedAttributedMessage;
 }
 
 #pragma mark -

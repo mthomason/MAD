@@ -16,8 +16,8 @@
 @synthesize labelH1, imageThumbnail;
 
 + (UIImage *)defaultThumbnail {
-    UIImage *result = [[UIImage imageNamed:UIIMAGEDOCUMENTBLANK] retain];
-    return [result autorelease];
+    UIImage *result = [UIImage imageNamed:UIIMAGEDOCUMENTBLANK];
+    return result;
 }
 
 + (CGFloat)defaultHeight {

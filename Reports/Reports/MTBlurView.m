@@ -11,17 +11,12 @@
 
 @interface MTBlurView ()
 
-@property (nonatomic, retain) UIToolbar *toolbar;
+@property (nonatomic, strong) UIToolbar *toolbar;
 
 @end
 
 @implementation MTBlurView
 
-- (void)dealloc {
-    [_toolbar release];
-    [_blurTintColor release];
-    [super dealloc];
-}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -55,7 +50,6 @@
         UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[self bounds]];
         [[self layer] insertSublayer:[toolbar layer] atIndex:0];
         [self setToolbar:toolbar];
-        [toolbar release];
     }
 }
 

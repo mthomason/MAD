@@ -13,9 +13,9 @@
 
 @interface RptqDocumentObjectLabelLink : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * text;
-@property (nonatomic, retain) NSString * url;
-@property (nonatomic, retain) RptqDocumentObject *parentObjectLinkLabel;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * text;
+@property (nonatomic, strong) NSString * url;
+@property (nonatomic, strong) RptqDocumentObject *parentObjectLinkLabel;
 
 @end

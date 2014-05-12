@@ -14,6 +14,6 @@
 @property (nonatomic) NSUInteger dropIndex;
 @property (nonatomic) BOOL lastTouchPointValid;
 @property (nonatomic) CGPoint lastTouchPoint;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) NSString *description;
 
 @end

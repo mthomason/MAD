@@ -13,18 +13,18 @@
 
 @interface RptqDatabaseSchemaField : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * dataType;
-@property (nonatomic, retain) NSNumber * dataTypeNative;
-@property (nonatomic, retain) NSString * dataTypeNativeDescription;
-@property (nonatomic, retain) NSNumber * decimals;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * primaryKey;
-@property (nonatomic, retain) NSNumber * width;
-@property (nonatomic, retain) NSSet *inQuery;
-@property (nonatomic, retain) NSSet *inQueryField;
-@property (nonatomic, retain) RptqDatabaseSchemaTable *inTable;
+@property (nonatomic, strong) NSNumber * dataType;
+@property (nonatomic, strong) NSNumber * dataTypeNative;
+@property (nonatomic, strong) NSString * dataTypeNativeDescription;
+@property (nonatomic, strong) NSNumber * decimals;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * label;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSNumber * primaryKey;
+@property (nonatomic, strong) NSNumber * width;
+@property (nonatomic, strong) NSSet *inQuery;
+@property (nonatomic, strong) NSSet *inQueryField;
+@property (nonatomic, strong) RptqDatabaseSchemaTable *inTable;
 @end
 
 @interface RptqDatabaseSchemaField (CoreDataGeneratedAccessors)

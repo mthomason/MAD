@@ -24,22 +24,22 @@
 @interface MTElementView : UIView
     <UIGestureRecognizerDelegate>
 
-@property (nonatomic, assign) id <MTElementViewDelegate> delegate;
+@property (nonatomic, weak) id <MTElementViewDelegate> delegate;
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
 
-@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain) UIFont *displayFont;
-@property (nonatomic, retain) NSParagraphStyle *paragraphStyle;
-@property (nonatomic, retain) NSString *displayText;
-@property (nonatomic, retain) NSNumber *underlineStyle;
-@property (nonatomic, retain) NSNumber *strikeThroughStyle;
-@property (nonatomic, retain) NSAttributedString *displayStringAttributed;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) UIFont *displayFont;
+@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
+@property (nonatomic, strong) NSString *displayText;
+@property (nonatomic, strong) NSNumber *underlineStyle;
+@property (nonatomic, strong) NSNumber *strikeThroughStyle;
+@property (nonatomic, strong) NSAttributedString *displayStringAttributed;
 @property (nonatomic, assign) CGRect drawingRect;
 @property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
-@property (nonatomic, retain) UIImage *displayImage;
-@property (nonatomic, retain) MTBarcode *displayBarcode;
+@property (nonatomic, strong) UIImage *displayImage;
+@property (nonatomic, strong) MTBarcode *displayBarcode;
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;

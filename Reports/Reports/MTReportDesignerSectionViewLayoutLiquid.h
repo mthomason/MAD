@@ -32,7 +32,7 @@
 
 @interface MTReportDesignerSectionViewLayoutLiquid : UICollectionViewLayout
 
-@property (nonatomic, assign) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
+@property (nonatomic, weak) id <MTReportDesignerSectionViewLayoutLiquidDelegate, UICollectionViewDataSource> delegate;
 
 @property (nonatomic, assign) CGSize contentSize;
 

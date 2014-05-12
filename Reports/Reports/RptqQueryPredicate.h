@@ -13,12 +13,12 @@
 
 @interface RptqQueryPredicate : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * comparson;
-@property (nonatomic, retain) NSString * fieldleftpred;
-@property (nonatomic, retain) NSString * fieldrightpred;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqQueryField *hasLeftField;
-@property (nonatomic, retain) RptqQueryField *hasRightField;
-@property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, strong) NSNumber * comparson;
+@property (nonatomic, strong) NSString * fieldleftpred;
+@property (nonatomic, strong) NSString * fieldrightpred;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqQueryField *hasLeftField;
+@property (nonatomic, strong) RptqQueryField *hasRightField;
+@property (nonatomic, strong) RptqQuery *inQuery;
 
 @end

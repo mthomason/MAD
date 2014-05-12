@@ -13,29 +13,29 @@
 
 @interface RptqDocumentSection : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * height;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSNumber * layoutHeight;
-@property (nonatomic, retain) NSNumber * marginBottom;
-@property (nonatomic, retain) NSNumber * marginLeft;
-@property (nonatomic, retain) NSNumber * marginRight;
-@property (nonatomic, retain) NSNumber * marginTop;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * numberOfRows;
-@property (nonatomic, retain) NSNumber * paddingBottom;
-@property (nonatomic, retain) NSNumber * paddingLeft;
-@property (nonatomic, retain) NSNumber * paddingRight;
-@property (nonatomic, retain) NSNumber * paddingTop;
-@property (nonatomic, retain) NSNumber * type;
-@property (nonatomic, retain) NSNumber * visibility;
-@property (nonatomic, retain) NSNumber * wrappingStyle;
-@property (nonatomic, retain) NSOrderedSet *hasRows;
-@property (nonatomic, retain) RptqQueryGroup *inGroup;
-@property (nonatomic, retain) RptqDocument *inReport;
-@property (nonatomic, retain) RptqDocument *inReportPageFooter;
-@property (nonatomic, retain) RptqDocument *inReportPageHeader;
-@property (nonatomic, retain) RptqDocument *inReportReportFooter;
-@property (nonatomic, retain) RptqDocument *inReportReportHeader;
+@property (nonatomic, strong) NSNumber * height;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSNumber * layoutHeight;
+@property (nonatomic, strong) NSNumber * marginBottom;
+@property (nonatomic, strong) NSNumber * marginLeft;
+@property (nonatomic, strong) NSNumber * marginRight;
+@property (nonatomic, strong) NSNumber * marginTop;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSNumber * numberOfRows;
+@property (nonatomic, strong) NSNumber * paddingBottom;
+@property (nonatomic, strong) NSNumber * paddingLeft;
+@property (nonatomic, strong) NSNumber * paddingRight;
+@property (nonatomic, strong) NSNumber * paddingTop;
+@property (nonatomic, strong) NSNumber * type;
+@property (nonatomic, strong) NSNumber * visibility;
+@property (nonatomic, strong) NSNumber * wrappingStyle;
+@property (nonatomic, strong) NSOrderedSet *hasRows;
+@property (nonatomic, strong) RptqQueryGroup *inGroup;
+@property (nonatomic, strong) RptqDocument *inReport;
+@property (nonatomic, strong) RptqDocument *inReportPageFooter;
+@property (nonatomic, strong) RptqDocument *inReportPageHeader;
+@property (nonatomic, strong) RptqDocument *inReportReportFooter;
+@property (nonatomic, strong) RptqDocument *inReportReportHeader;
 @end
 
 @interface RptqDocumentSection (CoreDataGeneratedAccessors)

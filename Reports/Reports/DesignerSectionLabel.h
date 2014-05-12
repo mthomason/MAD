@@ -17,7 +17,7 @@
 - (void)dimView;
 - (void)normalView;
 
-@property (nonatomic, retain) UILabel *labelSectionIdentifer;
+@property (nonatomic, strong) UILabel *labelSectionIdentifer;
 @property (nonatomic, assign, readonly) BOOL selected;
 @end
 

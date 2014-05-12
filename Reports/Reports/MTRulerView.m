@@ -12,8 +12,8 @@
 
 @interface MTRulerView ()
 
-@property (nonatomic, retain) NSDictionary *attributes;
-@property (nonatomic, retain) NSDictionary *attributesMetric;
+@property (nonatomic, strong) NSDictionary *attributes;
+@property (nonatomic, strong) NSDictionary *attributesMetric;
 @property (nonatomic, assign) CGFloat thinLineWidth;
 @property (nonatomic, assign) CGFloat lineWidth;
 @property (nonatomic, assign) CGFloat eigthInchInPoints;
@@ -23,11 +23,6 @@
 
 @implementation MTRulerView
 
-- (void)dealloc{
-    [_attributesMetric release];
-    [_attributes release];
-    [super dealloc];
-}
 
 - (id)init {
     self = [super init];
@@ -63,7 +58,6 @@
                                  };
     [self setAttributes:attributes];
     [self setAttributesMetric:attributes2];
-    [paragraphStyle release];
     
     CGFloat thinLineWidth = 1.0000f / [[UIScreen mainScreen] scale];
     [self setThinLineWidth:thinLineWidth];

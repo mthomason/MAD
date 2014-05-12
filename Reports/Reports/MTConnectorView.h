@@ -20,10 +20,10 @@ typedef NS_ENUM(NSUInteger, MNSConnectorPosition) {
 
 @interface MTConnectorView : UIView
 
-@property (nonatomic, retain) UIView *anchorViewLeft;
-@property (nonatomic, retain) UIView *anchorViewRight;
-@property (nonatomic, retain) NSNumber *topLeftToBottomRight;
-@property (nonatomic, retain) NSString *linkDescription;
+@property (nonatomic, strong) UIView *anchorViewLeft;
+@property (nonatomic, strong) UIView *anchorViewRight;
+@property (nonatomic, strong) NSNumber *topLeftToBottomRight;
+@property (nonatomic, strong) NSString *linkDescription;
 
 @property (nonatomic, assign) BOOL leftViewIsInital;
 @property (nonatomic, assign) MNSConnectorPosition connectorPosition;

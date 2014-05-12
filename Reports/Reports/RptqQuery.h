@@ -13,18 +13,18 @@
 
 @interface RptqQuery : NSManagedObject
 
-@property (nonatomic, retain) NSString * cachedText;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSNumber * override;
-@property (nonatomic, retain) NSString * overrideText;
-@property (nonatomic, retain) NSSet *hasFields;
-@property (nonatomic, retain) RptqQueryCache *hasQueryCache;
-@property (nonatomic, retain) NSSet *hasQueryGroups;
-@property (nonatomic, retain) NSSet *hasQueryLinks;
-@property (nonatomic, retain) NSSet *hasQueryPredicate;
-@property (nonatomic, retain) RptqQuerySort *hasQuerySort;
-@property (nonatomic, retain) NSSet *hasQueryTables;
-@property (nonatomic, retain) RptqDatabase *inDatabase;
+@property (nonatomic, strong) NSString * cachedText;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSNumber * override;
+@property (nonatomic, strong) NSString * overrideText;
+@property (nonatomic, strong) NSSet *hasFields;
+@property (nonatomic, strong) RptqQueryCache *hasQueryCache;
+@property (nonatomic, strong) NSSet *hasQueryGroups;
+@property (nonatomic, strong) NSSet *hasQueryLinks;
+@property (nonatomic, strong) NSSet *hasQueryPredicate;
+@property (nonatomic, strong) RptqQuerySort *hasQuerySort;
+@property (nonatomic, strong) NSSet *hasQueryTables;
+@property (nonatomic, strong) RptqDatabase *inDatabase;
 @end
 
 @interface RptqQuery (CoreDataGeneratedAccessors)

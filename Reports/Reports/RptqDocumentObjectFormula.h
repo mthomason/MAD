@@ -13,14 +13,14 @@
 
 @interface RptqDocumentObjectFormula : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * functionScope;
-@property (nonatomic, retain) NSNumber * functionType;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSNumber * inputType;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * resultType;
-@property (nonatomic, retain) NSString * source;
-@property (nonatomic, retain) RptqDocumentObjectAggregate *includedInAggregateObject;
-@property (nonatomic, retain) RptqDocumentObject *parentObjectFormula;
+@property (nonatomic, strong) NSNumber * functionScope;
+@property (nonatomic, strong) NSNumber * functionType;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSNumber * inputType;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSNumber * resultType;
+@property (nonatomic, strong) NSString * source;
+@property (nonatomic, strong) RptqDocumentObjectAggregate *includedInAggregateObject;
+@property (nonatomic, strong) RptqDocumentObject *parentObjectFormula;
 
 @end

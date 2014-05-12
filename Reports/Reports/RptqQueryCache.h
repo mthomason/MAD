@@ -13,10 +13,10 @@
 
 @interface RptqQueryCache : NSManagedObject
 
-@property (nonatomic, retain) id cacheDate;
-@property (nonatomic, retain) NSData * data;
-@property (nonatomic, retain) NSString * filename;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqQuery *hasQuery;
+@property (nonatomic, strong) id cacheDate;
+@property (nonatomic, strong) NSData * data;
+@property (nonatomic, strong) NSString * filename;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqQuery *hasQuery;
 
 @end

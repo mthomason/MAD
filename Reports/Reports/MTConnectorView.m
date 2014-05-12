@@ -12,7 +12,7 @@
 
 @interface MTConnectorView ()
 
-@property (nonatomic, retain) UIColor *forgroundColor;
+@property (nonatomic, strong) UIColor *forgroundColor;
 
 @property (nonatomic, assign) CGSize shadowSize;
 @property (nonatomic, assign) CGSize smallCircleSize;
@@ -21,14 +21,6 @@
 
 @implementation MTConnectorView
 
-- (void)dealloc {
-    [_anchorViewLeft release];
-    [_anchorViewRight release];
-    [_topLeftToBottomRight release];
-    [_linkDescription release];
-    [_forgroundColor release];
-    [super dealloc];
-}
 
 - (id)init {
     return [self initWithFrame:CGRectZero];
@@ -61,8 +53,6 @@
         [self addSubview:[self anchorViewLeft]];
         [self addSubview:[self anchorViewRight]];
         
-        [anchorLeft release];
-        [anchorRight release];
         
         [self setClipsToBounds:NO];
         [[self layer] setMasksToBounds:NO];
@@ -119,7 +109,6 @@
 
     NSNumber *topLeftToBottomRightWrapper = [[NSNumber alloc] initWithBool:topLeftToBottomRight];
     [self setTopLeftToBottomRight:topLeftToBottomRightWrapper];
-    [topLeftToBottomRightWrapper release];
     
     [self setNeedsDisplay];
     

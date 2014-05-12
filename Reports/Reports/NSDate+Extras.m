@@ -208,11 +208,9 @@
     
     
     [result appendString: NSLocalizedString(@"ago.", @"ago.")];
-    NSNumber *resultType = [@(resultResolution) retain];
-    MTPair *results = [[MTPair pairWithFormer:result andLatter:@(resultResolution)] retain];
-    [resultType release];
-    [result release];
-	return [results autorelease];
+    NSNumber *resultType = @(resultResolution);
+    MTPair *results = [MTPair pairWithFormer:result andLatter:@(resultResolution)];
+	return results;
 }
 
 @end

@@ -8,9 +8,9 @@
 
 #import "UIColor+EverydayApps.h"
 
-#define vendColor(r, g, b) static UIColor *ret; if (ret == nil) ret = [[UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:1.0000f] retain]; return ret
+#define vendColor(r, g, b) return [UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:1.0000f]
 
-#define vendColorWithAlpha(r, g, b, a) static UIColor *ret; if (ret == nil) ret = [[UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:a] retain]; return ret
+#define vendColorWithAlpha(r, g, b, a) return [UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:a]
 
 @implementation UIColor(EverydayApps)
 
@@ -29,10 +29,8 @@
 
 + (id)tintColor { vendColor(13.0000f, 158.0000f, 215.0000f); }
 + (id)tintColorRed { vendColor(222.0000f, 36.0000f, 72.0000f); }
-+ (id)tintColor2 {static UIColor *ret; if (ret == nil) ret = [[UIColor whiteColor] retain]; return ret; }
++ (id)tintColor2 {static UIColor *ret; if (ret == nil) ret = [UIColor whiteColor]; return ret; }
 + (id)tintColor3 { vendColor(164.0000f, 157.0000f, 26.0000f); }
 + (id)tintColor4 { vendColor(138.0000f, 131.0000f, 1.0000f); }
-
-//vendColor(6.0000f, 156.0000f, 217.0000f);}
 
 @end

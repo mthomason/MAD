@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
     CGGradientRef gradient;
 }
 
-@property (assign) IBOutlet id <MTResizeHandleViewDelegate> delegate;
+@property (weak) IBOutlet id <MTResizeHandleViewDelegate> delegate;
 @property (assign) MNSCompusPosition type;
 @property (assign) CGPoint initalPoint;
 @property (assign, getter = isHighlighted) BOOL highlighted;

@@ -13,22 +13,22 @@
 
 @interface RptqDocument : NSManagedObject
 
-@property (nonatomic, retain) NSString * author_name;
-@property (nonatomic, retain) NSString * comment;
-@property (nonatomic, retain) NSString * copyright;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * organization;
-@property (nonatomic, retain) NSNumber * override;
-@property (nonatomic, retain) NSString * overrideText;
-@property (nonatomic, retain) NSNumber * papersize;
-@property (nonatomic, retain) NSData * thumbnailpreview;
-@property (nonatomic, retain) NSSet *hasDatabaseSchemas;
-@property (nonatomic, retain) RptqDocumentSection *hasDetailSection;
-@property (nonatomic, retain) RptqDocumentSection *hasPageFooterSection;
-@property (nonatomic, retain) RptqDocumentSection *hasPageHeaderSection;
-@property (nonatomic, retain) RptqDocumentSection *hasReportFooterSection;
-@property (nonatomic, retain) RptqDocumentSection *hasReportHeaderSection;
+@property (nonatomic, strong) NSString * author_name;
+@property (nonatomic, strong) NSString * comment;
+@property (nonatomic, strong) NSString * copyright;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * organization;
+@property (nonatomic, strong) NSNumber * override;
+@property (nonatomic, strong) NSString * overrideText;
+@property (nonatomic, strong) NSNumber * papersize;
+@property (nonatomic, strong) NSData * thumbnailpreview;
+@property (nonatomic, strong) NSSet *hasDatabaseSchemas;
+@property (nonatomic, strong) RptqDocumentSection *hasDetailSection;
+@property (nonatomic, strong) RptqDocumentSection *hasPageFooterSection;
+@property (nonatomic, strong) RptqDocumentSection *hasPageHeaderSection;
+@property (nonatomic, strong) RptqDocumentSection *hasReportFooterSection;
+@property (nonatomic, strong) RptqDocumentSection *hasReportHeaderSection;
 @end
 
 @interface RptqDocument (CoreDataGeneratedAccessors)

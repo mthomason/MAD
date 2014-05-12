@@ -20,9 +20,9 @@
 
 @interface MTSchemaFieldCell : UITableViewCell
 
-@property (nonatomic, assign) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
-@property (nonatomic, retain) IBOutlet UILabel *detailLabel;
-@property (nonatomic, retain) UIView *parentContainerView;
+@property (nonatomic, weak) IBOutlet id <MTSchemaFieldCellDelegate> delegate;
+@property (nonatomic, strong) IBOutlet UILabel *detailLabel;
+@property (nonatomic, strong) UIView *parentContainerView;
 
 @end
 

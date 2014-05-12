@@ -18,11 +18,10 @@
     UIColor *whiteColor = [UIColor whiteColor];
     [titleTextAttributes setObject:whiteColor forKey:NSForegroundColorAttributeName];
     [[self navigationBar] setTitleTextAttributes:titleTextAttributes];
-    [titleTextAttributes release];
 }
 
 - (UITabBarItem *)tabBarItem {
-    return [[[[self topViewController] tabBarItem] retain] autorelease];
+    return [[self topViewController] tabBarItem];
 }
 
 @end

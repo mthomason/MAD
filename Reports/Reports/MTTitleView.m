@@ -12,10 +12,6 @@
 
 @implementation MTTitleView
 
-- (void)dealloc {
-    [_label release];
-    [super dealloc];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -59,7 +55,6 @@
     [label setText:@""];
     [self addSubview:label];
     [self setLabel:label];
-    [label release];
 }
 
 @end

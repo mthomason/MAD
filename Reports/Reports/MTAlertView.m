@@ -10,7 +10,7 @@
 
 @interface MTAlertView ()
 
-@property (nonatomic, retain) UIAlertView *alertView;
+@property (nonatomic, strong) UIAlertView *alertView;
 @property (copy) MTAlertViewDismissBlock dismissBlock;
 @property (copy) MTAlertViewCancelBlock cancelBlock;
 
@@ -18,12 +18,6 @@
 
 @implementation MTAlertView
 
-- (void)dealloc {
-    [_alertView release];
-    [_dismissBlock release];
-    [_cancelBlock release];
-    [super dealloc];
-}
 
 - (id)initWithTitle:(NSString *)title
             message:(NSString *)message

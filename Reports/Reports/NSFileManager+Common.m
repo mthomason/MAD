@@ -15,25 +15,21 @@
 
 + (NSMutableSet *)contentsOfDocumentsDirectory {
     NSMutableSet *doc = [[NSMutableSet alloc] init];
-    NSString *documentsDirectoryPath = [[NSFileManager applicationDocumentsDirectory] retain];
-	NSArray *documentsDirectoryContents = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:NULL] retain];
+    NSString *documentsDirectoryPath = [NSFileManager applicationDocumentsDirectory];
+	NSArray *documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:NULL];
 
     [documentsDirectoryContents enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSString *filePath = [[documentsDirectoryPath stringByAppendingPathComponent:obj] retain];
-		NSURL *fileURL = [[NSURL fileURLWithPath:filePath] retain];
+        NSString *filePath = [documentsDirectoryPath stringByAppendingPathComponent:obj];
+		NSURL *fileURL = [NSURL fileURLWithPath:filePath];
 		BOOL isDirectory;
         [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
         if (!isDirectory){
             [doc addObject:fileURL];
         }
-        [fileURL release];
-        [filePath release];
         
     }];
         
-    [documentsDirectoryContents release];
-    [documentsDirectoryPath release];
-    return [doc autorelease];
+    return doc;
 }
 
 
@@ -47,7 +43,7 @@
 }
 
 + (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension {
-    NSString *directoryPath = [directory retain];
+    NSString *directoryPath = directory;
     NSMutableArray *result = [[NSMutableArray alloc] init];
     NSError *error = nil;
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
@@ -66,8 +62,7 @@
             }
         }
     }
-    [directoryPath release];
-    return [result autorelease];
+    return result;
 }
 
 + (BOOL)createDirectoryForUrlIfItDoesNotExist:(NSURL *)url {
@@ -107,7 +102,7 @@
             [defaultManager createDirectoryAtURL:appSupportDirectoryForApp withIntermediateDirectories:YES attributes:nil error:&error];
         }
     }
-    return [[appSupportDirectoryForApp retain] autorelease];
+    return appSupportDirectoryForApp;
 }
 
 + (NSString *)applicationSupportDirectoryPath {
@@ -118,9 +113,9 @@
     NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *result = nil;
     if ([documentsDirectories count] >= 1) {
-        result = [[documentsDirectories objectAtIndex: 0] retain];
+        result = [documentsDirectories objectAtIndex: 0];
     }
-	return [result autorelease];
+	return result;
 }
 
 + (NSURL *)localTemporaryDirectory {
@@ -136,7 +131,6 @@
 }
 
 + (void)wrapFile:(NSURL *)fileToAttach withExtention:(NSString *)extention overwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion {
-    NSURL *resultUrl = nil;
     NSError *fileWrapperError = nil;
     BOOL success = NO;
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: fileToAttach
@@ -147,26 +141,23 @@
         NSString *fileName = [[fileToAttach lastPathComponent] stringByDeletingPathExtension];
         if (overwrite) {
             fileName = [fileName stringByAppendingPathExtension:extention];
-            resultUrl = [[[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO] retain];
+            NSURL *resultUrl = [[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO];
             NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
             success = [data writeToURL:resultUrl options:NSDataWritingAtomic error:&errorWriting];
             if (errorWriting != nil) {
                 MTLog(@"%@", errorWriting);
             }
+            
+            completion(success, resultUrl);
         } else {
-            resultUrl = [[NSURL uniqueUrlForDocumentWithName:fileName
-                                               withExtension:extention] retain];
-            NSData *data = [[fileWrapper serializedRepresentation] retain];
+            NSURL *resultUrl = [NSURL uniqueUrlForDocumentWithName:fileName
+                                               withExtension:extention];
+            NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
-            [data release];
+            
+            completion(success, resultUrl);
         }
-    }
-    [fileWrapper release];
-    if (completion != NULL) {
-        completion(success, [resultUrl autorelease]);
-    } else {
-        [resultUrl autorelease];
     }
 }
 

@@ -13,11 +13,11 @@
 
 @interface RptqDocumentSectionRows : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSNumber * layoutHeight;
-@property (nonatomic, retain) NSNumber * rowNumber;
-@property (nonatomic, retain) NSOrderedSet *hasObjects;
-@property (nonatomic, retain) RptqDocumentSection *inSection;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSNumber * layoutHeight;
+@property (nonatomic, strong) NSNumber * rowNumber;
+@property (nonatomic, strong) NSOrderedSet *hasObjects;
+@property (nonatomic, strong) RptqDocumentSection *inSection;
 @end
 
 @interface RptqDocumentSectionRows (CoreDataGeneratedAccessors)

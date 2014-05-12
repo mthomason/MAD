@@ -12,20 +12,15 @@
 
 @interface UIViewTableSectionHeaderDatabaseTable ()
 
-@property (nonatomic, retain) UILabel *titleLabel;
-@property (nonatomic, retain) UIButton *disclosureButton;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIButton *disclosureButton;
 @property (nonatomic, assign) NSInteger section;
-@property (nonatomic, assign) id <SectionHeaderViewDelegate> delegate;
+@property (nonatomic, weak) id <SectionHeaderViewDelegate> delegate;
 
 @end
 
 @implementation UIViewTableSectionHeaderDatabaseTable
 
-- (void)dealloc {
-    [_titleLabel release];
-    [_disclosureButton release];
-    [super dealloc];
-}
 
 - (id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
     
@@ -36,7 +31,6 @@
         // Set up the tap gesture recognizer.
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
         [self addGestureRecognizer:tapGesture];
-        [tapGesture release];
         
         [self setDelegate: delegate];
         [self setUserInteractionEnabled: YES];
@@ -56,7 +50,6 @@
         label.backgroundColor = [UIColor clearColor];
         [self addSubview:label];
         [self setTitleLabel: label];
-        [label release];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(0.0000f, 5.0000f, 35.0000f, 35.0000f);

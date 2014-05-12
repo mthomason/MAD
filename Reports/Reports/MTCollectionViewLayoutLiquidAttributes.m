@@ -10,9 +10,5 @@
 
 @implementation MTCollectionViewLayoutLiquidAttributes
 
-- (void)dealloc {
-    [_description release];
-    [super dealloc];
-}
 
 @end

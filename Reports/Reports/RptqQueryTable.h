@@ -13,17 +13,17 @@
 
 @interface RptqQueryTable : NSManagedObject
 
-@property (nonatomic, retain) NSString * alias;
-@property (nonatomic, retain) NSNumber * designerInitalLayout;
-@property (nonatomic, retain) NSNumber * designerOriginX;
-@property (nonatomic, retain) NSNumber * designerOriginY;
-@property (nonatomic, retain) NSNumber * designerSizeHeight;
-@property (nonatomic, retain) NSNumber * designerSizeWidth;
-@property (nonatomic, retain) NSNumber * dropIndex;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqDatabaseSchemaTable *databaseSchemaTable;
-@property (nonatomic, retain) NSSet *hasQueryFields;
-@property (nonatomic, retain) RptqQuery *inQuery;
+@property (nonatomic, strong) NSString * alias;
+@property (nonatomic, strong) NSNumber * designerInitalLayout;
+@property (nonatomic, strong) NSNumber * designerOriginX;
+@property (nonatomic, strong) NSNumber * designerOriginY;
+@property (nonatomic, strong) NSNumber * designerSizeHeight;
+@property (nonatomic, strong) NSNumber * designerSizeWidth;
+@property (nonatomic, strong) NSNumber * dropIndex;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqDatabaseSchemaTable *databaseSchemaTable;
+@property (nonatomic, strong) NSSet *hasQueryFields;
+@property (nonatomic, strong) RptqQuery *inQuery;
 @end
 
 @interface RptqQueryTable (CoreDataGeneratedAccessors)

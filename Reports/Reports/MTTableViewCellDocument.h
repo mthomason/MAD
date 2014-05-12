@@ -14,13 +14,13 @@
 
 @interface MTTableViewCellDocument : UITableViewCell
 
-@property (nonatomic, assign) IBOutlet UILabel *labelH1;
-@property (nonatomic, assign) IBOutlet UIImageView *imageThumbnail;
+@property (nonatomic, weak) IBOutlet UILabel *labelH1;
+@property (nonatomic, weak) IBOutlet UIImageView *imageThumbnail;
 
 + (CGFloat)defaultHeight;
 + (UIImage *)defaultThumbnail;
 
-@property (nonatomic, assign) id <MTDocumentCellProtocol> delegate;
+@property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
 
 @end
 

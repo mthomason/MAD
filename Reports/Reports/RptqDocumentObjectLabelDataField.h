@@ -13,11 +13,11 @@
 
 @interface RptqDocumentObjectLabelDataField : NSManagedObject
 
-@property (nonatomic, retain) NSString * field;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) NSString * table;
-@property (nonatomic, retain) NSString * text;
-@property (nonatomic, retain) RptqDocumentObject *parentObjectLabelDataField;
-@property (nonatomic, retain) RptqQueryField *referencesQueryField;
+@property (nonatomic, strong) NSString * field;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) NSString * table;
+@property (nonatomic, strong) NSString * text;
+@property (nonatomic, strong) RptqDocumentObject *parentObjectLabelDataField;
+@property (nonatomic, strong) RptqQueryField *referencesQueryField;
 
 @end

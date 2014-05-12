@@ -13,12 +13,12 @@
 
 @interface RptqDocumentObjectAggregate : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * function;
-@property (nonatomic, retain) NSNumber * groupNumber;
-@property (nonatomic, retain) NSNumber * groupType;
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqQueryField *aggregateField;
-@property (nonatomic, retain) RptqDocumentObjectFormula *aggregateFunction;
-@property (nonatomic, retain) RptqDocumentObject *parentObject;
+@property (nonatomic, strong) NSNumber * function;
+@property (nonatomic, strong) NSNumber * groupNumber;
+@property (nonatomic, strong) NSNumber * groupType;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqQueryField *aggregateField;
+@property (nonatomic, strong) RptqDocumentObjectFormula *aggregateFunction;
+@property (nonatomic, strong) RptqDocumentObject *parentObject;
 
 @end

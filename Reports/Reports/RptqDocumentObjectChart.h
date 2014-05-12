@@ -13,7 +13,7 @@
 
 @interface RptqDocumentObjectChart : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * identifier;
-@property (nonatomic, retain) RptqDocumentObject *parentObject;
+@property (nonatomic, strong) NSNumber * identifier;
+@property (nonatomic, strong) RptqDocumentObject *parentObject;
 
 @end

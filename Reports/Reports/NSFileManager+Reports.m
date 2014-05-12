@@ -17,11 +17,11 @@
     NSArray *results = nil;
     BOOL directoryExist = [[NSFileManager defaultManager] fileExistsAtPath:dataFile];
     if (directoryExist) {   //User documetns/Data
-        results = [[NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive] retain];
+        results = [NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive];
     } else {
-        results = [@[] retain];
+        results = @[];
     }
-    return [results autorelease];
+    return results;
 }
 
 + (NSSet *)pdfFiles {
