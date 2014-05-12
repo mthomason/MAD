@@ -81,7 +81,6 @@
         [self addGestureRecognizer:tapGestureRecognizer];
         [tapGestureRecognizer release];
         
-        [self setDisplaySelected:NO];
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
         [self setManagedObjectContext:managedObjectContext];
@@ -161,24 +160,9 @@ static size_t const kDashedCount            = (2.0f);
     return [self displayWobbling];
 }
 
-- (BOOL)toggleSelected {
-    [self setDisplaySelected:[self displaySelected] == NO];
-    return [self displaySelected];
-}
-
-- (BOOL)isSelected {
-    return [self displaySelected];
-}
-
 - (void)toggleSelection:(UITapGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
-        BOOL displaySelected = [self displaySelected] == NO;
-        [self setDisplaySelected:displaySelected];
-        if (displaySelected) {
-            [[self delegate] didSelectElementView:self];
-        } else {
-            [[self delegate] didDeselectElementView:self animated:YES];
-        }
+        [[self delegate] didTouchElementView:self];
     }
 }
 

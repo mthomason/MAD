@@ -698,9 +698,10 @@ NSString * const MTNullIdentifier = @"(null)";
                                                                               limit: [pageIndexes count]];
                     [[self pageCaching] cacheObjects:objectsForPage forPage:page];
                 }
-                NSDictionary *data = pageCache[row];
-                rowData = [NSDictionary dictionaryWithDictionary:data];
-                
+                if ([pageCache count] > row) {
+                    NSDictionary *data = pageCache[row];
+                    rowData = [NSDictionary dictionaryWithDictionary:data];
+                }
             } else {
                 rowData = [(MTDataTable *)[[self query] datatable] objectAtRow:[pageIndexes firstIndex]];
             }

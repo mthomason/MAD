@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTViewControllerBarcode.h"
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeQrCodeIso18004.h"
@@ -27,21 +31,21 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 @interface MTViewControllerBarcode ()
 
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *barButtonItemSave;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @property (nonatomic, assign) BOOL editModeBarcodeType;
 
-@property (nonatomic, retain) MTViewControllerBarcodePreview *previewViewController;
-@property (nonatomic, retain, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
+@property (nonatomic, strong) MTViewControllerBarcodePreview *previewViewController;
+@property (nonatomic, strong, readwrite) MTViewControllerBarcodeOptions *optionsViewController;
 
-@property (nonatomic, retain) NSString *barcodeInput;
+@property (nonatomic, strong) NSString *barcodeInput;
 
-@property (nonatomic, retain) NSArray *cachedData;
-@property (nonatomic, retain) NSArray *cachedDataMaxicode;
-@property (nonatomic, retain) NSArray *cachedData2dComponent;
+@property (nonatomic, strong) NSArray *cachedData;
+@property (nonatomic, strong) NSArray *cachedDataMaxicode;
+@property (nonatomic, strong) NSArray *cachedData2dComponent;
 
-@property (nonatomic, retain) IBOutlet UIView *topView;
-@property (nonatomic, retain) IBOutlet UIView *bottomView;
+@property (nonatomic, weak) IBOutlet UIView *topView;
+@property (nonatomic, weak) IBOutlet UIView *bottomView;
 
 @end
 
@@ -54,20 +58,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:barcodeTypeString];
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:showErrorMessages];
     [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
-    [_cachedData release];
-    [_cachedDataMaxicode release];
-    [_cachedData2dComponent release];
-    [_barcode release];
-    [_barcodeInput release];
-    [_previewViewController release];
-    [_optionsViewController release];
-    [_queryField1 release];
-    [_queryField2 release];
-    [_barButtonItemSave release];
     [self setEditmode:NO];
-    [_topView release];
-    [_bottomView release];
-    [super dealloc];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -153,11 +144,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     
     [self setEditModeBarcodeType:NO];
 
-    MTBarcode *barcode = [[MTBarcode barcodeWithType:MTBarcodeTypeAztec] retain];
+    MTBarcode *barcode = [MTBarcode barcodeWithType:MTBarcodeTypeAztec];
     [barcode setShowErrorMessages:YES];
     [self setBarcode:barcode];
-    [barcode release];
-
 }
 
 - (void)updateBarcode {
@@ -169,36 +158,30 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                              withFieldOne:[self queryField1]
                               andFieldTwo:[self queryField2]];
     }
-    
 }
 
 - (void)didSetField1:(RptqQueryField *)field {
     if (field != nil) {
         [[self barButtonItemSave] setEnabled:YES];
     }
-    [field retain];
     [self setQueryField1:field];
-    [field release];
 }
 
 - (void)didSetField2:(RptqQueryField *)field {
-    [field retain];
     [self setQueryField2:field];
-    [field release];
 }
 
 - (RptqQueryField *)barcodeQueryField1 {
-    return [[[self queryField1] retain] autorelease];
+    return [self queryField1];
 }
 
 - (RptqQueryField *)barcodeQueryField2 {
-    return [[[self queryField2] retain] autorelease];
+    return [self queryField2];
 }
 
 - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject {
-    MTBarcode *barcode = [[RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject] retain];
+    MTBarcode *barcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:barcodeDocumentObject];
     [self setBarcode:barcode];
-    [barcode release];
     
     RptqQueryField *field1 = [barcodeDocumentObject referencesField1];
     RptqQueryField *field2 = [barcodeDocumentObject referencesField2];
@@ -371,7 +354,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 #pragma mark - MTViewControllerBarcodePreviewDelegate
 - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType {
-    MTBarcode *barcode = [[MTBarcode barcodeWithType:barcodeType] retain];
+    MTBarcode *barcode = [MTBarcode barcodeWithType:barcodeType];
     
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
     NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
@@ -384,10 +367,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     [[self optionsViewController] addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
     [[self previewViewController] setBarcodeToPreview:barcode];
     [self setBarcode:barcode];
-    [barcode release];
     
-    //[[self barcode] setBarcodeType:barcodeType];
-    //[[self optionsViewController] setBarcodeType:barcodeType];
     [self updateBarcode];
 }
 
@@ -396,22 +376,16 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     
     NSString *identifier = [segue identifier];
     if ([identifier isEqualToString:@"MTIdentifierSegueBarcodePreview"]) {
-        MTViewControllerBarcodePreview *pvc = [[segue destinationViewController] retain];
+        MTViewControllerBarcodePreview *pvc = [segue destinationViewController];
         [pvc setDelegate:self];
         [pvc setBarcodeToPreview:[self barcode]];
         [[pvc view] layoutIfNeeded];
         [self setPreviewViewController:pvc];
-        [pvc release];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
-        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[[segue destinationViewController] topViewController] retain];
+        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[segue destinationViewController] topViewController];
         [ovc setDelegate:self];
         [self setOptionsViewController:ovc];
-        [ovc release];
     }
 }
-
-//- (IBAction)save:(id)sender {
-
-//}
 
 @end

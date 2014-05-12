@@ -28,6 +28,8 @@
 @property (nonatomic, strong) UIView *pageNumberView;
 @property (nonatomic, strong) UILabel *timeSinceRefrehLabel;
 
+//@property (nonatomic, strong) UISlider *pageSlider;
+
 @end
 
 @implementation MTReportViewerReportPageViewController
@@ -42,70 +44,6 @@
         _timerLabelTimeSinceRefreh = nil;
     }
     _delegate = nil;
-}
-
-- (void)updateLateRefreshedLabel:(id)sender {
-    if ([self lastCacheDate] == nil) {
-        
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
-        NSString *cachedDataPath = [cachedDataUrl path];
-        NSError *error = nil;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
-        if (error == nil) {
-            NSDate *lastD = [attributes fileModificationDate];
-            [self setLastCacheDate: lastD];
-        }
-    }
-    
-    if ([self lastCacheDate] == nil) {
-        [[self timeSinceRefrehLabel] setText:@"No Cache"];
-
-    } else {
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
-        NSString *display = [dateStringAndInterval former];
-        [[self timeSinceRefrehLabel] setText:display];
-        
-        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
-        
-        NSTimeInterval updateLabelInSeconds;
-        
-        switch (resolution) {
-            case MTDateResolutionDay:
-                updateLabelInSeconds = 86400.0;
-                break;
-            case MTDateResolutionHour:
-                updateLabelInSeconds = 3600.0;
-                break;
-            case MTDateResolutionMinute:
-                updateLabelInSeconds = 60.0;
-                break;
-            case MTDateResolutionSecond:
-                updateLabelInSeconds = 1.0;
-                break;
-            case MTDateResolutionMillisecond:
-                updateLabelInSeconds = 0.1;
-                break;
-            default:
-                updateLabelInSeconds = 86400;
-                break;
-        }
-        
-        if ([self timerLabelTimeSinceRefreh] != nil) {
-            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-                if ([[self timerLabelTimeSinceRefreh] isValid]) {
-                    [[self timerLabelTimeSinceRefreh] invalidate];
-                }
-            }
-            [self setTimerLabelTimeSinceRefreh:nil];
-        }
-        
-        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
-                                                    selector: @selector(updateLateRefreshedLabel:) userInfo:nil
-                                                     repeats: NO];
-        [self setTimerLabelTimeSinceRefreh:t];
-    }
 }
 
 - (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
@@ -131,6 +69,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setEdgesForExtendedLayout:UIRectEdgeNone];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -209,6 +148,69 @@
 
 }
 
+- (void)updateLateRefreshedLabel:(id)sender {
+    if ([self lastCacheDate] == nil) {
+        
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
+        NSString *cachedDataPath = [cachedDataUrl path];
+        NSError *error = nil;
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
+        if (error == nil) {
+            NSDate *lastD = [attributes fileModificationDate];
+            [self setLastCacheDate: lastD];
+        }
+    }
+    
+    if ([self lastCacheDate] == nil) {
+        [[self timeSinceRefrehLabel] setText:@"No Cache"];
+        
+    } else {
+        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
+        NSString *display = [dateStringAndInterval former];
+        [[self timeSinceRefrehLabel] setText:display];
+        
+        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
+        
+        NSTimeInterval updateLabelInSeconds;
+        
+        switch (resolution) {
+            case MTDateResolutionDay:
+                updateLabelInSeconds = 86400.0;
+                break;
+            case MTDateResolutionHour:
+                updateLabelInSeconds = 3600.0;
+                break;
+            case MTDateResolutionMinute:
+                updateLabelInSeconds = 60.0;
+                break;
+            case MTDateResolutionSecond:
+                updateLabelInSeconds = 1.0;
+                break;
+            case MTDateResolutionMillisecond:
+                updateLabelInSeconds = 0.1;
+                break;
+            default:
+                updateLabelInSeconds = 86400;
+                break;
+        }
+        
+        if ([self timerLabelTimeSinceRefreh] != nil) {
+            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+                if ([[self timerLabelTimeSinceRefreh] isValid]) {
+                    [[self timerLabelTimeSinceRefreh] invalidate];
+                }
+            }
+            [self setTimerLabelTimeSinceRefreh:nil];
+        }
+        
+        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
+                                                    selector: @selector(updateLateRefreshedLabel:) userInfo:nil
+                                                     repeats: NO];
+        [self setTimerLabelTimeSinceRefreh:t];
+    }
+}
 
 - (UIView *)pageNumberViewForPageNumber:(NSUInteger)pageNumber of:(NSUInteger)numberOfPages {
     CGFloat w = 99.0000f;

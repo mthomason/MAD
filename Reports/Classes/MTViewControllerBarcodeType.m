@@ -6,25 +6,22 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTViewControllerBarcodeType.h"
 
 @interface MTViewControllerBarcodeType ()
 
-@property (retain, nonatomic) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
 
-@property (nonatomic, retain) NSDictionary *barcodeNamesByType;
-@property (nonatomic, retain) NSArray *barcodeNamesOrdered;
+@property (nonatomic, strong) NSDictionary *barcodeNamesByType;
+@property (nonatomic, strong) NSArray *barcodeNamesOrdered;
 
 @end
 
 @implementation MTViewControllerBarcodeType
-
-- (void)dealloc {
-    [_barcodeNamesByType release];
-    [_barcodeNamesOrdered release];
-    [_pickerView release];
-    [super dealloc];
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,20 +40,13 @@
 }
 
 - (void)customInit {
-    NSDictionary *namesByType = [[MTBarcode names] retain];
+    NSDictionary *namesByType = [MTBarcode names];
     [self setBarcodeNamesByType:namesByType];
-    [namesByType release];
     
     NSArray *allNames = [[self barcodeNamesByType] allValues];
-    NSArray *allNamesSorted = [[allNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)] retain];
+    NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     [self setBarcodeNamesOrdered: allNamesSorted];
-    [allNamesSorted release];
     
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -64,10 +54,6 @@
     NSString *barcodeName = [[self barcodeNamesByType] objectForKey:@([self initalKey])];
     NSInteger index = [[self barcodeNamesOrdered] indexOfObject:barcodeName];
     [[self pickerView] selectRow:index inComponent:0 animated:animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - UIPickerView Data Source
@@ -95,9 +81,8 @@
                                  NSForegroundColorAttributeName : forgroundColor,
                                  NSParagraphStyleAttributeName : paragraph,
                                  };
-    [paragraph release];
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:tableName attributes:attributes];
-    return  [attributedString autorelease];
+    return  attributedString;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -200,24 +200,6 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="ERc-MK-TMQ" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
-                        <barButtonItem style="plain" id="o4d-Rw-Lqn">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="rXE-1c-kzE">
-                                <rect key="frame" x="16" y="6" width="200" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
-                                <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jvQ-RC-rI9">
-                                        <rect key="frame" x="0.0" y="3" width="200" height="34"/>
-                                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
-                                    </slider>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="jvQ-RC-rI9" firstAttribute="top" secondItem="rXE-1c-kzE" secondAttribute="top" constant="3" id="gRx-rE-CaW"/>
-                                    <constraint firstItem="jvQ-RC-rI9" firstAttribute="leading" secondItem="rXE-1c-kzE" secondAttribute="leading" constant="2" id="kxe-LG-XIB"/>
-                                    <constraint firstItem="jvQ-RC-rI9" firstAttribute="centerX" secondItem="rXE-1c-kzE" secondAttribute="centerX" id="q07-6s-P1y"/>
-                                </constraints>
-                            </view>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="uNL-pS-3JN"/>
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="HDt-8o-ngI"/>
                         <barButtonItem width="44" systemItem="action" id="Mnl-SJ-Bua">
@@ -246,9 +228,6 @@
                         <outlet property="barButtonItemActivity" destination="Mnl-SJ-Bua" id="dpH-he-PDw"/>
                         <outlet property="barButtonItemDone" destination="zUj-Uf-OIx" id="Hdo-8t-1YQ"/>
                         <outlet property="barButtonItemRefresh" destination="kyb-ds-B3C" id="T1g-Yx-0qY"/>
-                        <outlet property="barButtonItemSliderView" destination="o4d-Rw-Lqn" id="D6d-xW-afc"/>
-                        <outlet property="sliderPagination" destination="jvQ-RC-rI9" id="OIh-p0-m58"/>
-                        <outlet property="sliderView" destination="rXE-1c-kzE" id="man-hs-nFo"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Q9-tm-5N4" userLabel="First Responder" sceneMemberID="firstResponder"/>

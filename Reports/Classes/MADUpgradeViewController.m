@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MADUpgradeViewController.h"
 #import "NSFileManager+Common.h"
 #import "NSFileManager+Reports.h"
@@ -192,7 +196,7 @@ const NSInteger currentMajorVersion = 2;
             
             //Wrap all modo files from the ~/Documents/Data folder, and save as
             //  mad files in the ~/Documents folder.
-            NSArray *oldSchemaFiles = [[NSFileManager schemaFilesOld] retain];
+            NSArray *oldSchemaFiles = [NSArray arrayWithArray:[NSFileManager schemaFilesOld]];
             for (NSURL *urlToUpgrade in oldSchemaFiles) {
                 [NSFileManager wrapFile:urlToUpgrade withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
                     if (success) {
@@ -214,8 +218,6 @@ const NSInteger currentMajorVersion = 2;
                     }
                 }];
             }
-            [oldSchemaFiles release];
-            
         } else if ([self upgradeVersion2] == YES) {
             //For the future
         }

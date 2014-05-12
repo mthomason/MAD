@@ -75,8 +75,6 @@
 
 @property (nonatomic, assign) id <MTViewControllerBarcodeOptionsDelegate> delegate;
 
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
-
 @property (nonatomic, retain) NSArray *sampleBarcodeData;
 @property (nonatomic, retain) NSArray *sampleBarcodeData2dComponent;
 @property (nonatomic, retain) NSArray *sampleBarcodeDataMaxicode;

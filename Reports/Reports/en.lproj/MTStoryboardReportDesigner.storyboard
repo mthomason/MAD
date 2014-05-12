@@ -215,24 +215,6 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="D89-Nb-LnQ" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
-                        <barButtonItem style="plain" id="bMb-jS-V8M">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="wY2-Or-Evv">
-                                <rect key="frame" x="16" y="6" width="200" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
-                                <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="az8-gW-1Nn">
-                                        <rect key="frame" x="0.0" y="3" width="200" height="34"/>
-                                        <color key="minimumTrackTintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
-                                    </slider>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="az8-gW-1Nn" firstAttribute="centerX" secondItem="wY2-Or-Evv" secondAttribute="centerX" id="0PG-NP-yfI"/>
-                                    <constraint firstItem="az8-gW-1Nn" firstAttribute="leading" secondItem="wY2-Or-Evv" secondAttribute="leading" constant="2" id="gYB-Ju-iKd"/>
-                                    <constraint firstItem="az8-gW-1Nn" firstAttribute="top" secondItem="wY2-Or-Evv" secondAttribute="top" constant="3" id="isY-pu-Gl6"/>
-                                </constraints>
-                            </view>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="8RI-IH-kqi"/>
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="b36-6h-dRQ"/>
                         <barButtonItem width="44" systemItem="action" id="qcM-qp-6Ho">
@@ -259,9 +241,6 @@
                         <outlet property="barButtonItemActivity" destination="qcM-qp-6Ho" id="hhp-gb-egF"/>
                         <outlet property="barButtonItemDone" destination="zJA-ug-jW1" id="zRk-XV-wTY"/>
                         <outlet property="barButtonItemRefresh" destination="ajA-Ys-fgg" id="TaH-ax-dEq"/>
-                        <outlet property="barButtonItemSliderView" destination="bMb-jS-V8M" id="xyI-FY-jA4"/>
-                        <outlet property="sliderPagination" destination="az8-gW-1Nn" id="wtd-jU-RsN"/>
-                        <outlet property="sliderView" destination="wY2-Or-Evv" id="WlM-jv-nap"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DFG-2q-898" userLabel="First Responder" sceneMemberID="firstResponder"/>

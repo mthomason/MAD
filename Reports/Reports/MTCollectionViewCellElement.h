@@ -19,6 +19,7 @@
 
 - (void)deleteDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
+- (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell;
 - (MTDocumentObjectType)objectTypeRepresentedByCell:(MTCollectionViewCellElement *)cell;
 
 @end

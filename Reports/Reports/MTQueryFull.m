@@ -229,114 +229,144 @@
     return result;
 }
 
+- (NSArray *)activeBarcodesForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    //Fields in barcode bitches.
+    NSString *entityObjectBarcode = NSStringFromClass([RptqDocumentObjectBarcode class]);
+    NSFetchRequest *fetchRequestBarcode = [[NSFetchRequest alloc] initWithEntityName:entityObjectBarcode];
+    NSPredicate *predicateBarcode = [NSPredicate predicateWithValue:YES];
+    [fetchRequestBarcode setPredicate:predicateBarcode];
+    NSError *fetchBarcodeError = nil;
+    NSArray *barcodes = [managedObjectContext executeFetchRequest:fetchRequestBarcode error:&fetchBarcodeError];
+    if (fetchBarcodeError != nil) {
+        barcodes = [managedObjectContext executeFetchRequest:fetchRequestBarcode error:&fetchBarcodeError];
+    }
+    return barcodes;
+}
+
+- (NSArray *)activeDataLabelsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    //Fields in data label.
+    NSString *entityNameObjectLabelDataField = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
+    NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityNameObjectLabelDataField];
+    NSPredicate *predicateDataField = [NSPredicate predicateWithValue:YES];
+    [fetchRequestDataField setPredicate:predicateDataField];
+    NSError *fetchFieldsError = nil;
+    NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
+    if (fetchFieldsError != nil) {
+        dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
+    }
+    return dataObjectFields;
+}
+
+- (NSArray *)activeAggregateObjectsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    //Fields in aggregate function.
+    NSString *entityObjectAggregate = NSStringFromClass([RptqDocumentObjectAggregate class]);
+    NSFetchRequest *fetchRequestAggregate = [[NSFetchRequest alloc] initWithEntityName:entityObjectAggregate];
+    NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
+    [fetchRequestAggregate setPredicate:predicate];
+    NSError *fetchAggregateError = nil;
+    NSArray *aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate error:&fetchAggregateError];
+    if (fetchAggregateError != nil) {
+        aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate error:&fetchAggregateError];
+    }
+    return aggregateObjectFields;
+}
+
+- (NSArray *)activeGroupedObjectsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    //Fields in query groups.
+    NSString *entityObjectQueryGroup = NSStringFromClass([RptqQueryGroup class]);
+    NSFetchRequest *fetchRequestQueryGroup = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryGroup];
+    NSPredicate *predicateQueryGroups = [NSPredicate predicateWithValue:YES];
+    [fetchRequestQueryGroup setPredicate:predicateQueryGroups];
+    NSError *fetchQueryGroupError = nil;
+    NSArray *queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup error:&fetchQueryGroupError];
+    if (fetchQueryGroupError != nil) {
+        queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup error:&fetchQueryGroupError];
+    }
+    return queryGroups;
+}
+
+- (NSArray *)activeQueryLinkObjectsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    //Fields in query links.
+    NSString *entityObjectQueryLinks = NSStringFromClass([RptqQueryLinks class]);
+    NSFetchRequest *fetchRequestQueryLinks = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryLinks];
+    NSPredicate *predicateQueryLinks = [NSPredicate predicateWithValue:YES];
+    [fetchRequestQueryLinks setPredicate:predicateQueryLinks];
+    NSError *fetchQueryLinksError = nil;
+    NSArray *queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks error:&fetchQueryLinksError];
+    if (fetchQueryLinksError != nil) {
+        queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks error:&fetchQueryLinksError];
+    }
+    return queryLinks;
+}
+
+- (NSSet *)activeQueryFieldsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSArray *barcodes = [NSArray arrayWithArray:[self activeBarcodesForManagedObjectContext:managedObjectContext]];
+    NSArray *dataObjectFields = [NSArray arrayWithArray:[self activeDataLabelsForManagedObjectContext:managedObjectContext]];
+    NSArray *aggregateObjectFields = [NSArray arrayWithArray:[self activeAggregateObjectsForManagedObjectContext:managedObjectContext]];;
+    NSArray *queryGroups = [NSArray arrayWithArray:[self activeGroupedObjectsForManagedObjectContext:managedObjectContext]];
+    NSArray *queryLinks = [NSArray arrayWithArray:[self activeQueryLinkObjectsForManagedObjectContext:managedObjectContext]];
+    
+    NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count] + [queryGroups count];
+    NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
+    
+    for (RptqDocumentObjectBarcode *dataField in barcodes) {
+        RptqQueryField *queryField = [dataField referencesField1];
+        if (queryField != nil) {
+            [queryFields addObject:queryField];
+        }
+        RptqQueryField *queryField2 = [dataField referencesField2];
+        if (queryField2 != nil) {
+            [queryFields addObject:queryField2];
+        }
+    }
+    
+    for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
+        RptqQueryField *queryField = [dataField referencesQueryField];
+        if (queryField != nil) {
+            [queryFields addObject:queryField];
+        }
+    }
+    
+    for (RptqDocumentObjectAggregate *dataField in aggregateObjectFields) {
+        RptqQueryField *queryField = [dataField aggregateField];
+        if (queryField != nil) {
+            [queryFields addObject:queryField];
+        }
+    }
+    
+    for (RptqQueryGroup *queryGroup in queryGroups) {
+        RptqQueryField *queryField = [queryGroup hasField];
+        if (queryField != nil) {
+            [queryFields addObject:queryField];
+        }
+    }
+    
+    for (RptqQueryLinks *queryLink in queryLinks) {
+        RptqQueryField *queryFieldLeft = [queryLink hasLeftField];
+        if (queryFieldLeft != nil) {
+            [queryFields addObject:queryFieldLeft];
+        }
+        RptqQueryField *queryFieldRight = [queryLink hasRightField];
+        if (queryFieldRight != nil) {
+            [queryFields addObject:queryFieldRight];
+        }
+    }
+
+    return queryFields;
+}
+
 - (NSString *)sqlSelectExpressionWithTables:(NSArray *)tables usingOnlyActiveFields:(BOOL)onlyActiveFields forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
     NSMutableString *result = [[NSMutableString alloc] init];
     
     if (onlyActiveFields) {
         
-        //Logic to return only needed fields.
-        
-        //Fields in barcode bitches.
-        NSString *entityObjectBarcode = NSStringFromClass([RptqDocumentObjectBarcode class]);
-        NSFetchRequest *fetchRequestBarcode = [[NSFetchRequest alloc] initWithEntityName:entityObjectBarcode];
-        NSPredicate *predicateBarcode = [NSPredicate predicateWithValue:YES];
-        [fetchRequestBarcode setPredicate:predicateBarcode];
-        NSError *fetchBarcodeError = nil;
-        NSArray *barcodes = [managedObjectContext executeFetchRequest:fetchRequestBarcode error:&fetchBarcodeError];
-        if (fetchBarcodeError != nil) {
-            barcodes = [managedObjectContext executeFetchRequest:fetchRequestBarcode error:&fetchBarcodeError];
-        }
-        
-        //Fields in data label.
-        NSString *entityNameObjectLabelDataField = NSStringFromClass([RptqDocumentObjectLabelDataField class]);
-        NSFetchRequest *fetchRequestDataField = [[NSFetchRequest alloc] initWithEntityName:entityNameObjectLabelDataField];
-        NSPredicate *predicateDataField = [NSPredicate predicateWithValue:YES];
-        [fetchRequestDataField setPredicate:predicateDataField];
-        NSError *fetchFieldsError = nil;
-        NSArray *dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
-        if (fetchFieldsError != nil) {
-            dataObjectFields = [managedObjectContext executeFetchRequest:fetchRequestDataField error:&fetchFieldsError];
-        }
-        
-        //Fields in aggregate function.
-        NSString *entityObjectAggregate = NSStringFromClass([RptqDocumentObjectAggregate class]);
-        NSFetchRequest *fetchRequestAggregate = [[NSFetchRequest alloc] initWithEntityName:entityObjectAggregate];
-        NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-        [fetchRequestAggregate setPredicate:predicate];
-        NSError *fetchAggregateError = nil;
-        NSArray *aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate error:&fetchAggregateError];
-        if (fetchAggregateError != nil) {
-            aggregateObjectFields = [managedObjectContext executeFetchRequest:fetchRequestAggregate error:&fetchAggregateError];
-        }
-        
-        //Fields in query groups.
-        NSString *entityObjectQueryGroup = NSStringFromClass([RptqQueryGroup class]);
-        NSFetchRequest *fetchRequestQueryGroup = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryGroup];
-        NSPredicate *predicateQueryGroups = [NSPredicate predicateWithValue:YES];
-        [fetchRequestQueryGroup setPredicate:predicateQueryGroups];
-        NSError *fetchQueryGroupError = nil;
-        NSArray *queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup error:&fetchQueryGroupError];
-        if (fetchAggregateError != nil) {
-            queryGroups = [managedObjectContext executeFetchRequest:fetchRequestQueryGroup error:&fetchQueryGroupError];
-        }
-        
-        //Fields in query links.
-        NSString *entityObjectQueryLinks = NSStringFromClass([RptqQueryLinks class]);
-        NSFetchRequest *fetchRequestQueryLinks = [[NSFetchRequest alloc] initWithEntityName:entityObjectQueryLinks];
-        NSPredicate *predicateQueryLinks = [NSPredicate predicateWithValue:YES];
-        [fetchRequestQueryLinks setPredicate:predicateQueryLinks];
-        NSError *fetchQueryLinksError = nil;
-        NSArray *queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks error:&fetchQueryLinksError];
-        if (fetchQueryLinksError != nil) {
-            queryLinks = [managedObjectContext executeFetchRequest:fetchRequestQueryLinks error:&fetchQueryLinksError];
-        }
-        
-        NSUInteger estimatedSetSize = [dataObjectFields count] + [aggregateObjectFields count] + [queryGroups count];
-        NSMutableSet *queryFields = [[NSMutableSet alloc] initWithCapacity:estimatedSetSize];
-        
-        for (RptqDocumentObjectBarcode *dataField in barcodes) {
-            RptqQueryField *queryField = [dataField referencesField1];
-            if (queryField != nil) {
-                [queryFields addObject:queryField];
-            }
-            RptqQueryField *queryField2 = [dataField referencesField2];
-            if (queryField2 != nil) {
-                [queryFields addObject:queryField2];
-            }
-        }
-        
-        for (RptqDocumentObjectLabelDataField *dataField in dataObjectFields) {
-            RptqQueryField *queryField = [dataField referencesQueryField];
-            if (queryField != nil) {
-                [queryFields addObject:queryField];
-            }
-        }
-        
-        for (RptqDocumentObjectAggregate *dataField in aggregateObjectFields) {
-            RptqQueryField *queryField = [dataField aggregateField];
-            if (queryField != nil) {
-                [queryFields addObject:queryField];
-            }
-        }
-        
-        for (RptqQueryGroup *queryGroup in queryGroups) {
-            RptqQueryField *queryField = [queryGroup hasField];
-            if (queryField != nil) {
-                [queryFields addObject:queryField];
-            }
-        }
-        
-        for (RptqQueryLinks *queryLink in queryLinks) {
-            RptqQueryField *queryFieldLeft = [queryLink hasLeftField];
-            if (queryFieldLeft != nil) {
-                [queryFields addObject:queryFieldLeft];
-            }
-            RptqQueryField *queryFieldRight = [queryLink hasRightField];
-            if (queryFieldRight != nil) {
-                [queryFields addObject:queryFieldRight];
-            }
-        }
+        NSSet *queryFields = [NSSet setWithSet:[self activeQueryFieldsForManagedObjectContext:managedObjectContext]];
         
         NSUInteger fieldCounter = 0;
         for (RptqQueryField *queryField in queryFields) {
@@ -565,6 +595,10 @@
     }
     
     return sortedSortDescriptorsGroup;
+}
+
+- (NSArray *)sortDescriptorsOnlyActiveFields:(BOOL)onlyActiveFields {
+    
 }
 
 @end

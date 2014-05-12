@@ -103,7 +103,7 @@
 }
 
 - (void)format:(id)sender {
-    [[self delegate] editDocumentObjectRepresentedByCell:self];
+    [[self delegate] formatDocumentObjectRepresentedByCell:self];
 }
 
 //- (void)duplicate:(id)sender {

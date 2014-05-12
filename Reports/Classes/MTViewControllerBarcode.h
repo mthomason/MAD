@@ -28,10 +28,10 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 //@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
 
-@property (nonatomic, retain, readwrite) RptqQueryField *queryField1;
-@property (nonatomic, retain, readwrite) RptqQueryField *queryField2;
-@property (nonatomic, retain, readwrite) MTBarcode *barcode;
-@property (nonatomic, retain, readonly) MTViewControllerBarcodeOptions *optionsViewController;
+@property (nonatomic, strong, readwrite) RptqQueryField *queryField1;
+@property (nonatomic, strong, readwrite) RptqQueryField *queryField2;
+@property (nonatomic, strong, readwrite) MTBarcode *barcode;
+@property (nonatomic, strong, readonly) MTViewControllerBarcodeOptions *optionsViewController;
 @property (nonatomic, assign) BOOL editmode;
 
 - (void)updateBarcode;

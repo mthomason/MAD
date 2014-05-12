@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeGridMatrix.h"
@@ -23,9 +27,7 @@
 #import "MTQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-
 #import "AppDelegate.h"
-
 
 @interface MTViewControllerBarcodeOptions ()
 
@@ -33,8 +35,8 @@
 @property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
 @property (nonatomic, assign) NSUInteger sampleBarcodeData2dComponentIndex;
 
-@property (nonatomic, retain) UIFont *mainFont;
-@property (nonatomic, retain) UIFont *detailFont;
+@property (nonatomic, strong) UIFont *mainFont;
+@property (nonatomic, strong) UIFont *detailFont;
 
 @property (nonatomic, assign) NSInteger borderWidth;
 
@@ -51,16 +53,6 @@
     if ([[action identifier] isEqualToString:@"MTIdentifierSegueBarcodeFieldUnwind"]) {
     } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueBarcodeTypeUnwind"]) {
     }
-}
-
-- (void)dealloc {
-    //[_applicationInstance release];
-    [_sampleBarcodeDataMaxicode release];
-    [_sampleBarcodeData2dComponent release];
-    [_sampleBarcodeData release];
-    [_mainFont release];
-    [_detailFont release];
-    [super dealloc];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -89,14 +81,9 @@
     NSArray *sampleBarcodeData = @[@{@"Set Datasource" : @"Set Datasource"}];
     NSArray *sampleBarcodeDataMaxicode = @[@{@"" : @""}];
     NSArray *sampleBarcodeData2dComponent = @[@{@"" : @""}];
-    [sampleBarcodeData retain];
-    [sampleBarcodeDataMaxicode retain];
-    [sampleBarcodeData2dComponent retain];
     [self setSampleBarcodeData:sampleBarcodeData];
     [self setSampleBarcodeDataMaxicode:sampleBarcodeDataMaxicode];
-    [sampleBarcodeData release];
-    [sampleBarcodeData2dComponent release];
-    [sampleBarcodeDataMaxicode release];
+    [self setSampleBarcodeData2dComponent:sampleBarcodeData2dComponent];
     [self setSelectingField1:NO];
     [self setSelectingField2:NO];
     [self setSelecting2dComponentType:NO];
@@ -263,7 +250,7 @@
     if (section == [self tableViewSectionDefination]) {
         switch ([indexPath row]) {
             case 0: {
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeData forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeData forIndexPath:indexPath];
                 
                 NSInteger sampleBarcodeDataCount = [[self sampleBarcodeData] count];
                 
@@ -282,13 +269,14 @@
                 
                 break;
             }
-            case 1:
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeType forIndexPath:indexPath] retain];
+            case 1: {
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeType forIndexPath:indexPath];
                 NSString *barcodeName = [MTBarcode barcodeNameForType:[barcode barcodeType]];
                 [[cell detailTextLabel] setText:barcodeName];
                 break;
-            case 2:
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeHasOptionalInput forIndexPath:indexPath] retain];
+            }
+            case 2: {
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeHasOptionalInput forIndexPath:indexPath];
                 if ([barcode isKindOfClass:[MTBarcodeCode39Iso16388 class]] ||
                     [barcode isKindOfClass:[MTBarcodeCode39Extended class]]) {
                     NSString *mod43CheckDigit = @"Mod-43 Check Digit";
@@ -306,6 +294,7 @@
                     }
                 }
                 break;
+            }
             default:
                 break;
         }
@@ -313,21 +302,21 @@
         switch ([indexPath row]) {
             case 0: {
                 BOOL humanReadable = [barcode humanReadable];
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowHumanReadableText forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowHumanReadableText forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = humanReadable ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
                 break;
             }
             case 1: {
                 BOOL showErrorMessages = [barcode showErrorMessages];
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowErrorMessages forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowErrorMessages forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = showErrorMessages ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
                 break;
             }
             case 2: {
                 
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceSymbolHeight forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceSymbolHeight forIndexPath:indexPath];
                 NSInteger symbolHeight = [barcode height];
                 
                 static NSInteger tagWithStepper = 48584;
@@ -342,14 +331,11 @@
                     [[cell contentView] addSubview:stepper];
                     CGPoint newCenter = CGPointMake(correctX, centerY);
                     [stepper setCenter:newCenter];
-                    [stepper release];
-                    
                     [cell setTag: tagWithStepper];
                 }
                 NSString *detail = [NSString stringWithFormat:@"%ld", (long)symbolHeight];
                 NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
                 [[cell textLabel] setAttributedText:attributedString];
-                
             }
             default:
                 break;
@@ -360,25 +346,25 @@
         
         switch ([indexPath row]) {
             case 0: {
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderNone forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderNone forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
                 break;
             }
             case 1: {
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorder forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorder forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBox ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
                 break;
             }
             case 2: {
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderOption2 forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderOption2 forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBind ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
                 break;
             }
             case 3: {
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderWidth forIndexPath:indexPath] retain];
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderWidth forIndexPath:indexPath];
                 
                 static NSInteger tagWithStepper = 34314;
                 if ([cell tag] != tagWithStepper) {
@@ -392,7 +378,6 @@
                     [[cell contentView] addSubview:stepper];
                     CGPoint newCenter = CGPointMake(correctX, centerY);
                     [stepper setCenter:newCenter];
-                    [stepper release];
                     
                     [cell setTag: tagWithStepper];
                 }
@@ -407,13 +392,14 @@
         }
     } else if (section == [self tableViewSection2dComponent]) {
         switch ([indexPath row]) {
-            case 0:
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentEnabled forIndexPath:indexPath] retain];
+            case 0: {
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentEnabled forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = [barcode has2dComponentEnabled] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
                 break;
-            case 1:
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentType forIndexPath:indexPath] retain];
+            }
+            case 1: {
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentType forIndexPath:indexPath];
                 NSInteger type = [barcode has2dComponentType];
                 NSString *detailText = [NSString stringWithFormat:@"%ld", (long)type];
                 [[cell detailTextLabel] setText:detailText];
@@ -423,27 +409,28 @@
                 UIColor *labelColor = enabled ? [UIColor darkTextColor] : [UIColor lightGrayColor];
                 [[cell textLabel] setTextColor:labelColor];
                 break;
-            case 2:
-                cell = [[tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentDatasource forIndexPath:indexPath] retain];
+            }
+            case 2: {
+                cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentDatasource forIndexPath:indexPath];
                 NSDictionary *sampleItem = [[self sampleBarcodeData2dComponent] objectAtIndex:[self sampleBarcodeData2dComponentIndex]];
                 NSString *sampleText = [NSString stringWithFormat:@"%@", [[sampleItem allValues] lastObject]];
                 [[self delegate] barcode2dComponentsetSampleData:@[sampleText]];
 
                 NSString *fieldTwoName = [[[self delegate] barcodeQueryField2] toStringHumanReadable];
                 [[cell detailTextLabel] setText:fieldTwoName];
-                
                 break;
+            }
             default:
                 break;
         }
     }
-    return [cell autorelease];
+    return cell;
 }
 
 + (NSAttributedString *)subject:(NSString *)subjectPart withDetail:(NSString *)detailPart {
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    UIFont *boldFont = [[appDelegate mainFont] retain];
-    UIFont *systemFont = [[appDelegate detailFont] retain];
+    UIFont *boldFont = [appDelegate mainFont];
+    UIFont *systemFont = [appDelegate detailFont];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont, NSForegroundColorAttributeName : [UIColor blackColor]};
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont, NSForegroundColorAttributeName : [UIColor lightGrayColor]};
     
@@ -452,9 +439,7 @@
     NSString *pointsString = [@" " stringByAppendingString:detailPart];
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];
-    [messageSuffix release];
-    [boldFont release]; [systemFont release];
-    return [localizedAttributedMessage autorelease];
+    return localizedAttributedMessage;
 }
 
 
@@ -775,7 +760,7 @@
 }
 - (NSString *)initalPrimaryData {
     MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)[[self delegate] barcodeToDisplay];
-    return [[[barcode primaryData] retain] autorelease];
+    return [barcode primaryData];
 }
 
 - (void)barcodeMaxicodeDidChooseSampleData:(NSArray *)sampleData {

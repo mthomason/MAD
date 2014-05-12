@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerStaticSelectRow.h"
 
@@ -23,20 +27,10 @@
     
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) { }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setDisplayingSize:NO];
     [self setDisplayingErrorCorrection:NO];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -86,7 +80,6 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSInteger section = [indexPath section];
@@ -96,10 +89,8 @@
             
             switch (row) {
                 case 0:
-                    
                     [[self delegate] barcodeQrCodeDidEnableAutomaticResizing];
                     break;
-                    
                 case 1:
                     [self setDisplayingSize:YES];
                     [self setDisplayingErrorCorrection:NO];

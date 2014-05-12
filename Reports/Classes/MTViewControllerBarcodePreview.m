@@ -6,46 +6,36 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
 #import "MTViewControllerBarcodePreview.h"
 #import "MTBarcodeView.h"
 #import "MTBarcode.h"
 
 @interface MTViewControllerBarcodePreview ()
 
-@property (nonatomic, retain) IBOutlet UIPickerView *barcodePicker;
-@property (nonatomic, retain) IBOutlet MTBarcodeView *barcodeView;
+@property (nonatomic, weak) IBOutlet UIPickerView *barcodePicker;
+@property (nonatomic, weak) IBOutlet MTBarcodeView *barcodeView;
 
-@property (nonatomic, retain) NSDictionary *barcodeNamesByType;
-@property (nonatomic, retain) NSArray *barcodeNamesOrdered;
-@property (nonatomic, retain) MTBarcode *barcode;
+@property (nonatomic, strong) NSDictionary *barcodeNamesByType;
+@property (nonatomic, strong) NSArray *barcodeNamesOrdered;
+@property (nonatomic, strong) MTBarcode *barcode;
 
 @end
 
 @implementation MTViewControllerBarcodePreview
 
-- (void)dealloc {
-    [_barcode release];
-    [_barcodeNamesOrdered release];
-    [_barcodeNamesByType release];
-    [_barcodePicker release];
-    [_barcodeView release];
-    [super dealloc];
-}
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        NSDictionary *namesByType = [[MTBarcode names] retain];
+        NSDictionary *namesByType = [MTBarcode names];
         [self setBarcodeNamesByType:namesByType];
-        [namesByType release];
         
         NSArray *allNames = [[self barcodeNamesByType] allValues];
-        NSArray *allNamesSorted = [[allNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)] retain];
+        NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
         [self setBarcodeNamesOrdered: allNamesSorted];
-        [allNamesSorted release];
-        
-        
-        
     }
     return self;
 }
@@ -53,12 +43,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[self barcodeView] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)setBarcodeToPreview:(MTBarcode *)barcode {
@@ -72,10 +60,5 @@
     }
     [[self barcodeView] setNeedsDisplay];
 }
-
-//- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
-    
-//}
-
 
 @end

@@ -15,8 +15,7 @@
 @class MTElementView, MTBarcode;
 
 @protocol MTElementViewDelegate
-- (void)didSelectElementView:(id)sender;
-- (void)didDeselectElementView:(id)sender animated:(BOOL)animated;
+- (void)didTouchElementView:(MTElementView *)elementView;
 - (void)didHighlightElementView:(id)sender;
 - (void)didUnhighlightElementView:(id)sender;
 - (void)sizeChanged:(id)sender;
@@ -26,8 +25,6 @@
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) id <MTElementViewDelegate> delegate;
-
-@property (nonatomic, assign) BOOL displaySelected;
 
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
@@ -46,8 +43,6 @@
 
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
-- (BOOL)isSelected;
-- (BOOL)toggleSelected;
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
