@@ -74,12 +74,29 @@
 
 @property (nonatomic, strong) UIToolbar *toolbarSideRight;
 
+@property (nonatomic, strong) UIBarButtonItem *barButtonLabelStatus;
+
+@property (nonatomic, strong) UILabel *labelStatus;
+
+@property (nonatomic, strong) NSDictionary *attributesLabelDateUpdated;
+@property (nonatomic, strong) NSDictionary *attributesLabelNumberOfPages;
+@property (nonatomic, strong) NSDictionary *attributesRecordsRead;
+@property (nonatomic, strong) NSDictionary *attributesStatusLabel;
+
+@property (nonatomic, strong) NSAttributedString *statusMessage1;
+@property (nonatomic, strong) NSAttributedString *statusMessage2;
+@property (nonatomic, strong) NSAttributedString *statusMessage3;
+
 @end
 
 @implementation MTReportViewerController
 
 - (void)dealloc {
     _asyncDelegate = nil;
+    [self timerDealloc];
+}
+
+- (void)timerDealloc {
     if (_timerLabelTimeSinceRefreh != nil) {
         if ([_timerLabelTimeSinceRefreh respondsToSelector:@selector(isValid)]) {
             if ([_timerLabelTimeSinceRefreh isValid]) {
@@ -125,14 +142,20 @@
 - (void)initalize {
     
     UIToolbar *vertToolbar = [[UIToolbar alloc] init];
-    //[vertToolbar setTr]
-    //[vertToolbar setBarTintColor:[UIColor colorWithRed:0.0000f green:0.0000f blue:1.0000f alpha:0.9000f]];
     MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
     [vertSlider setMaximumValue:0];
     [vertSlider setMinimumValue:0];
     [vertSlider setContinuous:YES];
     [vertSlider setTintColor:[UIColor tintColorRed]];
 
+    UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
+    [labelStatus setNumberOfLines:2];
+    [labelStatus setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+    
+    UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
+    [self setBarButtonLabelStatus:barButtonLabelStatus];
+    [self setLabelStatus:labelStatus];
+    
     UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapped:)];
     [vertSlider addGestureRecognizer:sliderTapped];
     
@@ -141,6 +164,35 @@
     
     [self setPageSlider:vertSlider];
     [self setToolbarSideRight:vertToolbar];
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
+    [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
+    [shadow setShadowBlurRadius:5.0000f];
+    UIColor *textColor = [UIColor lightTextColor];
+    UIFont *font = [UIFont systemFontOfSize:8.0000f];
+    NSDictionary *attributes = @{
+                                 NSForegroundColorAttributeName : textColor,
+                                 NSFontAttributeName : font,
+                                 NSShadowAttributeName : shadow,
+                                 };
+    
+    NSAttributedString *statusMessage1 = [NSAttributedString new];
+    NSAttributedString *statusMessage2 = [NSAttributedString new];
+    NSAttributedString *statusMessage3 = [NSAttributedString new];
+    [self setStatusMessage1:statusMessage1];
+    [self setStatusMessage2:statusMessage2];
+    [self setStatusMessage3:statusMessage3];
+    
+    [self setAttributesLabelDateUpdated:attributes];
+    [self setAttributesLabelNumberOfPages:attributes];
+    [self setAttributesRecordsRead:attributes];
+    NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyleCentered setAlignment:NSTextAlignmentCenter];
+    NSDictionary *attributesCenter = @{
+                                       NSParagraphStyleAttributeName : paragraphStyleCentered
+                                       };
+    [self setAttributesStatusLabel:attributesCenter];
 }
 
 - (void)sliderTapped:(UIGestureRecognizer *)tap {
@@ -203,6 +255,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self setDelegate:self];
     
     [self setCurrentPageIndex:0];
+    [self updatePageStatus];
     
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
@@ -222,8 +275,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[self view] addSubview:[self toolbarSideRight]];
     [[self view] bringSubviewToFront:[self toolbarSideRight]];
     
+    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray:[self toolbarItems]];
+    [toolbarItems insertObject:[self barButtonLabelStatus] atIndex:1];
+    [self setToolbarItems:toolbarItems animated:NO];
+    
     [self setTintColorForToolbar:[[self navigationController] toolbar]];
     [self setTintColorForSidebar:[self toolbarSideRight]];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -240,6 +298,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
     }
     [self addSliderPagination];
+    [self updateLateRefreshedLabel:self];
 }
 
 - (void)setTintColorForToolbar:(UIToolbar *)toolbar {
@@ -254,11 +313,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIImage *blank = [UIImage new];
     [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    //UIColor *tintColor = [UIColor colorWithRed:(13.0000f / 256.0000f) green:(158.0000f / 256.0000f) blue:(215.0000f / 256.0000f) alpha:0.6000f];
     [toolbar setBackgroundColor:[UIColor clearColor]];
-    //[toolbar setTranslucent:YES];
-    //[toolbar setBarTintColor:tintColor];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -282,15 +337,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self setPrintPageRendererReport:nil];
-    
-    if ([self timerLabelTimeSinceRefreh] != nil) {
-        if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-            if ([[self timerLabelTimeSinceRefreh] isValid]) {
-                [[self timerLabelTimeSinceRefreh] invalidate];
-            }
-        }
-        [self setTimerLabelTimeSinceRefreh:nil];
-    }
+
+    [self timerDealloc];
 
 }
 
@@ -311,6 +359,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     float sliderIndex = lroundf([slider value]);
     if ((int)sliderIndex != [self currentPageIndex]) {
         [self setCurrentPageIndex:sliderIndex];
+        [self updatePageStatus];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber: [self currentPageIndex] + 1
                                                                                                                      ofPages: [self numberOfPages]];
         [[pageOne view] setFrame:[[self view] bounds]];
@@ -379,72 +428,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [[reportDocument managedObjectContext] save:&error];
     }
     [[self viewControllerDelegate] viewControllerDidFinish: self];
-}
-
-- (void)updateLateRefreshedLabel:(id)sender {
-    MTReportViewerController *reportViewer;
-    Class reportViewerClass = [MTReportViewerController class];
-    if ([sender isKindOfClass:reportViewerClass]) {
-        reportViewer = sender;
-    } else {
-        reportViewer = self;
-    }
-    
-    if ([reportViewer updatingOfTimerIsPaused] == NO) {
-        if ([reportViewer lastCacheDate] == nil) {
-
-            RptqQuery *query = [AppDelegate activeRptqQuery];
-            NSDate *lastD = [[query hasQueryCache] cacheDate];
-            [reportViewer setLastCacheDate: lastD];
-            if ([reportViewer lastCacheDate] == nil) {  //I give up
-                [reportViewer setLastCacheDate:[NSDate date]];
-            }
-        }
-        NSDate *lastCacheDate = [reportViewer lastCacheDate];
-        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:lastCacheDate];
-        NSString *former = [dateStringAndInterval former];
-        [[reportViewer labelDateLastRefreshed] setText:former];
-
-        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
-        
-        NSTimeInterval updateLabelInSeconds;
-        
-        switch (resolution) {
-            case MTDateResolutionDay:
-                updateLabelInSeconds = 86400.0;
-                break;
-            case MTDateResolutionHour:
-                updateLabelInSeconds = 3600.0;
-                break;
-            case MTDateResolutionMinute:
-                updateLabelInSeconds = 60.0;
-                break;
-            case MTDateResolutionSecond:
-                updateLabelInSeconds = 1.0;
-                break;
-            case MTDateResolutionMillisecond:
-                updateLabelInSeconds = 0.1;
-                break;
-            default:
-                updateLabelInSeconds = 86400;
-                break;
-        }
-        
-        if ([reportViewer timerLabelTimeSinceRefreh] != nil) {
-            if ([[reportViewer timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
-                if ([[reportViewer timerLabelTimeSinceRefreh] isValid]) {
-                    [[reportViewer timerLabelTimeSinceRefreh] invalidate];
-                }
-            }
-            [reportViewer setTimerLabelTimeSinceRefreh:nil];
-        }
-        
-        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval:updateLabelInSeconds target:reportViewer
-                                                    selector:@selector(updateLateRefreshedLabel:) userInfo:nil
-                                                     repeats:NO];
-        [reportViewer setTimerLabelTimeSinceRefreh:t];
-        
-    }
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -567,8 +550,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
     [reportViewerController setNumberOfPages:numberOfPages];
-    [[reportViewerController sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
-    [[reportViewerController pageSlider] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+    [self setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+//    [[reportViewerController sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+//    [[reportViewerController pageSlider] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
     
     NSInteger pageNumber = [reportViewerController currentPageIndex] + 1;
     MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
@@ -690,7 +674,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 dispatch_queue_t highpriorityqueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
                 if (success) {
                     
-
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_async(highpriorityqueue, ^{
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
@@ -699,6 +682,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             NSDate *lastD = [NSDate date];
                             [reportViewer4 setLastCacheDate: lastD];
                             [reportViewer4 reload:reportViewer4];
+                            [reportViewer4 timerDealloc];
+                            [reportViewer4 updateLateRefreshedLabel:reportViewer4];
                         });
                     });
                 } else {
@@ -709,6 +694,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         dispatch_sync(dispatch_get_main_queue(), ^{
                             [reportViewer4 setDisplayActive];
                             [reportViewer4 reload:reportViewer4];
+                            [reportViewer4 timerDealloc];
+                            [reportViewer4 updateLateRefreshedLabel:reportViewer4];
                         });
                     });
                 }
@@ -806,9 +793,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
             [blockViewer2 setNumberOfPages:numberOfPages];
             NSInteger maxValue = numberOfPages > 0 ? (numberOfPages - 1) : 0;
-            [[blockViewer2 sliderPagination] setMaximumValue:maxValue];
-            [[blockViewer2 pageSlider] setMaximumValue:maxValue];
-            
+            [blockViewer2 setMaxNumberOfPages:maxValue];
+
             NSInteger pageNumber = [blockViewer2 currentPageIndex] + 1;
             MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
                                                                                                                          ofPages:numberOfPages];
@@ -993,6 +979,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         if ([[(MTReportViewerController *)pageViewController viewControllers] count] > 0) {
             MTReportViewerReportPageViewController *viewController = [[pageViewController viewControllers] objectAtIndex:0];
             [(MTReportViewerController *)pageViewController setCurrentPageIndex:[viewController pageNumber] - 1];
+            [(MTReportViewerController *)pageViewController updatePageStatus];
             [[(MTReportViewerController *)pageViewController sliderPagination] setValue:[(MTReportViewerController *)pageViewController currentPageIndex] animated:YES];
             [[(MTReportViewerController *)pageViewController pageSlider] setValue:[(MTReportViewerController *)pageViewController currentPageIndex] animated:YES];
         }
@@ -1008,6 +995,147 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
     [(MTReportViewerController *)pageViewController setPageIsAnimating:YES];
     
+}
+
+#pragma mark - Status Label
+
+- (void)updateStatusWithTime:(NSString *)timeMessage {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateStatusWithTime:timeMessage];
+        });
+    } else {
+        
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:[self attributesLabelDateUpdated]];
+        [self setStatusMessage1:attributedString];
+        [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
+    }
+}
+
+
+- (void)updateStatusWithRecordsRead:(NSString *)message {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateStatusWithRecordsRead:message];
+        });
+    } else {
+        
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesLabelDateUpdated]];
+        [self setStatusMessage2:attributedString];
+        [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
+    }
+}
+
+- (void)updateStatusWithPageNumber:(NSString *)message {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateStatusWithPageNumber:message];
+        });
+    } else {
+        
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesLabelDateUpdated]];
+        [self setStatusMessage3:attributedString];
+        [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
+    }
+}
+
+- (void)updateStatusLabel:(NSAttributedString *)timeMessage recordsReadMessage:(NSAttributedString *)recordsReadMessage andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
+    
+    NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
+    NSAttributedString *newlineString = [[NSAttributedString alloc] initWithString:@"\n"];
+    [status appendAttributedString:newlineString];
+    [status appendAttributedString:recordsReadMessage];
+    [status appendAttributedString:numberOfPagesMessage];
+    NSRange range = NSMakeRange(0, [status length]);
+    [status addAttributes:[self attributesStatusLabel] range:range];
+                NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
+    CGFloat labelWidth = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size.width;
+    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelWidth, 44.0000f);
+    [[self labelStatus] setBounds:bounds];
+    [[self labelStatus] setAttributedText:status];
+}
+
+- (void)updateLateRefreshedLabel:(id)sender {
+    if ([self lastCacheDate] == nil) {
+        
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
+        NSString *cachedDataPath = [cachedDataUrl path];
+        NSError *error = nil;
+        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];
+        if (error == nil) {
+            NSDate *lastD = [attributes fileModificationDate];
+            [self setLastCacheDate: lastD];
+        }
+    }
+    
+    if ([self lastCacheDate] == nil) {
+        [self updateStatusWithTime:@"No Cache"];
+    } else {
+        MTPair *dateStringAndInterval = [NSDate stringWithTimeIntervalSinceDate:[self lastCacheDate]];
+        NSString *display = [dateStringAndInterval former];
+        [self updateStatusWithTime:display];
+        
+        MTDateResolution resolution = [[dateStringAndInterval latter] integerValue];
+        
+        NSTimeInterval updateLabelInSeconds;
+        
+        switch (resolution) {
+            case MTDateResolutionDay:
+                updateLabelInSeconds = 86400.0;
+                break;
+            case MTDateResolutionHour:
+                updateLabelInSeconds = 3600.0;
+                break;
+            case MTDateResolutionMinute:
+                updateLabelInSeconds = 60.0;
+                break;
+            case MTDateResolutionSecond:
+                updateLabelInSeconds = 1.0;
+                break;
+            case MTDateResolutionMillisecond:
+                updateLabelInSeconds = 0.1;
+                break;
+            default:
+                updateLabelInSeconds = 86400;
+                break;
+        }
+        
+        if ([self timerLabelTimeSinceRefreh] != nil) {
+            if ([[self timerLabelTimeSinceRefreh] respondsToSelector:@selector(isValid)]) {
+                if ([[self timerLabelTimeSinceRefreh] isValid]) {
+                    [[self timerLabelTimeSinceRefreh] invalidate];
+                }
+            }
+            [self setTimerLabelTimeSinceRefreh:nil];
+        }
+        
+        NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: updateLabelInSeconds target:self
+                                                    selector: @selector(updateLateRefreshedLabel:) userInfo:nil
+                                                     repeats: NO];
+        [self setTimerLabelTimeSinceRefreh:t];
+    }
+}
+
+- (void)updatePageStatus {
+    NSString *localizedPageOfPagesFormat = NSLocalizedString(@"Page %1d of %2d pages.", @"Page %1d of %2d pages.");
+    NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, ([self currentPageIndex] + 1), ([self numberOfPages])];
+    [self updateStatusWithPageNumber:localizedPageOfPages];
+}
+
+- (void)setMaxNumberOfPages:(NSUInteger)numberOfPages {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self setMaxNumberOfPages:numberOfPages];
+        });
+    } else {
+        if (round([[self pageSlider] maximumValue]) != round(numberOfPages)) {
+            [[self sliderPagination] setMaximumValue:numberOfPages];
+            [[self pageSlider] setMaximumValue:numberOfPages];
+        }
+    }
+    [self updatePageStatus];
 }
 
 @end

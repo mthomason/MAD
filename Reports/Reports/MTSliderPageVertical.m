@@ -33,7 +33,8 @@
         [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
         [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
         [shadow setShadowBlurRadius:5.0000f];
-        NSDictionary *attributes = @{ NSForegroundColorAttributeName : textColor,
+        NSDictionary *attributes = @{
+                                     NSForegroundColorAttributeName : textColor,
                                       NSFontAttributeName : font,
                                       NSShadowAttributeName : shadow,
                                       };
@@ -56,9 +57,8 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
+
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    [self drawBackgroundWithRect:rect inContext:context];
     
     NSMutableString *pageNumber = [[NSMutableString alloc] initWithString:@"0"];
     
@@ -96,20 +96,6 @@
         }
         drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + stringHeight + distanceBetweenTicks);
     }
-}
-
-- (void)drawBackgroundWithRect:(CGRect)rect inContext:(CGContextRef)context {
-    
-    CGContextSaveGState(context);
-    
-    [self rotateBoundingSize:rect.size inContext:context];
-    CGRect rectBg = CGRectMake(rect.origin.x + rect.size.width / 2.0000f, CGPointZero.y, rect.size.width / 2.0000f, rect.size.height);
-    CGMutablePathRef pathBackground = CGPathCreateMutable();
-    CGPathAddRect(pathBackground, NULL, rectBg);
-    UIColor *tintColor = [UIColor colorWithRed:(13.0000f / 256.0000f) green:(158.0000f / 256.0000f) blue:(215.0000f / 256.0000f) alpha:0.6000f];
-    [tintColor setFill];
-    CGContextDrawPath(context, kCGPathFill);
-    CGContextRestoreGState(context);
 }
 
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point inContext:(CGContextRef)context {

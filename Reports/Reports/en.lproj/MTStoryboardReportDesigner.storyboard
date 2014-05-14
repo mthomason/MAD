@@ -215,6 +215,7 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="D89-Nb-LnQ" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="A1I-wG-rvw"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="8RI-IH-kqi"/>
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="b36-6h-dRQ"/>
                         <barButtonItem width="44" systemItem="action" id="qcM-qp-6Ho">
