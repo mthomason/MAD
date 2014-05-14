@@ -18,8 +18,8 @@
 @interface MTQueryBuilderContainerController : UIViewController
     <MTViewControllerProtocol>
 
-@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, assign) id <MTViewControllerAsyncProtocol> delegateContentController;
+@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTViewControllerAsyncProtocol> delegateContentController;
 
 - (MTQueryBuilderViewController *)queryBuilderController;
 - (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced;

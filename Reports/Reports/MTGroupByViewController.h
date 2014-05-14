@@ -24,7 +24,7 @@ extern NSString * const MTGroupByViewControllerIdentifier;
 @interface MTGroupByViewController : UITableViewController
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, assign) id <MTGroupByViewControllerDelegate> delegate;
+@property (nonatomic, weak) id <MTGroupByViewControllerDelegate> delegate;
 
 @property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
 @property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;

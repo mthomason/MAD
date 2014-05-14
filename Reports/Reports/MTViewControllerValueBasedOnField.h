@@ -21,8 +21,8 @@
     <UITableViewDataSource, UITableViewDelegate,
         UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
-@property (nonatomic, retain) NSManagedObjectID *schemaFieldObjectId;
+@property (nonatomic, weak) IBOutlet id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
+@property (nonatomic, strong) NSManagedObjectID *schemaFieldObjectId;
 
 @end
 

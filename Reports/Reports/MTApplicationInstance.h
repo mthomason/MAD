@@ -42,10 +42,10 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 
 @property (nonatomic, assign) MTReportState reportState;
 
-@property (nonatomic, retain, readonly) MTUser *user;
-@property (nonatomic, retain, readonly) MTReportDesigner *reportDesigner;
-@property (nonatomic, retain, readonly) MTReportViewer *reportViewer;
-@property (nonatomic, retain, readonly) MTQueryDesigner *queryDesigner;
+@property (nonatomic, strong, readonly) MTUser *user;
+@property (nonatomic, strong, readonly) MTReportDesigner *reportDesigner;
+@property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
+@property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;

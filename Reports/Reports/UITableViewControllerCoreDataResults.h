@@ -15,7 +15,7 @@
 @interface UITableViewControllerCoreDataResults : UITableViewController
     <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 @property BOOL debug;
 

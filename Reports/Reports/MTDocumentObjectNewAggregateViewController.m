@@ -35,13 +35,11 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 
 @interface MTDocumentObjectNewAggregateViewController ()
 
-@property(nonatomic, retain) RptqDocumentObjectAggregate *aggregateDocumentObject;
+@property(nonatomic, strong) RptqDocumentObjectAggregate *aggregateDocumentObject;
 
 @end
 
 @implementation MTDocumentObjectNewAggregateViewController
-
-
 
 - (void)updateDisplay {
     
@@ -58,25 +56,18 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
                                                  groupType:[self aggregateGroupByType]
                                                groupNumber:groupNumber];
     }
-    
 }
 
 - (void)updateField {
-
     NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
     NSString *detailtext = [NSString stringWithFormat:formatString, [[self fieldObject] display]];
     [[[self tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
-    //[self updateDisplay];
-
 }
 
 - (void)updateFunctionType {
-
     NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:[self aggregateFunctionType]];
     NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
     [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
-    //[self updateDisplay];
-
 }
 
 - (void)updateGroupType {
@@ -108,8 +99,6 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
             [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
             break;
     }
-    //[self updateDisplay];
-
 }
 
 - (IBAction)unwindToNewAggregateFunction:(UIStoryboardSegue *)action {

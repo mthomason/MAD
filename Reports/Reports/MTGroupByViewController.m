@@ -20,7 +20,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 @interface MTGroupByViewController ()
 
-@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
 
 @end
 

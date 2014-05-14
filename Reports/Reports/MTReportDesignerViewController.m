@@ -2115,8 +2115,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                                 forQuery: query];
     UIView *selectedSectionView = [self getSectionViewForDocumentSection:documentSection];
     UIView *superv = [selectedSectionView superview];
-    CGRect rectToShow = superv.frame;
-    rectToShow = [selectedSectionView convertRect:superv.frame toView:self.designerScrollView];
+    CGRect rectToShow = [selectedSectionView convertRect:superv.frame toView:self.designerScrollView];
     CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
     
     //Scroll to top

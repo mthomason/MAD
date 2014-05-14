@@ -21,7 +21,7 @@
 @interface MTQueryBuilderAddLinkSecondTableViewController : UITableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddLinkSecondTableDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkSecondTableDelegate> delegate;
 
 @end
 

@@ -29,6 +29,8 @@
 #import "MTActivityReportPrintPreview.h"
 #import "MTReportViewerReportPageViewController.h"
 
+#import "MTSliderPageVertical.h"
+
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate>
 
@@ -67,8 +69,8 @@
 @property (nonatomic, assign) CGRect frameBeforeRotation;
 @property (nonatomic, assign) CGRect frameAfterRotation;
 
-@property (nonatomic, strong) UISlider *pageSlider;
-@property (nonatomic, strong) IBOutlet UISlider *sliderPagination;
+@property (nonatomic, strong) MTSliderPageVertical *pageSlider;
+@property (nonatomic, strong) IBOutlet UISlider *sliderPagination; // FIXME: Remvoe this slider, sometime EVER!!!WTFFF
 
 @property (nonatomic, strong) UIToolbar *toolbarSideRight;
 
@@ -124,7 +126,7 @@
     
     UIToolbar *vertToolbar = [[UIToolbar alloc] init];
 
-    UISlider *vertSlider = [[UISlider alloc] init];
+    MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
     [vertSlider setMaximumValue:0];
     [vertSlider setMinimumValue:0];
     [vertSlider setContinuous:YES];
@@ -456,7 +458,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
     [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
 
-    BOOL isPad = [UIDevice isPad];
+    /*BOOL isPad = [UIDevice isPad];
     if (isPad == NO) {
         CGFloat labelWidth = 180.0000f;
         switch (toInterfaceOrientation) {
@@ -476,7 +478,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 labelWidth = 170.000;
                 break;
         }
-    }
+    }*/
 }
 
 - (MTReportViewerReportPageViewController *)currentPageviewController {

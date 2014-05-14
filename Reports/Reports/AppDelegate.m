@@ -86,6 +86,16 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    //Setup iCloud KVS
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver: self
+                      selector: @selector(keyValueStoreDidChange:)
+                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                        object: nil];
+    
+    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+    [defaultStore synchronize];
+
     //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     
     MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
@@ -117,15 +127,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Startup strore kit.
     [MTStoreKitController sharedObject];
 
-    //Setup iCloud KVS
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter addObserver: self
-                      selector: @selector(keyValueStoreDidChange:)
-                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                        object: nil];
     
-    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-    [defaultStore synchronize];
+    [MACloudManager sharedManager];
+
     
     [self registerDefaultsFromSettingsBundle];
     

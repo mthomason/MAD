@@ -22,7 +22,7 @@
 @interface MTQueryBuilderSortTypeViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderSortTypeDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderSortTypeDelegate> delegate;
 
 @end
 

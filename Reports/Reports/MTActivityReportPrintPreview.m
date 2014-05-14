@@ -16,8 +16,8 @@
 @interface MTActivityReportPrintPreview()
     <UIDocumentInteractionControllerDelegate>
 
-@property (nonatomic, retain) UIDocumentInteractionController *interactionController;
-@property (nonatomic, retain) NSURL *pdfurl;
+@property (nonatomic, strong) UIDocumentInteractionController *interactionController;
+@property (nonatomic, strong) NSURL *pdfurl;
 
 @end
 

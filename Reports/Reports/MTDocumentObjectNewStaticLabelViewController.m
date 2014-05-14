@@ -16,8 +16,8 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 @interface MTDocumentObjectNewStaticLabelViewController ()
 
-@property (nonatomic, retain) IBOutlet UILabel *labelTextLabel;
-@property (nonatomic, retain) IBOutlet UITextField *labelTextTextbox;
+@property (nonatomic, weak) IBOutlet UILabel *labelTextLabel;
+@property (nonatomic, weak) IBOutlet UITextField *labelTextTextbox;
 
 @end
 

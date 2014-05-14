@@ -21,7 +21,7 @@
 @interface MTQueryBuilderAddLinkFirstFieldViewController : UITableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddLinkFirstFieldDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstFieldDelegate> delegate;
 
 @end
 

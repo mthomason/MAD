@@ -14,40 +14,12 @@
 
 @implementation MTSettingsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     [self setClearsSelectionOnViewWillAppear: YES];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

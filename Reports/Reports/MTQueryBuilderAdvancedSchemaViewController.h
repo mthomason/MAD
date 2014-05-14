@@ -21,8 +21,8 @@
     <UIDynamicItem>
 
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
-@property (nonatomic, assign) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
-@property (nonatomic, assign) IBOutlet MTSchemaFieldCell *schemaFieldCell;
+@property (nonatomic, weak) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
+@property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 
 - (void)setCenter:(CGPoint)center;
 - (void)setBounds:(CGRect)bounds;

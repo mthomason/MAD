@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
         MTViewControllerValueBasedOnFieldDelegate>
 
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 

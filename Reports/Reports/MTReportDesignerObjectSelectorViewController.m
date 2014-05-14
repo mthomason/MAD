@@ -45,31 +45,31 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         UICollectionViewDataSource,
         UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemMain;
+@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemMain;
 
-@property (nonatomic, retain) IBOutlet UICollectionViewController *visibleViewController;
-@property (nonatomic, retain) UIViewController *childViewController;
-@property (nonatomic, retain) UIViewController *viewControllerToPush;
-@property (nonatomic, retain) IBOutlet UIView *containerView;
-@property (nonatomic, retain) UIView *childDisplayedView;
+@property (nonatomic, weak) IBOutlet UICollectionViewController *visibleViewController;
+@property (nonatomic, strong) UIViewController *childViewController;
+@property (nonatomic, strong) UIViewController *viewControllerToPush;
+@property (nonatomic, weak) IBOutlet UIView *containerView;
+@property (nonatomic, strong) UIView *childDisplayedView;
 
-@property (nonatomic, retain) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
+@property (nonatomic, strong) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
 @property (nonatomic, assign) BOOL showAggregateFunctionsViewController;
 
-@property (nonatomic, retain) MTDocumentObjectNewAggregateViewController *aggregateViewController;
+@property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
 @property (nonatomic, assign) BOOL showNewAggregateViewController;
 
-@property (nonatomic, retain) MTGroupByViewController *groupByViewController;
+@property (nonatomic, strong) MTGroupByViewController *groupByViewController;
 @property (nonatomic, assign) BOOL showGroupByViewController;
 
-@property (nonatomic, retain) UITableViewController *fieldOrFormulaViewController;
+@property (nonatomic, strong) UITableViewController *fieldOrFormulaViewController;
 @property (nonatomic, assign) BOOL showFieldOrFormulaViewController;
 
-@property (nonatomic, retain) MTQueryBuilderChooseFieldViewController *fieldOrFormulaFieldPickerViewController;
+@property (nonatomic, strong) MTQueryBuilderChooseFieldViewController *fieldOrFormulaFieldPickerViewController;
 @property (nonatomic, assign) BOOL showFieldOrFormulaFieldPickerViewController;
 
-@property (nonatomic, retain) UITableViewController *fieldOrFormulaFormulaPickerViewController;
+@property (nonatomic, strong) UITableViewController *fieldOrFormulaFormulaPickerViewController;
 @property (nonatomic, assign) BOOL showFieldOrFormulaFormulaPickerViewerController;
 
 @property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
@@ -77,18 +77,17 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @property (atomic, assign) BOOL shouldDismissThis;
 
-@property (nonatomic, retain) NSManagedObjectID *aggregateInputField;
+@property (nonatomic, strong) NSManagedObjectID *aggregateInputField;
 @property (atomic, assign) BOOL fieldSelectionPopPartOneOfTwo;
 
-@property (nonatomic, retain) NSManagedObjectID *aggregateInputFormula;
+@property (nonatomic, strong) NSManagedObjectID *aggregateInputFormula;
 @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
 @property (nonatomic, assign) MTAggregateFunctionInputType  aggregateFunctionInputType;
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
 
-@property (nonatomic, retain) UIImagePickerController *imagePicker;
-
-@property (nonatomic, retain) UIBarButtonItem *saveButton;
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic, strong) UIBarButtonItem *saveButton;
 
 - (IBAction)done:(id)sender;
 

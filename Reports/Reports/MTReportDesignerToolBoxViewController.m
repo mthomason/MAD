@@ -27,16 +27,16 @@
 
 @property (nonatomic, copy) NSSet *selectedObjectIds;
 
-@property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemStyle;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemFontSelector;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navigationItemLayout;
-@property (nonatomic, retain) IBOutlet UIView *contentView;
-@property (nonatomic, retain) IBOutlet UISegmentedControl *sceneSelector;
+@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemStyle;
+@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemFontSelector;
+@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemLayout;
+@property (nonatomic, weak) IBOutlet UIView *contentView;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
 
-@property (nonatomic, retain) MTReportDesignerFontSettingsViewController *tableViewControllerTextLayoutSettings;
-@property (nonatomic, retain) MTReportDesignerFontSelectorViewController *tableViewControllerFontSelector;
-@property (nonatomic, retain) MTReportDesignerDocumentObjectFormat       *tableViewControllerDocumentObjectFormat;
+@property (nonatomic, strong) MTReportDesignerFontSettingsViewController *tableViewControllerTextLayoutSettings;
+@property (nonatomic, strong) MTReportDesignerFontSelectorViewController *tableViewControllerFontSelector;
+@property (nonatomic, strong) MTReportDesignerDocumentObjectFormat       *tableViewControllerDocumentObjectFormat;
 
 @end
 

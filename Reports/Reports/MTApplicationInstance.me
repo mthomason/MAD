@@ -33,9 +33,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"4.0.96";
-NSString * const MTGlobalBundleShortVersion                         = @"4.0.96";
-NSString * const MTGlobalBundleRev                                  = @"1078";
+NSString * const MTGlobalBundleVersion                              = @"4.0.97";
+NSString * const MTGlobalBundleShortVersion                         = @"4.0.97";
+NSString * const MTGlobalBundleRev                                  = @"1079";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -49,16 +49,16 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 @interface MTApplicationInstance ()
 
-@property (nonatomic, retain) NSURL *currentDocument;           //To support opening multiple documents
+@property (nonatomic, strong) NSURL *currentDocument;           //To support opening multiple documents
                                                                     //change this url to the url of the open
                                                                     //document.  This url will be key for the
                                                                     //documents array.
-@property (nonatomic, retain, readwrite) MTUser *user;
-@property (nonatomic, retain, readwrite) MTReportDesigner *reportDesigner;
-@property (nonatomic, retain, readwrite) MTReportViewer *reportViewer;
-@property (nonatomic, retain, readwrite) MTQueryDesigner *queryDesigner;
+@property (nonatomic, strong, readwrite) MTUser *user;
+@property (nonatomic, strong, readwrite) MTReportDesigner *reportDesigner;
+@property (nonatomic, strong, readwrite) MTReportViewer *reportViewer;
+@property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
-@property (nonatomic, retain) NSMutableDictionary *documents;   //MAReportDocument stored by their NSURLS
+@property (nonatomic, strong) NSMutableDictionary *documents;   //MAReportDocument stored by their NSURLS
 
 @end
 

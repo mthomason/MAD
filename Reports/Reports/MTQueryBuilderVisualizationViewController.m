@@ -1359,15 +1359,15 @@ typedef void(^MTBlockResultVoid)(void);
     [connectorView setUserInteractionEnabled:NO];
     [connectorView setObjectIdTag:objectId];
     
-    RptqQueryField *leftField = [link hasLeftField];
-    RptqQueryTable *leftTable = [leftField inQueryTable];
-    MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[self controllersForObjectIds] objectForKey:[leftTable objectID]];
-    UIView *leftTableView = [leftTableViewController view];
+    //RptqQueryField *leftField = [link hasLeftField];
+    //RptqQueryTable *leftTable = [leftField inQueryTable];
+    //MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[self controllersForObjectIds] objectForKey:[leftTable objectID]];
+    //UIView *leftTableView = nil;//[leftTableViewController view];
     
-    RptqQueryField *rightField = [link hasRightField];
-    RptqQueryTable *rightTable = [rightField inQueryTable];
-    MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[self controllersForObjectIds] objectForKey:[rightTable objectID]];
-    UIView *rightTableView = [rightTableViewController view];
+    //RptqQueryField *rightField = [link hasRightField];
+    //RptqQueryTable *rightTable = [rightField inQueryTable];
+    //MTQueryBuilderAdvancedSchemaViewController *rightTableViewController = [[self controllersForObjectIds] objectForKey:[rightTable objectID]];
+    //UIView *rightTableView = [rightTableViewController view];
     
     UIViewController *connectorViewController = [[UIViewController alloc] init];
     [connectorViewController setView:connectorView];

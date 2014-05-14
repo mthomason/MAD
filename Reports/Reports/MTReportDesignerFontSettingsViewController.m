@@ -28,47 +28,47 @@
 
 @property (nonatomic, retain) NSSet *userSelectedObjectIds;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *fontLabelTableViewCell;
-@property (nonatomic, retain) IBOutlet UISegmentedControl *segControlFontStyle;
-@property (nonatomic, retain) IBOutlet UILabel *labelFontSize;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperFontSize;
-@property (nonatomic, retain) IBOutlet UIButton *buttonBold;
-@property (nonatomic, retain) IBOutlet UIButton *buttonItalic;
-@property (nonatomic, retain) IBOutlet UIButton *buttonStrike;
-@property (nonatomic, retain) IBOutlet UIButton *buttonUnderline;
+@property (nonatomic, weak) IBOutlet UITableViewCell *fontLabelTableViewCell;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *segControlFontStyle;
+@property (nonatomic, weak) IBOutlet UILabel *labelFontSize;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperFontSize;
+@property (nonatomic, weak) IBOutlet UIButton *buttonBold;
+@property (nonatomic, weak) IBOutlet UIButton *buttonItalic;
+@property (nonatomic, weak) IBOutlet UIButton *buttonStrike;
+@property (nonatomic, weak) IBOutlet UIButton *buttonUnderline;
 
-@property (nonatomic, retain) IBOutlet UILabel *labelPaddingTop;
-@property (nonatomic, retain) IBOutlet UILabel *labelPaddingBottom;
-@property (nonatomic, retain) IBOutlet UILabel *labelPaddingLeft;
-@property (nonatomic, retain) IBOutlet UILabel *labelPaddingRight;
+@property (nonatomic, weak) IBOutlet UILabel *labelPaddingTop;
+@property (nonatomic, weak) IBOutlet UILabel *labelPaddingBottom;
+@property (nonatomic, weak) IBOutlet UILabel *labelPaddingLeft;
+@property (nonatomic, weak) IBOutlet UILabel *labelPaddingRight;
 
-@property (nonatomic, retain) IBOutlet UILabel *labelMarginTop;
-@property (nonatomic, retain) IBOutlet UILabel *labelMarginBottom;
-@property (nonatomic, retain) IBOutlet UILabel *labelMarginLeft;
-@property (nonatomic, retain) IBOutlet UILabel *labelMarginRight;
-@property (nonatomic, retain) IBOutlet UILabel *labelSizeWidth;
-@property (nonatomic, retain) IBOutlet UILabel *labelSizeHeight;
+@property (nonatomic, weak) IBOutlet UILabel *labelMarginTop;
+@property (nonatomic, weak) IBOutlet UILabel *labelMarginBottom;
+@property (nonatomic, weak) IBOutlet UILabel *labelMarginLeft;
+@property (nonatomic, weak) IBOutlet UILabel *labelMarginRight;
+@property (nonatomic, weak) IBOutlet UILabel *labelSizeWidth;
+@property (nonatomic, weak) IBOutlet UILabel *labelSizeHeight;
 
-@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingTop;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingBottom;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingLeft;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperPaddingRight;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingTop;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingBottom;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingLeft;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperPaddingRight;
 
-@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginTop;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginBottom;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginLeft;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperMarginRight;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginTop;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginBottom;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginLeft;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperMarginRight;
 
-@property (nonatomic, retain) IBOutlet UIStepper *stepperSizeWidth;
-@property (nonatomic, retain) IBOutlet UIStepper *stepperSizeHeight;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperSizeWidth;
+@property (nonatomic, weak) IBOutlet UIStepper *stepperSizeHeight;
 
-@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
-@property (nonatomic, retain) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlHorizontalAlignment;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *segmentedControlVerticalAlignment;
 
-@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
-@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
+@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellStyle;
+@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *groupTableViewCellLayout;
 
-@property (nonatomic, retain) IBOutletCollection(UIStepper) NSArray *steppers;
+@property (nonatomic, weak) IBOutletCollection(UIStepper) NSArray *steppers;
 
 - (IBAction)controlValueChanged:(id)sender;
 
@@ -748,10 +748,7 @@
     MAReportDocument *activeDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     
-    SEL valueChangedAction = @selector(emptySelector:);
-    
     if ([sender isEqual:[self stepperFontSize]]) {
-        valueChangedAction = @selector(setFontsize:);
         NSNumber *value = @([[self stepperFontSize] value]);
         [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[value floatValue]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -761,7 +758,6 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeHeight]]) {
-        valueChangedAction = @selector(setSizeheight:);
         NSNumber *value = @([[self stepperSizeHeight] value]);
         CGFloat fontSize = [[[self labelSizeHeight] font] pointSize];
         NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
@@ -773,7 +769,6 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeWidth]]) {
-        valueChangedAction = @selector(setSizewidth:);
         NSNumber *value = @([[self stepperSizeWidth] value]);
         CGFloat fontSize = [[[self labelSizeWidth] font] pointSize];
         NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
@@ -785,7 +780,6 @@
         }
         
     } else if ([sender isEqual:[self segmentedControlHorizontalAlignment]]) {
-        valueChangedAction = @selector(setHorizontalAlignment:);
         MTHorizontalAlignment horizontalAlignment = [[self segmentedControlHorizontalAlignment] selectedSegmentIndex];
         NSNumber *value = @(horizontalAlignment);
         [[self segmentedControlHorizontalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -796,7 +790,6 @@
         }
         
     } else if ([sender isEqual:[self segmentedControlVerticalAlignment]]) {
-        valueChangedAction = @selector(setVerticalAlignment:);
         MTVerticalAlignment verticalAlignment = [[self segmentedControlVerticalAlignment] selectedSegmentIndex];
         NSNumber *value = @(verticalAlignment);
         [[self segmentedControlVerticalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -807,7 +800,6 @@
         }
         
     } else if ([sender isEqual:[self stepperPaddingBottom]]) {
-        valueChangedAction = @selector(setPaddingBottom:);
         NSNumber *value = @([[self stepperPaddingBottom] value]);
         [[self labelPaddingBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelPaddingBottom] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -817,7 +809,6 @@
         }
 
     } else if ([sender isEqual:[self stepperPaddingLeft]]) {
-        valueChangedAction = @selector(setPaddingLeft:);
         NSNumber *value = @([[self stepperPaddingLeft] value]);
         [[self labelPaddingLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelPaddingLeft] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -827,7 +818,6 @@
         }
 
     } else if ([sender isEqual:[self stepperPaddingRight]]) {
-        valueChangedAction = @selector(setPaddingRight:);
         NSNumber *value = @([[self stepperPaddingRight] value]);
         [[self labelPaddingRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelPaddingRight] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -837,7 +827,6 @@
         }
 
     } else if ([sender isEqual:[self stepperPaddingTop]]) {
-        valueChangedAction = @selector(setPaddingTop:);
         NSNumber *value = @([[self stepperPaddingTop] value]);
         [[self labelPaddingTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelPaddingTop] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -847,7 +836,6 @@
         }
 
     } else if ([sender isEqual:[self stepperMarginBottom]]) {
-        valueChangedAction = @selector(setMarginBottom:);
         NSNumber *value = @([[self stepperMarginBottom] value]);
         [[self labelMarginBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelMarginBottom] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -857,7 +845,6 @@
         }
 
     } else if ([sender isEqual:[self stepperMarginTop]]) {
-        valueChangedAction = @selector(setMarginTop:);
         NSNumber *value = @([[self stepperMarginTop] value]);
         [[self labelMarginTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelMarginTop] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -867,7 +854,6 @@
         }
 
     } else if ([sender isEqual:[self stepperMarginLeft]]) {
-        valueChangedAction = @selector(setMarginLeft:);
         NSNumber *value = @([[self stepperMarginLeft] value]);
         [[self labelMarginLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelMarginLeft] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {

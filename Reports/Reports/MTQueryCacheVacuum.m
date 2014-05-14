@@ -16,7 +16,7 @@
 
 @interface MTQueryCacheVacuum ()
 
-@property (nonatomic, retain) MTDatabaseConnection *connection;
+@property (nonatomic, strong) MTDatabaseConnection *connection;
 
 @end
 

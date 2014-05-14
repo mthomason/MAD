@@ -23,7 +23,7 @@
 
 @property (nonatomic, strong) RptqQueryField *field;
 @property (nonatomic, strong) NSManagedObjectID *fieldId;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSave;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
 @end
 

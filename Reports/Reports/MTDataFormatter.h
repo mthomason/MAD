@@ -14,7 +14,7 @@
 
 @interface MTDataFormatter : NSObject
 
-@property (nonatomic, retain) MTQuery *query;
+@property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, assign) BOOL didRefresh;
 
  - (id)initWithQuery:(MTQuery *)query;

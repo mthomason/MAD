@@ -16,7 +16,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 @interface MTAggregateFunctionsViewController ()
 
-@property (nonatomic, retain) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
+@property (nonatomic, weak) IBOutletCollection(UITableViewCell) NSArray *tableViewCells;
 
 
 @end

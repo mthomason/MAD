@@ -56,10 +56,10 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 @interface MAReportDocument ()
 
-@property (nonatomic, retain) NSManagedObjectModel *mom;
-@property (nonatomic, retain) RptqDocument *document;
+@property (nonatomic, strong) NSManagedObjectModel *mom;
+@property (nonatomic, strong) RptqDocument *document;
 
-@property (nonatomic, retain) NSMutableDictionary *reportQueries;
+@property (nonatomic, strong) NSMutableDictionary *reportQueries;
 
 @property (nonatomic, assign) BOOL didRefresh;
 

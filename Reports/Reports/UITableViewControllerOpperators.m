@@ -14,12 +14,6 @@
 
 @implementation UITableViewControllerOpperators
 
-@synthesize delegate = _delegate;
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

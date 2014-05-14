@@ -21,7 +21,7 @@
 
 @interface SectionEnumerator ()
 
-@property (nonatomic, retain) RptqDocument *document;
+@property (nonatomic, strong) RptqDocument *document;
 
 @end
 

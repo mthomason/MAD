@@ -15,16 +15,16 @@
 @interface MTSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellPrint;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellExport;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellFind;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellReportSetup;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellRuler;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellSettings;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellHelp;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableCellStore;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellPrint;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellExport;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellFind;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellReportSetup;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellRuler;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellSettings;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellHelp;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableCellStore;
 
 - (IBAction)done:(id)sender;
 

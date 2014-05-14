@@ -21,7 +21,7 @@ typedef struct _ColumnWidth {
     CGFloat originX, width;
 } ColumnWidth;
 
-@property (nonatomic, retain) NSMutableArray *columnWidth;
+@property (nonatomic, strong) NSMutableArray *columnWidth;
 @property (nonatomic, assign) NSUInteger rowCount;
 @property (nonatomic, assign) NSUInteger columnCount;
 @property (nonatomic, assign) CGFloat heightRow;
@@ -68,8 +68,6 @@ typedef struct _ColumnWidth {
     [self setHeightRow:22.0000f];
     [self setHeightHeader:24.0000f];
     [[self collectionView] setDelegate:self];
-    
-//    [[self collectionView] setBackgroundColor:[UIColor tintColor]];
 }
 
 - (void)prepareLayout {

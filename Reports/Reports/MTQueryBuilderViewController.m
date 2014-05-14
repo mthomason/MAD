@@ -789,7 +789,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
                     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                     
-                    NSArray *deleteRows = nil;
                     NSIndexSet *deleteSections = nil;
                     RptqDocument *document = [reportDocument activeDocument];
                     NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForDocument:document];
@@ -800,7 +799,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
                     RptqQuery *query = [[database hasQueries] anyObject];
                     [query removeHasQueryTablesObject:table];
-                    deleteRows = [[NSArray alloc] initWithObjects:indexPath, nil];
                     numberOfTables--;
                     
                     NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [self datamodelForNumberOfTables: numberOfTables]];

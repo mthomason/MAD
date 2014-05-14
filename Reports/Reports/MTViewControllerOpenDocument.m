@@ -49,21 +49,19 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MTDocumentCellProtocol,
         MTViewControllerAsyncProtocol>
 
-@property (nonatomic, strong) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemTitle;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEditDone;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemTrash;
+@property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemInformation;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAbout;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTitle;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEditDone;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTrash;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformation;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAbout;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemLicensing;
+@property (nonatomic, weak) IBOutlet MTTitleView *titleView;
 
 @property (nonatomic, strong) UIAlertView *renameAlertView;
-
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemLicensing;
-
-@property (nonatomic, strong) IBOutlet MTTitleView *titleView;
 
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
 @property (nonatomic, strong) UIPopoverController *aboutPopoverController;

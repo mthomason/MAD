@@ -21,7 +21,7 @@
 @interface MTQueryBuilderPredicateFormatViewController : UITableViewController
     <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
 
 - (IBAction)done:(id)sender;
 

@@ -20,10 +20,6 @@
 #import "MTAlertView.h"
 #import "MTQuery.h"
 
-@interface MTShowSqlViewController ()
-
-@end
-
 @implementation MTShowSqlViewController
 
 - (void)viewDidLoad {

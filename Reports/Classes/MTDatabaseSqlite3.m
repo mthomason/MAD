@@ -316,7 +316,7 @@
 
     if ([queryString length] > 0) {
 
-        NSLog(@"Query %@", queryString);
+        //NSLog(@"Query %@", queryString);
         
         sqlite3_stmt *statement = NULL;
         statement = [self statementForQuery:query andStatement:statement];

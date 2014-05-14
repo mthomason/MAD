@@ -24,13 +24,13 @@
 
 @interface MTViewControllerValueBasedOnField ()
 
-@property (nonatomic, retain) IBOutlet UITableView *tableViewMain;
-@property (nonatomic, retain) IBOutlet UIView *pickerViewBackground;
-@property (nonatomic, retain) IBOutlet UIPickerView *pickerView;
-@property (nonatomic, retain) UITextField *textField;
-@property (nonatomic, retain) MTCellEnterText *tableViewCellEnterText;
-@property (nonatomic, retain) NSArray *pickerData;
-@property (nonatomic, retain) NSDateFormatter *longStyleDateFormatter;
+@property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
+@property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
+@property (nonatomic, weak) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
+@property (nonatomic, strong) NSArray *pickerData;
+@property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
 
 @end
 

@@ -28,8 +28,6 @@
 @property (nonatomic, strong) UIView *pageNumberView;
 @property (nonatomic, strong) UILabel *timeSinceRefrehLabel;
 
-//@property (nonatomic, strong) UISlider *pageSlider;
-
 @end
 
 @implementation MTReportViewerReportPageViewController

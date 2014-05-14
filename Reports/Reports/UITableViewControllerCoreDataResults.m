@@ -14,7 +14,7 @@
 
 @interface UITableViewControllerCoreDataResults()
 
-@property (nonatomic) BOOL beganUpdates;
+@property (nonatomic, assign) BOOL beganUpdates;
 
 @end
 

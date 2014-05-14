@@ -40,16 +40,16 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
         MTQueryBuilderAddLinkSecondFieldDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> delegate;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellJoinType;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellJoinType;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableOne;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFieldOne;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellTableTwo;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellFieldTwo;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableOne;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFieldOne;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableTwo;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFieldTwo;
 
 @property (assign) MNSLinkPart currentlyEditingPart;
 @property (assign) MNSLinkType linkType;

@@ -21,33 +21,33 @@
 
 @interface MTLicensingViewController ()
 
-@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowDesignerOneYear;
-@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowDesignerOneMonth;
+@property (nonatomic, weak) IBOutlet UIButton *buttonBuyNowDesignerOneYear;
+@property (nonatomic, weak) IBOutlet UIButton *buttonBuyNowDesignerOneMonth;
 
-@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowViewerOneYear;
-@property (nonatomic, retain) IBOutlet UIButton *buttonBuyNowViewerOneMonth;
+@property (nonatomic, weak) IBOutlet UIButton *buttonBuyNowViewerOneYear;
+@property (nonatomic, weak) IBOutlet UIButton *buttonBuyNowViewerOneMonth;
 
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonRestore;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *buttonDone;
-@property (nonatomic, retain) IBOutlet UISwipeGestureRecognizer *swipeDone;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *buttonRestore;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *buttonDone;
+@property (nonatomic, weak) IBOutlet UISwipeGestureRecognizer *swipeDone;
 
-@property (nonatomic, retain) IBOutlet UIView *viewBuyButtonsBackground;
+@property (nonatomic, weak) IBOutlet UIView *viewBuyButtonsBackground;
 
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearTitle;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearDesc1;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearDesc2;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearDesc3;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerLicenseOneYearDesc4;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerKeyActivated;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerKeyExpires;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerValueActivated;
-@property (nonatomic, retain) IBOutlet UILabel *labelDesignerValueExpires;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerLicenseOneYearTitle;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerLicenseOneYearDesc1;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerLicenseOneYearDesc2;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerLicenseOneYearDesc3;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerLicenseOneYearDesc4;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerKeyActivated;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerKeyExpires;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerValueActivated;
+@property (nonatomic, weak) IBOutlet UILabel *labelDesignerValueExpires;
 
-@property (nonatomic, retain) IBOutletCollection(UILabel) NSArray *labelsShowWhenActivated;
-@property (nonatomic, retain) IBOutletCollection(UILabel) NSArray *labelsHideWhenActivated;
+@property (nonatomic, weak) IBOutletCollection(UILabel) NSArray *labelsShowWhenActivated;
+@property (nonatomic, weak) IBOutletCollection(UILabel) NSArray *labelsHideWhenActivated;
 
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorDesignerLicenseOneYear;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator2;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorDesignerLicenseOneYear;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator2;
 
 @property (copy) MTBlockCompletion standardCompletion;
 @property (copy) MTStoreKitNonRenewableLicensedUser licenseUserCompletion;

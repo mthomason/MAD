@@ -26,10 +26,10 @@
         MTQueryBuilderSortTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (nonatomic, assign) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
 
-@property (retain) IBOutlet UITableViewCell *tableViewCellField;
-@property (retain) IBOutlet UITableViewCell *tableViewCellSort;
+@property (weak) IBOutlet UITableViewCell *tableViewCellField;
+@property (weak) IBOutlet UITableViewCell *tableViewCellSort;
 
 @property (copy) NSString *fieldName;
 @property (assign) MNSSortOrder sortOrder;

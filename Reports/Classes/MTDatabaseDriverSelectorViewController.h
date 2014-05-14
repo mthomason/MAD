@@ -14,7 +14,7 @@
 
 @interface MTDatabaseDriverSelectorViewController : UITableViewController
 
-@property (nonatomic, assign) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
 @end
 

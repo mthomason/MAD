@@ -16,10 +16,10 @@
 
 @interface MTCollectionViewCellDocument : UICollectionViewCell
 
-@property (nonatomic, assign) IBOutlet UILabel *labelTitle;
-@property (nonatomic, assign) IBOutlet UIImageView *imagePreview;
+@property (nonatomic, weak) IBOutlet UILabel *labelTitle;
+@property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
 
-@property (nonatomic, assign) id <MTDocumentCellProtocol> delegate;
+@property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
 
 - (void)dimTint;
 - (void)normalizeTint;

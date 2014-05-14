@@ -26,7 +26,7 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 @interface MTReportDesignerSectionLayoutSettingsViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (assign) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
+@property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
 
 @property (nonatomic, assign) NSInteger initalStepperValue;
 @property (nonatomic, assign) BOOL initalSwitchValue;

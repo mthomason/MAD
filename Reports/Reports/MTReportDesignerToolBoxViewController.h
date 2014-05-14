@@ -18,7 +18,7 @@
 
 @interface MTReportDesignerToolBoxViewController : UIViewController
 
-@property (nonatomic, assign) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds;
 - (IBAction)valueChanged:(id)sender;

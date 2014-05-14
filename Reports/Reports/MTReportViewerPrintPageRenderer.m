@@ -395,8 +395,10 @@
                                 id sortKey = [rowData objectForKey:key];
                                 if (sortKey == nil) {
                                     sortKey = MTNullIdentifier;
+                                    [groupLevelKeys addObject:sortKey];
+                                } else {
+                                    [groupLevelKeys addObject:sortKey];
                                 }
-                                [groupLevelKeys addObject:sortKey];
                                 if (nextRowData != nil) {
                                     id sortKeyNext = [nextRowData objectForKey:key];
                                     if (sortKeyNext == nil) {
@@ -418,7 +420,7 @@
                                 @autoreleasepool {
                                     
                                     
-                                    NSString *displayString = nil;
+                                    NSMutableString *displayString = [NSMutableString new];
                                     id drawingObject = nil;
                                     
                                     switch ([item getType]) {
@@ -543,17 +545,17 @@
                                             
                                             //[dataForGroup release];
                                             
-                                            displayString = [item formattedString:aggregateType
-                                                                         forValue:aggregateResult];
+                                            [displayString setString: [item formattedString:aggregateType
+                                                                         forValue:aggregateResult]];
                                             if ([displayString isEqualToString:MTNullIdentifier]) {
-                                                displayString = @"";
+                                                [displayString setString: @""];
                                             }
                                             break;
                                         }
                                             
                                         case MTDocumentObjectTypeImage: {
                                             drawingObject = [[item isImage] image];
-                                            displayString = @"";
+                                            [displayString setString: @""];
                                             break;
                                         }
                                             
@@ -630,23 +632,23 @@
                                                 RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
                                                 NSNumber *dataTypeNumber = [schemaField dataType];
                                                 MTDataType dataType = [dataTypeNumber integerValue];
-                                                displayString = [item formattedString:dataType forValue:value];
+                                                [displayString setString: [item formattedString:dataType forValue:value]];
                                                 if ([displayString isEqualToString:MTNullIdentifier]) {
-                                                    displayString = @"";
+                                                    [displayString setString: @""];
                                                 }
                                             } else {
-                                                displayString = @"";
+                                                [displayString setString: @""];
                                             }
                                             break;
                                         }
                                             
                                         case MTDocumentObjectTypeLabelStatic: {
-                                            displayString = [[item isLabel] text];
+                                            [displayString setString: [[item isLabel] text]];
                                             break;
                                         }
                                             
                                         default: {
-                                            displayString = @"";
+                                            [displayString setString: @""];
                                             break;
                                         }
                                     }

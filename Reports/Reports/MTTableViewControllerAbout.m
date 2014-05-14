@@ -21,8 +21,8 @@
 @interface MTTableViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, retain) IBOutlet UILabel *labelVersion;
-@property (nonatomic, retain) IBOutlet UILabel *labelBuild;
+@property (nonatomic, weak) IBOutlet UILabel *labelVersion;
+@property (nonatomic, weak) IBOutlet UILabel *labelBuild;
 
 @end
 

@@ -39,9 +39,9 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 
 @interface MADocument ()
 
-@property (nonatomic, retain) NSFileWrapper *fileWrapper;
-@property (nonatomic, retain) NSMutableDictionary *extraInformation;        //Structure for extra info
-@property (nonatomic, retain) UIImage *thumbnail;
+@property (nonatomic, strong) NSFileWrapper *fileWrapper;
+@property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
+@property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, assign) BOOL weMustSave;
 @property (nonatomic, assign) BOOL quickSaveInProgress;
 

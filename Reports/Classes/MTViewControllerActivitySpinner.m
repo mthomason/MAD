@@ -14,7 +14,7 @@
 
 @interface MTViewControllerActivitySpinner ()
 
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activitySpinner;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activitySpinner;
 
 @end
 

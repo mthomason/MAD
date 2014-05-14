@@ -17,7 +17,7 @@
 
 @interface MTReportDesignerFontSelectorViewController()
 
-@property (nonatomic, retain) MTFont *initalSelectedFont;
+@property (nonatomic, strong) MTFont *initalSelectedFont;
 
 @end
 

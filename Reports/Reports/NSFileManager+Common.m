@@ -145,18 +145,17 @@
             NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
             success = [data writeToURL:resultUrl options:NSDataWritingAtomic error:&errorWriting];
-            if (errorWriting != nil) {
-                MTLog(@"%@", errorWriting);
+            if (completion != NULL) {
+                completion(success, resultUrl);
             }
-            
-            completion(success, resultUrl);
         } else {
             NSURL *resultUrl = [NSURL uniqueUrlForDocumentWithName:fileName
                                                withExtension:extention];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
-            
-            completion(success, resultUrl);
+            if (completion != NULL) {
+                completion(success, resultUrl);
+            }
         }
     }
 }

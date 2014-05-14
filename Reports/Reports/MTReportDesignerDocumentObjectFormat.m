@@ -200,13 +200,14 @@
         valueChangedAction = @selector(setFormatNumericDecimals:);
         valueThatChanged = @([[self stepperNumberOfDecimals] value]);
         [[self labelNumberOfDecimals] setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
+        
+        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
+            [documentObject setFormatNumericDecimals:valueThatChanged];
+            [[documentObject managedObjectContext] save:nil];
+        }
     }
     
-    for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:[activeDocument managedObjectContext]];
-        [documentObject performSelector:valueChangedAction withObject:valueThatChanged];
-        [[documentObject managedObjectContext] save:nil];
-    }
 }
 
 - (NSAttributedString *)decimalsStringForNumberOfDecimals:(NSInteger)numberOfDecimals {

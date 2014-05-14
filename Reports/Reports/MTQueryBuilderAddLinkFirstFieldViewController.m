@@ -24,9 +24,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender {
-
-}
+- (IBAction)done:(id)sender { }
 
 #pragma mark -
 #pragma mark Table View Data Source Protocol

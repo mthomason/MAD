@@ -14,10 +14,6 @@
 #import "MTQuery.h"
 #import "MTDataTable.h"
 
-@interface MTTableFormatter ()
-
-@end
-
 @implementation MTTableFormatter
 
 - (id)initWithQuery:(MTQuery *)query {

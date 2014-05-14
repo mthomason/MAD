@@ -21,7 +21,7 @@
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddLinkJoinTypeDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkJoinTypeDelegate> delegate;
 
 @end
 

@@ -21,8 +21,8 @@
 @interface MTReportDesignerFontSettingsViewController : UITableViewController
     <MTToolboxViewControllerProtocol>
 
-@property (assign, nonatomic) IBOutlet id <MTReportDesignerFontSettingsDelegate> delegate;
-@property (nonatomic, retain) IBOutlet UILabel *labelFontName;
+@property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSettingsDelegate> delegate;
+@property (nonatomic, weak) IBOutlet UILabel *labelFontName;
 
 - (void)chooseFont:(MTFont *)font;
 

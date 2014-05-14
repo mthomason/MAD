@@ -209,8 +209,7 @@
     
     [result appendString: NSLocalizedString(@"ago.", @"ago.")];
     NSNumber *resultType = @(resultResolution);
-    MTPair *results = [MTPair pairWithFormer:result andLatter:@(resultResolution)];
-	return results;
+    return [MTPair pairWithFormer:result andLatter:resultType];
 }
 
 @end

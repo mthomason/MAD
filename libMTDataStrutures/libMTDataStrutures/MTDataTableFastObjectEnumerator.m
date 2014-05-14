@@ -43,30 +43,14 @@
         if (!empty) {
             _statement = NULL;
             const char *path = [[[databaseConnection databaseUrl] path] UTF8String];
-            
-            
             BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READONLY | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
-            if (success == NO) {
-                const char *errorMessage = sqlite3_errmsg(_database);
-                NSString *message = [NSString stringWithUTF8String: errorMessage];
-                NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
-                NSLog(@"%@ %@", message, title);
-            }
             success = sqlite3_extended_result_codes(_database, true) == SQLITE_OK;
-            
-            
             const char *queryStringConstChar = [sql UTF8String];
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
             success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
-            if (success == NO) {
-                const char *errorMessage = sqlite3_errmsg(_database);
-                NSString *message = [NSString stringWithUTF8String: errorMessage];
-                NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
-                NSLog(@"%@ %@", message, title);
-            }
+            NSAssert(success, @"Connection failed with message: %s", sqlite3_errmsg(_database));
             sqlite3_free(queryString);
         }
-        
         [self setColumnKeys:columnKeys];
         [self setColumns:columns];
 

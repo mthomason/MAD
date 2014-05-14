@@ -24,7 +24,7 @@
 @interface UITableViewControllerOpperators : UITableViewController
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <UITableViewControllerOpperatorsDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <UITableViewControllerOpperatorsDelegate> delegate;
 
 @end
 

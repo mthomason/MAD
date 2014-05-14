@@ -17,7 +17,7 @@ typedef void(^MTBlockCompletionNoReturn)(void);
 
 @interface MTReportDesignerViewController : UIViewController
 
-@property (assign, nonatomic) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
 - (IBAction)doneReports:(id)sender;
 - (IBAction)done:(id)sender;

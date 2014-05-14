@@ -12,7 +12,7 @@
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id managedDocument, BOOL success))completionHandler {
 
-    __weak id managedDocumentAtUrl = [[UIManagedDocument alloc] initWithFileURL:url];
+    id managedDocumentAtUrl = [[UIManagedDocument alloc] initWithFileURL:url];
 
     NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : @YES,
                                 NSInferMappingModelAutomaticallyOption : @YES};

@@ -15,8 +15,8 @@
 
 - (id)initWithFrame:(CGRect)frame;
 
-@property (nonatomic, retain) UIButton *buttonAdd;
-@property (nonatomic, retain) UILabel *labelTitle;
+@property (nonatomic, strong) UIButton *buttonAdd;
+@property (nonatomic, strong) UILabel *labelTitle;
 
 @end
 

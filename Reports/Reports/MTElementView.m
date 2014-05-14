@@ -23,10 +23,6 @@
 #define kAnimationTranslateX 2.0
 #define kAnimationTranslateY 2.0
 
-@interface MTElementView ()
-
-@end
-
 @implementation MTElementView
 
 #pragma mark - NSObject
@@ -48,16 +44,14 @@
 
 - (void)setAlpha:(CGFloat)alpha {
     [super setAlpha:alpha];
-    UIColor *labelBackgroundColor = [[UIColor alloc] initWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
+    UIColor *labelBackgroundColor = [UIColor colorWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
     [self setBackgroundColor:labelBackgroundColor];
 }
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-    CGSize viewSize = [documentObject size];
-    CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height);
-    self = [super initWithFrame:frame];
+    CGSize viewSize = [[RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext] size];
+    self = [super initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height)];
 
     if (self) {
         

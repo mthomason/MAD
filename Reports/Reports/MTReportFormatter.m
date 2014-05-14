@@ -62,9 +62,6 @@ NSString * const MTNullIdentifier = @"(null)";
 @property (nonatomic, strong) NSMutableIndexSet *temporaryIndexesForPage;
 @property (nonatomic, strong) NSMutableArray *temporaryIndexesByPage;
 
-//@property (nonatomic, assign) NSUInteger cachedPageNumber;
-//@property (nonatomic, retain) NSArray *objectsForPage;
-
 @property (nonatomic, strong) MTPageCaching *pageCaching;
 
 @end
@@ -678,9 +675,6 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
-
-    NSLog(@"Row: %d \tPage: %d", row, page);
-    
     id rowData = nil;
     if (page < [[self indexesByPage] count]) {
         

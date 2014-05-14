@@ -36,7 +36,7 @@ extern NSInteger const MTViewTagFieldOrFormulaSelector;
 @interface MTReportDesignerObjectSelectorViewController : UICollectionViewController
 
 
-@property (nonatomic, assign) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
+@property (nonatomic, weak) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
 
 @end
 

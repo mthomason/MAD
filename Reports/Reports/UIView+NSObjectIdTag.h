@@ -12,6 +12,6 @@
 
 @interface UIView (NSObjectIdTag)
 
-@property (nonatomic, retain) NSManagedObjectID *objectIdTag;
+@property (nonatomic, strong) NSManagedObjectID *objectIdTag;
 
 @end

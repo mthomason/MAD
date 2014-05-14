@@ -16,7 +16,7 @@
 #import "UIColor+EverydayApps.h"
 
 @interface MTCollectionViewCellDocument ()
-@property (nonatomic, retain) UIColor *bgColor;
+@property (nonatomic, strong) UIColor *bgColor;
 @end
 
 @implementation MTCollectionViewCellDocument

@@ -219,4 +219,8 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 - (void)cleanupBulkInsert {}
 
+- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
+    return @"";
+}
+
 @end

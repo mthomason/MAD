@@ -31,17 +31,17 @@ extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
 @interface MTDocumentObjectNewAggregateViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, assign) id <MTViewControllerAggregateDelegate> delegate;
+@property (nonatomic, weak) id <MTViewControllerAggregateDelegate> delegate;
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateInput;
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateInput;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateGroupBy;
 
 @property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSInteger groupTypeSectionNumber;
-@property (nonatomic, retain) NSManagedObjectID *fieldObjectId;
-@property (nonatomic, retain) RptqQueryField *fieldObject;
+@property (nonatomic, strong) NSManagedObjectID *fieldObjectId;
+@property (nonatomic, strong) RptqQueryField *fieldObject;
 
 @property (nonatomic, assign) BOOL editmode;
 

@@ -23,7 +23,7 @@
 @interface MTQueryBuilderAddLinkFirstTableViewController : UITableViewControllerCoreDataResults
     <UITableViewDataSource, UITableViewDelegate>
 
-@property (assign, nonatomic) IBOutlet id <MTQueryBuilderAddLinkFirstTableDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkFirstTableDelegate> delegate;
 
 - (IBAction)done:(id)sender;
 

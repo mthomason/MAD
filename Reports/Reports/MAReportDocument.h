@@ -30,7 +30,7 @@ extern NSString * const MTReportGroupFooter;
 
 @interface MAReportDocument : MADocument
 
-@property (nonatomic, retain) MTReportFormatter *reportFormatter;
+@property (nonatomic, strong) MTReportFormatter *reportFormatter;
 
 - (id)initWithFileURL:(NSURL *)url;
 

@@ -17,13 +17,13 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 @interface MTReportDesignerSectionLayoutSettingsViewController ()
 
-@property (nonatomic, retain) IBOutlet UILabel *labelHeight;
-@property (nonatomic, retain) IBOutlet UILabel *labelNumberOfRows;
+@property (nonatomic, weak) IBOutlet UILabel *labelHeight;
+@property (nonatomic, weak) IBOutlet UILabel *labelNumberOfRows;
 
-@property (nonatomic, retain) IBOutlet UIStepper *heightStepper;
-@property (nonatomic, retain) IBOutlet UIStepper *rowsStepper;
+@property (nonatomic, weak) IBOutlet UIStepper *heightStepper;
+@property (nonatomic, weak) IBOutlet UIStepper *rowsStepper;
 
-@property (nonatomic, retain) IBOutlet UISwitch *visibilitySwitch;
+@property (nonatomic, weak) IBOutlet UISwitch *visibilitySwitch;
 
 @end
 
