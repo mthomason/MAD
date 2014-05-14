@@ -65,9 +65,11 @@
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row {
-//    NSUInteger index = row;
     return [[[self query] datatable] objectAtRow:row];
-//    return [[[self query] datatable] objectAtIndex:index];
+}
+
+- (NSUInteger)numberOfResults {
+    return [[[self query] datatable] numberOfRows];
 }
 
 @end

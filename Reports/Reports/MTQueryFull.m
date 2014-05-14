@@ -53,14 +53,21 @@
 @implementation MTQueryFull
 
 
-- (id)initWithObject:(id)object {
+- (id)initWithObject:(NSDictionary *)object {
     self = [super initWithObject:object];
     if (self) {
         
-        NSAssert([object isKindOfClass:[RptqQuery class]], @"MTQueryReport expects RptqQuery.");
+        NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryFull expects NSDictionary with parameters.");
+
+        NSDictionary *parameters = (NSDictionary *)object;
+        NSNumber *parameterName = @(MTQueryCacheFullReportName);
+        NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
+        RptqQuery *queryObject = [parameters objectForKey: parameterScheam];
+        NSString *name = [parameters objectForKey:parameterName];
         
-        NSManagedObjectID *objectId = [object objectID];
-        NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
+        //NSManagedObjectID *objectId = [queryObject objectID];
+        //NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
+        NSUInteger hash = [name hash];
         
         NSNumber *typeKey = @(MTDataTableTypeOfTable);
         NSNumber *type = @(MTDataTableTypePhysical);
@@ -70,11 +77,11 @@
                                                                  typeKey : type,
                                                                  objectIdKey : objectIdV}];
         [self setDatatable:datatable];
-        RptqUserCredentals *userCredentals = [[(RptqQuery *)object inDatabase] ownedByUser];
+        RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
-        [self setQueryObject:object];
+        [self setQueryObject:queryObject];
 
         NSMutableArray *sortDesc = [[NSMutableArray alloc] initWithArray:[self sortDescriptors]];
         [datatable sortUsingDescriptors:sortDesc];

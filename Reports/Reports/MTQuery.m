@@ -71,7 +71,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 - (id)initWithQueryType:(MTQueryType)type object:(id)object {
 
     switch (type) {
-        
+            
         case MTQueryTypeMaxFieldLength:
             self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
             break;

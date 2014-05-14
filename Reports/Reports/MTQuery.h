@@ -37,6 +37,11 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
 
 #pragma mark Types of specific paramamters accepted for each query
 
+typedef NS_ENUM(NSUInteger, MTQueryCacheFullParameters) {
+	MTQueryCacheFullReportName,
+    MTQueryCacheFullQuerySchema,
+};
+
 typedef NS_ENUM(NSUInteger, MTQueryCacheAddColumnParameters) {
 	MTQueryCacheAddColumnDataColumn,
     MTQueryCacheAddColumnTableName,

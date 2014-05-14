@@ -21,5 +21,6 @@
 
 - (BOOL)format;
 - (NSDictionary *)dataForRow:(NSUInteger)row;
+- (NSUInteger)numberOfResults;
 
 @end

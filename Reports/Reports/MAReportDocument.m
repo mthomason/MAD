@@ -107,7 +107,16 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *rquery = [[database hasQueries] anyObject];
         if (rquery) {
-            MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:rquery];
+            
+            NSString *name = [[[[self urlThumbnail] path]lastPathComponent] stringByDeletingPathExtension];
+            NSNumber *parameterName = @(MTQueryCacheFullReportName);
+            NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
+            NSDictionary *queryFullParameters = @{
+                                                 parameterName : name,
+                                                  parameterSchema : rquery
+                                                  };
+            
+            MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
             if (query) {
                 [self reportQueries][@"defaultq"] = query;
             }
