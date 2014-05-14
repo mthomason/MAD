@@ -72,19 +72,28 @@
     
     if (numberOfTicks < 0) { numberOfTicks = 0; }
 
-    if (numberOfTicks > self.maximumValue) { numberOfTicks = floor(self.maximumValue) + 1; }
+    if (numberOfTicks > self.maximumValue) {
+        numberOfTicks = floor(self.maximumValue) + 1;
+    }
 
+    BOOL everyOther = numberOfTicks > 5;
+    if (everyOther && numberOfTicks % 2 == 0) {
+        numberOfTicks--;
+    }
+    
     CGFloat distanceBetweenTicks = numberOfTicks > 1 ? (rect.size.height - (stringHeight * numberOfTicks)) / (numberOfTicks - 1) : CGSizeZero.height;
     CGPoint drawingPoint = CGPointMake(rect.origin.x, rect.origin.y);
 
     double tickValue = [self maximumValue] / (numberOfTicks - 1);
     
     for (NSInteger i=0; i<numberOfTicks; i++) {
-
-        [pageNumber setString: [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)]];
+        
+            [pageNumber setString: [NSString stringWithFormat:@"%d", (int)roundl(i * tickValue + 1)]];
         
         NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:pageNumber attributes:[self stringAttributes]];
-        [self drawString:attributedString atPoint:drawingPoint inContext:context];
+        if (everyOther && i % 2 == 0) {
+            [self drawString:attributedString atPoint:drawingPoint inContext:context];
+        }
         drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + stringHeight + distanceBetweenTicks);
     }
 }
