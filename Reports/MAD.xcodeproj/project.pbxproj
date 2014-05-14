@@ -1280,6 +1280,14 @@
 		4CB12C9E14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
+		4CB3C22E1923374200F3213E /* MTSliderThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C22C1923374200F3213E /* MTSliderThumb.png */; };
+		4CB3C22F1923374200F3213E /* MTSliderThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C22C1923374200F3213E /* MTSliderThumb.png */; };
+		4CB3C2301923374200F3213E /* MTSliderThumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C22D1923374200F3213E /* MTSliderThumb@2x.png */; };
+		4CB3C2311923374200F3213E /* MTSliderThumb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C22D1923374200F3213E /* MTSliderThumb@2x.png */; };
+		4CB3C23A19235C7D00F3213E /* MTSliderThumbRotate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C23819235C7D00F3213E /* MTSliderThumbRotate.png */; };
+		4CB3C23B19235C7D00F3213E /* MTSliderThumbRotate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C23819235C7D00F3213E /* MTSliderThumbRotate.png */; };
+		4CB3C23C19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */; };
+		4CB3C23D19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */; };
 		4CB42DC8166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4CB4574A1705F6DB005269B7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457491705F6DB005269B7 /* RptqRelationship.m */; };
@@ -2590,6 +2598,10 @@
 		4CB12C9D14D1CB5B00979BEB /* MTQueryBuilderLinkBuilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryBuilderLinkBuilderViewController.m; sourceTree = "<group>"; };
 		4CB3C2281922A43600F3213E /* MTSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSliderPageVertical.h; sourceTree = "<group>"; };
 		4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSliderPageVertical.m; sourceTree = "<group>"; };
+		4CB3C22C1923374200F3213E /* MTSliderThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTSliderThumb.png; sourceTree = "<group>"; };
+		4CB3C22D1923374200F3213E /* MTSliderThumb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTSliderThumb@2x.png"; sourceTree = "<group>"; };
+		4CB3C23819235C7D00F3213E /* MTSliderThumbRotate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTSliderThumbRotate.png; sourceTree = "<group>"; };
+		4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTSliderThumbRotate@2x.png"; sourceTree = "<group>"; };
 		4CB42DC6166A339300CE1876 /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extras.h"; sourceTree = "<group>"; };
 		4CB42DC7166A339300CE1876 /* NSString+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extras.m"; sourceTree = "<group>"; };
 		4CB457481705F6DB005269B7 /* RptqRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqRelationship.h; sourceTree = "<group>"; };
@@ -2953,9 +2965,9 @@
 		4C00815914B6BDB6003DF437 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4CDC60AE16E48F9C00924676 /* Table View Cells */,
 				4C23FB2A18FADE46009F234F /* MADWatermarkView.h */,
 				4C23FB2B18FADE46009F234F /* MADWatermarkView.m */,
-				4CDC60AE16E48F9C00924676 /* Table View Cells */,
 				4CC39D61175E4A4800865CCA /* MTDocumentStatusView.h */,
 				4CC39D62175E4A4800865CCA /* MTDocumentStatusView.m */,
 				4CE3143516952E3B00114431 /* MTTextView.h */,
@@ -3818,6 +3830,10 @@
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CB3C23819235C7D00F3213E /* MTSliderThumbRotate.png */,
+				4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */,
+				4CB3C22C1923374200F3213E /* MTSliderThumb.png */,
+				4CB3C22D1923374200F3213E /* MTSliderThumb@2x.png */,
 				4C63631414E65C16005DBBFF /* UIImageDocument20.png */,
 				4C63631514E65C16005DBBFF /* UIImageDocument20@2x.png */,
 				4CC8993114DAF87A0094E17E /* UIImageBolt20.png */,
@@ -5288,6 +5304,7 @@
 				4C3A96A1189F8567007AF476 /* ReportDesignerPad.storyboard in Resources */,
 				4C0E77E8163B5AEC003B951E /* UIImagePatternBlackWeave.png in Resources */,
 				4C95CACB182CB36000160E01 /* zint.h in Resources */,
+				4CB3C23B19235C7D00F3213E /* MTSliderThumbRotate.png in Resources */,
 				4C0E77E9163B5AEC003B951E /* UIImagePatternBlackWeave@2x.png in Resources */,
 				4C0E77EA163B5AEC003B951E /* UIImagePatternBlueCrepe.png in Resources */,
 				4C0E77EB163B5AEC003B951E /* UIImagePatternBlueCrepe@2x.png in Resources */,
@@ -5309,6 +5326,7 @@
 				4C0E77FA163B5AEC003B951E /* UIImagePatternFibers1@2x.png in Resources */,
 				4C0E77FB163B5AEC003B951E /* UIImagePatternFibers2.png in Resources */,
 				4C0E77FC163B5AEC003B951E /* UIImagePatternFibers2@2x.png in Resources */,
+				4CB3C22F1923374200F3213E /* MTSliderThumb.png in Resources */,
 				4C0E77FD163B5AEC003B951E /* UIImagePatternFibersDarkGray.png in Resources */,
 				4C0E77FE163B5AEC003B951E /* UIImagePatternGoldMetallic.png in Resources */,
 				4C0E77FF163B5AEC003B951E /* UIImagePatternGoldMetallic@2x.png in Resources */,
@@ -5417,11 +5435,13 @@
 				4C92956B18C4E0770010AAEF /* MTImageLaunchDesignerPadPortrait.png in Resources */,
 				4C80A5FE1831EDD200242703 /* MTBarcodeMsiPlessey.h in Resources */,
 				4C5CB7D0189E2A7D00BB5AF8 /* sybdb.h in Resources */,
+				4CB3C2311923374200F3213E /* MTSliderThumb@2x.png in Resources */,
 				4C5CB7C8189E2A7D00BB5AF8 /* ctpublic.h in Resources */,
 				4C80A60E183203C500242703 /* MTBarcodeMaxicodeIso16023.h in Resources */,
 				4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */,
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
+				4CB3C23D19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */,
 				4C92956518C4E0770010AAEF /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
 				4C4C6F25167642D9004A3B04 /* MTGraph.h in Resources */,
@@ -5506,6 +5526,7 @@
 				4C77332719100098005AE7C2 /* CMakeLists.txt in Resources */,
 				4C92956C18C4E0770010AAEF /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
+				4CB3C2301923374200F3213E /* MTSliderThumb@2x.png in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
 				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
 				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
@@ -5559,6 +5580,7 @@
 				4C1BB6F01813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png in Resources */,
 				4CCD8D58150385DA002B9E77 /* UIImagePatternBlackWeave.png in Resources */,
 				4CCD8D59150385DA002B9E77 /* UIImagePatternBlackWeave@2x.png in Resources */,
+				4CB3C22E1923374200F3213E /* MTSliderThumb.png in Resources */,
 				4CCD8D5A150385DA002B9E77 /* UIImagePatternBlueCrepe.png in Resources */,
 				4C4EBFAE17EDEA8D00D10622 /* carat.png in Resources */,
 				4CCD8D5B150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png in Resources */,
@@ -5595,6 +5617,7 @@
 				4CCD8D73150385DA002B9E77 /* UIImagePatternGoldVellum@2x.png in Resources */,
 				4CCD8D74150385DA002B9E77 /* UIImagePatternGraphPaper.png in Resources */,
 				4C77332519100098005AE7C2 /* cmake_install.cmake in Resources */,
+				4CB3C23C19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */,
 				4CCD8D75150385DA002B9E77 /* UIImagePatternGraphPaper@2x.png in Resources */,
 				4CCD8D76150385DA002B9E77 /* UIImagePatternGrayGranite.png in Resources */,
 				4C1BB6EC1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png in Resources */,
@@ -5682,6 +5705,7 @@
 				4CCD8DB2150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png in Resources */,
 				4CCD8DB3150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers@2x.png in Resources */,
 				4CCD8DB4150385DA002B9E77 /* UIImagePatternYellowLined.png in Resources */,
+				4CB3C23A19235C7D00F3213E /* MTSliderThumbRotate.png in Resources */,
 				4CCD8DB5150385DA002B9E77 /* UIImagePatternYellowLined@2x.png in Resources */,
 				4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */,
 				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,

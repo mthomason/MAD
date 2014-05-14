@@ -125,7 +125,8 @@
 - (void)initalize {
     
     UIToolbar *vertToolbar = [[UIToolbar alloc] init];
-
+    //[vertToolbar setTr]
+    //[vertToolbar setBarTintColor:[UIColor colorWithRed:0.0000f green:0.0000f blue:1.0000f alpha:0.9000f]];
     MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
     [vertSlider setMaximumValue:0];
     [vertSlider setMinimumValue:0];
@@ -251,13 +252,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)setTintColorForSidebar:(UIToolbar *)toolbar {
     
     UIImage *blank = [UIImage new];
-    [toolbar setBackgroundImage:blank
-             forToolbarPosition:UIToolbarPositionAny
-                     barMetrics:UIBarMetricsDefault];
-    
-    [toolbar setBackgroundColor:[UIColor clearColor]];
+    [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    
+    //UIColor *tintColor = [UIColor colorWithRed:(13.0000f / 256.0000f) green:(158.0000f / 256.0000f) blue:(215.0000f / 256.0000f) alpha:0.6000f];
+    [toolbar setBackgroundColor:[UIColor clearColor]];
+    //[toolbar setTranslucent:YES];
+    //[toolbar setBarTintColor:tintColor];
 
 }
 
@@ -295,7 +295,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)addSliderPagination {
-    CGFloat w = 20.0000f;
+    CGFloat w = 40.0000f;
     CGFloat x = self.view.frame.size.width - w;
     CGFloat y = 0.0000f;
     CGFloat h = self.view.frame.size.height;
