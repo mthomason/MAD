@@ -614,6 +614,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+    
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [defaultCenter addObserver: self

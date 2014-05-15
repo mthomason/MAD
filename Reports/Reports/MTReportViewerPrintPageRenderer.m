@@ -442,8 +442,10 @@
                                                     NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:index];
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
                                                     NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:index];
+                                                    
                                                     NSArray *objectsToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
                                                                                                                               limit: [indexSet count]];
+                                                    
                                                     [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
                                                     break;
                                                 }
@@ -746,8 +748,12 @@
 }
 
 - (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
-    MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
+    MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname]
+                                         andPointSize:[[documentObject fontsize] floatValue]
+                                               isBold:[[documentObject bold] boolValue]
+                                             isItalic:[[documentObject italic] boolValue]];
     UIFont *customFont = [font font];
+    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
 
     // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.

@@ -24,7 +24,7 @@
 @interface MTDataTableFast ()
 
 @property (assign) sqlite3 *database;
-@property (assign, readwrite) sqlite3_stmt *statement;
+//@property (assign, readwrite) sqlite3_stmt *statement;
 @property (nonatomic, strong) MTDatabase *db;
 
 @property (nonatomic, strong) NSURL *urlFastCache;
@@ -170,7 +170,6 @@
 }
 
 - (void)setupSqlite {
-    _statement = NULL;
     const char *path = [[[self urlFastCache] path] UTF8String];
     
     BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
@@ -257,8 +256,6 @@
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
-    
-    //[NSSortDescriptor alloc] initWithKey:<#(NSString *)#> ascending:<#(BOOL)#>];
 }
 
 - (void)addRow:(NSArray *)row {
@@ -322,12 +319,6 @@
     
     // FIXME: reset cache after setting the sort descriptors    
 }
-
-//- (void)setSortDescriptorsWhileReplacingKeys:(NSArray *)sortDescriptors {
-    //for (type *object in [self columns]) {
-    //    statements
-    //}
-//}
 
 - (void)removeAllObjects {
     
@@ -441,34 +432,30 @@
 }
 
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
-    id results = nil;
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:limit];
     if (row != NSNotFound && limit > 0) {
-        results = [[NSMutableArray alloc] initWithCapacity:limit];
-        NSDictionary *currentObject = nil;
-        _statement = NULL;
+        sqlite3_stmt *statement = NULL;
         NSString *sql = [self sqlQueryWithLimit:limit offset:row];
         const char *sqlc = [sql UTF8String];
         char *queryString = sqlite3_mprintf((char *) sqlc);
-        BOOL success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
+        BOOL success = sqlite3_prepare_v2(_database, queryString, -1, &statement, NULL) == SQLITE_OK;
 
         if (success) {
-            while (sqlite3_step(_statement) == SQLITE_ROW) {
-                NSDictionary *currentD = [self currentObject];
-                currentObject = [NSDictionary dictionaryWithDictionary:currentD];
-                [results addObject:currentObject];
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                @autoreleasepool {
+                    NSDictionary *currentObject = [self currentObject:statement];
+                    [results addObject:currentObject];
+                }
             }
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
-            NSLog(@"%@", message);
+            MTLog(@"%@", message);
         }
         
-        sqlite3_finalize(_statement);
+        sqlite3_finalize(statement);
         sqlite3_free(queryString);
-    } else {
-        results = [NSArray array];
     }
-
     return results;
 }
 
@@ -507,7 +494,7 @@
     return [self rowCounter];
 }
 
-- (id)currentObject {
+- (id)currentObject:(sqlite3_stmt *)statement {
     NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
     int columnCounter = 0;
     for (id key in [self columnKeys]) {
@@ -517,23 +504,23 @@
             case MTDataTypeLong:
             case MTDataTypeLongLong:
             case MTDataTypeInteger:
-                columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
+                columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
                 break;
             case MTDataTypeBlob:
-                columnValue = [NSData dataWithBytes: sqlite3_column_blob(_statement, columnCounter)
-                                             length: sqlite3_column_bytes(_statement, columnCounter)];
+                columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
+                                             length: sqlite3_column_bytes(statement, columnCounter)];
                 break;
             case MTDataTypeFloat:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
                 break;
             case MTDataTypeDouble:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
                 break;
             case MTDataTypeDecimal:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
                 break;
             case MTDataTypeString: {
-                const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
+                const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {
                     columnValue = [NSNull null];
                 } else {
@@ -543,8 +530,8 @@
             }
             default: {
                 NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
-                if (sqlite3_column_type(_statement, columnCounter) == SQLITE_TEXT) {
-                    const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
+                if (sqlite3_column_type(statement, columnCounter) == SQLITE_TEXT) {
+                    const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                     if (text == NULL) {
                         columnValue = [NSNull null];
                     } else {

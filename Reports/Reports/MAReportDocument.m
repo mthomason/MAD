@@ -80,14 +80,10 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
-    NSManagedObjectModel *result = [self mom];
-    if (result == nil) {
-        NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"MAD" ofType:@"momd"];
-        NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
-        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-        [self setMom:mom];
-    }
-    return [self mom];
+    NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"MAD" ofType:@"momd"];
+    NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
+    NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return mom;
 }
 
 + (NSString *)persistentStoreName {
@@ -112,7 +108,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             NSNumber *parameterName = @(MTQueryCacheFullReportName);
             NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
             NSDictionary *queryFullParameters = @{
-                                                 parameterName : name,
+                                                  parameterName : name,
                                                   parameterSchema : rquery
                                                   };
             
@@ -126,9 +122,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                 RptqDocument *activeDocument = [self activeDocument];
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:defaultQuery
                                                                                        andLayout:activeDocument];
-                //NSArray *sortedGroups = [NSArray arrayWithArray:[defaultQuery sortDescriptors]];
-//                [reportFormatter setSortedQueryGroups:sortedGroups];
-                //[reportFormatter setSortDescriptorsByGroupSorted:sortedGroups];
                 [self setReportFormatter:reportFormatter];
             }
         }
@@ -253,13 +246,14 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     return urlToOpen;
 }
 
-+ (NSDictionary *)optionsPersistentStore{
++ (NSDictionary *)optionsPersistentStore {
     NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
     NSNumber *inferMappingModelAutomaticallyOption = @YES;
-    return @{
-             NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-             NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
-             };
+    NSDictionary *optionsPersistentStore = @{
+                                             NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+                                             NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
+                                             };
+    return optionsPersistentStore;
 }
 
 + (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
@@ -276,8 +270,8 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }
     
     if (urlToOpen != nil) {
-
-        NSDictionary *options = [MAReportDocument optionsPersistentStore];
+        NSDictionary *psOptions = [MAReportDocument optionsPersistentStore];
+        NSDictionary *options = [NSDictionary dictionaryWithDictionary:psOptions];
         MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         

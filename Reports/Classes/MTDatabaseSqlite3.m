@@ -387,7 +387,10 @@
                 
                 NSUInteger rowCounter = 0;
                 
+                NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
                 while (SQLITE_ROW == sqlite3_step(statement)) {
+                    
+ 
                     
                     if (rowCounter == 0) {  //If first time around, calculate column information.
                         for (NSUInteger columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
@@ -425,6 +428,15 @@
                         }
                         
                         [[query datatable] beginBulkInsert];
+                    }
+                    
+                    if (rowCounter % 7 == 0) {
+                        NSNumber *rowCounterWrapper = @(rowCounter);
+                        NSDictionary *parameters = @{
+                                                     @"MTDatabaseNumberOfRowsReadKey" : rowCounterWrapper,
+                                                     };
+                        NSNotification *notification = [NSNotification notificationWithName:@"MTNotificationDidReadRows" object:self userInfo:parameters];
+                        [defaultCenter postNotification:notification];
                     }
                     
                     NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
