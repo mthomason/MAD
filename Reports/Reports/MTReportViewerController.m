@@ -149,7 +149,7 @@
     [vertSlider setTintColor:[UIColor tintColorRed]];
 
     UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
-    [labelStatus setNumberOfLines:2];
+    [labelStatus setNumberOfLines:3];
     [labelStatus setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
     
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
@@ -193,6 +193,7 @@
                                        NSParagraphStyleAttributeName : paragraphStyleCentered
                                        };
     [self setAttributesStatusLabel:attributesCenter];
+
 }
 
 - (void)sliderTapped:(UIGestureRecognizer *)tap {
@@ -334,12 +335,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self setPrintPageRendererReport:nil];
-
     [self timerDealloc];
-
 }
 
 - (void)addSliderPagination {
@@ -440,28 +438,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
     [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
-
-    /*BOOL isPad = [UIDevice isPad];
-    if (isPad == NO) {
-        CGFloat labelWidth = 180.0000f;
-        switch (toInterfaceOrientation) {
-            case UIInterfaceOrientationLandscapeLeft:
-                labelWidth = 370.000;
-                break;
-            case UIInterfaceOrientationLandscapeRight:
-                labelWidth = 370.000;
-                break;
-            case UIInterfaceOrientationPortrait:
-                labelWidth = 170.000;
-                break;
-            case UIInterfaceOrientationPortraitUpsideDown:
-                labelWidth = 170.000;
-                break;
-            default:
-                labelWidth = 170.000;
-                break;
-        }
-    }*/
 }
 
 - (MTReportViewerReportPageViewController *)currentPageviewController {
@@ -551,8 +527,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
     [reportViewerController setNumberOfPages:numberOfPages];
     [self setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
-//    [[reportViewerController sliderPagination] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
-//    [[reportViewerController pageSlider] setMaximumValue:numberOfPages > 0 ? (numberOfPages - 1) : 0];
     
     NSInteger pageNumber = [reportViewerController currentPageIndex] + 1;
     MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
@@ -668,6 +642,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
             MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
+            
+            NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+            [defaultCenter addObserver: self
+                              selector: @selector(reportDocumentDidReadRows:)
+                                  name: @"MTNotificationDidReadRows"
+                                object: [[reportDocument defaultQuery] database]];
+            
 
             [reportDocument refresh:^(BOOL success, NSError *error) {
             
@@ -684,6 +665,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             [reportViewer4 reload:reportViewer4];
                             [reportViewer4 timerDealloc];
                             [reportViewer4 updateLateRefreshedLabel:reportViewer4];
+                            
+                            NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+                            [defaultCenter removeObserver:self name:@"MTNotificationDidReadRows" object:[[reportDocument defaultQuery] database]];
+                            
                         });
                     });
                 } else {
@@ -696,12 +681,22 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             [reportViewer4 reload:reportViewer4];
                             [reportViewer4 timerDealloc];
                             [reportViewer4 updateLateRefreshedLabel:reportViewer4];
+                            
+                            NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+                            [defaultCenter removeObserver:self name:@"MTNotificationDidReadRows" object:[[reportDocument defaultQuery] database]];
+                            
                         });
                     });
                 }
             }];
         });
     }
+}
+
+- (void)reportDocumentDidReadRows:(NSNotification *)sender {
+    NSDictionary *parameters = [sender userInfo];
+    NSNumber *rowNumber = [parameters objectForKey:@"MTDatabaseNumberOfRowsReadKey"];
+    [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
 - (IBAction)activity:(id)sender {
@@ -808,6 +803,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [blockViewer2 setStartedRefresh:NO];
             [[doc2 reportFormatter] setDidRefresh:NO];
             [[blockViewer2 barButtonItemDone] setEnabled:YES];
+           
+            [blockViewer2 updateRecordsReadStatus];
             
         });
     });
@@ -1042,15 +1039,26 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)updateStatusLabel:(NSAttributedString *)timeMessage recordsReadMessage:(NSAttributedString *)recordsReadMessage andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
+    
     NSAttributedString *newlineString = [[NSAttributedString alloc] initWithString:@"\n"];
-    [status appendAttributedString:newlineString];
-    [status appendAttributedString:recordsReadMessage];
-    [status appendAttributedString:numberOfPagesMessage];
+
+    
+    if ([[recordsReadMessage string] length] > 0) {
+        [status appendAttributedString:newlineString];
+        [status appendAttributedString:recordsReadMessage];
+    }
+
+    if ([[numberOfPagesMessage string] length] > 0) {
+        [status appendAttributedString:newlineString];
+        [status appendAttributedString:numberOfPagesMessage];
+    }
+    
     NSRange range = NSMakeRange(0, [status length]);
     [status addAttributes:[self attributesStatusLabel] range:range];
-                NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
-    CGFloat labelWidth = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size.width;
-    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelWidth, 44.0000f);
+                NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin);
+
+    CGSize labelSize = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size;
+    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelSize.width, 44.0000f);
     [[self labelStatus] setBounds:bounds];
     [[self labelStatus] setAttributedText:status];
 }
@@ -1118,9 +1126,34 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 }
 
+- (void)updateRecordsReadStatus {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self updateRecordsReadStatus];
+        });
+    } else {
+        MTApplicationInstance *app = [AppDelegate app];
+        MAReportDocument *doc = [app activeDocument];
+        NSNumber *numberOfResults = @([[doc reportFormatter] numberOfResults]);
+        [self updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
+    }
+}
+
+- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formatString = NSLocalizedString(@"Read %@ records.", @"Read %@ records.");
+    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    [self updateStatusWithRecordsRead:readRecords];
+}
+
 - (void)updatePageStatus {
-    NSString *localizedPageOfPagesFormat = NSLocalizedString(@"Page %1d of %2d pages.", @"Page %1d of %2d pages.");
-    NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, ([self currentPageIndex] + 1), ([self numberOfPages])];
+    NSString *localizedPageOfPagesFormat = NSLocalizedString(@"Page %1@ of %2@ pages.", @"Page %1@ of %2@ pages.");
+    NSNumber *startPageN = @([self currentPageIndex] + 1);
+    NSNumber *endPageN = @([self numberOfPages]);
+    NSString *startPage = [NSNumberFormatter localizedStringFromNumber:startPageN numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *endPage = [NSNumberFormatter localizedStringFromNumber:endPageN numberStyle:NSNumberFormatterDecimalStyle];
+
+    NSString *localizedPageOfPages = [NSString stringWithFormat:localizedPageOfPagesFormat, startPage, endPage];
     [self updateStatusWithPageNumber:localizedPageOfPages];
 }
 
