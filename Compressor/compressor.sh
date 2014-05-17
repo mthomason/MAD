@@ -193,7 +193,7 @@ empty_directory() {
 # Globals
 #
 
-readonly version_openssl="1.0.1g”
+readonly version_openssl="1.0.1g"
 readonly version_mysql="6.1.3"
 readonly version_freetds="0.91"
 readonly version_tds=7.1
@@ -1029,7 +1029,6 @@ if [[ $build_openssl == $true && $show_help == $false ]]; then
        fi
       
        platform_version_arch="${platform}${version_ios}-${arch}"
-       path_build="${path_base}/build"
        path_build_openssl_arch="${path_build}/openssl/${platform_version_arch}.sdk"
        
        path_to_libcrypto="${path_build_openssl_arch}/lib/libcrypto.a"
