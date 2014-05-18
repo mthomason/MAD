@@ -64,6 +64,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong, readwrite) NSDictionary *dataByGroup;
 
+@property (nonatomic, strong) NSArray *allObjects;
+
 @end
 
 @implementation MTReportFormatter
@@ -109,6 +111,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     NSDictionary *dataByGroup = @{};
     [self setDataByGroup:dataByGroup];
+    [self setAllObjects:[NSArray array]];
 }
 
 #pragma mark - Reading cached data
@@ -135,17 +138,15 @@ NSString * const MTNullIdentifier = @"(null)";
             
             [RptqDocumentSection batchUpdateSectionLayoutHeights:[self layout]];
 
-            [[self reportLayoutTemporary] removeAllObjects];
-            [[self reportIndexesTemporary] removeAllObjects];
+            [self cleanupTemporaryReportIndexes];
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
             [self setCounterDetailLine:0];
 
-            id groupedRows = [self cachedGroupedResults: [[[[self query] datatable] objectEnumerator] allObjects]
+            [self setAllObjects: [[[[[self query] datatable] objectEnumerator] allObjects] sortedArrayUsingDescriptors:[self sortDescriptorsByGroupSorted]]];
+            id groupedRows = [self cachedGroupedResults: [self allObjects]
                                                   level: 0];
             [self setDataByGroup: groupedRows];
-            
             [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
-            [self cleanupTemporaryIndexes];
             [self addReportHeaderToReportLayout];
             [self addPageHeaderToReportLayout];
             [self addDetailToReportLayout];
@@ -241,7 +242,13 @@ NSString * const MTNullIdentifier = @"(null)";
     return results;
 }
 
-- (void)cleanupTemporaryIndexes {
+- (void)cleanupTemporaryReportIndexes {
+    [[self reportLayoutTemporary] removeAllObjects];
+    [[self reportIndexesTemporary] removeAllObjects];
+    [self cleanupTemporaryPageIndexes];
+}
+
+- (void)cleanupTemporaryPageIndexes {
     [[self pageLayoutTemporary] removeAllObjects];
     [[self pageIndexesTemporary] removeAllIndexes];
 }
@@ -303,12 +310,7 @@ NSString * const MTNullIdentifier = @"(null)";
             //Group header section
             for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
                 if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                    
-                    CGFloat layoutHeight = [[documentSection layoutHeight] floatValue];
-                    [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
-                    CGFloat printableHeightUsed = [self counterHeightUsedCurrentPage] + layoutHeight;
-                    [self setCounterHeightUsedCurrentPage: printableHeightUsed];
-                    
+                    [self addHeightFromDocumentSectionToReportLayout:documentSection];                    
                     break;
                 }
             }
@@ -327,10 +329,7 @@ NSString * const MTNullIdentifier = @"(null)";
             //Group footer section
             for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
                 if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                    CGFloat layoutHeight = [[documentSection layoutHeight] floatValue];
-                    [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
-                    CGFloat printableHeightUsed = [self counterHeightUsedCurrentPage] + layoutHeight;
-                    [self setCounterHeightUsedCurrentPage: printableHeightUsed];
+                    [self addHeightFromDocumentSectionToReportLayout:documentSection];
                     break;
                 }
             }
@@ -342,6 +341,13 @@ NSString * const MTNullIdentifier = @"(null)";
         
         [self cacheDetailLevelWithDetails:(NSArray *)groupedRows];
     }
+}
+
+- (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
+    CGFloat layoutHeight = [[documentSection layoutHeight] floatValue];
+    [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
+    CGFloat printableHeightUsed = [self counterHeightUsedCurrentPage] + layoutHeight;
+    [self setCounterHeightUsedCurrentPage: printableHeightUsed];
 }
 
 - (RptqQueryGroup *)sortGroupAtLevel:(NSInteger)level {
@@ -386,7 +392,7 @@ NSString * const MTNullIdentifier = @"(null)";
         id dataToAdd = [[self pageIndexesTemporary] copy];
         [[self reportIndexesTemporary] addObject:dataToAdd];
         
-        [self cleanupTemporaryIndexes];
+        [self cleanupTemporaryPageIndexes];
         
         RptqDocumentSection *pageHeaderSection = [document hasPageHeaderSection];
         CGFloat pageHeaderHeight = CGPointZero.y;
@@ -415,20 +421,13 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addPageFooterToReportLayout {
-    RptqDocumentSection *pageFooterSection = [[self layout] hasPageFooterSection];
-    CGFloat pageFooterHeight = [[pageFooterSection layoutHeight] floatValue];
-    CGFloat printableSpaceUsed = [self counterHeightUsedCurrentPage] + pageFooterHeight;
-    [self setCounterHeightUsedCurrentPage: printableSpaceUsed];
+    [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasPageFooterSection]];
     [self addPageFooter];
 }
 
 - (void)addReportFooterToReportLayout {
-    RptqDocumentSection *reportFooter = [[self layout] hasReportFooterSection];
-    CGFloat reportFooterHeight = [[reportFooter layoutHeight] floatValue];
-    [self addPageBreakToReportLayoutWithNextItemHeight: reportFooterHeight];
+    [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasReportFooterSection]];
     [self addPageFooter];
-    CGFloat printableSpaceUsed = [self counterHeightUsedCurrentPage] + reportFooterHeight;
-    [self setCounterHeightUsedCurrentPage: printableSpaceUsed];
     [self cacheReportFooter];
 }
 
@@ -450,18 +449,10 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
-    
-    RptqDocument *document = [self layout];
-    RptqDocumentSection *detailSection = [document hasDetailSection];
-    CGFloat layoutHeight = [[detailSection layoutHeight] floatValue];
-    
     for (NSInteger i=0; i<[containerDetails count]; i++) {
-        [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
+        [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
         [self cacheDetail];
-        CGFloat printableHeightUsed = [self counterHeightUsedCurrentPage] + layoutHeight;
-        [self setCounterHeightUsedCurrentPage: printableHeightUsed];
     }
-    
 }
 
 - (void)cacheGroupFooterAtLevel:(NSUInteger)groupLevel {
@@ -505,8 +496,10 @@ NSString * const MTNullIdentifier = @"(null)";
 
                 NSArray *pageCache = [[self pageCaching] objectsForPage:page];
                 if (pageCache == nil) {
-                    NSArray *objectsForPage = [[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
-                                                                              limit: [pageIndexes count]];
+                    NSRange range = NSMakeRange([pageIndexes firstIndex], [pageIndexes count]);
+                    NSIndexSet *set = [NSIndexSet indexSetWithIndexesInRange:range];
+                    NSArray *objectsForPage = [[self allObjects] objectsAtIndexes:set];//[[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
+                                                                //              limit: [pageIndexes count]];
                     [[self pageCaching] cacheObjects:objectsForPage forPage:page];
                 }
                 if ([pageCache count] > row) {

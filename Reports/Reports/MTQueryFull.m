@@ -594,8 +594,10 @@
         NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
         NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
         
+        SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                       ascending: sortAscending];
+                                                                       ascending: sortAscending
+                                                                        selector: sel];
         [sortedSortDescriptorsGroup addObject:sortDescriptor];
     }
     

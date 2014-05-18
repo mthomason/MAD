@@ -293,10 +293,11 @@
             
             for (NSSortDescriptor *sort in sortDescriptors) {
                 for (NSString *columnKey in [[self columns] keyEnumerator]) {
-                    
                     MTDataColumn *column = [[self columns] objectForKey:columnKey];
                     if ([[column fieldName] isEqualToString:[sort key]]) {
-                        NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey  ascending:[sort ascending]];
+                        NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey
+                                                                                ascending:[sort ascending]
+                                                                                 selector:[MTDatabaseField selectorForSorting:[[column columnType] integerValue]]];
                         [newSorts addObject:sortn];
                         break;
                     }
