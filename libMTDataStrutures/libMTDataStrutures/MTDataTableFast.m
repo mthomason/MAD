@@ -24,7 +24,6 @@
 @interface MTDataTableFast ()
 
 @property (assign) sqlite3 *database;
-//@property (assign, readwrite) sqlite3_stmt *statement;
 @property (nonatomic, strong) MTDatabase *db;
 
 @property (nonatomic, strong) NSURL *urlFastCache;

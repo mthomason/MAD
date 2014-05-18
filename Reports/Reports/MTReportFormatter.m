@@ -143,7 +143,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setCounterDetailLine:0];
 
             [self setAllObjects: [[[[[self query] datatable] objectEnumerator] allObjects] sortedArrayUsingDescriptors:[self sortDescriptorsByGroupSorted]]];
-            id groupedRows = [self cachedGroupedResults: [self allObjects]
+            id groupedRows = [self addGroupedResults: [self allObjects]
                                                   level: 0];
             [self setDataByGroup: groupedRows];
             [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
@@ -168,7 +168,7 @@ NSString * const MTNullIdentifier = @"(null)";
     }
 }
 
-- (id)cachedGroupedResults:(NSArray *)sortedResults
+- (id)addGroupedResults:(NSArray *)sortedResults
                      level:(NSUInteger)level {
     
     BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
@@ -182,13 +182,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
         results = [[NSMutableDictionary alloc] init];
         NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
-        
         NSSortDescriptor *sortDescriptor = detailLevel ? nil : [[self sortDescriptorsByGroupSorted] objectAtIndex:level];
-        
         NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
-        
         id valueForField = nil, lastValueForField = nil;
-        
         NSUInteger groupResultIndexForLevel = 0;
         
         for (NSDictionary *result in sortedResults) {
@@ -200,12 +196,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
                 
-                NSMutableString *t = [[NSMutableString alloc] initWithString:@""];
-                for (int i = 0; i < level; i++) {
-                    [t appendString:@"\t"];
-                }
-
-                id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
+                id resultOfNextGroup = [self addGroupedResults: resultsForGroup
                                                             level: (level + 1)];
                 
                 [results setObject:resultOfNextGroup forKey:lastValueForField];
@@ -220,14 +211,14 @@ NSString * const MTNullIdentifier = @"(null)";
         
         if (valueForField != nil) {
 
-            id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
+            id resultOfNextGroup = [self addGroupedResults: resultsForGroup
                                                         level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             [results setObject:resultOfNextGroup forKey:key];
 
         } else {
 
-            id resultOfNextGroup = [self cachedGroupedResults: resultsForGroup
+            id resultOfNextGroup = [self addGroupedResults: resultsForGroup
                                                         level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             if (key == nil) {
@@ -279,11 +270,9 @@ NSString * const MTNullIdentifier = @"(null)";
         if (nullGroupExist) {
             [allKeys removeObject:MTNullIdentifier];
         }
-        NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
         
-        
-        NSArray *sortedKeys = nil;
 
+        NSArray *sortedKeys = nil;
         if (sortSelector != nil) {
             NSArray *sortedArray = [allKeys sortedArrayUsingSelector:sortSelector];
             if (nullGroupExist) {
@@ -298,11 +287,10 @@ NSString * const MTNullIdentifier = @"(null)";
         }
 
         
-        
+        NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
         NSEnumerator *loopEnumerator = loopEnumerator = [desc ascending] == NO ?
                                         [sortedKeys reverseObjectEnumerator] :
                                         [sortedKeys objectEnumerator];
-        
         
         for (id key in loopEnumerator) {
             id obj = [groupedRows objectForKey:key];

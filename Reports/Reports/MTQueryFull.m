@@ -604,8 +604,4 @@
     return sortedSortDescriptorsGroup;
 }
 
-- (NSArray *)sortDescriptorsOnlyActiveFields:(BOOL)onlyActiveFields {
-    
-}
-
 @end
