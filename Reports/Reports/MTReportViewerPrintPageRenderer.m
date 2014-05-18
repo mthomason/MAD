@@ -269,10 +269,6 @@
     NSUInteger rowIndex = 0;
     NSUInteger nextRowIndex = 1;
     
-    CGFloat originY = pageRect.origin.y;
-    CGFloat originX = pageRect.origin.x;
-    CGFloat sizeWidth = pageRect.size.width;
-    
     NSUInteger pageNumber = 0;
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
@@ -284,107 +280,75 @@
         
         NSUInteger numberOfGroups = [[query hasQueryGroups] count];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+        //NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
         if (pageIndex < numberOfPages) {
             
             CGRect sectionRect = CGRectZero;
+            CGFloat originY = pageRect.origin.y;
+            CGFloat originX = pageRect.origin.x;
+            CGFloat sizeWidth = pageRect.size.width;
             
-            BOOL firstTimeThroughLoop = NO;
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
                 @autoreleasepool {
                     
-                    NSNumber *groupLevel = nil;
-                    
-                    RptqDocumentSection *documentSection = nil;
-                    
-                    switch ((MNSDocumentSectionType)[[pageSection objectForKey: MTReportSectionType] integerValue]) {
+                    NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
+                    MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: MTReportSectionType] integerValue];
+                    RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:document andType:typeDocumentSection andLevel:groupLevel];
+
+                    switch (typeDocumentSection) {
+                            
                         case MNSDocumentSectionTypeBody:
-                            documentSection = [document hasDetailSection];
                             rowIndex++;
                             nextRowIndex++;
                             break;
+                            
                         case MNSDocumentSectionTypePageHeader:
-                            documentSection = [document hasPageHeaderSection];
                             break;
-                        case MNSDocumentSectionTypePageFooter:
-                            documentSection = [document hasPageFooterSection];
+                            
+                        case MNSDocumentSectionTypePageFooter: {
                             CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
                             BOOL lastPage = pageIndex == numberOfPages - 1;
                             if (lastPage) {
-                                RptqDocumentSection *pageFooterSection = [document hasReportFooterSection];
-                                CGFloat sizeHeightReportFooter = [[pageFooterSection layoutHeight] floatValue];
-                                originY = pageRect.origin.y + pageRect.size.height - sectionHeight - sizeHeightReportFooter;
+                                originY = pageRect.origin.y + pageRect.size.height - sectionHeight - [[[document hasReportFooterSection] layoutHeight] floatValue];
                             } else {
                                 originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
                                 pageNumber++;
                             }
                             break;
-                        case MNSDocumentSectionTypeReportHeader:
-                            documentSection = [document hasReportHeaderSection];
-                            break;
+                        }
                         case MNSDocumentSectionTypeReportFooter:
-                            documentSection = [document hasReportFooterSection];
-                            CGFloat sizeHeightReportFooter = [[documentSection layoutHeight] floatValue];
-                            originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter;
+                            originY = pageRect.origin.y + pageRect.size.height - [[documentSection layoutHeight] floatValue];
                             break;
-                        case MNSDocumentSectionTypeGroupHeader:
-                            groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                            documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
-
-                            break;
-                        case MNSDocumentSectionTypeGroupFooter:
-                            groupLevel = [pageSection objectForKey:MTReportGroupLevel];
                             
-                            query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                            documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
-
+                        case MNSDocumentSectionTypeGroupHeader:
                             break;
+                            
+                        case MNSDocumentSectionTypeGroupFooter:
+                            break;
+                        case MNSDocumentSectionTypeReportHeader:
+                            break;
+                            
                         default:
                             NSAssert(false, @"Unknown type");
                             break;
                     }
                     
-                    
                     BOOL sectionIsVisible = [[documentSection visibility] boolValue];
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                     
-                    if (sectionIsVisible) {
-                        UIBezierPath *bezierPathForSection = [UIBezierPath bezierPathWithRect:sectionRect];
-                        [bezierPathForSection fill];
-                    }
-                    
-                    //NSUInteger detailRowToPrint = (rowIndex == 0 ? rowIndex : rowIndex - 1);
                     
                     NSDictionary *rowData = [[self reportFormatter] dataForRow: rowIndex onPage: pageIndex];
-                    
-//                    NSNumber *documentSectionType = [documentSection type];
-                    
-                    
-                    //BOOL useNextRowData = ([documentSectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
-                    //NSInteger nextDetailRowToPrint = detailRowToPrint;
-
-                    //if (useNextRowData) {
-                        NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:pageIndex];
-                        if (nextRowIndex >= numberOfItemsOnPage) {
-                            nextRowIndex = 0;
-                        }
-                    //}
-                    
-                    NSDictionary *nextRowData = [[self reportFormatter] dataForRow:nextRowIndex onPage:nextPageIndex];
-
-                    NSLog(@"Current page:    %d", pageIndex);
-                    NSLog(@"Next page:       %d", nextPageIndex);
-
-                    NSLog(@"Current row:    %d", rowIndex);
-                    NSLog(@"Next row:       %d", nextRowIndex);
+                    NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:pageIndex];
+                    if (nextRowIndex >= numberOfItemsOnPage) {
+                        nextRowIndex = 0;
+                    }
                     
                     [groupLevelKeys removeAllObjects];
-                    [nextGroupLevelKeys removeAllObjects];
                     
                     if (rowData != nil) {
                         for (NSSortDescriptor *sortDescriptor in [[self reportFormatter] sortDescriptorsByGroupSorted]) {
@@ -398,15 +362,6 @@
                                     [groupLevelKeys addObject:sortKey];
                                 } else {
                                     [groupLevelKeys addObject:sortKey];
-                                }
-                                if (nextRowData != nil) {
-                                    id sortKeyNext = [nextRowData objectForKey:key];
-                                    if (sortKeyNext == nil) {
-                                        sortKeyNext = MTNullIdentifier;
-                                    }
-                                    if (sortKeyNext) {
-                                        [nextGroupLevelKeys addObject:sortKeyNext];
-                                    }
                                 }
                             }
                         }
@@ -450,10 +405,7 @@
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeSection: {
-                                                    BOOL useNextRowData = ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader);
-                                                    NSArray *keys = useNextRowData ? nextGroupLevelKeys : groupLevelKeys;
-                                                    dataForGroup = [[self reportFormatter] dataForGroupKeys:keys];
-
+                                                    dataForGroup = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeReport:
@@ -545,8 +497,6 @@
                                                     break;
                                             }
                                             
-                                            //[dataForGroup release];
-                                            
                                             [displayString setString: [item formattedString:aggregateType
                                                                          forValue:aggregateResult]];
                                             if ([displayString isEqualToString:MTNullIdentifier]) {
@@ -566,27 +516,10 @@
                                             RptqDocumentObjectBarcode *barcodeObject = [item isBarcode];
                                             RptqQueryField *queryField1 = [barcodeObject referencesField1];
                                             RptqQueryField *queryField2 = [barcodeObject referencesField2];
-                                            
-                                            NSInteger rowToPrint = (rowIndex == 0 ? rowIndex : rowIndex - 1);
-                                            NSInteger tPageIndex = pageIndex;
-                                            
-                                            NSNumber *sectionType = [documentSection type];
-                                            BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
-                                            if (useNextRowData) {
-                                                NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:tPageIndex];
-                                                if (rowToPrint < numberOfItemsOnPage - 1) {
-                                                    rowToPrint++;
-                                                } else {
-                                                    rowToPrint = 0;
-                                                    tPageIndex++;
-                                                }
-                                            }
-                                            NSDictionary *rd = useNextRowData ? nextRowData : rowData;
-                                            
                                             NSString *tableFieldKey1 = [database safeQueryField:queryField1];
                                             NSString *tableFieldKey2 = [database safeQueryField:queryField2];
-                                            id value1 = [rd objectForKey: tableFieldKey1];
-                                            id value2 = [rd objectForKey: tableFieldKey2];
+                                            id value1 = [rowData objectForKey: tableFieldKey1];
+                                            id value2 = [rowData objectForKey: tableFieldKey2];
                                             RptqDatabaseSchemaField *schemaField1 = [queryField1 databaseSchemaField];
                                             RptqDatabaseSchemaField *schemaField2 = [queryField2 databaseSchemaField];
                                             NSNumber *dataTypeNumber1 = [schemaField1 dataType];
@@ -613,25 +546,8 @@
                                             if (rowData != nil) {
                                                 RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
                                                 RptqQueryField *queryField = [labelDataField referencesQueryField];
-                                                
-                                                NSInteger rowToPrint = (rowIndex == 0 ? rowIndex : rowIndex - 1);
-                                                NSInteger tPageIndex = pageIndex;
-                                                
-                                                NSNumber *sectionType = [documentSection type];
-                                                /*
-                                                BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
-                                                if (useNextRowData) {
-                                                    NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:tPageIndex];
-                                                    if (rowToPrint < numberOfItemsOnPage - 1) {
-                                                        rowToPrint++;
-                                                    } else {
-                                                        rowToPrint = 0;
-                                                        tPageIndex++;
-                                                    }
-                                                }*/
-                                                NSDictionary *rd = /*useNextRowData ? nextRowData :*/ rowData;
                                                 NSString *tableFieldKey = [database safeQueryField:queryField];
-                                                id value = [rd objectForKey: tableFieldKey];
+                                                id value = [rowData objectForKey: tableFieldKey];
                                                 RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
                                                 NSNumber *dataTypeNumber = [schemaField dataType];
                                                 MTDataType dataType = [dataTypeNumber integerValue];
@@ -665,8 +581,6 @@
                                     CGFloat sizeWidthPadding = [[item sizewidth] floatValue] + [[item paddingRight] floatValue] + [[item marginRight] floatValue];
                                     CGFloat sizeHeightPadding = [[item sizeheight] floatValue] + [[item paddingBottom] floatValue] + [[item marginBottom] floatValue];
                                     
-                                    
-                                    //CGRect paddingFrame = [item paddingViewFrame];
                                     CGRect elementCanvasRect = CGRectMake(originPointXPadding, originPointYPadding, sizeWidthPadding, sizeHeightPadding);
                                     
                                     if (drawingObject == nil) {

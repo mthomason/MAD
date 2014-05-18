@@ -533,6 +533,54 @@
     return result;
 }
 
++ (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)type {
+    
+}
+
++ (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)typeDocumentSection andLevel:(NSUInteger)level {
+    
+    RptqDocumentSection *documentSection = nil;
+    switch (typeDocumentSection) {
+            
+        case MNSDocumentSectionTypeBody:
+            documentSection = [document hasDetailSection];
+            break;
+            
+        case MNSDocumentSectionTypePageHeader:
+            documentSection = [document hasPageHeaderSection];
+            break;
+            
+        case MNSDocumentSectionTypePageFooter:
+            documentSection = [document hasPageFooterSection];
+            break;
+            
+        case MNSDocumentSectionTypeReportHeader:
+            documentSection = [document hasReportHeaderSection];
+            break;
+            
+        case MNSDocumentSectionTypeReportFooter:
+            documentSection = [document hasReportFooterSection];
+            break;
+            
+        case MNSDocumentSectionTypeGroupHeader: {
+            RptqQuery *query = [RptqQuery RptqQueryForDocument:document];
+            documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel: level
+                                                                        forQuery: query];
+            break;
+        }
+        case MNSDocumentSectionTypeGroupFooter: {
+            RptqQuery *query = [RptqQuery RptqQueryForDocument:document];
+            documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel: level
+                                                                        forQuery: query];
+            break;
+        }
+        default:
+            NSAssert(false, @"Unknown type");
+            break;
+    }
+    return documentSection;
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {
