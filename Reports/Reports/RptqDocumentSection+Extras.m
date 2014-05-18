@@ -20,6 +20,7 @@
 #import "RptqDatabaseSchemaTable.h"
 
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
@@ -29,6 +30,7 @@
 
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
+
 
 @implementation RptqDocumentSection (Extras)
 
@@ -238,6 +240,11 @@
         }
     }
     return resultSection;
+}
+
++ (RptqDocumentSection *)getDocumentSectionForDocument:(RptqDocument *)document {
+    return [RptqDocumentSection getDocumentSectionForRow:0
+                                                forQuery:[RptqQuery RptqQueryForDocument:document]];
 }
 
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row

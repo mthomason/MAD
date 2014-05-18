@@ -476,11 +476,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MTApplicationInstance *appInstance = [AppDelegate app];
             [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                 if (success) {
-                    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                    //    dispatch_sync(dispatch_get_main_queue(), ^{
-                            [[self reportViewer] reload];
-                    //    });
-                    //});
+                    [[self reportViewer] reload];
                 }
             }];
             
@@ -643,10 +639,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         
         [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
-            
-                                   if (success) {
-                                       [viewController reload:viewController];
-                                   }
+            if (success) [viewController reload:viewController];
         }];
 
     }

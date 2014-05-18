@@ -12,10 +12,11 @@
 #import "RptqQuery.h"
 #import "MTProtocolCompare.h"
 
-@class MTGraph;
+@class RptqDocument;
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 
++ (RptqQuery *)RptqQueryForDocument:(RptqDocument *)document;
 - (RptqQueryGroup *)firstQueryGroup;
 
 @end

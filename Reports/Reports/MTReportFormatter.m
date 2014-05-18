@@ -245,12 +245,12 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addReportHeader {
-    NSDictionary *d = @{MTReportSectionType : MTReportHeader};
+    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeReportHeader)};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addPageHeader {
-    NSDictionary *d = @{MTReportSectionType : MTPageHeader};
+    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypePageHeader)};
     [[self pageLayoutTemporary] addObject:  d];
 }
 
@@ -421,18 +421,18 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
     NSNumber *level = @(groupLevel);
-    NSDictionary *d = @{MTReportSectionType : MTReportGroupHeader,
+    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeGroupHeader),
                         MTReportGroupLevel : level};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addPageFooter {
-    NSDictionary *d = @{MTReportSectionType : MTPageFooter};
+    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypePageFooter)};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)cacheReportFooter {
-    NSDictionary *d = @{MTReportSectionType : MTReportFooter};
+    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeReportFooter)};
     [[self pageLayoutTemporary] addObject: d];
 }
 
@@ -445,13 +445,13 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)cacheGroupFooterAtLevel:(NSUInteger)groupLevel {
     NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
-    NSDictionary *d = @{MTReportSectionType : MTReportGroupFooter,
+    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeGroupFooter),
                         MTReportGroupLevel : gl};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)cacheDetail {
-    NSDictionary *detail = @{MTReportSectionType : MTPageDetail};
+    NSDictionary *detail = @{MTReportSectionType : @(MNSDocumentSectionTypeBody)};
     [[self pageLayoutTemporary] addObject: detail];
     NSUInteger ctr = [self counterDetailLine];
     [[self pageIndexesTemporary] addIndex:ctr];
@@ -489,11 +489,13 @@ NSString * const MTNullIdentifier = @"(null)";
                     NSArray *objectsForPage = [[self allObjects] objectsAtIndexes:set];//[[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
                                                                 //              limit: [pageIndexes count]];
                     [[self pageCaching] cacheObjects:objectsForPage forPage:page];
+                    pageCache = [[self pageCaching] objectsForPage:page];
                 }
                 if ([pageCache count] > row) {
                     NSDictionary *data = pageCache[row];
                     rowData = [NSDictionary dictionaryWithDictionary:data];
                 }
+                pageCache = nil;
             } else {
                 rowData = [(MTDataTable *)[[self query] datatable] objectAtRow:[pageIndexes firstIndex]];
             }

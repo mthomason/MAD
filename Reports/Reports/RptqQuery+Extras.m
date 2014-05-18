@@ -12,6 +12,7 @@
 
 #import "RptqQuery+Extras.h"
 
+#import "RptqDocument.h"
 #import "MTGraph.h"
 #import "MTPair.h"
 #import "RptqQueryGroup.h"
@@ -26,6 +27,10 @@
 @implementation RptqQuery (Extras)
 
 #pragma mark - Overrides
+
++ (RptqQuery *)RptqQueryForDocument:(RptqDocument *)document {
+    return [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+}
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];

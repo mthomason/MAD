@@ -259,14 +259,20 @@
 
 }
 
-- (void)drawPageAtIndex:(NSInteger)index ofDocument:(RptqDocument *)document withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
+- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection {
+    [[UIColor whiteColor] setFill];
+}
 
+- (void)drawPageAtIndex:(NSInteger)pageIndex ofDocument:(RptqDocument *)document withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
+
+    NSInteger nextPageIndex = pageIndex + 1;
+    NSUInteger rowIndex = 0;
+    NSUInteger nextRowIndex = 1;
     
     CGFloat originY = pageRect.origin.y;
     CGFloat originX = pageRect.origin.x;
     CGFloat sizeWidth = pageRect.size.width;
     
-    NSUInteger detailRowsCounter = 0;
     NSUInteger pageNumber = 0;
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
@@ -282,76 +288,67 @@
         
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
-        if (index < numberOfPages) {
+        if (pageIndex < numberOfPages) {
             
             CGRect sectionRect = CGRectZero;
-            UIColor *whiteColor = [UIColor whiteColor];
             
-            for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:index]) {
+            BOOL firstTimeThroughLoop = NO;
+            for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
                 @autoreleasepool {
-                    
-                    NSString *pageSectionId = [pageSection objectForKey: MTReportSectionType];
                     
                     NSNumber *groupLevel = nil;
                     
                     RptqDocumentSection *documentSection = nil;
                     
-                    if ([MTPageDetail isEqualToString:pageSectionId]) {
-                        
-                        documentSection = [document hasDetailSection];
-                        [whiteColor setFill];
-                        detailRowsCounter++;
-                        
-                    } else if ([MTPageHeader isEqualToString:pageSectionId]) {
-                        
-                        documentSection = [document hasPageHeaderSection];
-                        [whiteColor setFill];
-                        
-                    } else if ([MTPageFooter isEqualToString:pageSectionId]) {
-                        
-                        documentSection = [document hasPageFooterSection];
-                        CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
-                        BOOL lastPage = index == numberOfPages - 1;
-                        if (lastPage) {
-                            RptqDocumentSection *pageFooterSection = [document hasReportFooterSection];
-                            CGFloat sizeHeightReportFooter = [[pageFooterSection layoutHeight] floatValue];
-                            originY = pageRect.origin.y + pageRect.size.height - sectionHeight - sizeHeightReportFooter;
-                        } else {
-                            originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
-                            pageNumber++;
-                        }
-                        [whiteColor setFill];
-                        
-                    } else if ([MTReportHeader isEqualToString:pageSectionId]) {
-                        
-                        documentSection = [document hasReportHeaderSection];
-                        [whiteColor setFill];
-                        
-                    } else if ([MTReportFooter isEqualToString:pageSectionId]) {
-                        
-                        documentSection = [document hasReportFooterSection];
-                        CGFloat sizeHeightReportFooter = [[documentSection layoutHeight] floatValue];
-                        originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter;
-                        [whiteColor setFill];
-                        
-                    } else if ([MTReportGroupHeader isEqualToString:pageSectionId]) {
-                        
-                        groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                        documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
-                        
-                        [whiteColor setFill];
-                        
-                    } else if ([MTReportGroupFooter isEqualToString:pageSectionId]) {
-                        
-                        groupLevel = [pageSection objectForKey:MTReportGroupLevel];
-                        
-                        query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                        documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
-                        
-                        [whiteColor setFill];
-                        
+                    switch ((MNSDocumentSectionType)[[pageSection objectForKey: MTReportSectionType] integerValue]) {
+                        case MNSDocumentSectionTypeBody:
+                            documentSection = [document hasDetailSection];
+                            rowIndex++;
+                            nextRowIndex++;
+                            break;
+                        case MNSDocumentSectionTypePageHeader:
+                            documentSection = [document hasPageHeaderSection];
+                            break;
+                        case MNSDocumentSectionTypePageFooter:
+                            documentSection = [document hasPageFooterSection];
+                            CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
+                            BOOL lastPage = pageIndex == numberOfPages - 1;
+                            if (lastPage) {
+                                RptqDocumentSection *pageFooterSection = [document hasReportFooterSection];
+                                CGFloat sizeHeightReportFooter = [[pageFooterSection layoutHeight] floatValue];
+                                originY = pageRect.origin.y + pageRect.size.height - sectionHeight - sizeHeightReportFooter;
+                            } else {
+                                originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
+                                pageNumber++;
+                            }
+                            break;
+                        case MNSDocumentSectionTypeReportHeader:
+                            documentSection = [document hasReportHeaderSection];
+                            break;
+                        case MNSDocumentSectionTypeReportFooter:
+                            documentSection = [document hasReportFooterSection];
+                            CGFloat sizeHeightReportFooter = [[documentSection layoutHeight] floatValue];
+                            originY = pageRect.origin.y + pageRect.size.height - sizeHeightReportFooter;
+                            break;
+                        case MNSDocumentSectionTypeGroupHeader:
+                            groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+                            documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel:[groupLevel integerValue] forQuery:query];
+
+                            break;
+                        case MNSDocumentSectionTypeGroupFooter:
+                            groupLevel = [pageSection objectForKey:MTReportGroupLevel];
+                            
+                            query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+                            documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel:[groupLevel integerValue] forQuery:query];
+
+                            break;
+                        default:
+                            NSAssert(false, @"Unknown type");
+                            break;
                     }
+                    
+                    
                     BOOL sectionIsVisible = [[documentSection visibility] boolValue];
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
@@ -361,26 +358,30 @@
                         [bezierPathForSection fill];
                     }
                     
-                    NSUInteger detailRowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                    NSDictionary *rowData = [[self reportFormatter] dataForRow: detailRowToPrint onPage: index];
+                    //NSUInteger detailRowToPrint = (rowIndex == 0 ? rowIndex : rowIndex - 1);
                     
-                    NSNumber *documentSectionType = [documentSection type];
+                    NSDictionary *rowData = [[self reportFormatter] dataForRow: rowIndex onPage: pageIndex];
                     
-                    BOOL useNextRowData = ([documentSectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
-                    NSInteger nextDetailRowToPrint = detailRowToPrint;
-                    NSInteger nextPageIndex = index;
+//                    NSNumber *documentSectionType = [documentSection type];
                     
-                    if (useNextRowData) {
-                        NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:index];
-                        if (nextDetailRowToPrint < numberOfItemsOnPage - 1) {
-                            nextDetailRowToPrint++;
-                        } else {
-                            nextDetailRowToPrint = 0;
-                            nextPageIndex++;
+                    
+                    //BOOL useNextRowData = ([documentSectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
+                    //NSInteger nextDetailRowToPrint = detailRowToPrint;
+
+                    //if (useNextRowData) {
+                        NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:pageIndex];
+                        if (nextRowIndex >= numberOfItemsOnPage) {
+                            nextRowIndex = 0;
                         }
-                    }
+                    //}
                     
-                    NSDictionary *nextRowData = [[self reportFormatter] dataForRow:nextDetailRowToPrint onPage:nextPageIndex];
+                    NSDictionary *nextRowData = [[self reportFormatter] dataForRow:nextRowIndex onPage:nextPageIndex];
+
+                    NSLog(@"Current page:    %d", pageIndex);
+                    NSLog(@"Next page:       %d", nextPageIndex);
+
+                    NSLog(@"Current row:    %d", rowIndex);
+                    NSLog(@"Next row:       %d", nextRowIndex);
                     
                     [groupLevelKeys removeAllObjects];
                     [nextGroupLevelKeys removeAllObjects];
@@ -438,9 +439,9 @@
                                                     // FIXME: Check to see which ones of these are correct.
                                                 case MTAggregateGroupByTypePage: {
                                                     
-                                                    NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:index];
+                                                    NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:pageIndex];
                                                     dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
-                                                    NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:index];
+                                                    NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:pageIndex];
                                                     
                                                     NSArray *objectsToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
                                                                                                                               limit: [indexSet count]];
@@ -566,18 +567,18 @@
                                             RptqQueryField *queryField1 = [barcodeObject referencesField1];
                                             RptqQueryField *queryField2 = [barcodeObject referencesField2];
                                             
-                                            NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                                            NSInteger pageIndex = index;
+                                            NSInteger rowToPrint = (rowIndex == 0 ? rowIndex : rowIndex - 1);
+                                            NSInteger tPageIndex = pageIndex;
                                             
                                             NSNumber *sectionType = [documentSection type];
                                             BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                             if (useNextRowData) {
-                                                NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:index];
+                                                NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:tPageIndex];
                                                 if (rowToPrint < numberOfItemsOnPage - 1) {
                                                     rowToPrint++;
                                                 } else {
                                                     rowToPrint = 0;
-                                                    pageIndex++;
+                                                    tPageIndex++;
                                                 }
                                             }
                                             NSDictionary *rd = useNextRowData ? nextRowData : rowData;
@@ -613,21 +614,22 @@
                                                 RptqDocumentObjectLabelDataField *labelDataField = [item isLabelDataField];
                                                 RptqQueryField *queryField = [labelDataField referencesQueryField];
                                                 
-                                                NSInteger rowToPrint = (detailRowsCounter == 0 ? detailRowsCounter : detailRowsCounter - 1);
-                                                NSInteger pageIndex = index;
+                                                NSInteger rowToPrint = (rowIndex == 0 ? rowIndex : rowIndex - 1);
+                                                NSInteger tPageIndex = pageIndex;
                                                 
                                                 NSNumber *sectionType = [documentSection type];
+                                                /*
                                                 BOOL useNextRowData = ([sectionType integerValue] == MNSDocumentSectionTypeGroupHeader);
                                                 if (useNextRowData) {
-                                                    NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:index];
+                                                    NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:tPageIndex];
                                                     if (rowToPrint < numberOfItemsOnPage - 1) {
                                                         rowToPrint++;
                                                     } else {
                                                         rowToPrint = 0;
-                                                        pageIndex++;
+                                                        tPageIndex++;
                                                     }
-                                                }
-                                                NSDictionary *rd = useNextRowData ? nextRowData : rowData;
+                                                }*/
+                                                NSDictionary *rd = /*useNextRowData ? nextRowData :*/ rowData;
                                                 NSString *tableFieldKey = [database safeQueryField:queryField];
                                                 id value = [rd objectForKey: tableFieldKey];
                                                 RptqDatabaseSchemaField *schemaField = [queryField databaseSchemaField];
