@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 + (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document;
 + (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document;
 
++ (void)batchUpdateSectionLayoutHeights:(RptqDocument *)document;
 + (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section;
 
 - (NSString *)localizedDisplayName;

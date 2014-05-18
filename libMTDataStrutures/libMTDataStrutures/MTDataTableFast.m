@@ -40,11 +40,6 @@
     sqlite3_close_v2(_database);
 }
 
-//- (void)loadFromCache {
-//    [super loadFromCache];
-    
-//}
-
 - (id)plist {
     
     NSDictionary *superPlist = [super plist];
@@ -203,7 +198,7 @@
         NSUInteger sortCounter = 0;
         for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
             if (sortCounter != 0) [sql appendString:@", "];
-            NSString *sortDirection = [sortDescriptor ascending] ? @"ASC" : @"DESC";
+            NSString *sortDirection = [sortDescriptor ascending] ? @"ASC" : @"DESC";//  @"COLLATE NOCASE ASC" : @"COLLATE NOCASE DESC";
             [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
             sortCounter++;
         }
@@ -477,6 +472,12 @@
     return objectEnumerator;
 }
 
+- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel {
+    NSEnumerator *enumerator = nil;
+
+    return enumerator;
+}
+
 - (NSArray *)allObjects {
     // FIXME: Implement this.
     return nil;
@@ -577,8 +578,6 @@
         dispatch_semaphore_signal(s3);
     }];
     dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
-
-
 }
 
 - (void)endBulkInsert {

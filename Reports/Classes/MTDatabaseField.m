@@ -85,11 +85,7 @@
         case MTDataTypeTimeStamp:
         case MTDataTypeYear:
         case MTDataTypeUnknown:
-            @throw [NSException exceptionWithName: NSInternalInconsistencyException
-                                           reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
-                                         userInfo: nil];
-            
-            break;
+            NSAssert(false, @"Not implemented: selectorForSorted in MTDatabaseField.");
         case MTDataTypeBlob:
         case MTDataTypeBit:
         case MTDataTypeFloat:

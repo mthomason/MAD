@@ -317,23 +317,37 @@
     return resultSection;
 }
 
+
++ (void)batchUpdateSectionLayoutHeights:(RptqDocument *)document {
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
+    for (RptqDocumentSection *sec in enumerator) {
+        @autoreleasepool {
+            CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
+            NSNumber *lh = @(layoutHight);
+            [sec setLayoutHeight:lh];
+        }
+    }
+}
+
 // This is the layout height for page rendering... the designer section height is stored in the db
 + (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section {
     CGFloat resultHeight = CGSizeZero.height;
-    for (RptqDocumentSectionRows *row in [section hasRows]) {
-        for (RptqDocumentObject *element in [row hasObjects]) {
-            
-            CGFloat originPointX        = [[element dropPointX] floatValue];
-            CGFloat originPointY        = [[element dropPointY] floatValue];
-            
-            CGSize marginSize           = [element size];
-            CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, marginSize.width, marginSize.height);
-
-            CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
-            if (totalHeight > resultHeight) {
-                resultHeight = totalHeight;
-                NSNumber *h = [[NSNumber alloc] initWithFloat:resultHeight];
-                [section setLayoutHeight:h];
+    if ([[section visibility] boolValue]) {
+        for (RptqDocumentSectionRows *row in [section hasRows]) {
+            for (RptqDocumentObject *element in [row hasObjects]) {
+                
+                CGFloat originPointX        = [[element dropPointX] floatValue];
+                CGFloat originPointY        = [[element dropPointY] floatValue];
+                
+                CGSize marginSize           = [element size];
+                CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, marginSize.width, marginSize.height);
+                
+                CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
+                if (totalHeight > resultHeight) {
+                    resultHeight = totalHeight;
+                    NSNumber *h = [[NSNumber alloc] initWithFloat:resultHeight];
+                    [section setLayoutHeight:h];
+                }
             }
         }
     }

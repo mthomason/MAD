@@ -12,6 +12,4 @@
 @interface MTDataTableFast : MTDataTable
 <NSCoding, NSFastEnumeration>
 
-//- (void)setSortDescriptorsWhileReplacingKeys:(NSArray *)sortDescriptors;
-
 @end

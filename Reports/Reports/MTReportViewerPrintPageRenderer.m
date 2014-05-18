@@ -149,7 +149,6 @@
     CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
     CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
     
-    //[[self reportFormatter] formatForSize:letterRect.size onlyFirstPage:YES];
     UIGraphicsBeginImageContextWithOptions(letterRect.size, NO, 0.0000f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();

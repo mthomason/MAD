@@ -200,6 +200,7 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="ERc-MK-TMQ" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
+                        <barButtonItem style="plain" systemItem="fixedSpace" id="fni-VY-x1j"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="uNL-pS-3JN"/>
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="HDt-8o-ngI"/>
                         <barButtonItem width="44" systemItem="action" id="Mnl-SJ-Bua">
@@ -208,7 +209,7 @@
                                 <action selector="activity:" destination="ERc-MK-TMQ" id="kep-te-mAh"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="5Mc-Dk-rgz"/>
+                        <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="5Mc-Dk-rgz"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="L5Q-GJ-2o1">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="zUj-Uf-OIx">

@@ -28,6 +28,8 @@
 @property (nonatomic, strong) UIView *pageNumberView;
 @property (nonatomic, strong) UILabel *timeSinceRefrehLabel;
 
+@property (nonatomic, assign) BOOL displayDebuggingInfo;
+
 @end
 
 @implementation MTReportViewerReportPageViewController
@@ -50,6 +52,7 @@
         [self setShowPageNumberDisplay:YES];
         [self setPageNumber:pageNumber];
         [self setNumberOfPages:numberOfPages];
+        [self setDisplayDebuggingInfo:NO];
     }
     return self;
 }
@@ -77,11 +80,11 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if ([self showPageNumberDisplay]) {
-        [self addTimerView];
-        [self updateLateRefreshedLabel:self];
-
-        [self pageNumberViewForPageNumber:[self pageNumber] of:[self numberOfPages]];
-        
+        if ([self displayDebuggingInfo]) {
+            [self addTimerView];
+            [self updateLateRefreshedLabel:self];
+            [self displayPageCounterIndicatorWithPageNumber:[self pageNumber] ofTotalPages:[self numberOfPages]];
+        }
     } else {
         [self setShowPageNumberDisplay:YES];
     }
@@ -210,7 +213,7 @@
     }
 }
 
-- (UIView *)pageNumberViewForPageNumber:(NSUInteger)pageNumber of:(NSUInteger)numberOfPages {
+- (UIView *)displayPageCounterIndicatorWithPageNumber:(NSUInteger)pageNumber ofTotalPages:(NSUInteger)numberOfPages {
     CGFloat w = 99.0000f;
     CGFloat h = 33.0000f;
     CGFloat y = CGPointZero.y + 10.0000f;

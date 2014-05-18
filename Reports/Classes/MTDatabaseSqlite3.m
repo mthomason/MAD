@@ -404,7 +404,6 @@
                                 
                                 const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
                                 const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
-                                //const char *originName = sqlite3_column_origin_name(statement, columnCounter);
                                 const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
                                 
                                 char const **pzDataType = NULL;

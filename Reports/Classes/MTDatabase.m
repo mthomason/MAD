@@ -180,7 +180,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 }
 
 - (NSString *)sqlLimitClause {
-    return [self limitResults] ? @"\nLIMIT 10000" : @"";
+    return [self limitResults] ? @"" /*@"\nLIMIT 10000"*/ : @"";
 }
 
 - (void)removeCredentalsBecauseOfError:(NSError *)error {

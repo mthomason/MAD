@@ -79,6 +79,7 @@
 @property (nonatomic, strong) UILabel *labelStatus;
 
 @property (nonatomic, strong) NSDictionary *attributesLabelDateUpdated;
+
 @property (nonatomic, strong) NSDictionary *attributesLabelNumberOfPages;
 @property (nonatomic, strong) NSDictionary *attributesRecordsRead;
 @property (nonatomic, strong) NSDictionary *attributesStatusLabel;
@@ -169,14 +170,19 @@
     [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
     [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
     [shadow setShadowBlurRadius:5.0000f];
-    UIColor *textColor = [UIColor lightTextColor];
+    UIColor *textColor = [UIColor whiteColor];
+    
     UIFont *font = [UIFont systemFontOfSize:8.0000f];
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:8.0000f];
+    
     NSDictionary *attributes = @{
                                  NSForegroundColorAttributeName : textColor,
-                                 NSFontAttributeName : font,
-                                 NSShadowAttributeName : shadow,
+                                 NSFontAttributeName : fontBold,
                                  };
-    
+    NSDictionary *attributesLight = @{
+                                     NSForegroundColorAttributeName : textColor,
+                                     NSFontAttributeName : font,
+                                     };
     NSAttributedString *statusMessage1 = [NSAttributedString new];
     NSAttributedString *statusMessage2 = [NSAttributedString new];
     NSAttributedString *statusMessage3 = [NSAttributedString new];
@@ -185,10 +191,11 @@
     [self setStatusMessage3:statusMessage3];
     
     [self setAttributesLabelDateUpdated:attributes];
-    [self setAttributesLabelNumberOfPages:attributes];
-    [self setAttributesRecordsRead:attributes];
+    [self setAttributesLabelNumberOfPages:attributesLight];
+    [self setAttributesRecordsRead:attributesLight];
     NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyleCentered setAlignment:NSTextAlignmentCenter];
+    [paragraphStyleCentered setAlignment:NSTextAlignmentLeft];
+    
     NSDictionary *attributesCenter = @{
                                        NSParagraphStyleAttributeName : paragraphStyleCentered
                                        };
@@ -1017,7 +1024,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesLabelDateUpdated]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesRecordsRead]];
         [self setStatusMessage2:attributedString];
         [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
     }
@@ -1030,7 +1037,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesLabelDateUpdated]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesLabelNumberOfPages]];
         [self setStatusMessage3:attributedString];
         [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
     }
@@ -1057,8 +1064,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [status addAttributes:[self attributesStatusLabel] range:range];
                 NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin);
 
-    CGSize labelSize = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size;
-    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelSize.width, 44.0000f);
+    //CGSize labelSize = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size;
+    //CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelSize.width, 44.0000f);
+    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
     [[self labelStatus] setBounds:bounds];
     [[self labelStatus] setAttributedText:status];
 }

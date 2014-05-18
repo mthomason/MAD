@@ -80,9 +80,12 @@
     NSString *columnAffinity = [[self database] nativeTypeForDataType:[self columnType]];
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
+    
+    NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"" : @""; //@"COLLATE NOCASE" : @"";
+    
     NSString *sql = [self createTable] ?
-                    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@);", tableName, columnDefination] :
-                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@", tableName, columnDefination];
+                    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, collate] :
+                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@ %@", tableName, columnDefination, collate];
     
     return sql;
 }

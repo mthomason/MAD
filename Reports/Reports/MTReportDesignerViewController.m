@@ -1670,13 +1670,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([UIDevice isPad]) {
         NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[[self popoverControllerInformation] passthroughViews]];
         [passThroughViews removeObject:elementView];
-        
-        NSAssert([[self popoverControllerInformation] isPopoverVisible], @"Should always eval to true");
-        if ([self oneOrMoreElementsSelected]) {
-            [self repositionPopoverControllerInformationAnimated:animated];
-            [self setDisplayInactive];
-        } else {
-            [[self popoverControllerInformation] dismissPopoverAnimated:animated];
+        if ([[self popoverControllerInformation] isPopoverVisible]) {
+            if ([self oneOrMoreElementsSelected]) {
+                [self repositionPopoverControllerInformationAnimated:animated];
+                [self setDisplayInactive];
+            } else {
+                [[self popoverControllerInformation] dismissPopoverAnimated:animated];
+            }
         }
     }
     

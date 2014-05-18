@@ -65,10 +65,7 @@
         RptqQuery *queryObject = [parameters objectForKey: parameterScheam];
         NSString *name = [parameters objectForKey:parameterName];
         
-        //NSManagedObjectID *objectId = [queryObject objectID];
-        //NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
         NSUInteger hash = [name hash];
-        
         NSNumber *typeKey = @(MTDataTableTypeOfTable);
         NSNumber *type = @(MTDataTableTypePhysical);
         NSNumber *objectIdKey = @(MTDataTableObjectId);
@@ -548,6 +545,11 @@
                     NSCharacterSet *charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
                     [result setString: [result stringByTrimmingCharactersInSet:charSet]];
                     
+                    for (NSUInteger i = 0; i < [*linkDepth integerValue]; i++) {
+                        [result appendFormat:@"\t"];
+                    }
+                    [result appendString:tableFactor];
+                    
                     if (NO) {   //I would think to group these in parentheses, but some databases don't like that.
                         [result insertString:@"\t(" atIndex:0];
                         [result appendString:@")\n\t"];
@@ -555,11 +557,7 @@
                         [result insertString:@"\t" atIndex:0];
                         [result appendString:@"\n\t"];
                     }
-                    
-                    for (NSUInteger i = 0; i < [*linkDepth integerValue]; i++) {
-                        [result appendFormat:@"\t"];
-                    }
-                    [result appendString:tableFactor];
+
                 }
                 
                 *linkDepth = @([*linkDepth integerValue] - 1);

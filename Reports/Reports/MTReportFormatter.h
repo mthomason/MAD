@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "MTTableFormatter.h"
 
+typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
+    MTReportFormatterOptionsNone   = 1 << 0,
+};
+
 extern NSString * const MTNullIdentifier;
 
 @class RptqDocument;
@@ -19,7 +23,7 @@ extern NSString * const MTNullIdentifier;
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
 
 - (void)formatForSize:(CGSize)printableSize;
-- (void)formatForSize:(CGSize)printableSize onlyFirstPage:(BOOL)onlyFirstPage;
+- (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page;
 
