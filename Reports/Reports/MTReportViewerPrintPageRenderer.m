@@ -306,9 +306,6 @@
                             nextRowIndex++;
                             break;
                             
-                        case MNSDocumentSectionTypePageHeader:
-                            break;
-                            
                         case MNSDocumentSectionTypePageFooter: {
                             CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
                             BOOL lastPage = pageIndex == numberOfPages - 1;
@@ -320,20 +317,12 @@
                             }
                             break;
                         }
+
                         case MNSDocumentSectionTypeReportFooter:
                             originY = pageRect.origin.y + pageRect.size.height - [[documentSection layoutHeight] floatValue];
                             break;
-                            
-                        case MNSDocumentSectionTypeGroupHeader:
-                            break;
-                            
-                        case MNSDocumentSectionTypeGroupFooter:
-                            break;
-                        case MNSDocumentSectionTypeReportHeader:
-                            break;
-                            
+                        
                         default:
-                            NSAssert(false, @"Unknown type");
                             break;
                     }
                     
@@ -373,7 +362,6 @@
                             for (RptqDocumentObject *item in [row hasObjects]) {
                                 
                                 @autoreleasepool {
-                                    
                                     
                                     NSMutableString *displayString = [NSMutableString new];
                                     id drawingObject = nil;

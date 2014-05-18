@@ -27,8 +27,6 @@
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
 
-NSString * const MTSqlSelectTop100 = @"SELECT DISTINCT TOP 511";
-
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
 NSString * const MTDatabaseConnectionDatabase   = @"MTDatabaseConnectionDatabase";
@@ -42,6 +40,11 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 @end
 
 @implementation MTDatabaseSqlServer
+
+- (void *)databaseHandle {
+    NSAssert(false, @"Not yet implemented");
+    return NULL;
+}
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     

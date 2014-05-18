@@ -31,7 +31,7 @@
 
 @interface MTDatabaseSqlite3 ()
 
-@property (assign) sqlite3 *database;
+@property (nonatomic, readwrite, assign) sqlite3 *database;
 @property (assign) sqlite3_stmt *bulkStatement;
 
 @property (nonatomic, assign) BOOL isOpen;
@@ -39,6 +39,10 @@
 @end
 
 @implementation MTDatabaseSqlite3
+
+- (void *)databaseHandle {
+    return _database;
+}
 
 - (id)init {
     self = [super init];

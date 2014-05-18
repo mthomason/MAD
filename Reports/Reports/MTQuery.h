@@ -32,10 +32,19 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
     MTQueryTypeCacheJournalModeOverride,
     MTQueryTypeCacheJournalModeDefault,
     MTQueryTypeCacheIndexCreateParameters,
-    MTQueryTypeCacheIndexDropParameters
+    MTQueryTypeCacheIndexDropParameters,
+    MTQueryTypeCacheSelectLimitOffset,
 };
 
 #pragma mark Types of specific paramamters accepted for each query
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
+    MTQueryCacheSelectLimitOffsetParamatersLimit,
+    MTQueryCacheSelectLimitOffsetParamatersOffset,
+    MTQueryCacheSelectLimitOffsetParamatersTableNames,
+    MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
+    MTQueryCacheSelectLimitOffsetParamatersSortDesc
+};
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheFullParameters) {
 	MTQueryCacheFullReportName,

@@ -536,6 +536,8 @@
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C4177C319294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */; };
+		4C4177C419294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */; };
 		4C434B2618B5F3E800750B6B /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2318B5F3E800750B6B /* libcrypto.a */; };
 		4C434B2918B5F49A00750B6B /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C434B2D18B605C700750B6B /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2318B5F3E800750B6B /* libcrypto.a */; };
@@ -1974,6 +1976,8 @@
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C3ACA45167297AA001BC16D /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryPredicate+Extras.m"; sourceTree = "<group>"; };
+		4C4177C119294B2E006EC472 /* MTQueryCacheSelectLimitOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectLimitOffset.h; sourceTree = "<group>"; };
+		4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectLimitOffset.m; sourceTree = "<group>"; };
 		4C434AD818B5F3E800750B6B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		4C434AD918B5F3E800750B6B /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
 		4C434ADA18B5F3E800750B6B /* asn1_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1_mac.h; sourceTree = "<group>"; };
@@ -3240,6 +3244,8 @@
 				4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */,
 				4C273826191AE4FF00304A02 /* MTQueryCacheIndexDrop.h */,
 				4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */,
+				4C4177C119294B2E006EC472 /* MTQueryCacheSelectLimitOffset.h */,
+				4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */,
 			);
 			name = MTQueryCache;
 			sourceTree = "<group>";
@@ -5971,6 +5977,7 @@
 				4CE17E2A1650C6B50002F8EA /* RptqUserCredentals+Extras.m in Sources */,
 				4CABE4741837DF7C007EDD9D /* RptqDatabaseSchemaField.m in Sources */,
 				4C23FC0918FAE610009F234F /* MTDatabase.m in Sources */,
+				4C4177C419294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m in Sources */,
 				4C7C8AF41660348D00F2B88B /* UIManagedDocument+FileOperations.m in Sources */,
 				4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */,
 				4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
@@ -6432,6 +6439,7 @@
 				4C23FC0E18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */,
 				4CFF3F25164DFF1F0070E880 /* MADocument.m in Sources */,
 				4C23FB4318FAE0CA009F234F /* MTStoreKitController.m in Sources */,
+				4C4177C319294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m in Sources */,
 				4CE17E2116501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4CE17E251650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m in Sources */,
 				4C23FAEC18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,

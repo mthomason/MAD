@@ -79,6 +79,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)nativeTypeForDataType:(MTDataType)dataType;
 
 - (void)cleanupBulkInsert;
+- (void *)databaseHandle;
 
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 

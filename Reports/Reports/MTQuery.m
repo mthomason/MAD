@@ -30,6 +30,7 @@
 #import "MTQueryCacheJournalModeOverride.h"
 #import "MTQueryCacheIndexCreate.h"
 #import "MTQueryCacheIndexDrop.h"
+#import "MTQueryCacheSelectLimitOffset.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -146,6 +147,10 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
             
         case MTQueryTypeCacheIndexDropParameters:
             self = [[MTQueryCacheIndexDrop alloc] initWithObject:object];
+            break;
+            
+        case MTQueryTypeCacheSelectLimitOffset:
+            self = [[MTQueryCacheSelectLimitOffset alloc] initWithObject:object];
             break;
             
         default:

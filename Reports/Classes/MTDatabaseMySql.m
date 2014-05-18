@@ -54,6 +54,11 @@
 
 @implementation MTDatabaseMySql
 
+- (void *)databaseHandle {
+    NSAssert(false, @"Not yet implemented");
+    return NULL;
+}
+
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
     
     [self getCredentalsWithConnection:connection completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
