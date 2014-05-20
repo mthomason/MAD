@@ -15,6 +15,7 @@
 #import "MTDatabaseConnection.h"
 
 extern NSString * const MTReportSectionType;
+extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportSectionValues;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MTReportGroupLevelKeys;

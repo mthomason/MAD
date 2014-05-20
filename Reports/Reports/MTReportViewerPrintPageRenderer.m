@@ -362,7 +362,9 @@
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {
                             if (readGroupIndex < [groupData count]) {
-                                rowData = [groupData objectAtIndex:readGroupIndex];// [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
+                                NSNumber *rowId = [pageSection objectForKey: MTReportDetailRowId];
+                                rowData = [[self reportFormatter] dataForCacheId: rowId];
+                                //rowData = [groupData objectAtIndex:readGroupIndex];// [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
                             }
                             readGroupIndex++;
                         }

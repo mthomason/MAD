@@ -83,7 +83,7 @@
         [sql appendFormat:@"\"%@\"", key];
         columnCounter++;
     }
-    [sql appendFormat:@" FROM %@", [self tableName]];
+    [sql appendFormat:@", rowid FROM %@", [self tableName]];
     
     if ([[self sortDesc] count] > 0) {
         NSUInteger sortCounter = 0;

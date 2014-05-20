@@ -48,7 +48,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, assign) CGSize layoutSize;
 
-@property (nonatomic, assign) NSUInteger counterDetailLine;
 @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
 
 @property (nonatomic, strong, readwrite) NSArray *reportIndexes;
@@ -144,7 +143,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
             [self cleanupTemporaryReportIndexes];
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
-            [self setCounterDetailLine:0];
 
             NSArray *allObjects = [[[[self query] datatable] objectEnumerator] allObjects];
             [self setAllObjects: allObjects];
@@ -453,7 +451,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
     for (NSInteger i=0; i<[containerDetails count]; i++) {
         [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
-        [self cacheDetail];
+        [self cacheDetail:containerDetails[i][@"ROWID"]];
     }
 }
 
@@ -464,13 +462,11 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject: d];
 }
 
-- (void)cacheDetail {
-    NSDictionary *detail = @{MTReportSectionType : @(MNSDocumentSectionTypeBody)};
+- (void)cacheDetail:(NSNumber *)detailRowId {
+    NSDictionary *detail = @{MTReportSectionType : @(MNSDocumentSectionTypeBody),
+                             MTReportDetailRowId : detailRowId};
     [[self pageLayoutTemporary] addObject: detail];
-    NSUInteger ctr = [self counterDetailLine];
-    [[self pageIndexesTemporary] addIndex:ctr];
-    ctr++;
-    [self setCounterDetailLine:ctr];
+    [[self pageIndexesTemporary] addIndex:[detailRowId integerValue]];
 }
 
 - (NSUInteger)numberOfPages {
@@ -482,6 +478,11 @@ NSString * const MTNullIdentifier = @"(null)";
         numberOfPages = [[self reportLayout] count];
     }
     return numberOfPages;
+}
+
+// Uses sqlite3 rowid
+- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
+    return [[[self query] datatable] dataForCacheId:cacheId];
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {

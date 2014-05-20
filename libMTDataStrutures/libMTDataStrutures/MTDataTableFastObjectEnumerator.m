@@ -47,9 +47,6 @@
             MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
             [self setDatabaseForQuery:database];
             _statement = NULL;
-            //const char *path = [[[databaseConnection databaseUrl] path] UTF8String];
-            //BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READONLY | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
-            //success = sqlite3_extended_result_codes(_database, true) == SQLITE_OK;
             const char *queryStringConstChar = [[query getSqlWithError:nil] UTF8String];
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
             BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
@@ -139,6 +136,9 @@
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];
         }
         columnCounter++;
+    }
+    if (sqlite3_column_count(_statement) >= columnCounter) {
+        [currentObject setValue:@(sqlite3_column_int(_statement, columnCounter)) forKey:@"ROWID"];
     }
     return currentObject;
 }

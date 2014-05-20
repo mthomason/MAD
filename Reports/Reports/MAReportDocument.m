@@ -46,7 +46,7 @@ NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
 NSString * const MTReportGroupLevel = @"MTReportGroupLevel";
 NSString * const MTReportGroupLevelKeys = @"MTReportGroupLevelKeys";
-
+NSString * const MTReportDetailRowId = @"MTReportDetailRowId";
 NSString * const MTPageDetail = @"MTPageDetail";
 NSString * const MTPageHeader = @"MTPageHeader";
 NSString * const MTPageFooter = @"MTPageFooter";

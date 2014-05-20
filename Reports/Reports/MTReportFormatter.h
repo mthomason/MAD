@@ -36,6 +36,8 @@ extern NSString * const MTNullIdentifier;
 
 - (NSArray *)layoutForPage:(NSUInteger)page;
 
+- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
+
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 
 @end

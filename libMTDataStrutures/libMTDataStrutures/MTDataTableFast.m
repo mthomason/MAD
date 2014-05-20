@@ -376,6 +376,33 @@
     return  queryDefination;
 }
 
+- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
+    NSDictionary *options = @{
+                              @(MTQuerySelectRowId) : cacheId,
+                              @(MTQuerySelectTableName) : [self tableName],
+                                  };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
+    sqlite3_stmt *statement = NULL;
+    NSError *error = nil;
+    NSString *sql = [query getSqlWithError:&error];
+    const char *sqlc = [sql UTF8String];
+    char *queryString = sqlite3_mprintf((char *) sqlc);
+    BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+    NSDictionary *result = nil;
+    if (success) {
+        success = sqlite3_step(statement) == SQLITE_ROW;
+        result = [self currentObject:statement];
+    } else {
+        const char *errorMessage = sqlite3_errmsg([[self databaseForSelects] databaseHandle]);
+        NSString *message = [NSString stringWithUTF8String: errorMessage];
+        MTLog(@"%@", message);
+    }
+    
+    sqlite3_finalize(statement);
+    sqlite3_free(queryString);
+    return result;
+}
+
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
     
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];

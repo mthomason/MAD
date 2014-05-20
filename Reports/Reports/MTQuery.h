@@ -34,6 +34,7 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
     MTQueryTypeCacheIndexCreateParameters,
     MTQueryTypeCacheIndexDropParameters,
     MTQueryTypeCacheSelectLimitOffset,
+    MTQueryTypeCacheSelectRowId,
 };
 
 #pragma mark Types of specific paramamters accepted for each query
@@ -103,7 +104,8 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
     MTQuerySelectLimit,
     MTQuerySelectOffset,
     MTQuerySelectSortDescriptors,
-    MTQuerySelectPredicates
+    MTQuerySelectPredicates,
+    MTQuerySelectRowId
 };
 
 extern NSString * const MTQueryKeyType;

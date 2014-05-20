@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQuery.h"
+#import "MTQueryCacheSelectRowId.h"
 #import "MTQuerySampleDataField.h"
 #import "MTQuerySampleDataTable.h"
 #import "MTQueryFull.h"
@@ -72,7 +73,11 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 - (id)initWithQueryType:(MTQueryType)type object:(id)object {
 
     switch (type) {
-            
+        
+        case MTQueryTypeCacheSelectRowId:
+            self = [[MTQueryCacheSelectRowId alloc] initWithObject:object];
+            break;
+
         case MTQueryTypeMaxFieldLength:
             self = [[MTQueryMaxFieldLength alloc] initWithObject:object];
             break;
