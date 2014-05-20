@@ -340,9 +340,6 @@
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                     
-                    
-                    
-                    
                     NSDictionary *rowData = nil;
                 
                     if (numberOfGroups > 0) {
@@ -666,18 +663,21 @@
 
 - (NSArray *)groupLevelKeysForDetail:(NSDictionary *)pageSection page:(NSInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups {
     NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] init];
-    for (NSInteger pageCtr = page; page >= 0; page--) {
+    BOOL firstTime = YES;
+    for (NSInteger pageCtr = page; pageCtr >= 0; pageCtr--) {
         NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:pageCtr];
         NSInteger sectionRowCounter = [sectionsForPage count] - 1;
-        for (NSDictionary *pageSec in [sectionsForPage reverseObjectEnumerator]) {
+        NSRange range = NSMakeRange(0, firstTime ? row : [sectionsForPage count] - 1);
+        for (NSDictionary *pageSec in [[sectionsForPage subarrayWithRange:range] reverseObjectEnumerator]) {
             if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
                 [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
-                [currentGroupLevelKeys addObjectsFromArray:sectionsForPage];
+                [currentGroupLevelKeys addObjectsFromArray:[pageSec objectForKey: MTReportGroupLevelKeys]];
                 pageCtr = -1;
                 break;
             }
             sectionRowCounter--;
         }
+        firstTime = NO;
     }
     return currentGroupLevelKeys;
 }
