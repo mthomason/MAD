@@ -659,6 +659,9 @@
     } else if (type == MNSDocumentSectionTypeBody) {
         NSArray *keys = [self groupLevelKeysForDetail:pageSection page:page row:row numberOfGroups:numberOfGroups];
         [currentGroupLevelKeys addObjectsFromArray:keys];
+    } else if (type == MNSDocumentSectionTypeGroupFooter) {
+        NSArray *keys = [self groupLevelKeysForGroupFooter:pageSection page:page row:row numberOfGroups:numberOfGroups];
+        [currentGroupLevelKeys addObjectsFromArray:keys];
     }
     return currentGroupLevelKeys;
     
@@ -668,7 +671,7 @@
     NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] init];
     BOOL firstTime = YES;
     for (NSInteger pageCtr = page; pageCtr >= 0; pageCtr--) {
-        NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:pageCtr];
+        NSArray *sectionsForPage = [NSArray arrayWithArray:[[self reportFormatter] layoutForPage:pageCtr]];
         NSInteger sectionRowCounter = [sectionsForPage count] - 1;
         NSRange range = NSMakeRange(0, firstTime ? row : [sectionsForPage count] - 1);
         for (NSDictionary *pageSec in [[sectionsForPage subarrayWithRange:range] reverseObjectEnumerator]) {
@@ -683,6 +686,10 @@
         firstTime = NO;
     }
     return currentGroupLevelKeys;
+}
+
+- (NSArray *)groupLevelKeysForGroupFooter:(NSDictionary *)pageSection page:(NSInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups {
+    return [self groupLevelKeysForDetail:pageSection page:page row:row numberOfGroups:numberOfGroups];
 }
 
 - (NSArray *)groupLevelKeysForGroupHeader:(NSDictionary *)pageSection page:(NSInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups {
