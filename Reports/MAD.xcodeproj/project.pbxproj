@@ -479,8 +479,8 @@
 		4C23FBFD18FAE5DF009F234F /* MTDatabaseConnectionSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBF518FAE5DF009F234F /* MTDatabaseConnectionSqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC0818FAE610009F234F /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBFF18FAE610009F234F /* MTDatabase.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC0918FAE610009F234F /* MTDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FBFF18FAE610009F234F /* MTDatabase.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FC0A18FAE610009F234F /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0118FAE610009F234F /* MTDatabaseMySql.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4C23FC0B18FAE610009F234F /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0118FAE610009F234F /* MTDatabaseMySql.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C23FC0A18FAE610009F234F /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0118FAE610009F234F /* MTDatabaseMySql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FC0B18FAE610009F234F /* MTDatabaseMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0118FAE610009F234F /* MTDatabaseMySql.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC0C18FAE610009F234F /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0318FAE610009F234F /* MTDatabaseProcessSqlServer.m */; };
 		4C23FC0D18FAE610009F234F /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0318FAE610009F234F /* MTDatabaseProcessSqlServer.m */; };
 		4C23FC0E18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0518FAE610009F234F /* MTDatabaseSqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };

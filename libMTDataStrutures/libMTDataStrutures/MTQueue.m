@@ -14,7 +14,7 @@
 
 @interface MTQueue ()
 
-@property (retain) NSMutableArray *queue;
+@property (strong) NSMutableArray *queue;
 @property (assign) NSUInteger counter;
 
 @end

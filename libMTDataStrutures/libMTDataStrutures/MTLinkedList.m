@@ -14,7 +14,7 @@
 
 @interface MTLinkedList()
 
-@property (nonatomic, retain) NSMutableArray *list;
+@property (nonatomic, strong) NSMutableArray *list;
 @property (assign) NSInteger location;
 
 @end
@@ -27,6 +27,7 @@
         [self setLocation: 0];
         NSMutableArray *list = [[NSMutableArray alloc] init];
         [self setList:list];
+        list = nil;
     }
     return self;
 }

@@ -16,10 +16,10 @@
 
 @interface MTEdge ()
 
-@property (nonatomic, retain) MTPair *vertices;
-@property (nonatomic, retain) NSNumber *weight;
+@property (nonatomic, strong) MTPair *vertices;
+@property (nonatomic, strong) NSNumber *weight;
 @property (readwrite, assign) BOOL isDirected;
-@property (nonatomic, retain) NSNumber *uniqueIdForStructure;
+@property (nonatomic, strong) NSNumber *uniqueIdForStructure;
 
 @end
 

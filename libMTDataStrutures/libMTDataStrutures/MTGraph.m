@@ -15,7 +15,7 @@
 @interface MTGraph ()
 
 // MARK: The graph is defined as an adjacency list.
-@property (nonatomic, retain) NSMutableArray *vertices;
+@property (nonatomic, strong) NSMutableArray *vertices;
 
 // MARK: Counters to give edges and verties unique ids.
 @property (assign) NSUInteger idUniqueVertices;

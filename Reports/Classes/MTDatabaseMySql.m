@@ -73,23 +73,19 @@
         [serv setUser:      username];
         [serv setPassword:  password];
         
-        MysqlConnection *conn = [[MysqlConnection connectToServer: serv error:&connError] retain];
+        MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
 
         success = (conn && connError == nil);
         completion(conn, success, connError);
         
-        [conn release];
-        [serv release];
-        
-
     }];
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
-    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    MTDatabaseConnection *connectionSettings = [self databaseConnection];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-            MysqlConnection *conn = [dbconn retain];
+            MysqlConnection *conn = dbconn;
             if (conn && error == nil) {
                 @autoreleasepool {
                     [MysqlFetch performQuery:query onConnection:conn];
@@ -101,19 +97,17 @@
                 [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                 completion(NO, error);
             }
-            [conn release];
         }];
     }];
-    [connectionSettings release];
 }
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    MTDatabaseConnection *connectionSettings = [self databaseConnection];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             
-            MysqlConnection *conn = [dbconn retain];
+            MysqlConnection *conn = dbconn;
             BOOL successConnection = conn != nil;
             if (successConnection) {
                 
@@ -121,22 +115,20 @@
                 NSInteger resultsCount = [dataTable count];
                 NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
                 for (NSInteger i=0; i<[dataTable count]; i++) {
-                    NSString *tableName = [dataTable objectAtRow:i column:0];
-                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                    [results addObject:table];
-                    [table release];
+                    @autoreleasepool {
+                        NSString *tableName = [dataTable objectAtRow:i column:0];
+                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                        [results addObject:table];
+                    }
                 }
-                completion(successConnection, error, [results autorelease]);
+                completion(successConnection, error, results);
             } else {
                 SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
                 [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                 completion(NO, error, nil);
             }
-            [conn release];
         }];
     }];
-    [connectionSettings release];
-    
 }
 
 
@@ -144,10 +136,10 @@
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     
-    MTDatabaseConnection *connectionSettings = [[self databaseConnection] retain];
+    MTDatabaseConnection *connectionSettings = [self databaseConnection];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-            MysqlConnection *conn = [dbconn retain];
+            MysqlConnection *conn = dbconn;
             BOOL successConnection = conn != nil;
             NSMutableDictionary *resultsDictionary = nil;
             
@@ -163,14 +155,13 @@
                     NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
                     MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
                     [resultsDictionary setObject:field forKey:safeId];
-                    [field release];
                 }
                 
                 NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
                 MTDataTable *dataTable2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
                 
                 for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
-                    MTDatabaseField *databaseField = [[resultsDictionary objectForKey:[dataColumn fieldName]] retain];
+                    MTDatabaseField *databaseField = [resultsDictionary objectForKey:[dataColumn fieldName]];
                     NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
                     [databaseField setFieldTypeNative:nativeColumnType];
                     MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];
@@ -178,19 +169,12 @@
                     [databaseField setWidth:[[dataColumn dataLength] integerValue]];
                     [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
                     [databaseField setPrimaryKey:[dataColumn isPrimaryKey]];
-                    [databaseField release];
                 }
-
             } else {
                 SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
                 [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
             }
-
-            NSArray *resultsArray = [[resultsDictionary allValues] retain];
-            [resultsDictionary release];
-            
-            completion(successConnection, error, [resultsArray autorelease]);
-            
+            completion(successConnection, error, [resultsDictionary allValues]);
         }];
      }];
 }

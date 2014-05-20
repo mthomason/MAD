@@ -36,14 +36,14 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 @property (assign) MTAlgorithmColor sortVertexColor;
 
 @property (assign) MTAlgorithmColor bfsVertexColor;
-@property (nonatomic, retain) MTVertex         *bfsPredecessor;
-@property (nonatomic, retain) NSNumber         *bfsDistance;
+@property (nonatomic, strong) MTVertex         *bfsPredecessor;
+@property (nonatomic, strong) NSNumber         *bfsDistance;
 
 @property (assign) MTAlgorithmColor dfsVertexColor;
-@property (nonatomic, retain) NSNumber         *dfsDistance;
-@property (nonatomic, retain) MTVertex         *dfsPredecessor;
-@property (nonatomic, retain) NSNumber         *dfsFoundCounter;
-@property (nonatomic, retain) NSNumber         *dfsTimestampDiscovered;
-@property (nonatomic, retain) NSNumber         *dfsTimestampFinished;
+@property (nonatomic, strong) NSNumber         *dfsDistance;
+@property (nonatomic, strong) MTVertex         *dfsPredecessor;
+@property (nonatomic, strong) NSNumber         *dfsFoundCounter;
+@property (nonatomic, strong) NSNumber         *dfsTimestampDiscovered;
+@property (nonatomic, strong) NSNumber         *dfsTimestampFinished;
 
 @end

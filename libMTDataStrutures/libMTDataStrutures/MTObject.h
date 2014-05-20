@@ -12,7 +12,7 @@
 
 @interface MTObject : NSObject <MTProtocolCompare, MTProtocolLog>
 
-@property (retain) id object;
+@property (strong) id object;
 
 + (id)objectWithObject:(id)object;
 

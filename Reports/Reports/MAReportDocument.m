@@ -100,7 +100,6 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         }
         [self setDocument:document];
         
-        // FIXME: Only one query for a report at this time.
         RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
         RptqQuery *rquery = [[database hasQueries] anyObject];
         if (rquery) {
@@ -114,16 +113,14 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                                                   };
             
             MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
-            if (query) {
-                [self reportQueries][@"defaultq"] = query;
-            }
+            [self reportQueries][@"defaultq"] = query;
+            query = nil;
             
             if ([self reportFormatter] == nil) {
-                MTQuery *defaultQuery = [self defaultQuery];
-                RptqDocument *activeDocument = [self activeDocument];
-                MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:defaultQuery
-                                                                                       andLayout:activeDocument];
+                MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
+                                                                                       andLayout:[self activeDocument]];
                 [self setReportFormatter:reportFormatter];
+                reportFormatter = nil;
             }
         }
     }

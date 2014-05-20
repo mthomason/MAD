@@ -12,8 +12,8 @@
 
 @interface MTPair : NSObject <MTProtocolLog>
 
-@property (retain) id former;
-@property (retain) id latter;
+@property (strong) id former;
+@property (strong) id latter;
 
 - (id)init;
 - (id)initWithFormer:(id)former andLatter:(id)latter;
