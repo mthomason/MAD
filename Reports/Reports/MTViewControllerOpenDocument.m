@@ -548,8 +548,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
 
-                    MTApplicationInstance *appInstance = [AppDelegate app];
-                    [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                    [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                         if (success) {
                             [queryBuilderViewController reloadActiveDocumentAnimated:YES];
                         }
@@ -563,8 +562,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 
                 __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                 
-                MTApplicationInstance *appInstance = [AppDelegate app];
-                [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
                     if (success) {
                         [queryBuilderViewController reloadActiveDocumentAnimated:YES];
                     }

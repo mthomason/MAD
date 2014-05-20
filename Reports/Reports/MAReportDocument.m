@@ -247,18 +247,8 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     return urlToOpen;
 }
 
-+ (NSDictionary *)optionsPersistentStore {
-    NSNumber *migratePersistentStoresAutomaticallyOption = @YES;
-    NSNumber *inferMappingModelAutomaticallyOption = @YES;
-    NSDictionary *optionsPersistentStore = @{
-                                             NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                                             NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
-                                             };
-    return optionsPersistentStore;
-}
-
-+ (void)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
-    
++ (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
+    MAReportDocument *managedDocumentAtUrl = nil;
     NSURL *urlToOpen = nil;
     if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
         
@@ -271,15 +261,16 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }
     
     if (urlToOpen != nil) {
-        NSDictionary *psOptions = [MAReportDocument optionsPersistentStore];
-        NSDictionary *options = [NSDictionary dictionaryWithDictionary:psOptions];
-        MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
+        managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
+        NSDictionary *options = @{
+                                  NSMigratePersistentStoresAutomaticallyOption : @(YES),
+                                  NSInferMappingModelAutomaticallyOption : @(YES),
+                                  };
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
-        __block MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
+        __block __weak MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
         MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-            MAReportDocument *activeDocument = blockManagedDocumentAtUrl;
-            completionHandler(activeDocument, success);
+                completionHandler(blockManagedDocumentAtUrl, success);
         };
 
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
@@ -288,9 +279,11 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         } else {
             [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
         }
+        
+        options = nil;
 
     }
-    
+    return managedDocumentAtUrl;
 }
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
@@ -307,7 +300,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                 
                 if (success) {
                     
-                    __block MAReportDocument *documentReport = managedDocument;
+                    __block __weak MAReportDocument *documentReport = managedDocument;
 
                     RptqDocument *rptqDocument = [documentReport activeDocument];
                     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];

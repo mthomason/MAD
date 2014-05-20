@@ -63,7 +63,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong, readwrite) NSDictionary *dataByGroup;
 
-@property (nonatomic, strong) NSArray *allObjects;
+//@property (nonatomic, strong) NSArray *allObjects;
 
 @end
 
@@ -114,7 +114,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     NSDictionary *dataByGroup = @{};
     [self setDataByGroup:dataByGroup];
-    [self setAllObjects:[NSArray array]];
+    //[self setAllObjects:[NSArray array]];
 }
 
 #pragma mark - Reading cached data
@@ -122,7 +122,6 @@ NSString * const MTNullIdentifier = @"(null)";
 //  Data is cached by group, page, and report.
 
 - (BOOL)format {
-    [[self pageCaching] dumpCache];
     return [super format];
 }
 
@@ -136,6 +135,8 @@ NSString * const MTNullIdentifier = @"(null)";
         
         if ([self shouldFormatAgain:printableSize]) {
             
+            [[self pageCaching] dumpCache];
+
             [self setLayoutSize:printableSize];
             [self setPrintableSize:printableSize];
             
@@ -145,8 +146,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
 
             NSArray *allObjects = [[[[self query] datatable] objectEnumerator] allObjects];
-            [self setAllObjects: allObjects];
-            id groupedRows = [self addGroupedResults: [self allObjects]
+            id groupedRows = [self addGroupedResults: allObjects
                                                   level: 0];
             [self setDataByGroup: groupedRows];
             [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
@@ -499,10 +499,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
                 NSArray *pageCache = [[self pageCaching] objectsForPage:page];
                 if (pageCache == nil) {
-
-                    NSRange range = NSMakeRange([pageIndexes firstIndex], [pageIndexes count]);
-                    NSIndexSet *set = [NSIndexSet indexSetWithIndexesInRange:range];
-                    NSArray *objectsForPage1 = [[self allObjects] objectsAtIndexes:set];
                     
                     NSArray *objectsForPage = [[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
                                                                               limit: [pageIndexes count]];
@@ -551,9 +547,7 @@ NSString * const MTNullIdentifier = @"(null)";
         } else {
             resultData = @[];
         }
-        //resultData = [[NSArray alloc] initWithArray:resultData];
     }
-    NSLog(@"%2@ %1s", resultData, __PRETTY_FUNCTION__);
     return resultData;
 }
 

@@ -266,33 +266,22 @@
 
 - (void)drawPageAtIndex:(NSInteger)pageIndex ofDocument:(RptqDocument *)document withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
 
-    NSInteger nextPageIndex = pageIndex + 1;
-    NSUInteger rowIndex = 0;
-    NSUInteger nextRowIndex = 1;
+    NSUInteger rowIndex = 0, pageNumber = 0;
     
-    NSUInteger pageNumber = 0;
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
     
-    BOOL useNextRowData = NO;
     if (query) {
-        
         NSUInteger numberOfGroups = [[query hasQueryGroups] count];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         BOOL groupLevelKeySet = NO;
-        //NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
         if (pageIndex < numberOfPages) {
             
-            BOOL skipDetil = NO;
-            
-            CGRect sectionRect = CGRectZero;
             CGFloat originY = pageRect.origin.y;
             CGFloat originX = pageRect.origin.x;
             CGFloat sizeWidth = pageRect.size.width;
@@ -331,14 +320,12 @@
                         default:
                             break;
                     }
-                    if (typeDocumentSection == MNSDocumentSectionTypeGroupHeader || typeDocumentSection == MNSDocumentSectionTypePageHeader || typeDocumentSection == MNSDocumentSectionTypeReportHeader || typeDocumentSection == MNSDocumentSectionTypeGroupFooter || typeDocumentSection == MNSDocumentSectionTypePageFooter || typeDocumentSection == MNSDocumentSectionTypeReportFooter) {
-                        readGroupIndex = 0;
-                    }
+                    
+                    if (typeDocumentSection != MNSDocumentSectionTypeBody) readGroupIndex = 0;
                     NSInteger readRowIndex = rowIndex;
                     NSInteger readPageIndex = pageIndex;
-
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
-                    sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                    CGRect sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                     
                     NSDictionary *rowData = nil;
                 
@@ -370,12 +357,6 @@
 
                     } else {
                         rowData = [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
-                    }
-                    
-                    
-                    NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:pageIndex];
-                    if (nextRowIndex >= numberOfItemsOnPage) {
-                        nextRowIndex = 0;
                     }
                     
                     if (sectionIsVisible) {
@@ -601,18 +582,20 @@
                                         //          Want to draw the fucking rect without
                                         //          having to do a fucking translation.
                                         
-                                        CGContextSaveGState(ctx);
-                                        {
+                                        CGContextSaveGState(ctx); {
+                                            
                                             CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
                                             CGRect drawingRect = CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height);
                                             NSStringDrawingOptions options = NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin;
                                             [displayString drawWithRect:drawingRect options:options attributes:attributes context:nil];
                                         }
                                         CGContextRestoreGState(ctx);
+                                        attributes = nil;
                                         
                                     } else {
                                         [drawingObject drawInRect:elementCanvasRect];
                                     }
+                                    displayString = nil;
                                     drawingObject = nil;
                                 }
                             }
@@ -621,7 +604,6 @@
                     
                     if (typeDocumentSection == MNSDocumentSectionTypeBody) {
                         rowIndex++;
-                        nextRowIndex++;
                     }
                     originY += sizeHeight;
                     if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter) {

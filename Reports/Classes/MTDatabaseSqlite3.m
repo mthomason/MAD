@@ -86,17 +86,16 @@
 
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
-    NSString *string1 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg1 length:len1] bytes]];
-    NSString *string2 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg2 length:len2] bytes]];
+    NSData *data1 = [NSData dataWithBytes:arg1 length:len1];
+    NSData *data2 = [NSData dataWithBytes:arg2 length:len1];
+    NSString *string1 = [NSString stringWithUTF8String:[data1 bytes]];
+    NSString *string2 = [NSString stringWithUTF8String:[data2 bytes]];
     if (string1 == nil) {
        string1 = @"";
     }
     if (string2 == nil) {
         string2 = @"";
     }
-    
-    //NSLog(@"Compare: %d (%@)\t\t %@", [string1 localizedCaseInsensitiveCompare:string2], string1, string2);
-    
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
@@ -113,7 +112,6 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     if (_database != NULL && sqlite3_close(_database) != SQLITE_OK) {   // close short circuts (skips) on null database
         NSAssert1(0, @"Error: failed to close database with message '%s'.", sqlite3_errmsg(_database));
     }
-    [super dealloc];
 }
 
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
@@ -137,12 +135,11 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
             
             MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
             [result addObject:databaseTable];
-            [databaseTable release];
 		}
 	}
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
-    completion(success, nil, [result autorelease]);
+    completion(success, nil, result);
 }
 
 - (void)getFieldsForTableName: (NSString *)tableName
@@ -170,12 +167,11 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
             [databaseField setFieldTypeNative:dataType];
             [databaseField setPrimaryKey:isPk];
             [result addObject:databaseField];
-            [databaseField release];
 		}
 	}
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
-    completion(success, nil, [result autorelease]);
+    completion(success, nil, result);
 }
 
 
@@ -459,7 +455,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                                 [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
                                 [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
                                 [[query datatable] addColumn:dataColumn];
-                                [dataColumn release];
+                                dataColumn = nil;
                             }
                         }
                         
@@ -524,9 +520,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                     }
                     
                     [[query datatable] addRowWithDataForFieldKeys:resultsForRow];
-                    [resultsForRow release];
-                    
-                    
+                    resultsForRow = nil;
                     rowCounter++;
                 }
                 [[query datatable] endBulkInsert];
