@@ -30,7 +30,7 @@
 - (NSArray *)hasMadDocuments {
     NSSet *madFiles = [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
     SEL selectorPath = @selector(path);
-    SEL selectorSort = @selector(caseInsensitiveCompare:);
+    SEL selectorSort = @selector(localizedStandardCompare:);
     NSString *key = NSStringFromSelector(selectorPath);
     NSSortDescriptor *sortByFileName = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:selectorSort];
     NSArray *sortDescriptors = @[sortByFileName];

@@ -43,7 +43,8 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersOffset,
     MTQueryCacheSelectLimitOffsetParamatersTableNames,
     MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
-    MTQueryCacheSelectLimitOffsetParamatersSortDesc
+    MTQueryCacheSelectLimitOffsetParamatersSortDesc,
+    MTQueryCacheSelectLimitOffsetParamatersWhere
 };
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheFullParameters) {

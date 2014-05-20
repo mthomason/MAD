@@ -62,7 +62,7 @@
             NSUInteger sortCounter = 0;
             for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
                 if (sortCounter != 0) [sql appendString:@", "];
-                NSString *sortDirection = [sortDescriptor ascending] ? @"ASC" : @"DESC";
+                NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
                 [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
                 sortCounter++;
             }

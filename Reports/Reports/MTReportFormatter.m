@@ -81,6 +81,10 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
+- (NSArray *)layoutForPage:(NSUInteger)page {
+    return (page < [[self reportLayout] count]) ? [[self reportLayout] objectAtIndex:page] : nil;
+}
+
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query andLayout:layout];
     return result;
@@ -142,7 +146,8 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
             [self setCounterDetailLine:0];
 
-            [self setAllObjects: [[[[[self query] datatable] objectEnumerator] allObjects] sortedArrayUsingDescriptors:[self sortDescriptorsByGroupSorted]]];
+            NSArray *allObjects = [[[[self query] datatable] objectEnumerator] allObjects];
+            [self setAllObjects: allObjects];
             id groupedRows = [self addGroupedResults: [self allObjects]
                                                   level: 0];
             [self setDataByGroup: groupedRows];
@@ -171,6 +176,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (id)addGroupedResults:(NSArray *)sortedResults
                      level:(NSUInteger)level {
     
+    
     BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
     id results = nil;
     
@@ -195,7 +201,7 @@ NSString * const MTNullIdentifier = @"(null)";
             }
 
             if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
-                
+
                 id resultOfNextGroup = [self addGroupedResults: resultsForGroup
                                                             level: (level + 1)];
                 
@@ -212,14 +218,14 @@ NSString * const MTNullIdentifier = @"(null)";
         if (valueForField != nil) {
 
             id resultOfNextGroup = [self addGroupedResults: resultsForGroup
-                                                        level: (level + 1)];
+                                                     level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             [results setObject:resultOfNextGroup forKey:key];
 
         } else {
 
             id resultOfNextGroup = [self addGroupedResults: resultsForGroup
-                                                        level: (level + 1)];
+                                                     level: (level + 1)];
             NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
             if (key == nil) {
                 key = MTNullIdentifier;
@@ -254,7 +260,9 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject:  d];
 }
 
-- (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel {
+- (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel andKeys:(NSArray *)passedkeys {
+    
+    NSMutableArray *keys = [[NSMutableArray alloc] initWithArray:passedkeys];
     
     NSArray *sqg = [[self query] sortedHasQueryGroups];
     [self setSortedQueryGroups:sqg];
@@ -303,13 +311,14 @@ NSString * const MTNullIdentifier = @"(null)";
                 }
             }
             
-            [self addGroupHeaderLevel:groupedRowsLevel];
+            [keys addObject:key];
+            [self addGroupHeaderLevel:groupedRowsLevel withKeys:keys];
 
             NSInteger indexNextGroup = [[queryGroup weight] integerValue] + 1;
             
             RptqQueryGroup *nextGroup = [self sortGroupAtLevel:indexNextGroup];
             if (nextGroup != nil) {
-                [self addGroupLevel: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1];
+                [self addGroupLevel: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys];
             } else {
                 [self cacheDetailLevelWithDetails:obj];
             }
@@ -323,6 +332,8 @@ NSString * const MTNullIdentifier = @"(null)";
             }
             
             [self cacheGroupFooterAtLevel:groupedRowsLevel];
+            
+            [keys removeLastObject];
         }
         
     } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
@@ -353,7 +364,8 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addDetailToReportLayout {
     [self addGroupLevel: [self firstQueryGroup]
             groupedRows: [self dataByGroup]
-       groupedRowsLevel: 0];
+       groupedRowsLevel: 0
+                andKeys: @[]];
 }
 
 // FIXME: Make sure paper rect is passed in to the software
@@ -419,10 +431,12 @@ NSString * const MTNullIdentifier = @"(null)";
     [self cacheReportFooter];
 }
 
-- (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
+- (void)addGroupHeaderLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
     NSNumber *level = @(groupLevel);
-    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeGroupHeader),
-                        MTReportGroupLevel : level};
+    NSArray *newKeys = [NSArray arrayWithArray:keys];
+    NSDictionary *d = @{MTReportSectionType     : @(MNSDocumentSectionTypeGroupHeader),
+                        MTReportGroupLevelKeys  : newKeys,
+                        MTReportGroupLevel      : level};
     [[self pageLayoutTemporary] addObject: d];
 }
 
@@ -484,10 +498,14 @@ NSString * const MTNullIdentifier = @"(null)";
 
                 NSArray *pageCache = [[self pageCaching] objectsForPage:page];
                 if (pageCache == nil) {
+
                     NSRange range = NSMakeRange([pageIndexes firstIndex], [pageIndexes count]);
                     NSIndexSet *set = [NSIndexSet indexSetWithIndexesInRange:range];
-                    NSArray *objectsForPage = [[self allObjects] objectsAtIndexes:set];//[[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
-                                                                //              limit: [pageIndexes count]];
+                    NSArray *objectsForPage1 = [[self allObjects] objectsAtIndexes:set];
+                    
+                    NSArray *objectsForPage = [[[self query] datatable] objectAtRow: [pageIndexes firstIndex]
+                                                                              limit: [pageIndexes count]];
+
                     [[self pageCaching] cacheObjects:objectsForPage forPage:page];
                     pageCache = [[self pageCaching] objectsForPage:page];
                 }
@@ -507,6 +525,10 @@ NSString * const MTNullIdentifier = @"(null)";
 - (id)dataForGroupKeys:(NSArray *)keys {
     return [MTReportFormatter dataForGroupData:[self dataByGroup] andKeys:keys];
 }
+
+/*
+ // FIXME: Write function to return results for keys without having data stored in memeory.
+ */
 
 + (id)dataForGroupData:(id)data andKeys:(NSArray *)keys {
     id resultData = nil;
@@ -528,8 +550,9 @@ NSString * const MTNullIdentifier = @"(null)";
         } else {
             resultData = @[];
         }
-        resultData = [[NSArray alloc] initWithArray:resultData];
+        //resultData = [[NSArray alloc] initWithArray:resultData];
     }
+    NSLog(@"%2@ %1s", resultData, __PRETTY_FUNCTION__);
     return resultData;
 }
 

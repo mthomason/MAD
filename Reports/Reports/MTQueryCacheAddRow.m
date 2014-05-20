@@ -79,9 +79,9 @@
     NSUInteger columnCounter = 0;
     
     for (id object in [self row]) {
+        
         NSString *fieldName = [self columnKeys][columnCounter];
         MTDataColumn *column = [self columns][fieldName];
-        NSString *columnValue = nil;
         MTDataType type = [[column columnType] integerValue];
         NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
         
@@ -91,86 +91,80 @@
         }
         
         [colmunNames appendString:safeFieldName];
-        switch (type) {
-            case MTDataTypeBit:
-            case MTDataTypeInteger:
-            case MTDataTypeShort:
-            case MTDataTypeLong:
-            case MTDataTypeLongLong:
-            case MTDataTypeInt24:
-            case MTDataTypeEnum: {
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeInteger
-                                                                                          fieldIndex:columnCounter
-                                                                                               value:object];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
-                break;
-            }
-            case MTDataTypeSet:
-            case MTDataTypeTime:
-            case MTDataTypeTimeStamp:
-            case MTDataTypeYear:
-            case MTDataTypeDate:
-            case MTDataTypeDateTime:
-            case MTDataTypeString:
-            case MTDataTypeVarChar:
-            case MTDataTypeGeometry: {
-                
-                
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeString
-                                                                                          fieldIndex:columnCounter
-                                                                                               value:object];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
-                break;
-            }
-            case MTDataTypeImage:
-            case MTDataTypeBlob: {
-                
-                //MTDataType realType = MTDataTypeBlob;
-                //Class classString = [NSString class];
-                //if ([object isKindOfClass:classString]) {
-                //    realType = MTDataTypeString;
-                //}
-                
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeBlob
-                                                                                          fieldIndex:columnCounter
-                                                                                               value:object];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
-                break;
-            }
-            case MTDataTypeFloat: {
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeFloat
-                                                                                          fieldIndex:columnCounter
-                                                                                               value:object];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
-                break;
-            }
-            case MTDataTypeDouble:
-            case MTDataTypeDecimal:
-            case MTDataTypeNumber: {
-                
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeDouble
-                                                                                          fieldIndex:columnCounter
-                                                                                               value:object];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
-                break;
-            }
-            case MTDataTypeUnknown:
-            default: {
-                NSString *safeObject = [NSString stringWithFormat:@"%@", object];
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeString
-                                                                                          fieldIndex:columnCounter
-                                                                                               value:safeObject];
-                [[self binaryBindings] addObject:databinding];
-                columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+        
+        if (object == nil || object == [NSNull null]) {
+            MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeNull
+                                                                                      fieldIndex:columnCounter
+                                                                                           value:[NSNull null]];
+            [[self binaryBindings] addObject:databinding];
+        } else {
 
-                break;
+            switch (type) {
+                case MTDataTypeBit:
+                case MTDataTypeInteger:
+                case MTDataTypeShort:
+                case MTDataTypeLong:
+                case MTDataTypeLongLong:
+                case MTDataTypeInt24:
+                case MTDataTypeEnum: {
+                    MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeInteger
+                                                                                              fieldIndex:columnCounter
+                                                                                                   value:object];
+                    [[self binaryBindings] addObject:databinding];
+                    break;
+                }
+                case MTDataTypeSet:
+                case MTDataTypeTime:
+                case MTDataTypeTimeStamp:
+                case MTDataTypeYear:
+                case MTDataTypeDate:
+                case MTDataTypeDateTime:
+                case MTDataTypeString:
+                case MTDataTypeVarChar:
+                case MTDataTypeGeometry: {
+                    MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeString
+                                                                                              fieldIndex:columnCounter
+                                                                                                   value:object];
+                    [[self binaryBindings] addObject:databinding];
+                    break;
+                }
+                case MTDataTypeImage:
+                case MTDataTypeBlob: {
+                    MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeBlob
+                                                                                              fieldIndex:columnCounter
+                                                                                                   value:object];
+                    [[self binaryBindings] addObject:databinding];
+                    break;
+                }
+                case MTDataTypeFloat: {
+                    MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeFloat
+                                                                                              fieldIndex:columnCounter
+                                                                                                   value:object];
+                    [[self binaryBindings] addObject:databinding];
+                    break;
+                }
+                case MTDataTypeDouble:
+                case MTDataTypeDecimal:
+                case MTDataTypeNumber: {
+                    
+                    MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeDouble
+                                                                                              fieldIndex:columnCounter
+                                                                                                   value:object];
+                    [[self binaryBindings] addObject:databinding];
+                    break;
+                }
+                case MTDataTypeUnknown:
+                default: {
+                    NSString *safeObject = [NSString stringWithFormat:@"%@", object];
+                    MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType:MTDataTypeString
+                                                                                              fieldIndex:columnCounter
+                                                                                                   value:safeObject];
+                    [[self binaryBindings] addObject:databinding];
+                    break;
+                }
             }
         }
+        NSString *columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
         [values appendString:columnValue];
         
         columnCounter++;

@@ -81,7 +81,7 @@
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     
-    NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"" : @""; //@"COLLATE NOCASE" : @"";
+    NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"COLLATE LSASC" : @"COLLATE LSDESC";;
     
     NSString *sql = [self createTable] ?
                     [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, collate] :

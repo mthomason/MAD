@@ -66,6 +66,14 @@
         BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);
+            
+            
+            sqlite3_create_collation_v2(_database, "LSASC",
+                                        SQLITE_UTF8, _database,
+                                        compare_string_utf8_localized_asc_collation, NULL);
+            sqlite3_create_collation_v2(_database, "LSDESC",
+                                     SQLITE_UTF8, _database,
+                                     compare_string_utf8_localized_desc_collation, NULL);
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
@@ -74,7 +82,28 @@
         }
         [self setIsOpen:YES];
     }
+}
+
+
+int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
+    NSString *string1 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg1 length:len1] bytes]];
+    NSString *string2 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg2 length:len2] bytes]];
+    if (string1 == nil) {
+       string1 = @"";
+    }
+    if (string2 == nil) {
+        string2 = @"";
+    }
     
+    //NSLog(@"Compare: %d (%@)\t\t %@", [string1 localizedCaseInsensitiveCompare:string2], string1, string2);
+    
+    return [string1 localizedCaseInsensitiveCompare:string2];
+}
+
+int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
+    NSString *string1 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg1 length:len1] bytes]];
+    NSString *string2 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg2 length:len2] bytes]];
+    return [string1 localizedCaseInsensitiveCompare:string2] * -1;
 }
 
 - (void)dealloc {
@@ -371,6 +400,10 @@
                                 success = SQLITE_OK == sqlite3_bind_double(statement, columnNumber, doubeValue);
                                 NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
                                 break;
+                            }
+                            case MTDataTypeNull: {
+                                success = SQLITE_OK == sqlite3_bind_null(statement, columnNumber);
+                                NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
                             }
                             default:
                                 NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");

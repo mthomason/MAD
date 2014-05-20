@@ -263,6 +263,7 @@
     [[UIColor whiteColor] setFill];
 }
 
+
 - (void)drawPageAtIndex:(NSInteger)pageIndex ofDocument:(RptqDocument *)document withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
 
     NSInteger nextPageIndex = pageIndex + 1;
@@ -276,36 +277,57 @@
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
     
+    BOOL useNextRowData = NO;
     if (query) {
         
         NSUInteger numberOfGroups = [[query hasQueryGroups] count];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+        NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+        BOOL groupLevelKeySet = NO;
         //NSMutableArray *nextGroupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
         if (pageIndex < numberOfPages) {
             
+            BOOL skipDetil = NO;
+            
             CGRect sectionRect = CGRectZero;
             CGFloat originY = pageRect.origin.y;
             CGFloat originX = pageRect.origin.x;
             CGFloat sizeWidth = pageRect.size.width;
             
+            NSInteger layoutSectionCounter = 0;
+            NSInteger readGroupIndex = 0;
+            NSArray *groupData = nil;
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
                 @autoreleasepool {
                     
                     NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
+                    
                     MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: MTReportSectionType] integerValue];
                     RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:document andType:typeDocumentSection andLevel:groupLevel];
+                    BOOL sectionIsVisible = [[documentSection visibility] boolValue];
 
+                    
+                    
+                    
+                    
                     switch (typeDocumentSection) {
                             
-                        case MNSDocumentSectionTypeBody:
-                            rowIndex++;
-                            nextRowIndex++;
-                            break;
-                            
+                        //case MNSDocumentSectionTypeBody:
+                        //    rowIndex++;
+                        //    nextRowIndex++;
+                        //    break;
+                        //case MNSDocumentSectionTypeGroupHeader:
+                        //case MNSDocumentSectionTypeGroupFooter: {
+                        //    NSArray *keys = [pageSection objectForKey:MTReportGroupLevelKeys];
+                        //    id data = [[self reportFormatter] dataForGroupKeys:keys];
+                        //    NSLog(@"%@", data);
+
+                        //    break;
+                        //}
                         case MNSDocumentSectionTypePageFooter: {
                             CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
                             BOOL lastPage = pageIndex == numberOfPages - 1;
@@ -325,28 +347,80 @@
                         default:
                             break;
                     }
+                    if (typeDocumentSection == MNSDocumentSectionTypeGroupHeader || typeDocumentSection == MNSDocumentSectionTypePageHeader || typeDocumentSection == MNSDocumentSectionTypeReportHeader || typeDocumentSection == MNSDocumentSectionTypeGroupFooter || typeDocumentSection == MNSDocumentSectionTypePageFooter || typeDocumentSection == MNSDocumentSectionTypeReportFooter) {
+                        readGroupIndex = 0;
+                    }
+                    NSInteger readRowIndex = rowIndex;
+                    NSInteger readPageIndex = pageIndex;
+/*
+                    if (rowIndex != 0 && typeDocumentSection == MNSDocumentSectionTypeGroupHeader) {
+                        useNextRowData = YES;
+                        readRowIndex = nextRowIndex;
+                        if (readRowIndex >= [[self reportFormatter] countOnPageIndex:pageIndex]) {
+                            readRowIndex = 0;
+                            readPageIndex = pageIndex + 1;
+                        }
+                    } else {
+                        useNextRowData = NO;
+                    }
+                    */
                     
-                    BOOL sectionIsVisible = [[documentSection visibility] boolValue];
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                     
                     
-                    NSDictionary *rowData = [[self reportFormatter] dataForRow: rowIndex onPage: pageIndex];
+                    
+                    
+                    NSDictionary *rowData = nil;
+                
+                    if (numberOfGroups > 0) {
+                        if ([groupLevelKeys count] < numberOfGroups - 1) {
+                            [groupLevelKeys removeAllObjects];
+                            NSArray *keys = [self groupLevelKeysForPage:readPageIndex row:layoutSectionCounter numberOfGroups:numberOfGroups andSection:pageSection];
+                            [groupLevelKeys addObjectsFromArray:keys];
+                            groupLevelKeySet = YES;
+                        }
+                        
+                        id data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
+                        if ([data isKindOfClass:[NSDictionary class]]) {
+                            
+                            rowData = [NSDictionary dictionaryWithDictionary:data];
+                            
+                        } else {
+                            groupData = [NSArray arrayWithArray: data];
+                            rowData = [data firstObject];
+                        }
+                        
+                        if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                            if (readGroupIndex < [groupData count]) {
+                                rowData = [groupData objectAtIndex:readGroupIndex];// [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
+                            }
+                            readGroupIndex++;
+                        }
+
+                    } else {
+                        rowData = [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
+                    }
+                    
+                    
                     NSInteger numberOfItemsOnPage = [[self reportFormatter] countOnPageIndex:pageIndex];
                     if (nextRowIndex >= numberOfItemsOnPage) {
                         nextRowIndex = 0;
                     }
                     
-                    [groupLevelKeys removeAllObjects];
+                    //[groupLevelKeys removeAllObjects];
                     
-                    if (rowData != nil) {
+                    /*if (rowData != nil) {
                         for (NSSortDescriptor *sortDescriptor in [[self reportFormatter] sortDescriptorsByGroupSorted]) {
                             
                             @autoreleasepool {
                                 
                                 NSString *key = [sortDescriptor key];
                                 id sortKey = [rowData objectForKey:key];
-                                if (sortKey == nil) {
+                                if (sortKey == nil || sortKey == [NSNull null]) {
+                                    if (typeDocumentSection == MNSDocumentSectionTypeGroupHeader) {
+                                        skipDetil = YES;
+                                    }
                                     sortKey = MTNullIdentifier;
                                     [groupLevelKeys addObject:sortKey];
                                 } else {
@@ -354,7 +428,7 @@
                                 }
                             }
                         }
-                    }
+                    }*/
                     
                     if (sectionIsVisible) {
                         for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
@@ -596,11 +670,94 @@
                             }
                         }
                     }
+                    
+                    if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+                        rowIndex++;
+                        nextRowIndex++;
+                    }
                     originY += sizeHeight;
+                    if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter && groupLevel == 0) {
+                        [groupLevelKeys removeAllObjects];
+                    }
+
                 }
+                
+                layoutSectionCounter++;
             }
         }
     }
+}
+
+- (NSArray *)groupLevelKeysForPage:(NSUInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups andSection:(NSDictionary *)pageSection {
+    NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] init];
+    MNSDocumentSectionType type = [[pageSection objectForKey: MTReportSectionType] integerValue];
+
+    if (type == MNSDocumentSectionTypeReportHeader) {
+        NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
+        if ([sectionsForPage count] > 2) {
+            NSArray *keys = [self groupLevelKeysForPage:page row:2 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:2]];
+            [currentGroupLevelKeys addObjectsFromArray:keys];
+        }
+    } else if (type == MNSDocumentSectionTypePageHeader) {
+        NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
+        if ([sectionsForPage count] > 2) {
+            NSArray *keys = [self groupLevelKeysForPage:page row:2 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:2]];
+            [currentGroupLevelKeys addObjectsFromArray:keys];
+        }
+    } else if (type == MNSDocumentSectionTypeGroupHeader) {
+        NSArray *keys = [self groupLevelKeysForGroupHeader:pageSection page:page row:row numberOfGroups:numberOfGroups];
+        [currentGroupLevelKeys addObjectsFromArray:keys];
+    } else if (type == MNSDocumentSectionTypeBody) {
+        NSArray *keys = [self groupLevelKeysForDetail:pageSection page:page row:row numberOfGroups:numberOfGroups];
+        [currentGroupLevelKeys addObjectsFromArray:keys];
+    }
+    return currentGroupLevelKeys;
+}
+
+- (NSArray *)groupLevelKeysForDetail:(NSDictionary *)pageSection page:(NSInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups {
+    NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] init];
+    for (NSInteger pageCtr = page; page >= 0; page--) {
+        NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:pageCtr];
+        NSInteger sectionRowCounter = [sectionsForPage count] - 1;
+        for (NSDictionary *pageSec in [sectionsForPage reverseObjectEnumerator]) {
+            if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
+                [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
+                [currentGroupLevelKeys addObjectsFromArray:sectionsForPage];
+                pageCtr = -1;
+                break;
+            }
+            sectionRowCounter--;
+        }
+    }
+    return currentGroupLevelKeys;
+}
+
+- (NSArray *)groupLevelKeysForGroupHeader:(NSDictionary *)pageSection page:(NSInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups {
+    NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] init];
+
+    NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
+    
+    if (groupLevel < numberOfGroups) {
+        NSInteger rangeStartLocation = row;
+        NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
+        for (NSInteger pageCtr = page; pageCtr < numberOfPages; pageCtr++) {
+            NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
+            NSRange range = NSMakeRange(rangeStartLocation, [sectionsForPage count] - rangeStartLocation);
+            for (NSDictionary *pageSec in [sectionsForPage subarrayWithRange:range]) {
+                if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
+                    [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
+                    [currentGroupLevelKeys addObjectsFromArray:[pageSec objectForKey: MTReportGroupLevelKeys]];
+                    pageCtr = numberOfPages;
+                    break;
+                }
+            }
+            rangeStartLocation = 0;
+        }
+    } else {
+        NSArray *keys = [pageSection objectForKey:MTReportGroupLevelKeys];
+        [currentGroupLevelKeys addObjectsFromArray:keys];
+    }
+    return currentGroupLevelKeys;
 }
 
 - (void)drawWatermarkWithContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {

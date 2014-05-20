@@ -423,14 +423,37 @@
         objectEnumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
                                                                                        columns:[self columns]
                                                                                     columnKeys:[self columnKeys]
-                                                                                           sql:[query getSqlWithError:nil]];
+                                                                                           query:query];
     }
     return objectEnumerator;
 }
 
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel {
+- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
+    NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
     NSEnumerator *enumerator = nil;
+    
+    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
+    //NSUInteger counter = 0;
+    for (NSString *key in keys) {
+        NSSortDescriptor *sortDescriptor = [[self sortDescriptors] objectAtIndex:0];
+        NSDictionary *whereStatement = @{@"col" : [sortDescriptor key], @"val" : key };
+        [whereClause addObject:whereStatement];
+    }
 
+    NSDictionary *querySelect = @{
+                                  @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
+                                  @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
+                                  @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                                  @(MTQueryCacheSelectLimitOffsetParamatersWhere) : whereClause,
+                                  };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:querySelect];
+    
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
+    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
+                                                                                   columns:[self columns]
+                                                                                columnKeys:[self columnKeys]
+                                                                                     query:query];
+    
     return enumerator;
 }
 

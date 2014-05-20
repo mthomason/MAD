@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@class MTDatabaseConnection;
+@class MTDatabaseConnection, MTQuery;
 
 @interface MTDataTableFastObjectEnumerator : NSEnumerator
 
-- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys sql:(NSString *)sql;
+- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query;
 
 @end

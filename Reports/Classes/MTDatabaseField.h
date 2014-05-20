@@ -32,7 +32,8 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
     MTDataTypeLong          = 20,
     MTDataTypeLongLong      = 21,
     MTDataTypeVarChar       = 22,
-    MTDataTypeShort         = 23
+    MTDataTypeShort         = 23,
+    MTDataTypeNull          = 24
 };
 
 #import <Foundation/Foundation.h>

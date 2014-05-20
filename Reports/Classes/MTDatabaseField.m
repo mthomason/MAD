@@ -94,7 +94,7 @@
             result = @selector(compare:);
             break;
         case MTDataTypeString:
-            result = @selector(caseInsensitiveCompare:);
+            result = @selector(localizedCaseInsensitiveCompare:);
             break;
         default:
             result = @selector(compare:);

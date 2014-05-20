@@ -15,14 +15,17 @@
 #import "MTDatabaseConnection.h"
 #import "MTDataColumn.h"
 #import "libSqlite3_8.h"
+#import "MTQuery.h"
 
 @interface MTDataTableFastObjectEnumerator ()
 
-@property (assign) sqlite3 *database;
+//@property (assign) sqlite3 *database;
 @property (assign) sqlite3_stmt *statement;
 @property (nonatomic, strong) NSDictionary *columns;
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (assign) BOOL empty;
+
+@property (nonatomic, strong) MTDatabase *databaseForQuery;
 
 @end
 
@@ -30,10 +33,10 @@
 
 - (void)dealloc {
     sqlite3_finalize(_statement);
-    sqlite3_close_v2(_database);
+//    sqlite3_close_v2(_database);
 }
 
-- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys sql:(NSString *)sql {
+- (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
     self = [super init];
     if (self) {
         
@@ -41,14 +44,16 @@
         BOOL empty = numberOfColumns == 0;
         [self setEmpty:empty];
         if (!empty) {
+            MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+            [self setDatabaseForQuery:database];
             _statement = NULL;
-            const char *path = [[[databaseConnection databaseUrl] path] UTF8String];
-            BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READONLY | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
-            success = sqlite3_extended_result_codes(_database, true) == SQLITE_OK;
-            const char *queryStringConstChar = [sql UTF8String];
+            //const char *path = [[[databaseConnection databaseUrl] path] UTF8String];
+            //BOOL success = sqlite3_open_v2(path, &_database, SQLITE_OPEN_READONLY | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX, NULL) == SQLITE_OK;
+            //success = sqlite3_extended_result_codes(_database, true) == SQLITE_OK;
+            const char *queryStringConstChar = [[query getSqlWithError:nil] UTF8String];
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
-            success = sqlite3_prepare_v2(_database, queryString, -1, &_statement, NULL) == SQLITE_OK;
-            NSAssert(success, @"Connection failed with message: %s", sqlite3_errmsg(_database));
+            BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
+            NSAssert(success, @"Connection failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
             sqlite3_free(queryString);
         }
         [self setColumnKeys:columnKeys];

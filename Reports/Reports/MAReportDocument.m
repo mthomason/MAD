@@ -45,6 +45,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
 NSString * const MTReportGroupLevel = @"MTReportGroupLevel";
+NSString * const MTReportGroupLevelKeys = @"MTReportGroupLevelKeys";
 
 NSString * const MTPageDetail = @"MTPageDetail";
 NSString * const MTPageHeader = @"MTPageHeader";

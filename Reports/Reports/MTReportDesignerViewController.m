@@ -1811,6 +1811,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
     }
     [self deselectAllElementsAnimated:YES];
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    [[reportDocument managedObjectContext] save:nil];
 }
 
 - (void)repositionPopoverControllerInformationAnimated:(BOOL)animated {
@@ -3453,6 +3456,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [collectionView invalidateIntrinsicContentSize];
         [[reportDesigner designerContentView] setNeedsUpdateConstraints];
     }];
+    [[reportDocument managedObjectContext] save:nil];
 }
 
 - (BOOL)checkAndUpdateHeightForSection:(RptqDocumentSection *)documentSection forHeight:(CGFloat)height {

@@ -34,7 +34,7 @@
         [self setBarcodeNamesByType:namesByType];
         
         NSArray *allNames = [[self barcodeNamesByType] allValues];
-        NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        NSArray *allNamesSorted = [allNames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
         [self setBarcodeNamesOrdered: allNamesSorted];
     }
     return self;

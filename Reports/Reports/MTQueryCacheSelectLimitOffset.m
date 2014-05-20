@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (nonatomic, strong) NSArray *sortDesc;
 
+@property (nonatomic, strong) NSArray *whereClause;
+
 @property (nonatomic, assign) NSUInteger limit;
 @property (nonatomic, assign) NSUInteger offset;
 
@@ -42,6 +44,9 @@
         NSArray *sortDesc = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersSortDesc)];
         [self setSortDesc:sortDesc];
         
+        NSArray *whereClause = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersWhere)];
+        [self setWhereClause:whereClause];
+        
     }
     return self;
 }
@@ -49,6 +54,8 @@
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
     NSString *result = nil;
+    
+    
     if (self.limit == NSNotFound && self.offset == NSNotFound) {
         result = [self sqlQuery];
     } else if (self.offset == NSNotFound) {
@@ -78,16 +85,30 @@
     }
     [sql appendFormat:@" FROM %@", [self tableName]];
     
-    if ([[self sortDescriptors] count] > 0) {
-        [sql appendString:@" ORDER BY "];
+    if ([[self sortDesc] count] > 0) {
         NSUInteger sortCounter = 0;
+        [sql appendString:@" ORDER BY "];
         for (NSSortDescriptor *sortDescriptor in [self sortDesc]) {
             if (sortCounter != 0) [sql appendString:@", "];
-            NSString *sortDirection = [sortDescriptor ascending] ? @"ASC" : @"DESC";//  @"COLLATE NOCASE ASC" : @"COLLATE NOCASE DESC";
+            NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
             [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
             sortCounter++;
         }
     }
+    
+    // FIXME: Right now only handles equal case.
+    if ([[self whereClause] count] > 0) {
+        [sql appendString:@" WHERE "];
+        NSUInteger counter = 0;
+        for (NSDictionary *condition in [self whereClause]) {
+            if (counter > 0) [sql appendString:@" AND "];
+            NSString *columnHandle = [condition objectForKey:@"col"];
+            NSString *columnValue = [condition objectForKey:@"val"];
+            [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
+            counter++;
+        }
+    }
+    
     return sql;
     
 }
