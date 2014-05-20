@@ -676,7 +676,7 @@
                         nextRowIndex++;
                     }
                     originY += sizeHeight;
-                    if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter && groupLevel == 0) {
+                    if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter) {
                         [groupLevelKeys removeAllObjects];
                     }
 
@@ -701,7 +701,7 @@
     } else if (type == MNSDocumentSectionTypePageHeader) {
         NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
         if ([sectionsForPage count] > 2) {
-            NSArray *keys = [self groupLevelKeysForPage:page row:2 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:2]];
+            NSArray *keys = [self groupLevelKeysForPage:page row:1 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:2]];
             [currentGroupLevelKeys addObjectsFromArray:keys];
         }
     } else if (type == MNSDocumentSectionTypeGroupHeader) {
