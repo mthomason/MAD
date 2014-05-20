@@ -310,24 +310,8 @@
                     RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:document andType:typeDocumentSection andLevel:groupLevel];
                     BOOL sectionIsVisible = [[documentSection visibility] boolValue];
 
-                    
-                    
-                    
-                    
                     switch (typeDocumentSection) {
                             
-                        //case MNSDocumentSectionTypeBody:
-                        //    rowIndex++;
-                        //    nextRowIndex++;
-                        //    break;
-                        //case MNSDocumentSectionTypeGroupHeader:
-                        //case MNSDocumentSectionTypeGroupFooter: {
-                        //    NSArray *keys = [pageSection objectForKey:MTReportGroupLevelKeys];
-                        //    id data = [[self reportFormatter] dataForGroupKeys:keys];
-                        //    NSLog(@"%@", data);
-
-                        //    break;
-                        //}
                         case MNSDocumentSectionTypePageFooter: {
                             CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
                             BOOL lastPage = pageIndex == numberOfPages - 1;
@@ -352,19 +336,7 @@
                     }
                     NSInteger readRowIndex = rowIndex;
                     NSInteger readPageIndex = pageIndex;
-/*
-                    if (rowIndex != 0 && typeDocumentSection == MNSDocumentSectionTypeGroupHeader) {
-                        useNextRowData = YES;
-                        readRowIndex = nextRowIndex;
-                        if (readRowIndex >= [[self reportFormatter] countOnPageIndex:pageIndex]) {
-                            readRowIndex = 0;
-                            readPageIndex = pageIndex + 1;
-                        }
-                    } else {
-                        useNextRowData = NO;
-                    }
-                    */
-                    
+
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                     
@@ -407,28 +379,6 @@
                     if (nextRowIndex >= numberOfItemsOnPage) {
                         nextRowIndex = 0;
                     }
-                    
-                    //[groupLevelKeys removeAllObjects];
-                    
-                    /*if (rowData != nil) {
-                        for (NSSortDescriptor *sortDescriptor in [[self reportFormatter] sortDescriptorsByGroupSorted]) {
-                            
-                            @autoreleasepool {
-                                
-                                NSString *key = [sortDescriptor key];
-                                id sortKey = [rowData objectForKey:key];
-                                if (sortKey == nil || sortKey == [NSNull null]) {
-                                    if (typeDocumentSection == MNSDocumentSectionTypeGroupHeader) {
-                                        skipDetil = YES;
-                                    }
-                                    sortKey = MTNullIdentifier;
-                                    [groupLevelKeys addObject:sortKey];
-                                } else {
-                                    [groupLevelKeys addObject:sortKey];
-                                }
-                            }
-                        }
-                    }*/
                     
                     if (sectionIsVisible) {
                         for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
