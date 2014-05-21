@@ -49,10 +49,15 @@
 #import "MTDataColumn.h"
 
 @interface MTDatabaseMySql ()
+    <MysqlFetchDelegate>
 
 @end
 
 @implementation MTDatabaseMySql
+
+- (void)didFetchRow:(NSUInteger)row {
+    [self readRow:row];
+}
 
 - (void *)databaseHandle {
     NSAssert(false, @"Not yet implemented");
@@ -88,7 +93,9 @@
             MysqlConnection *conn = dbconn;
             if (conn && error == nil) {
                 @autoreleasepool {
-                    [MysqlFetch performQuery:query onConnection:conn];
+                    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+                    [myFetch setDelegate:self];
+                    [myFetch performQuery:query onConnection:conn];
                     completion(YES, nil);
                 }
                 
@@ -111,7 +118,8 @@
             BOOL successConnection = conn != nil;
             if (successConnection) {
                 
-                MTDataTable *dataTable = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+                MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+                MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
                 NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
                 for (NSInteger i=0; i<[dataTable count]; i++) {
@@ -146,7 +154,8 @@
             if (successConnection) {
                 
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
-                MTDataTable *dataTable = [MysqlFetch fetchWithCommand:command onConnection:conn];
+                MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+                MTDataTable *dataTable = [myFetch fetchWithCommand:command onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
                 resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
 
@@ -158,7 +167,8 @@
                 }
                 
                 NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
-                MTDataTable *dataTable2 = [MysqlFetch fetchWithCommand:command2 onConnection:conn];
+                MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
+                MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 onConnection:conn];
                 
                 for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
                     MTDatabaseField *databaseField = [resultsDictionary objectForKey:[dataColumn fieldName]];

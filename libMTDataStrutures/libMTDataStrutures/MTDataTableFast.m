@@ -460,7 +460,6 @@
     NSEnumerator *enumerator = nil;
     
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
-    //NSUInteger counter = 0;
     for (NSString *key in keys) {
         NSSortDescriptor *sortDescriptor = [[self sortDescriptors] objectAtIndex:0];
         NSDictionary *whereStatement = @{@"col" : [sortDescriptor key], @"val" : key };
@@ -473,13 +472,13 @@
                                   @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
                                   @(MTQueryCacheSelectLimitOffsetParamatersWhere) : whereClause,
                                   };
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:querySelect];
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object: querySelect];
     
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
-    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
-                                                                                   columns:[self columns]
-                                                                                columnKeys:[self columnKeys]
-                                                                                     query:query];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                             columns: [self columns]
+                                                                          columnKeys: [self columnKeys]
+                                                                               query: query];
     
     return enumerator;
 }

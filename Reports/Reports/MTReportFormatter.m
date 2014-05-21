@@ -149,6 +149,7 @@ NSString * const MTNullIdentifier = @"(null)";
             id groupedRows = [self addGroupedResults: allObjects
                                                   level: 0];
             [self setDataByGroup: groupedRows];
+            
             [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
             [self addReportHeaderToReportLayout];
             [self addPageHeaderToReportLayout];

@@ -81,6 +81,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)cleanupBulkInsert;
 - (void *)databaseHandle;
 
+- (void)readRow:(NSUInteger)row;
+
 @property (nonatomic, assign, readonly) BOOL isLicensedUser;
 
 @end

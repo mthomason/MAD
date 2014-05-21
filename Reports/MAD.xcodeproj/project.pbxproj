@@ -321,7 +321,6 @@
 		4C1A586F14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A586E14E2658500184445 /* MTQueryBuilderChooseFieldViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C1B7A55163E0D9400E331AA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C202130163DD4090058F869 /* SenTestingKit.framework */; };
 		4C1B7A5D163E0D9400E331AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */; };
-		4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B7A5F163E0D9400E331AA /* MySqlClientTest.m */; };
 		4C1BB6E31813D1520027C508 /* UIBarButtonItemPaintRoller.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E11813D1520027C508 /* UIBarButtonItemPaintRoller.png */; };
 		4C1BB6E41813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E21813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png */; };
 		4C1BB6E71813D1C70027C508 /* UIBarButtonItemDatabase.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6E51813D1C70027C508 /* UIBarButtonItemDatabase.png */; };
@@ -6164,7 +6163,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C1B7A60163E0D9400E331AA /* MySqlClientTest.m in Sources */,
 				4C7C8B0016606F6700F2B88B /* MTTableViewCellDocument.m in Sources */,
 				4C7C8B0216606F8400F2B88B /* Constants.m in Sources */,
 				4C8EC0B0167A953C00F37DA7 /* NSManagedObjectID+Extras.m in Sources */,

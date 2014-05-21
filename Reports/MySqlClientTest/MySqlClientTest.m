@@ -30,7 +30,8 @@
     NSMutableArray *results = nil;
     
     if (conn) {
-        MysqlFetch *fetch = [MysqlFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+        MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+        MysqlFetch *fetch = [myFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
         if (fetch) {
             if ([[fetch fields] count] > 0) {
                 MysqlFetchField *resultsTableName = [[fetch fields] objectAtIndex:0];
@@ -40,8 +41,8 @@
                     NSString *tn = [tableName objectForKey:[resultsTableName name]];
                     [results addObject: tn];
                     
-                    
-                    MysqlFetch *fetchCols = [MysqlFetch fetchWithCommand:[NSString stringWithFormat:@"SHOW COLUMNS IN %@;", [tableName objectForKey:[resultsTableName name]]] onConnection:conn];
+                    MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
+                    MysqlFetch *fetchCols = [myFetch2 fetchWithCommand:[NSString stringWithFormat:@"SHOW COLUMNS IN %@;", [tableName objectForKey:[resultsTableName name]]] onConnection:conn];
                     if (fetchCols != nil) {
                         if ([[fetch fields] count] > 0) {
                             MysqlFetchField *resultsColumnName = [[[fetchCols fields] objectAtIndex:0] retain];

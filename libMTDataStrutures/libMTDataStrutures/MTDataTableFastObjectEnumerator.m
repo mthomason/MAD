@@ -19,7 +19,6 @@
 
 @interface MTDataTableFastObjectEnumerator ()
 
-//@property (assign) sqlite3 *database;
 @property (assign) sqlite3_stmt *statement;
 @property (nonatomic, strong) NSDictionary *columns;
 @property (nonatomic, strong) NSArray *columnKeys;
@@ -33,24 +32,24 @@
 
 - (void)dealloc {
     sqlite3_finalize(_statement);
-//    sqlite3_close_v2(_database);
 }
 
 - (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
     self = [super init];
     if (self) {
-        
+
+        MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+        [self setDatabaseForQuery:database];
+
         NSUInteger numberOfColumns = [columnKeys count];
         BOOL empty = numberOfColumns == 0;
         [self setEmpty:empty];
         if (!empty) {
-            MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
-            [self setDatabaseForQuery:database];
             _statement = NULL;
             const char *queryStringConstChar = [[query getSqlWithError:nil] UTF8String];
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
             BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
-            NSAssert(success, @"Connection failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
+            NSAssert(success, @"sqlite3_prepare_v2 failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
             sqlite3_free(queryString);
         }
         [self setColumnKeys:columnKeys];
@@ -103,7 +102,7 @@
                 break;
             }
             case MTDataTypeFloat:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                columnValue = [NSNumber numberWithFloat:sqlite3_column_double(_statement, columnCounter)];
                 break;
             case MTDataTypeDouble:
                 columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];

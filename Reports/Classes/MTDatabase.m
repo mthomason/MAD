@@ -223,4 +223,16 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return @"";
 }
 
+- (void)readRow:(NSUInteger)row {
+    if (row % 7 == 0) {
+        NSNumber *rowCounterWrapper = @(row);
+        NSDictionary *parameters = @{
+                                     @"MTDatabaseNumberOfRowsReadKey" : rowCounterWrapper,
+                                     };
+        
+        NSNotification *notification = [NSNotification notificationWithName:@"MTNotificationDidReadRows" object:self userInfo:parameters];
+        [[NSNotificationCenter defaultCenter] postNotification:notification];
+    }
+}
+
 @end

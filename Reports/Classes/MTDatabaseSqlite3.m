@@ -366,13 +366,13 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                         switch ([databinding datatype]) {
                             case MTDataTypeBlob: {
                                 NSData *data = [databinding value];
-                                //if ([data isKindOfClass:[NSString class]]) {
-                                //    const char *cstr = [(NSString *)data UTF8String];
-                                //    int len = strlen(cstr);
-                                //    success = SQLITE_OK == sqlite3_bind_text(statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
-                                //} else if ([data isKindOfClass:[NSData class]]) {
+                                if ([data isKindOfClass:[NSString class]]) {
+                                    const char *cstr = [(NSString *)data UTF8String];
+                                    int len = (int)strlen(cstr);
+                                    success = SQLITE_OK == sqlite3_bind_text(statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
+                                } else if ([data isKindOfClass:[NSData class]]) {
                                 success = SQLITE_OK == sqlite3_bind_blob(statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
-                                //}
+                                }
                                 NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
                                 break;
                             }
@@ -385,7 +385,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                             case MTDataTypeString: {
                                 NSString *stringValue = [databinding value];
                                 const char *cstr = [stringValue UTF8String];
-                                int len = strlen(cstr);
+                                int len = (int)strlen(cstr);
                                 success = SQLITE_OK == sqlite3_bind_text(statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
                                 NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
                                 break;
@@ -420,7 +420,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                 
                 NSUInteger rowCounter = 0;
                 
-                NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+                //NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
                 while (SQLITE_ROW == sqlite3_step(statement)) {
                     
  
@@ -461,15 +461,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                         
                         [[query datatable] beginBulkInsert];
                     }
-                    
-                    if (rowCounter % 7 == 0) {
-                        NSNumber *rowCounterWrapper = @(rowCounter);
-                        NSDictionary *parameters = @{
-                                                     @"MTDatabaseNumberOfRowsReadKey" : rowCounterWrapper,
-                                                     };
-                        NSNotification *notification = [NSNotification notificationWithName:@"MTNotificationDidReadRows" object:self userInfo:parameters];
-                        [defaultCenter postNotification:notification];
-                    }
+                    [self readRow:rowCounter];
                     
                     NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:numberOfColumns];
                     
