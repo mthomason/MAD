@@ -90,13 +90,13 @@
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     
-    NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"COLLATE LSASC" : @"COLLATE LSDESC";;
+    //NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"COLLATE LSASC" : @"COLLATE LSDESC";;
     
     NSString *unique = self.uniqueColumnHack ? @"UNIQUE" : @"";
     NSString *sql = [self createTable] ?
     
-    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@ %@);", tableName, columnDefination, unique, collate] :
-                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@ %@", tableName, columnDefination, collate];
+    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, unique] :
+                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@", tableName, columnDefination];
     
     return sql;
 }

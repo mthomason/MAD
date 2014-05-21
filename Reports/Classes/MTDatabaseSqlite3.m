@@ -66,12 +66,12 @@
         BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);
-            sqlite3_create_collation_v2(_database, "LSASC",
+            sqlite3_create_collation(_database, "LSASC",
                                         SQLITE_UTF8, _database,
-                                        compare_string_utf8_localized_asc_collation, NULL);
-            sqlite3_create_collation_v2(_database, "LSDESC",
+                                        compare_string_utf8_localized_asc_collation);
+            sqlite3_create_collation(_database, "LSDESC",
                                         SQLITE_UTF8, _database,
-                                        compare_string_utf8_localized_desc_collation, NULL);
+                                        compare_string_utf8_localized_desc_collation);
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
@@ -84,16 +84,14 @@
 
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
-    NSData *data1 = [NSData dataWithBytes:arg1 length:len1];
-    NSData *data2 = [NSData dataWithBytes:arg2 length:len1];
-    NSString *string1 = [NSString stringWithUTF8String:[data1 bytes]];
-    NSString *string2 = [NSString stringWithUTF8String:[data2 bytes]];
-    //if (string1 == nil) {
-    //   string1 = @"";
-    //}
-    //if (string2 == nil) {
-    //    string2 = @"";
-    //}
+    NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:len1 encoding:NSUTF8StringEncoding];
+    NSString *string2 = [[NSString alloc] initWithBytes:arg2 length:len2 encoding:NSUTF8StringEncoding];
+    if (string1 == nil) {
+       string1 = @"";
+    }
+    if (string2 == nil) {
+        string2 = @"";
+    }
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 

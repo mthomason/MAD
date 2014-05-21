@@ -42,7 +42,7 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT %@ FROM %@", self.columnName, self.tableName];
+    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT DISTINCT %@ FROM %@", self.columnName, self.tableName];
     NSInteger i = 0;
     for (NSDictionary *predicate in [self predicates]) {
         NSString *left = [predicate objectForKey:@"c"];
@@ -55,9 +55,12 @@
         [sql appendFormat:@"%@ = \"%@\"", left, right];
         i++;
     }
-    [sql appendFormat:@" GROUP BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC" : @"COLLATE LSDESC")];
+    //[sql appendString:@" COLLATE LSASC "];
+    //[sql appendFormat:@" GROUP BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC" : @"COLLATE LSDESC")];
     //[sql appendFormat:@"  %@", (self.accending ? @"ASC" : @"DESC")];
-//    [sql appendFormat:@" ORDER BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC ASC" : @"COLLATE LSDESC DESC")];
+    //[sql appendString:@")"];
+
+    [sql appendFormat:@" ORDER BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC ASC" : @"COLLATE LSDESC DESC")];
     return sql;
 }
 

@@ -536,7 +536,8 @@
 
 - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
     NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
-    if ([self groupKeys] == nil) {
+    if (groupLevel == 0) {
+        [[self groupKeys] removeAllObjects];
         [self initalizeGroupKeys];
     }
     
@@ -666,7 +667,7 @@
     dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
     
     [self setSortDescriptorsSet:NO];
-    [self createIndex];
+    //[self createIndex];
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
     dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
