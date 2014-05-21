@@ -28,6 +28,8 @@
 @property (nonatomic, assign) MTDataType columnType;
 @property (nonatomic, assign) BOOL createTable;
 
+@property (nonatomic, assign) BOOL uniqueColumnHack;
+
 @end
 
 @implementation MTQueryCacheAddColumn
@@ -51,6 +53,13 @@
         NSURL *url = [object objectForKey:keyMTQueryCacheAddColumnUrl];
         NSString *columnName = [object objectForKey:keyMTQueryCacheAddColumnColumnName];
         NSNumber *createTable = [object objectForKey:keyMTQueryCacheAddColumnCreateTable];
+        NSNumber *uniqueObj = [object objectForKey:@(MTQueryCacheAddColumnUnique)];
+        BOOL uniqueValue = NO;
+        if (uniqueObj != nil) {
+            uniqueValue = [uniqueObj boolValue];
+        }
+        [self setUniqueColumnHack:uniqueValue];
+        
         [self setCreateTable:[createTable boolValue]];
         [self setColumnName:columnName];
         
@@ -83,8 +92,10 @@
     
     NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"COLLATE LSASC" : @"COLLATE LSDESC";;
     
+    NSString *unique = self.uniqueColumnHack ? @"UNIQUE" : @"";
     NSString *sql = [self createTable] ?
-                    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, collate] :
+    
+    [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@ %@);", tableName, columnDefination, unique, collate] :
                     [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@ %@", tableName, columnDefination, collate];
     
     return sql;

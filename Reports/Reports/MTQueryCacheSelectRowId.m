@@ -34,7 +34,7 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    return [NSString stringWithFormat:@"SELECT * FROM %@  WHERE rowid = %d", self.tableName, self.rowId.integerValue];
+    return [NSString stringWithFormat:@"SELECT * FROM %@  WHERE rowid = %ld", self.tableName, (long)self.rowId.integerValue];
 }
 
 @end

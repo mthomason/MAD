@@ -114,7 +114,6 @@ NSString * const MTNullIdentifier = @"(null)";
     
     NSDictionary *dataByGroup = @{};
     [self setDataByGroup:dataByGroup];
-    //[self setAllObjects:[NSArray array]];
 }
 
 #pragma mark - Reading cached data
@@ -149,7 +148,6 @@ NSString * const MTNullIdentifier = @"(null)";
             id groupedRows = [self addGroupedResults: allObjects
                                                   level: 0];
             [self setDataByGroup: groupedRows];
-            
             [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
             [self addReportHeaderToReportLayout];
             [self addPageHeaderToReportLayout];
@@ -268,9 +266,10 @@ NSString * const MTNullIdentifier = @"(null)";
     
     if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
         
-        SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
+                SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
 
         NSArray *allKeysFixed = [groupedRows allKeys];
+        
         NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray:allKeysFixed copyItems:NO];
 
         BOOL nullGroupExist = [self nullKeyExist:allKeys];
@@ -296,48 +295,69 @@ NSString * const MTNullIdentifier = @"(null)";
         
         NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
         NSEnumerator *loopEnumerator = loopEnumerator = [desc ascending] == NO ?
-                                        [sortedKeys reverseObjectEnumerator] :
-                                        [sortedKeys objectEnumerator];
+                                                                                [sortedKeys reverseObjectEnumerator] :
+                                                                                [sortedKeys objectEnumerator];
         
+        NSEnumerator *loopEnumerator2 = [[[self query] datatable] enumeratorForGroupLevel:groupedRowsLevel withKeys:passedkeys accending:[desc ascending]];
+        
+        for (id key in loopEnumerator2) {
+            NSLog(@"Key %@", key);
+        }
+        
+        // FIXME: Get loop enumerator here... All keys for level
         for (id key in loopEnumerator) {
-            id obj = [groupedRows objectForKey:key];
-            
-            //Group header section
-            for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-                if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                    [self addHeightFromDocumentSectionToReportLayout:documentSection];                    
-                    break;
-                }
-            }
-            
-            [keys addObject:key];
-            [self addGroupHeaderLevel:groupedRowsLevel withKeys:keys];
 
-            NSInteger indexNextGroup = [[queryGroup weight] integerValue] + 1;
+            NSLog(@"Key %d %@", groupedRowsLevel, key);
             
-            RptqQueryGroup *nextGroup = [self sortGroupAtLevel:indexNextGroup];
-            if (nextGroup != nil) {
-                [self addGroupLevel: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys];
-            } else {
-                [self cacheDetailLevelWithDetails:obj];
-            }
-            
-            //Group footer section
-            for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-                if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                    [self addHeightFromDocumentSectionToReportLayout:documentSection];
-                    break;
+            @autoreleasepool {
+                id obj = [groupedRows objectForKey:key];
+                
+                //Group header section
+                [self addHeightFromGroupHeaderWithQueryGroup:queryGroup];
+                
+                [keys addObject:key];
+                [self addGroupHeaderLevel:groupedRowsLevel withKeys:keys];
+                
+                NSInteger indexNextGroup = [[queryGroup weight] integerValue] + 1;
+                
+                RptqQueryGroup *nextGroup = [self sortGroupAtLevel:indexNextGroup];
+                if (nextGroup != nil) {
+                    [self addGroupLevel: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys];
+                } else {
+                    [self cacheDetailLevelWithDetails:obj];
                 }
+                
+                [self addHeightFromGroupFooterWithQueryGroup:queryGroup];
+                [self cacheGroupFooterAtLevel:groupedRowsLevel];
+                
+                [keys removeLastObject];
             }
             
-            [self cacheGroupFooterAtLevel:groupedRowsLevel];
-            
-            [keys removeLastObject];
         }
         
     } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
         
         [self cacheDetailLevelWithDetails:(NSArray *)groupedRows];
+    }
+}
+
+// !!!: Is this getting the height correctly?
+- (void)addHeightFromGroupHeaderWithQueryGroup:(RptqQueryGroup *)queryGroup {
+    for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
+        if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+            [self addHeightFromDocumentSectionToReportLayout:documentSection];
+            break;
+        }
+    }
+}
+
+// !!!: Is this getting the height correctly?
+- (void)addHeightFromGroupFooterWithQueryGroup:(RptqQueryGroup *)queryGroup {
+    for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
+        if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+            [self addHeightFromDocumentSectionToReportLayout:documentSection];
+            break;
+        }
     }
 }
 

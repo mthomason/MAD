@@ -32,6 +32,9 @@
 @property (nonatomic, assign) BOOL bulkInsertLoop;
 @property (nonatomic, assign) BOOL sortDescriptorsSet;
 
+@property (nonatomic, strong) NSMutableArray *groupKeys;
+@property (nonatomic, strong) NSArray *groupTableNames;
+
 @end
 
 @implementation MTDataTableFast
@@ -111,6 +114,8 @@
         BOOL sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]];;
         [self setSortDescriptorsSet:sortDescriptorsSet];
 
+        NSMutableArray *groupKeys = [[NSMutableArray alloc] init];
+        [self setGroupKeys:groupKeys];
         
         [self reopenDbConnection];
     }
@@ -163,19 +168,67 @@
 }
 
 - (void)addColumn:(MTDataColumn *)column {
-    
     NSUInteger columnId = [[self columnKeys] count];
     NSString *columnName = [NSString stringWithFormat:@"c%lu", (unsigned long)columnId];
     
     [[self columns] setObject:column forKey:columnName];
     [[self columnKeys] addObject:columnName];
     
-    NSNumber *createTable = @(columnId == 0);
+    [self addColumn:column toTable:[self tableName] columnName:columnName createTable:columnId == 0 unique:NO];
+}
+
+- (void)initalizeGroupKeys {
+        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:[[self sortDescriptors] count]];
+        for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
+            NSNumber *columnIndex = @([[self columnKeys] indexOfObject: [sortDescriptor key]]);
+            [groupKeys addObject:columnIndex];
+        }
+        [self setGroupKeys:groupKeys];
+        groupKeys = nil;
+}
+
+- (NSString *)columnKeyForGroupLocation:(NSInteger)groupLevel {
+    NSInteger loc = [[self groupKeys][groupLevel] integerValue];
+    return [self columnKeys][loc];
+}
+
+- (MTDataColumn *)dataColumnForGroupLevel:(NSInteger)groupLevel {
+    NSString *key = [self columnKeyForGroupLocation:groupLevel];
+    return [[self columns] objectForKey:key];
+}
+
+- (void)addRow:(NSArray *)row {
+    self.rowCounter++;
+    [self addRow:row toTable:[self tableName] withColumns:[self columns] andColumnKeys:[self columnKeys]];
+    if ([self groupKeys] == nil) {
+        [self initalizeGroupKeys];
+    }
+    /*
+    for (int i=0; i<[[self sortDescriptors] count ]; i++) {
+        NSString *tableName = [self cacheTableNameForGroupLevel:i];
+        NSInteger loc = [[self groupKeys][i] integerValue];
+        id value = row[loc];
+        MTDataColumn *oldDataColumn = [self dataColumnForGroupLevel:i];
+        MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:[self cachedGroupColumnName]];
+        [dataColumn setColumnType: [oldDataColumn columnType]];
+        [self addRow:@[value] toTable:tableName withColumns:@{[self cachedGroupColumnName] : dataColumn} andColumnKeys:@[[self cachedGroupColumnName]]];
+    }
+     */
+}
+
+- (NSString *)cachedGroupColumnName {
+    return @"c";
+}
+
+- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
+    
+    NSNumber *createTable = @(create);
     NSDictionary *queryDefination = @{
                                       @(MTQueryCacheAddColumnDataColumn) : column,
-                                      @(MTQueryCacheAddColumnTableName) : [self tableName],
+                                      @(MTQueryCacheAddColumnTableName) : table,
                                       @(MTQueryCacheAddColumnColumnName) : columnName,
-                                      @(MTQueryCacheAddColumnCreateTable) : createTable
+                                      @(MTQueryCacheAddColumnCreateTable) : createTable,
+                                      @(MTQueryCacheAddColumnUnique) : @(unique),
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
@@ -186,17 +239,15 @@
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
 }
 
-- (void)addRow:(NSArray *)row {
-    
+- (void)addRow:(NSArray *)row toTable:(NSString *)tableName withColumns:(NSDictionary *)columns andColumnKeys:(NSArray *)columnKeys {
     NSDictionary *queryDefination = @{
-                                      @(MTQueryCacheAddRowColumnKeys)   : [self columnKeys],
-                                      @(MTQueryCacheAddRowColumns)      : [self columns],
+                                      @(MTQueryCacheAddRowColumnKeys)   : columnKeys,
+                                      @(MTQueryCacheAddRowColumns)      : columns,
                                       @(MTQueryCacheAddRowData)         : row,
-                                      @(MTQueryCacheAddRowTableName)    : [self tableName]
+                                      @(MTQueryCacheAddRowTableName)    : tableName
                                       };
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
-    self.rowCounter++;
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
         NSAssert(success, @"Error %@", error);
@@ -204,6 +255,7 @@
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
 }
+
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
     NSMutableArray *rowData = [[NSMutableArray alloc] init];
@@ -218,13 +270,14 @@
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
-    
+    [[self groupKeys] removeAllObjects];
     if ([[self columnKeys] count] > 0 && [[self columns] count] > 0) {
         
         if ([sortDescriptors count] > 0 && self.sortDescriptorsSet == NO) {
             NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
             
             for (NSSortDescriptor *sort in sortDescriptors) {
+                NSInteger i = 0;
                 for (NSString *columnKey in [[self columns] keyEnumerator]) {
                     MTDataColumn *column = [[self columns] objectForKey:columnKey];
                     if ([[column fieldName] isEqualToString:[sort key]]) {
@@ -232,8 +285,10 @@
                                                                                 ascending:[sort ascending]
                                                                                  selector:[MTDatabaseField selectorForSorting:[[column columnType] integerValue]]];
                         [newSorts addObject:sortn];
+                        [[self groupKeys] addObject:@(i)];
                         break;
                     }
+                    i++;
                 }
                 if ([newSorts count] == [sortDescriptors count]) {
                     [self setSortDescriptorsSet:YES];
@@ -284,6 +339,23 @@
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+    
+    [[self groupKeys] removeAllObjects];
+    [self initalizeGroupKeys];
+    
+    /*
+    for (int i = 0; i < [[self sortDescriptors] count]; i++) {
+        NSString *tableName = [self cacheTableNameForGroupLevel:i];
+        MTDataColumn *oldDataColumn = [self dataColumnForGroupLevel:i];
+        MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:[self cachedGroupColumnName]];
+        [dataColumn setColumnType: [oldDataColumn columnType]];
+        [self addColumn:dataColumn toTable:tableName columnName:@"c" createTable:YES unique:YES];
+    }
+     */
+}
+
+- (NSString *)cacheTableNameForGroupLevel:(NSInteger)groupLevel {
+    return [NSString stringWithFormat:@"s%d", groupLevel];
 }
 
 - (void)dropIndex {
@@ -301,6 +373,10 @@
     }];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
+    for (int i = 0; i < [[self sortDescriptors] count]; i++) {
+        NSString *tableName = [self cacheTableNameForGroupLevel:i];
+        [self dropTableName:tableName];
+    }
 }
 
 - (void)vacuumCacheDb {
@@ -316,19 +392,22 @@
 }
 
 - (void)dropTable {
+    [self dropTableName:[self tableName]];
+}
+
+- (void)dropTableName:(NSString *)tableName {
     NSNumber *tableNameKey = @(MTQueryCacheDropTableTableName);
     NSDictionary *queryDefination = @{
-                                      tableNameKey : [self tableName]
+                                      tableNameKey : tableName
                                       };
     
     MTQuery *queryDropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDropTable object:queryDefination];
-
+    
     dispatch_semaphore_t semaphoreDropTable = dispatch_semaphore_create(0);
     [queryDropTable performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
         dispatch_semaphore_signal(semaphoreDropTable);
     }];
     dispatch_semaphore_wait(semaphoreDropTable, DISPATCH_TIME_FOREVER);
-    
 }
 
 - (void)deleteAll {
@@ -455,31 +534,43 @@
     return objectEnumerator;
 }
 
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
+- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
     NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
-    NSEnumerator *enumerator = nil;
+    if ([self groupKeys] == nil) {
+        [self initalizeGroupKeys];
+    }
     
+    NSArray *columnKeys = @[[self columnKeyForGroupLocation:groupLevel]];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
+    
     for (NSString *key in keys) {
-        NSSortDescriptor *sortDescriptor = [[self sortDescriptors] objectAtIndex:0];
-        NSDictionary *whereStatement = @{@"col" : [sortDescriptor key], @"val" : key };
+
+        NSInteger sortLevel = groupLevel - 1;
+        //NSSortDescriptor *sortDescriptor = [[self sortDescriptors] objectAtIndex:sortLevel];
+        
+        
+        NSDictionary *whereStatement = @{@"c" : [self columnKeyForGroupLocation:sortLevel],
+                                         @"v" : key};
         [whereClause addObject:whereStatement];
     }
 
+    //NSSortDescriptor *sortDescriptor = [self sortDescriptors][groupLevel];
     NSDictionary *querySelect = @{
-                                  @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
-                                  @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-                                  @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
-                                  @(MTQueryCacheSelectLimitOffsetParamatersWhere) : whereClause,
+                                  @(MTQuerySelectFieldKeys) : columnKeys,
+                                  @(MTQuerySelectTableName) : [self tableName],
+                                  @(MTQuerySelectSortAccending) : @(accending),
+                                  @(MTQuerySelectPredicates) : whereClause,
                                   };
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object: querySelect];
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectGroupKeys object: querySelect];
+    
     
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
-    enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                              columns: [self columns]
-                                                                          columnKeys: [self columnKeys]
+                                                                          columnKeys: columnKeys
                                                                                query: query];
-    
+    [enumerator setAddRowId:NO];
+    [enumerator setSingleColumnNoWrapper:YES];
     return enumerator;
 }
 

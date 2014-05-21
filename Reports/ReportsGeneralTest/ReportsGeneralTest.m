@@ -14,6 +14,10 @@
     [super setUp];
 }
 
+- (void)testDestinctiveSelect {
+    
+}
+
 - (void)tearDown {
     [super tearDown];
 }

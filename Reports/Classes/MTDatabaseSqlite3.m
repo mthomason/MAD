@@ -66,14 +66,12 @@
         BOOL isOpen = sqlite3_open_v2(path, &_database, flags, NULL) == SQLITE_OK;
         if (isOpen) {
             sqlite3_extended_result_codes(_database, true);
-            
-            
             sqlite3_create_collation_v2(_database, "LSASC",
                                         SQLITE_UTF8, _database,
                                         compare_string_utf8_localized_asc_collation, NULL);
             sqlite3_create_collation_v2(_database, "LSDESC",
-                                     SQLITE_UTF8, _database,
-                                     compare_string_utf8_localized_desc_collation, NULL);
+                                        SQLITE_UTF8, _database,
+                                        compare_string_utf8_localized_desc_collation, NULL);
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
@@ -90,12 +88,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     NSData *data2 = [NSData dataWithBytes:arg2 length:len1];
     NSString *string1 = [NSString stringWithUTF8String:[data1 bytes]];
     NSString *string2 = [NSString stringWithUTF8String:[data2 bytes]];
-    if (string1 == nil) {
-       string1 = @"";
-    }
-    if (string2 == nil) {
-        string2 = @"";
-    }
+    //if (string1 == nil) {
+    //   string1 = @"";
+    //}
+    //if (string2 == nil) {
+    //    string2 = @"";
+    //}
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
@@ -520,6 +518,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
             }
         } else {
             int result = sqlite3_step(statement);
+            //MTLog(@"Sqlite message %s", (char *)sqlite3_errmsg(_database));
             NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s", (char *)sqlite3_errmsg(_database));
             NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
         }

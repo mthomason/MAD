@@ -32,6 +32,7 @@
 #import "MTQueryCacheIndexCreate.h"
 #import "MTQueryCacheIndexDrop.h"
 #import "MTQueryCacheSelectLimitOffset.h"
+#import "MTQueryCacheSelectGroupKeys.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
@@ -73,6 +74,10 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 - (id)initWithQueryType:(MTQueryType)type object:(id)object {
 
     switch (type) {
+        
+        case MTQueryTypeCacheSelectGroupKeys:
+            self = [[MTQueryCacheSelectGroupKeys alloc] initWithObject:object];
+            break;
         
         case MTQueryTypeCacheSelectRowId:
             self = [[MTQueryCacheSelectRowId alloc] initWithObject:object];

@@ -54,7 +54,7 @@
     NSMutableString *sql = [[NSMutableString alloc] init];
 
     if ([[self sortDescriptors] count] > 0) {
-        NSString *queryCreateIndexFirstPart = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@", [self indexName], [self tableName]];
+        NSString *queryCreateIndexFirstPart = [NSString stringWithFormat:@"CREATE INDEX IF NOT EXISTS main.%@ ON %@ ", [self indexName], [self tableName]];
         
         [sql appendString: queryCreateIndexFirstPart];
         if ([[self sortDescriptors] count] > 0) {

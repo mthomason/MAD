@@ -32,6 +32,7 @@
 
 - (void)dealloc {
     sqlite3_finalize(_statement);
+    _databaseForQuery = nil;
 }
 
 - (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
@@ -45,8 +46,10 @@
         BOOL empty = numberOfColumns == 0;
         [self setEmpty:empty];
         if (!empty) {
-            _statement = NULL;
-            const char *queryStringConstChar = [[query getSqlWithError:nil] UTF8String];
+            self->_statement = NULL;
+            NSString *sql = [query getSqlWithError:nil];
+            const char *queryStringConstChar = [sql UTF8String];
+            NSLog(@"Sql: %@", sql);
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
             BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
             NSAssert(success, @"sqlite3_prepare_v2 failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
@@ -54,6 +57,8 @@
         }
         [self setColumnKeys:columnKeys];
         [self setColumns:columns];
+        [self setAddRowId:YES];
+        [self setSingleColumnNoWrapper:NO];
 
     }
     return self;
@@ -81,11 +86,11 @@
 }
 
 - (id)currentObject {
-    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
+    NSMutableDictionary *currentObject = [self singleColumnNoWrapper] ? nil : [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
     int columnCounter = 0;
+    id columnValue;
     for (id key in [self columnKeys]) {
         MTDataColumn *dataColumn = [self columns][key];
-        id columnValue;
         switch ([[dataColumn columnType] integerValue]) {
             case MTDataTypeInteger:
                 columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
@@ -131,15 +136,19 @@
                 break;
             }
         }
-        if (columnValue != nil) {
+        if (columnValue == nil) {
+            columnValue = [NSNull null];
+        }
+        if (columnValue != nil && self.singleColumnNoWrapper == NO) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];
         }
         columnCounter++;
     }
-    if (sqlite3_column_count(_statement) >= columnCounter) {
+    if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
         [currentObject setValue:@(sqlite3_column_int(_statement, columnCounter)) forKey:@"ROWID"];
     }
-    return currentObject;
+    //NSLog(@"FEnum: %@", columnValue);
+    return self.singleColumnNoWrapper ? columnValue : currentObject;
 }
 
 @end

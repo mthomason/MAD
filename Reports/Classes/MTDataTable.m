@@ -22,7 +22,7 @@
 
 @implementation MTDataTable
 
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
+- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
