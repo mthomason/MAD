@@ -72,10 +72,10 @@
 
 - (NSString *)sqlQuery {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
-    NSUInteger columnCounter = 0;
     
     NSAssert([[self columnKeys] count] != 0, @"Bad parameter data.");  // FIXME: Handle case where no columns.
     
+    NSUInteger columnCounter = 0;
     for (NSString *key in [self columnKeys]) {
         if (columnCounter != 0) {
             [sql appendString:@", "];
