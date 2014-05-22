@@ -292,34 +292,21 @@ NSString * const MTNullIdentifier = @"(null)";
             sortedKeys = allKeys;
         }
 
-        
         NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
-        NSEnumerator *loopEnumerator = loopEnumerator = [desc ascending] == NO ?
-                                                                                [sortedKeys reverseObjectEnumerator] :
-                                                                                [sortedKeys objectEnumerator];
-        
-        NSEnumerator *loopEnumerator2 = [[[self query] datatable] enumeratorForGroupLevel:groupedRowsLevel withKeys:passedkeys accending:[desc ascending]];
-        
-        for (id key in loopEnumerator2) {
-            NSLog(@"Key %@", key);
-        }
-        
-        // FIXME: Get loop enumerator here... All keys for level
+        NSEnumerator *loopEnumerator = [[[self query] datatable] enumeratorForGroupLevel: groupedRowsLevel
+                                                                                 withKeys: passedkeys
+                                                                                accending: [desc ascending]];
         for (id key in loopEnumerator) {
 
-            NSLog(@"Key %d %@", groupedRowsLevel, key);
-            
             @autoreleasepool {
                 id obj = [groupedRows objectForKey:key];
                 
-                //Group header section
                 [self addHeightFromGroupHeaderWithQueryGroup:queryGroup];
                 
                 [keys addObject:key];
                 [self addGroupHeaderLevel:groupedRowsLevel withKeys:keys];
-                
+
                 NSInteger indexNextGroup = [[queryGroup weight] integerValue] + 1;
-                
                 RptqQueryGroup *nextGroup = [self sortGroupAtLevel:indexNextGroup];
                 if (nextGroup != nil) {
                     [self addGroupLevel: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys];
