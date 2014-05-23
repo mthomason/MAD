@@ -61,6 +61,10 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) MTPageCaching *pageCaching;
 
+@property (nonatomic, strong) NSEnumerator *enumeratorForReportDetail;
+
+@property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
+
 @end
 
 @implementation MTReportFormatter
@@ -247,6 +251,136 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject:  d];
 }
 
+- (void)addAllDetail {
+    
+    
+    NSInteger numberOfGroups = [[self sortDescriptorsByGroupSorted] count];
+    
+    NSEnumerator *testEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
+    //NSInteger rowCounter = 0;
+//    NSArray *lastResultValues = [NSArray arrayWithArray:[self lastResultRowComparsonValues]];
+    RptqDocumentSection *detailSection = [[self layout] hasDetailSection];
+
+    BOOL firstRow = YES;
+    for (NSDictionary *resultRow in testEnumerator) {
+        
+        //Get row id
+        NSNumber *rowid = [resultRow objectForKey:@"ROWID"];
+
+        //Get row key values
+        NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+        for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
+            id predicateValue = [resultRow objectForKey:[sortDesc key]];
+            [keyValuesForComparson addObject:predicateValue];
+        }
+        
+        //Display new footers if needed.
+        if (!firstRow) {
+            [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+        }
+        
+        //Display new group headers if needed.
+        [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+        
+        [self addHeightFromDocumentSectionToReportLayout:detailSection];
+        [self cacheDetail:rowid];
+        
+        
+        
+        //NSLog(@"D:\t%@", resultRow);
+        
+        [self setLastResultRowComparsonValues: keyValuesForComparson];
+
+        firstRow = NO;
+    }
+}
+
+- (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
+    for (NSInteger groupLevel = [lastValues count] - 1; groupLevel >= 0; groupLevel--) {
+        id value = lastValues[groupLevel];
+        id value2 = currentValues[groupLevel];
+        if (value == [NSNull null]) {
+            value = @"";
+        }
+        if (value2 == [NSNull null]) {
+            value2 = @"";
+        }
+        NSSortDescriptor *sortDesc = [self sortDescriptorsByGroupSorted][groupLevel];
+        SEL comparec = [sortDesc selector];
+        NSComparisonResult comparsonResult;
+        if (comparec == @selector(localizedCaseInsensitiveCompare:)) {
+            comparsonResult = [value localizedCaseInsensitiveCompare:value2];
+        } else {
+            comparsonResult = [value compare:value];
+        }
+        BOOL newFooter = comparsonResult != NSOrderedSame;
+        
+        if (newFooter) {
+            RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+            [self addHeightFromGroupFooterWithQueryGroup: group];
+            [self cacheGroupFooterAtLevel:groupLevel];
+            //NSLog(@"GF%d:\t%@", groupLevel, currentValues);
+        }
+    }
+}
+
+- (void)displayNewGroupHeadersIfNeeded:(NSArray *)currentValues andLastValues:(NSArray *)lastValues {
+    
+    for (NSInteger groupLevel = 0; groupLevel < [currentValues count]; groupLevel++) {
+
+        BOOL newHeader = [lastValues count] == 0;
+        if (newHeader == NO) {
+            id value = lastValues[groupLevel];
+            id value2 = currentValues[groupLevel];
+            if (value == [NSNull null]) {
+                value = @"";
+            }
+            if (value2 == [NSNull null]) {
+                value2 = @"";
+            }
+            NSSortDescriptor *sortDesc = [self sortDescriptorsByGroupSorted][groupLevel];
+            SEL comparec = [sortDesc selector];
+            NSComparisonResult comparsonResult;
+            if (comparec == @selector(localizedCaseInsensitiveCompare:)) {
+                comparsonResult = [value localizedCaseInsensitiveCompare:value2];
+            } else {
+                comparsonResult = [value compare:value];
+            }
+            newHeader = comparsonResult != NSOrderedSame;
+        }
+        
+        if (newHeader) {
+            RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+            [self addHeightFromGroupHeaderWithQueryGroup: gh];
+            
+            NSRange range = NSMakeRange(0, groupLevel + 1);
+            NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
+            NSArray *currentKeys = [currentValues objectsAtIndexes:indexSet];
+            [self addGroupHeaderLevel:groupLevel withKeys:currentKeys];
+            //NSLog(@"GH%d:\t%@", groupLevel, currentKeys);
+        }
+    }
+}
+
+- (void)addGroupLevel:(NSInteger)groupLevel groupKeys:(NSArray *)keys enumerator:(NSEnumerator *)enumerator {
+/*
+    RptqQueryGroup *groupHeader = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+    [self addHeightFromGroupHeaderWithQueryGroup: groupHeader];
+    [self addGroupHeaderLevel:0 withKeys:keys];
+
+    BOOL nextGroup;
+    if (nextGroup) {
+        [self addGroupLevel:groupLevel groupKeys:keys enumerator:enumerator];
+    } else {
+        [self cacheDetailLevelWithDetails:];
+    }
+    
+    RptqQueryGroup *groupFooter = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+    [self addHeightFromGroupFooterWithQueryGroup:groupFooter];
+    [self cacheGroupFooterAtLevel:groupLevel];
+  */
+}
+
 - (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel andKeys:(NSArray *)passedkeys andAllKeys:(NSMutableArray *)allKeysForLevel {
     
     NSMutableArray *keys = [[NSMutableArray alloc] initWithArray:passedkeys];
@@ -264,6 +398,7 @@ NSString * const MTNullIdentifier = @"(null)";
         NSEnumerator *loopEnumerator = [[[self query] datatable] enumeratorForGroupLevel: groupedRowsLevel
                                                                                 withKeys: passedkeys
                                                                                accending: [desc ascending]];
+        
         for (id key in loopEnumerator) {
             
             @autoreleasepool {
@@ -290,6 +425,24 @@ NSString * const MTNullIdentifier = @"(null)";
                 
                 [keys removeLastObject];
             }
+        }
+    }
+}
+
+- (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
+    
+    for (NSInteger i=0; i<[containerDetails count]; i++) {
+        @autoreleasepool {
+            
+            
+
+            [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
+            NSNumber *rowid = containerDetails[i][@"ROWID"];
+            [self cacheDetail:rowid];
+            
+            //id nextObject = [[[[self query] datatable] enumeratorForAllObjectsSortedRowIdOnly] nextObject];
+            ///NSLog(@"Next Object %@ == %@", nextObject, rowid);
+
         }
     }
 }
@@ -336,9 +489,16 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addDetailToReportLayout {
     NSArray *emptyArray = @[];
     NSMutableArray *emptyMutableArray = [[NSMutableArray alloc] init];
+    
+    NSEnumerator *enumeratorForAllObjectsSorted = [[[self query] datatable] enumeratorForAllObjectsSorted];
+    [self setEnumeratorForReportDetail: enumeratorForAllObjectsSorted];
+    
+    [self addAllDetail];
+    /*
     [self addGroupLevel: [self firstQueryGroup]
             groupedRows: nil
        groupedRowsLevel: 0 andKeys: emptyArray andAllKeys:emptyMutableArray];
+     */
 }
 
 // FIXME: Make sure paper rect is passed in to the software
@@ -423,13 +583,6 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject: d];
 }
 
-- (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
-    for (NSInteger i=0; i<[containerDetails count]; i++) {
-        [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
-        [self cacheDetail:containerDetails[i][@"ROWID"]];
-    }
-}
-
 - (void)cacheGroupFooterAtLevel:(NSUInteger)groupLevel {
     NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
     NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeGroupFooter),
@@ -438,7 +591,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)cacheDetail:(NSNumber *)detailRowId {
-    NSDictionary *detail = @{MTReportSectionType : @(MNSDocumentSectionTypeBody),
+    NSNumber *type = @(MNSDocumentSectionTypeBody);
+    NSDictionary *detail = @{MTReportSectionType : type,
                              MTReportDetailRowId : detailRowId};
     [[self pageLayoutTemporary] addObject: detail];
     [[self pageIndexesTemporary] addIndex:[detailRowId integerValue]];

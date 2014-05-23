@@ -322,23 +322,60 @@
     
 }
 
+- (NSArray *)sortDescriptorIndexGroupsForSortDescriptors:(NSArray *)sortDescriptors {
+
+    NSInteger sortDescCtr = [sortDescriptors count];
+    NSUInteger capacity = sortDescCtr + 1;
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:capacity];
+    [results addObject:sortDescriptors];
+    for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+        @autoreleasepool {
+            NSArray *group = @[sortDescriptor];
+            [results addObject:group];
+        }
+    }
+    return results;
+}
+
+- (NSString *)cacheTableNameForGroupLevel:(NSInteger)groupLevel {
+    return [NSString stringWithFormat:@"s%d", groupLevel];
+}
+
+- (NSString *)indexNameForGroupLevel:(NSInteger)groupLevel andIndex:(NSInteger)index {
+    return [NSString stringWithFormat:@"i%d%d", groupLevel, index];
+}
+
+- (NSDictionary *)createIndexParametersForIndexName:(NSString *)indexName tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors {
+    return @{
+             @(MTQueryCacheIndexCreateIndexName)         : indexName,
+             @(MTQueryCacheIndexCreateTableName)         : tableName,
+             @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors
+             };
+}
+
 - (void)createIndex {
     
     [self sortUsingDescriptors:[self sortDescriptors]];
+    NSInteger sortDescCtr = [[self sortDescriptors] count];
+    NSArray *sortDescriptorGroups = [self sortDescriptorIndexGroupsForSortDescriptors:[self sortDescriptors]];
     
-    NSDictionary *parametersCreateIndex = @{
-                                            @(MTQueryCacheIndexCreateIndexName)         : @"i1",
-                                            @(MTQueryCacheIndexCreateTableName)         : [self tableName],
-                                            @(MTQueryCacheIndexCreateSortDescriptors)   : [self sortDescriptors]
-                                            };
-    MTQuery *queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
-                                                            object: parametersCreateIndex];
-    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    [queryCreateIndex performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"Error %@", error);
-        dispatch_semaphore_signal(semaphoreQuery);
-    }];
-    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+    NSInteger groupCounter = 0;
+    for (NSArray *sortDescriptors in sortDescriptorGroups) {
+
+        NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
+        NSDictionary *parametersCreateIndex = [self createIndexParametersForIndexName:groupName tableName:[self tableName] andSortDescriptors:sortDescriptors];
+  
+        MTQuery *queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
+                                                                object: parametersCreateIndex];
+        dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
+        [queryCreateIndex performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
+            NSAssert(success, @"Error %@", error);
+            dispatch_semaphore_signal(semaphoreQuery);
+        }];
+        dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+        groupCounter++;
+    }
+    
     
     [[self groupKeys] removeAllObjects];
     [self initalizeGroupKeys];
@@ -354,28 +391,24 @@
      */
 }
 
-- (NSString *)cacheTableNameForGroupLevel:(NSInteger)groupLevel {
-    return [NSString stringWithFormat:@"s%d", groupLevel];
-}
-
 - (void)dropIndex {
-    NSDictionary *parameters = @{
-                                 @(MTQueryCacheIndexDropIndexName) : @"i1",
-                                 };
-    MTQuery *query = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexDropParameters
-                                                 object: parameters];
-    
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self databaseForInserts]
-                         completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"Error %@", error);
-        dispatch_semaphore_signal(semaphore);
-    }];
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
-    for (int i = 0; i < [[self sortDescriptors] count]; i++) {
-        NSString *tableName = [self cacheTableNameForGroupLevel:i];
-        [self dropTableName:tableName];
+    NSInteger sortDescCtr = [[self sortDescriptors] count];
+    NSInteger groupCounter = 0;
+    for (NSInteger i = 0; i<sortDescCtr; i++) {
+        NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
+        NSDictionary *parameters = @{
+                                     @(MTQueryCacheIndexDropIndexName) : groupName,
+                                     };
+        MTQuery *query = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexDropParameters
+                                                     object: parameters];
+        
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        [query performQueryWithDatabase:[self databaseForInserts]
+                             completion:^(BOOL success, NSError *error) {
+                                 NSAssert(success, @"Error %@", error);
+                                 dispatch_semaphore_signal(semaphore);
+                             }];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     }
 }
 
@@ -612,6 +645,55 @@
                                                                                query: query];
     [enumerator setAddRowId:NO];
     [enumerator setSingleColumnNoWrapper:YES];
+    return enumerator;
+}
+
+- (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
+    
+    NSDictionary *options = @{
+                              @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+    
+    NSString *columnKey = @"ROWID";
+
+    MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:columnKey];
+    [rowid setColumnType:@(MTDataTypeInteger)];
+    
+    NSDictionary *columns = @{columnKey : rowid};
+    NSArray *columnKeys = @[columnKey];
+    
+    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                              columns: columns
+                                                                                                           columnKeys: columnKeys
+                                                                                                                query: query];
+    [enumerator setAddRowId:NO];
+    [enumerator setSingleColumnNoWrapper:YES];
+    return enumerator;
+}
+
+- (NSEnumerator *)enumeratorForAllObjectsSorted {
+    
+    [[self groupKeys] removeAllObjects];
+    [self initalizeGroupKeys];
+    
+    NSDictionary *options = @{
+                              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
+                              @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              };
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+    
+    MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                              columns: [self columns]
+                                                                                                           columnKeys: [self columnKeys]
+                                                                                                                query: query];
+    [enumerator setAddRowId:YES];
+    [enumerator setSingleColumnNoWrapper:NO];
     return enumerator;
 }
 

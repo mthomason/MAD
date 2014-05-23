@@ -55,10 +55,6 @@
         [sql appendFormat:@"%@ = \"%@\"", left, right];
         i++;
     }
-    //[sql appendString:@" COLLATE LSASC "];
-    //[sql appendFormat:@" GROUP BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC" : @"COLLATE LSDESC")];
-    //[sql appendFormat:@"  %@", (self.accending ? @"ASC" : @"DESC")];
-    //[sql appendString:@")"];
 
     [sql appendFormat:@" ORDER BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC ASC" : @"COLLATE LSDESC DESC")];
     return sql;

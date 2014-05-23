@@ -73,17 +73,24 @@
 - (NSString *)sqlQuery {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
     
-    NSAssert([[self columnKeys] count] != 0, @"Bad parameter data.");  // FIXME: Handle case where no columns.
+    BOOL rowIdOnly = [[self columnKeys] count] == 0;
     
-    NSUInteger columnCounter = 0;
-    for (NSString *key in [self columnKeys]) {
-        if (columnCounter != 0) {
-            [sql appendString:@", "];
+    //NSAssert([[self columnKeys] count] != 0, @"Bad parameter data.");  // FIXME: Handle case where no columns.
+    
+    if (rowIdOnly) {
+        [sql appendFormat:@" rowid FROM %@", [self tableName]];
+    } else {
+
+        NSUInteger columnCounter = 0;
+        for (NSString *key in [self columnKeys]) {
+            if (columnCounter != 0) {
+                [sql appendString:@", "];
+            }
+            [sql appendFormat:@"\"%@\"", key];
+            columnCounter++;
         }
-        [sql appendFormat:@"\"%@\"", key];
-        columnCounter++;
+        [sql appendFormat:@", rowid FROM %@", [self tableName]];
     }
-    [sql appendFormat:@", rowid FROM %@", [self tableName]];
     
     if ([[self sortDesc] count] > 0) {
         NSUInteger sortCounter = 0;
