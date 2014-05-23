@@ -7,6 +7,8 @@
 //
 
 #import "MTQuerySelectItemsForGroup.h"
+#import "MTDatabaseDataBinding.h"
+#import "MTDataColumn.h"
 
 @interface MTQuerySelectItemsForGroup ()
 
@@ -15,6 +17,7 @@
 @property (nonatomic, strong) NSArray *sortDescriptors;
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (nonatomic, strong) NSArray *whereClause;
+@property (nonatomic, strong) NSDictionary *columns;
 
 @end
 
@@ -32,11 +35,18 @@
         NSArray *sortDescriptors = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectSortDescriptors)]];
         [self setSortDescriptors:sortDescriptors];
         
-        NSArray *columnKeys = [object objectForKey:@(MTQuerySelectFieldKeys)];
+        NSMutableArray *columnKeys = [NSMutableArray arrayWithArray:[object objectForKey:@(MTQuerySelectFieldKeys)]];
+        [columnKeys addObject:@"ROWID"];
         [self setColumnKeys:columnKeys];
         
-        NSArray *whereClause = [object objectForKey:@(MTQuerySelectPredicates)];
+        NSArray *whereClause = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectPredicates)]];
         [self setWhereClause:whereClause];
+        
+        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:[object objectForKey:@(MTQuerySelectFieldDescriptors)]];
+        MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:@"ROWID"];
+        [rowid setColumnType:@(MTDataTypeInteger)];
+        [columns setObject:rowid forKey:@"ROWID"];
+        [self setColumns:columns];
   
     }
     return self;
@@ -56,8 +66,29 @@
         [sql appendFormat:@"\"%@\"", key];
         columnCounter++;
     }
-    [sql appendFormat:@", rowid FROM %@", [self tableName]];
+    [sql appendFormat:@" FROM %@", [self tableName]];
 
+    if ([[self whereClause] count] > 0) {
+        NSUInteger counter = 0;
+        for (NSDictionary *condition in [self whereClause]) {
+            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
+            NSString *columnHandle = [condition objectForKey:@"c"];
+            NSString *columnValue = [condition objectForKey:@"v"];
+            
+            
+            if ([[NSNull null] isEqual: columnValue]) {
+                [sql appendFormat:@"%@ is Null", columnHandle];
+            } else {
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
+                                                                                          fieldIndex: counter
+                                                                                               value: columnValue];
+                [[self binaryBindings] addObject:databinding];
+                [sql appendFormat:@"%@ = ?", columnHandle];
+            }
+            counter++;
+        }
+    }
+    
     if ([[self sortDescriptors] count] > 0) {
         NSUInteger sortCounter = 0;
         [sql appendString:@" ORDER BY "];
@@ -69,20 +100,12 @@
             sortCounter++;
         }
     }
-
-    if ([[self whereClause] count] > 0) {
-        [sql appendString:@" WHERE "];
-        NSUInteger counter = 0;
-        for (NSDictionary *condition in [self whereClause]) {
-            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
-            NSString *columnHandle = [condition objectForKey:@"c"];
-            NSString *columnValue = [condition objectForKey:@"v"];
-            [sql appendFormat:@"%@ = \"%@\"", columnHandle, columnValue];
-            counter++;
-        }
-    }
     
     return sql;
+}
+
+- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
+    return [[(MTDataColumn *)[[self columns] objectForKey:columnHandle] columnType] integerValue];
 }
 
 @end

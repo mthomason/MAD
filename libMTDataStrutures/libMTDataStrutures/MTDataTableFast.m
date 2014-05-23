@@ -187,13 +187,13 @@
         groupKeys = nil;
 }
 
-- (NSString *)columnKeyForGroupLocation:(NSInteger)groupLevel {
+- (NSString *)idColumnKeyForGroupLocation:(NSInteger)groupLevel {
     NSInteger loc = [[self groupKeys][groupLevel] integerValue];
     return [self columnKeys][loc];
 }
 
-- (MTDataColumn *)dataColumnForGroupLevel:(NSInteger)groupLevel {
-    NSString *key = [self columnKeyForGroupLocation:groupLevel];
+- (MTDataColumn *)idDataColumnForGroupLevel:(NSInteger)groupLevel {
+    NSString *key = [self idColumnKeyForGroupLocation:groupLevel];
     return [[self columns] objectForKey:key];
 }
 
@@ -441,11 +441,10 @@
 
 - (NSDictionary *)queryDefinationSelect {
     return  @{
-              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
-              @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
-              
-              };
+                @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
+                @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
+                @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+            };
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSInteger)limit andOffset:(NSInteger)offset {
@@ -480,6 +479,54 @@
     sqlite3_finalize(statement);
     sqlite3_free(queryString);
     return result;
+}
+
+- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
+
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
+    NSInteger groupLevel = 0;
+    for (NSString *key in groupKeys) {
+        NSDictionary *whereStatement = @{@"c" : [self idColumnKeyForGroupLocation:groupLevel],
+                                         @"v" : key};
+        [whereClause addObject:whereStatement];
+        groupLevel++;
+    }
+    NSDictionary *querySelect = @{
+                                  @(MTQuerySelectFieldKeys) : [self columnKeys],
+                                  @(MTQuerySelectTableName) : [self tableName],
+                                  @(MTQuerySelectPredicates) : whereClause,
+                                  @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
+                                  @(MTQuerySelectFieldDescriptors) : [self columns]
+                                  
+                                  };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectItemsForGroupKeys object: querySelect];
+    sqlite3_stmt *statement = NULL;
+    NSError *error = nil;
+    NSString *sql = [query getSqlWithError:&error];
+    const char *sqlc = [sql UTF8String];
+    char *queryString = sqlite3_mprintf((char *) sqlc);
+    sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
+    BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
+
+    for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
+        [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
+    }
+
+    if (success) {
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            @autoreleasepool {
+                NSDictionary *result = [NSDictionary dictionaryWithDictionary:[self currentObject:statement]];
+                [results addObject:result];
+            }
+        }
+    }
+    NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
+    
+    sqlite3_finalize(statement);
+    sqlite3_free(queryString);
+    return results;
 }
 
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
@@ -541,21 +588,16 @@
         [self initalizeGroupKeys];
     }
     
-    NSArray *columnKeys = @[[self columnKeyForGroupLocation:groupLevel]];
+    NSArray *columnKeys = @[[self idColumnKeyForGroupLocation:groupLevel]];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
     
     for (NSString *key in keys) {
-
         NSInteger sortLevel = groupLevel - 1;
-        //NSSortDescriptor *sortDescriptor = [[self sortDescriptors] objectAtIndex:sortLevel];
-        
-        
-        NSDictionary *whereStatement = @{@"c" : [self columnKeyForGroupLocation:sortLevel],
+        NSDictionary *whereStatement = @{@"c" : [self idColumnKeyForGroupLocation:sortLevel],
                                          @"v" : key};
         [whereClause addObject:whereStatement];
     }
 
-    //NSSortDescriptor *sortDescriptor = [self sortDescriptors][groupLevel];
     NSDictionary *querySelect = @{
                                   @(MTQuerySelectFieldKeys) : columnKeys,
                                   @(MTQuerySelectTableName) : [self tableName],
@@ -563,8 +605,6 @@
                                   @(MTQuerySelectPredicates) : whereClause,
                                   };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectGroupKeys object: querySelect];
-    
-    
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
                                                                              columns: [self columns]
@@ -644,6 +684,9 @@
         }
         columnCounter++;
     }
+    if (sqlite3_column_count(statement) >= columnCounter) {
+        [currentObject setValue:@(sqlite3_column_int(statement, columnCounter)) forKey:@"ROWID"];
+    }
     return currentObject;
 }
 
@@ -667,7 +710,7 @@
     dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
     
     [self setSortDescriptorsSet:NO];
-    //[self createIndex];
+    [self createIndex];
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
     dispatch_semaphore_t s3 = dispatch_semaphore_create(0);

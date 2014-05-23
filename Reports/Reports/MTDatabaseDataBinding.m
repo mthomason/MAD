@@ -27,6 +27,57 @@
     self = [super init];
     if (self) {
         
+        if (value == nil || value == [NSNull null]) {
+            datatype = MTDataTypeNull;
+            value = [NSNull null];
+        } else {
+            
+            switch (datatype) {
+                case MTDataTypeBit:
+                case MTDataTypeInteger:
+                case MTDataTypeShort:
+                case MTDataTypeLong:
+                case MTDataTypeLongLong:
+                case MTDataTypeInt24:
+                case MTDataTypeEnum: {
+                    datatype = MTDataTypeInteger;
+                    break;
+                }
+                case MTDataTypeSet:
+                case MTDataTypeTime:
+                case MTDataTypeTimeStamp:
+                case MTDataTypeYear:
+                case MTDataTypeDate:
+                case MTDataTypeDateTime:
+                case MTDataTypeString:
+                case MTDataTypeVarChar:
+                case MTDataTypeGeometry: {
+                    datatype = MTDataTypeString;
+                    break;
+                }
+                case MTDataTypeImage:
+                case MTDataTypeBlob: {
+                    datatype = MTDataTypeBlob;
+                    break;
+                }
+                case MTDataTypeFloat: {
+                    datatype = MTDataTypeFloat;
+                    break;
+                }
+                case MTDataTypeDouble:
+                case MTDataTypeDecimal:
+                case MTDataTypeNumber: {
+                    datatype = MTDataTypeDouble;
+                    break;
+                }
+                case MTDataTypeUnknown:
+                default: {
+                    value = [NSString stringWithFormat:@"%@", value];
+                    datatype = MTDataTypeString;
+                    break;
+                }
+            }
+        }
         [self setDatatype:datatype];
         [self setFieldIndex:fieldIndex];
         [self setValue:value];

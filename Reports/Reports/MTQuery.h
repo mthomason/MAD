@@ -104,6 +104,7 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
 	MTQuerySelectConnection,
     MTQuerySelectTableName,
     MTQuerySelectFieldKeys,
+    MTQuerySelectFieldDescriptors,
     MTQuerySelectLimit,
     MTQuerySelectOffset,
     MTQuerySelectSortDescriptors,

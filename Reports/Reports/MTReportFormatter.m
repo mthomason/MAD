@@ -61,10 +61,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) MTPageCaching *pageCaching;
 
-@property (nonatomic, strong, readwrite) NSDictionary *dataByGroup;
-
-//@property (nonatomic, strong) NSArray *allObjects;
-
 @end
 
 @implementation MTReportFormatter
@@ -112,8 +108,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSArray *dataByPage = @[];
     [self setReportIndexes:dataByPage];
     
-    NSDictionary *dataByGroup = @{};
-    [self setDataByGroup:dataByGroup];
 }
 
 #pragma mark - Reading cached data
@@ -144,10 +138,6 @@ NSString * const MTNullIdentifier = @"(null)";
             [self cleanupTemporaryReportIndexes];
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
 
-            NSArray *allObjects = [[[[self query] datatable] objectEnumerator] allObjects];
-            id groupedRows = [self addGroupedResults: allObjects
-                                                  level: 0];
-            [self setDataByGroup: groupedRows];
             [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
             [self addReportHeaderToReportLayout];
             [self addPageHeaderToReportLayout];
@@ -257,74 +247,50 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject:  d];
 }
 
-- (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel andKeys:(NSArray *)passedkeys {
+- (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel andKeys:(NSArray *)passedkeys andAllKeys:(NSMutableArray *)allKeysForLevel {
     
     NSMutableArray *keys = [[NSMutableArray alloc] initWithArray:passedkeys];
     
     NSArray *sqg = [[self query] sortedHasQueryGroups];
     [self setSortedQueryGroups:sqg];
     
-    if ([groupedRows isKindOfClass:[NSDictionary class]]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
+    if (groupedRowsLevel == [[self sortDescriptorsByGroupSorted] count]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
         
-                SEL sortSelector = [[[queryGroup hasField] databaseSchemaField] selectorForSorting];
+        NSArray *results = [NSArray arrayWithArray:[[[self query] datatable] objectsForGroupKeys:allKeysForLevel]];
+        [self cacheDetailLevelWithDetails:results];
 
-        NSArray *allKeysFixed = [groupedRows allKeys];
-        
-        NSMutableArray *allKeys = [[NSMutableArray alloc] initWithArray:allKeysFixed copyItems:NO];
-
-        BOOL nullGroupExist = [self nullKeyExist:allKeys];
-        if (nullGroupExist) {
-            [allKeys removeObject:MTNullIdentifier];
-        }
-        
-
-        NSArray *sortedKeys = nil;
-        if (sortSelector != nil) {
-            NSArray *sortedArray = [allKeys sortedArrayUsingSelector:sortSelector];
-            if (nullGroupExist) {
-                NSMutableArray *allKeysSorted = [[NSMutableArray alloc] initWithArray:sortedArray copyItems:NO];
-                [allKeysSorted insertObject:MTNullIdentifier atIndex:0];
-                sortedKeys = allKeysSorted;
-            } else {
-                sortedKeys = sortedArray;
-            }
-        } else {
-            sortedKeys = allKeys;
-        }
-
+    } else {
         NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
         NSEnumerator *loopEnumerator = [[[self query] datatable] enumeratorForGroupLevel: groupedRowsLevel
-                                                                                 withKeys: passedkeys
-                                                                                accending: [desc ascending]];
+                                                                                withKeys: passedkeys
+                                                                               accending: [desc ascending]];
         for (id key in loopEnumerator) {
-
+            
             @autoreleasepool {
-                id obj = [groupedRows objectForKey:key];
-                
-                [self addHeightFromGroupHeaderWithQueryGroup:queryGroup];
                 
                 [keys addObject:key];
+                [allKeysForLevel addObject:key];
+                
+                [self addHeightFromGroupHeaderWithQueryGroup:queryGroup];
                 [self addGroupHeaderLevel:groupedRowsLevel withKeys:keys];
-
+                
                 NSInteger indexNextGroup = [[queryGroup weight] integerValue] + 1;
                 RptqQueryGroup *nextGroup = [self sortGroupAtLevel:indexNextGroup];
                 if (nextGroup != nil) {
-                    [self addGroupLevel: nextGroup groupedRows: obj groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys];
+                    [self addGroupLevel: nextGroup groupedRows: nil groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys andAllKeys:allKeysForLevel];
                 } else {
-                    [self cacheDetailLevelWithDetails:obj];
+                    NSArray *results = [NSArray arrayWithArray:[[[self query] datatable] objectsForGroupKeys:allKeysForLevel]];
+                    [self cacheDetailLevelWithDetails:results];
                 }
+                
+                [allKeysForLevel removeLastObject];
                 
                 [self addHeightFromGroupFooterWithQueryGroup:queryGroup];
                 [self cacheGroupFooterAtLevel:groupedRowsLevel];
                 
                 [keys removeLastObject];
             }
-            
         }
-        
-    } else if ([groupedRows isKindOfClass:[NSArray class]]) {   //Details without groupings...
-        
-        [self cacheDetailLevelWithDetails:(NSArray *)groupedRows];
     }
 }
 
@@ -368,10 +334,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addDetailToReportLayout {
+    NSArray *emptyArray = @[];
+    NSMutableArray *emptyMutableArray = [[NSMutableArray alloc] init];
     [self addGroupLevel: [self firstQueryGroup]
-            groupedRows: [self dataByGroup]
-       groupedRowsLevel: 0
-                andKeys: @[]];
+            groupedRows: nil
+       groupedRowsLevel: 0 andKeys: emptyArray andAllKeys:emptyMutableArray];
 }
 
 // FIXME: Make sure paper rect is passed in to the software
@@ -528,7 +495,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (id)dataForGroupKeys:(NSArray *)keys {
-    return [MTReportFormatter dataForGroupData:[self dataByGroup] andKeys:keys];
+    return [[[self query] datatable] objectsForGroupKeys:keys];
 }
 
 /*

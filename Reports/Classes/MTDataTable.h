@@ -64,6 +64,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 
 - (NSArray *)allObjects;
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit;
+- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys;
 
 - (NSUInteger)count;
 - (NSUInteger)numberOfColumns;

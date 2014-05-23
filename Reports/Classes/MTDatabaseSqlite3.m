@@ -333,6 +333,62 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     return [query partOfTransactionSet] ? _bulkStatement : statement;
 }
 
+- (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding {
+    [MTDatabaseSqlite3 bindStatement:statement withBindings:databinding andDatabase:&_database];
+}
+
++ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database {
+    
+    int columnNumber = (int)[databinding fieldIndex] + 1;
+    BOOL success = YES;
+    if ([[databinding value] isEqual:[NSNull null]]) {
+        success = SQLITE_OK == sqlite3_bind_null(*statement, columnNumber);
+    } else {
+        switch ([databinding datatype]) {
+            case MTDataTypeBlob: {
+                id data = [databinding value];
+                if ([data isKindOfClass:[NSString class]]) {
+                    const char *cstr = [(NSString *)data UTF8String];
+                    int len = (int)strlen(cstr);
+                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
+                } else if ([data isKindOfClass:[NSData class]]) {
+                    success = SQLITE_OK == sqlite3_bind_blob(*statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+                }
+                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                break;
+            }
+            case MTDataTypeInteger: {
+                long long integerValue = [[databinding value] longLongValue];
+                success = SQLITE_OK == sqlite3_bind_int64(*statement, columnNumber, integerValue);
+                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                break;
+            }
+            case MTDataTypeString: {
+                NSString *stringValue = [databinding value];
+                const char *cstr = [stringValue UTF8String];
+                int len = (int)strlen(cstr);
+                success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
+                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                break;
+            }
+            case MTDataTypeFloat:
+            case MTDataTypeDouble: {
+                double doubeValue = [[databinding value] doubleValue];
+                success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, doubeValue);
+                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                break;
+            }
+            case MTDataTypeNull: {
+                success = SQLITE_OK == sqlite3_bind_null(*statement, columnNumber);
+                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+            }
+            default:
+                NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
+                break;
+        }
+    }
+}
+
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     
     NSError *error = nil;
@@ -355,53 +411,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
             success = SQLITE_OK == sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
             if ([[query binaryBindings] count] > 0) {
                 for (MTDatabaseDataBinding *databinding in [query binaryBindings]) {
-                    int columnNumber = (int)[databinding fieldIndex] + 1;
-                    if ([[databinding value] isEqual:[NSNull null]]) {
-                        success = SQLITE_OK == sqlite3_bind_null(statement, columnNumber);
-                    } else {
-                        switch ([databinding datatype]) {
-                            case MTDataTypeBlob: {
-                                NSData *data = [databinding value];
-                                if ([data isKindOfClass:[NSString class]]) {
-                                    const char *cstr = [(NSString *)data UTF8String];
-                                    int len = (int)strlen(cstr);
-                                    success = SQLITE_OK == sqlite3_bind_text(statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
-                                } else if ([data isKindOfClass:[NSData class]]) {
-                                success = SQLITE_OK == sqlite3_bind_blob(statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
-                                }
-                                NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
-                                break;
-                            }
-                            case MTDataTypeInteger: {
-                                long long integerValue = [[databinding value] longLongValue];
-                                success = SQLITE_OK == sqlite3_bind_int64(statement, columnNumber, integerValue);
-                                NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
-                                break;
-                            }
-                            case MTDataTypeString: {
-                                NSString *stringValue = [databinding value];
-                                const char *cstr = [stringValue UTF8String];
-                                int len = (int)strlen(cstr);
-                                success = SQLITE_OK == sqlite3_bind_text(statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
-                                NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
-                                break;
-                            }
-                            case MTDataTypeFloat:
-                            case MTDataTypeDouble: {
-                                double doubeValue = [[databinding value] doubleValue];
-                                success = SQLITE_OK == sqlite3_bind_double(statement, columnNumber, doubeValue);
-                                NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
-                                break;
-                            }
-                            case MTDataTypeNull: {
-                                success = SQLITE_OK == sqlite3_bind_null(statement, columnNumber);
-                                NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
-                            }
-                            default:
-                                NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
-                                break;
-                        }
-                    }
+                    [self bindStatement:&statement withBindings:databinding];
                 }
             }
         }
@@ -486,6 +496,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                                 break;
                             }
                             case SQLITE_NULL: {
+                                value = [NSNull null];
                                 break;
                             }
                             case SQLITE3_TEXT: {
@@ -501,10 +512,11 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                                 break;
                         }
                         
-                        if (value != nil) {
-                            NSString *fieldName = [query fieldKeys][colCtr];
-                            [resultsForRow setObject:value forKey:fieldName];
+                        if (value == nil) {
+                            value = [NSNull null];
                         }
+                        NSString *fieldName = [query fieldKeys][colCtr];
+                        [resultsForRow setObject:value forKey:fieldName];
                     }
                     
                     [[query datatable] addRowWithDataForFieldKeys:resultsForRow];
@@ -548,6 +560,10 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     
     completion(success, error);
 }
+
+//+ (id)currentObjectForStatement:(sqlite3_stmt *)statement and {
+    
+//}
 
 - (void)cleanupBulkInsert {
     BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);

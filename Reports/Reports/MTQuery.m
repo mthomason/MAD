@@ -204,7 +204,6 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 }
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
-    
     @autoreleasepool {
         [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
             [[self datatable] cache];

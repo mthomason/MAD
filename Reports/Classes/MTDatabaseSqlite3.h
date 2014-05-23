@@ -14,6 +14,8 @@
 
 #import "MTDatabaseConnection.h"
 
+@class MTDatabaseDataBinding;
+
 @interface MTDatabaseSqlite3 : MTDatabase
 
 - (void *)databaseHandle;
@@ -30,6 +32,9 @@
 + (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
+
++ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database;
+- (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
 
 - (void)openDatabase;
 
