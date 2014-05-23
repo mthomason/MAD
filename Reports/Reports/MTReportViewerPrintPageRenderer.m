@@ -632,7 +632,7 @@
     } else if (type == MNSDocumentSectionTypePageHeader) {
         NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
         if ([sectionsForPage count] > 2) {
-            NSArray *keys = [self groupLevelKeysForPage:page row:1 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:1]];
+            NSArray *keys = [self groupLevelKeysForPage:page row:row+1 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:1]];
             [currentGroupLevelKeys addObjectsFromArray:keys];
         }
     } else if (type == MNSDocumentSectionTypeGroupHeader) {
