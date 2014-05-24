@@ -46,12 +46,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[self barButtonItemSave] setEnabled:NO];
+    [self setSortOrder:MNSSortOrderAccending];
+    [[[self tableViewCellSort] detailTextLabel] setText: [NSLocalizedString(@"Accending", @"Accending") lowercaseString]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self setSortOrder:MNSSortOrderAccending];
-    [[[self tableViewCellSort] detailTextLabel] setText: [NSLocalizedString(@"Accending", @"Accending") lowercaseString]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -73,6 +73,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showGroupSortOrders"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
+            MTQueryBuilderSortTypeViewController *dvc = [segue destinationViewController];
+            [dvc setInitalSortOrder:[self sortOrder]];
             [[segue destinationViewController] setDelegate:self];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
@@ -104,21 +106,27 @@
 #pragma mark Sort Type
 
 - (void)uITableViewControllerSortTypeDidSelectSortType:(MNSSortOrder)sortOrderType {
-    [[self navigationController] popToViewController:self animated:YES];
     [self setSortOrder:sortOrderType];
     NSString *label = nil;
     switch (sortOrderType) {
         case MNSSortOrderAccending:
             label = NSLocalizedString(@"Accending", @"Accending");
+            [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+            [[self detailLabelSort] setText:label];
             break;
         case MNSSortOrderDecending:
             label = NSLocalizedString(@"Decending", @"Decending");
+            [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+            [[self detailLabelSort] setText:label];
             break;
         default:
             label = NSLocalizedString(@"Default", @"Default");
+            [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+            [[self detailLabelSort] setText:label];
             break;
     }
-    [[[self tableViewCellSort] detailTextLabel] setText: [label lowercaseString]];
+    [[self navigationController] popToViewController:self animated:YES];
+    //[[[self tableViewCellSort] detailTextLabel] setNeedsDisplay];
 }
 
 #pragma mark - Actions

@@ -28,8 +28,11 @@
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
 
-@property (weak) IBOutlet UITableViewCell *tableViewCellField;
-@property (weak) IBOutlet UITableViewCell *tableViewCellSort;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;
+@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellSort;
+@property (nonatomic, weak) IBOutlet UILabel *detailLabelField;
+@property (nonatomic, weak) IBOutlet UILabel *detailLabelSort;
+
 
 @property (copy) NSString *fieldName;
 @property (assign) MNSSortOrder sortOrder;

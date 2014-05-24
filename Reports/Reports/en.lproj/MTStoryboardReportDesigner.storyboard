@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="E7v-7q-ygd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="E7v-7q-ygd">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -2041,7 +2041,7 @@
                         <sections>
                             <tableViewSection id="YWY-2f-TQi">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellSortOrderAccending" textLabel="pNy-vs-xRj" style="IBUITableViewCellStyleDefault" id="eU7-6m-gXj">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MTTableViewCellSortOrderAccending" textLabel="pNy-vs-xRj" style="IBUITableViewCellStyleDefault" id="eU7-6m-gXj">
                                         <rect key="frame" x="0.0" y="35" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eU7-6m-gXj" id="D9P-DB-mav">
@@ -2059,7 +2059,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellSortOrderDecending" textLabel="xf4-oT-oE5" style="IBUITableViewCellStyleDefault" id="ULG-UC-pwL">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MTTableViewCellSortOrderDecending" textLabel="xf4-oT-oE5" style="IBUITableViewCellStyleDefault" id="ULG-UC-pwL">
                                         <rect key="frame" x="0.0" y="79" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ULG-UC-pwL" id="Dwb-O3-0kg">
@@ -2093,6 +2093,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableViewCellAccending" destination="eU7-6m-gXj" id="HPf-JD-tQb"/>
+                        <outlet property="tableViewCellDecending" destination="ULG-UC-pwL" id="JVt-us-t4k"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XsF-3H-2sW" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rP4-Fn-avi" userLabel="Exit" sceneMemberID="exit"/>
@@ -2188,6 +2192,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="detailLabelField" destination="Gh1-Zd-adc" id="Gsh-Yy-VAA"/>
+                        <outlet property="detailLabelSort" destination="8OK-M0-lKo" id="fdX-t1-TKj"/>
                         <outlet property="tableViewCellField" destination="aa3-6a-4fe" id="Kxd-UU-LZb"/>
                         <outlet property="tableViewCellSort" destination="JAr-jg-9nE" id="Ccy-xq-vID"/>
                     </connections>
@@ -11423,8 +11429,8 @@
         <segue reference="3KQ-0K-U1O"/>
         <segue reference="PPx-4T-brk"/>
         <segue reference="pCi-yT-77G"/>
-        <segue reference="kPX-hH-DKi"/>
         <segue reference="pfP-rZ-fVf"/>
+        <segue reference="giJ-oQ-sLB"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

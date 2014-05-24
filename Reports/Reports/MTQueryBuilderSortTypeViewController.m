@@ -12,19 +12,33 @@
 
 #import "MTQueryBuilderSortTypeViewController.h"
 
-#define MNSSortTypeReuseIds [NSArray arrayWithObjects: @"UITableViewCellSortOrderAccending", @"UITableViewCellSortOrderDecending", nil]
+#define MNSSortTypeReuseIds [NSArray arrayWithObjects: @"MTTableViewCellSortOrderAccending", @"MTTableViewCellSortOrderDecending", nil]
 
 #define MNSSortTypeNames [NSArray arrayWithObjects: NSLocalizedString(@"Accending", @"Accending"), NSLocalizedString(@"Decending", @"Decending"), nil]
+
+@interface MTQueryBuilderSortTypeViewController ()
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellAccending;
+@property (weak, nonatomic) IBOutlet UITableViewCell *tableViewCellDecending;
+
+@end
 
 @implementation MTQueryBuilderSortTypeViewController
 
 @synthesize delegate = _delegate;
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
+    [[self navigationItem] setHidesBackButton:NO];
+    if ([self initalSortOrder] == MNSSortOrderAccending) {
+        [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    } else {
+        [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -36,15 +50,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[MNSSortTypeReuseIds objectAtIndex:MNSSortOrderAccending]]) {
         [[self delegate] uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderAccending];
+        [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryCheckmark];
+        [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryNone];
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[MNSSortTypeReuseIds objectAtIndex:MNSSortOrderDecending]]) {
         [[self delegate] uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderDecending];
-    }
-}
+        [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryNone];
+        [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryCheckmark];
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
-    [[self navigationItem] setHidesBackButton:NO];
+    }
 }
 
 @end

@@ -23,6 +23,7 @@
     <UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderSortTypeDelegate> delegate;
+@property (nonatomic, assign) MNSSortOrder initalSortOrder;
 
 @end
 
