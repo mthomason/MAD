@@ -298,7 +298,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[[self navigationController] toolbar] setNeedsLayout];
     
     if ([self asyncDelegate]) {
-        __block __weak MTReportViewerController *viewController = self;
+        __weak MTReportViewerController *viewController = self;
         [[self asyncDelegate] displayContentController:viewController];
     } else {
         if ([MTApplicationInstance isMadDesigner]) {
@@ -379,7 +379,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 [[reportViewer labelDateLastRefreshed] setHidden:NO];
                 [reportViewer setUpdatingOfTimerIsPaused:NO];
                 [reportViewer setIsRefreshing:NO];
-
+                reportViewer = nil;
             }
         }];
     }
@@ -664,6 +664,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_async(highpriorityqueue, ^{
+                        
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
                         dispatch_sync(dispatch_get_main_queue(), ^{
                             [reportViewer4 setDisplayActive];
@@ -675,13 +676,18 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             
                             NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
                             [defaultCenter removeObserver:self name:@"MTNotificationDidReadRows" object:[[reportDocument defaultQuery] database]];
-                            
+
+                            reportViewer4 = nil;
                         });
+                        
+                        reportViewer3 = nil;
                     });
+
                 } else {
                     [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
                     __block MTReportViewerController *reportViewer3 = reportViewer2;
                     dispatch_async(highpriorityqueue, ^{
+                        
                         __block MTReportViewerController *reportViewer4 = reportViewer3;
                         dispatch_sync(dispatch_get_main_queue(), ^{
                             [reportViewer4 setDisplayActive];
@@ -691,11 +697,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             
                             NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
                             [defaultCenter removeObserver:self name:@"MTNotificationDidReadRows" object:[[reportDocument defaultQuery] database]];
+                            reportViewer4 = nil;
                             
                         });
+                        reportViewer3 = nil;
                     });
                 }
             }];
+            reportViewer2 = nil;
         });
     }
 }
@@ -757,7 +766,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)reload {
-    __block __weak MTReportViewerController *blockself = self;
+    __weak MTReportViewerController *blockself = self;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -770,11 +779,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [reportViewer setDisplayInactive];
     
-    __block __weak MTReportViewerController *blockViewer = reportViewer;
+    __weak MTReportViewerController *blockViewer = reportViewer;
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
     MTApplicationInstance *app = [AppDelegate app];
-    __block __weak MAReportDocument *doc = [app activeDocument];
+    __weak MAReportDocument *doc = [app activeDocument];
     [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
     if ([self printPageRendererReport] == nil) {
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
@@ -786,8 +795,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [[doc reportFormatter] setDidRefresh:[self startedRefresh]];
         [[doc reportFormatter] formatForSize:viewBounds];
         
-        __block __weak MAReportDocument *doc2 = doc;
-        __block __weak MTReportViewerController *blockViewer2 = blockViewer;
+        __weak MAReportDocument *doc2 = doc;
+        __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             [blockViewer2 setDisplayActive];
@@ -831,7 +840,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     for (UITabBarItem *i in [[[self tabBarController] tabBar] items]) {
         [i setEnabled:NO];
     }
-    __block MTReportViewerController *blockself = self;
+    __weak MTReportViewerController *blockself = self;
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queuePriorityBackground, ^{
@@ -848,7 +857,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         [printPageRender writeToPdf:temporaryFile];
         
-        __block MTReportViewerController *blockself2 = blockself;
+        __weak MTReportViewerController *blockself2 = blockself;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [blockself2 setUpdatingOfTimerIsPaused:NO];
             [blockself2 updateLateRefreshedLabel:blockself2];
@@ -884,7 +893,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [[self barButtonItemSendToPdf] setEnabled:NO];
         [[self barButtonItemActivity] setEnabled:NO];
         
-        __block MTReportViewerController *reportViewer = self;
+        __weak MTReportViewerController *reportViewer = self;
         UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
             [[reportViewer barButtonItemPrint] setEnabled:YES];
             [[reportViewer barButtonItemRefresh] setEnabled:YES];

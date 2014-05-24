@@ -23,13 +23,14 @@ CGFloat const MTAnimationRotateDeg = 1.0000f;
     
     [[self layer] setAnchorPoint:CGPointMake(0.5, 0.5)];
 
-    __block __weak UIView *v = self;
+    __block UIView *v = self;
     [UIView animateWithDuration:0.3500
                           delay:0
                         options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
                      animations:^{
                          [UIView setAnimationRepeatCount:NSNotFound];
                          v.transform = rightWobble;
+                         v = nil;
                      }
                      completion:nil];
     

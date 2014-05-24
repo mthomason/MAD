@@ -259,15 +259,18 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     
     if (urlToOpen != nil) {
         managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
+        NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
+        NSNumber *inferMappingModelAutomaticallyOption = @(YES);
         NSDictionary *options = @{
-                                  NSMigratePersistentStoresAutomaticallyOption : @(YES),
-                                  NSInferMappingModelAutomaticallyOption : @(YES),
+                                  NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+                                  NSInferMappingModelAutomaticallyOption :inferMappingModelAutomaticallyOption,
                                   };
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
-        __block __weak MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
+        __weak MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
         MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-                completionHandler(blockManagedDocumentAtUrl, success);
+            MAReportDocument *strongManagedDocUrl = blockManagedDocumentAtUrl;
+            completionHandler(strongManagedDocUrl, success);
         };
 
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
@@ -285,8 +288,9 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
     
-    
     MTQuery *queryTest = [[MTQuery alloc] initWithQueryType:MTQueryTypeConnectionTest object:databaseConnection];
+    __weak MTDatabaseConnection *weakDatabaseConnection = databaseConnection;
+
     [queryTest performQuery:^(BOOL success, NSError *error) {
         
         if (!success) {
@@ -297,14 +301,14 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                 
                 if (success) {
                     
-                    __block __weak MAReportDocument *documentReport = managedDocument;
+                    __weak MAReportDocument *documentReport = managedDocument;
 
                     RptqDocument *rptqDocument = [documentReport activeDocument];
-                    MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+                    MTDatabase *database = [MTDatabase databaseFactory:weakDatabaseConnection];
                     
                     if (database) {
                         
-                        [self addDatabase:database toDocument:rptqDocument ofDocumentReport:documentReport completion:^(BOOL success, NSError *error){
+                        [MAReportDocument addDatabase:database toDocument:rptqDocument ofDocumentReport:documentReport completion:^(BOOL success, NSError *error){
                             completion(success, error);
                         }];
                         
@@ -325,17 +329,18 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 + (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document ofDocumentReport:(MAReportDocument *)documentReport completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
 
+    __weak MAReportDocument *weakDocumentReport = documentReport;
     [RptqDocument addDatabase:database toDocument:document completion:^(BOOL successAddingDatasource, NSError *error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (successAddingDatasource) {
 
-                [self closeReportDocument:documentReport withCompletion:^(BOOL success, NSError *error) {
+                [self closeReportDocument:weakDocumentReport withCompletion:^(BOOL success, NSError *error) {
                     completion(success, error);
                 }];
                 
             } else {
-                [self discardReportDocument:documentReport withCompletion:^(BOOL success, NSError *error) {
+                [self discardReportDocument:weakDocumentReport withCompletion:^(BOOL success, NSError *error) {
                     completion(success, error);
                 }];
             }

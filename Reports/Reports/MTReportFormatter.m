@@ -138,7 +138,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setPrintableSize:printableSize];
             
             [RptqDocumentSection batchUpdateSectionLayoutHeights:[self layout]];
-
+            
             [self cleanupTemporaryReportIndexes];
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
 
@@ -162,6 +162,16 @@ NSString * const MTNullIdentifier = @"(null)";
             
         }
     }
+}
+
+- (void)initReportLayoutContainers {
+    NSArray *layoutByPage = @[];
+    [self setReportLayout:layoutByPage];
+    
+    NSArray *dataByPage = @[];
+    [self setReportIndexes:dataByPage];
+    
+    [self setLastResultRowComparsonValues:nil];
 }
 
 - (id)addGroupedResults:(NSArray *)sortedResults
@@ -251,14 +261,15 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject:  d];
 }
 
+
+
 - (void)addAllDetail {
     
-    
+    [self initReportLayoutContainers];
+
     NSInteger numberOfGroups = [[self sortDescriptorsByGroupSorted] count];
     
     NSEnumerator *testEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
-    //NSInteger rowCounter = 0;
-//    NSArray *lastResultValues = [NSArray arrayWithArray:[self lastResultRowComparsonValues]];
     RptqDocumentSection *detailSection = [[self layout] hasDetailSection];
 
     BOOL firstRow = YES;
@@ -281,13 +292,9 @@ NSString * const MTNullIdentifier = @"(null)";
         
         //Display new group headers if needed.
         [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        
         [self addHeightFromDocumentSectionToReportLayout:detailSection];
+        
         [self cacheDetail:rowid];
-        
-        
-        
-        //NSLog(@"D:\t%@", resultRow);
         
         [self setLastResultRowComparsonValues: keyValuesForComparson];
 
@@ -344,7 +351,7 @@ NSString * const MTNullIdentifier = @"(null)";
             if (comparec == @selector(localizedCaseInsensitiveCompare:)) {
                 comparsonResult = [value localizedCaseInsensitiveCompare:value2];
             } else {
-                comparsonResult = [value compare:value];
+                comparsonResult = [value compare:value2];
             }
             newHeader = comparsonResult != NSOrderedSame;
         }
@@ -487,8 +494,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addDetailToReportLayout {
-    NSArray *emptyArray = @[];
-    NSMutableArray *emptyMutableArray = [[NSMutableArray alloc] init];
+   // NSArray *emptyArray = @[];
+   // NSMutableArray *emptyMutableArray = [[NSMutableArray alloc] init];
     
     NSEnumerator *enumeratorForAllObjectsSorted = [[[self query] datatable] enumeratorForAllObjectsSorted];
     [self setEnumeratorForReportDetail: enumeratorForAllObjectsSorted];

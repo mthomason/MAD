@@ -1535,6 +1535,7 @@ typedef void(^MTBlockResultVoid)(void);
         __block UIView *blockConnectorView = connectorView;
         MTBlockResultVoid setFrame = ^() {
             [blockConnectorView setFrame: connectorFrame];
+            blockConnectorView = nil;
         };
         
         if (animated == NO) {

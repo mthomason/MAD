@@ -266,6 +266,8 @@
 
 - (void)drawPageAtIndex:(NSInteger)pageIndex ofDocument:(RptqDocument *)document withContext:(CGContextRef)ctx inPageRect:(CGRect)pageRect {
 
+    NSMutableDictionary *dataCacheForPage = [[NSMutableDictionary alloc] init];
+    
     NSUInteger rowIndex = 0, pageNumber = 0;
     
     RptqDatabase *databaseSchemas = [[document hasDatabaseSchemas] anyObject];
@@ -330,6 +332,7 @@
                     NSDictionary *rowData = nil;
                 
                     if (numberOfGroups > 0) {
+                        
                         if ([groupLevelKeys count] < numberOfGroups) {
                             [groupLevelKeys removeAllObjects];
                             NSArray *keys = [self groupLevelKeysForPage:readPageIndex row:layoutSectionCounter numberOfGroups:numberOfGroups andSection:pageSection];
@@ -337,7 +340,26 @@
                             groupLevelKeySet = YES;
                         }
                         
-                        id data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
+                        NSMutableString *groupKey = [[NSMutableString alloc] init];
+                        for (id key in groupLevelKeys) {
+                            NSString *safeKey = nil;
+                            if ([key isEqual: [NSNull null]]) {
+                                safeKey = MTNullIdentifier;
+                            }
+                            if ([key isKindOfClass:[NSString class]] == NO) {
+                                safeKey = [NSString stringWithFormat:@"%@", safeKey];
+                            } else {
+                                safeKey = key;
+                            }
+                            [groupKey appendString:([safeKey isEqual: [NSNull null]]) ? MTNullIdentifier : safeKey];
+                        }
+                        NSNumber *hash = @([groupKey hash]);
+                        
+                        id data = [dataCacheForPage objectForKey:hash];
+                        if (data == nil) {
+                            data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
+                        }
+                        [dataCacheForPage setObject:data forKey:hash];
                         if ([data isKindOfClass:[NSDictionary class]]) {
                             
                             rowData = [NSDictionary dictionaryWithDictionary:data];
@@ -616,6 +638,8 @@
             }
         }
     }
+    
+    [dataCacheForPage removeAllObjects];
 }
 
 - (NSArray *)groupLevelKeysForPage:(NSUInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups andSection:(NSDictionary *)pageSection {

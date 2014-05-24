@@ -272,7 +272,7 @@ NSString * MTDocumentParentContextName          = @"moc";
             [blockSelf setSuspended:NO];
             
             [blockSelf setQuickSaveInProgress:NO];
-            
+            blockSelf = nil;
         }];
     }
 }
@@ -342,26 +342,18 @@ NSString * MTDocumentParentContextName          = @"moc";
 
 + (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion {
     
-    __block NSURL *blockFileUrl = fileUrl;
+    __weak NSURL *blockFileUrl = fileUrl;
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
         NSError *deleteError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
-            MTLog(@"Error %@", error);
             return YES;
         }];
         for (NSURL *blockFileUrl in enumerator) {
             NSError *error = nil;
             [fileManager removeItemAtURL:blockFileUrl error:&error];
-            if (error != nil) {
-                MTLog(@"Error %@", error);
-            }
         }
         [fileManager removeItemAtURL:blockFileUrl error:&deleteError];
-        if (deleteError != nil) {
-            MTLog(@"%@", deleteError);
-        }
-        
         completion(YES);
     };
     
@@ -370,7 +362,7 @@ NSString * MTDocumentParentContextName          = @"moc";
     if (properTypeToWrap) {
     
         if ([documentReport documentState] != UIDocumentStateClosed) {
-            __block MAReportDocument *blockReport = documentReport;
+            __weak MAReportDocument *blockReport = documentReport;
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 [blockReport performAsynchronousFileAccessUsingBlock:asyncBlock];
             }];
@@ -383,7 +375,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 + (void)deleteFromDiskQuick:(MAReportDocument *)documentReport completion:(void (^)(BOOL success))completion {
     
     NSURL *url = [documentReport fileURL];
-    __block NSURL *blockFileUrl = url;
+    __weak NSURL *blockFileUrl = url;
     
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
         NSError *deleteError = nil;
@@ -412,7 +404,7 @@ NSString * MTDocumentParentContextName          = @"moc";
     if (properTypeToWrap) {
         
         if ([documentReport documentState] != UIDocumentStateClosed) {
-            __block MAReportDocument *blockReport = documentReport;
+            __weak MAReportDocument *blockReport = documentReport;
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 [blockReport performAsynchronousFileAccessUsingBlock:asyncBlock];
             }];

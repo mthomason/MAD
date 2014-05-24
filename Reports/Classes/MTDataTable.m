@@ -15,12 +15,28 @@
 #import "MTDataTableFast.h"
 #import "MTDataColumn.h"
 #import "NSFileManager+Common.h"
+#import "MTLog.h"
 
 @interface MTDataTable ()
 
 @end
 
 @implementation MTDataTable
+
+- (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
+- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
+- (NSEnumerator *)enumeratorForAllObjectsSorted {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
 
 - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
@@ -208,7 +224,7 @@
         NSDataWritingOptions mask = NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen;
         [cache writeToURL:[self url] options:mask error:&error];
         if (error) {
-            NSLog(@"Error: %@", error);
+            MTLog(@"Error: %@", error);
             error = nil;
             [cache writeToURL:[self url] options:mask error:&error];
         }

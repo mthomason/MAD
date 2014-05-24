@@ -233,7 +233,7 @@
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        if (!success) NSLog(@"Error %@", error);
+        NSAssert(success, @"Error %@", error);
         dispatch_semaphore_signal(semaphoreQuery);
     }];
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
@@ -496,6 +496,9 @@
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
+
+    MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
+    
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
     BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
@@ -538,11 +541,17 @@
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
+    
+    MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
+    
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
     sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
-    BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
+    
+    sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
 
+    BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
+    
     for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
         [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
     }
@@ -562,6 +571,11 @@
     return results;
 }
 
+void sqliteCallbackFunc(void *foo, const char* statement);
+void sqliteCallbackFunc(void *foo, const char* statement) {
+    NSLog(@"=> %s", statement);
+}
+
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
     
     NSDictionary *queryDefination = [self queryDefinationSelectWithLimit:limit andOffset:row];
@@ -572,9 +586,13 @@
         sqlite3_stmt *statement = NULL;
         NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
+        
+        MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
+
         const char *sqlc = [sql UTF8String];
         char *queryString = sqlite3_mprintf((char *) sqlc);
         BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+        NSAssert(success, @"%s", sqlite3_errmsg([[self databaseForSelects] databaseHandle]));
         if (success) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 @autoreleasepool {
@@ -582,10 +600,6 @@
                     [results addObject:currentObject];
                 }
             }
-        } else {
-            const char *errorMessage = sqlite3_errmsg([[self databaseForSelects] databaseHandle]);
-            NSString *message = [NSString stringWithUTF8String: errorMessage];
-            MTLog(@"%@", message);
         }
         
         sqlite3_finalize(statement);

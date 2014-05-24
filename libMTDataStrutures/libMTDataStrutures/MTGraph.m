@@ -61,7 +61,8 @@
     BOOL result = NO;
     
     // MARK: Create new edge.
-    MTEdge *edge = [[MTEdge alloc] initWithUniqueID:@([self idUniqueEdges]) origin:origin destination:destination object:object andWeight:weight];
+    NSNumber *uniqueId = @([self idUniqueEdges]);
+    MTEdge *edge = [[MTEdge alloc] initWithUniqueID:uniqueId origin:origin destination:destination object:object andWeight:weight];
     [self setIdUniqueEdges: ([self idUniqueEdges] + 1)];
 
     // MARK: Make sure edge does not exist.

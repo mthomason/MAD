@@ -47,7 +47,7 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 @property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
 
-- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler;
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
 
 

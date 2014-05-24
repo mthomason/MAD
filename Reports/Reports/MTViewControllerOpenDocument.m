@@ -474,7 +474,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [self setReportViewer:viewControllerReportViewer];
             
             MTApplicationInstance *appInstance = [AppDelegate app];
-            [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+            [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                 if (success) {
                     [[self reportViewer] reload];
                 }
@@ -509,7 +509,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [[tabBarController view] setTintColor:[UIColor tintColorRed]];
 
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
-                    __block MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
+                    __weak MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
                     [queryBuilderViewController setDelegate:self];
 
                     UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
@@ -521,7 +521,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     [reportViewerViewController setViewControllerDelegate:self];
                     
                     MTApplicationInstance *appInstance = [AppDelegate app];
-                    [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                    [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                         if (success) {
                             [[queryBuilderViewController queryBuilderController] reloadActiveDocumentAnimated:YES];
                             [[queryBuilderViewController queryBuilderControllerAdvanced] reloadActiveDocumentAnimatedAnimated:YES];
@@ -538,7 +538,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     //[[tabBarController view] setBackgroundColor:[UIColor greenColor]];
                     
                     UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
-                    __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
+                    __weak MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
                     
                     UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
                     MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
@@ -548,7 +548,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
                     [reportViewerViewController setViewControllerDelegate:self];
 
-                    [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                    [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                         if (success) {
                             [queryBuilderViewController reloadActiveDocumentAnimated:YES];
                         }
@@ -560,9 +560,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 //[queryBuilderViewController setDelegate:self];
             } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
                 
-                __block MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+                __weak MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
                 
-                [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+                [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                     if (success) {
                         [queryBuilderViewController reloadActiveDocumentAnimated:YES];
                     }
@@ -601,8 +601,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)displayContentController:(UIViewController *)contentController {
     //If designer application, then load designer query builder.
     //  If viewer, load, well, the viewer.
-    __block MTQueryBuilderVisualizationViewController *advanced = nil;
-    __block MTQueryBuilderViewController *standard = nil;
+    __weak MTQueryBuilderVisualizationViewController *advanced = nil;
+    __weak MTQueryBuilderViewController *standard = nil;
 
     if ([MTApplicationInstance isMadDesigner]) {
         if ([contentController isKindOfClass:[UINavigationController class]]) {
@@ -624,7 +624,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([self bothContentControllersDisplayed] && standard != nil && standard != nil) {
             
             
-            [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+            [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                 if (success) {
                     [standard reloadActiveDocumentAnimated:YES];
                     [advanced reloadActiveDocumentAnimatedAnimated:YES];
@@ -633,10 +633,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
         }
     } else if ([MTApplicationInstance isMadViewer]) {
-        __block __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
-        
-        
-        [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+        __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
+
+        [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
             if (success) [viewController reload:viewController];
         }];
 
@@ -717,12 +716,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    [applicationInstance openReport:[self urlBeingOpended] withCompletionHandler:^(id managedDocument, BOOL success) {
+    __weak MTQueryBuilderViewController *weakTvc = tvc;
+    [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
         if (success) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [tvc reloadActiveDocumentAnimated:YES];
+                    [weakTvc reloadActiveDocumentAnimated:YES];
                 });
             });
         }
@@ -1291,8 +1290,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [result startWobble];
     }
     if ([[result contentView] alpha] < 0.99999f && [self cellsHidden] == NO) {
-        __block UIView *blockView = [result contentView];
-        __block UIActivityIndicatorView *activityIndicatorView;
+        __block __weak UIView *blockView = [result contentView];
+        __block __weak UIActivityIndicatorView *activityIndicatorView;
         for (UIView *subview in [[result contentView] subviews]) {
             if ([subview isKindOfClass:[UIActivityIndicatorView class]]) {
                 activityIndicatorView = (UIActivityIndicatorView *)subview;

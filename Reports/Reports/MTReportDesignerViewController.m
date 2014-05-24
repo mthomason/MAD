@@ -254,7 +254,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
     } else if ([[action identifier] isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
         
-        __block MTReportDesignerViewController *reportDesigner = self;
+        __weak MTReportDesignerViewController *reportDesigner = self;
         block_insertObject insert = ^(UIStoryboardSegue *action) {
             [reportDesigner insertDocumentObjectWithDefination:
              @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeWhtiespace)}];
@@ -289,7 +289,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
     } else if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         
-        __block MTReportDesignerViewController *reportDesigner = self;
+        __weak MTReportDesignerViewController *reportDesigner = self;
         block_insertObject insert = ^(UIStoryboardSegue *action) {
             MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
             RptqQueryField *queryField = [dynamicFieldController queryField];
@@ -329,7 +329,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
         
-        __block MTReportDesignerViewController *reportDesigner = self;
+        __weak MTReportDesignerViewController *reportDesigner = self;
         block_insertObject insert = ^(UIStoryboardSegue *action) {
             if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
                 UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
@@ -436,7 +436,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([UIDevice isPad] == NO) {
         CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
         if (navigationToolbarFrame.size.height != [[self toolbarBottomHeightConstraint] constant]) {
-            __block MTReportDesignerViewController *reportDesigner = self;
+            __weak MTReportDesignerViewController *reportDesigner = self;
             [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
                 [[reportDesigner toolbarBottomHeightConstraint] setConstant:navigationToolbarFrame.size.height];
             } completion:NULL];
@@ -447,7 +447,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    __block MTReportDesignerViewController *reportDesigner = self;
+    __weak MTReportDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [[reportDesigner rulerView] setNeedsDisplay];
     } completion:NULL];
@@ -942,13 +942,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         } completion:NULL];
         
         for (UIView *view in [self sectionViewsArray]) {
-            __block UIView *bview = view;
+            __weak UIView *bview = view;
             [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
                 [bview removeFromSuperview];
             } completion:NULL];
         }
         for (UIView *view in [self sectionControlViewsArray]) {
-            __block UIView *bview = view;
+            __weak UIView *bview = view;
             [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
                 [bview removeFromSuperview];
             } completion:NULL];
@@ -1001,10 +1001,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if ([viewController isKindOfClass:[UITableViewController class]]) {
-        NSLog(@"%@", NSStringFromCGRect([[viewController view] frame]));
-        NSLog(@"%@", NSStringFromCGRect([[navigationController view] frame]));
-    }
     [[viewController view] setFrame:[[navigationController view] frame]];
 }
 
@@ -1205,7 +1201,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     BOOL insertNewSection = numberOfRows > documentSection.numberOfRows.integerValue;
     BOOL deleteLastSection = numberOfRows < documentSection.numberOfRows.integerValue;
     
-    __block UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
+    __weak UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
 
     if ([[documentSection numberOfRows] integerValue] == numberOfRows) {
         
@@ -1730,7 +1726,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             [[self view] layoutIfNeeded];
             
-            __block MTReportDesignerViewController *reportDesigner = self;
+            __weak MTReportDesignerViewController *reportDesigner = self;
             
             [[[AppDelegate app] reportDesigner] setContentOffsetOnShowToolbox:reportDesigner.designerScrollView.contentOffset];
             
@@ -1777,7 +1773,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[self navigationControllerSectionLayoutSettings] setNavigationBarHidden:YES animated:YES];
             
             CGFloat toolBarHeight = [self toolbarBottomHeight];
-            __block MTReportDesignerViewController *reportDesigner = self;
+            __weak MTReportDesignerViewController *reportDesigner = self;
             
             MTBlockCompletionNoReturn animations = ^{
                 [[reportDesigner view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
@@ -1844,7 +1840,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     
     if (selectedImage != nil) {
-        __block MTReportDesignerViewController *reportDesigner = self;
+        __weak MTReportDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
             [reportDesigner insertDocumentObjectWithDefination:
              @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
@@ -1881,7 +1877,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[self designerScrollView] setZoomScale:zoomScale animated:YES];
         [self scrollViewDidEndZooming:[self designerScrollView] withView:[self designerContentView] atScale:zoomScale];
         
-        __block UIScrollView *blockScrollView = [self designerScrollView];
+        __weak UIScrollView *blockScrollView = [self designerScrollView];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [blockScrollView setContentOffset:CGPointZero animated:NO];
@@ -2699,8 +2695,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [cell setUserInteractionEnabled:YES];
                 [[cell contentView] addSubview:elementView];
                 
-                __block UICollectionViewCell *blockCell = cell;
-                __block MTElementView *blockElementView = elementView;
+                __weak UICollectionViewCell *blockCell = cell;
+                __weak MTElementView *blockElementView = elementView;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [blockCell setContentScaleFactor:contextScale];
@@ -2812,7 +2808,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
     
-    NSLog(@"Perform Selector: %@", NSStringFromSelector(action));
+    //NSLog(@"Perform Selector: %@", NSStringFromSelector(action));
     
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
@@ -2849,8 +2845,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewControllerDidFinish:(id)sender {
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [[self designerScrollView] setZoomScale:1.0000f animated:NO];
-        //[[self designerScrollView] setContentOffset:CGPointZero animated:NO];
-        __block MTReportDesignerViewController *reportDesigner = self;
+        __weak MTReportDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
             [[reportDesigner view] setNeedsUpdateConstraints];
             [[reportDesigner designerContentView] setNeedsLayout];
@@ -2866,8 +2861,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
             } else {
                 [[self designerScrollView] setZoomScale:1.0000f animated:NO];
-                //[[self designerScrollView] setContentOffset:CGPointZero animated:NO];
-                __block MTReportDesignerViewController *reportDesigner = self;
+                __weak MTReportDesignerViewController *reportDesigner = self;
                 [self dismissViewControllerAnimated:YES completion:^{
                     [[reportDesigner view] setNeedsUpdateConstraints];
                     [[reportDesigner designerContentView] setNeedsLayout];
@@ -2875,12 +2869,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 }];
             }
         } else {
-            __block MTReportDesignerViewController *reportDesigner = self;
+            __weak MTReportDesignerViewController *reportDesigner = self;
             [self dismissViewControllerAnimated:YES completion:^{
-                //[[self designerScrollView] setZoomScale:1.0000f animated:NO];
-                //[[self designerScrollView] setContentOffset:CGPointZero animated:NO];
-                //[[self view] setNeedsUpdateConstraints];
-                //[[self designerContentView] setNeedsLayout];
                 [[reportDesigner designerContentView] setNeedsDisplay];
             }];
         }
@@ -2932,8 +2922,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     RptqDocumentSection *section = [document hasDetailSection];
     
-    __block MTReportDesignerViewController *reportDesigner = self;
-    __block UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
+    __weak MTReportDesignerViewController *reportDesigner = self;
+    __weak UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
 
     [detailSection performBatchUpdates:^{
 
@@ -3019,7 +3009,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         if (found) {
             
-            __block MTReportDesignerViewController *reportDesigner = self;
+            __weak MTReportDesignerViewController *reportDesigner = self;
 
             [svSection performBatchUpdates:^{
                 
@@ -3231,7 +3221,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
             };
             
-            __block MTReportDesignerViewController *reportDesigner = self;
+            __weak MTReportDesignerViewController *reportDesigner = self;
             MTBlockCompletionSimple finishedUpdate = ^(BOOL finished) {
                 if (finished) [reportDesigner resizeCollectionView:collectionView];
             };
@@ -3372,7 +3362,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             if (newSection != nil) {
                 
-                __block MTReportDesignerViewController *reportDesigner = self;
+                __weak MTReportDesignerViewController *reportDesigner = self;
                 
                 MTBlockCompletionNoReturn update = ^(void) {
                     MTApplicationInstance *app = [AppDelegate app];
@@ -3451,7 +3441,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: [reportDocument managedObjectContext]];
     [documentSection setHeight:@([collectionView intrinsicContentSize].height)];
-    __block MTReportDesignerViewController *reportDesigner = self;
+    __weak MTReportDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:0.6666f animations:^{
         [collectionView invalidateIntrinsicContentSize];
         [[reportDesigner designerContentView] setNeedsUpdateConstraints];

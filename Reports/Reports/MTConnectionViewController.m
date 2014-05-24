@@ -118,7 +118,7 @@
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
     
-    __block __weak MTConnectionViewController *blockSelf = self;
+    __weak MTConnectionViewController *blockSelf = self;
     
     UITextField *textFieldServer    = [blockSelf textFieldHost];
     UITextField *textFieldDatabae   = [blockSelf textFieldDatabase];
@@ -131,7 +131,7 @@
     NSString *textPort      = [textPortText length] > 0 ? textPortText : @"0";   // FIXME: A very poor guess.
     NSInteger blockPort     = [textPort integerValue];
     
-    __block __weak id blockSender = sender;
+    __weak id blockSender = sender;
     
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];

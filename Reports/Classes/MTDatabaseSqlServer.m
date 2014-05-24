@@ -55,8 +55,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-
-            [blockSelf connectWithCredentals:[blockSelf databaseConnection] completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
+            MTDatabaseConnection *databaseConnection = [blockSelf databaseConnection];
+            [blockSelf connectWithCredentals:databaseConnection completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
                 
                 if (success) {
 
@@ -122,7 +122,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 }
 
             }];
-
+            blockSelf = nil;
         });
     });
 }
@@ -1339,6 +1339,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         [janFirst1990 release];
         [janFirst1990Components release];
         [gregorian release];
+        
+        datatable = nil;
 
         dispatch_semaphore_signal(semaphoreRunQuery);
         

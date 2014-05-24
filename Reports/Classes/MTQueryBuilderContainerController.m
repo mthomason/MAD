@@ -96,6 +96,7 @@
             NSMutableArray *mutableItems = [items mutableCopy];
             [mutableItems removeObject:[blockSelf barButtonItemRevealQuery]];
             [blockSelf setToolbarItems:mutableItems];
+            blockSelf = nil;
         }
     }];
     

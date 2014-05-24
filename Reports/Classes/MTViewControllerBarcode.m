@@ -104,7 +104,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     if ([self editmode]) {
         [[self barButtonItemSave] setEnabled:YES];
         
-        __block MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
+        __weak MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
         if ([self queryField1] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             

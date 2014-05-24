@@ -33,9 +33,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"4.0.129";
-NSString * const MTGlobalBundleShortVersion                         = @"4.0.129";
-NSString * const MTGlobalBundleRev                                  = @"1111";
+NSString * const MTGlobalBundleVersion                              = @"4.0.132";
+NSString * const MTGlobalBundleShortVersion                         = @"4.0.132";
+NSString * const MTGlobalBundleRev                                  = @"1114";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -158,11 +158,11 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 #pragma mark - Open and close mad document
 
-- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
     __block __weak MTApplicationInstance *weakSelf = self;
      MAReportDocument *document = [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
          [weakSelf setReportState:MTReportStateOpen];
-         completionHandler(managedDocument, success);
+         completionHandler(success);
      }];
     [self setCurrentDocument:url];
     [[self documents] setObject:document forKey:url];
@@ -173,11 +173,11 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     
     if ([self activeDocument]) {
 
-        __block MTApplicationInstance *blockSelf = self;
+        __weak MTApplicationInstance *blockSelf = self;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            __block MAReportDocument *blockActiveDocument = [blockSelf activeDocument];
-            __block MTApplicationInstance *blockSelf2 = blockSelf;
+            __weak MAReportDocument *blockActiveDocument = [blockSelf activeDocument];
+            __weak MTApplicationInstance *blockSelf2 = blockSelf;
             [blockActiveDocument regenThumbnail];
             [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
                 
@@ -417,39 +417,32 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSAttributedString *)waterMarkStringMad {
-    static NSAttributedString *attributedString;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart];
-        UIColor *foregroundColor = [UIColor lightTextColor];
-        CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
-        UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
-        NSDictionary *attributes = @{
-                                     NSForegroundColorAttributeName : foregroundColor,
-                                     NSFontAttributeName : customFont
-                                     };
-        attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
-    });
+    NSString *displayStringText = [MTApplicationInstance applicationNamePrefixPart];
+    UIColor *foregroundColor = [UIColor lightTextColor];
+    CGFloat fontSize = [MTApplicationInstance isMadDesigner] ? 100.0000f : 78.0000f;
+    UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+    NSDictionary *attributes = @{
+                                 NSForegroundColorAttributeName : foregroundColor,
+                                 NSFontAttributeName : customFont
+                                 };
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: displayStringText
+                                                                           attributes: attributes];
     return attributedString;
 }
 
 + (NSAttributedString *)waterMarkStringDesigner {
-    static NSAttributedString *attributedString;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *displayStringText = [[MTApplicationInstance applicationNameSufixPart] uppercaseString];
-        UIColor *foregroundColor = [UIColor lightTextColor];
-        CGFloat fontSize =  [MTApplicationInstance isMadDesigner] ? 44.5000f : 46.0000f;
-        UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
-        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        [paragraphStyle setAlignment:NSTextAlignmentCenter];
-        NSDictionary *attributes = @{
-                       NSForegroundColorAttributeName : foregroundColor,
-                       NSFontAttributeName : customFont,
-                       NSParagraphStyleAttributeName : paragraphStyle
-                       };
-        attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
-    });
+    NSString *displayStringText = [[MTApplicationInstance applicationNameSufixPart] uppercaseString];
+    UIColor *foregroundColor = [UIColor lightTextColor];
+    CGFloat fontSize =  [MTApplicationInstance isMadDesigner] ? 44.5000f : 46.0000f;
+    UIFont *customFont = [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:fontSize];
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    NSDictionary *attributes = @{
+                                 NSForegroundColorAttributeName : foregroundColor,
+                                 NSFontAttributeName : customFont,
+                                 NSParagraphStyleAttributeName : paragraphStyle
+                                 };
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: displayStringText attributes:attributes];
     return attributedString;
 }
 
@@ -489,10 +482,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 CGFloat y2 = y + logoSize.height;
                 logoRect2 = CGRectMake(x, y2, logoSize2.width, logoSize2.height);
                 
-                //if (logoRect.size.width > logoRect2.size.width) {
-                //    logoRect2.origin.x = logoRect2.origin.x + ((logoRect.size.width - logoRect2.size.width) / 2.0000f);
-                //}
-                
                 CGContextSaveGState(ctx);
                 
                 {
@@ -503,9 +492,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                     CGContextTranslateCTM(ctx, x, firstT);
                     
                     CGFloat rect2Offset = 0.0000f;
-                    //if (logoRect.size.width > logoRect2.size.width) {
-                    //    rect2Offset = (logoRect.size.width - logoRect2.size.width) / 2.0000f;
-                    //}
                     
                     CGRect rect2 = CGRectMake(rect2Offset, 0.0000f, logoRect2.size.width, logoRect2.size.height);
                     [displayString2 drawInRect:rect2];

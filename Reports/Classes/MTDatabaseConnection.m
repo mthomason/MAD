@@ -63,7 +63,9 @@
     
     if ([connectionObject isKindOfClass:[RptqUserCredentals class]]) {
         RptqUserCredentals *credentals = (RptqUserCredentals *)connectionObject;
-        if ([[credentals database_driver_type] isEqualToString:[MTDatabaseConnectionMySql identifier]]) {
+        
+        NSString *mysqlConnectionId = [MTDatabaseConnectionMySql identifier];
+        if ([[credentals database_driver_type] isEqualToString:mysqlConnectionId]) {
             
             resultCredentals = [[MTDatabaseConnectionMySql alloc] initWithHost: credentals.mysql_host
                                                                       database: credentals.mysql_database
