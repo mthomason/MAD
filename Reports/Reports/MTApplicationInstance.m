@@ -33,9 +33,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"4.0.132";
-NSString * const MTGlobalBundleShortVersion                         = @"4.0.132";
-NSString * const MTGlobalBundleRev                                  = @"1114";
+NSString * const MTGlobalBundleVersion                              = @"4.0.133";
+NSString * const MTGlobalBundleShortVersion                         = @"4.0.133";
+NSString * const MTGlobalBundleRev                                  = @"1115";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -506,6 +506,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         } while (logoRect.origin.x + logoRect.size.width < rect.size.width);
         rowCounter++;
     } while (logoRect.origin.y + logoRect.size.height < rect.size.height);
+    
 }
 
 @end

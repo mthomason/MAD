@@ -1,6 +1,6 @@
 //
-//  FlipsideViewController.m
-//  Reports
+//  MTViewControllerOpenDocument
+//  MAD Designer
 //
 //  Created by Michael Thomason on 1/2/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
@@ -17,7 +17,6 @@
 #import "MTReportViewerController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerViewController.h"
-#import "MTTitleView.h"
 #import "MADWatermarkView.h"
 #import "NSURL+Document.h"
 #import "MTUser.h"
@@ -51,15 +50,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTitle;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEditDone;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, strong)  UIBarButtonItem *barButtonItemEditDone;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTrash;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformation;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAbout;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemLicensing;
-@property (nonatomic, weak) IBOutlet MTTitleView *titleView;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemLicensing;
 
 @property (nonatomic, strong) UIAlertView *renameAlertView;
 
@@ -70,7 +67,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @property (nonatomic, strong) NSURL *urlBeingOpended;
 @property (nonatomic, strong) NSMutableArray *availableFilesCache;
-@property (nonatomic, strong) NSMutableDictionary *previewLoadingOperations;
 
 @property (nonatomic, strong) MTReportViewerController *reportViewer;
 
@@ -80,8 +76,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
-
-@property (nonatomic, assign) BOOL needsEmailMenu;
 
 @property (nonatomic, assign) BOOL cellsHidden;
 
@@ -174,9 +168,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 
     [self setEditModeEnabled:NO];
-
-    NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
-    [self setPreviewLoadingOperations:d];
     
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
     [self setBarButtonItemEditDone:barButtonItemEditDone];
@@ -280,15 +271,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [tapGestureRecognizer setDelegate: self];
     [[self collectionView] addGestureRecognizer:tapGestureRecognizer];
     [self setTapGestureRecognizer:tapGestureRecognizer];
-    
-    [[[self titleView] label] setText:NSLocalizedString(@"Reports", @"Reports")];
 
     NSMutableArray *fileUrlCache = [[NSMutableArray alloc] init];
     [self setAvailableFilesCache: fileUrlCache];
     
     [[self barButtonItemLicensing] setEnabled:[SKPaymentQueue canMakePayments]];
-    
-    [self setNeedsEmailMenu:YES];
 
     NSMutableArray *toolbarButtons = [[NSMutableArray alloc] initWithArray: [self toolbarItems]];
     [toolbarButtons removeObject:[self barButtonItemAction]];

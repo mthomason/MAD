@@ -650,13 +650,15 @@
     if (type == MNSDocumentSectionTypeReportHeader) {
         NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
         if ([sectionsForPage count] > 2) {
-            NSArray *keys = [self groupLevelKeysForPage:page row:2 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:2]];
+            NSInteger nextRow = row + 1;
+            NSArray *keys = [self groupLevelKeysForPage:page row:nextRow numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:nextRow]];
             [currentGroupLevelKeys addObjectsFromArray:keys];
         }
     } else if (type == MNSDocumentSectionTypePageHeader) {
         NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
         if ([sectionsForPage count] > 2) {
-            NSArray *keys = [self groupLevelKeysForPage:page row:row+1 numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:1]];
+            NSInteger nextRow = row + 1;
+            NSArray *keys = [self groupLevelKeysForPage:page row:nextRow numberOfGroups:numberOfGroups andSection:[sectionsForPage objectAtIndex:nextRow]];
             [currentGroupLevelKeys addObjectsFromArray:keys];
         }
     } else if (type == MNSDocumentSectionTypeGroupHeader) {
@@ -707,18 +709,20 @@
         NSInteger rangeStartLocation = row;
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         for (NSInteger pageCtr = page; pageCtr < numberOfPages; pageCtr++) {
-            NSArray *sectionsForPage = [NSArray arrayWithArray:[[self reportFormatter] layoutForPage:pageCtr]];
-            NSRange range = NSMakeRange(rangeStartLocation, [sectionsForPage count] - rangeStartLocation);
-            NSArray *subArray = [sectionsForPage subarrayWithRange:range];
-            for (NSDictionary *pageSec in subArray) {
-                if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
-                    [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
-                    [currentGroupLevelKeys addObjectsFromArray:[pageSec objectForKey: MTReportGroupLevelKeys]];
-                    pageCtr = numberOfPages;
-                    break;
+            @autoreleasepool {
+                NSArray *sectionsForPage = [NSArray arrayWithArray:[[self reportFormatter] layoutForPage:pageCtr]];
+                NSRange range = NSMakeRange(rangeStartLocation, [sectionsForPage count] - rangeStartLocation);
+                NSArray *subArray = [sectionsForPage subarrayWithRange:range];
+                for (NSDictionary *pageSec in subArray) {
+                    if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
+                        [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
+                        [currentGroupLevelKeys addObjectsFromArray:[pageSec objectForKey: MTReportGroupLevelKeys]];
+                        pageCtr = numberOfPages;
+                        break;
+                    }
                 }
+                rangeStartLocation = 0;
             }
-            rangeStartLocation = 0;
         }
     } else {
         NSArray *keys = [pageSection objectForKey:MTReportGroupLevelKeys];

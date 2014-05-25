@@ -94,59 +94,65 @@
     int columnCounter = 0;
     id columnValue;
     for (id key in [self columnKeys]) {
-        MTDataColumn *dataColumn = [self columns][key];
-        switch ([[dataColumn columnType] integerValue]) {
-            case MTDataTypeInteger:
-                columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
-                break;
-            case MTDataTypeBlob: {
-                const void *blob = sqlite3_column_blob(_statement, columnCounter);
-                if (blob == NULL) {
-                    columnValue = nil;
-                } else {
-                    int bytes = sqlite3_column_bytes(_statement, columnCounter);
-                    columnValue = [NSData dataWithBytes: blob
-                                                 length: bytes];
+        
+        @autoreleasepool {
+            
+            MTDataColumn *dataColumn = [self columns][key];
+            switch ([[dataColumn columnType] integerValue]) {
+                case MTDataTypeInteger:
+                    columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
+                    break;
+                case MTDataTypeBlob: {
+                    const void *blob = sqlite3_column_blob(_statement, columnCounter);
+                    if (blob == NULL) {
+                        columnValue = nil;
+                    } else {
+                        int bytes = sqlite3_column_bytes(_statement, columnCounter);
+                        columnValue = [NSData dataWithBytes: blob
+                                                     length: bytes];
+                    }
+                    break;
                 }
-                break;
-            }
-            case MTDataTypeFloat:
-                columnValue = [NSNumber numberWithFloat:sqlite3_column_double(_statement, columnCounter)];
-                break;
-            case MTDataTypeDouble:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
-                break;
-            case MTDataTypeDecimal:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
-                break;
-            case MTDataTypeString: {
-                const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
-                if (text == NULL) {
-                    columnValue = [NSNull null];
-                } else {
-                    columnValue = [NSString stringWithUTF8String:(const char *) text];
-                }
-                break;
-            }
-            default: {
-                if (sqlite3_column_type(_statement, columnCounter) == SQLITE_TEXT) {
+                case MTDataTypeFloat:
+                    columnValue = [NSNumber numberWithFloat:sqlite3_column_double(_statement, columnCounter)];
+                    break;
+                case MTDataTypeDouble:
+                    columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                    break;
+                case MTDataTypeDecimal:
+                    columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
+                    break;
+                case MTDataTypeString: {
                     const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
                     if (text == NULL) {
                         columnValue = [NSNull null];
                     } else {
                         columnValue = [NSString stringWithUTF8String:(const char *) text];
                     }
+                    break;
                 }
-                break;
+                default: {
+                    if (sqlite3_column_type(_statement, columnCounter) == SQLITE_TEXT) {
+                        const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
+                        if (text == NULL) {
+                            columnValue = [NSNull null];
+                        } else {
+                            columnValue = [NSString stringWithUTF8String:(const char *) text];
+                        }
+                    }
+                    break;
+                }
             }
+            if (columnValue == nil) {
+                columnValue = [NSNull null];
+            }
+            if (columnValue != nil && self.singleColumnNoWrapper == NO) {
+                [currentObject setValue:columnValue forKey:[dataColumn identifier]];
+            }
+            columnCounter++;
+            
         }
-        if (columnValue == nil) {
-            columnValue = [NSNull null];
-        }
-        if (columnValue != nil && self.singleColumnNoWrapper == NO) {
-            [currentObject setValue:columnValue forKey:[dataColumn identifier]];
-        }
-        columnCounter++;
+        
     }
     if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
         [currentObject setValue:@(sqlite3_column_int(_statement, columnCounter)) forKey:@"ROWID"];

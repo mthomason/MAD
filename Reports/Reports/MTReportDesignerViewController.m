@@ -1448,7 +1448,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [elementView setParagraphStyle:paragraphStyle];
             
             NSString *string = [documentObject designerRepresentationText];
-            [elementView setDisplayText:string];
             
             [elementView setDisplayImage:nil];
             [elementView setDisplayBarcode:nil];
@@ -1476,7 +1475,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                          NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
                                          NSUnderlineStyleAttributeName : [elementView underlineStyle]
                                          };
-            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:[elementView displayText]
+            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
                                                                                     attributes:attributes];
             [elementView setDisplayStringAttributed:attributtedString];
             

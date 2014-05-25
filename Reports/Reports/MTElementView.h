@@ -30,14 +30,13 @@
 @property (assign) BOOL displayHighlighted;
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
 @property (nonatomic, strong) UIFont *displayFont;
 @property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
-@property (nonatomic, strong) NSString *displayText;
 @property (nonatomic, strong) NSNumber *underlineStyle;
 @property (nonatomic, strong) NSNumber *strikeThroughStyle;
 @property (nonatomic, strong) NSAttributedString *displayStringAttributed;
 @property (nonatomic, assign) CGRect drawingRect;
-@property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
 @property (nonatomic, strong) UIImage *displayImage;
 @property (nonatomic, strong) MTBarcode *displayBarcode;
 
