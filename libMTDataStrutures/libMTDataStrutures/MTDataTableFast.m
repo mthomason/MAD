@@ -33,7 +33,7 @@
 @property (nonatomic, assign) BOOL sortDescriptorsSet;
 
 @property (nonatomic, strong) NSMutableArray *groupKeys;
-@property (nonatomic, strong) NSArray *groupTableNames;
+//@property (nonatomic, strong) NSArray *groupTableNames;
 
 @end
 
@@ -280,7 +280,7 @@
                 NSInteger i = 0;
                 for (NSString *columnKey in [[self columns] keyEnumerator]) {
                     MTDataColumn *column = [[self columns] objectForKey:columnKey];
-                    if ([[column fieldName] isEqualToString:[sort key]]) {
+                    if ([[column fieldName] isEqualToString:[sort key]] || [columnKey isEqualToString:[sort key]]) {
                         NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey
                                                                                 ascending:[sort ascending]
                                                                                  selector:[MTDatabaseField selectorForSorting:[[column columnType] integerValue]]];
@@ -487,6 +487,24 @@
     return  queryDefination;
 }
 
+- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {
+    
+    
+    NSDictionary *options = @{
+                              @(MTQuerySelectRowIds) : cacheIds,
+                              @(MTQuerySelectTableName) : [self tableName],
+                              @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
+                              };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
+
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
+    NSEnumerator *data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
+                                                                                   columns:[self columns]
+                                                                                columnKeys:[self columnKeys]
+                                                                                     query:query];
+    return data;
+}
+
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
     NSDictionary *options = @{
                               @(MTQuerySelectRowId) : cacheId,
@@ -520,6 +538,11 @@
 - (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
 
     NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    if ([[self groupKeys] count] != [groupKeys count]) {
+        [self setSortDescriptorsSet:NO];
+        [self sortUsingDescriptors:[self sortDescriptors]];
+    }
     
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
     NSInteger groupLevel = 0;

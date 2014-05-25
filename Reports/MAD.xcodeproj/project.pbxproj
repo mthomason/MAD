@@ -1329,6 +1329,8 @@
 		4CC8993414DAF87A0094E17E /* UIImageBolt20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC8993214DAF87A0094E17E /* UIImageBolt20@2x.png */; };
 		4CC8993714DAFAF80094E17E /* MTTableViewCellQueryPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993614DAFAF70094E17E /* MTTableViewCellQueryPredicate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CC8B41019319C59007F8910 /* MTQueryCacheSelectRowIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8B40F19319C59007F8910 /* MTQueryCacheSelectRowIds.m */; };
+		4CC8B41119319C59007F8910 /* MTQueryCacheSelectRowIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8B40F19319C59007F8910 /* MTQueryCacheSelectRowIds.m */; };
 		4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
 		4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
 		4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */; };
@@ -2669,6 +2671,8 @@
 		4CC8993814DAFB430094E17E /* MTTableViewCellQueryPredicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellQueryPredicate.h; sourceTree = "<group>"; };
 		4CC8993914DAFB720094E17E /* UITableViewCellQueryGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewCellQueryGroup.h; sourceTree = "<group>"; };
 		4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryGroup.m; sourceTree = "<group>"; };
+		4CC8B40E19319C59007F8910 /* MTQueryCacheSelectRowIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectRowIds.h; sourceTree = "<group>"; };
+		4CC8B40F19319C59007F8910 /* MTQueryCacheSelectRowIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectRowIds.m; sourceTree = "<group>"; };
 		4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPebbled.png; sourceTree = "<group>"; };
 		4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPebbled@2x.png"; sourceTree = "<group>"; };
 		4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternStationary.png; sourceTree = "<group>"; };
@@ -3290,6 +3294,8 @@
 				4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */,
 				4C4177CE192B0DE0006EC472 /* MTQueryCacheSelectRowId.h */,
 				4C4177CF192B0DE0006EC472 /* MTQueryCacheSelectRowId.m */,
+				4CC8B40E19319C59007F8910 /* MTQueryCacheSelectRowIds.h */,
+				4CC8B40F19319C59007F8910 /* MTQueryCacheSelectRowIds.m */,
 				4C258026192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.h */,
 				4C258027192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.m */,
 				4C15EB8D192DF50600C412A4 /* MTQuerySelectItemsForGroup.h */,
@@ -6177,6 +6183,7 @@
 				4C5BED7018EB273300BDDDB8 /* NSError+Constructors.m in Sources */,
 				4C752E1416EE7F55001FDAA3 /* MTAlertView.m in Sources */,
 				4C3138EB184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
+				4CC8B41119319C59007F8910 /* MTQueryCacheSelectRowIds.m in Sources */,
 				4CE9BC8216EF702600B0808C /* RptqQueryTable+Extras.m in Sources */,
 				4CB0FF6716F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
 				4C23FBF918FAE5DF009F234F /* MTDatabaseConnectionMySql.m in Sources */,
@@ -6650,6 +6657,7 @@
 				4C6DF38316D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38916D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
 				4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */,
+				4CC8B41019319C59007F8910 /* MTQueryCacheSelectRowIds.m in Sources */,
 				4CF8670D16D72E0900F716A8 /* MTScrollViewCenter.m in Sources */,
 				4C5BED6F18EB273300BDDDB8 /* NSError+Constructors.m in Sources */,
 				4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */,

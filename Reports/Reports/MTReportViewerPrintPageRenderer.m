@@ -60,12 +60,7 @@
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 
-@property (nonatomic, assign) NSUInteger temporaryCachedDetailCounter;
-
-@property (nonatomic, assign) CGFloat printableSpaceUsedPageHeight;
 @property (nonatomic, assign) CGSize printableSize;
-@property (nonatomic, assign) CGSize cachedPageSize;
-@property (nonatomic, assign) CGRect cachedPageRect;
 @property (nonatomic, assign) BOOL showWaterMark;
 @property (nonatomic, assign) BOOL debugMode;
 
@@ -94,8 +89,6 @@
     
     [self setDebugMode:NO];
 
-    [self setCachedPageSize:CGSizeZero];
-    [self setCachedPageRect:CGRectZero];
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     if ([standardUserDefaults valueForKey:@"MTCachedSizeHorizontal"] == nil) {
 
@@ -288,9 +281,11 @@
             CGFloat originX = pageRect.origin.x;
             CGFloat sizeWidth = pageRect.size.width;
             
-            NSInteger layoutSectionCounter = 0;
-            NSInteger readGroupIndex = 0;
+            NSInteger layoutSectionCounter = 0, readGroupIndex = 0;
             NSArray *groupData = nil;
+            
+            NSEnumerator *dataForPageIndexEnumerator = [[self reportFormatter] dataForPageIndex:pageIndex];
+            
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
                 @autoreleasepool {
@@ -360,6 +355,7 @@
                             data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
                         }
                         [dataCacheForPage setObject:data forKey:hash];
+
                         if ([data isKindOfClass:[NSDictionary class]]) {
                             
                             rowData = [NSDictionary dictionaryWithDictionary:data];
@@ -370,15 +366,11 @@
                         }
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {
-                            if (readGroupIndex < [groupData count]) {
-                                NSNumber *rowId = [pageSection objectForKey: MTReportDetailRowId];
-                                rowData = [[self reportFormatter] dataForCacheId: rowId];
-                            }
-                            readGroupIndex++;
+                            rowData = [dataForPageIndexEnumerator nextObject]; //[[self reportFormatter] dataForCacheId: rowId];
                         }
 
                     } else {
-                        rowData = [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
+                        rowData = [dataForPageIndexEnumerator nextObject];//[[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
                     }
                     
                     if (sectionIsVisible) {

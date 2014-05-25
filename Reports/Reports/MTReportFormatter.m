@@ -437,19 +437,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
-    
     for (NSInteger i=0; i<[containerDetails count]; i++) {
         @autoreleasepool {
-            
-            
-
             [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
             NSNumber *rowid = containerDetails[i][@"ROWID"];
             [self cacheDetail:rowid];
-            
-            //id nextObject = [[[[self query] datatable] enumeratorForAllObjectsSortedRowIdOnly] nextObject];
-            ///NSLog(@"Next Object %@ == %@", nextObject, rowid);
-
         }
     }
 }
@@ -494,21 +486,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addDetailToReportLayout {
-   // NSArray *emptyArray = @[];
-   // NSMutableArray *emptyMutableArray = [[NSMutableArray alloc] init];
-    
     NSEnumerator *enumeratorForAllObjectsSorted = [[[self query] datatable] enumeratorForAllObjectsSorted];
     [self setEnumeratorForReportDetail: enumeratorForAllObjectsSorted];
-    
     [self addAllDetail];
-    /*
-    [self addGroupLevel: [self firstQueryGroup]
-            groupedRows: nil
-       groupedRowsLevel: 0 andKeys: emptyArray andAllKeys:emptyMutableArray];
-     */
 }
 
-// FIXME: Make sure paper rect is passed in to the software
 - (BOOL)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
     
     BOOL newPageCreated = NO;
@@ -614,6 +596,10 @@ NSString * const MTNullIdentifier = @"(null)";
         numberOfPages = [[self reportLayout] count];
     }
     return numberOfPages;
+}
+
+- (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex {
+    return [[[self query] datatable] enumeratorForRowIds: [self reportIndexes][pageIndex]];
 }
 
 // Uses sqlite3 rowid

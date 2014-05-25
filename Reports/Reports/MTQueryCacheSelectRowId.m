@@ -20,15 +20,11 @@
 - (id)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
-        
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
-        
         self.rowId = [object objectForKey:@(MTQuerySelectRowId)];
         
         NSString *tableName = [object objectForKey:@(MTQuerySelectTableName)];
         [self setTableName:tableName];
-        
-        
     }
     return self;
 }
