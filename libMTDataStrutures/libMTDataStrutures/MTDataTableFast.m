@@ -51,7 +51,19 @@
     plist[keyUrlFastCache] = [[self urlFastCache] absoluteString];
     plist[keyTag] = @([self tag]);
     plist[keyBulkInsertLoop] = @([self bulkInsertLoop]);
+    
+    NSString *keyGroupKeys = [MTDataTableFast keyGroupKeys];
+    NSString *keySortDescriptorsSet = [MTDataTableFast keySortDescriptorsSet];
 
+    if ([self groupTableNames] != nil) {
+        NSString *keyGroupTableNames = [MTDataTableFast keyGroupTableNames];
+        plist[keyGroupTableNames] = [self groupTableNames];
+    }
+    if ([self groupKeys] != nil) {
+        plist[keyGroupKeys] = [self groupKeys];
+    }
+    plist[keySortDescriptorsSet] = @([self sortDescriptorsSet]);
+    
     return plist;
 }
 
@@ -70,6 +82,16 @@
     NSNumber *bulkInsertLoopWrapper = [plist objectForKey: [MTDataTableFast keyBulkInsertLoop]];
     BOOL bulkInsertLoop = [bulkInsertLoopWrapper boolValue];
     [self setBulkInsertLoop:bulkInsertLoop];
+    
+    NSArray *groupKeysArray = [plist objectForKey: [MTDataTableFast keyGroupKeys]];
+    NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
+    [self setGroupKeys:groupKeys];
+    
+    NSArray *groupTableNames = [plist objectForKey:[MTDataTableFast keyGroupTableNames]];
+    [self setGroupTableNames:groupTableNames];
+    
+    [self reopenDbConnection];
+    
 }
 
 + (NSString *)keyUrlFastCache {
@@ -86,6 +108,19 @@
     SEL sel = @selector(bulkInsertLoop);
     return NSStringFromSelector(sel);
 }
+
++ (NSString *)keySortDescriptorsSet {
+    return NSStringFromSelector(@selector(sortDescriptorsSet));
+}
+
++ (NSString *)keyGroupKeys {
+    return NSStringFromSelector(@selector(groupKeys));
+}
+
++ (NSString *)keyGroupTableNames {
+    return NSStringFromSelector(@selector(groupTableNames));
+}
+
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [super encodeWithCoder:encoder];
@@ -113,9 +148,13 @@
 
         BOOL sortDescriptorsSet = [decoder decodeBoolForKey: [MTDataTableFast keySortDescriptorsSet]];;
         [self setSortDescriptorsSet:sortDescriptorsSet];
-
-        NSMutableArray *groupKeys = [[NSMutableArray alloc] init];
+        
+        NSArray *groupKeysArray = [decoder decodeObjectForKey: [MTDataTableFast keyGroupKeys]];
+        NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithArray: groupKeysArray];
         [self setGroupKeys:groupKeys];
+        
+        NSArray *groupTableNames = [decoder decodeObjectForKey:[MTDataTableFast keyGroupTableNames]];
+        [self setGroupTableNames:groupTableNames];
         
         [self reopenDbConnection];
     }
@@ -126,10 +165,7 @@
     SEL selColumns = @selector(columns);
     return NSStringFromSelector(selColumns);
 }
-+ (NSString *)keySortDescriptorsSet {
-    SEL selector = @selector(sortDescriptorsSet);
-    return NSStringFromSelector(selector);
-}
+
 - (id)initWithId:(NSUInteger)objectId {
     self = [super initWithId:objectId];
     if (self) {
