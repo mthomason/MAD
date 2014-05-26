@@ -47,7 +47,6 @@ NSString * const MTNullIdentifier = @"(null)";
 @property (nonatomic, assign) CGRect printableRect;
 
 @property (nonatomic, assign) CGSize layoutSize;
-
 @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
 
 @property (nonatomic, strong, readwrite) NSArray *reportIndexes;
@@ -668,6 +667,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (BOOL)shouldFormatAgain:(CGSize)printableSize {
     
+    return YES;
+    /*
     BOOL landscape = [self isLandscape];
     CGSize lastCachedPageSizeForOrientation = landscape ? [self sizeLastCachedPageLayoutLandscape]:
     [self sizeLastCachedPageLayoutPortrate];
@@ -680,7 +681,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setPageLayoutSizeForCachePortrate:printableSize];
         }
     }
-    return formatAgain;
+    return formatAgain;*/
 }
 
 - (RptqQueryGroup *)firstQueryGroup {
