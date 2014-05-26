@@ -546,6 +546,8 @@
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C40EBF3193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40EBF2193387D100F12AAC /* MTQueryCacheSelectRowIds.m */; };
+		4C40EBF4193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C40EBF2193387D100F12AAC /* MTQueryCacheSelectRowIds.m */; };
 		4C4177C319294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */; };
 		4C4177C419294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */; };
 		4C4177D0192B0DE0006EC472 /* MTQueryCacheSelectRowId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4177CF192B0DE0006EC472 /* MTQueryCacheSelectRowId.m */; };
@@ -2006,6 +2008,8 @@
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C3ACA45167297AA001BC16D /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryPredicate+Extras.m"; sourceTree = "<group>"; };
+		4C40EBF1193387D100F12AAC /* MTQueryCacheSelectRowIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectRowIds.h; sourceTree = "<group>"; };
+		4C40EBF2193387D100F12AAC /* MTQueryCacheSelectRowIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectRowIds.m; sourceTree = "<group>"; };
 		4C4177C119294B2E006EC472 /* MTQueryCacheSelectLimitOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectLimitOffset.h; sourceTree = "<group>"; };
 		4C4177C219294B2E006EC472 /* MTQueryCacheSelectLimitOffset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectLimitOffset.m; sourceTree = "<group>"; };
 		4C4177CE192B0DE0006EC472 /* MTQueryCacheSelectRowId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectRowId.h; sourceTree = "<group>"; };
@@ -3294,6 +3298,8 @@
 				4C258027192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.m */,
 				4C15EB8D192DF50600C412A4 /* MTQuerySelectItemsForGroup.h */,
 				4C15EB8E192DF50600C412A4 /* MTQuerySelectItemsForGroup.m */,
+				4C40EBF1193387D100F12AAC /* MTQueryCacheSelectRowIds.h */,
+				4C40EBF2193387D100F12AAC /* MTQueryCacheSelectRowIds.m */,
 			);
 			name = MTQueryCache;
 			sourceTree = "<group>";
@@ -6070,6 +6076,7 @@
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
 				4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */,
 				4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */,
+				4C40EBF4193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
 				4CE17E2216501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4C7732A1190FFD6A005AE7C2 /* MysqlUpdate.m in Sources */,
 				4CA14FFD18B7F913001AFAD8 /* MTActivityReportExportToPdf.m in Sources */,
@@ -6543,6 +6550,7 @@
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
 				4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
+				4C40EBF3193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
 				4C23FBD618FAE4F7009F234F /* MTPaperC7.m in Sources */,
 				4C7732A0190FFD6A005AE7C2 /* MysqlUpdate.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,

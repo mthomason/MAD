@@ -843,4 +843,22 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     [[self databaseForInserts] cleanupBulkInsert];
 }
 
+- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {
+    
+    
+    NSDictionary *options = @{
+                              @(MTQuerySelectRowIds) : cacheIds,
+                              @(MTQuerySelectTableName) : [self tableName],
+                              @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
+                              };
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
+    
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
+    NSEnumerator *data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
+                                                                                     columns:[self columns]
+                                                                                  columnKeys:[self columnKeys]
+                                                                                       query:query];
+    return data;
+}
+
 @end

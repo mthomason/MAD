@@ -291,6 +291,8 @@
             NSInteger layoutSectionCounter = 0;
             NSInteger readGroupIndex = 0;
             NSArray *groupData = nil;
+            
+            NSEnumerator *dataForPageIndexEnumerator = [[self reportFormatter] dataForPageIndex:pageIndex];
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
                 @autoreleasepool {
@@ -371,14 +373,13 @@
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {
                             if (readGroupIndex < [groupData count]) {
-                                NSNumber *rowId = [pageSection objectForKey: MTReportDetailRowId];
-                                rowData = [[self reportFormatter] dataForCacheId: rowId];
+                                rowData = [dataForPageIndexEnumerator nextObject];
                             }
                             readGroupIndex++;
                         }
 
                     } else {
-                        rowData = [[self reportFormatter] dataForRow: readRowIndex onPage: readPageIndex];
+                        rowData = [dataForPageIndexEnumerator nextObject];
                     }
                     
                     if (sectionIsVisible) {

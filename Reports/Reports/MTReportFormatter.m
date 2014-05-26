@@ -388,6 +388,10 @@ NSString * const MTNullIdentifier = @"(null)";
   */
 }
 
+- (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex {
+    return [[[self query] datatable] enumeratorForRowIds: [self reportIndexes][pageIndex]];
+}
+
 - (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel andKeys:(NSArray *)passedkeys andAllKeys:(NSMutableArray *)allKeysForLevel {
     
     NSMutableArray *keys = [[NSMutableArray alloc] initWithArray:passedkeys];
