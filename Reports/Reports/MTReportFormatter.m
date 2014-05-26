@@ -71,10 +71,8 @@ NSString * const MTNullIdentifier = @"(null)";
 - (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
     self = [super initWithQuery:query];
     if (self) {
-        
         [self setLayout:layout];
         [self initalize];
-        
     }
     return self;
 }
@@ -158,6 +156,8 @@ NSString * const MTNullIdentifier = @"(null)";
             
             NSArray *tdbp = [[NSArray alloc] initWithArray:[self reportIndexesTemporary]];
             [self setReportIndexes: tdbp];
+            
+            [self cleanupTemporaryReportIndexes];
             
         }
     }
@@ -455,6 +455,13 @@ NSString * const MTNullIdentifier = @"(null)";
         
         id dataToAdd = [[self pageIndexesTemporary] copy];
         [[self reportIndexesTemporary] addObject:dataToAdd];
+
+//        id layoutToAdd = [[self pageLayoutTemporary] copy];
+//        [[self reportLayoutTemporary] addObject:layoutToAdd];
+        
+//        id dataToAdd = [[self pageIndexesTemporary] copy];
+//        [[self reportIndexesTemporary] addObject:dataToAdd];
+
         
         [self cleanupTemporaryPageIndexes];
         
