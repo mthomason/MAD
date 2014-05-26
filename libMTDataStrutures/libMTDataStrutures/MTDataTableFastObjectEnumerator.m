@@ -56,7 +56,7 @@
             MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
 
             BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
-            NSAssert(success, @"sqlite3_prepare_v2 failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
+            //NSAssert(success, @"sqlite3_prepare_v2 failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
             sqlite3_free(queryString);
         }
         [self setColumnKeys:columnKeys];

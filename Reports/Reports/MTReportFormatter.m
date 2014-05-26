@@ -304,6 +304,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
     for (NSInteger groupLevel = [lastValues count] - 1; groupLevel >= 0; groupLevel--) {
+
         id value = lastValues[groupLevel];
         id value2 = currentValues[groupLevel];
         if (value == [NSNull null]) {
@@ -312,6 +313,7 @@ NSString * const MTNullIdentifier = @"(null)";
         if (value2 == [NSNull null]) {
             value2 = @"";
         }
+
         NSSortDescriptor *sortDesc = [self sortDescriptorsByGroupSorted][groupLevel];
         SEL comparec = [sortDesc selector];
         NSComparisonResult comparsonResult;
@@ -326,7 +328,6 @@ NSString * const MTNullIdentifier = @"(null)";
             RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
             [self addHeightFromGroupFooterWithQueryGroup: group];
             [self cacheGroupFooterAtLevel:groupLevel];
-            //NSLog(@"GF%d:\t%@", groupLevel, currentValues);
         }
     }
 }
@@ -337,6 +338,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
         BOOL newHeader = [lastValues count] == 0;
         if (newHeader == NO) {
+
             id value = lastValues[groupLevel];
             id value2 = currentValues[groupLevel];
             if (value == [NSNull null]) {
@@ -345,6 +347,7 @@ NSString * const MTNullIdentifier = @"(null)";
             if (value2 == [NSNull null]) {
                 value2 = @"";
             }
+
             NSSortDescriptor *sortDesc = [self sortDescriptorsByGroupSorted][groupLevel];
             SEL comparec = [sortDesc selector];
             NSComparisonResult comparsonResult;
@@ -376,15 +379,10 @@ NSString * const MTNullIdentifier = @"(null)";
     
     for (NSInteger i=0; i<[containerDetails count]; i++) {
         @autoreleasepool {
-            
-            
 
             [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasDetailSection]];
             NSNumber *rowid = containerDetails[i][@"ROWID"];
             [self cacheDetail:rowid];
-            
-            //id nextObject = [[[[self query] datatable] enumeratorForAllObjectsSortedRowIdOnly] nextObject];
-            ///NSLog(@"Next Object %@ == %@", nextObject, rowid);
 
         }
     }

@@ -188,6 +188,9 @@
 }
 
 - (NSString *)idColumnKeyForGroupLocation:(NSInteger)groupLevel {
+    if (groupLevel < [[self groupKeys] count]) {
+        [self initalizeGroupKeys];
+    }
     NSInteger loc = [[self groupKeys][groupLevel] integerValue];
     return [self columnKeys][loc];
 }
