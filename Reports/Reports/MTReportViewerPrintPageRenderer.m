@@ -326,7 +326,7 @@
                     }
                     
                     if (typeDocumentSection != MNSDocumentSectionTypeBody) readGroupIndex = 0;
-                    NSInteger readRowIndex = rowIndex;
+
                     NSInteger readPageIndex = pageIndex;
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     CGRect sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);

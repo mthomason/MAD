@@ -364,80 +364,12 @@ NSString * const MTNullIdentifier = @"(null)";
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
             NSArray *currentKeys = [currentValues objectsAtIndexes:indexSet];
             [self addGroupHeaderLevel:groupLevel withKeys:currentKeys];
-            //NSLog(@"GH%d:\t%@", groupLevel, currentKeys);
         }
     }
-}
-
-- (void)addGroupLevel:(NSInteger)groupLevel groupKeys:(NSArray *)keys enumerator:(NSEnumerator *)enumerator {
-/*
-    RptqQueryGroup *groupHeader = [[self sortedQueryGroups] objectAtIndex:groupLevel];
-    [self addHeightFromGroupHeaderWithQueryGroup: groupHeader];
-    [self addGroupHeaderLevel:0 withKeys:keys];
-
-    BOOL nextGroup;
-    if (nextGroup) {
-        [self addGroupLevel:groupLevel groupKeys:keys enumerator:enumerator];
-    } else {
-        [self cacheDetailLevelWithDetails:];
-    }
-    
-    RptqQueryGroup *groupFooter = [[self sortedQueryGroups] objectAtIndex:groupLevel];
-    [self addHeightFromGroupFooterWithQueryGroup:groupFooter];
-    [self cacheGroupFooterAtLevel:groupLevel];
-  */
 }
 
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex {
     return [[[self query] datatable] enumeratorForRowIds: [self reportIndexes][pageIndex]];
-}
-
-- (void)addGroupLevel:(RptqQueryGroup *)queryGroup groupedRows:(NSDictionary *)groupedRows groupedRowsLevel:(NSUInteger)groupedRowsLevel andKeys:(NSArray *)passedkeys andAllKeys:(NSMutableArray *)allKeysForLevel {
-    
-    NSMutableArray *keys = [[NSMutableArray alloc] initWithArray:passedkeys];
-    
-    NSArray *sqg = [[self query] sortedHasQueryGroups];
-    [self setSortedQueryGroups:sqg];
-    
-    if (groupedRowsLevel == [[self sortDescriptorsByGroupSorted] count]) {     //May not be a dictionary if no results are returned or no groupings preformed... otherwise, detail
-        
-        NSArray *results = [NSArray arrayWithArray:[[[self query] datatable] objectsForGroupKeys:allKeysForLevel]];
-        [self cacheDetailLevelWithDetails:results];
-
-    } else {
-        NSSortDescriptor *desc = [[self sortDescriptorsByGroupSorted] objectAtIndex:groupedRowsLevel];
-        NSEnumerator *loopEnumerator = [[[self query] datatable] enumeratorForGroupLevel: groupedRowsLevel
-                                                                                withKeys: passedkeys
-                                                                               accending: [desc ascending]];
-        
-        for (id key in loopEnumerator) {
-            
-            @autoreleasepool {
-                
-                [keys addObject:key];
-                [allKeysForLevel addObject:key];
-                
-                [self addHeightFromGroupHeaderWithQueryGroup:queryGroup];
-                [self addGroupHeaderLevel:groupedRowsLevel withKeys:keys];
-                
-                NSInteger indexNextGroup = [[queryGroup weight] integerValue] + 1;
-                RptqQueryGroup *nextGroup = [self sortGroupAtLevel:indexNextGroup];
-                if (nextGroup != nil) {
-                    [self addGroupLevel: nextGroup groupedRows: nil groupedRowsLevel: groupedRowsLevel + 1 andKeys:keys andAllKeys:allKeysForLevel];
-                } else {
-                    NSArray *results = [NSArray arrayWithArray:[[[self query] datatable] objectsForGroupKeys:allKeysForLevel]];
-                    [self cacheDetailLevelWithDetails:results];
-                }
-                
-                [allKeysForLevel removeLastObject];
-                
-                [self addHeightFromGroupFooterWithQueryGroup:queryGroup];
-                [self cacheGroupFooterAtLevel:groupedRowsLevel];
-                
-                [keys removeLastObject];
-            }
-        }
-    }
 }
 
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
@@ -498,18 +430,9 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addDetailToReportLayout {
-   // NSArray *emptyArray = @[];
-   // NSMutableArray *emptyMutableArray = [[NSMutableArray alloc] init];
-    
     NSEnumerator *enumeratorForAllObjectsSorted = [[[self query] datatable] enumeratorForAllObjectsSorted];
     [self setEnumeratorForReportDetail: enumeratorForAllObjectsSorted];
-    
     [self addAllDetail];
-    /*
-    [self addGroupLevel: [self firstQueryGroup]
-            groupedRows: nil
-       groupedRowsLevel: 0 andKeys: emptyArray andAllKeys:emptyMutableArray];
-     */
 }
 
 // FIXME: Make sure paper rect is passed in to the software
