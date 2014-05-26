@@ -359,16 +359,22 @@
                         
                         id data = [dataCacheForPage objectForKey:hash];
                         if (data == nil) {
-                            data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
+                            if ([groupLevelKeys count] == numberOfGroups) {
+                                data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
+                            } else {
+                                data = nil;
+                            }
                         }
-                        [dataCacheForPage setObject:data forKey:hash];
-                        if ([data isKindOfClass:[NSDictionary class]]) {
-                            
-                            rowData = [NSDictionary dictionaryWithDictionary:data];
-                            
-                        } else {
-                            groupData = [NSArray arrayWithArray: data];
-                            rowData = [data firstObject];
+                        if (data) {
+                            [dataCacheForPage setObject:data forKey:hash];
+                            if ([data isKindOfClass:[NSDictionary class]]) {
+                                
+                                rowData = [NSDictionary dictionaryWithDictionary:data];
+                                
+                            } else {
+                                groupData = [NSArray arrayWithArray: data];
+                                rowData = [data firstObject];
+                            }
                         }
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {

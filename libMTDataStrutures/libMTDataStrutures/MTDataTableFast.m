@@ -180,8 +180,11 @@
 - (void)initalizeGroupKeys {
         NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity:[[self sortDescriptors] count]];
         for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
-            NSNumber *columnIndex = @([[self columnKeys] indexOfObject: [sortDescriptor key]]);
-            [groupKeys addObject:columnIndex];
+            NSUInteger index = [[self columnKeys] indexOfObject: [sortDescriptor key]];
+            if (index != NSNotFound) {
+                NSNumber *columnIndex = @(index);
+                [groupKeys addObject:columnIndex];
+            }
         }
         [self setGroupKeys:groupKeys];
         groupKeys = nil;
@@ -202,10 +205,12 @@
 
 - (void)addRow:(NSArray *)row {
     self.rowCounter++;
-    [self addRow:row toTable:[self tableName] withColumns:[self columns] andColumnKeys:[self columnKeys]];
     if ([self groupKeys] == nil) {
+        [[self groupKeys] removeAllObjects];
         [self initalizeGroupKeys];
     }
+
+    [self addRow:row toTable:[self tableName] withColumns:[self columns] andColumnKeys:[self columnKeys]];
     /*
     for (int i=0; i<[[self sortDescriptors] count ]; i++) {
         NSString *tableName = [self cacheTableNameForGroupLevel:i];
@@ -633,10 +638,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
     NSAssert([keys count] == groupLevel, @"Need a key for each previous group.");
-    if (groupLevel == 0) {
-        [[self groupKeys] removeAllObjects];
-        [self initalizeGroupKeys];
-    }
     
     NSArray *columnKeys = @[[self idColumnKeyForGroupLocation:groupLevel]];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[keys count]];
