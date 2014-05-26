@@ -40,7 +40,6 @@
     if ([[self pageCache] count] > CACHE_SIZE) {
         [self trimCache:index];
     }
-    
 }
 
 - (void)dumpCache {

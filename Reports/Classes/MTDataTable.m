@@ -23,6 +23,11 @@
 
 @implementation MTDataTable
 
+- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
