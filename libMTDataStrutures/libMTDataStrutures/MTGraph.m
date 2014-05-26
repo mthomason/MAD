@@ -36,7 +36,8 @@
 - (id)initWithVertices:(NSSet *)verticesSet {
     self = [super init];
     if (self) {
-        NSMutableArray *vertices = [[NSMutableArray alloc] initWithArray: [verticesSet allObjects]];
+        NSArray *allVertices = [verticesSet allObjects];
+        NSMutableArray *vertices = [[NSMutableArray alloc] initWithArray: allVertices];
         [self setVertices: vertices];
         
         [self setIdUniqueEdges:0];

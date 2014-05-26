@@ -26,9 +26,12 @@
 - (id)initWithFormer:(id)former andLatter:(id)latter {
     self = [super init];
     if (self) {
+
+        id f = former;
+        [self setFormer:f];
         
-        [self setFormer:former];
-        [self setLatter:latter];
+        id l = latter;
+        [self setLatter:l];
         
     }
     return self;
