@@ -306,10 +306,11 @@
                     switch (typeDocumentSection) {
                             
                         case MNSDocumentSectionTypePageFooter: {
-                            CGFloat sectionHeight = [[documentSection layoutHeight] floatValue];
+                            CGFloat sectionHeight = [[self reportFormatter] heightForSection:[document hasReportFooterSection]];
+            
                             BOOL lastPage = pageIndex == numberOfPages - 1;
                             if (lastPage) {
-                                originY = pageRect.origin.y + pageRect.size.height - sectionHeight - [[[document hasReportFooterSection] layoutHeight] floatValue];
+                                originY = pageRect.origin.y + pageRect.size.height - sectionHeight - [[self reportFormatter] heightForSection:[document hasReportFooterSection]];
                             } else {
                                 originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
                                 pageNumber++;
@@ -318,7 +319,7 @@
                         }
 
                         case MNSDocumentSectionTypeReportFooter:
-                            originY = pageRect.origin.y + pageRect.size.height - [[documentSection layoutHeight] floatValue];
+                            originY = pageRect.origin.y + pageRect.size.height - [[self reportFormatter] heightForSection:documentSection];
                             break;
                         
                         default:

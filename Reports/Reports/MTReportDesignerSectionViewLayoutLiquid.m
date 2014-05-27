@@ -103,7 +103,7 @@
         }
     }
     [layout setFrame: nearestRect];
-    
+
     [[self delegate] collectionView:[self collectionView] layout:self setDropPoint:[layout frame].origin forItemAtIndexPath:[layout indexPath]];
 
     return layout;

@@ -119,13 +119,7 @@ const NSUInteger tagAlertViewAquire         = 666;
     [alertView setAlertViewStyle:UIAlertViewStyleDefault];
     [alertView setTag:tagAlertViewRemovePassword];
     [self setFirstAlertView:alertView];
-    if ([NSThread isMainThread]) {
-        [alertView show];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [alertView show];
-        });
-    }
+    [alertView performSelector:@selector(show) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
 }
 
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {

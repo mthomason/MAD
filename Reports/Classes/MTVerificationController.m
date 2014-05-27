@@ -83,7 +83,7 @@ static MTVerificationController *singleton;
                                                                                  error:&error];
     if (!dictionaryParsed) {
         if (error) {
-            NSAssert(error != nil, @"%@", error);
+            NSAssert(error == nil, @"%@", error);
         }
         return nil;
     }
@@ -98,7 +98,7 @@ static MTVerificationController *singleton;
                                                                        error:&error];
     if (!dictionaryParsed) {
         if (error) {
-            NSAssert(error != nil, @"%@", error);
+            NSAssert(error == nil, @"%@", error);
         }
         return nil;
     }

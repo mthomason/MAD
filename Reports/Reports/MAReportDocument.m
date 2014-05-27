@@ -41,6 +41,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
 #import "NSThread+Extras.h"
+#import "MADocumentState.h"
 
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
@@ -354,7 +355,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
     [documentReport closeWithCompletionHandler:^(BOOL success) {
         if (success) {
-            [documentReport setSuspended:YES];
+            [[documentReport documentStatus] setSuspended:YES];
             [[documentReport managedObjectContext] lock];
             [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
                 [documentReport deleteFromDiskCompletion:^(BOOL success) {
@@ -390,7 +391,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 - (void)regenThumbnail {
 
-    if ([self activeDocument] != nil) {
+    if ([self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh])) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);

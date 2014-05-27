@@ -85,7 +85,10 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
+    //Log uncaught errors.
+    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+
     //Setup iCloud KVS
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver: self
@@ -107,9 +110,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes
                                              forState:UIControlStateNormal];
-    
-    //Log uncaught errors.
-    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     [self deleteCoreDataCache];
     

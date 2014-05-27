@@ -122,7 +122,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     const char *queryStartChar = [queryStart UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
 
-    MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
+    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
     
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -149,7 +149,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     const char *queryStartChar = [queryStart UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
     
-    MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
+    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
     
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -401,7 +401,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
 
     if ([queryString length] > 0) {
 
-        //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryString);
+        MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryString);
         
         sqlite3_stmt *statement = NULL;
         statement = [self statementForQuery:query andStatement:statement];

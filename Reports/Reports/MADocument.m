@@ -24,6 +24,8 @@
 #import "NSError+UserInterface.h"
 #import "NSFileManager+Common.h"
 
+#import "MADocumentState.h"
+
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
@@ -42,23 +44,84 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 @property (nonatomic, strong) NSFileWrapper *fileWrapper;
 @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 @property (nonatomic, strong) UIImage *thumbnail;
-@property (nonatomic, assign) BOOL weMustSave;
-@property (nonatomic, assign) BOOL quickSaveInProgress;
+
+//@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
 @end
 
 @implementation MADocument
 
+- (void)dealloc {
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextObjectsDidChangeNotification
+                           object: [self managedObjectContext]];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextDidSaveNotification
+                           object: [self managedObjectContext]];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextWillSaveNotification
+                           object: self];
+    [defaultCenter removeObserver: self
+                             name: UIDocumentStateChangedNotification
+                           object: self];
+}
+
 - (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
         
+        
+        MADocumentState *documentState = [MADocumentState new];
+        [documentState setSaveInProgress:NO];
+        [documentState setNeedsSave:NO];
+        [documentState setContextChagned:NO];
+        [self setDocumentStatus:documentState];
+        
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
         [self setExtraInformation:extraInfo];
+        
+        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+        [defaultCenter addObserver: self
+                          selector: @selector(managedObjectContextDidChange:)
+                              name: NSManagedObjectContextObjectsDidChangeNotification
+                            object: [self managedObjectContext]];
+        
+        [defaultCenter addObserver: self
+                          selector: @selector(managedObjectContextDidSave:)
+                              name: NSManagedObjectContextDidSaveNotification
+                            object: [self managedObjectContext]];
+
+        [defaultCenter addObserver: self
+                          selector: @selector(managedObjectContextWillSave:)
+                              name: NSManagedObjectContextWillSaveNotification
+                            object: self];
+
+        [defaultCenter addObserver: self
+                          selector: @selector(documentStateChanged)
+                              name: UIDocumentStateChangedNotification
+                            object: self];
+
         
     }
     return self;
 }
+
+- (void)managedObjectContextDidChange:(NSNotification *)notification {
+    [[self documentStatus] setNeedsSave:YES];
+    [[self documentStatus] setContextChagned:YES];
+}
+
+- (void)managedObjectContextDidSave:(NSNotification *)notification {
+    [[self documentStatus] setSaveInProgress:NO];
+    [[self documentStatus] setNeedsSave:NO];
+}
+
+- (void)managedObjectContextWillSave:(NSNotification *)notification {
+    [[self documentStatus] setSaveInProgress:YES];
+}
+
+- (void)documentStateChanged { }
 
 /*
  {
@@ -68,7 +131,7 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
         version = 1;
     };
     fileType = "com.everydayapps.productivity.mad";
-    parentContext = "<NSManagedObjectContext: 0x1f8bf550>";
+    parentContext = "<NSManagedObjectContext: 0xffffffff>";
  }
  */
 
@@ -83,28 +146,12 @@ NSString * MTDocumentVersionFileName            = @"ver";
 NSString * MTDocumentTypenFileName              = @"typ";
 NSString * MTDocumentParentContextName          = @"moc";
 
-/*- (BOOL)hasUnsavedChanges {
-    BOOL result = NO;
-    if ([self quickSaveInProgress] || [self isSuspended]) {
-        result = NO;
-    } else {
-        if ([self weMustSave]) {
-            result = YES;
-        } else {
-            result = [super hasUnsavedChanges];
-        }
-    }
-    return result;
-}*/
-
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
     id result = [super contentsForType:typeName error:outError];
-    [self setWeMustSave:NO];
     return result;
 }
 
 - (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
-    [self setWeMustSave:NO];
     BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
     return result;
 }
@@ -191,7 +238,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 
     id result;
 
-    if ([self isSuspended]) {
+    if ([[self documentStatus] isSuspended]) {
         result = [NSNull null];
     } else {
         if ([self extraInformation] == nil) {
@@ -211,7 +258,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 
     BOOL writeAdditionalContent;
     
-    if (content ==[NSNull null] || [self isSuspended]) {
+    if (content ==[NSNull null] || [[self documentStatus] isSuspended]) {
 
         writeAdditionalContent  = NO;
    
@@ -251,7 +298,6 @@ NSString * MTDocumentParentContextName          = @"moc";
 
 - (void)saveContext {
     NSError *error;
-    [self setWeMustSave:YES];
     if ([self managedObjectContext] != nil) {
         if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
             [[self managedObjectContext] save:nil]; //Try again!?!?!?!
@@ -260,18 +306,18 @@ NSString * MTDocumentParentContextName          = @"moc";
 }
 
 - (void)quickSave {
-    if ([self quickSaveInProgress] == NO) {
-        [self setQuickSaveInProgress:YES];
+    if ([[self documentStatus] saveInProgressLock] == NO) {
+        [[self documentStatus] setSaveInProgressLock:YES];
         NSURL *url = [self fileURL];
         __block MADocument *blockSelf = self;
         [blockSelf saveToURL: url forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
             
-            [blockSelf setSuspended:YES];
+            [[blockSelf documentStatus] setSuspended:YES];
             NSURL *url = [blockSelf fileURL];
             [NSFileManager wrapFile:url withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:nil];
-            [blockSelf setSuspended:NO];
+            [[blockSelf documentStatus] setSuspended:NO];
             
-            [blockSelf setQuickSaveInProgress:NO];
+            [[blockSelf documentStatus] setSaveInProgressLock:NO];
             blockSelf = nil;
         }];
     }
@@ -302,9 +348,7 @@ NSString * MTDocumentParentContextName          = @"moc";
             [fileManager removeItemAtURL:file error:&error];
         }
         [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
-        if (deleteError != nil) {
-            MTLog(@"%@", deleteError);
-        }
+        NSAssert(deleteError == nil, @"%@", deleteError);
         completion(YES);
     };
 
@@ -378,23 +422,21 @@ NSString * MTDocumentParentContextName          = @"moc";
     __weak NSURL *blockFileUrl = url;
     
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        NSError *deleteError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
-            MTLog(@"Error %@", error);
+
+        NSArray *propertyKeys = @[NSURLIsDirectoryKey];
+        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl includingPropertiesForKeys:propertyKeys options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+            NSAssert(error == nil, @"%@", error);
             return YES;
         }];
         for (NSURL *blockFileUrl in enumerator) {
             NSError *error = nil;
             [fileManager removeItemAtURL:blockFileUrl error:&error];
-            if (error != nil) {
-                MTLog(@"Error %@", error);
-            }
+            NSAssert(error == nil, @"%@", error);
         }
-        [[NSFileManager defaultManager] removeItemAtURL:blockFileUrl error:&deleteError];
-        if (deleteError != nil) {
-            MTLog(@"%@", deleteError);
-        }
+        NSError *deleteError = nil;
+        [fileManager removeItemAtURL:blockFileUrl error:&deleteError];
+        NSAssert(deleteError == nil, @"%@", deleteError);
         
         completion(YES);
     };

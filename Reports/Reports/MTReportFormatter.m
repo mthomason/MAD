@@ -64,6 +64,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
 
+@property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
+
 @end
 
 @implementation MTReportFormatter
@@ -109,6 +111,8 @@ NSString * const MTNullIdentifier = @"(null)";
     NSArray *dataByPage = @[];
     [self setReportIndexes:dataByPage];
     
+    [self setLayoutHeightsBySectionKey:nil];
+    
 }
 
 #pragma mark - Reading cached data
@@ -134,7 +138,8 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setLayoutSize:printableSize];
             [self setPrintableSize:printableSize];
             
-            [RptqDocumentSection batchUpdateSectionLayoutHeights:[self layout]];
+            NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
+            [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
             
             [self cleanupTemporaryReportIndexes];
             [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
@@ -173,72 +178,6 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setLastResultRowComparsonValues:nil];
 }
 
-- (id)addGroupedResults:(NSArray *)sortedResults
-                     level:(NSUInteger)level {
-    
-    
-    BOOL detailLevel = level == [[self sortDescriptorsByGroupSorted] count];
-    id results = nil;
-    
-    if (detailLevel) {
-    
-        results = [sortedResults copy];
-
-    } else {
-
-        results = [[NSMutableDictionary alloc] init];
-        NSMutableArray *resultsForGroup = [[NSMutableArray alloc] init];
-        NSSortDescriptor *sortDescriptor = detailLevel ? nil : [[self sortDescriptorsByGroupSorted] objectAtIndex:level];
-        NSString *sortFieldName =  detailLevel ? nil : [sortDescriptor key];
-        id valueForField = nil, lastValueForField = nil;
-        NSUInteger groupResultIndexForLevel = 0;
-        
-        for (NSDictionary *result in sortedResults) {
-
-            valueForField = detailLevel ? nil : [result objectForKey:sortFieldName];
-            if (valueForField == nil) {
-                valueForField = MTNullIdentifier;
-            }
-
-            if (![valueForField isEqual: lastValueForField] && lastValueForField != nil) {
-
-                id resultOfNextGroup = [self addGroupedResults: resultsForGroup
-                                                            level: (level + 1)];
-                
-                [results setObject:resultOfNextGroup forKey:lastValueForField];
-                
-                [resultsForGroup removeAllObjects];
-                
-            }
-            [resultsForGroup addObject:result];
-            lastValueForField = valueForField;
-            groupResultIndexForLevel++;
-        }
-        
-        if (valueForField != nil) {
-
-            id resultOfNextGroup = [self addGroupedResults: resultsForGroup
-                                                     level: (level + 1)];
-            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
-            [results setObject:resultOfNextGroup forKey:key];
-
-        } else {
-
-            id resultOfNextGroup = [self addGroupedResults: resultsForGroup
-                                                     level: (level + 1)];
-            NSString *key = lastValueForField == nil ? valueForField : lastValueForField;
-            if (key == nil) {
-                key = MTNullIdentifier;
-            }
-            [results setObject:resultOfNextGroup forKey:key];
-
-        }
-        
-        [resultsForGroup removeAllObjects];
-    }
-    return results;
-}
-
 - (void)cleanupTemporaryReportIndexes {
     [[self reportLayoutTemporary] removeAllObjects];
     [[self reportIndexesTemporary] removeAllObjects];
@@ -259,8 +198,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypePageHeader)};
     [[self pageLayoutTemporary] addObject:  d];
 }
-
-
 
 - (void)addAllDetail {
     
@@ -332,7 +269,6 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)displayNewGroupHeadersIfNeeded:(NSArray *)currentValues andLastValues:(NSArray *)lastValues {
-    
     for (NSInteger groupLevel = 0; groupLevel < [currentValues count]; groupLevel++) {
 
         BOOL newHeader = [lastValues count] == 0;
@@ -407,8 +343,12 @@ NSString * const MTNullIdentifier = @"(null)";
     }
 }
 
+- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection {
+    return [[self layoutHeightsBySectionKey][[documentSection sectionKey]] floatValue];
+}
+
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
-    CGFloat layoutHeight = [[documentSection layoutHeight] floatValue];
+    CGFloat layoutHeight = [self heightForSection:documentSection];
     [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
     CGFloat printableHeightUsed = [self counterHeightUsedCurrentPage] + layoutHeight;
     [self setCounterHeightUsedCurrentPage: printableHeightUsed];
@@ -439,7 +379,7 @@ NSString * const MTNullIdentifier = @"(null)";
     CGRect pageRect;
     RptqDocument *document = [self layout];
     RptqDocumentSection *pageFooterSection = [document hasPageFooterSection];
-    CGFloat pageFooterSectionHeight = [[pageFooterSection layoutHeight] floatValue];
+    CGFloat pageFooterSectionHeight = [self heightForSection:pageFooterSection];
     
     pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);
     
@@ -467,7 +407,7 @@ NSString * const MTNullIdentifier = @"(null)";
         
         RptqDocumentSection *pageHeaderSection = [document hasPageHeaderSection];
         CGFloat pageHeaderHeight = CGPointZero.y;
-        pageHeaderHeight += [[pageHeaderSection layoutHeight] floatValue];
+        pageHeaderHeight += [self heightForSection:pageHeaderSection];
         [self setCounterHeightUsedCurrentPage: pageHeaderHeight];
         
         [self addPageHeader];
@@ -477,7 +417,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addReportHeaderToReportLayout {
     RptqDocumentSection *reportHeaderSection = [[self layout] hasReportHeaderSection];
-    CGFloat reportHeaderHeight = [[reportHeaderSection layoutHeight] floatValue];
+    CGFloat reportHeaderHeight = [self heightForSection:reportHeaderSection];
     CGFloat printableSpaceUsed = [self counterHeightUsedCurrentPage] + reportHeaderHeight;
     [self setCounterHeightUsedCurrentPage: printableSpaceUsed];
     [self addReportHeader];
@@ -485,7 +425,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addPageHeaderToReportLayout {
     RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
-    CGFloat pageHeaderHeight = [[pageHeaderSection layoutHeight] floatValue];
+    CGFloat pageHeaderHeight = [self heightForSection:pageHeaderSection];
     CGFloat printableSpaceUsed = [self counterHeightUsedCurrentPage] + pageHeaderHeight;
     [self setCounterHeightUsedCurrentPage: printableSpaceUsed];
     [self addPageHeader];

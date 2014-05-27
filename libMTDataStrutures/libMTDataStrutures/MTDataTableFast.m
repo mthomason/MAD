@@ -592,7 +592,7 @@
     char *queryString = sqlite3_mprintf((char *) sqlc);
     sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
     
-    sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
+    //sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
 
     BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
     

@@ -10,6 +10,7 @@
 
 @interface MADocumentState : NSObject
 
+@property (nonatomic, assign, readwrite, getter = isSuspended) BOOL suspended;
 @property (nonatomic, assign, readwrite) BOOL saveInProgress;
 @property (nonatomic, assign, readwrite) BOOL saveInProgressLock;
 @property (nonatomic, assign, readwrite) BOOL needsSave;

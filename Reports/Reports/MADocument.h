@@ -15,6 +15,8 @@
 
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
+@class MADocumentState;
+
 @interface MADocument : UIManagedDocument
 
 - (void)quickSave;
@@ -29,7 +31,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 - (NSURL *)urlThumbnail;
 
-@property (nonatomic, assign, getter = isSuspended) BOOL suspended;
+@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
 @end
 

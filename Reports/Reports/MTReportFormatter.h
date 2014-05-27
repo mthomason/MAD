@@ -15,7 +15,7 @@ typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
 
 extern NSString * const MTNullIdentifier;
 
-@class RptqDocument;
+@class RptqDocument, RptqDocumentSection;
 
 @interface MTReportFormatter : MTTableFormatter
 
@@ -35,6 +35,7 @@ extern NSString * const MTNullIdentifier;
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 
 - (NSArray *)layoutForPage:(NSUInteger)page;
+- (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex;

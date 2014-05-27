@@ -85,11 +85,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)closeReport {
     
+    [self displaySavingReportActivityIndicator];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-
     __weak MTViewControllerOpenDocument *blockSelf = self;
+    [[AppDelegate app] closeReportWithCompletionHandler:^(BOOL success) {
+        [[blockSelf collectionView] setUserInteractionEnabled: YES];
+        [blockSelf setCellsHidden:NO];
+        [[blockSelf collectionView] reloadData];
+    }];
+    
+}
 
+- (void)displaySavingReportActivityIndicator {
     NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
     [self setCellsHidden:YES];
     for (NSInteger i=0; i<numberOfCells; i++) {
@@ -105,13 +112,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
     }
     [[self collectionView] setUserInteractionEnabled: NO];
-    
-    [applicationInstance closeReportWithCompletionHandler:^(BOOL success) {
-        [[blockSelf collectionView] setUserInteractionEnabled: YES];
-        [blockSelf setCellsHidden:NO];
-        [[blockSelf collectionView] reloadData];
-    }];
-    
 }
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
@@ -730,8 +730,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [[self collectionView] reloadData];
     
 }
-
-- (IBAction)add:(id)sender { }
 
 - (IBAction)done:(id)sender { }
 

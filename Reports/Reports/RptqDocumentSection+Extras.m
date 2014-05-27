@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import <objc/runtime.h>
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
@@ -31,6 +32,13 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
+static char secKeyKey;
+
+@interface RptqDocumentSection ()
+
+@property (nonatomic, retain) NSString *secKey;
+
+@end
 
 @implementation RptqDocumentSection (Extras)
 
@@ -52,7 +60,8 @@
         RptqDocumentSection *lastObject = [fetchResults lastObject];
         identifier = [[lastObject identifier] integerValue] + 1;
     }
-    [self setIdentifier:@(identifier)];
+    NSNumber *identiferNumber = @(identifier);
+    [self setIdentifier:identiferNumber];
     
     // MARK: Initalize section height.
     [self setHeight:@44.0000f];
@@ -64,6 +73,9 @@
 
 - (void)awakeFromFetch {
     [super awakeFromFetch];
+
+    NSString *keyForIdentifier = [self keyForIdentifier];
+    [self setSecKey: keyForIdentifier];
 }
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
@@ -86,6 +98,15 @@
     }
 }
 
+- (NSString *)secKey {
+    return objc_getAssociatedObject(self, &secKeyKey);
+}
+
+- (void)setSecKey:(NSString *)string {
+    objc_setAssociatedObject(self, &secKeyKey, string, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value {
     if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
         [(NSMutableOrderedSet *)[self hasRows] addObject:value];
@@ -106,7 +127,7 @@
     }
 }
 
-- (NSString *)sectionKey {
+- (NSString *)keyForIdentifier {
     NSCharacterSet *nonAumericCharacterSet = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
     NSString *objectIdAsUrlString = [[[self objectID] URIRepresentation] absoluteString];
     NSString *section = [NSString stringWithFormat:@"%ld", (long)[[self identifier] integerValue]];
@@ -324,16 +345,31 @@
     return resultSection;
 }
 
+- (CGFloat)layoutHeightCalculated {
+    return [RptqDocumentSection layoutHeightForSection:self];
+}
 
-+ (void)batchUpdateSectionLayoutHeights:(RptqDocument *)document {
++ (NSDictionary *)layoutHeightsBySectionKey:(RptqDocument *)document {
+    NSMutableDictionary *dictionary = [NSMutableDictionary new];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
     for (RptqDocumentSection *sec in enumerator) {
         @autoreleasepool {
+            [sec fireFault];
+            NSString *sectionKey = [sec sectionKey];
             CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
-            NSNumber *lh = @(layoutHight);
-            [sec setLayoutHeight:lh];
+            dictionary[sectionKey] = @(layoutHight);
         }
     }
+    return dictionary;
+}
+
+- (void)fireFault {
+    NSString *marginLeftMethod = NSStringFromSelector(@selector(marginLeft));
+    [self valueForKey:marginLeftMethod];
+}
+
+- (NSString *)sectionKey {
+    return [self secKey];
 }
 
 // This is the layout height for page rendering... the designer section height is stored in the db
@@ -352,8 +388,6 @@
                 CGFloat totalHeight = elementCanvasRect.size.height + elementCanvasRect.origin.y;
                 if (totalHeight > resultHeight) {
                     resultHeight = totalHeight;
-                    NSNumber *h = [[NSNumber alloc] initWithFloat:resultHeight];
-                    [section setLayoutHeight:h];
                 }
             }
         }
@@ -531,10 +565,6 @@
             break;
     }
     return result;
-}
-
-+ (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)type {
-    
 }
 
 + (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)typeDocumentSection andLevel:(NSUInteger)level {

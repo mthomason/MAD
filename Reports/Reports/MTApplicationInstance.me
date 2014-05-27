@@ -23,7 +23,7 @@
 #import "MTQueryDesigner.h"
 #import "MAReportDocument.h"
 #import "MTUser.h"
-
+#import "MADocumentState.h"
 
 NSString *const MTApplicationIdMadDesigner                          = @"666001433";
 NSString *const MTApplicationIdMadViewer                            = @"666003759";
@@ -33,9 +33,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.505";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.505";
-NSString * const MTGlobalBundleRev                                  = @"1126";
+NSString * const MTGlobalBundleVersion                              = @"1.0.514";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.514";
+NSString * const MTGlobalBundleRev                                  = @"1135";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -183,16 +183,20 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 
                 if (success) {
                     
-                    [blockActiveDocument setSuspended:YES];
+                    [[blockActiveDocument documentStatus] setSuspended:YES];
                     [NSFileManager wrapFile:[blockActiveDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                        
                         [MADocument deleteFromDiskQuick:blockActiveDocument completion:^(BOOL success) {
+
                             if (success) {
+                                
                                 [blockSelf2 setReportState:MTReportStateClosed];
                                 [[blockSelf2 documents] removeObjectForKey:[blockSelf2 currentDocument]];
                                 dispatch_sync(dispatch_get_main_queue(), ^{
                                     completionHandler(success);
                                 });
                             }
+                            
                         }];
                         
                     }];
