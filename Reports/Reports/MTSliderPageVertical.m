@@ -65,8 +65,9 @@
     NSAttributedString *testString = [[NSAttributedString alloc] initWithString:pageNumber attributes:[self stringAttributes]];
     CGFloat stringHeight = [self boundsForAttributedString:testString].height;
     
-    rect.origin = CGPointMake(rect.origin.x, rect.origin.y + (stringHeight / 2.0));
-    rect.size = CGSizeMake(rect.size.height, rect.size.width - (stringHeight / 2.0) * 2.0);
+    CGFloat offsetHeight = (stringHeight / 1.333f);
+    rect.origin = CGPointMake(rect.origin.x, rect.origin.y + offsetHeight);
+    rect.size = CGSizeMake(rect.size.height, rect.size.width - offsetHeight * 2.0000f);
 
     NSInteger numberOfTicks = (rect.size.height / stringHeight) - 1;
     
