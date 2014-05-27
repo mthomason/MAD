@@ -40,7 +40,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
-
+#import "NSThread+Extras.h"
 
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
@@ -358,13 +358,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             [[documentReport managedObjectContext] lock];
             [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
                 [documentReport deleteFromDiskCompletion:^(BOOL success) {
-                    if ([NSThread isMainThread]) {
-                        completion(YES, nil);
-                    } else {
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            completion(YES, nil);
-                        });
-                    }
+                    [NSThread completeOnMainThread:completion withObject:nil andSuccess:YES];
                 }];
             }];
         }
@@ -376,14 +370,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         if (successClosingReport) {
             [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
             NSError *error = [MAReportDocument errorConnectionProblem];
-            if ([NSThread isMainThread]) {
-                completion(NO, error);
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(NO, error);
-                });
-            }
-            
+            [NSThread completeOnMainThread:completion withObject:error andSuccess:NO];
         }
     }];
 
