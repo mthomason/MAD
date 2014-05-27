@@ -97,7 +97,7 @@
                                                                                        value: object];
         [[self binaryBindings] addObject:databinding];
         
-        NSString *columnValue = [NSString stringWithFormat: @"?%d", columnCounter + 1];
+        NSString *columnValue = [NSString stringWithFormat: @"?%ld", columnCounter + 1];
         [values appendString:columnValue];
         
         columnCounter++;
