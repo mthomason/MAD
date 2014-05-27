@@ -1112,8 +1112,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)documentStateChanged {
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    UIDocumentState state = [reportDocument documentState];
-    switch (state) {
+    switch ([reportDocument documentState]) {
         case UIDocumentStateClosed:
             [self enableUserInteraction:[self view]];
             break;
@@ -1887,10 +1886,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)deselectAllElementsAnimated:(BOOL)animated {
-    //UIMenuController *sharedController = [UIMenuController sharedMenuController];
-    //if ([sharedController isMenuVisible]) {
-    //    [sharedController setMenuVisible:NO animated:YES];
-    //}
 
     //Remove border from element views
     for (MTElementView *elementView in [self selectedElementViews]) {
@@ -1962,14 +1957,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (NSSet *)elementViews {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    RptqDocument *document = [reportDocument activeDocument];
+    RptqDocument *document = [[[AppDelegate app] activeDocument] activeDocument];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
     NSMutableSet *results = [[NSMutableSet alloc] init];
+
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
         MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
-        
         NSInteger numberOfSectionsInCollectionView = [documentSectionView numberOfSections];
         
         for (NSUInteger section = 0; section < numberOfSectionsInCollectionView; section++) {
@@ -2059,14 +2052,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
     if (![self dismissAllPopovers]) {
         [[self delegate] viewControllerDidFinish:@(NO)];
-    } else {
-        [self deselectAllElementsAnimated:YES];
-    }
-}
-
-- (IBAction)doneReports:(id)sender {
-    if (![self dismissAllPopovers]) {
-        [[self delegate] viewControllerDidFinish:@(YES) animated:NO];
     } else {
         [self deselectAllElementsAnimated:YES];
     }
@@ -2586,8 +2571,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (NSUInteger)collectionView:(UICollectionView *)collectionView
                       layout:(UICollectionViewLayout *)collectionViewLayout updateDropIndexForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag]
                                                                             fromObjectContext:managedObjectContext];
@@ -2609,8 +2593,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
           setDropPoint:(CGPoint)dropPoint
     forItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
@@ -2667,8 +2650,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 //if ([[documentObject objectID] isTemporaryID]) {
 // FIXME: What's happening here.
                 //}
-                
-                
+
                 [cell setBackgroundColor:[UIColor clearColor]];
                 [[cell contentView] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
                 

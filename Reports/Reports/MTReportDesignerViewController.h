@@ -19,9 +19,7 @@ typedef void(^MTBlockCompletionNoReturn)(void);
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
-- (IBAction)doneReports:(id)sender;
 - (IBAction)done:(id)sender;
-- (IBAction)info:(id)sender;
 - (IBAction)showObjects:(id)sender;
 
 @end

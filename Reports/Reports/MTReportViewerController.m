@@ -309,21 +309,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self updateLateRefreshedLabel:self];
 }
 
-- (void)setTintColorForToolbar:(UIToolbar *)toolbar {
-    UIColor *barTintColor = [UIColor tintColor];
-    UIColor *tintColor = [UIColor tintColor2];
-    [toolbar setBarTintColor:barTintColor];
-    [toolbar setTintColor:tintColor];
-}
-
-- (void)setTintColorForSidebar:(UIToolbar *)toolbar {
-    
-    UIImage *blank = [UIImage new];
-    [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
-    [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    [toolbar setBackgroundColor:[UIColor clearColor]];
-}
-
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -345,6 +330,21 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self setPrintPageRendererReport:nil];
     [self timerDealloc];
+}
+
+- (void)setTintColorForToolbar:(UIToolbar *)toolbar {
+    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColor2];
+    [toolbar setBarTintColor:barTintColor];
+    [toolbar setTintColor:tintColor];
+}
+
+- (void)setTintColorForSidebar:(UIToolbar *)toolbar {
+    
+    UIImage *blank = [UIImage new];
+    [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
+    [toolbar setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)addSliderPagination {
@@ -785,6 +785,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     MTApplicationInstance *app = [AppDelegate app];
     __weak MAReportDocument *doc = [app activeDocument];
     [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
+    
     if ([self printPageRendererReport] == nil) {
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
