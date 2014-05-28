@@ -49,14 +49,14 @@ NSString * const MTNullIdentifier = @"(null)";
 @property (nonatomic, assign) CGSize layoutSize;
 @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
 
-@property (nonatomic, strong, readwrite) NSArray *reportIndexes;
+@property (nonatomic, strong, readwrite) NSMutableArray *reportIndexes;
 @property (nonatomic, strong, readwrite) NSArray *reportLayout;
 
 @property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
 @property (nonatomic, strong) NSMutableArray *reportLayoutTemporary;
 
 @property (nonatomic, strong) NSMutableIndexSet *pageIndexesTemporary;
-@property (nonatomic, strong) NSMutableArray *reportIndexesTemporary;
+//@property (nonatomic, strong) NSMutableArray *reportIndexesTemporary;
 
 @property (nonatomic, strong) MTPageCaching *pageCaching;
 
@@ -96,8 +96,8 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
-    NSMutableArray *temporaryDataByPage = [[NSMutableArray alloc] init];
-    [self setReportIndexesTemporary:temporaryDataByPage];
+    NSMutableArray *reportIndexes = [NSMutableArray new];
+    [self setReportIndexes:reportIndexes];
     
     MTPageCaching *pageCaching = [[MTPageCaching alloc] init];
     [self setPageCaching:pageCaching];
@@ -107,9 +107,6 @@ NSString * const MTNullIdentifier = @"(null)";
     
     NSArray *layoutByPage = @[];
     [self setReportLayout:layoutByPage];
-    
-    NSArray *dataByPage = @[];
-    [self setReportIndexes:dataByPage];
     
     [self setLayoutHeightsBySectionKey:nil];
     
@@ -133,6 +130,8 @@ NSString * const MTNullIdentifier = @"(null)";
         
         if ([self shouldFormatAgain:printableSize]) {
             
+            [[self reportIndexes] removeAllObjects];
+            
             [[self pageCaching] dumpCache];
 
             [self setLayoutSize:printableSize];
@@ -154,13 +153,10 @@ NSString * const MTNullIdentifier = @"(null)";
             [[self reportLayoutTemporary] addObject:tlfp];
             
             NSIndexSet *tdfp = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
-            [[self reportIndexesTemporary] addObject:tdfp];
+            [[self reportIndexes] addObject:tdfp];
             
             NSArray *tlbp = [[NSArray alloc] initWithArray:[self reportLayoutTemporary]];
             [self setReportLayout: tlbp];
-            
-            NSArray *tdbp = [[NSArray alloc] initWithArray:[self reportIndexesTemporary]];
-            [self setReportIndexes: tdbp];
             
             [self cleanupTemporaryReportIndexes];
             
@@ -171,16 +167,15 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)initReportLayoutContainers {
     NSArray *layoutByPage = @[];
     [self setReportLayout:layoutByPage];
-    
-    NSArray *dataByPage = @[];
-    [self setReportIndexes:dataByPage];
+
+    [[self reportIndexes] removeAllObjects];
     
     [self setLastResultRowComparsonValues:nil];
 }
 
 - (void)cleanupTemporaryReportIndexes {
     [[self reportLayoutTemporary] removeAllObjects];
-    [[self reportIndexesTemporary] removeAllObjects];
+    //[[self reportIndexesTemporary] removeAllObjects];
     [self cleanupTemporaryPageIndexes];
 }
 
@@ -394,7 +389,7 @@ NSString * const MTNullIdentifier = @"(null)";
         [[self reportLayoutTemporary] addObject:layoutToAdd];
         
         id dataToAdd = [[self pageIndexesTemporary] copy];
-        [[self reportIndexesTemporary] addObject:dataToAdd];
+        [[self reportIndexes] addObject:dataToAdd];
 
 //        id layoutToAdd = [[self pageLayoutTemporary] copy];
 //        [[self reportLayoutTemporary] addObject:layoutToAdd];
