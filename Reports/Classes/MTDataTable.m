@@ -112,11 +112,18 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeObject:  [self name]         forKey: [MTDataTable keyName]];
-    [encoder encodeObject:  [self columnKeys]   forKey: [MTDataTable keyColumnKeys]];
-    [encoder encodeObject:  [self columns]      forKey: [MTDataTable keyColumns]];
-    [encoder encodeInteger: [self rowCounter]   forKey: [MTDataTable keyRowCounter]];
+    
+    [encoder encodeObject:  [self sortDescriptors]  forKey:[MTDataTable keySortDescriptors]];
+    [encoder encodeObject:  [self url]              forKey:[MTDataTable keyUrl]];
+    [encoder encodeObject:  [self name]             forKey: [MTDataTable keyName]];
+    [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
+    [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
+    [encoder encodeInteger: [self rowCounter]       forKey: [MTDataTable keyRowCounter]];
 
+}
+
++ (NSString *)keyUrl {
+    return @"url";
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -133,9 +140,14 @@
         
         NSUInteger rowCounter =         [decoder decodeIntegerForKey: [MTDataTable keyRowCounter]];
         [self setRowCounter:rowCounter];
-                
+        
+        NSMutableArray *sortDescriptors = [decoder decodeObjectForKey:[MTDataTable keySortDescriptors]];
+        [self setSortDescriptors:sortDescriptors];
 
-    }
+        NSURL *url = [decoder decodeObjectForKey:[MTDataTable keyUrl]];
+        [self setUrl:url];
+                
+   }
     return self;
 }
 

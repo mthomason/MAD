@@ -84,8 +84,8 @@
                                                                                                value: columnValue];
                 [[self binaryBindings] addObject:databinding];
                 [sql appendFormat:@"%@ = ?", columnHandle];
+                counter++;
             }
-            counter++;
         }
     }
     

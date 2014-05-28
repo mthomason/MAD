@@ -53,10 +53,7 @@ NSString * const MTNullIdentifier = @"(null)";
 @property (nonatomic, strong, readwrite) NSMutableArray *reportLayout;
 
 @property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
-//@property (nonatomic, strong) NSMutableArray *reportLayoutTemporary;
-
 @property (nonatomic, strong) NSMutableIndexSet *pageIndexesTemporary;
-//@property (nonatomic, strong) NSMutableArray *reportIndexesTemporary;
 
 @property (nonatomic, strong) MTPageCaching *pageCaching;
 
@@ -189,11 +186,11 @@ NSString * const MTNullIdentifier = @"(null)";
 
     NSInteger numberOfGroups = [[self sortDescriptorsByGroupSorted] count];
     
-    NSEnumerator *testEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
+    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
     RptqDocumentSection *detailSection = [[self layout] hasDetailSection];
 
     BOOL firstRow = YES;
-    for (NSDictionary *resultRow in testEnumerator) {
+    for (NSDictionary *resultRow in dataEnumerator) {
         
         //Get row id
         NSNumber *rowid = [resultRow objectForKey:@"ROWID"];
@@ -351,8 +348,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addDetailToReportLayout {
-    NSEnumerator *enumeratorForAllObjectsSorted = [[[self query] datatable] enumeratorForAllObjectsSorted];
-    [self setEnumeratorForReportDetail: enumeratorForAllObjectsSorted];
+    //NSEnumerator *enumeratorForAllObjectsSorted = [[[self query] datatable] enumeratorForAllObjectsSorted];
+    //[self setEnumeratorForReportDetail: enumeratorForAllObjectsSorted];
     [self addAllDetail];
 }
 
@@ -416,7 +413,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addReportFooterToReportLayout {
     [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasReportFooterSection]];
     [self addPageFooter];
-    [self cacheReportFooter];
+    [self addReportFooter];
 }
 
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
@@ -433,7 +430,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject: d];
 }
 
-- (void)cacheReportFooter {
+- (void)addReportFooter {
     NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypeReportFooter)};
     [[self pageLayoutTemporary] addObject: d];
 }

@@ -50,10 +50,10 @@
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
             const char *queryStringConstChar = [sql UTF8String];
-            NSLog(@"Sql: %@", sql);
+            //MTLog(@"Sql: %@", sql);
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
             
-            MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
+            //MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
 
             BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
             //NSAssert(success, @"sqlite3_prepare_v2 failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));

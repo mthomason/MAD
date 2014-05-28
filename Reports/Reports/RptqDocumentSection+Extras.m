@@ -98,6 +98,13 @@ static char secKeyKey;
     }
 }
 
+- (NSString *)sectionKey {
+    if ([self secKey] == nil) {
+        [self setSecKey:[self keyForIdentifier]];
+    }
+    return [self secKey];
+}
+
 - (NSString *)secKey {
     return objc_getAssociatedObject(self, &secKeyKey);
 }
@@ -366,10 +373,6 @@ static char secKeyKey;
 - (void)fireFault {
     NSString *marginLeftMethod = NSStringFromSelector(@selector(marginLeft));
     [self valueForKey:marginLeftMethod];
-}
-
-- (NSString *)sectionKey {
-    return [self secKey];
 }
 
 // This is the layout height for page rendering... the designer section height is stored in the db

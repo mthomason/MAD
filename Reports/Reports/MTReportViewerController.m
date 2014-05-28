@@ -782,21 +782,23 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     __weak MTReportViewerController *blockViewer = reportViewer;
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
-    MTApplicationInstance *app = [AppDelegate app];
-    __weak MAReportDocument *doc = [app activeDocument];
-    [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
     
-    if ([self printPageRendererReport] == nil) {
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
-        [self setPrintPageRendererReport: prtingPageRendererReport];
-    }
+    
+    MAReportDocument *doc = [[AppDelegate app] activeDocument];
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
+                                                                           andLayout:[doc activeDocument]];
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
+    [self setPrintPageRendererReport:printPageRender];
+    [doc setReportFormatter:reportFormatter];
+
+    __weak MAReportDocument *weakdoc = doc;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
-        [[doc reportFormatter] setDidRefresh:[self startedRefresh]];
-        [[doc reportFormatter] formatForSize:viewBounds];
+        [[weakdoc reportFormatter] setDidRefresh:[self startedRefresh]];
+        [[weakdoc reportFormatter] formatForSize:viewBounds];
         
-        __weak MAReportDocument *doc2 = doc;
+        __weak MAReportDocument *doc2 = weakdoc;
         __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             

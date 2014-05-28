@@ -586,7 +586,7 @@
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
     
-    MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
+    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
     
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);

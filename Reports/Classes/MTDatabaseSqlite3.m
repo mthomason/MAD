@@ -103,10 +103,10 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
 
 - (void)dealloc {
     if (_bulkStatement != NULL && sqlite3_finalize(_bulkStatement)) {
-        NSAssert1(0, @"Error: failed to finalize bulk statement with message: '%s'.", sqlite3_errmsg(_database));
+        NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
     if (_database != NULL && sqlite3_close(_database) != SQLITE_OK) {   // close short circuts (skips) on null database
-        NSAssert1(0, @"Error: failed to close database with message '%s'.", sqlite3_errmsg(_database));
+        NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
 }
 
@@ -358,13 +358,13 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                 } else if ([data isKindOfClass:[NSData class]]) {
                     success = SQLITE_OK == sqlite3_bind_blob(*statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
                 }
-                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 break;
             }
             case MTDataTypeInteger: {
                 long long integerValue = [[databinding value] longLongValue];
                 success = SQLITE_OK == sqlite3_bind_int64(*statement, columnNumber, integerValue);
-                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 break;
             }
             case MTDataTypeString: {
@@ -372,19 +372,19 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
                 const char *cstr = [stringValue UTF8String];
                 int len = (int)strlen(cstr);
                 success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
-                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 break;
             }
             case MTDataTypeFloat:
             case MTDataTypeDouble: {
                 double doubeValue = [[databinding value] doubleValue];
                 success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, doubeValue);
-                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 break;
             }
             case MTDataTypeNull: {
                 success = SQLITE_OK == sqlite3_bind_null(*statement, columnNumber);
-                NSAssert(success, @"%s", (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
             }
             default:
                 NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
@@ -401,7 +401,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
 
     if ([queryString length] > 0) {
 
-        MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryString);
+        //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryString);
         
         sqlite3_stmt *statement = NULL;
         statement = [self statementForQuery:query andStatement:statement];

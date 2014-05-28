@@ -29,7 +29,6 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
 @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
-
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
 
 + (id)dataTableFactory:(NSDictionary *)parameters;

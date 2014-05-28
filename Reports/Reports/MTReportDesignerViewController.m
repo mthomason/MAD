@@ -2606,8 +2606,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
-        [documentObject setDropPoint:dropPoint];
-        [[documentObject managedObjectContext] save:nil];
+        if (CGPointEqualToPoint(dropPoint, [documentObject dropPoint]) == NO) {
+            [documentObject setDropPoint:dropPoint];
+            [[documentObject managedObjectContext] save:nil];
+        }
     }
 }
 

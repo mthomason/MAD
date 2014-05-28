@@ -24,6 +24,10 @@
 #import "RptqQuery+Extras.h"
 #import "MTDataTable.h"
 
+#import "AppDelegate.h"
+#import "MTApplicationInstance.h"
+
+
 @interface MTDataFormatter ()
 
 @end
@@ -50,7 +54,7 @@
 - (BOOL)format {
     
     BOOL updatedData = NO;
-    
+        
     NSAssert([[self query] datatable] != nil, @"We need a datatable way before here");
     
     NSURL *url = [[[self query] datatable] url];

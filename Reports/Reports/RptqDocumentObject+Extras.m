@@ -177,6 +177,10 @@ static NSNumberFormatter *currencyNumberFormatter;
     [self setDropPointY: y];
 }
 
+- (CGPoint)dropPoint {
+    return CGPointMake(self.dropPointX.floatValue, self.dropPointY.floatValue);
+}
+
 - (void)setOrigin:(CGPoint)origin {
     NSNumber *x = @(origin.x), *y = @(origin.y);
     [self setOriginx: x];
