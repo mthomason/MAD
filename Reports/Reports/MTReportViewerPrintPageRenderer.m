@@ -349,17 +349,19 @@
                             if ([key isEqual: [NSNull null]]) {
                                 safeKey = MTNullIdentifier;
                             }
-                            if ([key isKindOfClass:[NSString class]] == NO) {
-                                safeKey = [NSString stringWithFormat:@"%@", safeKey];
-                            } else {
+                            if ([key isKindOfClass:[NSString class]]) {
                                 safeKey = key;
+                            } else if ([key isKindOfClass:[NSNumber class]]) {
+                                safeKey = [key stringValue];
+                            } else {
+                                safeKey = [NSString stringWithFormat:@"%@", key];
                             }
                             [groupKey appendString:([safeKey isEqual: [NSNull null]]) ? MTNullIdentifier : safeKey];
                         }
                         NSNumber *hash = @([groupKey hash]);
                         
                         id data = [dataCacheForPage objectForKey:hash];
-                        if (data == nil) {
+                        if ([data count] == 0) {
                             if ([groupLevelKeys count] == numberOfGroups) {
                                 data = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
                             } else {

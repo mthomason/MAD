@@ -227,9 +227,9 @@
 }
 
 - (NSString *)idColumnKeyForGroupLocation:(NSInteger)groupLevel {
-    if (groupLevel < [[self groupKeys] count]) {
-        [self initalizeGroupKeys];
-    }
+    //if (groupLevel > [[self groupKeys] count]) {
+    //    [self initalizeGroupKeys];
+    //}
     NSInteger loc = [[self groupKeys][groupLevel] integerValue];
     return [self columnKeys][loc];
 }
@@ -563,6 +563,7 @@
 
 - (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
 
+    [self initalizeGroupKeys];
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
@@ -804,7 +805,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
             }
             default: {
                 NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
-                if (sqlite3_column_type(statement, columnCounter) == SQLITE_TEXT) {
+                if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                     const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                     if (text == NULL) {
                         columnValue = [NSNull null];

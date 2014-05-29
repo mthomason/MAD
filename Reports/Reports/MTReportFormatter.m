@@ -186,10 +186,11 @@ NSString * const MTNullIdentifier = @"(null)";
 
     NSInteger numberOfGroups = [[self sortDescriptorsByGroupSorted] count];
     
-    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
     RptqDocumentSection *detailSection = [[self layout] hasDetailSection];
 
     BOOL firstRow = YES;
+
+    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
     for (NSDictionary *resultRow in dataEnumerator) {
         
         //Get row id
@@ -224,21 +225,11 @@ NSString * const MTNullIdentifier = @"(null)";
 
         id value = lastValues[groupLevel];
         id value2 = currentValues[groupLevel];
-        if (value == [NSNull null]) {
-            value = @"";
-        }
-        if (value2 == [NSNull null]) {
-            value2 = @"";
-        }
 
         NSSortDescriptor *sortDesc = [self sortDescriptorsByGroupSorted][groupLevel];
         SEL comparec = [sortDesc selector];
-        NSComparisonResult comparsonResult;
-        if (comparec == @selector(localizedCaseInsensitiveCompare:)) {
-            comparsonResult = [value localizedCaseInsensitiveCompare:value2];
-        } else {
-            comparsonResult = [value compare:value];
-        }
+        NSComparisonResult comparsonResult = [self compareValue:value withValue:value2 usingSelector:comparec];
+        
         BOOL newFooter = comparsonResult != NSOrderedSame;
         
         if (newFooter) {
@@ -250,6 +241,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)displayNewGroupHeadersIfNeeded:(NSArray *)currentValues andLastValues:(NSArray *)lastValues {
+
     for (NSInteger groupLevel = 0; groupLevel < [currentValues count]; groupLevel++) {
 
         BOOL newHeader = [lastValues count] == 0;
@@ -257,23 +249,14 @@ NSString * const MTNullIdentifier = @"(null)";
 
             id value = lastValues[groupLevel];
             id value2 = currentValues[groupLevel];
-            if (value == [NSNull null]) {
-                value = @"";
-            }
-            if (value2 == [NSNull null]) {
-                value2 = @"";
-            }
-
+            
             NSSortDescriptor *sortDesc = [self sortDescriptorsByGroupSorted][groupLevel];
             SEL comparec = [sortDesc selector];
-            NSComparisonResult comparsonResult;
-            if (comparec == @selector(localizedCaseInsensitiveCompare:)) {
-                comparsonResult = [value localizedCaseInsensitiveCompare:value2];
-            } else {
-                comparsonResult = [value compare:value2];
-            }
+            NSComparisonResult comparsonResult = [self compareValue:value withValue:value2 usingSelector:comparec];
+            
             newHeader = comparsonResult != NSOrderedSame;
         }
+        
         
         if (newHeader) {
             RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
@@ -282,9 +265,31 @@ NSString * const MTNullIdentifier = @"(null)";
             NSRange range = NSMakeRange(0, groupLevel + 1);
             NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
             NSArray *currentKeys = [currentValues objectsAtIndexes:indexSet];
+
             [self addGroupHeaderLevel:groupLevel withKeys:currentKeys];
         }
     }
+}
+
+- (NSComparisonResult)compareValue:(id)value withValue:(id)value2 usingSelector:(SEL)selector {
+    NSComparisonResult comparsonResult;
+    
+    if (value == [NSNull null]) {
+        if (value2 == [NSNull null]) {
+            comparsonResult = NSOrderedSame;
+        } else {
+            comparsonResult = NSOrderedAscending;
+        }
+    } else if (value2 == [NSNull null]) {
+        comparsonResult = NSOrderedDescending;
+    } else {
+        if (selector == @selector(localizedCaseInsensitiveCompare:)) {
+            comparsonResult = [value localizedCaseInsensitiveCompare:value2];
+        } else {
+            comparsonResult = [value compare:value2];
+        }
+    }
+    return comparsonResult;
 }
 
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex {
