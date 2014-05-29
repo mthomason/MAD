@@ -47,7 +47,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong, readwrite) NSMutableArray *reportIndexes;
 @property (nonatomic, strong, readwrite) NSMutableArray *reportLayout;
+
 @property (nonatomic, strong) MTPageCaching *pageCachingVirtual;
+@property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
 
 @property (nonatomic, assign) CGSize printableSize;
@@ -64,7 +66,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
 
-@property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
 @end
 
@@ -232,6 +233,11 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL firstRow = YES;
 
     NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
+
+    
+    NSArray *sqg = [[self query] sortedHasQueryGroups];
+    [self setSortedQueryGroups:sqg];
+    
     for (NSDictionary *resultRow in dataEnumerator) {
         
         //Get row id

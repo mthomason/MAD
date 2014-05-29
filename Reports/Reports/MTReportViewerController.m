@@ -781,8 +781,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     __weak MTReportViewerController *blockViewer = reportViewer;
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
-    
-    
     MAReportDocument *doc = [[AppDelegate app] activeDocument];
     MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
                                                                            andLayout:[doc activeDocument]];

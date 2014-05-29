@@ -23,6 +23,7 @@
 #import "RptqDatabaseSchemaField+Extras.h"
 
 @interface MTViewControllerValueBasedOnField ()
+    <UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableViewMain;
 @property (nonatomic, weak) IBOutlet UIView *pickerViewBackground;
@@ -45,12 +46,9 @@
         [longStyleDateFormatter setTimeStyle:NSDateFormatterLongStyle];
         [longStyleDateFormatter setLocale:[NSLocale currentLocale]];
         [self setLongStyleDateFormatter:longStyleDateFormatter];
+        
     }
     return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Actions
@@ -63,54 +61,47 @@
     [self done:sender];
 }
 
-- (void)textFieldDidEndOnExit:(id)sender {
-    [self done:sender];
-}
-
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+- (void)loadPickerView {
+    //__weak MTViewControllerValueBasedOnField *weakself = self;
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
+    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
+                                                                fromObjectContext: objectContext];
     
-    dispatch_async(queuePriorityBackground, ^{
-        
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
-        RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
-                                                                    fromObjectContext: objectContext];
-        
-        MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
-        [querySampleDataField performQuery:^(BOOL success, NSError *error) {
-            if (success) {
-                [self setPickerData:[querySampleDataField datatable]];
-                [[self pickerView] reloadAllComponents];
-            } else {
-                [error presentErrorToUser];
-            }
-        }];
-        
-    });
-
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
+    
+    __weak MTViewControllerValueBasedOnField *weakself2 = self;
+    [querySampleDataField performQuery:^(BOOL success, NSError *error) {
+        if (success) {
+            
+            //__weak MTViewControllerValueBasedOnField *weakself3 = weakself2;
+            
+            [weakself2 setPickerData:[querySampleDataField datatable]];
+            [[weakself2 pickerView] reloadAllComponents];
+            
+            [[weakself2 pickerView] setNeedsDisplay];
+            [[weakself2 pickerView] selectRow:0 inComponent:0 animated:NO];
+            
+            
+        } else {
+            [error presentErrorToUser];
+        }
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
     [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-
     [[self textField] setText:[self pickerView: [self pickerView]
                                    titleForRow: 0
                                   forComponent: 0]];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+    
+    [self loadPickerView];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -179,7 +170,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *MTTableViewCellTextFieldIdentifier = @"MTTableViewCellPredicateEnterValueString";
+    
     MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
+    
+    [[result textField] setReturnKeyType:UIReturnKeyDone];
+    //[[result textField] addTarget:self action:@selector(didEndEditing:) forControlEvents:UIControlEventEditingDidEnd];
+    [[result textField] setDelegate:self];
+    
     [self setTextField:[result textField]];
     return result;
 }
@@ -188,6 +185,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end
