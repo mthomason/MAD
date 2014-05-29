@@ -24,6 +24,7 @@ extern NSString * const MTNullIdentifier;
 
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
+- (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged;
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page;
 

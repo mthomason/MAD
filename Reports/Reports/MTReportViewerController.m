@@ -527,9 +527,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     [reportViewerController setDisplayActive];
-    MTApplicationInstance *app = [AppDelegate app];
-    MAReportDocument *doc = [app activeDocument];
-    [[doc reportFormatter] formatForSize:frame.size];
+    MAReportDocument *doc = [[AppDelegate app] activeDocument];
+    [[doc reportFormatter] formatForSize:frame.size options:0 contentChanged:NO];
     
     NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
     [reportViewerController setNumberOfPages:numberOfPages];

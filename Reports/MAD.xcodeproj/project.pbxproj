@@ -1295,6 +1295,8 @@
 		4CABE4BC1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CABE4BA1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CAE00CC1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
 		4CAE00CD1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */; };
+		4CAE370F1937634D0096F206 /* MTReportFormatterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE370E1937634D0096F206 /* MTReportFormatterCache.m */; };
+		4CAE37101937634D0096F206 /* MTReportFormatterCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CAE370E1937634D0096F206 /* MTReportFormatterCache.m */; };
 		4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
 		4CB0FF6716F4B7A800B88626 /* UIDevice+Hack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */; };
 		4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB0FF6C16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m */; };
@@ -2641,6 +2643,8 @@
 		4CABE4BA1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObjectBarcode.m; sourceTree = "<group>"; };
 		4CAE00CA1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationControllerHideBottomBarUnlicensed.h; sourceTree = "<group>"; };
 		4CAE00CB1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationControllerHideBottomBarUnlicensed.m; sourceTree = "<group>"; };
+		4CAE370D1937634D0096F206 /* MTReportFormatterCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatterCache.h; sourceTree = "<group>"; };
+		4CAE370E1937634D0096F206 /* MTReportFormatterCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatterCache.m; sourceTree = "<group>"; };
 		4CB0FF6416F4B7A800B88626 /* UIDevice+Hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hack.h"; sourceTree = "<group>"; };
 		4CB0FF6516F4B7A800B88626 /* UIDevice+Hack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hack.m"; sourceTree = "<group>"; };
 		4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTToolboxViewControllerProtocol.h; path = Reports/MTToolboxViewControllerProtocol.h; sourceTree = "<group>"; };
@@ -3240,6 +3244,8 @@
 				4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */,
 				4C95C42D18DB6B6D003DFB11 /* MTReportFormatter.h */,
 				4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */,
+				4CAE370D1937634D0096F206 /* MTReportFormatterCache.h */,
+				4CAE370E1937634D0096F206 /* MTReportFormatterCache.m */,
 			);
 			name = Formatters;
 			sourceTree = "<group>";
@@ -6162,6 +6168,7 @@
 				4C23FBD718FAE4F7009F234F /* MTPaperC7.m in Sources */,
 				4C23FB2318FADDAA009F234F /* MADUpgradeViewController.m in Sources */,
 				4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */,
+				4CAE37101937634D0096F206 /* MTReportFormatterCache.m in Sources */,
 				4C40EC0919349A7A00F12AAC /* MADocumentState.m in Sources */,
 				4C23FB1118FADD17009F234F /* objcmad.c in Sources */,
 				4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
@@ -6639,6 +6646,7 @@
 				4C23FBD018FAE4F7009F234F /* MTPaperC4.m in Sources */,
 				4CF339441693E5B400390B3A /* MTFont.m in Sources */,
 				4CE3143716952E3B00114431 /* MTTextView.m in Sources */,
+				4CAE370F1937634D0096F206 /* MTReportFormatterCache.m in Sources */,
 				4C40EC0819349A7A00F12AAC /* MADocumentState.m in Sources */,
 				4C23FBFC18FAE5DF009F234F /* MTDatabaseConnectionSqlServer.m in Sources */,
 				4C4C78C016960C23000ADD1D /* UIColor+Gradients.m in Sources */,

@@ -8,49 +8,53 @@
 
 #import "MTReportFormatterCache.h"
 
-NSString * const MTDeviceOrientationLandscape = @"l";
-NSString * const MTDeviceOrientationPortrait = @"p";
-
 @interface MTReportFormatterCache ()
 
-@property (nonatomic, strong) NSMutableDictionary *layoutByOrientation;
-@property (nonatomic, strong) NSMutableDictionary *indexesByOrientation;
+@property (nonatomic, strong) NSMutableDictionary *layout;
+@property (nonatomic, strong) NSMutableDictionary *indexes;
 
 @end
 
 @implementation MTReportFormatterCache
 
+- (void)dealloc {
+    [_layout removeAllObjects];
+    [_indexes removeAllObjects];
+}
+
 - (id)init {
     if (self = [super init]) {
+        
         NSMutableDictionary *layout = [[NSMutableDictionary alloc] initWithCapacity:2];
-        [self setLayoutByOrientation:layout];
+        [self setLayout:layout];
         
         NSMutableDictionary *indexes = [[NSMutableDictionary alloc] initWithCapacity:2];
-        [self setIndexesByOrientation:indexes];
+        [self setIndexes:indexes];
     }
     return self;
 }
 
-- (void)setLayout:(NSArray *)layout andIndexes:(NSArray *)indexes forKey:(NSString *)key {
-    [self layoutByOrientation][key] = layout;
-    [self indexesByOrientation][key] = layout;
+- (void)setLayout:(NSArray *)layout andIndexes:(NSArray *)indexes forSize:(CGSize)size {
+    NSString *key = NSStringFromCGSize(size);
+    NSArray *l = [NSArray arrayWithArray:layout];
+    NSArray *i = [NSArray arrayWithArray:indexes];
+    [[self layout] setObject:l forKey:key];
+    [[self indexes] setObject:i forKey:key];
 }
 
-- (NSArray *)layoutForOrientation:(UIDeviceOrientation)orientation {
-    return [self layoutByOrientation][[self keyForOrientation:orientation]];
+- (NSArray *)layoutForSize:(CGSize)size {
+    NSString *key = NSStringFromCGSize(size);
+    return [[self layout] objectForKey:key];
 }
 
-- (NSArray *)indexesByOrientation:(UIDeviceOrientation)orientation {
-    return [self indexesByOrientation][[self keyForOrientation:orientation]];
-}
-
-- (NSString *)keyForOrientation:(UIDeviceOrientation)orientation {
-    return UIDeviceOrientationIsLandscape(orientation) ? MTDeviceOrientationLandscape : MTDeviceOrientationPortrait;
+- (NSArray *)indexesForSize:(CGSize)size {
+    NSString *key = NSStringFromCGSize(size);
+    return [[self indexes] objectForKey:key];
 }
 
 - (void)dumpCache {
-    [[self layoutByOrientation] removeAllObjects];
-    [[self indexesByOrientation] removeAllObjects];
+    [[self layout] removeAllObjects];
+    [[self indexes] removeAllObjects];
 }
 
 @end
