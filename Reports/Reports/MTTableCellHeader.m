@@ -47,9 +47,9 @@
 
 - (void)initalize {
     UILabel *lbl = [[UILabel alloc] initWithFrame:[self bounds]];
-    UIColor *bgcolor = [UIColor tintColor];
+    UIColor *bgcolor = [UIColor tintColorBlue];
     [lbl setBackgroundColor:bgcolor];
-    [lbl setTextColor:[UIColor tintColor2]];
+    [lbl setTextColor:[UIColor tintColorWhite]];
     [lbl setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
     [self addSubview:lbl];
     [self setLabel:lbl];

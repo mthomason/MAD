@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIColor *barTintColor = [UIColor tintColor];
+    UIColor *barTintColor = [UIColor tintColorBlue];
     [[self navigationController] toolbar] setBarTintColor:barTintColor];
     [[[self navigationController] navigationBar] setTintColor:barTintColor];
 }

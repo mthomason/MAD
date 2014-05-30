@@ -203,8 +203,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         }];
     }
 
-    UIColor *barTintColor = [UIColor tintColor];
-    UIColor *tintColor = [UIColor tintColor2];
+    UIColor *barTintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [UIColor tintColorWhite];
     UIToolbar *toolbar = [[self navigationController] toolbar];
     [toolbar setBarTintColor:barTintColor];
     [toolbar setTintColor:tintColor];
@@ -1205,7 +1205,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [[result textLabel] setFont: font];
             [[result textLabel] setBackgroundColor:[UIColor whiteColor]];
             [result setIndentationLevel: 1];
-            [result setTintColor:[UIColor tintColor]];
+            [result setTintColor:[UIColor tintColorBlue]];
             [result setBackgroundColor:[UIColor whiteColor]];
             [result setSelectionStyle:UITableViewCellSelectionStyleNone];
             
@@ -1240,7 +1240,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSString *linksDescription = [links linkDescription];
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
             NSDictionary *attributes = @{ NSFontAttributeName : font, NSParagraphStyleAttributeName : paragraphStyle };
-            UIColor *color = [UIColor tintColor];
+            UIColor *color = [UIColor tintColorBlue];
             NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption, NSForegroundColorAttributeName :  color};
             NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
@@ -1271,7 +1271,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSDictionary *attributes = @{ NSFontAttributeName : font };
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
             NSDictionary *attributesLeft = @{ NSParagraphStyleAttributeName : paragraphStyleLeft };
-            UIColor *color = [UIColor tintColor];
+            UIColor *color = [UIColor tintColorBlue];
             NSDictionary *attributesRight = @{ NSParagraphStyleAttributeName : paragraphStyleLeft, NSFontAttributeName : fontCaption, NSForegroundColorAttributeName :  color };
             NSRange rangeLeft = [messageText rangeOfString:fieldName];
             NSRange rangeRange = [messageText rangeOfString:sortFieldName];
@@ -1309,7 +1309,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSString *symbol = [predicate symbolForDisplay];
             NSString *messageText = [NSString stringWithFormat:formatString, leftFieldDisplay, symbol, rightFieldDisplay];
             NSDictionary *attributes = @{ NSFontAttributeName : font };
-            UIColor *color = [UIColor tintColor];
+            UIColor *color = [UIColor tintColorBlue];
             NSDictionary *attributesCaption = @{ NSForegroundColorAttributeName :  color };
 
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];

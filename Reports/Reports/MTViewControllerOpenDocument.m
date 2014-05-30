@@ -233,8 +233,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     //[self setApplicationInstance: appInstance];
     //[appInstance release];
     
-    UIColor *barTintColor = [UIColor tintColor];
-    UIColor *tintColor = [UIColor tintColor2];
+    UIColor *barTintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [UIColor tintColorWhite];
     UIToolbar *toolbar = [[self navigationController] toolbar];
     [toolbar setBarTintColor:barTintColor];
     [toolbar setTintColor:tintColor];

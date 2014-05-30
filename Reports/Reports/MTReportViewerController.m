@@ -333,8 +333,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)setTintColorForToolbar:(UIToolbar *)toolbar {
-    UIColor *barTintColor = [UIColor tintColor];
-    UIColor *tintColor = [UIColor tintColor2];
+    UIColor *barTintColor = [UIColor tintColorBlue];
+    UIColor *tintColor = [UIColor tintColorWhite];
     [toolbar setBarTintColor:barTintColor];
     [toolbar setTintColor:tintColor];
 }
@@ -620,6 +620,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [activityIndicator startAnimating];
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
+    //[activityIndicator setColor:[UIColor tintColorGold2]];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
     

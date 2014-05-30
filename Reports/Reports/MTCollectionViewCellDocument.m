@@ -30,7 +30,7 @@
     CGSize offsetSize = CGSizeMake(offset, offset);
     [[[self imagePreview] layer] setShadowOffset:offsetSize];
 
-    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
     [[self labelTitle] setClipsToBounds:NO];
     
     [[[self selectedBackgroundView] layer] setCornerRadius:5.0000f];
@@ -45,7 +45,7 @@
 }
 
 - (void)performDeselectionAnimations {
-    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
 }
 
 - (void)setText:(NSString *)text {
@@ -68,7 +68,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        UIColor *bgColor = [[UIColor tintColor] colorWithAlphaComponent:0.70000f];
+        UIColor *bgColor = [[UIColor tintColorBlue] colorWithAlphaComponent:0.70000f];
         [self setBgColor:bgColor];
         
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
@@ -96,7 +96,7 @@
 }
 
 - (BOOL)resignFirstResponder {
-    [[self labelTitle] setTextColor:[UIColor tintColor]];
+    [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
     return YES;
 }
 

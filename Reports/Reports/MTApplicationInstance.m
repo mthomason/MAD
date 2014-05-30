@@ -11,6 +11,9 @@
 #endif
 
 #import "MTApplicationInstance.h"
+#import <CoreData/CoreData.h>
+#import "MTQueryBuilderViewController.h"
+
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 #import "MAReportDocument.h"
@@ -33,9 +36,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.523";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.523";
-NSString * const MTGlobalBundleRev                                  = @"1144";
+NSString * const MTGlobalBundleVersion                              = @"1.0.524";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.524";
+NSString * const MTGlobalBundleRev                                  = @"1145";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -511,6 +514,86 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         rowCounter++;
     } while (logoRect.origin.y + logoRect.size.height < rect.size.height);
     
+}
+
+- (void)initalizeAppearance {
+    UIColor *tintColorWhite = [UIColor tintColorWhite];
+    UIColor *tintColorRed = [UIColor tintColorRed];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil] setTintColor:tintColorWhite];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTintColor:tintColorWhite];
+    [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil] setColor:tintColorRed];
+    
+    [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil] setColor:tintColorRed];
+    
+    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
+    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes
+                                             forState: UIControlStateNormal];
+}
+
+- (id)mainWindow {
+    //Dynamically choose which storyboard to run.
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
+    id initViewController = [storyBoard instantiateInitialViewController];
+    [window setRootViewController:initViewController];
+    [window makeKeyAndVisible];
+    return window;
+}
+
+- (void)deleteCoreDataCache {
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(dipatchQueue, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            dispatch_async(dipatchQueueBg, ^{
+                
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+            });
+        });
+    });
+}
+
+- (void)registerDefaultsFromSettingsBundle {
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(dipatchQueue, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            dispatch_async(dipatchQueueBg, ^{
+                
+                NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+                [standardUserDefaults synchronize];
+                
+                NSString *pathSettingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
+                NSAssert(pathSettingsBundle, @"Could not find Settings.bundle");
+                NSString *pathRootPlist = [pathSettingsBundle stringByAppendingPathComponent:@"Root.plist"];
+                
+                
+                NSDictionary *rootPlistSettings = [NSDictionary dictionaryWithContentsOfFile:pathRootPlist];
+                NSArray *preferences = [rootPlistSettings objectForKey:@"PreferenceSpecifiers"];
+                NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
+                
+                for (NSDictionary *prefSpecification in preferences)  {
+                    NSString *key = [prefSpecification objectForKey:@"Key"];
+                    if (key) {
+                        
+                        id currentObject = [standardUserDefaults objectForKey:key];
+                        if (currentObject == nil) {
+                            
+                            id objectToSet = [prefSpecification objectForKey:@"DefaultValue"];
+                            [defaultsToRegister setObject:objectToSet forKey:key];
+                        }
+                    }
+                }
+                
+                [standardUserDefaults registerDefaults:defaultsToRegister];
+                [standardUserDefaults synchronize];
+            });
+        });
+    });
 }
 
 @end

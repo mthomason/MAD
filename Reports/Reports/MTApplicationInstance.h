@@ -50,8 +50,12 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler;
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
 
-
 - (MAReportDocument *)activeDocument;
+
+- (void)initalizeAppearance;
+- (id)mainWindow;
+- (void)deleteCoreDataCache;
+- (void)registerDefaultsFromSettingsBundle;
 
 + (NSString *)applicationName;
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner;

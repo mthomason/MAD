@@ -55,33 +55,36 @@
 //    [[[self navigationController] view] setBackgroundColor:[UIColor clearColor]];
 //    [[self view] setBackgroundColor:[UIColor clearColor]];
 //    [[self collectionView] setBackgroundColor:[UIColor clearColor]];
-    [[self collectionView] setBackgroundColor:[UIColor tintColor]];
+    [[self collectionView] setBackgroundColor:[UIColor tintColorBlue]];
     [[self collectionView] setAlwaysBounceHorizontal:YES];
     [[self collectionView] setAlwaysBounceVertical:YES];
     
     UINavigationItem *navitagionItem = [self navigationItem];
     UIBarButtonItem *barButtonItemDone = [navitagionItem rightBarButtonItem];
-    [barButtonItemDone setTintColor:[UIColor tintColorRed]];
+    //UIColor *redColor = [UIColor tintColorGold];
+    [barButtonItemDone setTintColor:[UIColor tintColorWhite]];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
     [activityIndicator startAnimating];
+    //[activityIndicator setColor:redColor];
     UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 
     [navitagionItem setRightBarButtonItem:barButtonItemActive];
     
+    __weak MTTableController *weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
 
-        
-        [[[self tableFormatter] query] performQuery:^(BOOL success, NSError *error) {
+        __weak MTTableController *weakSelf2 = weakSelf;
+        [[[weakSelf tableFormatter] query] performQuery:^(BOOL success, NSError *error) {
             
             [navitagionItem performSelectorOnMainThread:@selector(setRightBarButtonItem:) withObject:barButtonItemDone waitUntilDone:NO];
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
             [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
-            [self performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
+            [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
 
         }];
 

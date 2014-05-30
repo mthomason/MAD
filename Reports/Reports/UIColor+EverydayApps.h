@@ -21,10 +21,10 @@
 + (id)edaGreenLight;
 
 + (id)edaTableHeaderBackground;
-+ (id)tintColor;
++ (id)tintColorBlue;
 + (id)tintColorRed;
-+ (id)tintColor2;
-+ (id)tintColor3;
-+ (id)tintColor4;
++ (id)tintColorWhite;
++ (id)tintColorGold;
++ (id)tintColorGold2;
 
 @end

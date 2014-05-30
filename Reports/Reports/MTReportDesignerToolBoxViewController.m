@@ -87,7 +87,7 @@
     UIColor *tintColor = [UIColor tintColorRed];
     [rightBarButtonItem setTintColor:tintColor];
     UISegmentedControl *segmentedControl = (UISegmentedControl *)[leftBarButtonItem customView];
-    [segmentedControl setTintColor:[UIColor tintColor2]];
+    [segmentedControl setTintColor:[UIColor tintColorWhite]];
     [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self setSceneSelector:segmentedControl];
     UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];

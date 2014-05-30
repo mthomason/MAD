@@ -106,12 +106,12 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     //[self setHighlight: NO];
-    [[self titleLabel] setTextColor:[UIColor tintColor]];
+    [[self titleLabel] setTextColor:[UIColor tintColorBlue]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     //[self setHighlight: NO];
-    [[self titleLabel] setTextColor:[UIColor tintColor]];
+    [[self titleLabel] setTextColor:[UIColor tintColorBlue]];
 }
 
 

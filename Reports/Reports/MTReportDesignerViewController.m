@@ -547,8 +547,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[self viewControllerSectionLayoutSettings]];
 
-    [[navigationController navigationBar] setBarTintColor:[UIColor tintColor]];
-    [[navigationController navigationBar] setTintColor:[UIColor tintColor2]];
+    [[navigationController navigationBar] setBarTintColor:[UIColor tintColorBlue]];
+    [[navigationController navigationBar] setTintColor:[UIColor tintColorWhite]];
     UIColor *whiteColor = [UIColor whiteColor];
     NSDictionary *textAttribues = @{ NSForegroundColorAttributeName : whiteColor };
     [[navigationController navigationBar] setTitleTextAttributes:textAttribues];
@@ -1910,7 +1910,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)applyBorderToView:(UIView *)view {
     NSNumber *key = @([view tag]);
     [[self borderAppliedToView] setObject:@YES forKey:key];
-    UIColor *tintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColorBlue];
     [[view layer] setBorderColor:[tintColor CGColor]];
     [[view layer] setBorderWidth:1.0000f / [[UIScreen mainScreen] scale]];
 }
@@ -3278,7 +3278,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
                     DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
                     [sectionLabel dimView];
-                    UIColor *borderColor = [UIColor tintColor];
+                    UIColor *borderColor = [UIColor tintColorBlue];
                     UIView *superView = [self getSectionViewForDocumentSection: section];
                     [[superView layer] setBorderColor:  [borderColor CGColor]];
                     [[superView layer] setBorderWidth:  1.0000f];

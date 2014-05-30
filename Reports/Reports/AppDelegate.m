@@ -85,53 +85,21 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    
     //Log uncaught errors.
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-
-    //Setup iCloud KVS
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter addObserver: self
-                      selector: @selector(keyValueStoreDidChange:)
-                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                        object: nil];
     
-    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-    [defaultStore synchronize];
-
-    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    [self initalizeApplicationInstance];
+    [self initalizeICloudKvs];
+    [[self applicationInstance] initalizeAppearance];
+    [[self applicationInstance] deleteCoreDataCache];
     
-    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
-    [self setApplicationInstance:appInstance];
-    
-    UIColor *titleTextColor = [UIColor tintColor2];
-    NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : titleTextColor};
-
-    
-    [[UITabBarItem appearance] setTitleTextAttributes:titleTextAttributes
-                                             forState:UIControlStateNormal];
-    
-    [self deleteCoreDataCache];
-    
-    //Dynamically choose which storyboard to run.
-    UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
-    [window setTintColor:[UIColor tintColor]];
-    
-    //Getting inital view controller
-    id initViewController = [storyBoard instantiateInitialViewController];
-    [window setRootViewController:initViewController];
-    [window makeKeyAndVisible];
+    UIWindow *window = [[self applicationInstance] mainWindow];
     [self setWindow: window];
 
-    //Startup strore kit.
     [MTStoreKitController sharedObject];
-
-    
     [MACloudManager sharedManager];
-
-    
-    [self registerDefaultsFromSettingsBundle];
+    [[self applicationInstance] registerDefaultsFromSettingsBundle];
     
     return YES;
 }
@@ -184,17 +152,7 @@ const NSInteger MATagNewDocument = 3838;
     return [UIDevice isPad] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
-- (void)deleteCoreDataCache {
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(dipatchQueue, ^{
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-        [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
-    });
-}
-
+/*
 - (void)registerDefaultsFromSettingsBundle {
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(dipatchQueue, ^{
@@ -228,6 +186,7 @@ const NSInteger MATagNewDocument = 3838;
         [standardUserDefaults synchronize];
     });
 }
+*/
 
 #pragma mark - Key Value Store Notifications
 
@@ -257,7 +216,7 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
     // Otherwise, remove the key.
     
     if (currentToken) {
-        NSData* newTokenData = [NSKeyedArchiver archivedDataWithRootObject:currentToken];
+        NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:currentToken];
         [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:MTICloudUbiquityToken];
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:MTICloudUbiquityToken];
@@ -287,18 +246,37 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
 }
 
 - (void)initFonts {
+
+    __weak AppDelegate *weakself = self;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MTCellSkinner"];
-        
         UIFont *detailFont = [[cell detailTextLabel] font];
         UIFontDescriptor *detailFontDescriptor = [detailFont fontDescriptor];
-        [self setDetailFontDescriptor:detailFontDescriptor];
+        [weakself setDetailFontDescriptor:detailFontDescriptor];
         
         UIFont *mainFont = [[cell textLabel] font];
         UIFontDescriptor *mainFontDescriptor = [mainFont fontDescriptor];
-        [self setMainFontDescriptor:mainFontDescriptor];
+        [weakself setMainFontDescriptor:mainFontDescriptor];
     });
+}
+
+- (void)initalizeApplicationInstance {
+    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
+    [self setApplicationInstance:appInstance];
+}
+
+- (void)initalizeICloudKvs {
+    //Setup iCloud KVS
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver: self
+                      selector: @selector(keyValueStoreDidChange:)
+                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                        object: nil];
+    
+    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
+    [defaultStore synchronize];
 }
 
 @end

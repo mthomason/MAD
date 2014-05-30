@@ -28,7 +28,7 @@
         [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
         [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
         [labelSectionIdentifer setFont:[UIFont systemFontOfSize:10.0000f]];
-        UIColor *tintColor = [UIColor tintColor];
+        UIColor *tintColor = [UIColor tintColorBlue];
         [labelSectionIdentifer setTextColor:tintColor];
         [labelSectionIdentifer setText: displayText];
         [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -42,7 +42,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    UIColor *color = [UIColor tintColor];
+    UIColor *color = [UIColor tintColorBlue];
     if ([self selected]) {
         [[self labelSectionIdentifer] setTextColor:[color colorWithAlphaComponent:0.500f]];
     } else {
@@ -56,14 +56,14 @@
 }
 
 - (void)dimView {
-    UIColor *tintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColorBlue];
     [[self labelSectionIdentifer] setTextColor:[tintColor colorWithAlphaComponent:0.500f]];
     [self setSelected:YES];
 }
 
 - (void)normalView {
     
-    UIColor *tintColor = [UIColor tintColor];
+    UIColor *tintColor = [UIColor tintColorBlue];
     [[self labelSectionIdentifer] setTextColor:tintColor];
     [self setSelected:NO];
 }

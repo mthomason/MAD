@@ -99,7 +99,7 @@ static size_t const kDashedCount            = (2.0f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, kDashedBorderWidth);
-    UIColor *tintColor = [UIColor tintColor4];
+    UIColor *tintColor = [UIColor tintColorGold2];
     CGContextSetStrokeColorWithColor(context, tintColor.CGColor);
     CGContextSetLineDash(context, kDashedPhase, kDashedLinesLength, kDashedCount) ;
     CGContextAddRect(context, rect);
