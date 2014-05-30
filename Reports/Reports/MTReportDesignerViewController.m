@@ -3346,31 +3346,30 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             if (newSection != nil) {
                 
                 __weak MTReportDesignerViewController *reportDesigner = self;
+                MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                 
-                MTBlockCompletionNoReturn update = ^(void) {
-                    MTApplicationInstance *app = [AppDelegate app];
-                    MAReportDocument *reportDocument = [app activeDocument];
-                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-                    NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
-                    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
-                    CGRect frame = [[gestureRecognizer view] frame];
-                    [[gestureRecognizer view] removeFromSuperview];
-                    
-                    NSManagedObjectID *sectionId = [newSection objectIdTag];
-                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
-                                                                                            fromObjectContext: managedObjectContext];
+                NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
+                
+                [[gestureRecognizer view] removeFromSuperview];
+                
+                NSManagedObjectID *sectionId = [newSection objectIdTag];
+                
+                CGRect frame = [[gestureRecognizer view] frame];
+                __weak RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
+                __weak RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
+                                                                                        fromObjectContext: managedObjectContext];
+                
+                [newSection performBatchUpdates:^(void) {
                     
                     NSIndexPath *indexPathInsert = [documentSection addDocumentObject:documentObject withDropPoint:frame.origin];
                     NSArray *indexPathsInserted = @[indexPathInsert];
                     [newSection insertItemsAtIndexPaths:indexPathsInserted];
+                    [[documentSection managedObjectContext] save:nil];
 
-                };
-                
-                MTBlockCompletionSimple finishedUpdate = ^(BOOL finished) {
+                } completion:^(BOOL finished) {
                     if (finished) [reportDesigner resizeCollectionView:newSection];
-                };
-                
-                [newSection performBatchUpdates:update completion:finishedUpdate];
+                }];
                 
             }
 

@@ -428,12 +428,20 @@
                                                     break;
                                                 }
                                                 case MTAggregateGroupByTypeSection: {
-                                                    dataForGroup = [[self reportFormatter] dataForGroupKeys:groupLevelKeys];
+                                                    NSInteger groupCount = [[aggregateField groupNumber] integerValue];
+                                                    if (groupCount < [groupLevelKeys count]) {
+                                                        NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
+                                                        NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
+                                                        dataForGroup = [[self reportFormatter] dataForGroupKeys:groupKeys];
+                                                    } else {
+                                                        dataForGroup = @[];
+                                                    }
                                                     break;
                                                 }
-                                                case MTAggregateGroupByTypeReport:
+                                                case MTAggregateGroupByTypeReport: {
                                                     dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
                                                     break;
+                                                }
                                                     
                                                 default:
                                                     dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
