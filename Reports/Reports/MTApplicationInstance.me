@@ -36,9 +36,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.525";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.525";
-NSString * const MTGlobalBundleRev                                  = @"1146";
+NSString * const MTGlobalBundleVersion                              = @"1.0.526";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.526";
+NSString * const MTGlobalBundleRev                                  = @"1147";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -519,6 +519,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 - (void)initalizeAppearance {
     UIColor *tintColorWhite = [UIColor tintColorWhite];
     UIColor *tintColorRed = [UIColor tintColorRed];
+    UIColor *edaGreen = [UIColor edaGreenLight];
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil] setTintColor:tintColorWhite];
@@ -526,8 +527,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil] setTintColor:tintColorWhite];
     [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil] setTintColor:tintColorWhite];
 
-    [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil] setColor:tintColorRed];
-    [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil] setColor:tintColorRed];
+    [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil] setColor:edaGreen];
+    [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil] setColor:edaGreen];
     
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes  forState: UIControlStateNormal];
     

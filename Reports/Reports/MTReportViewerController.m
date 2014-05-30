@@ -78,11 +78,11 @@
 
 @property (nonatomic, strong) UILabel *labelStatus;
 
-@property (nonatomic, strong) NSDictionary *attributesLabelDateUpdated;
+//@property (nonatomic, strong) NSDictionary *attributesLabelDateUpdated;
 
-@property (nonatomic, strong) NSDictionary *attributesLabelNumberOfPages;
-@property (nonatomic, strong) NSDictionary *attributesRecordsRead;
-@property (nonatomic, strong) NSDictionary *attributesStatusLabel;
+//@property (nonatomic, strong) NSDictionary *attributesLabelNumberOfPages;
+//@property (nonatomic, strong) NSDictionary *attributesRecordsRead;
+//@property (nonatomic, strong) NSDictionary *attributesStatusLabel;
 
 @property (nonatomic, strong) NSAttributedString *statusMessage1;
 @property (nonatomic, strong) NSAttributedString *statusMessage2;
@@ -91,6 +91,8 @@
 @end
 
 @implementation MTReportViewerController
+
+#pragma mark - Dealloc
 
 - (void)dealloc {
     _asyncDelegate = nil;
@@ -107,6 +109,8 @@
         _timerLabelTimeSinceRefreh = nil;
     }
 }
+
+#pragma mark - Initalize
 
 - (id)init {
     self = [super init];
@@ -141,14 +145,31 @@
 }
 
 - (void)initalize {
-    
-    UIToolbar *vertToolbar = [[UIToolbar alloc] init];
+    [self initializeVerticalSlider];
+    [self initalizeLabelStatus];
+    [self initalizeStatusMessages];
+}
+
+- (void)initializeVerticalSlider {
     MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
     [vertSlider setMaximumValue:0];
     [vertSlider setMinimumValue:0];
     [vertSlider setContinuous:YES];
     [vertSlider setTintColor:[UIColor tintColorRed]];
+    
+    UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapped:)];
+    [vertSlider addGestureRecognizer:sliderTapped];
+    
+    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * M_PI);
+    [self setPageSlider:vertSlider];
+    
+    UIToolbar *vertToolbar = [[UIToolbar alloc] init];
+    vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * M_PI);
+    [self setToolbarSideRight:vertToolbar];
 
+}
+
+- (void)initalizeLabelStatus {
     UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
     [labelStatus setNumberOfLines:3];
     [labelStatus setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
@@ -156,84 +177,18 @@
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
     [self setBarButtonLabelStatus:barButtonLabelStatus];
     [self setLabelStatus:labelStatus];
-    
-    UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapped:)];
-    [vertSlider addGestureRecognizer:sliderTapped];
-    
-    vertSlider.transform = CGAffineTransformRotate(vertSlider.transform, 1.0000f / 2.0000f * M_PI);
-    vertToolbar.transform = CGAffineTransformRotate(vertSlider.transform, 3.0000f / 2.0000f * M_PI);
-    
-    [self setPageSlider:vertSlider];
-    [self setToolbarSideRight:vertToolbar];
-    
-    NSShadow *shadow = [[NSShadow alloc] init];
-    [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
-    [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
-    [shadow setShadowBlurRadius:5.0000f];
-    UIColor *textColor = [UIColor whiteColor];
-    
-    UIFont *font = [UIFont systemFontOfSize:8.0000f];
-    UIFont *fontBold = [UIFont boldSystemFontOfSize:8.0000f];
-    
-    NSDictionary *attributes = @{
-                                 NSForegroundColorAttributeName : textColor,
-                                 NSFontAttributeName : fontBold,
-                                 };
-    NSDictionary *attributesLight = @{
-                                     NSForegroundColorAttributeName : textColor,
-                                     NSFontAttributeName : font,
-                                     };
+}
+
+- (void)initalizeStatusMessages {
     NSAttributedString *statusMessage1 = [NSAttributedString new];
     NSAttributedString *statusMessage2 = [NSAttributedString new];
     NSAttributedString *statusMessage3 = [NSAttributedString new];
     [self setStatusMessage1:statusMessage1];
     [self setStatusMessage2:statusMessage2];
     [self setStatusMessage3:statusMessage3];
-    
-    [self setAttributesLabelDateUpdated:attributes];
-    [self setAttributesLabelNumberOfPages:attributesLight];
-    [self setAttributesRecordsRead:attributesLight];
-    NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyleCentered setAlignment:NSTextAlignmentLeft];
-    
-    NSDictionary *attributesCenter = @{
-                                       NSParagraphStyleAttributeName : paragraphStyleCentered
-                                       };
-    [self setAttributesStatusLabel:attributesCenter];
-
 }
 
-- (void)sliderTapped:(UIGestureRecognizer *)tap {
-    UISlider *slider = (UISlider *)tap.view;
-    if (slider.highlighted == NO) {
-        CGPoint pt = [tap locationInView: slider];
-        CGFloat percentage = pt.x / slider.bounds.size.width;
-        CGFloat delta = percentage * (slider.maximumValue - slider.minimumValue);
-        CGFloat value = slider.minimumValue + delta;
-        [slider setValue:value animated:YES];
-        [self sliderPageDidFinishDrag:slider];
-        [self sliderChangedPage:slider];
-    }
-}
-
-static UIImageView *captureSnapshotOfView (UIView *targetView) {
-    UIGraphicsBeginImageContextWithOptions([targetView bounds].size, YES, 0);
-    [[targetView layer] renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
-    [snapshotView setFrame:[targetView frame]];
-    return snapshotView;
-}
-
-- (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemMadViewer"];
-}
-
-- (NSString *)title {
-    return NSLocalizedString(@"MAD Viewer", "MAD Viewer");
-}
+#pragma mark - UIViewController Standard Callbacks
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -248,7 +203,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [labelMadDesigner setAttributedText:attributedString];
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
-        _timerLabelTimeSinceRefreh = nil;
+    _timerLabelTimeSinceRefreh = nil;
     
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
@@ -268,17 +223,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
     [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
-
+    
     [[self pageSlider] setValue:0.0000f];
     [[self pageSlider] addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
     [[self pageSlider] addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     [[self pageSlider] setMinimumValue:0];
-
+    
     [[self sliderPagination] setValue:0.0000f];
     [[self sliderPagination] addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
     [[self sliderPagination] addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     [[self sliderPagination] setMinimumValue:0];
-
+    
     [[self toolbarSideRight] addSubview:[self pageSlider]];
     [[self view] addSubview:[self toolbarSideRight]];
     [[self view] bringSubviewToFront:[self toolbarSideRight]];
@@ -332,6 +287,63 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self timerDealloc];
 }
 
+#pragma mark - properties
+
+- (NSDictionary *)attributesStatusLabelBold {
+    UIColor *textColor = [UIColor whiteColor];
+    UIFont *fontBold = [UIFont boldSystemFontOfSize:8.0000f];
+    return @{
+             NSForegroundColorAttributeName : textColor,
+             NSFontAttributeName : fontBold,
+             };
+}
+- (NSDictionary *)attributesStatusLabelLight {
+    UIColor *textColor = [UIColor whiteColor];
+    UIFont *font = [UIFont systemFontOfSize:8.0000f];
+    return @{
+             NSForegroundColorAttributeName : textColor,
+             NSFontAttributeName : font,
+             };
+}
+
+- (NSDictionary *)attributesStatusLabelCentered {
+    NSMutableParagraphStyle *paragraphStyleCentered = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyleCentered setAlignment:NSTextAlignmentLeft];
+    return @{
+             NSParagraphStyleAttributeName : paragraphStyleCentered
+             };
+}
+
+- (NSShadow *)statusLabelShadow {
+    NSShadow *shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
+    [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
+    [shadow setShadowBlurRadius:5.0000f];
+    return shadow;
+}
+
+
+- (void)sliderTapped:(UIGestureRecognizer *)tap {
+    UISlider *slider = (UISlider *)tap.view;
+    if (slider.highlighted == NO) {
+        CGPoint pt = [tap locationInView: slider];
+        CGFloat percentage = pt.x / slider.bounds.size.width;
+        CGFloat delta = percentage * (slider.maximumValue - slider.minimumValue);
+        CGFloat value = slider.minimumValue + delta;
+        [slider setValue:value animated:YES];
+        [self sliderPageDidFinishDrag:slider];
+        [self sliderChangedPage:slider];
+    }
+}
+
+- (UIImage *)tabBarImage {
+    return [UIImage imageNamed:@"UIBarButtonItemMadViewer"];
+}
+
+- (NSString *)title {
+    return NSLocalizedString(@"MAD Viewer", "MAD Viewer");
+}
+
 - (void)setTintColorForToolbar:(UIToolbar *)toolbar {
     UIColor *barTintColor = [UIColor tintColorBlue];
     UIColor *tintColor = [UIColor tintColorWhite];
@@ -340,7 +352,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)setTintColorForSidebar:(UIToolbar *)toolbar {
-    
     UIImage *blank = [UIImage new];
     [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
@@ -433,6 +444,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [[reportDocument managedObjectContext] save:&error];
     }
     [[self viewControllerDelegate] viewControllerDidFinish: self];
+}
+
+static UIImageView *captureSnapshotOfView (UIView *targetView) {
+    UIGraphicsBeginImageContextWithOptions([targetView bounds].size, YES, 0);
+    [[targetView layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
+    [snapshotView setFrame:[targetView frame]];
+    return snapshotView;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -1020,7 +1042,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:[self attributesLabelDateUpdated]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:timeMessage attributes:[self attributesStatusLabelBold]];
         [self setStatusMessage1:attributedString];
         [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
     }
@@ -1034,7 +1056,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesRecordsRead]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesStatusLabelLight]];
         [self setStatusMessage2:attributedString];
         [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
     }
@@ -1047,7 +1069,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         });
     } else {
         
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesLabelNumberOfPages]];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:message attributes:[self attributesStatusLabelLight]];
         [self setStatusMessage3:attributedString];
         [self updateStatusLabel:[self statusMessage1] recordsReadMessage:[self statusMessage2] andNumberOfPagesMessage:[self statusMessage3]];
     }
@@ -1071,11 +1093,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
     
     NSRange range = NSMakeRange(0, [status length]);
-    [status addAttributes:[self attributesStatusLabel] range:range];
-                NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin);
+    [status addAttributes:[self attributesStatusLabelCentered] range:range];
 
+    //NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin);
     //CGSize labelSize = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size;
     //CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelSize.width, 44.0000f);
+    
     CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
     [[self labelStatus] setBounds:bounds];
     [[self labelStatus] setAttributedText:status];

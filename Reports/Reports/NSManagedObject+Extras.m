@@ -7,7 +7,6 @@
 //
 
 #import "NSManagedObject+Extras.h"
-#import "NSError+UserInterface.h"
 
 @implementation NSManagedObject (Extras)
 
@@ -18,9 +17,7 @@
         if (error != nil) {
             error = nil;
             [[self managedObjectContext] obtainPermanentIDsForObjects:[NSArray arrayWithObject: self] error:&error];
-            if (error != nil) {
-                [error presentErrorToUser];
-            }
+            NSAssert(error == nil, @"Error %@", error);
         }
     }
 }
@@ -28,6 +25,7 @@
 - (BOOL)saveContext {
     NSError *__autoreleasing error = nil;
     [[self managedObjectContext] save:&error];
+    NSAssert(error == nil, @"%s\n%@ failed to save context with error %@.\n\t", __PRETTY_FUNCTION__, self, error);
     return error == nil;
 }
 
