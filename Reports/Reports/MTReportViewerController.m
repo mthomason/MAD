@@ -78,15 +78,11 @@
 
 @property (nonatomic, strong) UILabel *labelStatus;
 
-//@property (nonatomic, strong) NSDictionary *attributesLabelDateUpdated;
-
-//@property (nonatomic, strong) NSDictionary *attributesLabelNumberOfPages;
-//@property (nonatomic, strong) NSDictionary *attributesRecordsRead;
-//@property (nonatomic, strong) NSDictionary *attributesStatusLabel;
-
 @property (nonatomic, strong) NSAttributedString *statusMessage1;
 @property (nonatomic, strong) NSAttributedString *statusMessage2;
 @property (nonatomic, strong) NSAttributedString *statusMessage3;
+
+@property (nonatomic, strong) UIProgressView *progressView;
 
 @end
 
@@ -148,14 +144,27 @@
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
     [self initalizeStatusMessages];
+    [self initalizeProgressBars];
+}
+
+- (void)initalizeProgressBars {
+    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    [progressView setTrackTintColor:[UIColor tintColorRed]];
+    [progressView setTintColor:[UIColor tintColorBlue]];
+    [progressView setProgress:0.0000f animated:NO];
+    [self setProgressView:progressView];
+    [[self toolbarSideRight] addSubview:[self pageSlider]];
 }
 
 - (void)initializeVerticalSlider {
     MTSliderPageVertical *vertSlider = [[MTSliderPageVertical alloc] init];
-    [vertSlider setMaximumValue:0];
-    [vertSlider setMinimumValue:0];
+    [vertSlider setMaximumValue:0.0000f];
+    [vertSlider setMinimumValue:0.0000f];
     [vertSlider setContinuous:YES];
     [vertSlider setTintColor:[UIColor tintColorRed]];
+    [vertSlider setValue:0.0000f];
+    [vertSlider addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
+    [vertSlider addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
     
     UITapGestureRecognizer *sliderTapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sliderTapped:)];
     [vertSlider addGestureRecognizer:sliderTapped];
@@ -224,19 +233,7 @@
     NSArray *blankPageArray = @[blankPage];
     [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
     
-    [[self pageSlider] setValue:0.0000f];
-    [[self pageSlider] addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
-    [[self pageSlider] addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
-    [[self pageSlider] setMinimumValue:0];
-    
-    [[self sliderPagination] setValue:0.0000f];
-    [[self sliderPagination] addTarget:self action:@selector(sliderChangedPage:) forControlEvents:UIControlEventValueChanged];
-    [[self sliderPagination] addTarget:self action:@selector(sliderPageDidFinishDrag:) forControlEvents:UIControlEventTouchUpInside];
-    [[self sliderPagination] setMinimumValue:0];
-    
-    [[self toolbarSideRight] addSubview:[self pageSlider]];
-    [[self view] addSubview:[self toolbarSideRight]];
-    [[self view] bringSubviewToFront:[self toolbarSideRight]];
+    [self addPageSliderToView];
     
     NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray:[self toolbarItems]];
     [toolbarItems insertObject:[self barButtonLabelStatus] atIndex:1];
@@ -246,6 +243,7 @@
     [self setTintColorForSidebar:[self toolbarSideRight]];
     
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -285,6 +283,22 @@
     // FIXME: This has to be cleared, or the cache grows, and grows.
     [self setPrintPageRendererReport:nil];
     [self timerDealloc];
+}
+
+#pragma mark - add controls
+
+- (void)addProgressViewToView {
+    [[self view] addSubview:[self progressView]];
+    [[self view] bringSubviewToFront:[self progressView]];
+}
+
+- (void)removeProgressViewFromView {
+    [[self progressView] removeFromSuperview];
+}
+
+- (void)addPageSliderToView {
+    [[self view] addSubview:[self toolbarSideRight]];
+    [[self view] bringSubviewToFront:[self toolbarSideRight]];
 }
 
 #pragma mark - properties
@@ -437,8 +451,7 @@
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     [[reportDocument managedObjectContext] save:&error];
     if (error != nil) {
         [[reportDocument managedObjectContext] save:&error];
@@ -673,62 +686,48 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             
             NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-            [defaultCenter addObserver: self
+            [defaultCenter addObserver: reportViewer2
                               selector: @selector(reportDocumentDidReadRows:)
                                   name: @"MTNotificationDidReadRows"
                                 object: [[reportDocument defaultQuery] database]];
             
 
+            __weak MTDatabase *weakDatabase = [[reportDocument defaultQuery] database];
             [reportDocument refresh:^(BOOL success, NSError *error) {
-            
-                dispatch_queue_t highpriorityqueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-                if (success) {
-                    
-                    __block MTReportViewerController *reportViewer3 = reportViewer2;
-                    dispatch_async(highpriorityqueue, ^{
-                        
-                        __block MTReportViewerController *reportViewer4 = reportViewer3;
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [reportViewer4 setDisplayActive];
-                            NSDate *lastD = [NSDate date];
-                            [reportViewer4 setLastCacheDate: lastD];
-                            [reportViewer4 reload:reportViewer4];
-                            [reportViewer4 timerDealloc];
-                            [reportViewer4 updateLateRefreshedLabel:reportViewer4];
-                            
-                            NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-                            [defaultCenter removeObserver:self name:@"MTNotificationDidReadRows" object:[[reportDocument defaultQuery] database]];
-
-                            reportViewer4 = nil;
-                        });
-                        
-                        reportViewer3 = nil;
-                    });
-
-                } else {
+                __weak MTDatabase *weakDatabase3 = weakDatabase;
+                __block MTReportViewerController *reportViewer3 = reportViewer2;
+                if (!success) {
                     [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
-                    __block MTReportViewerController *reportViewer3 = reportViewer2;
-                    dispatch_async(highpriorityqueue, ^{
-                        
-                        __block MTReportViewerController *reportViewer4 = reportViewer3;
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            [reportViewer4 setDisplayActive];
-                            [reportViewer4 reload:reportViewer4];
-                            [reportViewer4 timerDealloc];
-                            [reportViewer4 updateLateRefreshedLabel:reportViewer4];
-                            
-                            NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-                            [defaultCenter removeObserver:self name:@"MTNotificationDidReadRows" object:[[reportDocument defaultQuery] database]];
-                            reportViewer4 = nil;
-                            
-                        });
-                        reportViewer3 = nil;
-                    });
+                } else {
+                    NSDate *lastD = [NSDate date];
+                    [reportViewer3 setLastCacheDate:lastD];
                 }
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                    
+                    __weak MTDatabase *weakDatabase4 = weakDatabase3;
+                    __block MTReportViewerController *reportViewer4 = reportViewer3;
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        [MTReportViewerController finishedRefreshWithReportViewer:reportViewer4];
+                        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+                        [defaultCenter removeObserver: reportViewer4
+                                                 name: @"MTNotificationDidReadRows"
+                                               object: weakDatabase4];
+                        reportViewer4 = nil;
+                    });
+                    reportViewer3 = nil;
+                });
             }];
             reportViewer2 = nil;
         });
     }
+}
+
++ (void)finishedRefreshWithReportViewer:(MTReportViewerController *)viewer {
+    [viewer setDisplayActive];
+    [viewer reload:viewer];
+    [viewer timerDealloc];
+    [viewer updateLateRefreshedLabel:viewer];
 }
 
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {

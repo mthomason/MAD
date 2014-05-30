@@ -409,7 +409,6 @@
                                             RptqQueryField *queryField = [aggregateField aggregateField];
                                             
                                             NSArray *dataForGroup = nil;
-                                            
                                             NSNumber *aggregateFieldGroupType = [aggregateField groupType];
                                             MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
                                             
