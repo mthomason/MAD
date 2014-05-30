@@ -69,6 +69,8 @@
 
 #import "MTQueryTest.h"
 
+#import "NSManagedObject+Extras.h"
+
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
 NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
@@ -1021,14 +1023,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 // MARK: Delete MTQuerySectionsGroups
                 case MTQuerySectionsGroups: {
                     
-                    MTApplicationInstance *applicationInstance = [AppDelegate app];
-                    MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
-                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-                    
                     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
-                    RptqDocument *document = [reportDocument activeDocument];
+                    RptqDocument *document = [[[AppDelegate app] activeDocument] activeDocument];
 
                     if (document) {
                         RptqQuery *query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
@@ -1051,7 +1049,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
                                 [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
                             }
-                            [managedObjectContext deleteObject: groupToRemove];
+                            [[query managedObjectContext] deleteObject: groupToRemove];
                             [query removeHasQueryGroupsObject: groupToRemove];
                             
                             //Reweight Groups
@@ -1082,11 +1080,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     
                     if (tvcPred) {
                         NSManagedObjectID *objid = [tvcPred tableID];
-                        MTApplicationInstance *applicationInstance = [AppDelegate app];
-                        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-                        NSManagedObject *predicate = [[reportDocument managedObjectContext] objectRegisteredForID:objid];
-                        [[reportDocument managedObjectContext] deleteObject:predicate];
-                        [reportDocument saveContext];
+                        RptqDocument *doc = [[[AppDelegate app] activeDocument] activeDocument];
+                        NSManagedObject *predicate = [[doc managedObjectContext] objectRegisteredForID:objid];
+                        [[doc managedObjectContext] deleteObject:predicate];
+                        [doc saveContext];
                     }
 
                     break;
