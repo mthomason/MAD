@@ -68,32 +68,49 @@
 
 - (void)initialize { }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
+- (void)initalizeFontSettingsTableViewController {
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
-
     MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
+    [[reportDesignerFontSettingsViewController tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self setTableViewControllerTextLayoutSettings:reportDesignerFontSettingsViewController];
     
+}
+
+- (void)initalizeFontListSettingsTableViewController {
+    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
     MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
 
+}
+
+- (void)initalizeSegmentedControl {
     UINavigationItem *navigationItem = [[[self navigationBar] items] objectAtIndex:0];
-    UIBarButtonItem *leftBarButtonItem = [navigationItem leftBarButtonItem];
-    UIBarButtonItem *rightBarButtonItem = [navigationItem rightBarButtonItem];
-    UIColor *tintColor = [UIColor tintColorRed];
-    [rightBarButtonItem setTintColor:tintColor];
-    UISegmentedControl *segmentedControl = (UISegmentedControl *)[leftBarButtonItem customView];
+    [[navigationItem rightBarButtonItem] setTintColor:[UIColor tintColorRed]];
+    
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)[[navigationItem leftBarButtonItem] customView];
     [segmentedControl setTintColor:[UIColor tintColorWhite]];
     [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self setSceneSelector:segmentedControl];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    [self initalizeFontListSettingsTableViewController];
+    [self initalizeFontSettingsTableViewController];
+    [self initalizeSegmentedControl];
+
+    [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+
     UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];
     [tableView setBounds: [[self contentView] bounds]];
     [tableView setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
-    [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
 }
 
 - (CGFloat)contentHeight {
