@@ -828,6 +828,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 [columnPercision addObject: negOne];
                             }
                             
+                            
+                            NSInteger rowCounter = 0;
                             while (dbnextrow(dbconn) != NO_MORE_ROWS) {
                                 /* do RowByAgonizingRow processing */
                                 
@@ -1191,7 +1193,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 }
 
                                 [datatable addRowWithDataForFieldKeys:resultsForRow];
-                                
+                                [self readRow:rowCounter];
+                                rowCounter++;
                             }
                             
                             for (NSInteger i = 0; i < resultCountForTypeSybCharBind; i++) {
