@@ -486,8 +486,8 @@
 		4C23FC0D18FAE610009F234F /* MTDatabaseProcessSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0318FAE610009F234F /* MTDatabaseProcessSqlServer.m */; };
 		4C23FC0E18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0518FAE610009F234F /* MTDatabaseSqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC0F18FAE610009F234F /* MTDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0518FAE610009F234F /* MTDatabaseSqlite3.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FC1018FAE610009F234F /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4C23FC1118FAE610009F234F /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */; };
+		4C23FC1018FAE610009F234F /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C23FC1118FAE610009F234F /* MTDatabaseSqlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC0718FAE610009F234F /* MTDatabaseSqlServer.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1418FAE633009F234F /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1318FAE633009F234F /* MTDatabaseTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1518FAE633009F234F /* MTDatabaseTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1318FAE633009F234F /* MTDatabaseTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FC1718FAE649009F234F /* MTDatabaseField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };

@@ -100,8 +100,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                                                        encoding: NSStringEncodingConversionAllowLossy];
                                         MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
                                         [results addObject:table];
-                                        [table release];
-                                        [tableName release];
                                     }
                                 }
                             }
@@ -116,7 +114,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                     }
                     
                     
-                    completion(error == nil, error, [results autorelease]);
+                    completion(error == nil, error, results);
                 } else {
                     completion(NO, connectionError, nil);
                 }
@@ -204,15 +202,14 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     
                                     NSString *object = [[NSString alloc] initWithCString: nameBind
                                                                                 encoding: NSStringEncodingConversionAllowLossy];
-                                    name = [object retain];
-                                    [object release];
+                                    name = object;
                                 }
                             }
                             if (name != nil) {
                                 MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName:name];
-                                const char *typeDesc = dbprtype((int)typeBind);
-                                NSString *typeDescWrapper = [[NSString alloc] initWithCString: typeDesc
-                                                                                     encoding: NSStringEncodingConversionAllowLossy];
+                                //const char *typeDesc = dbprtype((int)typeBind);
+                                //NSString *typeDescWrapper = [[NSString alloc] initWithCString: typeDesc
+                                //                                                     encoding: NSStringEncodingConversionAllowLossy];
                                 NSInteger fieldTypeCalculated = [MTDatabaseSqlServer dataTypeForNativeType:typeBind];
                                 [databaseField setFieldTypeNative:fieldTypeCalculated];
                                 [databaseField setFieldType:fieldTypeCalculated];
@@ -222,11 +219,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 
                                 [results addObject:databaseField];
                                 
-                                [databaseField release];
-                                [typeDescWrapper release];
-                                
                             }
-                            [name release];
                         }
                         free(nameBind);
                     }
@@ -235,7 +228,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 
             }
             
-            completion(error == nil, error, [results autorelease]);
+            completion(error == nil, error, results);
         } else {
             completion(NO, connectionError, nil);
         }
@@ -363,7 +356,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         [janFirst1990Components setMinute:  0];
         [janFirst1990Components setSecond:  0];
         
-        NSDate *janFirst1990 = [[gregorian dateFromComponents:janFirst1990Components] retain];
+        NSDate *janFirst1990 = [gregorian dateFromComponents:janFirst1990Components];
         
         RETCODE success = FAIL;
         
@@ -384,7 +377,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 } else {
                     
                     NSString *decimalSeperator = [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator];
-                    NSString *decimalSeperatorSqlServer = nil;
                     
                     BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperator = NO;
                     BOOL tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
@@ -487,26 +479,26 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 //NSCharacterSet *whitespaceAndNewlineCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
                                 //NSString *cname = [[columns objectAtIndex:columnCtr] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet];
                                 //NSArray *fieldSelectComponents = [cname componentsSeparatedByString:[self tableAliasConnector]];
-                                NSString *columnNameString = [fieldKey retain];// [[[fieldSelectComponents lastObject] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet] retain];
+                                NSString *columnNameString = fieldKey; // [[[fieldSelectComponents lastObject] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet] retain];
                                 //NSString *columnNameString = [[NSString alloc] initWithCString:columnName encoding:NSStringEncodingConversionAllowLossy];
                                 
                                 NSNumber *columnDataLen = [[NSNumber alloc] initWithInt:columnNumberBytes];
-                                NSNumber *columTypeKey = [@(columnType) retain];
+                                NSNumber *columTypeKey = @(columnType);
                                 NSInteger columnIndexOfType = [[counters objectForKey:columTypeKey] integerValue];
                                 
                                 NSNumber *columnIndexOfTypeNumber = [[NSNumber alloc] initWithInteger:columnIndexOfType];
                                 NSNumber *columnLen = [[NSNumber alloc] initWithInteger: columnLength];
                                 NSNumber *columPercision = [[NSNumber alloc] initWithInteger: -1];
                                 
-                                NSDictionary *dictionary = [[NSDictionary alloc] initWithDictionary:@{
-                                                                                                      MTDatabaseColumnTypeId : columnTypeNumber,          //Type
-                                                                                                      MTDatabaseColumnNameId : columnNameString,          //Name
-                                                                                                      MTDatabaseColumnNumberId : columnNumber,              //Index
-                                                                                                      MTDatabaseColumnDataLenId : columnDataLen,             //Data length
-                                                                                                      MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber,   //Index of type
-                                                                                                      MTDatabaseColumnLenId : columnLen,                 //Column lenght
-                                                                                                      MTDatabaseColumnPrecision : columPercision             //Column percision
-                                                                                                      }];
+                                NSDictionary *dictionary = @{
+                                                             MTDatabaseColumnTypeId : columnTypeNumber,          //Type
+                                                             MTDatabaseColumnNameId : columnNameString,          //Name
+                                                             MTDatabaseColumnNumberId : columnNumber,              //Index
+                                                             MTDatabaseColumnDataLenId : columnDataLen,             //Data length
+                                                             MTDatabaseColumnIndexOfType : columnIndexOfTypeNumber,   //Index of type
+                                                             MTDatabaseColumnLenId : columnLen,                 //Column lenght
+                                                             MTDatabaseColumnPrecision : columPercision             //Column percision
+                                                             };
                                 
 
                                 
@@ -521,30 +513,15 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 
                                 [datatable addColumn:dataColumn];
                                 
-                                [dataColumn release];
-                                
-                                [columPercision release];
                                 [colmunHolder addObject:dictionary];
                                 
-                                [dictionary release];
                                 
                                 
                                 columnIndexOfType++;
                                 
-                                NSNumber *n = [@(columnIndexOfType) retain];
+                                NSNumber *n = @(columnIndexOfType);
                                 [counters setObject:n forKey:columTypeKey];
-                                [n release];
                                 
-                                [columnLen release];
-                                [columnIndexOfTypeNumber release];
-                                [columnNameString release];
-                                [columnTypeNumber release];
-                                
-                                [columnNumber release];
-                                
-                                [columnDataLen release];
-                                
-                                [columTypeKey release];
                             }
                         }
                         
@@ -849,7 +826,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             for (NSInteger i = 0; i<[colmunHolder count]; i++) {
                                 NSNumber *negOne = [[NSNumber alloc] initWithInteger:-1];
                                 [columnPercision addObject: negOne];
-                                [negOne release];
                             }
                             
                             while (dbnextrow(dbconn) != NO_MORE_ROWS) {
@@ -859,14 +835,12 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 
                                 NSInteger columnCounter = 0;
                                 for (NSDictionary *columnMetaData in colmunHolder) {
-                                    [columnMetaData retain];
-                                    
+
                                     int indexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] intValue];
                                     
-                                    NSString *fieldName = [[columnMetaData objectForKey:MTDatabaseColumnNameId] retain];
+                                    NSString *fieldName = [columnMetaData objectForKey:MTDatabaseColumnNameId];
                                     
                                     NSInteger columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] intValue];
-                                    //NSInteger columnLength = [[columnMetaData objectForKey:MTDatabaseColumnLenId] intValue];
                                     
                                     switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
                                             
@@ -882,14 +856,14 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 
                                                 NSString *decimalSeperatorSqlServer2 = nil;
                                                 if (cp == -1 && tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved == NO) {
-                                                    //NSArray *seperators = [objectStr componentsSeparatedByCharactersInSet :[NSCharacterSet decimalDigitCharacterSet]];
+
                                                     NSCharacterSet *characterSet = [NSCharacterSet decimalDigitCharacterSet];
-                                                    NSString *seperator = [[objectStr stringByTrimmingCharactersInSet:characterSet] retain];
+                                                    NSString *seperator = [objectStr stringByTrimmingCharactersInSet:characterSet];
                                                     switch ([seperator length]) {
                                                         case 0: {
                                                             NSNumber *zero = [[NSNumber alloc] initWithInteger:0];
                                                             [columnPercision setObject:zero atIndexedSubscript:columnCounter];
-                                                            [zero release];
+
                                                             //  Integer case... no seperator yet.
                                                             tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved = NO;
                                                             tdsDecimalSeperatorMatchesCocoaDecimalSeperator = YES;
@@ -899,10 +873,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                         default: {
                                                             NSNumber *one = [[NSNumber alloc] initWithInteger:1];
                                                             [columnPercision setObject:one atIndexedSubscript:columnCounter];
-                                                            [one release];
                                                             
                                                             //Multiple decimal seperators?  This is going to end badly, lol.
-                                                            decimalSeperatorSqlServer2 = [seperator retain];
+                                                            decimalSeperatorSqlServer2 = seperator;
                                                             
                                                             if ([decimalSeperatorSqlServer2 isEqualToString:decimalSeperator]) {
                                                                 tdsDecimalSeperatorMatchesCocoaDecimalSeperator = YES;
@@ -915,17 +888,13 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                             break;
                                                         }
                                                     }
-                                                    [seperator release];
                                                 }
                                                 
                                                 NSString *objectStr2 = nil;
                                                 
                                                 if (tdsDecimalSeperatorMatchesCocoaDecimalSeperator == NO) {
-                                                    objectStr2 = [[objectStr stringByReplacingOccurrencesOfString:decimalSeperatorSqlServer2 withString:decimalSeperator] retain];
-                                                    //objectStr2 = [obj retain];
+                                                    objectStr2 = [objectStr stringByReplacingOccurrencesOfString:decimalSeperatorSqlServer2 withString:decimalSeperator];
                                                 }
-                                                [decimalSeperatorSqlServer release];
-                                                [decimalSeperatorSqlServer2 release];
                                                 
                                                 NSDecimalNumber *decimalNumber = [[NSDecimalNumber alloc] initWithString:objectStr2];
                                                 if (decimalNumber) {
@@ -934,13 +903,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     resultsForRow[fieldName] = @"Error";
                                                 }
                                                 
-                                                [decimalNumber release];
                                                 
-                                                [objectStr release]; [objectStr2 release];
                                                 objectStr = nil; objectStr2 = nil;
                                                 
-                                            } else {
-                                                //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -948,9 +913,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybRealBindNull[indexOfType] != -1) {
                                                 NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
                                                 resultsForRow[fieldName] = object;
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -958,9 +920,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybFltNBindNull[indexOfType] != -1) {
                                                 NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
                                                 resultsForRow[fieldName] = object;
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -968,9 +927,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybFlt8BindNull[indexOfType] != -1) {
                                                 NSNumber *object = [[NSNumber alloc] initWithDouble:sybFlt8Bind[indexOfType]];
                                                 resultsForRow[fieldName] = object;
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -983,10 +939,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSString *object = [[NSString alloc] initWithCString: sybChar
                                                                                                 encoding: NSStringEncodingConversionAllowLossy];
                                                     resultsForRow[fieldName] = object;
-                                                    [object release];
                                                 }
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -998,10 +951,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSString *object = [[NSString alloc] initWithCString: sybVarChar
                                                                                                 encoding: NSStringEncodingConversionAllowLossy];
                                                     [resultsForRow setObject:object forKey:fieldName];
-                                                    [object release];
                                                 }
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1012,10 +962,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSString *object = [[NSString alloc] initWithCString: sybnVarChar
                                                                                                 encoding: NSStringEncodingConversionAllowLossy];
                                                     [resultsForRow setObject:object forKey:fieldName];
-                                                    [object release];
                                                 }
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1027,10 +974,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSString *object = [[NSString alloc] initWithCString: sybText
                                                                                                 encoding: NSStringEncodingConversionAllowLossy];
                                                     [resultsForRow setObject:object forKey:fieldName];
-                                                    [object release];
                                                 }
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1041,10 +985,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSString *object = [[NSString alloc] initWithCString: sybnTest
                                                                                                 encoding: NSStringEncodingConversionAllowLossy];
                                                     [resultsForRow setObject:object forKey:fieldName];
-                                                    [object release];
                                                 }
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1054,9 +995,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 long long integer = sybIntnBind[indexOfType];
                                                 NSNumber *object = [[NSNumber alloc] initWithInteger:(NSInteger)integer];
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1064,11 +1002,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybInt1BindNull[indexOfType] != -1) {
                                                 int integer = sybInt1Bind[indexOfType];
                                                 NSNumber *object = [[NSNumber alloc] initWithInt:integer];
-                                                //NSLog(@"%@\t\t(SYBINT1):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1077,9 +1011,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 int integer = sybInt2Bind[indexOfType];
                                                 NSNumber *object = [[NSNumber alloc] initWithInt:integer];
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1088,9 +1019,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 int integer = sybInt4Bind[indexOfType];
                                                 NSNumber *object = [[NSNumber alloc] initWithInt:integer];
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:@"NULL" forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1098,9 +1026,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybInt8BindNull[indexOfType] != -1) {
                                                 NSNumber *object = [[NSNumber alloc] initWithLongLong:sybInt8Bind[indexOfType]];
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1128,15 +1053,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [offsetCompsWithMinutes setDay:     smallDaysComponentsPart1.day];
                                                 [offsetCompsWithMinutes setSecond:  0];
                                                 
-                                                NSDate *newDate = [[gregorian dateFromComponents:offsetCompsWithMinutes] retain];
+                                                NSDate *newDate = [gregorian dateFromComponents:offsetCompsWithMinutes];
                                                 
-                                                //NSLog(@"%@\t\t(SYBDATETIME4):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], newDate);
                                                 [resultsForRow setObject:newDate forKey:fieldName];
-                                                [newDate release];
-                                                [offsetCompsDays release];
-                                                [offsetCompsWithMinutes release];
-                                            } else {
-                                                //[resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
                                             break;
                                         }
@@ -1155,11 +1074,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [comps setMinute:     dateinfo.dateminute];
                                                 [comps setSecond:     dateinfo.datesecond];
                                                 [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
-                                                NSDate *date = [[gregorian dateFromComponents:comps] retain];
-                                                //NSLog(@"%@\t\t(SYBDATETIME):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], date);
+                                                NSDate *date = [gregorian dateFromComponents:comps];
                                                 [resultsForRow setObject:date forKey:fieldName];
-                                                [date release];
-                                                [comps release];
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1182,12 +1098,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
                                                 NSCalendar *gregorian = [[NSCalendar alloc]
                                                                          initWithCalendarIdentifier:NSGregorianCalendar];
-                                                NSDate *date = [[gregorian dateFromComponents:comps] retain];
-                                                //NSLog(@"%@\t\t(SYBDATETIMN):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], date);
+                                                NSDate *date = [gregorian dateFromComponents:comps];
                                                 [resultsForRow setObject:date forKey:fieldName];
-                                                [date release];
-                                                [comps release];
-                                                [gregorian release];
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1199,7 +1111,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 NSNumber *object = [[NSNumber alloc] initWithBool:(BOOL)sybBitBind[indexOfType]];
                                                 //NSLog(@"%@\t\t(SYBBIT):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1209,9 +1120,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                         case SYBBITN: {
                                             if (sybBitNBindNull[indexOfType] != -1) {
                                                 NSNumber *object = [[NSNumber alloc] initWithInt:(BOOL)sybBitNBind[indexOfType]];
-                                                //NSLog(@"%@\t\t(SYBBITN):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
                                                 [resultsForRow setObject:object forKey:fieldName];
-                                                [object release];
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1220,7 +1129,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             
                                         case SYBIMAGE: {
                                             if (sybImageBindNull[indexOfType] != -1) {
-                                                //NSLog(@"%@\t\t(SYBMONEY): Not supported", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0]);
+
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1229,10 +1138,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                         case SYBMONEY: {
                                             if (sybMoneyBindNull[indexOfType] != -1) {
                                                 double money = sybMoneyBind[indexOfType];
-                                                //NSLog(@"%@\t\t(SYBMONEY):\t\t%f", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], money);
                                                 NSNumber *moneyNumber = [[NSNumber alloc] initWithDouble:money];
                                                 [resultsForRow setObject:moneyNumber forKey:fieldName];
-                                                [moneyNumber release];
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1241,11 +1148,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                         case SYBMONEYN: {
                                             if (sybMoneyNBindNull[indexOfType] != -1) {
                                                 double money = sybMoneyNBind[indexOfType];
-                                                //NSLog(@"%@\t\t(SYBMONEYN):\t\t%f", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], money);
                                                 NSNumber *moneyNumber = [[NSNumber alloc] initWithDouble:money];
                                                 [resultsForRow setObject:moneyNumber forKey:fieldName];
-                                                [moneyNumber release];
-                                                
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1255,7 +1159,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybBinaryBindNull[indexOfType] != -1) {
                                                 NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
                                                 [resultsForRow setObject:notSupported forKey:fieldName];
-                                                //NSLog(@"%@\t\t(SYBBINARY):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], notSupported);
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1265,7 +1168,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybVoidBindNull[indexOfType] != -1) {
                                                 NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
                                                 [resultsForRow setObject:notSupported forKey:fieldName];
-                                                //NSLog(@"%@\t\t(SYBVOID):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], notSupported);
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1275,7 +1177,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             if (sybVarBinaryBindNull[indexOfType] != -1) {
                                                 NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
                                                 [resultsForRow setObject:notSupported forKey:fieldName];
-                                                //NSLog(@"%@\t\t(SYBVARBINARY):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], notSupported);
                                             } else {
                                                 [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
                                             }
@@ -1286,18 +1187,12 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             break;
                                     }
                                     
-                                    [fieldName release];
-                                    [columnMetaData release];
                                     columnCounter++;
                                 }
 
                                 [datatable addRowWithDataForFieldKeys:resultsForRow];
                                 
-                                [resultsForRow release];
-                                
                             }
-                            
-                            [columnPercision release];
                             
                             for (NSInteger i = 0; i < resultCountForTypeSybCharBind; i++) {
                                 free(sybCharBind[i]);
@@ -1322,9 +1217,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                         
                         [datatable endBulkInsert];
                         
-                        [colmunHolder release];
-                        [counters release];
-                        
                     }
                     
                 }
@@ -1335,11 +1227,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             dbclose(dbconn);
             
         }
-        
-        [janFirst1990 release];
-        [janFirst1990Components release];
-        [gregorian release];
-        
+
         datatable = nil;
 
         dispatch_semaphore_signal(semaphoreRunQuery);
@@ -1348,7 +1236,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     
     
     dispatch_semaphore_wait(semaphoreRunQuery, DISPATCH_TIME_FOREVER);
-    dispatch_release(semaphoreRunQuery);
     
 }
 
@@ -1396,7 +1283,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             }];
         });
         dispatch_semaphore_wait(showError, DISPATCH_TIME_FOREVER);
-        dispatch_release(showError);
         
         if (continueToGo) {
             result = INT_CONTINUE;

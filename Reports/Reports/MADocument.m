@@ -98,7 +98,7 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
                             object: self];
 
         [defaultCenter addObserver: self
-                          selector: @selector(documentStateChanged)
+                          selector: @selector(documentStateChanged:)
                               name: UIDocumentStateChangedNotification
                             object: self];
 
@@ -121,7 +121,29 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
     [[self documentStatus] setSaveInProgress:YES];
 }
 
-- (void)documentStateChanged { }
+- (void)documentStateChanged:(NSNotification *)notification {
+
+    switch (self.documentState) {
+        case UIDocumentStateClosed:
+            MTLog(@"Document state closed.");
+            break;
+        case UIDocumentStateEditingDisabled:
+            MTLog(@"Document state editing disabled.");
+            break;
+        case UIDocumentStateInConflict:
+            MTLog(@"Document state in conflict.");
+            break;
+        case UIDocumentStateNormal:
+            MTLog(@"Document state normal.");
+            break;
+        case UIDocumentStateSavingError:
+            MTLog(@"Document state saving error.");
+            break;
+        default:
+            break;
+    }
+    
+}
 
 /*
  {

@@ -814,7 +814,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
-        [[weakdoc reportFormatter] setDidRefresh:[self startedRefresh]];
+        [[weakdoc reportFormatter] setDidRefresh:[blockViewer startedRefresh]];
         [[weakdoc reportFormatter] formatForSize:viewBounds];
         
         __weak MAReportDocument *doc2 = weakdoc;

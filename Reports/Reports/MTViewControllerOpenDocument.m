@@ -298,6 +298,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [menuItems addObject:menuItem];
         [menu setMenuItems:menuItems];
     });
+    
+    __weak MTViewControllerOpenDocument *weakSelf = self;
 
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
@@ -314,10 +316,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 [menu setMenuItems:menuItems];
             });
 
-            if ([[self toolbarItems] containsObject:[self barButtonItemAction]] == NO) {
-                NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
-                [toolbarButtons insertObject:[self barButtonItemAction] atIndex:1];
-                [self setToolbarItems:toolbarButtons animated:animated];
+            if ([[weakSelf toolbarItems] containsObject:[weakSelf barButtonItemAction]] == NO) {
+                NSMutableArray *toolbarButtons = [[weakSelf toolbarItems] mutableCopy];
+                [toolbarButtons insertObject:[weakSelf barButtonItemAction] atIndex:1];
+                [weakSelf setToolbarItems:toolbarButtons animated:animated];
             }
             
         } else {
