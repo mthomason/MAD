@@ -334,7 +334,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
                 UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
                 [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-                [imagePicker setDelegate: self];
+                [imagePicker setDelegate: reportDesigner];
+                [[imagePicker navigationBar] setBarTintColor:[UIColor edaGreenLight]];
                 [reportDesigner presentViewController:imagePicker animated:YES completion:NULL];
             }
         };
@@ -367,14 +368,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         } else {
             
             NSMutableDictionary *defination = [[NSMutableDictionary alloc] initWithCapacity:4];
-            [defination setObject:@(MTDocumentObjectTypeBarcode)        forKey:MTDocumentObjectDefinationType];
-            [defination setObject:[barcodeViewController barcode]       forKey:MTDocumentObjectDefinationObject];
+            defination[MTDocumentObjectDefinationType] = @(MTDocumentObjectTypeBarcode);
+            defination[MTDocumentObjectDefinationObject] = [barcodeViewController barcode];
+
             RptqQueryField *queryField1 = [barcodeViewController queryField1];
-            RptqQueryField *queryField2 = [barcodeViewController queryField2];
             if (queryField1 != nil) {
                 NSManagedObjectID *objectId = [queryField1 objectID];
                 [defination setObject:objectId forKey:MTDocumentObjectDefinationField1];
             }
+
+            RptqQueryField *queryField2 = [barcodeViewController queryField2];
             if (queryField2 != nil) {
                 NSManagedObjectID *objectId = [queryField2 objectID];
                 [defination setObject:objectId forKey:MTDocumentObjectDefinationField2];

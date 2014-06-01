@@ -1447,9 +1447,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     [titleViewText addAttribute:NSFontAttributeName value:fontb range:rangeFirstPart];
     [titleViewText addAttribute:NSFontAttributeName value:fonti range:rangeSecondPart];
-    
-    
-    
+
     return titleViewText;
 }
 
