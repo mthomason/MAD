@@ -56,15 +56,25 @@ CGLineSegmentMake(CGPoint p1, CGPoint p2) {
     return lineSegment;
 }
 
-CG_INLINE CGPoint CGCenterOfRect(CGRect rect);
+CG_INLINE BOOL CGRectAboveRect(CGRect rect1, CGRect rect2);
+CG_INLINE BOOL
+CGRectAboveRect(CGRect rect1, CGRect rect2) {
+    return rect1.origin.y + rect1.size.height < rect2.origin.y;
+}
 
+CG_INLINE BOOL CGRectBelowRect(CGRect rect1, CGRect rect2);
+CG_INLINE BOOL
+CGRectBelowRect(CGRect rect1, CGRect rect2) {
+    return rect1.origin.y > rect2.origin.y + rect2.size.height;
+}
+
+CG_INLINE CGPoint CGCenterOfRect(CGRect rect);
 CG_INLINE CGPoint
 CGCenterOfRect(CGRect rect) {
     return CGPointMake(rect.origin.x + (rect.size.width / 2.0000f), rect.origin.y + (rect.size.height / 2.0000f));
 }
 
 CG_INLINE CGPoint CGPointMakeRandomOffscreen();
-
 CG_INLINE CGPoint
 CGPointMakeRandomOffscreen() {
 	CGPoint offScreen;
