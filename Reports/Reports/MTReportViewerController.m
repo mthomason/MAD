@@ -765,15 +765,19 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [self setPopoverControllerActivity:popoverController];
         }
     } else {
-        [self presentViewController:activityViewController animated:YES completion:^{ }];
+
+        [self presentViewController:activityViewController animated:YES completion:^{
+            [[[[self presentedViewController] navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
+        }];
     }
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {
-    return self;
+    return [self navigationController];
 }
 
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
+    
 
     if ([UIDevice isPad] == NO) {
         [self dismissViewControllerAnimated:YES completion:^{
@@ -893,6 +897,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 [i setEnabled:YES];
             }
             UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
+            
             [c setDelegate:blockself2];
             [c presentPreviewAnimated:YES];
         });
