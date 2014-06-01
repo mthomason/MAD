@@ -72,7 +72,8 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending;
 - (NSEnumerator *)enumeratorForAllObjectsSorted;
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
-- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids;;
+- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids;
+- (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
 

@@ -232,16 +232,16 @@ NSString * const MTNullIdentifier = @"(null)";
 
     BOOL firstRow = YES;
 
-    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForAllObjectsSorted];
+    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForKeyObjectsSorted];
 
-    
     NSArray *sqg = [[self query] sortedHasQueryGroups];
     [self setSortedQueryGroups:sqg];
     
-    for (NSDictionary *resultRow in dataEnumerator) {
+    BOOL rowIdOnly = [sqg count] == 0;
+    for (id resultRow in dataEnumerator) {
         
         //Get row id
-        NSNumber *rowid = [resultRow objectForKey:@"ROWID"];
+        NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
 
         //Get row key values
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];

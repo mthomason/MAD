@@ -703,6 +703,29 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return enumerator;
 }
 
+- (MTQuery *)queryForAllItemsAllRows {
+    NSDictionary *options = @{
+                              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
+                              @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              };
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
+    return query;
+}
+
+- (MTQuery *)queryForAllRowsWithKeys:(NSArray *)columnKeys {
+    
+    NSDictionary *options = @{
+                              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : columnKeys,
+                              @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
+                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
+                              };
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
+    return query;
+}
+
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     
     NSDictionary *options = @{
@@ -729,18 +752,43 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return enumerator;
 }
 
+- (NSArray *)columnKeysForSortDescriptors {
+    NSMutableArray *columnKeys = [[NSMutableArray alloc] initWithCapacity:[[self sortDescriptors] count]];
+    for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
+        [columnKeys addObject:[sortDescriptor key]];
+    }
+    return columnKeys;
+}
+
+- (NSEnumerator *)enumeratorForKeyObjectsSorted {
+    [[self groupKeys] removeAllObjects];
+    [self initalizeGroupKeys];
+    
+    NSEnumerator *enumerator;
+    NSArray *columnKeys = [self columnKeysForSortDescriptors];
+    if ([columnKeys count] == 0) {
+        enumerator = [self enumeratorForAllObjectsSortedRowIdOnly];
+    } else {
+        MTQuery *query = [self queryForAllRowsWithKeys:columnKeys];
+        
+        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
+        
+        enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
+                                                                                                                  columns: [self columns]
+                                                                                                               columnKeys: columnKeys
+                                                                                                                    query: query];
+        [(MTDataTableFastObjectEnumerator *)enumerator setAddRowId:YES];
+        [(MTDataTableFastObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
+    }
+    return enumerator;
+}
+
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
     [[self groupKeys] removeAllObjects];
     [self initalizeGroupKeys];
     
-    NSDictionary *options = @{
-                              @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
-                              @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-                              @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
-                              };
-    
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:options];
+    MTQuery *query = [self queryForAllItemsAllRows];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
     
     MTDataTableFastObjectEnumerator *enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection

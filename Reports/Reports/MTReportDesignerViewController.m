@@ -1839,12 +1839,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     CGRect visableRect = [MTReportDesignerViewController visableRect:reportDesigner.designerScrollView];
     CGRect bounds = [reportDesigner.designerScrollView convertRect: reportDesigner.designerScrollView.bounds
                                                        toView: reportDesigner.view];
-    
-    NSLog(@"Rect to show: %@", NSStringFromCGRect(rectOfInterest));
-    NSLog(@"Visable rect: %@", NSStringFromCGRect(visableRect));
-    NSLog(@"Bounds:       %@", NSStringFromCGRect(bounds));
-    
-
     CGFloat adjustment = [reportDesigner heightScrollViewAdjustment];
     if (CGRectIntersectsRect(visableRect, rectOfInterest) == NO) {
         
@@ -1857,7 +1851,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         } else {
             contentOffset = [MTReportDesignerViewController contectOffsetBottomOfRect:rectOfInterest inRect:visableRect];
         }
-        
         [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
     }
 }
@@ -1877,11 +1870,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[reportDesigner view] addConstraints:[reportDesigner layoutConstraintsToolboxVisiable]];
     [[reportDesigner toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
 }
+
 + (void)setConstraintsForToolboxHiddenOnDesigner:(MTReportDesignerViewController *)reportDesigner {
     [[reportDesigner view] removeConstraints:[reportDesigner layoutConstraintsToolboxVisiable]];
     [[reportDesigner view] addConstraints:[reportDesigner layoutConstraintsToolboxHidden]];
     [[reportDesigner toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
-
 }
 
 - (void)removeItemsFromToolbars {
@@ -1903,7 +1896,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
     
     // FIXME: Add ability to edit image fields.  84848422
     

@@ -50,6 +50,11 @@
     return nil;
 }
 
+- (NSEnumerator *)enumeratorForKeyObjectsSorted {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [super encodeWithCoder:encoder];
     
