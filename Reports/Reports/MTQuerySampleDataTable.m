@@ -61,7 +61,7 @@
 - (NSString *)getSqlWithError:(NSError **)error {
     [super getSqlWithError:error];
 
-    NSMutableString *sql = [[NSMutableString alloc] initWithString:[[self database] selectPart]];
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:[[self database] selectPartWithLimitedResults:255]];
     RptqDatabaseSchemaTable *table = [self queryObject];
     
     [sql appendString:[[self database] sqlAllFieldsInTable:table]];
@@ -97,6 +97,8 @@
     
     [sql appendString:MTSqlFrom];
     [sql appendString:safeTableName];
+    NSString *sqlLimit = [[self database] sqlLimitClause:255];
+    [sql appendString:sqlLimit];
     return sql;
 }
 

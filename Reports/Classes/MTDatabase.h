@@ -55,7 +55,9 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField;
 - (NSString *)selectPart;
+- (NSString *)selectPartWithLimitedResults:(NSInteger)limit;
 - (NSString *)sqlLimitClause;
+- (NSString *)sqlLimitClause:(NSInteger)limit;
 - (NSString *)sqlAllFieldsInTable:(RptqDatabaseSchemaTable *)schemaTable;
 - (NSString *)tableAliasForTable:(RptqDatabaseSchemaTable *)table;
 - (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field
@@ -75,7 +77,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion;
 - (void)removeCredentalsBecauseOfError:(NSError *)error;
 
-- (BOOL)limitResults;
 - (NSString *)nativeTypeForDataType:(MTDataType)dataType;
 
 - (void)cleanupBulkInsert;

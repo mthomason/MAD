@@ -52,16 +52,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initalize];
-//    [[[self navigationController] view] setBackgroundColor:[UIColor clearColor]];
-//    [[self view] setBackgroundColor:[UIColor clearColor]];
-//    [[self collectionView] setBackgroundColor:[UIColor clearColor]];
     [[self collectionView] setBackgroundColor:[UIColor tintColorBlue]];
     [[self collectionView] setAlwaysBounceHorizontal:YES];
     [[self collectionView] setAlwaysBounceVertical:YES];
     
     UINavigationItem *navitagionItem = [self navigationItem];
     UIBarButtonItem *barButtonItemDone = [navitagionItem rightBarButtonItem];
-    //UIColor *redColor = [UIColor tintColorGold];
     [barButtonItemDone setTintColor:[UIColor tintColorWhite]];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -69,7 +65,6 @@
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
     [activityIndicator startAnimating];
-    //[activityIndicator setColor:redColor];
     UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 
     [navitagionItem setRightBarButtonItem:barButtonItemActive];
@@ -84,7 +79,7 @@
             [navitagionItem performSelectorOnMainThread:@selector(setRightBarButtonItem:) withObject:barButtonItemDone waitUntilDone:NO];
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
             [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
-            [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:self waitUntilDone:NO];
+            [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
 
         }];
 
@@ -101,6 +96,11 @@
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    [[[self navigationItem] titleView] sizeToFit];
 }
 
 #pragma mark - Helpers
@@ -178,11 +178,14 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
     NSUInteger row = [(MTTableLayout *)[self collectionViewLayout] rowForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdForColumn:column];
+    
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
-                                                                           forIndexPath:indexPath];
+                                                                  forIndexPath:indexPath];
+    
     NSDictionary *rowData = [[self tableFormatter] dataForRow:row];
     NSString *fieldKey = [[self query] fieldKeyForIndex:column];
     id fieldValue = [rowData objectForKey:fieldKey];

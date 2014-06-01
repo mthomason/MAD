@@ -28,6 +28,8 @@
 #import "MTUser.h"
 #import "MADocumentState.h"
 
+#import "NSParagraphStyle+CommonStyles.h"
+
 NSString *const MTApplicationIdMadDesigner                          = @"666001433";
 NSString *const MTApplicationIdMadViewer                            = @"666003759";
 
@@ -36,9 +38,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.531";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.531";
-NSString * const MTGlobalBundleRev                                  = @"1151";
+NSString * const MTGlobalBundleVersion                              = @"1.0.532";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.532";
+NSString * const MTGlobalBundleRev                                  = @"1153";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -336,14 +338,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     return _bundleVersion;
 }
 
-+ (NSParagraphStyle *)paragraphStyleTitleBar {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
-    return paragraphStyle;
-}
-
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner {
     NSString *title = [MTApplicationInstance madDesigner];
     return [MTApplicationInstance logoForTitle:title];
@@ -362,7 +356,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 + (NSAttributedString *)logoForTitle:(NSString *)title {
     
     
-    NSParagraphStyle *paragraphStyle = [MTApplicationInstance paragraphStyleTitleBar];
+    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
     NSMutableAttributedString *attributedStringMadDesigner = [[NSMutableAttributedString alloc] initWithString:title];
     NSInteger length = [[attributedStringMadDesigner string] length];
     

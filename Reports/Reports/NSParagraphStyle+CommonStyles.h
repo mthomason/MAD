@@ -1,0 +1,20 @@
+//
+//  NSParagraphStyle+CommonStyles.h
+//  MAD
+//
+//  Created by Michael Thomason on 5/31/14.
+//  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
+//
+
+#ifndef Reports_NSParagraphStyle_CommonStyles_h
+#define Reports_NSParagraphStyle_CommonStyles_h
+
+#import <UIKit/UIKit.h>
+
+@interface NSParagraphStyle (CommonStyles)
+
++ (NSParagraphStyle *)titleBarStyle;
+
+@end
+
+#endif

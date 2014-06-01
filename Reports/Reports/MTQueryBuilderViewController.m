@@ -70,6 +70,7 @@
 #import "MTQueryTest.h"
 
 #import "NSManagedObject+Extras.h"
+#import "NSParagraphStyle+CommonStyles.h"
 
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
@@ -1399,19 +1400,57 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+
     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
-    
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
+    
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
+
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
     MTNavigationController *navigationController = [[MTNavigationController alloc] initWithRootViewController:tableController];
 
+
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissViewControllerAnimated:completion:)];
+
+
+    UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
+    [sampleDataTitleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    
+    NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName:[schemaTable name]];
+    [sampleDataTitleView setAttributedText:titleViewText];
+    
     [[tableController navigationItem] setTitle:[schemaTable name]];
+    [[tableController navigationItem] setTitleView:sampleDataTitleView];
+   
     [[tableController navigationItem] setRightBarButtonItem:doneButton animated:NO];
-    [self presentViewController:navigationController animated:YES completion:^{
-        
-    }];
+    [self presentViewController:navigationController animated:YES completion:^{ }];
+}
+
+- (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
+
+    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
+
+    NSString *firstPart = @"Data Sample";
+    NSString *titleString = [NSString stringWithFormat:@"%1@ %2@", firstPart, tableName];
+
+    NSRange rangeFirstPart = NSMakeRange(0, [firstPart length]);
+    NSRange rangeSecondPart = NSMakeRange([firstPart length], [titleString length] - [firstPart length]);
+    
+    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
+    UIFont *fonti = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:20.0000f];
+    
+    UIColor *foregroundColor = [UIColor whiteColor];
+    NSDictionary *attributes = @{NSParagraphStyleAttributeName: paragraphStyle,
+                                 NSForegroundColorAttributeName: foregroundColor};
+    NSMutableAttributedString *titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
+                                                                                      attributes:attributes];
+
+    [titleViewText addAttribute:NSFontAttributeName value:fontb range:rangeFirstPart];
+    [titleViewText addAttribute:NSFontAttributeName value:fonti range:rangeSecondPart];
+    
+    
+    
+    return titleViewText;
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }

@@ -179,8 +179,16 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return @"SELECT\n";
 }
 
+- (NSString *)selectPartWithLimitedResults:(NSInteger)limit {   //Generally limited resuls are in a LIMIT part, but
+    return [self selectPart];                                   //  SQL Server uses the TOP part (not default here).
+}
+
 - (NSString *)sqlLimitClause {
-    return [self limitResults] ? @"" /*@"\nLIMIT 10000"*/ : @"";
+    return [self sqlLimitClause:NSNotFound];                    //No limit by default
+}
+
+- (NSString *)sqlLimitClause:(NSInteger)limit {
+    return (limit > 0 && limit != NSNotFound) ? [NSString stringWithFormat: @"\nLIMIT %ld", limit] : @"";
 }
 
 - (void)removeCredentalsBecauseOfError:(NSError *)error {
@@ -195,12 +203,6 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 - (NSString *)sqlAggregateFunctionMax {
     return @"MAX";
-}
-
-- (BOOL)limitResults {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *limitResuts = [userDefaults objectForKey:@"MTPreferenceKeyLimitResutls"];
-    return [limitResuts boolValue];
 }
 
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField {
