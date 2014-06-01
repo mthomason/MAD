@@ -559,10 +559,10 @@ static char secKeyKey;
             result = NSLocalizedString(@"Report Footer", @"Report Footer");
             break;
         case MNSDocumentSectionTypeGroupHeader:
-            result = [NSString stringWithFormat:NSLocalizedString(@"G%d - %@", @"\"Group Header 1\""), [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header %d (%@)", @"\"Group Header 1\""), [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
             break;
         case MNSDocumentSectionTypeGroupFooter:
-            result = [NSString stringWithFormat:NSLocalizedString(@"G%d - %@", @"\"Group Footer 1\""),  [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d - (%@)", @"\"Group Footer 1\""),  [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
             break;
         default:
             break;

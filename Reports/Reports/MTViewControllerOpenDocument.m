@@ -46,7 +46,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         UITextFieldDelegate,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
-        MTViewControllerAsyncProtocol>
+        MTViewControllerAsyncProtocol,
+        UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
@@ -215,6 +216,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
+#pragma mark - UIDocumentInteractionViewController
+
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
+    return [self navigationController];
+}
+
 #pragma mark - UIViewController Overrides
 
 - (void)setLetterpressBackground {
@@ -226,8 +233,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
 
     //MTApplicationInstance *appInstance = [[AppDelegate app] retain];
     //[self setApplicationInstance: appInstance];
@@ -690,6 +695,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [mFMailComposeViewController setMailComposeDelegate:self];
         [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
         [mFMailComposeViewController setSubject:@"MAD Designer"];
+        [[[mFMailComposeViewController navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
         [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
     } else {
         NSString *title = NSLocalizedString(@"Alert", @"Alert title");
@@ -833,31 +839,33 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
     }
     
-    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
-        
-        if (completed) {
-            [UAAppReviewManager userDidSignificantEvent:YES];
-        }
-    
-        NSUInteger numberOfSections = [[self collectionView] numberOfSections];
-        for (NSUInteger section = 0; section < numberOfSections; section++) {
-            NSUInteger numberOfItemsInSection = [[self collectionView] numberOfItemsInSection:section];
-            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
-                NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
-                MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:selectedCellLocation];
-                if (documentCell != nil) {
-                    if ([documentCell isSelected]) {
-                        [documentCell normalizeTint];
-                    }
-                }
-            }
-        }
-    
-    };
-    
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:wrappedUrls applicationActivities:@[]];
     [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo]];
-    [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
+    
+    
+    MTViewControllerOpenDocument *weakSelf = self;
+    [activityViewController setCompletionHandler: ^(NSString *activityType, BOOL completed) {
+        [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
+        
+         if (completed) {
+             [UAAppReviewManager userDidSignificantEvent:YES];
+         }
+         
+         NSUInteger numberOfSections = [[weakSelf collectionView] numberOfSections];
+         for (NSUInteger section = 0; section < numberOfSections; section++) {
+             NSUInteger numberOfItemsInSection = [[weakSelf collectionView] numberOfItemsInSection:section];
+             for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
+                 NSIndexPath *selectedCellLocation = [NSIndexPath indexPathForItem:item inSection:section];
+                 MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[[weakSelf collectionView] cellForItemAtIndexPath:selectedCellLocation];
+                 if (documentCell != nil) {
+                     if ([documentCell isSelected]) {
+                         [documentCell normalizeTint];
+                     }
+                 }
+             }
+         }
+     }];
+
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
@@ -866,9 +874,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [self setPopoverControllerActivity:popoverController];
         }
     } else {
-        [self presentViewController:activityViewController animated:YES completion:^{ }];
+        [self presentViewController:activityViewController animated:YES completion:^{
+            [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorAnalogous4]];
+        }];
     }
 }
+
 
 - (IBAction)delete:(id)sender {
     if ([self collectionView] != nil) {
@@ -1008,6 +1019,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                         
                         NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
                         [mailComposer addAttachmentData:data mimeType:@"application/vnd.everydayapps.mad" fileName:name];
+                        [[[mailComposer navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
                         
                         if ([UIDevice isPad]) {
                             [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
@@ -1015,6 +1027,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                             [mailComposer setProvidesPresentationContextTransitionStyle:YES];
                             [mailComposer setModalInPopover:NO];
                         }
+
                         [self presentViewController:mailComposer animated:YES completion:nil];
                         
                     });

@@ -38,9 +38,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.534";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.534";
-NSString * const MTGlobalBundleRev                                  = @"1155";
+NSString * const MTGlobalBundleVersion                              = @"1.0.535";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.535";
+NSString * const MTGlobalBundleRev                                  = @"1156";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -512,8 +512,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)initalizeAppearance {
     UIColor *tintColorWhite = [UIColor tintColorWhite];
-    UIColor *tintColorRed = [UIColor tintColorRed];
-    UIColor *edaGreen = [UIColor edaGreenLight];
+    UIColor *edaGreen = [UIColor tintColorAnalogous4];
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil] setTintColor:tintColorWhite];
