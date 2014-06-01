@@ -335,7 +335,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
                 [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                 [imagePicker setDelegate: reportDesigner];
-                [[imagePicker navigationBar] setBarTintColor:[UIColor edaGreenLight]];
+                [[imagePicker navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
                 [reportDesigner presentViewController:imagePicker animated:YES completion:NULL];
             }
         };
@@ -3281,7 +3281,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
                     DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
                     [sectionLabel dimView];
-                    UIColor *borderColor = [UIColor tintColorBlue];
+                    UIColor *borderColor = [UIColor tintColorRed];
                     UIView *superView = [self getSectionViewForDocumentSection: section];
                     [[superView layer] setBorderColor:  [borderColor CGColor]];
                     [[superView layer] setBorderWidth:  1.0000f];
@@ -3350,20 +3350,22 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 
                 __weak MTReportDesignerViewController *reportDesigner = self;
                 MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-                NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+                __weak NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                 
                 NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
-                
-                [[gestureRecognizer view] removeFromSuperview];
-                
                 NSManagedObjectID *sectionId = [newSection objectIdTag];
                 
                 CGRect frame = [[gestureRecognizer view] frame];
-                __weak RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
-                __weak RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
-                                                                                        fromObjectContext: managedObjectContext];
+                __weak UIView *weakGestureRecognizerView = [gestureRecognizer view];
                 
                 [newSection performBatchUpdates:^(void) {
+                    
+                    [weakGestureRecognizerView removeFromSuperview];
+                    
+                    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
+                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
+                                                                                                   fromObjectContext: managedObjectContext];
+
                     
                     NSIndexPath *indexPathInsert = [documentSection addDocumentObject:documentObject withDropPoint:frame.origin];
                     NSArray *indexPathsInserted = @[indexPathInsert];
