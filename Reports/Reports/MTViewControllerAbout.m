@@ -13,6 +13,7 @@
 #import "MTViewControllerAbout.h"
 #import <MessageUI/MessageUI.h>
 #import "NSError+UserInterface.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
@@ -40,6 +41,7 @@
         [mFMailComposeViewController setMailComposeDelegate:self];
         [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
         [mFMailComposeViewController setSubject:@"MAD Designer"];
+        [[[mFMailComposeViewController navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
         [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
     } else {
         UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", @"Alert title")
