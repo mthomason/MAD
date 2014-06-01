@@ -184,8 +184,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    __weak UICollectionViewController *weakSelf = self;
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [[[self collectionView] backgroundView] setNeedsDisplay];
+        [[[weakSelf collectionView] backgroundView] setNeedsDisplay];
     } completion:NULL];
 }
 

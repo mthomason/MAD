@@ -305,8 +305,9 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    __weak UIView *weakView = [self scrollView];
     [UIView animateWithDuration:duration animations:^{
-        [[self scrollView] setNeedsDisplay];
+        [weakView setNeedsDisplay];
     }];
 }
 
@@ -475,14 +476,16 @@ typedef void(^MTBlockResultVoid)(void);
                 CGAffineTransform swingTransform = CGAffineTransformSwing();
                 CGPoint center = [viewController view].center;
                 CGFloat animationDuration = 0.3000f;
+                
+                __weak UIViewController *weakViewController = viewController;
                 [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    [[viewController view] setBounds:CGRectZero];
-                    [[viewController view] setCenter:center];
-                    [[viewController view] setTransform:swingTransform];
+                    [[weakViewController view] setBounds:CGRectZero];
+                    [[weakViewController view] setCenter:center];
+                    [[weakViewController view] setTransform:swingTransform];
                 } completion:^(BOOL finished) {
-                    [viewController willMoveToParentViewController:nil];
-                    [[viewController view] removeFromSuperview];
-                    [viewController removeFromParentViewController];
+                    [weakViewController willMoveToParentViewController:nil];
+                    [[weakViewController view] removeFromSuperview];
+                    [weakViewController removeFromParentViewController];
                 }];
             }
             
@@ -1279,14 +1282,15 @@ typedef void(^MTBlockResultVoid)(void);
     } else if ([[viewController view] isKindOfClass:[MTConnectorView class]]) {
         
         CGPoint center = [viewController view].center;
+        __weak UIViewController *weakViewController = viewController;
         [UIView animateWithDuration:animationDuration delay:0.0000f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            [[viewController view] setBounds:CGRectZero];
-            [[viewController view] setCenter:center];
-            [[viewController view] setTransform:swingTransform];
+            [[weakViewController view] setBounds:CGRectZero];
+            [[weakViewController view] setCenter:center];
+            [[weakViewController view] setTransform:swingTransform];
         } completion:^(BOOL finished) {
-            [viewController willMoveToParentViewController:nil];
-            [[viewController view] removeFromSuperview];
-            [viewController removeFromParentViewController];
+            [weakViewController willMoveToParentViewController:nil];
+            [[weakViewController view] removeFromSuperview];
+            [weakViewController removeFromParentViewController];
         }];
     }
 }

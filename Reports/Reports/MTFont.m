@@ -57,12 +57,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 @implementation MTFont
 
 + (NSArray *)familyNames {
-    static NSArray *familyNames;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        familyNames = @[MTFontFamilyAmericanTypewriter, MTFontFamilyArial, MTFontFamilyCourierNew, MTFontFamilyCourier, MTFontFamilyGeorgia, MTFontFamilyHelvetica, MTFontFamilyHelveticaNeue, MTFontFamilyTimesNewRoman, MTFontFamilyTrebuchet, MTFontFamilyVerdana, MTFontFamilyZapfino];
-    });
-    return familyNames;
+    return @[MTFontFamilyAmericanTypewriter, MTFontFamilyArial, MTFontFamilyCourierNew, MTFontFamilyCourier, MTFontFamilyGeorgia, MTFontFamilyHelvetica, MTFontFamilyHelveticaNeue, MTFontFamilyTimesNewRoman, MTFontFamilyTrebuchet, MTFontFamilyVerdana, MTFontFamilyZapfino];
 }
 
 + (NSDictionary *)fontNamesForFamilyName:(NSString *)familyName {
@@ -96,189 +91,128 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
 }
 
 + (NSDictionary *)fontNamesByFamilyNames {
-    static NSDictionary *fontNamesByFamilyNames;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        fontNamesByFamilyNames = @{
-                                   MTFontFamilyAmericanTypewriter :    [self americanTypewriter],
-                                   MTFontFamilyArial :                 [self arial],
-                                   MTFontFamilyCourier :               [self courier],
-                                   MTFontFamilyCourierNew :            [self courierNew],
-                                   MTFontFamilyGeorgia :               [self georgia],
-                                   MTFontFamilyHelvetica :             [self helvetica],
-                                   MTFontFamilyHelveticaNeue :         [self helveticaNeue],
-                                   MTFontFamilyTimesNewRoman :         [self timesNewRoman],
-                                   MTFontFamilyTrebuchet :             [self trebuchet],
-                                   MTFontFamilyVerdana :               [self verdana],
-                                   MTFontFamilyZapfino :               [self zapfino],
-                                   };
-    });
-    
-    return fontNamesByFamilyNames;
+    return @{
+             MTFontFamilyAmericanTypewriter :    [self americanTypewriter],
+             MTFontFamilyArial :                 [self arial],
+             MTFontFamilyCourier :               [self courier],
+             MTFontFamilyCourierNew :            [self courierNew],
+             MTFontFamilyGeorgia :               [self georgia],
+             MTFontFamilyHelvetica :             [self helvetica],
+             MTFontFamilyHelveticaNeue :         [self helveticaNeue],
+             MTFontFamilyTimesNewRoman :         [self timesNewRoman],
+             MTFontFamilyTrebuchet :             [self trebuchet],
+             MTFontFamilyVerdana :               [self verdana],
+             MTFontFamilyZapfino :               [self zapfino],
+             };
 }
 
 + (NSDictionary *)americanTypewriter {
-    static NSDictionary *americanTypewriter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        americanTypewriter = @{
-                               MTFontNormal :          @"AmericanTypewriter",
-                               MTFontBold :            @"AmericanTypewriter-Bold",
-                               MTFontCondensed :       @"AmericanTypewriter-Condensed",
-                               MTFontCondensedBold :   @"AmericanTypewriter-CondensedBold",
-                               MTFontCondensedLight :  @"AmericanTypewriter-CondensedLight",
-                               MTFontLight :           @"AmericanTypewriter-Light"
-                               };
-    });
-    return americanTypewriter;
+    return @{
+             MTFontNormal :          @"AmericanTypewriter",
+             MTFontBold :            @"AmericanTypewriter-Bold",
+             MTFontCondensed :       @"AmericanTypewriter-Condensed",
+             MTFontCondensedBold :   @"AmericanTypewriter-CondensedBold",
+             MTFontCondensedLight :  @"AmericanTypewriter-CondensedLight",
+             MTFontLight :           @"AmericanTypewriter-Light"
+             };
 }
 
 + (NSDictionary *)arial {
-    static NSDictionary *arial;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        arial = @{
-                  MTFontNormal :          @"ArialMT",
-                  MTFontBold :            @"Arial-BoldMT",
-                  MTFontItalic :          @"Arial-ItalicMT",
-                  MTFontBoldItalic :      @"Arial-BoldItalicMT",
-                  };
-    });
-    return arial;
+    return @{
+             MTFontNormal :          @"ArialMT",
+             MTFontBold :            @"Arial-BoldMT",
+             MTFontItalic :          @"Arial-ItalicMT",
+             MTFontBoldItalic :      @"Arial-BoldItalicMT",
+             };
 }
 
 + (NSDictionary *)courierNew {
-    static NSDictionary *courierNew;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        courierNew = @{
-                       MTFontNormal :          @"CourierNewPSMT",
-                       MTFontBold :            @"CourierNewPS-BoldMT",
-                       MTFontItalic :          @"CourierNewPS-ItalicMT",
-                       MTFontBoldItalic :      @"CourierNewPS-BoldItalicMT"
-                       };
-    });
-    return courierNew;
+    return @{
+             MTFontNormal :          @"CourierNewPSMT",
+             MTFontBold :            @"CourierNewPS-BoldMT",
+             MTFontItalic :          @"CourierNewPS-ItalicMT",
+             MTFontBoldItalic :      @"CourierNewPS-BoldItalicMT"
+             };
 }
 
 + (NSDictionary *)courier {
-    static NSDictionary *courier;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        courier = @{
-                    MTFontNormal :          @"Courier",
-                    MTFontBold :            @"Courier-Bold",
-                    MTFontOblique :         @"Courier-Oblique",
-                    MTFontBoldOblique :     @"Courier-BoldOblique",
-                    };
-    });
-    return courier;
+    return @{
+             MTFontNormal :          @"Courier",
+             MTFontBold :            @"Courier-Bold",
+             MTFontOblique :         @"Courier-Oblique",
+             MTFontBoldOblique :     @"Courier-BoldOblique",
+             };
 }
 
 + (NSDictionary *)georgia {
-    static NSDictionary *georgia;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        georgia = @{
-                    MTFontNormal :          @"Georgia",
-                    MTFontBold :            @"Georgia-Bold",
-                    MTFontItalic :          @"Georgia-BoldItalic",
-                    MTFontBoldItalic :      @"Georgia-Italic",
-                    };
-    });
-    return georgia;
+    return @{
+             MTFontNormal :          @"Georgia",
+             MTFontBold :            @"Georgia-Bold",
+             MTFontItalic :          @"Georgia-BoldItalic",
+             MTFontBoldItalic :      @"Georgia-Italic",
+             };
 }
 
 + (NSDictionary *)helvetica {
-    static NSDictionary *helvetica;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        helvetica = @{
-                      MTFontNormal :          @"Helvetica",
-                      MTFontBold :            @"Helvetica-Bold",
-                      MTFontBoldOblique :     @"Helvetica-BoldOblique",
-                      MTFontLight :           @"Helvetica-Light",
-                      MTFontLightOblique :    @"Helvetica-LightOblique",
-                      MTFontOblique :         @"Helvetica-Oblique",
-                      MTFontItalic :          @"Helvetica-Oblique",
-                      MTFontBoldItalic :      @"Helvetica-BoldOblique"
-                      };
-    });
-    return helvetica;
+    return @{
+             MTFontNormal :          @"Helvetica",
+             MTFontBold :            @"Helvetica-Bold",
+             MTFontBoldOblique :     @"Helvetica-BoldOblique",
+             MTFontLight :           @"Helvetica-Light",
+             MTFontLightOblique :    @"Helvetica-LightOblique",
+             MTFontOblique :         @"Helvetica-Oblique",
+             MTFontItalic :          @"Helvetica-Oblique",
+             MTFontBoldItalic :      @"Helvetica-BoldOblique"
+             };
 }
 
 + (NSDictionary *)helveticaNeue {
-    static NSDictionary *helveticaNeue;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        helveticaNeue = @{
-                          MTFontNormal :          @"HelveticaNeue",
-                          MTFontBold :            @"HelveticaNeue-Bold",
-                          MTFontItalic :          @"HelveticaNeue-LightItalic",
-                          MTFontBoldItalic :      @"HelveticaNeue-BoldItalic",
-                          MTFontCondensedBold :   @"HelveticaNeue-CondensedBold",
-                          MTFontCondensedBlack :  @"HelveticaNeue-CondensedBlack",
-                          MTFontLight :           @"HelveticaNeue-Light",
-                          MTFontLightItalic :     @"HelveticaNeue-LightItalic",
-                          MTFontMedium :          @"HelveticaNeue-Medium",
-                          MTFontUltraLightItalic :@"HelveticaNeue-UltraLight",
-                          MTFontUltraLight :      @"HelveticaNeue-UltraLightItalic",
-                          };;
-    });
-    return helveticaNeue;
+    return @{
+             MTFontNormal :          @"HelveticaNeue",
+             MTFontBold :            @"HelveticaNeue-Bold",
+             MTFontItalic :          @"HelveticaNeue-LightItalic",
+             MTFontBoldItalic :      @"HelveticaNeue-BoldItalic",
+             MTFontCondensedBold :   @"HelveticaNeue-CondensedBold",
+             MTFontCondensedBlack :  @"HelveticaNeue-CondensedBlack",
+             MTFontLight :           @"HelveticaNeue-Light",
+             MTFontLightItalic :     @"HelveticaNeue-LightItalic",
+             MTFontMedium :          @"HelveticaNeue-Medium",
+             MTFontUltraLightItalic :@"HelveticaNeue-UltraLight",
+             MTFontUltraLight :      @"HelveticaNeue-UltraLightItalic",
+             };
 }
 
 + (NSDictionary *)timesNewRoman {
-    static NSDictionary *timesNewRoman;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        timesNewRoman = @{
-                          MTFontNormal :          @"TimesNewRomanPSMT",
-                          MTFontBold :            @"TimesNewRomanPS-BoldMT",
-                          MTFontItalic :          @"TimesNewRomanPS-ItalicMT",
-                          MTFontBoldItalic :      @"TimesNewRomanPS-BoldItalicMT",
-                          };
-    });
-    return timesNewRoman;
+    return @{
+             MTFontNormal :          @"TimesNewRomanPSMT",
+             MTFontBold :            @"TimesNewRomanPS-BoldMT",
+             MTFontItalic :          @"TimesNewRomanPS-ItalicMT",
+             MTFontBoldItalic :      @"TimesNewRomanPS-BoldItalicMT",
+             };
 }
 
 + (NSDictionary *)trebuchet {
-    static NSDictionary *trebuchet;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        trebuchet = @{
-                      MTFontNormal :          @"TrebuchetMS",
-                      MTFontBold :            @"TrebuchetMS-Bold",
-                      MTFontItalic :          @"TrebuchetMS-Italic",
-                      MTFontBoldItalic :      @"Trebuchet-BoldItalic",
-                      };
-    });
-    return trebuchet;
+    return @{
+             MTFontNormal :          @"TrebuchetMS",
+             MTFontBold :            @"TrebuchetMS-Bold",
+             MTFontItalic :          @"TrebuchetMS-Italic",
+             MTFontBoldItalic :      @"Trebuchet-BoldItalic",
+             };
 }
 
 + (NSDictionary *)verdana {
-    static NSDictionary *verdana;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        verdana = @{
-                    MTFontNormal :          @"Verdana",
-                    MTFontBold :            @"Verdana-Bold",
-                    MTFontItalic :          @"Verdana-Italic",
-                    MTFontBoldItalic :      @"Verdana-BoldItalic",
-                    };
-    });
-    return verdana;
+    return @{
+             MTFontNormal :          @"Verdana",
+             MTFontBold :            @"Verdana-Bold",
+             MTFontItalic :          @"Verdana-Italic",
+             MTFontBoldItalic :      @"Verdana-BoldItalic",
+             };
 }
 
 + (NSDictionary *)zapfino {
-    static NSDictionary *zapfino;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        zapfino = @{
-                    MTFontNormal :          @"Zapfino"
-                    };
-    });
-    return zapfino;
+    return @{
+             MTFontNormal :          @"Zapfino"
+             };
 }
 
 + (NSString *)defaultFamily {

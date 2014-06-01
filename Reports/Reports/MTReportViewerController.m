@@ -766,8 +766,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
     } else {
 
+        __weak MTReportViewerController *weakSelf = self;
         [self presentViewController:activityViewController animated:YES completion:^{
-            [[[[self presentedViewController] navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
+            [[[[weakSelf presentedViewController] navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
         }];
     }
 }
@@ -1041,8 +1042,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateStatusWithTime:(NSString *)timeMessage {
     if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateStatusWithTime:timeMessage];
+            [weakSelf updateStatusWithTime:timeMessage];
         });
     } else {
         
@@ -1055,8 +1057,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
     if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateStatusWithRecordsRead:message];
+            [weakSelf updateStatusWithRecordsRead:message];
         });
     } else {
         
@@ -1068,8 +1071,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
     if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateStatusWithPageNumber:message];
+            [weakSelf updateStatusWithPageNumber:message];
         });
     } else {
         
@@ -1173,8 +1177,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateRecordsReadStatus {
     if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self updateRecordsReadStatus];
+            [weakSelf updateRecordsReadStatus];
         });
     } else {
         MTApplicationInstance *app = [AppDelegate app];
@@ -1204,8 +1209,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)setMaxNumberOfPages:(NSUInteger)numberOfPages {
     if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self setMaxNumberOfPages:numberOfPages];
+            [weakSelf setMaxNumberOfPages:numberOfPages];
         });
     } else {
         if (round([[self pageSlider] maximumValue]) != round(numberOfPages)) {

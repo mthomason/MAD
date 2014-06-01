@@ -31,30 +31,15 @@ const int MTModernOSMajorVersion = 7;
 }
 
 + (BOOL)isLagacyOS {
-    static BOOL _isLagacyOS;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _isLagacyOS = [UIDevice deviceSystemMajorVersion] < MTModernOSMajorVersion;
-    });
-    return _isLagacyOS;
+    return [UIDevice deviceSystemMajorVersion] < MTModernOSMajorVersion;
 }
 
 + (BOOL)isModernOS {
-    static BOOL _isModernOS;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _isModernOS = [UIDevice deviceSystemMajorVersion] >= MTModernOSMajorVersion;
-    });
-    return _isModernOS;
+    return [UIDevice deviceSystemMajorVersion] >= MTModernOSMajorVersion;
 }
 
 + (BOOL)isRetnaDisplay {
-    static BOOL _retnaDisplay;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _retnaDisplay = [[UIScreen mainScreen] scale] > 1.5;
-    });
-    return _retnaDisplay;
+    return [[UIScreen mainScreen] scale] > 1.5;
 }
 
 @end

@@ -191,17 +191,18 @@
     }
     
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+
+    __weak UIControl *weakControl = control;
     dispatch_async(queuePriorityBackground, ^{
-        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
-            [control setSelected:select];
-            [control setHighlighted:highlight];
+            [weakControl setSelected:select];
+            [weakControl setHighlighted:highlight];
             
-            if ([control isKindOfClass:[UIButton class]]) {
-                [control setBackgroundColor:backgroundColor];
-                [control setTintColor:titleColor];
-                [[(UIButton *)control titleLabel] setTextColor:titleColor];
+            if ([weakControl isKindOfClass:[UIButton class]]) {
+                [weakControl setBackgroundColor:backgroundColor];
+                [weakControl setTintColor:titleColor];
+                [[(UIButton *)weakControl titleLabel] setTextColor:titleColor];
             }
             
         }];

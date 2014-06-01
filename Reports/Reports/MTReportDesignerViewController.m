@@ -939,8 +939,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         CGFloat animationDuration = 0.2222f;
         CGFloat delay = 0.0000f;
         
+        __weak MTReportDesignerViewController *weakSelf = self;
         [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [[self rulerView] removeFromSuperview];
+            [[weakSelf rulerView] removeFromSuperview];
         } completion:NULL];
         
         for (UIView *view in [self sectionViewsArray]) {

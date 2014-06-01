@@ -237,14 +237,16 @@
     [[self view] addSubview:numberView];
     [self setPageNumberView:numberView];
     
+    __weak MTReportViewerReportPageViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f delay:0.0000f options:UIViewAnimationOptionCurveEaseIn animations:^{
-        [[self pageNumberView] setAlpha:1.0000f];
+        [[weakSelf pageNumberView] setAlpha:1.0000f];
     } completion:^(BOOL finished) {
         
         if (finished) {
+            __weak MTReportViewerReportPageViewController *weakSelf2 = weakSelf;
             [UIView animateWithDuration:0.30000f delay:1.0000f
                                 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                                    [[self pageNumberView] setAlpha:0.0000f];
+                                    [[weakSelf2 pageNumberView] setAlpha:0.0000f];
                                 } completion:nil];
         }
     }];

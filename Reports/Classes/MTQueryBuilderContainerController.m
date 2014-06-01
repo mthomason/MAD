@@ -240,11 +240,11 @@
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
+    __weak MTQueryBuilderContainerController *weakSelf = self;
+    BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
     [self dismissViewControllerAnimated:animated completion:^{
-        if ([sender isKindOfClass:[NSNumber class]]) {
-            if ([sender boolValue]) {
-                [[self delegate] viewControllerDidFinish:self animated:YES];
-            }
+        if (procDelegateFunction) {
+            [[weakSelf delegate] viewControllerDidFinish:weakSelf animated:YES];
         }
     }];
 }

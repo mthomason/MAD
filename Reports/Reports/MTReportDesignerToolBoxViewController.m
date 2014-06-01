@@ -174,15 +174,16 @@
     [[newViewController tableView] setBounds: [[self contentView] bounds]];
     [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
 
+    __weak MTReportDesignerToolBoxViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f animations:^{
 
-        [[[self tableViewControllerTextLayoutSettings] view] removeFromSuperview];
-        [self setTableViewControllerTextLayoutSettings:newViewController];
-        [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
+        [[[weakSelf tableViewControllerTextLayoutSettings] view] removeFromSuperview];
+        [weakSelf setTableViewControllerTextLayoutSettings:newViewController];
+        [[weakSelf contentView] addSubview:[[weakSelf tableViewControllerTextLayoutSettings] view]];
     
     } completion:^(BOOL finished) {
     
-        [[self delegate] toolboxHeightChanged:[self contentHeight]];
+        [[weakSelf delegate] toolboxHeightChanged:[weakSelf contentHeight]];
         [sender setEnabled:YES];
 
     }];
@@ -215,12 +216,12 @@
         
         [[[self tableViewControllerFontSelector] tableView] setFrame: [[self contentView] bounds]];
         
-        
+        __weak MTReportDesignerToolBoxViewController *weakSelf = self;
         [UIView animateWithDuration:0.3000f animations:^{
-            [[[self tableViewControllerFontSelector] tableView] setFrame: offScreen];
-            [[[self tableViewControllerTextLayoutSettings] tableView] setAlpha:1.0000f];
+            [[[weakSelf tableViewControllerFontSelector] tableView] setFrame: offScreen];
+            [[[weakSelf tableViewControllerTextLayoutSettings] tableView] setAlpha:1.0000f];
         } completion:^(BOOL finished) {
-            [[[self tableViewControllerFontSelector] tableView] removeFromSuperview];
+            [[[weakSelf tableViewControllerFontSelector] tableView] removeFromSuperview];
         }];
     } else if ([item isEqual:[self navigationItemLayout]]) {
         
@@ -261,9 +262,10 @@
         [[[self tableViewControllerFontSelector] tableView] setFrame: newRectOffscreen];
         [[self contentView] addSubview:[[self tableViewControllerFontSelector] tableView]];        
         
+        __weak MTReportDesignerToolBoxViewController *weakSelf = self;
         [UIView animateWithDuration:0.3000f animations:^{
-            [[[self tableViewControllerTextLayoutSettings] tableView] setAlpha:0.0000f];
-            [[[self tableViewControllerFontSelector] tableView] setFrame:newRect];
+            [[[weakSelf tableViewControllerTextLayoutSettings] tableView] setAlpha:0.0000f];
+            [[[weakSelf tableViewControllerFontSelector] tableView] setFrame:newRect];
         } completion:^(BOOL finished) {
             
         }];

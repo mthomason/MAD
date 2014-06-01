@@ -38,9 +38,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.540";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.540";
-NSString * const MTGlobalBundleRev                                  = @"1161";
+NSString * const MTGlobalBundleVersion                              = @"1.0.541";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.541";
+NSString * const MTGlobalBundleRev                                  = @"1162";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -219,43 +219,23 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 #pragma mark - App settings
 
 + (NSString *)applicationNamePrefixPart {
-    static NSString *localizedPrefix;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        localizedPrefix = NSLocalizedString(@"MAD", @"MAD");
-    });
-    return localizedPrefix;
+    return @"MAD";
 }
 
 + (NSString *)applicationNamePrefixPartFormat {
-    static NSString *localizedPrefix;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        localizedPrefix = NSLocalizedString(@"MAD %@", @"MAD %@");
-    });
-    return localizedPrefix;
+    return @"MAD %@";
 }
 
 + (NSString *)applicationNameSufixPart {
-    static NSString *result;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        result = [MTApplicationInstance isMadDesigner] ?
-        NSLocalizedString(@"Designer", @"Designer") :
-        NSLocalizedString(@"Viewer", @"Viewer");;
-    });
-    return result;
+    return [MTApplicationInstance isMadDesigner] ?
+                                                    NSLocalizedString(@"Designer", @"Designer") :
+                                                    NSLocalizedString(@"Viewer", @"Viewer");
 }
 
 + (NSString *)applicationId {
-    static NSString *result;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        result = [MTApplicationInstance isMadDesigner] ?
-                    MTApplicationIdMadDesigner :
-                    MTApplicationIdMadViewer;
-    });
-    return result;
+    return [MTApplicationInstance isMadDesigner] ?
+                                        MTApplicationIdMadDesigner :
+                                        MTApplicationIdMadViewer;
 }
 
 + (NSString *)bundleDisplayName {
@@ -318,24 +298,16 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 + (NSString *)bundleId {
     static NSString *_bundleId;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if ([MTApplicationInstance isMadDesigner]) {
-            _bundleId = MTBundleIdMadDesigner;
-        } else if ([MTApplicationInstance isMadViewer]) {
-            _bundleId = MTBundleIdMadViewer;
-        }
-    });
+    if ([MTApplicationInstance isMadDesigner]) {
+        _bundleId = MTBundleIdMadDesigner;
+    } else if ([MTApplicationInstance isMadViewer]) {
+        _bundleId = MTBundleIdMadViewer;
+    }
     return _bundleId;
 }
 
 + (NSString *)bundleVersion {
-    static NSString *_bundleVersion;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _bundleVersion = MTGlobalBundleVersion;
-    });
-    return _bundleVersion;
+    return MTGlobalBundleVersion;
 }
 
 + (NSAttributedString *)localizedAttributedApplicationNameMadDesigner {
@@ -385,29 +357,21 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSString *)storyboardName {
-    static NSString *_storyboardName;
+    NSString *_storyboardName;
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        if ([MTApplicationInstance isMadDesigner]) {
-            if ([UIDevice isModernOS]) {
-                _storyboardName = [UIDevice isPad] ?
-                                        MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-            } else {
-                _storyboardName = [UIDevice isPad] ?
-                                        MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
-            }
-        } else if ([MTApplicationInstance isMadViewer]) {
-            if ([UIDevice isModernOS]) {
-                _storyboardName = [UIDevice isPad] ?
-                                        MTStoryboardReportViewerPad : MTStoryboardReportViewer;
-            } else {
-                _storyboardName = [UIDevice isPad] ?
-                                        MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
-            }
+    if ([MTApplicationInstance isMadDesigner]) {
+        if ([UIDevice isModernOS]) {
+            _storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+        } else {
+            _storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
         }
-    });
+    } else if ([MTApplicationInstance isMadViewer]) {
+        if ([UIDevice isModernOS]) {
+            _storyboardName = [UIDevice isPad] ? MTStoryboardReportViewerPad : MTStoryboardReportViewer;
+        } else {
+            _storyboardName = [UIDevice isPad] ? MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
+        }
+    }
     return _storyboardName;
 }
 

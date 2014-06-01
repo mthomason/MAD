@@ -121,12 +121,13 @@ static size_t const kDashedCount            = (2.0f);
         
         [[self layer] setAnchorPoint:CGPointMake(0.5000f, 0.5000f)];
         
+        __weak MTElementView *weakSelf = self;
         [UIView animateWithDuration:0.3500
                               delay:0
                             options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
                          animations:^{
                              [UIView setAnimationRepeatCount:NSNotFound];
-                             [self setTransform: rightWobble];
+                             [weakSelf setTransform: rightWobble];
                          }
                          completion:nil];
         
