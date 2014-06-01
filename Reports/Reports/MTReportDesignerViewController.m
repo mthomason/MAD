@@ -1749,6 +1749,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                              
                              UIEdgeInsets insets = [weakSelf edgeInsetsWithoutToolbar];
                              [[weakSelf designerScrollView] setContentInset: insets];
+                             [[weakSelf designerScrollView] setScrollIndicatorInsets: insets];
                              [[weakSelf view] layoutIfNeeded];
                          } completion: ^(BOOL finished) {
                              if (finished) {
@@ -1878,7 +1879,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 + (void)setConstraintsForToolboxHiddenOnDesigner:(MTReportDesignerViewController *)reportDesigner {
     [[reportDesigner view] removeConstraints:[reportDesigner layoutConstraintsToolboxVisiable]];
     [[reportDesigner view] addConstraints:[reportDesigner layoutConstraintsToolboxHidden]];
-    [[reportDesigner toolbarBottomHeightConstraint] setConstant:[reportDesigner toolbarBottomHeight]];
+    [[reportDesigner toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
 
 }
 
@@ -2156,6 +2157,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     CGRect visibleRect;
     visibleRect.origin = scrollView.contentOffset;
     visibleRect.size = scrollView.bounds.size;
+    //if (visibleRect.origin.y < CGPointZero.y) {
+    //    visibleRect.size.height += fabsf(visibleRect.origin.y);
+    //}
     return [MTReportDesignerViewController adjustRect:visibleRect forZoomScale:scrollView.zoomScale];
 }
 
@@ -2171,8 +2175,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)resizeCollectionView:(UICollectionView *)collectionView forSectionWithId:(NSManagedObjectID *)sectionObjectId {
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForObjectID:sectionObjectId fromObjectContext:managedObjectContext];
     CGSize contentSize = [(MTReportDesignerSectionViewLayoutLiquid *)[collectionView collectionViewLayout] collectionViewContentSize];
