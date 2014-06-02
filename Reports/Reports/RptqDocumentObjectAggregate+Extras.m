@@ -13,6 +13,8 @@
 #import "RptqDocumentObjectAggregate+Extras.h"
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
 #import "Constants.h"
 
 NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
@@ -73,6 +75,58 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 + (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
+    return result;
+}
+
+- (NSString *)designerRepresentationText {
+    return [NSString stringWithFormat:@"%@(%@)", [self functionNameShort], [[self aggregateField] toStringHumanReadable]];
+}
+
+- (NSString *)functionName {
+    return [RptqDocumentObjectAggregate displayStringForType: [[self function] integerValue]];
+}
+
+- (NSString *)functionNameShort {
+    return [RptqDocumentObjectAggregate shortDisplayStringForType: [[self function] integerValue]];
+}
+
++ (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
+    
+    NSString *result = nil;
+    
+    switch (aggregateFunctionType) {
+            
+        case MTAggregateFunctionTypeCount:
+            result = NSLocalizedString(@"Count", @"Count");
+            break;
+            
+        case MTAggregateFunctionTypeFirst:
+            result = NSLocalizedString(@"First", @"First");
+            break;
+            
+        case MTAggregateFunctionTypeLast:
+            result = NSLocalizedString(@"Last", @"Last");
+            break;
+            
+        case MTAggregateFunctionTypeMax:
+            result = NSLocalizedString(@"Max", @"Max");
+            break;
+            
+        case MTAggregateFunctionTypeMean:
+            result = NSLocalizedString(@"Mean", @"Mean");
+            break;
+            
+        case MTAggregateFunctionTypeMin:
+            result = NSLocalizedString(@"Min", @"Min");
+            break;
+            
+        case MTAggregateFunctionTypeSum:
+            result = NSLocalizedString(@"Sum", @"Sum");
+            break;
+
+        default:
+            break;
+    }
     return result;
 }
 

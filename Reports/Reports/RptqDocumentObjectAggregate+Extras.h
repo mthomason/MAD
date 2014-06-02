@@ -25,5 +25,6 @@ extern NSString * const MTAggregateTypeKeyGroupNumber;
                                       groupType:(MTAggregateGroupByType)groupType
                                 aggregateObject:(NSManagedObject *)aggregateObject  //RptqQueryField or MTAggregateFunctionInputTypeFormula
                                     groupNumber:(NSUInteger)groupNumber;
+- (NSString *)designerRepresentationText;
 
 @end

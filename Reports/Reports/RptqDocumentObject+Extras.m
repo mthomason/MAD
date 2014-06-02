@@ -200,13 +200,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     switch ([[self type] integerValue]) {
     
         case MTDocumentObjectTypeAggregate: {
-            RptqDocumentObjectAggregate *aggregateObject = [self isAggregate];
-            if ([aggregateObject aggregateField] != nil) {
-                result = [NSString stringWithFormat:@"Aggregate: %@", [[aggregateObject aggregateField] toStringHumanReadable]];
-            } else if ([aggregateObject aggregateFunction] != nil) {
-                result = @"Aggregate function";
-            }
-            
+            result = [[self isAggregate] designerRepresentationText];
             break;
         }
 
