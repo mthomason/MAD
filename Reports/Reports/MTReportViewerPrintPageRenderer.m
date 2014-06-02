@@ -417,140 +417,146 @@
                                                 NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
                                                 groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
                                             }
-
-                                            //[[self reportFormatter] rowidsForPage:pageIndex];
-                                            id aggregateResults = [[[[self reportFormatter] query] datatable] resultsForAggregateType: [[aggregateField groupType] integerValue]
-                                                                                                                             function: [[aggregateField function] integerValue]
-                                                                                                                             fieldKey: fieldKey
-                                                                                                                            groupKeys: groupKeys
-                                                                                                                               rowids: [[self reportFormatter] rowidsForPage:pageIndex]];
                                             
-                                            NSLog(@"Result: %@", aggregateResults);
-
-                                            NSArray *dataForGroup = nil;
-                                            NSNumber *aggregateFieldGroupType = [aggregateField groupType];
-                                            MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
-                                            
-                                            switch (aggregateGroupType) {
-                                                    // FIXME: Check to see which ones of these are correct.
-                                                case MTAggregateGroupByTypePage: {
-                                                    
-                                                    NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:pageIndex];
-                                                    dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
-                                                    NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:pageIndex];
-                                                    
-                                                    NSArray *objectsToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
-                                                                                                                              limit: [indexSet count]];
-                                                    
-                                                    [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
-                                                    break;
-                                                }
-                                                case MTAggregateGroupByTypeSection: {
-                                                    NSInteger groupCount = [[aggregateField groupNumber] integerValue];
-                                                    if (groupCount < [groupLevelKeys count]) {
-                                                        NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
-                                                        NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
-                                                        dataForGroup = [[self reportFormatter] dataForGroupKeys:groupKeys];
-                                                    } else {
-                                                        dataForGroup = @[];
-                                                    }
-                                                    break;
-                                                }
-                                                case MTAggregateGroupByTypeReport: {
-                                                    dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
-                                                    break;
-                                                }
-                                                    
-                                                default:
-                                                    dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
-                                                    break;
-                                            }
-                                            
-                                            
-                                            
+                                            MTAggregateFunctionType functionType = [[aggregateField function] integerValue];
                                             RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
                                             NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
                                             MTDataType aggregateType = [databaseSchemaFieldDataType integerValue];
-                                            id aggregateResult = nil;
+
+                                            BOOL calculateInMemory = functionType == MTAggregateFunctionTypeFirst || functionType == MTAggregateFunctionTypeLast;
                                             
-                                            switch ([[aggregateField function] integerValue]) {
-                                                    
-                                                case MTAggregateFunctionTypeCount:
-                                                    aggregateResult = @([dataForGroup count]);
-                                                    break;
-                                                    
-                                                case MTAggregateFunctionTypeFirst:
-                                                    if ([dataForGroup count] >= 1) {
-                                                        aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
-                                                    } else {
-                                                        aggregateResult = @"";
-                                                    }
-                                                    break;
-                                                    
-                                                case MTAggregateFunctionTypeLast:
-                                                    aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
-                                                    break;
-                                                    
-                                                case MTAggregateFunctionTypeMax: {
-                                                    
-                                                    id result = nil;
-                                                    for (id object in dataForGroup) {
-                                                        id n = [object objectForKey: fieldKey];
-                                                        if ([n compare:result] == NSOrderedDescending) {result = n;}
-                                                    }
-                                                    aggregateResult = result;
-                                                    
-                                                    break;
-                                                }
-                                                    
-                                                case MTAggregateFunctionTypeMean: {
-                                                    
-                                                    
-                                                    id sum = @(0);
-                                                    for (id object in dataForGroup) {
-                                                        id n = [object objectForKey: fieldKey];
-                                                        sum = [self sumObject:sum andObject:n forType:aggregateType];
-                                                    }
-                                                    NSUInteger dataForGroupCount = [dataForGroup count];
-                                                    aggregateResult = @(dataForGroupCount > 0 ? ([sum floatValue] / dataForGroupCount) : dataForGroupCount);
-                                                    
-                                                    break;
-                                                }
-                                                    
-                                                case MTAggregateFunctionTypeMin: {
-                                                    
-                                                    id result = nil;
-                                                    for (id object in dataForGroup) {
-                                                        id n = [object objectForKey: fieldKey];
-                                                        if ([n compare:result] == NSOrderedAscending) {result = n;}
-                                                    }
-                                                    aggregateResult = result;
-                                                    
-                                                    break;
-                                                }
-                                                case MTAggregateFunctionTypeSum: {
-                                                    
-                                                    id sum = @(0);
-                                                    for (id object in dataForGroup) {
-                                                        id n = [object objectForKey: fieldKey];
-                                                        sum = [self sumObject:sum andObject:n forType:aggregateType];
+                                            id aggregateResult;
+                                            
+                                            if (calculateInMemory == NO) {
+
+                                                aggregateResult = [[[[self reportFormatter] query] datatable] resultsForAggregateType: [[aggregateField groupType] integerValue]
+                                                                                                                              function: [[aggregateField function] integerValue]
+                                                                                                                              fieldKey: fieldKey
+                                                                                                                             groupKeys: groupKeys
+                                                                                                                                rowids: [[self reportFormatter] rowidsForPage:pageIndex]];
+                                                
+                                                
+                                            } else {
+                                                
+                                                
+                                                NSArray *dataForGroup = nil;
+                                                NSNumber *aggregateFieldGroupType = [aggregateField groupType];
+                                                MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
+                                                
+                                                switch (aggregateGroupType) {
+                                                        // FIXME: Check to see which ones of these are correct.
+                                                    case MTAggregateGroupByTypePage: {
                                                         
+                                                        NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:pageIndex];
+                                                        dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
+                                                        NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:pageIndex];
+                                                        
+                                                        NSArray *objectsToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
+                                                                                                                                  limit: [indexSet count]];
+                                                        
+                                                        [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
+                                                        break;
                                                     }
-                                                    aggregateResult = sum;
-                                                    
-                                                    
-                                                    break;
+                                                    case MTAggregateGroupByTypeSection: {
+                                                        NSInteger groupCount = [[aggregateField groupNumber] integerValue];
+                                                        if (groupCount < [groupLevelKeys count]) {
+                                                            NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
+                                                            NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
+                                                            dataForGroup = [[self reportFormatter] dataForGroupKeys:groupKeys];
+                                                        } else {
+                                                            dataForGroup = @[];
+                                                        }
+                                                        break;
+                                                    }
+                                                    case MTAggregateGroupByTypeReport: {
+                                                        dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
+                                                        break;
+                                                    }
+                                                        
+                                                    default:
+                                                        dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
+                                                        break;
                                                 }
-                                                default:
-                                                    
-                                                    break;
+                                                
+                                                switch (functionType) {
+                                                        
+                                                    case MTAggregateFunctionTypeCount:
+                                                        aggregateResult = @([dataForGroup count]);
+                                                        break;
+                                                        
+                                                    case MTAggregateFunctionTypeFirst:
+                                                        if ([dataForGroup count] >= 1) {
+                                                            aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
+                                                        } else {
+                                                            aggregateResult = @"";
+                                                        }
+                                                        break;
+                                                        
+                                                    case MTAggregateFunctionTypeLast:
+                                                        aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
+                                                        break;
+                                                        
+                                                    case MTAggregateFunctionTypeMax: {
+                                                        
+                                                        id result = nil;
+                                                        for (id object in dataForGroup) {
+                                                            id n = [object objectForKey: fieldKey];
+                                                            if ([n compare:result] == NSOrderedDescending) {result = n;}
+                                                        }
+                                                        aggregateResult = result;
+                                                        
+                                                        break;
+                                                    }
+                                                        
+                                                    case MTAggregateFunctionTypeMean: {
+                                                        
+                                                        
+                                                        id sum = @(0);
+                                                        for (id object in dataForGroup) {
+                                                            id n = [object objectForKey: fieldKey];
+                                                            sum = [self sumObject:sum andObject:n forType:aggregateType];
+                                                        }
+                                                        NSUInteger dataForGroupCount = [dataForGroup count];
+                                                        aggregateResult = @(dataForGroupCount > 0 ? ([sum floatValue] / dataForGroupCount) : dataForGroupCount);
+                                                        
+                                                        break;
+                                                    }
+                                                        
+                                                    case MTAggregateFunctionTypeMin: {
+                                                        
+                                                        id result = nil;
+                                                        for (id object in dataForGroup) {
+                                                            id n = [object objectForKey: fieldKey];
+                                                            if ([n compare:result] == NSOrderedAscending) {result = n;}
+                                                        }
+                                                        aggregateResult = result;
+                                                        
+                                                        break;
+                                                    }
+                                                    case MTAggregateFunctionTypeSum: {
+                                                        
+                                                        id sum = @(0);
+                                                        for (id object in dataForGroup) {
+                                                            id n = [object objectForKey: fieldKey];
+                                                            sum = [self sumObject:sum andObject:n forType:aggregateType];
+                                                            
+                                                        }
+                                                        aggregateResult = sum;
+                                                        
+                                                        break;
+                                                    }
+                                                    default:
+                                                        
+                                                        break;
+                                                }
                                             }
                                             
                                             [displayString setString: [item formattedString:aggregateType
-                                                                         forValue:aggregateResult]];
+                                                                                   forValue:aggregateResult]];
                                             if ([displayString isEqualToString:MTNullIdentifier]) {
                                                 [displayString setString: @""];
                                             }
+                                            
                                             break;
                                         }
                                             

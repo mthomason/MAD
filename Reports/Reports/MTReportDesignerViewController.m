@@ -2903,14 +2903,22 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                groupType:(MTAggregateGroupByType)groupType
                                              groupNumber:(NSNumber *)groupNumber {
     [[self barButtonItemObjects] setEnabled:YES];
-
-    NSDictionary *documentObject = @{MTDocumentObjectDefinationAggregateType : @(functionType),
+    
+    NSNumber *functionTypeNumber = @(functionType);
+    NSNumber *groupTypeNumber = @(groupType);
+    NSNumber *inputTypeNumber = @(inputType);
+    NSNumber *objectType = @(MTDocumentObjectTypeAggregate);
+    NSDictionary *documentObject = @{
+                                     MTDocumentObjectDefinationAggregateType : functionTypeNumber,
                                      MTDocumentObjectDefinationAggregatePivotNumber : groupNumber,
-                                     MTDocumentObjectDefinationAggregatePivotType : @(groupType),
+                                     MTDocumentObjectDefinationAggregatePivotType : groupTypeNumber,
                                      MTDocumentObjectDefinationAggregateObjectId : inputObject,
-                                     MTDocumentObjectDefinationAggregateFunctionInputType : @(inputType)};
-    NSDictionary *documentObjectDefination = @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeAggregate),
-                                               MTDocumentObjectDefinationObject :  documentObject};
+                                     MTDocumentObjectDefinationAggregateFunctionInputType : inputTypeNumber
+                                     };
+    NSDictionary *documentObjectDefination = @{
+                                               MTDocumentObjectDefinationType : objectType,
+                                               MTDocumentObjectDefinationObject :  documentObject
+                                               };
 
     [self insertDocumentObjectWithDefination: documentObjectDefination];
 }
