@@ -35,32 +35,12 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT * FROM %@  WHERE ", self.tableName];
-    NSUInteger rowid = [[self rowids] firstIndex];
-    BOOL firstTime = YES;
-    while (rowid != NSNotFound) {
-        if (firstTime == NO) {
-            [sql appendString: @" OR "];
-        }
-        [sql appendFormat:@"rowid = %d", rowid];
-        rowid = [[self rowids] indexGreaterThanIndex: rowid];
-        firstTime = NO;
-    }
-    
-    if ([[self sortDescriptors] count] > 0) {
-        NSUInteger sortCounter = 0;
-        [sql appendString:@" ORDER BY "];
-        
-        for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
-            if (sortCounter != 0) [sql appendString:@", "];
-            NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
-            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
-            sortCounter++;
-        }
-    }
+    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT * FROM %@ ", self.tableName];
+
+    [sql appendString:[self whereClauseWithRowIds:[self rowids]]];
+    [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
     
     return sql;
 }
-
 
 @end

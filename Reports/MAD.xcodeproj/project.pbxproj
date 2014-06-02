@@ -1339,6 +1339,8 @@
 		4CC8993B14DAFB730094E17E /* UITableViewCellQueryGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CCD2439193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD2438193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m */; };
 		4CCD243A193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD2438193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m */; };
+		4CCD243D193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD243C193BC03700E44D47 /* MTQueryCacheAggregateFunction.m */; };
+		4CCD243E193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD243C193BC03700E44D47 /* MTQueryCacheAggregateFunction.m */; };
 		4CCD8CDD15036DBB002B9E77 /* UIImagePatternPebbled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */; };
 		4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */; };
 		4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */; };
@@ -2691,6 +2693,8 @@
 		4CC8993A14DAFB720094E17E /* UITableViewCellQueryGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewCellQueryGroup.m; sourceTree = "<group>"; };
 		4CCD2437193AB07100E44D47 /* NSParagraphStyle+CommonStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSParagraphStyle+CommonStyles.h"; sourceTree = "<group>"; };
 		4CCD2438193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSParagraphStyle+CommonStyles.m"; sourceTree = "<group>"; };
+		4CCD243B193BC03700E44D47 /* MTQueryCacheAggregateFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheAggregateFunction.h; sourceTree = "<group>"; };
+		4CCD243C193BC03700E44D47 /* MTQueryCacheAggregateFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheAggregateFunction.m; sourceTree = "<group>"; };
 		4CCD8CD715036DBB002B9E77 /* UIImagePatternPebbled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternPebbled.png; sourceTree = "<group>"; };
 		4CCD8CD815036DBB002B9E77 /* UIImagePatternPebbled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImagePatternPebbled@2x.png"; sourceTree = "<group>"; };
 		4CCD8CD915036DBB002B9E77 /* UIImagePatternStationary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImagePatternStationary.png; sourceTree = "<group>"; };
@@ -3320,6 +3324,8 @@
 				4C15EB8E192DF50600C412A4 /* MTQuerySelectItemsForGroup.m */,
 				4C40EBF1193387D100F12AAC /* MTQueryCacheSelectRowIds.h */,
 				4C40EBF2193387D100F12AAC /* MTQueryCacheSelectRowIds.m */,
+				4CCD243B193BC03700E44D47 /* MTQueryCacheAggregateFunction.h */,
+				4CCD243C193BC03700E44D47 /* MTQueryCacheAggregateFunction.m */,
 			);
 			name = MTQueryCache;
 			sourceTree = "<group>";
@@ -6103,6 +6109,7 @@
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
 				4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */,
 				4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */,
+				4CCD243E193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */,
 				4C40EBF4193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
 				4CE17E2216501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4C7732A1190FFD6A005AE7C2 /* MysqlUpdate.m in Sources */,
@@ -6582,6 +6589,7 @@
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
 				4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
+				4CCD243D193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */,
 				4C40EBF3193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
 				4C23FBD618FAE4F7009F234F /* MTPaperC7.m in Sources */,
 				4C7732A0190FFD6A005AE7C2 /* MysqlUpdate.m in Sources */,

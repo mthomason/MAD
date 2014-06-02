@@ -339,8 +339,12 @@ NSString * const MTNullIdentifier = @"(null)";
     return comparsonResult;
 }
 
+- (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex {
+    return _reportIndexes[pageIndex];
+}
+
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex {
-    return [[[self query] datatable] enumeratorForRowIds: [self reportIndexes][pageIndex]];
+    return [[[self query] datatable] enumeratorForRowIds: [self rowidsForPage:pageIndex]];
 }
 
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {

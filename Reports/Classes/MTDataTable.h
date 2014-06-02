@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -76,5 +77,11 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
+
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                     function:(MTAggregateFunctionType)function
+                     fieldKey:(NSString *)fieldKey
+                    groupKeys:(NSArray *)groupKeys
+                       rowids:(NSIndexSet *)rowids;
 
 @end

@@ -561,11 +561,7 @@
     return result;
 }
 
-- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
-
-    [self initalizeGroupKeys];
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    
+- (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
     NSInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
@@ -574,6 +570,15 @@
         [whereClause addObject:whereStatement];
         groupLevel++;
     }
+    return whereClause;
+}
+
+- (NSArray *)objectsForGroupKeys:(NSArray *)groupKeys {
+
+    [self initalizeGroupKeys];
+
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    NSArray *whereClause = [self whereClauseForGroupKeys:groupKeys];
     NSDictionary *querySelect = @{
                                   @(MTQuerySelectFieldKeys) : [self columnKeys],
                                   @(MTQuerySelectTableName) : [self tableName],
@@ -586,8 +591,6 @@
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
-    
-    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
     
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
@@ -817,53 +820,196 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return [self rowCounter];
 }
 
-- (id)currentObject:(sqlite3_stmt *)statement {
-    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
-    int columnCounter = 0;
-    for (id key in [self columnKeys]) {
-        MTDataColumn *dataColumn = [self columns][key];
-        id columnValue;
-        switch ([[dataColumn columnType] integerValue]) {
-            case MTDataTypeLong:
-            case MTDataTypeLongLong:
-            case MTDataTypeInteger:
-                columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
-                break;
-            case MTDataTypeBlob:
-                columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
-                                             length: sqlite3_column_bytes(statement, columnCounter)];
-                break;
-            case MTDataTypeFloat:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
-                break;
-            case MTDataTypeDouble:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
-                break;
-            case MTDataTypeDecimal:
-                columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
-                break;
-            case MTDataTypeString: {
+
+- (NSDictionary *)paramatersAggregateWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+    NSNumber *keyTableName = @(MTQueryCacheAggregateFunctionParamatersTableName);
+    NSNumber *keyFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
+    NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
+    NSNumber *keyFieldDescriptors = @(MTQueryCacheAggregateFunctionParamatersFieldDescriptors);
+    NSNumber *objFunctionType = @(functionType);
+    return @{
+             keyTableName : [self tableName],
+             keyFieldKey : fieldKey,
+             keyFieldDescriptors : [self columns],
+             keyAggregateFunctionType: objFunctionType
+             };
+}
+
+- (NSDictionary *)paramatersAggregateByPageWithFieldKey:(NSString *)fieldKey andRowIds:(NSIndexSet *)rowids andFunctionType:(MTAggregateFunctionType)functionType {
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
+    NSNumber *keyRowids = @(MTQueryCacheAggregateFunctionParamatersRowids);
+    [parameters setObject:rowids forKey:keyRowids];
+    return parameters;
+}
+
+- (NSDictionary *)paramatersAggregateByGroupKeys:(NSArray *)groupKeys andFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
+    NSNumber *keyWhereClause = @(MTQueryCacheAggregateFunctionParamatersWhere);
+    [parameters setObject:[self whereClauseForGroupKeys:groupKeys] forKey:keyWhereClause];
+    return parameters;
+}
+
+- (NSDictionary *)parametersAggregateByReportWithFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
+    return [self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType];
+}
+
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                     function:(MTAggregateFunctionType)function
+                     fieldKey:(NSString *)fieldKey
+                    groupKeys:(NSArray *)groupKeys
+                       rowids:(NSIndexSet *)rowids {
+    id result = nil;
+  
+    NSString *columnKey = [self columnKeyForColumnName:fieldKey];
+    
+    NSDictionary *queryParameters;
+    
+    switch (groupByType) {
+        case MTAggregateGroupByTypePage:
+            queryParameters = [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function];
+            break;
+
+        case MTAggregateGroupByTypeReport:
+            queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
+            break;
+        
+        case MTAggregateGroupByTypeSection:
+            queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
+            break;
+            
+        default:
+            break;
+    }
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAggregateFunction object:queryParameters];
+    sqlite3_stmt *statement = NULL;
+    NSError *error = nil;
+    NSString *sql = [query getSqlWithError:&error];
+    
+    const char *sqlc = [sql UTF8String];
+    char *queryString = sqlite3_mprintf((char *) sqlc);
+    sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
+    
+    BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
+    
+    for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
+        [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
+    }
+    sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
+//log_sql(databaseHandle,1);
+    
+    if (success && sqlite3_step(statement) == SQLITE_ROW) {
+        result = [self objectOfUnknownType:statement forColumnNumber:0];
+    }
+    NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
+    
+    sqlite3_finalize(statement);
+    sqlite3_free(queryString);
+    
+    return result;
+}
+
+- (NSString *)columnKeyForColumnName:(NSString *)columnName {
+    NSString *key;
+    for (NSString *columnKey in [[self columns] keyEnumerator]) {
+        MTDataColumn *column = [[self columns] objectForKey:columnKey];
+        if ([[column fieldName] isEqualToString:columnName]) {
+            key = [NSString stringWithString: columnKey];
+            break;
+        }
+    }
+    return key;
+}
+
+MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type);
+MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
+    switch (sqlite3type) {
+        case SQLITE_INTEGER:
+            return MTDataTypeInteger;
+            break;
+        case SQLITE_TEXT:
+            return MTDataTypeString;
+            break;
+        case SQLITE_BLOB:
+            return MTDataTypeBlob;
+            break;
+        case SQLITE_NULL:
+            return MTDataTypeNull;
+            break;
+        case SQLITE_FLOAT:
+            return MTDataTypeFloat;
+            break;
+        default:
+            return MTDataTypeString;
+            break;
+    }
+}
+
+- (int)columnIndexForKey:(NSString *)key {
+    return [[self columnKeys] indexOfObject:key];
+}
+
+- (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(NSUInteger)columnIndex {
+    MTDataType aggregateResultType = mad_sqlite3_datatype_for_sqlite3_type(sqlite3_column_type(statement, columnIndex));
+    return [self object:statement forColumnNumber:columnIndex withType:aggregateResultType];
+}
+
+- (id)object:(sqlite3_stmt *)statement forColumnNumber:(NSUInteger)columnCounter withType:(MTDataType)type {
+    id columnValue;
+    switch (type) {
+        case MTDataTypeLong:
+        case MTDataTypeLongLong:
+        case MTDataTypeInteger:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeBlob:
+            columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
+                                         length: sqlite3_column_bytes(statement, columnCounter)];
+            break;
+        case MTDataTypeFloat:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeDouble:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeDecimal:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeString: {
+            const unsigned char *text = sqlite3_column_text(statement, columnCounter);
+            if (text == NULL) {
+                columnValue = [NSNull null];
+            } else {
+                columnValue = [NSString stringWithUTF8String:(const char *) text];
+            }
+            break;
+        }
+        case MTDataTypeNull: {
+            columnValue = [NSNull null];
+            break;
+        }
+        default: {
+            NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
+            if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                 const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {
                     columnValue = [NSNull null];
                 } else {
                     columnValue = [NSString stringWithUTF8String:(const char *) text];
                 }
-                break;
             }
-            default: {
-                NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
-                if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
-                    const unsigned char *text = sqlite3_column_text(statement, columnCounter);
-                    if (text == NULL) {
-                        columnValue = [NSNull null];
-                    } else {
-                        columnValue = [NSString stringWithUTF8String:(const char *) text];
-                    }
-                }
-                break;
-            }
+            break;
         }
+    }
+    return columnValue;
+}
+
+- (id)currentObject:(sqlite3_stmt *)statement {
+    NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
+    int columnCounter = 0;
+    for (id key in [self columnKeys]) {
+        MTDataColumn *dataColumn = [self columns][key];
+        id columnValue = [self object:statement forColumnNumber:columnCounter withType:[[dataColumn columnType] integerValue]];
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];
         }

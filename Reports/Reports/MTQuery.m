@@ -35,9 +35,11 @@
 #import "MTQueryCacheSelectGroupKeys.h"
 #import "MTQuerySelectItemsForGroup.h"
 #import "MTQueryCacheSelectRowIds.h"
+#import "MTQueryCacheAggregateFunction.h"
 
 #import "MTDatabase.h"
 #import "MTDatabaseField.h"
+#import "MTDataColumn.h"
 
 #import "MTGraph.h"
 
@@ -64,6 +66,8 @@
 
 #import "MTDataTable.h"
 
+#import "MTDatabaseDataBinding.h"
+
 NSString * const MTQueryKeyType = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
@@ -83,6 +87,10 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         
         case MTQueryTypeCacheSelectItemsForGroupKeys:
             self = [[MTQuerySelectItemsForGroup alloc] initWithObject:object];
+            break;
+        
+        case MTQueryTypeCacheAggregateFunction:
+            self = [[MTQueryCacheAggregateFunction alloc] initWithObject:object];
             break;
             
         case MTQueryTypeCacheSelectGroupKeys:
@@ -257,6 +265,71 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
     return (index < [[self fieldKeys] count]) ? [[self fieldKeys] objectAtIndex:index] : nil;
+}
+
+#pragma mark - Helper functions for the query cache
+// FIXME: These are not yet useable for anything but Sqlite3.
+
+- (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+    if ([whereClause count] > 0) {
+        NSUInteger counter = 0;
+        for (NSDictionary *condition in whereClause) {
+            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
+            NSString *columnHandle = [condition objectForKey:@"c"];
+            NSString *columnValue = [condition objectForKey:@"v"];
+            
+            
+            if ([[NSNull null] isEqual: columnValue]) {
+                [sql appendFormat:@"%@ is Null", columnHandle];
+            } else {
+                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
+                                                                                          fieldIndex: counter
+                                                                                               value: columnValue];
+                [[self binaryBindings] addObject:databinding];
+                [sql appendFormat:@"%@ = ?", columnHandle];
+                counter++;
+            }
+        }
+    }
+    return sql;
+}
+
+- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+    if ([sortDescriptors count] > 0) {
+        NSUInteger sortCounter = 0;
+        [sql appendString:@" ORDER BY "];
+        
+        for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+            if (sortCounter != 0) [sql appendString:@", "];
+            NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
+            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
+            sortCounter++;
+        }
+    }
+    return sql;
+}
+
+- (NSString *)whereClauseWithRowIds:(NSIndexSet *)rowids {
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
+    NSUInteger rowid = [rowids firstIndex];
+    BOOL firstTime = YES;
+    while (rowid != NSNotFound) {
+        if (firstTime == NO) {
+            [sql appendString: @" OR "];
+        } else {
+            [sql appendString: @" WHERE "];
+        }
+        [sql appendFormat:@"rowid = %d", rowid];
+        rowid = [rowids indexGreaterThanIndex: rowid];
+        firstTime = NO;
+    }
+    return sql;
+}
+
+- (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
+    return [[(MTDataColumn *)[[self columns] objectForKey:columnHandle] columnType] integerValue];
 }
 
 @end

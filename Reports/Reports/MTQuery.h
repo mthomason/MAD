@@ -37,10 +37,22 @@ typedef NS_ENUM(NSUInteger, MTQueryType) {
     MTQueryTypeCacheSelectRowId,
     MTQueryTypeCacheSelectRowIds,
     MTQueryTypeCacheSelectGroupKeys,
-    MTQueryTypeCacheSelectItemsForGroupKeys
+    MTQueryTypeCacheSelectItemsForGroupKeys,
+    MTQueryTypeCacheAggregateFunction
 };
 
 #pragma mark Types of specific paramamters accepted for each query
+
+typedef NS_ENUM(NSUInteger, MTQueryCacheAggregateFunctionParamaters) {
+    MTQueryCacheAggregateFunctionParamatersTableName,
+    MTQueryCacheAggregateFunctionParamatersGroupByType,
+    MTQueryCacheAggregateFunctionParamatersRowids,
+    MTQueryCacheAggregateFunctionParamatersAggregateFunctionType,
+    MTQueryCacheAggregateFunctionParamatersFieldKey,
+    MTQueryCacheAggregateFunctionParamatersWhere,
+    MTQueryCacheAggregateFunctionParamatersFieldDescriptors,
+    
+};
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersLimit,
@@ -138,9 +150,17 @@ extern NSString * const MTQueryKeyObject;
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion;
 - (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion;
 
+@property (nonatomic, strong) NSDictionary *columns;    //MTDataColumns by key
+
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
+
+
+- (NSString *)whereClauseWithRowIds:(NSIndexSet *)rowids;
+- (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
+- (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
+- (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3
 
 - (id)initWithObject:(id)object;
 - (NSArray *)sortedHasQueryGroups;

@@ -17,7 +17,6 @@
 @property (nonatomic, strong) NSArray *sortDescriptors;
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (nonatomic, strong) NSArray *whereClause;
-@property (nonatomic, strong) NSDictionary *columns;
 
 @end
 
@@ -67,45 +66,10 @@
         columnCounter++;
     }
     [sql appendFormat:@" FROM %@", [self tableName]];
+    [sql appendString:[self whereClauseWithParameters:[self whereClause]]];
+    [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
 
-    if ([[self whereClause] count] > 0) {
-        NSUInteger counter = 0;
-        for (NSDictionary *condition in [self whereClause]) {
-            [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
-            NSString *columnHandle = [condition objectForKey:@"c"];
-            NSString *columnValue = [condition objectForKey:@"v"];
-            
-            
-            if ([[NSNull null] isEqual: columnValue]) {
-                [sql appendFormat:@"%@ is Null", columnHandle];
-            } else {
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
-                                                                                          fieldIndex: counter
-                                                                                               value: columnValue];
-                [[self binaryBindings] addObject:databinding];
-                [sql appendFormat:@"%@ = ?", columnHandle];
-                counter++;
-            }
-        }
-    }
-    
-    if ([[self sortDescriptors] count] > 0) {
-        NSUInteger sortCounter = 0;
-        [sql appendString:@" ORDER BY "];
-        
-        for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
-            if (sortCounter != 0) [sql appendString:@", "];
-            NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
-            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
-            sortCounter++;
-        }
-    }
-    
     return sql;
-}
-
-- (MTDataType)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MTDataColumn *)[[self columns] objectForKey:columnHandle] columnType] integerValue];
 }
 
 @end

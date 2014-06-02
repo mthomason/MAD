@@ -20,6 +20,15 @@
 
 @implementation MTDataTableVirtual
 
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                     function:(MTAggregateFunctionType)function
+                     fieldKey:(NSString *)fieldKey
+                    groupKeys:(NSArray *)groupKeys
+                       rowids:(NSIndexSet *)rowids {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
 - (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;

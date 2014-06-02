@@ -401,13 +401,32 @@
                                     NSMutableString *displayString = [NSMutableString new];
                                     id drawingObject = nil;
                                     
+                                    
+                                    
                                     switch ([item getType]) {
                                             
                                         case MTDocumentObjectTypeAggregate: {
+                                            
                                             RptqDocumentObjectAggregate *aggregateField = [item isAggregate];
-                                            
                                             RptqQueryField *queryField = [aggregateField aggregateField];
+                                            NSString *fieldKey = [database safeQueryField:queryField];
                                             
+                                            NSArray *groupKeys;
+                                            NSInteger groupCount = [[aggregateField groupNumber] integerValue];
+                                            if (groupCount < [groupLevelKeys count]) {
+                                                NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
+                                                groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
+                                            }
+
+                                            //[[self reportFormatter] rowidsForPage:pageIndex];
+                                            id aggregateResults = [[[[self reportFormatter] query] datatable] resultsForAggregateType: [[aggregateField groupType] integerValue]
+                                                                                                                             function: [[aggregateField function] integerValue]
+                                                                                                                             fieldKey: fieldKey
+                                                                                                                            groupKeys: groupKeys
+                                                                                                                               rowids: [[self reportFormatter] rowidsForPage:pageIndex]];
+                                            
+                                            NSLog(@"Result: %@", aggregateResults);
+
                                             NSArray *dataForGroup = nil;
                                             NSNumber *aggregateFieldGroupType = [aggregateField groupType];
                                             MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
@@ -447,7 +466,7 @@
                                                     break;
                                             }
                                             
-                                            NSString *fieldKey = [database safeQueryField:queryField];
+                                            
                                             
                                             RptqDatabaseSchemaField *databaseSchemaField = [queryField databaseSchemaField];
                                             NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
@@ -655,7 +674,6 @@
             }
         }
     }
-    
     [dataCacheForPage removeAllObjects];
 }
 
