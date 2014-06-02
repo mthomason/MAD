@@ -466,7 +466,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addReportFooterToReportLayout {
     [self addHeightFromDocumentSectionToReportLayout:[[self layout] hasReportFooterSection]];
-    [self addPageFooter];
+    [self addPageFooterToReportLayout];
     [self addReportFooter];
 }
 

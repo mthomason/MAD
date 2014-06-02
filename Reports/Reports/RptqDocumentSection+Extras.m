@@ -36,7 +36,7 @@ static char secKeyKey;
 
 @interface RptqDocumentSection ()
 
-@property (nonatomic, retain) NSString *secKey;
+//@property (nonatomic, retain) NSString *secKey;
 
 @end
 
@@ -74,8 +74,8 @@ static char secKeyKey;
 - (void)awakeFromFetch {
     [super awakeFromFetch];
 
-    NSString *keyForIdentifier = [self keyForIdentifier];
-    [self setSecKey: keyForIdentifier];
+    //NSString *keyForIdentifier = [self keyForIdentifier];
+    //[self setSecKey: keyForIdentifier];
 }
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
@@ -99,19 +99,16 @@ static char secKeyKey;
 }
 
 - (NSString *)sectionKey {
-    if ([self secKey] == nil) {
-        [self setSecKey:[self keyForIdentifier]];
-    }
     return [self secKey];
 }
 
 - (NSString *)secKey {
-    return objc_getAssociatedObject(self, &secKeyKey);
+    return [self keyForIdentifier];
 }
 
-- (void)setSecKey:(NSString *)string {
-    objc_setAssociatedObject(self, &secKeyKey, string, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
+//- (void)setSecKey:(NSString *)string {
+//    objc_setAssociatedObject(self, &secKeyKey, string, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//}
 
 
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value {
@@ -135,12 +132,7 @@ static char secKeyKey;
 }
 
 - (NSString *)keyForIdentifier {
-    NSCharacterSet *nonAumericCharacterSet = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
-    NSString *objectIdAsUrlString = [[[self objectID] URIRepresentation] absoluteString];
-    NSString *section = [NSString stringWithFormat:@"%ld", (long)[[self identifier] integerValue]];
-    NSArray *components = [objectIdAsUrlString componentsSeparatedByCharactersInSet:nonAumericCharacterSet];
-    NSString *key = [components componentsJoinedByString: section];
-    return key;
+    return [[[self objectID] URIRepresentation] absoluteString];
 }
 
 - (NSUInteger)nextDropIndexForSection {

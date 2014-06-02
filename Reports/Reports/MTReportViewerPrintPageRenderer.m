@@ -259,8 +259,43 @@
 
 }
 
-- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection {
+- (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection inRect:(CGRect)rect {
+
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
     [[UIColor whiteColor] setFill];
+    
+    switch ([documentSection getDocumentSectionType]) {
+        case MNSDocumentSectionTypeBody:
+            [[UIColor blueColor] setFill];
+            break;
+        case MNSDocumentSectionTypeGroupFooter:
+            [[UIColor greenColor] setFill];
+            break;
+        case MNSDocumentSectionTypeGroupHeader:
+            [[UIColor whiteColor] setFill];
+            break;
+        case MNSDocumentSectionTypePageFooter:
+            [[UIColor yellowColor] setFill];
+            break;
+        case MNSDocumentSectionTypePageHeader:
+            [[UIColor whiteColor] setFill];
+            break;
+        case MNSDocumentSectionTypeReportFooter:
+            [[UIColor whiteColor] setFill];
+            break;
+        case MNSDocumentSectionTypeReportHeader:
+            [[UIColor whiteColor] setFill];
+            break;
+        default:
+            [[UIColor whiteColor] setFill];
+            break;
+    }
+    
+    CGPathRef path = CGPathCreateWithRect(rect, NULL);
+    CGContextAddPath(ctx, path);
+    CGContextDrawPath(ctx, kCGPathFill);
+    CGPathRelease(path);
+
 }
 
 
@@ -306,8 +341,9 @@
                     switch (typeDocumentSection) {
                             
                         case MNSDocumentSectionTypePageFooter: {
-                            CGFloat sectionHeight = [[self reportFormatter] heightForSection:[document hasReportFooterSection]];
-            
+                            //RptqDocumentSection
+                            CGFloat sectionHeight = [[self reportFormatter] heightForSection:documentSection];
+                            
                             BOOL lastPage = pageIndex == numberOfPages - 1;
                             if (lastPage) {
                                 originY = pageRect.origin.y + pageRect.size.height - sectionHeight - [[self reportFormatter] heightForSection:[document hasReportFooterSection]];
@@ -331,6 +367,8 @@
                     NSInteger readPageIndex = pageIndex;
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
                     CGRect sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
+                    
+                    [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
                     
                     NSDictionary *rowData = nil;
                 
@@ -480,10 +518,6 @@
                                                 
                                                 switch (functionType) {
                                                         
-                                                    case MTAggregateFunctionTypeCount:
-                                                        aggregateResult = @([dataForGroup count]);
-                                                        break;
-                                                        
                                                     case MTAggregateFunctionTypeFirst:
                                                         if ([dataForGroup count] >= 1) {
                                                             aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
@@ -496,57 +530,8 @@
                                                         aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
                                                         break;
                                                         
-                                                    case MTAggregateFunctionTypeMax: {
-                                                        
-                                                        id result = nil;
-                                                        for (id object in dataForGroup) {
-                                                            id n = [object objectForKey: fieldKey];
-                                                            if ([n compare:result] == NSOrderedDescending) {result = n;}
-                                                        }
-                                                        aggregateResult = result;
-                                                        
-                                                        break;
-                                                    }
-                                                        
-                                                    case MTAggregateFunctionTypeMean: {
-                                                        
-                                                        
-                                                        id sum = @(0);
-                                                        for (id object in dataForGroup) {
-                                                            id n = [object objectForKey: fieldKey];
-                                                            sum = [self sumObject:sum andObject:n forType:aggregateType];
-                                                        }
-                                                        NSUInteger dataForGroupCount = [dataForGroup count];
-                                                        aggregateResult = @(dataForGroupCount > 0 ? ([sum floatValue] / dataForGroupCount) : dataForGroupCount);
-                                                        
-                                                        break;
-                                                    }
-                                                        
-                                                    case MTAggregateFunctionTypeMin: {
-                                                        
-                                                        id result = nil;
-                                                        for (id object in dataForGroup) {
-                                                            id n = [object objectForKey: fieldKey];
-                                                            if ([n compare:result] == NSOrderedAscending) {result = n;}
-                                                        }
-                                                        aggregateResult = result;
-                                                        
-                                                        break;
-                                                    }
-                                                    case MTAggregateFunctionTypeSum: {
-                                                        
-                                                        id sum = @(0);
-                                                        for (id object in dataForGroup) {
-                                                            id n = [object objectForKey: fieldKey];
-                                                            sum = [self sumObject:sum andObject:n forType:aggregateType];
-                                                            
-                                                        }
-                                                        aggregateResult = sum;
-                                                        
-                                                        break;
-                                                    }
                                                     default:
-                                                        
+                                                        NSAssert(false, @"Not implemented");
                                                         break;
                                                 }
                                             }
