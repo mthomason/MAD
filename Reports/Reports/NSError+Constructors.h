@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_NSError_Constructors_h
+#define Reports_NSError_Constructors_h
+
 #import <Foundation/Foundation.h>
 
 @interface NSError (Constructors)
@@ -13,3 +16,5 @@
 + (instancetype)errorWithDomain:(NSString *)domain code:(NSInteger)code title:(NSString *)title andMessage:(NSString *)message;
 
 @end
+
+#endif

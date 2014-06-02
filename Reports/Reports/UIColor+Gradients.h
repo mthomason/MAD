@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIColor_Gradients_h
+#define Reports_UIColor_Gradients_h
+
 #import <Foundation/Foundation.h>
 
 @interface UIColor (Gradients)
@@ -27,3 +30,5 @@
 + (CGGradientRef)backgroundGradientGreenToRedIcon;
 
 @end
+
+#endif

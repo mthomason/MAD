@@ -4,8 +4,14 @@
 // No warranty is expressed or implied.
 
 // Helper methods for adding an alpha layer to an image
+
+#ifndef Reports_UIImage_Alpha_h
+#define Reports_UIImage_Alpha_h
+
 @interface UIImage (Alpha)
 - (BOOL)hasAlpha;
 - (UIImage *)imageWithAlpha;
 - (UIImage *)transparentBorderImage:(NSUInteger)borderSize;
 @end
+
+#endif

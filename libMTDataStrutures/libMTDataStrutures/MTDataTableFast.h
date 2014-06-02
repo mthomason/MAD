@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDataTableFast_h
+#define Reports_MTDataTableFast_h
+
 #import <Foundation/Foundation.h>
 #import "MTDataTable.h"
 
@@ -13,3 +16,5 @@
 <NSCoding, NSFastEnumeration>
 
 @end
+
+#endif

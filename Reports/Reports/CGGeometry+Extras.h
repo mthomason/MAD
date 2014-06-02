@@ -6,6 +6,9 @@
 //  Copyright 2010 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_CGGeometry_Extras_h
+#define Reports_CGGeometry_Extras_h
+
 #import "Constants.h"
 
 /* Make a point from `(x, y)'. */
@@ -445,5 +448,6 @@ CGLineSegmentIntercept(CGLineSegment lineSegment1, CGLineSegment lineSegment2) {
     }
     
     return result;
-    
 }
+
+#endif

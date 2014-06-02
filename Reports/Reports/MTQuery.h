@@ -130,7 +130,7 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
 
-@class MTDatabase, MTDatabaseConnection, MTDataTable;
+@class MTDatabase, MTDataTable;
 
 @interface MTQuery : NSObject
 

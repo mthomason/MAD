@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_NSManagedObjectID_NSObjectIdTag_h
+#define Reports_NSManagedObjectID_NSObjectIdTag_h
+
 #import <UIKit/UIKit.h>
 
 @class NSManagedObjectID;
@@ -15,3 +18,5 @@
 @property (nonatomic, strong) NSManagedObjectID *objectIdTag;
 
 @end
+
+#endif

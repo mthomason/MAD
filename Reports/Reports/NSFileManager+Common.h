@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_NSFileManager_Common_h
+#define Reports_NSFileManager_Common_h
+
 #import "Constants.h"
 
 @interface NSFileManager (Common)
@@ -27,3 +30,5 @@
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
 @end
+
+#endif

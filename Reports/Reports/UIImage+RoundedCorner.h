@@ -5,6 +5,11 @@
 
 // Extends the UIImage class to support making rounded corners
 
+#ifndef Reports_UIImage_RoundedCorner_h
+#define Reports_UIImage_RoundedCorner_h
+
 @interface UIImage (RoundedCorner)
 - (UIImage *)roundedCornerImage:(NSInteger)cornerSize borderSize:(NSInteger)borderSize;
 @end
+
+#endif

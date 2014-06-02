@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDataTableFastObjectEnumerator_h
+#define Reports_MTDataTableFastObjectEnumerator_h
+
 #import <Foundation/Foundation.h>
 
 @class MTDatabaseConnection, MTQuery;
@@ -18,3 +21,5 @@
 - (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query;
 
 @end
+
+#endif

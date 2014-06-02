@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTStoreKitController_NonRenewableLicensing_h
+#define Reports_MTStoreKitController_NonRenewableLicensing_h
+
 #import "MTStoreKitController.h"
 #import "AppDelegate.h"
 
@@ -24,3 +27,5 @@ extern const NSTimeInterval MTTimeIntervalYear;
 + (BOOL)licensedUser;
 
 @end
+
+#endif

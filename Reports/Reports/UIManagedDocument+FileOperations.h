@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIManagedDocument_FileOperations_h
+#define Reports_UIManagedDocument_FileOperations_h
+
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
@@ -16,3 +19,5 @@
 + (void)openManagedDocumentAtUrl:(NSURL *)url withWrapper:(Class)managedObjectType andCompletionHandler:(void (^)(id managedDocument, BOOL success))completionHandler;
 
 @end
+
+#endif

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDataColumn_h
+#define Reports_MTDataColumn_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTDataColumn : NSObject
@@ -35,3 +38,5 @@
 - (void)addRows:(NSUInteger)count;          //Adds specifc number of rows with default value.
 
 @end
+
+#endif

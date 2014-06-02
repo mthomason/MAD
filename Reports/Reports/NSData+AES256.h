@@ -8,6 +8,9 @@
 //  Found at http://pastie.org/426530#44
 //
 
+#ifndef Reports_NSData_AES256_h
+#define Reports_NSData_AES256_h
+
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCryptor.h>
 
@@ -17,3 +20,5 @@
 - (NSData *)AES256DecryptWithKey:(NSString *)key;
 
 @end
+
+#endif

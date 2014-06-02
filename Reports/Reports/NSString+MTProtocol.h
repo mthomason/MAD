@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_NSString_MTProtocol_h
+#define Reports_NSString_MTProtocol_h
+
 #import <Foundation/Foundation.h>
 #import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"
@@ -13,3 +16,5 @@
 @interface NSString (MTProtocol) <MTProtocolCompare, MTProtocolLog>
 
 @end
+
+#endif

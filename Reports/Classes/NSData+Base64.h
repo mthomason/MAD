@@ -12,6 +12,9 @@
 //  appreciated but not required.
 //
 
+#ifndef Reports_NSData_Base64_h
+#define Reports_NSData_Base64_h
+
 #import <Foundation/Foundation.h>
 
 void *NewBase64Decode(
@@ -31,3 +34,5 @@ char *NewBase64Encode(
 - (NSString *)base64EncodedString;
 
 @end
+
+#endif

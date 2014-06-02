@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIViewController_tabBarItem_h
+#define Reports_UIViewController_tabBarItem_h
+
 #import <UIKit/UIKit.h>
 
 @protocol MTTabBarImageProtocol <NSObject>
@@ -17,3 +20,5 @@
 @interface UIViewController (tabBarItem) <MTTabBarImageProtocol>
 
 @end
+
+#endif

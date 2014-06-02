@@ -93,6 +93,9 @@
  5/3/2013
  */
 
+#ifndef Reports_UIImage_ImageEffects_h
+#define Reports_UIImage_ImageEffects_h
+
 #import <UIKit/UIKit.h>
 
 @interface UIImage (ImageEffects)
@@ -105,3 +108,5 @@
 - (UIImage *)applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
 
 @end
+
+#endif

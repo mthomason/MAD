@@ -5,6 +5,9 @@
 
 // Extends the UIImage class to support resizing/cropping
 
+#ifndef Reports_UIImage_Resize_h
+#define Reports_UIImage_Resize_h
+
 @interface UIImage (Resize)
 
 - (UIImage *)croppedImage:(CGRect)bounds;
@@ -24,3 +27,5 @@
 - (UIImage *)thumbnailImage:(CGFloat)maxLenght
        interpolationQuality:(CGInterpolationQuality)quality;
 @end
+
+#endif

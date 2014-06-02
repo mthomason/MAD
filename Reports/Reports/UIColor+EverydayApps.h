@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIColor_EverydayApps_h
+#define Reports_UIColor_EverydayApps_h
+
 @interface UIColor(EverydayApps)
 
 #define vendColor(r, g, b) return [UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:1.0000f]
@@ -33,3 +36,5 @@
 + (id)tintColorAnalogous4;
 
 @end
+
+#endif

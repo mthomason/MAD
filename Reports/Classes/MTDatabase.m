@@ -111,6 +111,10 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return s;
 }
 
+- (void *)databaseHandle {
+    return NULL;
+}
+
 - (NSString *)fieldAliasForField:(RptqDatabaseSchemaField *)field {
     RptqDatabaseSchemaTable *table = [field inTable];
     NSString *fieldAlias = [[field name] stringByAppendingString:[table name]];
@@ -188,7 +192,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 }
 
 - (NSString *)sqlLimitClause:(NSInteger)limit {
-    return (limit > 0 && limit != NSNotFound) ? [NSString stringWithFormat: @"\nLIMIT %ld", limit] : @"";
+    return (limit > 0 && limit != NSNotFound) ? [NSString stringWithFormat: @"\nLIMIT %ld", (long)limit] : @"";
 }
 
 - (void)removeCredentalsBecauseOfError:(NSError *)error {

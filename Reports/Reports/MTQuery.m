@@ -57,6 +57,7 @@
 
 #import "NSError+UserInterface.h"
 
+#import "MTDatabaseConnection.h"
 #import "MTDatabaseConnectionMySql.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseConnectionSqlServer.h"

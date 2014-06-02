@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDataTable_h
+#define Reports_MTDataTable_h
+
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
@@ -85,3 +88,5 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
                        rowids:(NSIndexSet *)rowids;
 
 @end
+
+#endif

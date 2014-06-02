@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_UIColor_PaperPatterns_h
+#define Reports_UIColor_PaperPatterns_h
+
 #import <Foundation/Foundation.h>
 
 @interface UIColor (PaperPatterns)
@@ -63,3 +66,5 @@
 + (id)paperYellowLined;
 
 @end
+
+#endif
