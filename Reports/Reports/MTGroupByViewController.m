@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
 #import "NSError+UserInterface.h"
 
 NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerIdentifier";
@@ -224,8 +225,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         
         default: {
             RptqQueryGroup *queryGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath:[self updatedIndexPath:indexPath]];
-            NSString *sectionNumber = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
-            NSString *textLabel = [NSString stringWithFormat:sectionNumber, [[queryGroup weight] integerValue]];
+            NSString *textLabel = [NSString stringWithFormat:@"Group %d (%@)", [[queryGroup weight] integerValue] + 1, [queryGroup fieldNameNice]];
             [[cell textLabel] setText:textLabel];
             if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && [indexPath row] - 2 == [self aggregateGroupNumber]) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];

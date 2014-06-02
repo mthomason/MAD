@@ -47,7 +47,9 @@
     [super viewDidLoad];
     [[self barButtonItemSave] setEnabled:NO];
     [self setSortOrder:MNSSortOrderAccending];
-    [[[self tableViewCellSort] detailTextLabel] setText: [NSLocalizedString(@"Accending", @"Accending") lowercaseString]];
+    NSString *accending = NSLocalizedString(@"Accending", @"Accending");
+    NSString *lowercase = [accending lowercaseString];
+    [[[self tableViewCellSort] detailTextLabel] setText: lowercase];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
