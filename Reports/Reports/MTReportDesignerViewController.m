@@ -2791,7 +2791,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
                          inCollectionView:(UICollectionView *)collectionView {
 
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    return [self elementViewForCollectionViewCell:[collectionView cellForItemAtIndexPath:indexPath]];
+}
+
+- (MTElementView *)elementViewForCollectionViewCell:(UICollectionViewCell *)cell {
     MTElementView *result = nil;
     
     for (id elementView in [[cell contentView] subviews]) {
@@ -2998,15 +3001,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                     completion:(void (^)(BOOL finished))completion {
     
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
     
     RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
-    UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
+    UICollectionView *collectionViewSection = [self getSectionViewForDocumentSection:section];
     
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[svSection objectIdTag] fromObjectContext:managedObjectContext];
+    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionViewSection objectIdTag] fromObjectContext:managedObjectContext];
     
     
     BOOL found = NO;
@@ -3030,9 +3032,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         if (found) {
             
-            __weak MTReportDesignerViewController *reportDesigner = self;
-
-            [svSection performBatchUpdates:^{
+            __weak MTReportDesignerViewController *weakself = self;
+            __weak UICollectionView *weakSectionView = collectionViewSection;
+            [collectionViewSection performBatchUpdates:^{
                 
                 RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
                 [objectToDelete setInSectionRow:nil];
@@ -3043,11 +3045,20 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [[objectToDelete managedObjectContext] save:&error];
                 NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
                 
-                [svSection deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+                [weakSectionView deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
                 
             } completion:^(BOOL finished) {
                 if (finished) {
-                    [reportDesigner resizeCollectionView:svSection];
+                    
+                    [documentSection setHeight:@([weakSectionView intrinsicContentSize].height)];
+                    [UIView animateWithDuration:0.6666f animations:^{
+                        [weakSectionView invalidateIntrinsicContentSize];
+                    }];
+                    [[reportDocument managedObjectContext] save:nil];
+
+                    
+                    [MTReportDesignerViewController redrawAllElementViewsInCollectionView:weakSectionView inDesigner:weakself];
+
                     if (completion != nil) {
                         completion(YES);
                     }
@@ -3242,9 +3253,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
             };
             
-            __weak MTReportDesignerViewController *reportDesigner = self;
+            __weak UICollectionView *weakCollectionView = collectionView;
             MTBlockCompletionSimple finishedUpdate = ^(BOOL finished) {
-                if (finished) [reportDesigner resizeCollectionView:collectionView];
+                if (finished) {
+                    __weak UICollectionView *weakCollectionView2 = weakCollectionView;
+                    [UIView animateWithDuration:0.6666f animations:^{
+                        [weakCollectionView2 invalidateIntrinsicContentSize];
+                    }];
+                }
+                
             };
 
              [collectionView performBatchUpdates:update completion:finishedUpdate];
@@ -3379,36 +3396,45 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             [[gestureRecognizer view] setAlpha:1.0000f];
             [[gestureRecognizer view] setTransform: CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000)];
-            UICollectionView *newSection = [self sectionViewFor:gestureRecognizer];
+            UICollectionView *sectionView = [self sectionViewFor:gestureRecognizer];
             
-            if (newSection != nil) {
+            if (sectionView != nil) {
                 
-                __weak MTReportDesignerViewController *reportDesigner = self;
                 MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
                 __weak NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
                 
                 NSManagedObjectID *objectId = [[gestureRecognizer view] objectIdTag];
-                NSManagedObjectID *sectionId = [newSection objectIdTag];
+                NSManagedObjectID *sectionId = [sectionView objectIdTag];
                 
                 CGRect frame = [[gestureRecognizer view] frame];
                 __weak UIView *weakGestureRecognizerView = [gestureRecognizer view];
                 
-                [newSection performBatchUpdates:^(void) {
+                __weak RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
+                                                                                        fromObjectContext: managedObjectContext];
+                __weak UICollectionView *weakSectionView = sectionView;
+                __weak MTReportDesignerViewController *weakself = self;
+                [sectionView performBatchUpdates:^(void) {
                     
                     [weakGestureRecognizerView removeFromSuperview];
                     
                     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
-                    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: sectionId
-                                                                                                   fromObjectContext: managedObjectContext];
 
                     
                     NSIndexPath *indexPathInsert = [documentSection addDocumentObject:documentObject withDropPoint:frame.origin];
                     NSArray *indexPathsInserted = @[indexPathInsert];
-                    [newSection insertItemsAtIndexPaths:indexPathsInserted];
+                    [weakSectionView insertItemsAtIndexPaths:indexPathsInserted];
                     [[documentSection managedObjectContext] save:nil];
 
                 } completion:^(BOOL finished) {
-                    if (finished) [reportDesigner resizeCollectionView:newSection];
+                    if (finished) {
+                        [documentSection setHeight:@([weakSectionView intrinsicContentSize].height)];
+                        [UIView animateWithDuration:0.6666f animations:^{
+                            [weakSectionView invalidateIntrinsicContentSize];
+                        }];
+                        [managedObjectContext save:nil];
+                        
+                        [MTReportDesignerViewController redrawAllElementViewsInCollectionView:weakSectionView inDesigner:weakself];
+                    }
                 }];
                 
             }
@@ -3419,6 +3445,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
         default:
             break;
+    }
+}
+
++ (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView inDesigner:(MTReportDesignerViewController *)reportDesigner {
+    int numberOfItemsInSection = [collectionView numberOfItemsInSection:0];
+    for (int i = 0; i < numberOfItemsInSection; i++) {
+        NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:i inSection:0];
+        MTElementView *elementView = [reportDesigner elementViewAtIndexPath:insertedPath inCollectionView:collectionView];
+        [elementView setNeedsDisplay];
     }
 }
 
@@ -3456,17 +3491,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return result;
 }
 
-- (void)resizeCollectionView:(UICollectionView *)collectionView {
+- (void)resizeCollectionView:(UICollectionView *)collectionView height:(CGFloat)height {
     
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: [reportDocument managedObjectContext]];
     [documentSection setHeight:@([collectionView intrinsicContentSize].height)];
-    __weak MTReportDesignerViewController *reportDesigner = self;
+//    __weak MTReportDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:0.6666f animations:^{
         [collectionView invalidateIntrinsicContentSize];
-        [[reportDesigner designerContentView] setNeedsUpdateConstraints];
     }];
     [[reportDocument managedObjectContext] save:nil];
 }
