@@ -48,7 +48,6 @@
         [self registerClass: [MTReportDesignerSectionDecorationView class]
     forDecorationViewOfKind: NSStringFromClass([MTReportDesignerSectionDecorationView class])];
 
-        
         [self setFirstTime:YES];
     }
     return self;
@@ -108,7 +107,10 @@
     }
     [layout setFrame: nearestRect];
 
-    [[self delegate] collectionView:[self collectionView] layout:self setDropPoint:[layout frame].origin forItemAtIndexPath:[layout indexPath]];
+    [[self delegate] collectionView: [self collectionView]
+                             layout: self
+                       setDropPoint: [layout frame].origin
+                 forItemAtIndexPath: [layout indexPath]];
 
     return layout;
 }
@@ -306,7 +308,7 @@
                     positionCounter++;
                 }
                 
-                [layoutToChange setFrame: [[availablePositionsOrdered objectAtIndex:indexOfFurtheristPosition] CGRectValue]];
+                [layoutToChange setFrame: [[availablePositionsOrdered objectAtIndex:indexOfNearestPosition] CGRectValue]];
                 [layoutToChange setDropIndex: [[self delegate] collectionView: [self collectionView]
                                                                        layout: self
                                             updateDropIndexForItemAtIndexPath: [layoutToChange indexPath]]];
@@ -714,27 +716,6 @@
 
 }
 
-/*
-- (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
-    BOOL found = NO;
-    for (NSArray *section in [self itemAttributesBySection]) {
-        for (MTCollectionViewLayoutLiquidAttributes *layoutAttributes in section) {
-            if (layoutAttributes.indexPath.item == indexPath.item && layoutAttributes.indexPath.section == indexPath.section) {
-                resultLayout = layoutAttributes;
-                found = YES;
-                break;
-            }
-        }
-        if (found) {
-            break;
-        }
-    }
-    return resultLayout;
-
-}
-*/
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
     [super prepareForCollectionViewUpdates:updateItems];
 }
