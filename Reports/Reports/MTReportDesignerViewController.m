@@ -2568,15 +2568,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                         layoutAttributesForItemAtIndexPath: (NSIndexPath *)indexPath {
 
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID: [collectionView objectIdTag]
                                                                             fromObjectContext: managedObjectContext];
-    
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
-    
+    RptqDocumentSectionRows *rows =[[documentSection hasRows] firstObject];
+    NSOrderedSet *objects = [rows hasObjects];
+//    RptqDocumentObject *documentObject = [objects objectAtIndex:indexPath.item];
     MTCollectionViewLayoutLiquidAttributes *result = [MTCollectionViewLayoutLiquidAttributes layoutAttributesForCellWithIndexPath:indexPath];
     
     if ([objects count] > [indexPath item]) {
@@ -2638,7 +2637,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
         if (CGPointEqualToPoint(dropPoint, [documentObject dropPoint]) == NO) {
             [documentObject setDropPoint:dropPoint];
-            [[documentObject managedObjectContext] save:nil];
+            //[managedObjectContext save:nil];
         }
     }
 }
@@ -3005,72 +3004,43 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
     
-    RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
-    UICollectionView *collectionViewSection = [self getSectionViewForDocumentSection:section];
+    RptqDocumentSectionRows *sectionRow = [documentObject inSectionRow];
+    RptqDocumentSection *section = [sectionRow inSection];
+    NSInteger deleteIndex = [[sectionRow hasObjects] indexOfObject:documentObject];
+    UICollectionView *sectionCollectionView = [self getSectionViewForDocumentSection:section];
     
-    RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionViewSection objectIdTag] fromObjectContext:managedObjectContext];
+    __weak MTReportDesignerViewController *reportDesigner = self;
     
+    __weak UICollectionView *weakSectionCollectionView = sectionCollectionView;
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [sectionRow hasObjects]];
+    [hasObjects removeObjectAtIndex:deleteIndex];
     
-    BOOL found = NO;
-    NSUInteger deleteSection = 0;
-    
-    for (RptqDocumentSectionRows *row in [documentSection hasRows]) {
+    [sectionCollectionView performBatchUpdates:^{
         
-        NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [row hasObjects]];
-        NSUInteger deleteIndex = 0;
-        
-        
-        for (RptqDocumentObject *object in hasObjects) {
-            
-            if ([[object objectID] isEqual: elementViewId]) {
-                found = YES;
-                break;
-            }
-            
-            deleteIndex++;
-        }
-        
-        if (found) {
-            
-            __weak MTReportDesignerViewController *weakself = self;
-            __weak UICollectionView *weakSectionView = collectionViewSection;
-            [collectionViewSection performBatchUpdates:^{
-                
-                RptqDocumentObject *objectToDelete = [hasObjects objectAtIndex:deleteIndex];
-                [objectToDelete setInSectionRow:nil];
-                [hasObjects removeObjectAtIndex:deleteIndex];
-                RptqDocumentSectionRows *row = [[documentSection hasRows] objectAtIndex: deleteSection];
-                [row setHasObjects:hasObjects];
-                NSError *error = nil;
-                [[objectToDelete managedObjectContext] save:&error];
-                NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: deleteSection];
-                
-                [weakSectionView deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
-                
-            } completion:^(BOOL finished) {
-                if (finished) {
-                    
-                    [documentSection setHeight:@([weakSectionView intrinsicContentSize].height)];
-                    [UIView animateWithDuration:0.6666f animations:^{
-                        [weakSectionView invalidateIntrinsicContentSize];
-                    }];
-                    [[reportDocument managedObjectContext] save:nil];
+        [sectionRow setHasObjects:hasObjects];
 
-                    
-                    [MTReportDesignerViewController redrawAllElementViewsInCollectionView:weakSectionView inDesigner:weakself];
-
-                    if (completion != nil) {
-                        completion(YES);
-                    }
-                }
+        [documentObject setInSectionRow:nil];
+        NSError *error = nil;
+        [managedObjectContext save:&error];
+        
+        NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
+        [weakSectionCollectionView deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+        
+    } completion:^(BOOL finished) {
+        if (finished) {
+            
+            [section setHeight:@([weakSectionCollectionView intrinsicContentSize].height)];
+            [UIView animateWithDuration:0.6666f animations:^{
+                [weakSectionCollectionView invalidateIntrinsicContentSize];
             }];
+            [managedObjectContext save:nil];
+            
+            [MTReportDesignerViewController redrawAllElementViewsInCollectionView:weakSectionCollectionView inDesigner:reportDesigner];
+            if (completion != nil) {
+                completion(YES);
+            }
         }
-        if (found) {
-            break;
-        }
-        found = NO;     // FIXME: Short circut this?
-        deleteSection++;
-    }
+    }];
 }
 
 - (void)addPointA:(CGPoint)pointA andPointB:(CGPoint)pointB {
