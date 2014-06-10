@@ -182,11 +182,7 @@
                 [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:ly];
             }
         }
-    
-        //for (MTCollectionViewLayoutLiquidAttributes *ly in [itemAttributesBySection objectAtIndex:0]) {
-        //    [[self delegate] collectionView:[self collectionView] layout:self setDropPoint:ly.frame.origin forItemAtIndexPath:ly.indexPath]
-        //}
-        
+
         [self setItemAttributesBySection: itemAttributesBySection];
     
     
