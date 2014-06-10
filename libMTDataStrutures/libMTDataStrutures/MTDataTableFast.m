@@ -862,49 +862,50 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
   
     NSString *columnKey = [self columnKeyForColumnName:fieldKey];
     
-    NSDictionary *queryParameters;
-    
-    switch (groupByType) {
-        case MTAggregateGroupByTypePage:
-            queryParameters = [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function];
-            break;
-
-        case MTAggregateGroupByTypeReport:
-            queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
-            break;
+    if (columnKey) {
+        NSDictionary *queryParameters;
         
-        case MTAggregateGroupByTypeSection:
-            queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
-            break;
-            
-        default:
-            break;
+        switch (groupByType) {
+            case MTAggregateGroupByTypePage:
+                queryParameters = [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function];
+                break;
+                
+            case MTAggregateGroupByTypeReport:
+                queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
+                break;
+                
+            case MTAggregateGroupByTypeSection:
+                queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
+                break;
+                
+            default:
+                break;
+        }
+        
+        MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAggregateFunction object:queryParameters];
+        sqlite3_stmt *statement = NULL;
+        NSError *error = nil;
+        NSString *sql = [query getSqlWithError:&error];
+        
+        const char *sqlc = [sql UTF8String];
+        char *queryString = sqlite3_mprintf((char *) sqlc);
+        sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
+        
+        BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
+        
+        for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
+            [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
+        }
+        sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
+        
+        if (success && sqlite3_step(statement) == SQLITE_ROW) {
+            result = [self objectOfUnknownType:statement forColumnNumber:0];
+        }
+        NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
+        
+        sqlite3_finalize(statement);
+        sqlite3_free(queryString);
     }
-    
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAggregateFunction object:queryParameters];
-    sqlite3_stmt *statement = NULL;
-    NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
-    
-    const char *sqlc = [sql UTF8String];
-    char *queryString = sqlite3_mprintf((char *) sqlc);
-    sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
-    
-    BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
-    
-    for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
-        [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
-    }
-    sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
-//log_sql(databaseHandle,1);
-    
-    if (success && sqlite3_step(statement) == SQLITE_ROW) {
-        result = [self objectOfUnknownType:statement forColumnNumber:0];
-    }
-    NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
-    
-    sqlite3_finalize(statement);
-    sqlite3_free(queryString);
     
     return result;
 }

@@ -18,6 +18,8 @@
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
 
+#import "UIColor+EverydayApps.h"
+
 @interface MTTableViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
 
@@ -44,13 +46,6 @@
     return preferredContentSize;
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    if ([UIDevice isPad]) {
-        //[self setPreferredContentSize:CGSizeMake(320.0000f, 420.0000f)];
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSString *versionTextKey = NSLocalizedString(@"Verison %@", @"Verison %@");
@@ -60,6 +55,9 @@
     NSString *buildText = [NSString stringWithFormat:buildTextKey, MTGlobalBundleRev];
     [[self labelVersion] setText:versionText];
     [[self labelBuild] setText:buildText];
+    
+
+    //[[[self navigationController] toolbar] setBarTintColor:[UIColor tintColorBlue]];
 }
 
 - (IBAction)cancel:(id)sender {
