@@ -52,10 +52,7 @@
     [graph addEdgeWithOrigin:vertexY destination:vertexX object:@"Y->X" andWeight:@(1)];
     [graph addEdgeWithOrigin:vertexU destination:vertexX object:@"U->X" andWeight:@(1)];
     
-    NSLog(@"%@", [graph toStringHumanReadable]);
-    
     MTLinkedList *dfsResultsU = [graph depthFirstSearch:vertexU];
-    NSLog(@"U:\t%@", [dfsResultsU toStringHumanReadable]);
     
 }
 

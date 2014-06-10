@@ -44,10 +44,8 @@
         UILabel *label = [[UILabel alloc] initWithFrame:titleLabelFrame];
         [label setText: title];
         [label setFont: [UIFont boldSystemFontOfSize:17.0000f]];
-        UIColor *tintColor = [[[[UIApplication sharedApplication] delegate] window] tintColor];
-        [label setTextColor:tintColor];
-        //label.textColor = [UIColor whiteColor];
-        label.backgroundColor = [UIColor clearColor];
+        [label setTextColor: [UIColor tintColorBlue]];
+        [label setBackgroundColor: [UIColor clearColor]];
         [self addSubview:label];
         [self setTitleLabel: label];
         
@@ -59,17 +57,6 @@
         [self addSubview:button];
         [self setDisclosureButton: button];
         
-        static NSMutableArray *colors = nil;
-        if (colors == nil) {
-            colors = [[NSMutableArray alloc] initWithCapacity:3];
-            UIColor *color = nil;
-            color = [UIColor colorWithRed:0.8200f green:0.8400f blue:0.8700f alpha:1.000f];
-            [colors addObject:(id)[color CGColor]];
-            color = [UIColor colorWithRed:0.4100f green:0.4100f blue:0.5900f alpha:1.000f];
-            [colors addObject:(id)[color CGColor]];
-            color = [UIColor colorWithRed:0.4100f green:0.4100f blue:0.5900f alpha:1.000f];
-            [colors addObject:(id)[color CGColor]];
-        }
         [self setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     }
     
@@ -99,18 +86,18 @@
     }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event { 
-    //[self setHighlight: YES];
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
     [[self titleLabel] setTextColor:[UIColor whiteColor]];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    //[self setHighlight: NO];
+    [super touchesEnded:touches withEvent:event];
     [[self titleLabel] setTextColor:[UIColor tintColorBlue]];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    //[self setHighlight: NO];
+    [super touchesCancelled:touches withEvent:event];
     [[self titleLabel] setTextColor:[UIColor tintColorBlue]];
 }
 

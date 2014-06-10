@@ -1213,10 +1213,9 @@ void HSPtoRGB(
 // Return UIColor from Kelvin
 // Via http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
 
-+ (UIColor *) colorWithKelvin:(CGFloat)kelvin
-{
-    if ((kelvin < 1000) || (kelvin > 40000))
-        NSLog(@"Warning: temperature should range between 1000 and 40000");
++ (UIColor *) colorWithKelvin:(CGFloat)kelvin {
+    
+    NSAssert((kelvin < 1000) || (kelvin > 40000), @"Warning: temperature should range between 1000 and 40000");
     
     CGFloat temperature = kelvin / 100;
     

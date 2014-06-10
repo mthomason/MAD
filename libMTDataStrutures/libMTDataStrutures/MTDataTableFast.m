@@ -596,8 +596,6 @@
     char *queryString = sqlite3_mprintf((char *) sqlc);
     sqlite3 *databaseHandle = [[self databaseForSelects] databaseHandle];
     
-    //sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
-
     BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
     
     for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
@@ -621,7 +619,7 @@
 
 void sqliteCallbackFunc(void *foo, const char* statement);
 void sqliteCallbackFunc(void *foo, const char* statement) {
-    NSLog(@"=> %s", statement);
+    MTLogStatic(@"=> %s", statement);
 }
 
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
@@ -896,7 +894,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
             [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
         }
-        sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
+        //sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
         
         if (success && sqlite3_step(statement) == SQLITE_ROW) {
             result = [self objectOfUnknownType:statement forColumnNumber:0];

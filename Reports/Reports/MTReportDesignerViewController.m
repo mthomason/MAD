@@ -223,6 +223,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - NSObject
 
++ (UIColor *)borderColor {
+    return [UIColor lightGrayColor];
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -230,7 +234,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
 
         [[viewRuler layer] setBorderWidth: 0.5000f];
-        [[viewRuler layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
+        [[viewRuler layer] setBorderColor:[[MTReportDesignerViewController borderColor] CGColor]];
         
         [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setRulerView:viewRuler];
@@ -488,6 +492,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     [self setEditAggregate:NO];
     
+    
+    
     [[self tabBarController] setDelegate:self];
     
     [self setInsetsSetup:NO];
@@ -551,8 +557,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[self viewControllerSectionLayoutSettings]];
 
-    [[navigationController navigationBar] setBarTintColor:[UIColor tintColorBlue]];
-    [[navigationController navigationBar] setTintColor:[UIColor tintColorWhite]];
+    [MTReportDesignerViewController setTintColorForNavigationBar:[navigationController navigationBar]];
+    
+    [MTReportDesignerViewController setTintColorForNavigationBar:[[self navigationController] navigationBar]];
+    
     UIColor *whiteColor = [UIColor whiteColor];
     NSDictionary *textAttribues = @{ NSForegroundColorAttributeName : whiteColor };
     [[navigationController navigationBar] setTitleTextAttributes:textAttribues];
@@ -607,17 +615,43 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
++ (void)setTintColorForNavigationBar:(UINavigationBar *)navigationBar {
+    [navigationBar setBarTintColor:[UIColor tintColorBlue]];
+    [navigationBar setTintColor:[UIColor tintColorWhite]];
+}
+
+- (void)removeObservers {
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     
-    MTApplicationInstance *app = [AppDelegate app];
-    [[app reportDesigner] setZoomScaleRestore:[[self designerScrollView] zoomScale]];
-    [[self designerScrollView] setZoomScale:1.0000f animated:NO];
-
-    MAReportDocument *reportDocument = [app activeDocument];
-
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextObjectsDidChangeNotification
+                           object: managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextDidSaveNotification
+                           object: managedObjectContext];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidHideMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidShowMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerWillHideMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerWillShowMenuNotification
+                           object: nil];
+    [defaultCenter removeObserver: self
+                             name: UIDocumentStateChangedNotification
+                           object: reportDocument];
+}
+
+- (void)addObservers {
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
     [defaultCenter addObserver: self
@@ -634,7 +668,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                       selector: @selector(didHideMenuNotification:)
                           name: UIMenuControllerDidHideMenuNotification
                         object: nil];
-
+    
     [defaultCenter addObserver: self
                       selector: @selector(willHideMenuNotification:)
                           name: UIMenuControllerWillHideMenuNotification
@@ -644,7 +678,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                       selector: @selector(didShowMenuNotification:)
                           name: UIMenuControllerDidShowMenuNotification
                         object: nil];
-
+    
     [defaultCenter addObserver: self
                       selector: @selector(willShowMenuNotification:)
                           name: UIMenuControllerWillShowMenuNotification
@@ -654,6 +688,19 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                       selector: @selector(documentStateChanged)
                           name: UIDocumentStateChangedNotification
                         object: reportDocument];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self addObservers];
+    
+    MTApplicationInstance *app = [AppDelegate app];
+    [[app reportDesigner] setZoomScaleRestore:[[self designerScrollView] zoomScale]];
+    [[self designerScrollView] setZoomScale:1.0000f animated:NO];
+
+    MAReportDocument *reportDocument = [app activeDocument];
+    
     
     RptqDocument *document = [reportDocument activeDocument];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
@@ -763,7 +810,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             // MARK: Setup vert auto layout
             NSString *collectionViewKey = [reportSection sectionKey];
             
-            [[collectionView layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+            [[collectionView layer] setBorderColor: [[MTReportDesignerViewController borderColor] CGColor]];
             [[collectionView layer] setBorderWidth: 1.0000f / [[UIScreen mainScreen] scale]];
             
             [[self sectionBackgroundViews] setValue:backgroundView forKey:collectionViewKey];
@@ -868,10 +915,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
     [[self designerScrollView] setDelegate:self];
     [[self designerScrollView] setUserInteractionEnabled:YES];
-    [[self designerScrollView] setBackgroundColor:[UIColor lightGrayColor]];
+    [[self designerScrollView] setBackgroundColor:[MTReportDesignerViewController designerBackgroundColor]];
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
     [[self designerScrollView] flashScrollIndicators];
     
+}
+
++ (UIColor *)designerBackgroundColor {
+    return [UIColor lightGrayColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -899,36 +950,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    [self removeObservers];
+    
     MTApplicationInstance *app = [AppDelegate app];
     [[app reportDesigner] setBoundsOnDisappear:[[self designerScrollView] bounds]];
-    MAReportDocument *reportDocument = [app activeDocument];
-    
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: managedObjectContext];
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextDidSaveNotification
-                           object: managedObjectContext];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidHideMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidShowMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerWillHideMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerWillShowMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIDocumentStateChangedNotification
-                           object: reportDocument];
-    
-    [reportDocument saveContext];
+    [[app activeDocument] saveContext];
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -969,8 +997,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     [[self designerScrollView] removeConstraints:[self viewDidAppearDesignerScrollViewConstraints]];
     [[self designerScrollView] removeConstraints:[self viewDidAppearDesignerContentViewConstraints]];
-    MTApplicationInstance *app = [AppDelegate app];
-    [[app reportDesigner] setShownAndHidden:YES];
+
+    [[[AppDelegate app] reportDesigner] setShownAndHidden:YES];
 }
 
 + (UIColor *)sectionBackgroundColor:(BOOL)isVisible {
@@ -1523,7 +1551,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - Menu Notifications
 
 - (void)willHideMenuNotification:(NSNotification *)notification { }
-- (void)didHideMenuNotification:(NSNotification *)notification { }
+- (void)didHideMenuNotification:(NSNotification *)notification {
+    [self deselectLastElementViewToShowMenu];
+}
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 - (void)willShowMenuNotification:(NSNotification *)notification { }
 
@@ -1676,12 +1706,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 [self repositionPopoverControllerInformationAnimated:animated];
                 [self setDisplayInactive];
             } else {
-                [[self popoverControllerInformation] dismissPopoverAnimated:animated];
+                [self hideToolbox];
             }
         }
-    }
-    
-    if ([self oneOrMoreElementsSelected] == NO) {
+    } else if ([self oneOrMoreElementsSelected] == NO) {
         [self hideToolbox];
     }
 }
@@ -1965,6 +1993,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
     
     [self removeBorderFromSectionViews];
+}
+
+- (void)deselectLastElementViewToShowMenu {
+    if ([self lastElementViewToShowMenu]) {
+        [self deselectElementView:[self lastElementViewToShowMenu] animated:YES];
+    }
 }
 
 - (void)removeBorderFromSectionViews {

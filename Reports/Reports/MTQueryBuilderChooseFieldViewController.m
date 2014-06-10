@@ -90,6 +90,8 @@
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
     NSArray *queryTablesArray = [queryTables sortedArrayUsingDescriptors:@[namesAccending]];
     [self setDataTables:queryTablesArray];
+    
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
 }
 

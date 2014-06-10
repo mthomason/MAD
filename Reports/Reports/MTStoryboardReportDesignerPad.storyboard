@@ -139,13 +139,13 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="MAD Designer" id="gUI-h7-8DY">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="xUH-8E-KEh">
-                            <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="done:" destination="SZT-w9-gB7" id="e8Y-0B-1xj"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="1QU-im-22s">
-                            <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="showObjects:" destination="SZT-w9-gB7" id="Uqc-M4-yu4"/>
                                 <segue destination="Hl5-7b-oyD" kind="popover" identifier="showObjects" popoverAnchorBarButtonItem="1QU-im-22s" id="deP-iv-9fn">
@@ -11505,11 +11505,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="204-Pu-Gdz"/>
         <segue reference="En2-cS-5pQ"/>
         <segue reference="7pZ-CD-6UY"/>
+        <segue reference="vXr-rE-Oaf"/>
+        <segue reference="YFs-Yk-PnB"/>
         <segue reference="zUp-ku-ep4"/>
         <segue reference="glj-Nb-BHS"/>
-        <segue reference="rbO-qj-gE4"/>
     </inferredMetricsTieBreakers>
 </document>
