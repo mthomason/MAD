@@ -392,7 +392,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 - (void)regenThumbnail {
 
     [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
-    BOOL contentChanged = [self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) ;
+    BOOL contentChanged = [self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
         UIImage *thumbnail = [printPageRender thumbnail];
