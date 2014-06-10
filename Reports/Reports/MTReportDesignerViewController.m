@@ -1730,6 +1730,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if ([[self popoverControllerSectionSettings] isPopoverVisible]) {
         [[self popoverControllerSectionSettings] dismissPopoverAnimated:YES];
     }
+    [self setDisplayActive];
 }
 
 - (void)presentToolboxViewOfType:(MTToolboxType)toolboxType {
@@ -2822,8 +2823,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForObjectID:[collectionView objectIdTag] fromObjectContext:managedObjectContext];
     NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
-    
-    //NSLog(@"Perform Selector: %@", NSStringFromSelector(action));
     
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = [objects objectAtIndex:row];
