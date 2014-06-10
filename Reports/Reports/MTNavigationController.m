@@ -7,15 +7,24 @@
 //
 
 #import "MTNavigationController.h"
+#import "UIColor+EverydayApps.h"
 
 @implementation MTNavigationController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIColor *whiteColor = [UIColor whiteColor];
+    UIColor *barTintColor = [UIColor tintColorBlue];
+    
+    [[self toolbar] setBarTintColor:barTintColor];
+    [[self toolbar] setBarStyle:UIBarStyleBlack];
+    [[self toolbar] setTranslucent:YES];
+
     [[self navigationBar] setBarStyle:UIBarStyleBlack];
     [[self navigationBar] setTranslucent:YES];
+    
     NSMutableDictionary *titleTextAttributes = [[[self navigationBar] titleTextAttributes] mutableCopy];
-    UIColor *whiteColor = [UIColor whiteColor];
     [titleTextAttributes setObject:whiteColor forKey:NSForegroundColorAttributeName];
     [[self navigationBar] setTitleTextAttributes:titleTextAttributes];
 }

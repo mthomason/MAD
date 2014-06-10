@@ -266,16 +266,16 @@
     
     switch ([documentSection getDocumentSectionType]) {
         case MNSDocumentSectionTypeBody:
-            [[UIColor blueColor] setFill];
+            [[UIColor whiteColor] setFill];
             break;
         case MNSDocumentSectionTypeGroupFooter:
-            [[UIColor greenColor] setFill];
+            [[UIColor whiteColor] setFill];
             break;
         case MNSDocumentSectionTypeGroupHeader:
             [[UIColor whiteColor] setFill];
             break;
         case MNSDocumentSectionTypePageFooter:
-            [[UIColor yellowColor] setFill];
+            [[UIColor whiteColor] setFill];
             break;
         case MNSDocumentSectionTypePageHeader:
             [[UIColor whiteColor] setFill];
@@ -325,7 +325,8 @@
             
             NSInteger layoutSectionCounter = 0;
             NSInteger readGroupIndex = 0;
-            NSArray *groupData = nil;
+            //NSArray *groupData = nil;
+            NSInteger groupDataCount;
             
             NSEnumerator *dataForPageIndexEnumerator = [[self reportFormatter] dataForPageIndex:pageIndex];
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
@@ -413,13 +414,13 @@
                                 rowData = [NSDictionary dictionaryWithDictionary:data];
                                 
                             } else {
-                                groupData = [NSArray arrayWithArray: data];
+                                groupDataCount = [(NSArray *)data count];
                                 rowData = [data firstObject];
                             }
                         }
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {
-                            if (readGroupIndex < [groupData count]) {
+                            if (readGroupIndex < groupDataCount) {
                                 rowData = [dataForPageIndexEnumerator nextObject];
                             }
                             readGroupIndex++;
