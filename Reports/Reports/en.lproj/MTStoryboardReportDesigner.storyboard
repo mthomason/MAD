@@ -1628,7 +1628,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nci-gr-x4y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2944" y="-101"/>
+            <point key="canvasLocation" x="2979" y="-173"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hWE-8O-gLX">
@@ -2549,8 +2549,12 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Join Type" id="DdA-1r-2Cq"/>
                     <connections>
+                        <outlet property="tableViewCellCrossJoin" destination="G92-Ut-CTF" id="2Je-Da-Ys3"/>
                         <outlet property="tableViewCellEquiJoin" destination="cqd-Qp-iCE" id="cpV-fW-2bq"/>
                         <outlet property="tableViewCellFullOuterJoin" destination="fIS-CO-tfg" id="LV3-Or-TE8"/>
+                        <outlet property="tableViewCellInnerJoin" destination="IBe-4y-rdM" id="6Aa-mR-FAm"/>
+                        <outlet property="tableViewCellLeftOuterJoin" destination="FLn-95-32V" id="mLd-rX-EEV"/>
+                        <outlet property="tableViewCellRightOuterJoin" destination="C5Y-Kg-iQK" id="i3h-eu-ufr"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1o-O4-sb0" userLabel="First Responder" sceneMemberID="firstResponder"/>

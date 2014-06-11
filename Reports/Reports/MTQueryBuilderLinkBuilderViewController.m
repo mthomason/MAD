@@ -108,6 +108,10 @@
 
 #pragma mark - Delegate callbacks
 
+- (MNSLinkType)initalLinktype {
+    return [self linkType];
+}
+
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)queryField {
     [[self navigationController] popToViewController: self animated: YES];

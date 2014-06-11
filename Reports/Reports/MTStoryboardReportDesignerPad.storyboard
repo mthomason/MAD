@@ -2458,8 +2458,12 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Select Join Type" id="xvK-mw-QOs"/>
                     <connections>
+                        <outlet property="tableViewCellCrossJoin" destination="uT0-hq-XuS" id="kp4-60-EVj"/>
                         <outlet property="tableViewCellEquiJoin" destination="TDD-iF-z3k" id="fh7-a5-021"/>
                         <outlet property="tableViewCellFullOuterJoin" destination="vtT-ES-fpA" id="5i0-BR-J7p"/>
+                        <outlet property="tableViewCellInnerJoin" destination="P7g-Z3-pak" id="cnb-VM-WYN"/>
+                        <outlet property="tableViewCellLeftOuterJoin" destination="MF5-WY-Pqt" id="TPF-nO-HuT"/>
+                        <outlet property="tableViewCellRightOuterJoin" destination="NbB-vm-sHU" id="ASX-49-CVd"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RAQ-go-gPg" userLabel="First Responder" sceneMemberID="firstResponder"/>

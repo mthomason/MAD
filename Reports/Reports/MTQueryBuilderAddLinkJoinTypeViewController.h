@@ -15,6 +15,7 @@
 @class MTQueryBuilderAddLinkJoinTypeViewController, MAReportDocument;
 
 @protocol MTQueryBuilderAddLinkJoinTypeDelegate
+- (MNSLinkType)initalLinktype;
 - (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MAReportDocument *)document;
 @end
 
