@@ -228,36 +228,29 @@ static char secKeyKey;
     RptqDocumentSection *resultSection = nil;
     RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
     NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
-    for (RptqQueryGroup *group in groupsUnsorted) {
-        if ([[group weight] integerValue] == groupLevel) {
-            NSSet *sections = [group hasSection];
-            for (RptqDocumentSection *section in sections) {
-                if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                    resultSection = section;
-                    break;
-                }
-            }
-            break;
-        }
+    NSArray *groupsSorted = [RptqDocumentSection queryGroupsSortedByWeight:groupsUnsorted];
+    if (groupLevel < [groupsSorted count]) {
+        RptqQueryGroup *group = [groupsSorted objectAtIndex:groupLevel];
+        resultSection = [RptqDocumentSection headerSectionInSections:[group hasSection]];
     }
     return resultSection;
+}
+
++ (NSArray *)queryGroupsSortedByWeight:(NSSet *)queryGroupsUnsorted {
+    NSString *sortKey = NSStringFromSelector(@selector(weight));
+    NSSortDescriptor *sortedWeightAscending = [NSSortDescriptor sortDescriptorWithKey:sortKey ascending:YES];
+    NSArray *sortDescriptors = @[sortedWeightAscending];
+    return [queryGroupsUnsorted sortedArrayUsingDescriptors:sortDescriptors];
 }
 
 + (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
     RptqDocumentSection *resultSection = nil;
     RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
     NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
-    for (RptqQueryGroup *group in groupsUnsorted) {
-        if ([[group weight] integerValue] == groupLevel) {
-            NSSet *sections = [group hasSection];
-            for (RptqDocumentSection *section in sections) {
-                if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                    resultSection = section;
-                    break;
-                }
-            }
-            break;
-        }
+    NSArray *groupsSorted = [RptqDocumentSection queryGroupsSortedByWeight:groupsUnsorted];
+    if (groupLevel < [groupsSorted count]) {
+        RptqQueryGroup *group = [groupsSorted objectAtIndex:groupLevel];
+        resultSection = [RptqDocumentSection footerSectionInSections:[group hasSection]];
     }
     return resultSection;
 }
@@ -305,14 +298,7 @@ static char secKeyKey;
                 NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
                 NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
                 RptqQueryGroup *group = sortedArray[groupNumber];
-
-                NSSet *sections = [group hasSection];
-                for (RptqDocumentSection *section in sections) {
-                    if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-                        resultSection = section;
-                        break;
-                    }
-                }
+                resultSection = [RptqDocumentSection headerSectionInSections:[group hasSection]];
                 break;
             }
             
@@ -325,13 +311,8 @@ static char secKeyKey;
                 NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
                 NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
                 RptqQueryGroup *group = sortedArray[groupNumber];
-                NSSet *sections = [group hasSection];
-                for (RptqDocumentSection *section in sections) {
-                    if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-                        resultSection = section;
-                        break;
-                    }
-                }
+                
+                resultSection = [RptqDocumentSection footerSectionInSections:[group hasSection]];
                 break;
             }
             
@@ -341,6 +322,28 @@ static char secKeyKey;
         
     }
 
+    return resultSection;
+}
+
++ (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
+    RptqDocumentSection *resultSection = nil;
+    for (RptqDocumentSection *section in sections) {
+        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+            resultSection = section;
+            break;
+        }
+    }
+    return resultSection;
+}
+
++ (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
+    RptqDocumentSection *resultSection = nil;
+    for (RptqDocumentSection *section in sections) {
+        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+            resultSection = section;
+            break;
+        }
+    }
     return resultSection;
 }
 
@@ -551,10 +554,10 @@ static char secKeyKey;
             result = NSLocalizedString(@"Report Footer", @"Report Footer");
             break;
         case MNSDocumentSectionTypeGroupHeader:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header %d (%@)", @"\"Group Header 1\""), [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [[self inGroup] fieldNameQuery]];
             break;
         case MNSDocumentSectionTypeGroupFooter:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer %d - (%@)", @"\"Group Footer 1\""),  [[[self inGroup] weight] integerValue], [[self inGroup] fieldNameQuery]];
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [[self inGroup] fieldNameQuery]];
             break;
         default:
             break;
