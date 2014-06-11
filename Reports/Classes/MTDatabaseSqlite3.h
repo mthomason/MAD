@@ -41,6 +41,9 @@
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
++ (NSString *)nativeTypeForDataType:(MTDataType)dataType;
++ (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending;
+
 @end
 
 #endif

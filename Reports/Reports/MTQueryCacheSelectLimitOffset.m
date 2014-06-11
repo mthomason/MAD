@@ -7,6 +7,8 @@
 //
 
 #import "MTQueryCacheSelectLimitOffset.h"
+#import "MTDataColumn.h"
+#import "MTDatabaseSqlite3.h"
 
 @interface MTQueryCacheSelectLimitOffset ()
 
@@ -47,6 +49,8 @@
         NSArray *whereClause = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersWhere)];
         [self setWhereClause:whereClause];
         
+        NSDictionary *columns = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersColumns)];
+        [self setColumns:columns];
     }
     return self;
 }
@@ -97,8 +101,14 @@
         [sql appendString:@" ORDER BY "];
         for (NSSortDescriptor *sortDescriptor in [self sortDesc]) {
             if (sortCounter != 0) [sql appendString:@", "];
-            NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
-            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
+            
+            MTDataColumn *dataColumn = nil;
+            if ([self columns]) {
+                dataColumn = [[self columns] objectForKey:[sortDescriptor key]];
+            }
+            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
+            
+            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDescription];
             sortCounter++;
         }
     }

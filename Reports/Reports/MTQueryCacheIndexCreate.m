@@ -13,6 +13,8 @@
 #import "MTQueryCacheIndexCreate.h"
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
+#import "MTDatabaseSqlite3.h"
+#import "MTDataColumn.h"
 
 @interface MTQueryCacheIndexCreate ()
 
@@ -43,6 +45,10 @@
         NSArray *sortDescriptors = object[keySortDescriptors];
         [self setSortDescriptors:sortDescriptors];
         
+        NSNumber *keyColumns = @(MTQueryCacheIndexCreateColumns);
+        NSDictionary *columns = object[keyColumns];
+        [self setColumns:columns];
+        
         [self setQueryObject:object];
         
     }
@@ -62,7 +68,10 @@
             NSUInteger sortCounter = 0;
             for (NSSortDescriptor *sortDescriptor in [self sortDescriptors]) {
                 if (sortCounter != 0) [sql appendString:@", "];
-                NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC ASC" : @"COLLATE LSDESC";
+                
+                MTDataColumn *column = [[self columns] objectForKey:[sortDescriptor key]];
+                NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+                NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[column nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
                 [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
                 sortCounter++;
             }

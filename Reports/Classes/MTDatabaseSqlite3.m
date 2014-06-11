@@ -69,9 +69,6 @@
             sqlite3_create_collation(_database, "LSASC",
                                         SQLITE_UTF8, _database,
                                         compare_string_utf8_localized_asc_collation);
-            sqlite3_create_collation(_database, "LSDESC",
-                                        SQLITE_UTF8, _database,
-                                        compare_string_utf8_localized_desc_collation);
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
@@ -93,12 +90,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         string2 = @"";
     }
     return [string1 localizedCaseInsensitiveCompare:string2];
-}
-
-int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
-    NSString *string1 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg1 length:len1] bytes]];
-    NSString *string2 = [NSString stringWithUTF8String:[[NSData dataWithBytes:arg2 length:len2] bytes]];
-    return [string1 localizedCaseInsensitiveCompare:string2] * -1;
 }
 
 - (void)dealloc {
@@ -243,6 +234,16 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     return result;
 }
 
++ (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending {
+    NSString *sortDescription = nil;
+    if ([[MTDatabaseSqlite3 nativeTypeForDataType:columnType] isEqualToString:@"TEXT"]) {
+        sortDescription = ascending ? @"COLLATE LSASC ASC" : @"COLLATE LSASC DESC";
+    } else {
+        sortDescription = ascending ? @"ASC" : @"DESC";;
+    }
+    return sortDescription;
+}
+
 + (MTDataType)dataTypeForNativeTypeNumeric:(MTDataType)dataType {
     MTDataType result;
     switch (dataType) {
@@ -290,7 +291,7 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
     return result;
 }
 
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
++ (NSString *)nativeTypeForDataType:(MTDataType)dataType {
     NSString *columnAffinity;
     switch (dataType) {
         case MTDataTypeBit:
@@ -331,6 +332,11 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
             break;
     }
     return columnAffinity;
+}
+
+
+- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
+    return [MTDatabaseSqlite3 nativeTypeForDataType:dataType];
 }
 
 - (sqlite3_stmt *)statementForQuery:(MTQuery *)query andStatement:(sqlite3_stmt *)statement {

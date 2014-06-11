@@ -7,6 +7,8 @@
 //
 
 #import "MTQueryCacheSelectGroupKeys.h"
+#import "MTDataColumn.h"
+#import "MTDatabaseSqlite3.h"
 
 @interface MTQueryCacheSelectGroupKeys ()
 
@@ -37,6 +39,12 @@
         
         [self setAccending:[[object objectForKey:@(MTQuerySelectSortAccending)] boolValue]];
         
+        NSNumber *keyColumns = @(MTQuerySelectColumns);
+        NSDictionary *columns = [object objectForKey:keyColumns];
+        if (columns) {
+            NSDictionary *c = [NSDictionary dictionaryWithDictionary:columns];
+            [self setColumns:c];
+        }
     }
     return self;
 }
@@ -56,7 +64,14 @@
         i++;
     }
 
-    [sql appendFormat:@" ORDER BY %@ %@", self.columnName, (self.accending ? @"COLLATE LSASC ASC" : @"COLLATE LSDESC DESC")];
+    MTDataColumn *dataColumn = nil;
+    if ([self columns]) {
+        dataColumn = [[self columns] objectForKey:self.columnName];
+    }
+    NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+    NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:self.accending];
+    
+    [sql appendFormat:@" ORDER BY %@ %@", self.columnName, sortDirection];
     return sql;
 }
 

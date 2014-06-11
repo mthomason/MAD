@@ -90,7 +90,6 @@
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     
-    //NSString *collate = [columnAffinity isEqualToString:@"TEXT"] ? @"COLLATE LSASC" : @"COLLATE LSDESC";;
     
     NSString *unique = self.uniqueColumnHack ? @"UNIQUE" : @"";
     NSString *sql = [self createTable] ?
