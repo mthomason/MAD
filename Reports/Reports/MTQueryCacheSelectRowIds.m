@@ -30,12 +30,16 @@
         
         NSArray *sortDescriptors = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectSortDescriptors)]];
         [self setSortDescriptors:sortDescriptors];
+        
+        NSNumber *keyColumns = @(MTQuerySelectColumns);
+        NSDictionary *columns = [object objectForKey:keyColumns];
+        [self setColumns:columns];
     }
     return self;
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT * FROM %@ ", self.tableName];
+    NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT *, ROWID FROM %@ ", self.tableName];
 
     [sql appendString:[self whereClauseWithRowIds:[self rowids]]];
     [sql appendString:[self orderByClauseWithSortDescriptors:[self sortDescriptors]]];
