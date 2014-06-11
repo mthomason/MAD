@@ -269,8 +269,7 @@
     [super viewDidAppear:animated];
     
     if ([self printPageRendererReport] == nil) {
-        MTApplicationInstance *app = [AppDelegate app];
-        __block MAReportDocument *doc = [app activeDocument];
+        __block MAReportDocument *doc = [[AppDelegate app] activeDocument];
         [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
         MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
@@ -891,8 +890,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
         NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
 
-        MTApplicationInstance *app = [AppDelegate app];
-        MAReportDocument *doc = [app activeDocument];
+        MAReportDocument *doc = [[AppDelegate app] activeDocument];
         MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
                                                                                andLayout:[doc activeDocument]];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
@@ -959,7 +957,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         controller.printInfo = printInfo;
         
         controller.showsPageRange = YES;
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] init];
+
+        
+        MAReportDocument *doc = [[AppDelegate app] activeDocument];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
+                                                                               andLayout:[doc activeDocument]];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
+
         [controller setPrintPageRenderer:printPageRender];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

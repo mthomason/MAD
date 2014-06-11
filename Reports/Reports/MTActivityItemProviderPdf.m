@@ -26,8 +26,7 @@
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
 
-    MTApplicationInstance *app = [AppDelegate app];
-    MAReportDocument *reportDocument = [app activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportDocument reportFormatter]];
     [printPageRender writeToPdf:temporaryFile];
