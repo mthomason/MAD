@@ -70,6 +70,8 @@
 
 #import "Constants.h"
 
+#import "UIViewController+ui.h"
+
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
@@ -406,20 +408,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)setDisplayInactive {
     [self enableTabBarItems];
-}
-
-- (void)disableTabBarItems {
-    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
-    for (UITabBarItem *item in tabBarItems) {
-        [item setEnabled:YES];
-    }
-}
-
-- (void)enableTabBarItems {
-    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
-    for (UITabBarItem *item in tabBarItems) {
-        [item setEnabled:NO];
-    }
 }
 
 #pragma mark - UIViewController

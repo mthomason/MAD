@@ -34,10 +34,6 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 @interface MTQueryBuilderLinkBuilderViewController : UITableViewController
     <UITableViewDataSource, UITableViewDelegate,
         MTQueryBuilderAddLinkJoinTypeDelegate,
-        MTQueryBuilderAddLinkFirstTableDelegate,
-        MTQueryBuilderAddLinkFirstFieldDelegate,
-        MTQueryBuilderAddLinkSecondTableDelegate,
-        MTQueryBuilderAddLinkSecondFieldDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> delegate;
@@ -46,15 +42,9 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellJoinType;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldTwo;
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableOne;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFieldOne;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableTwo;
-@property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFieldTwo;
-
 @property (assign) MNSLinkPart currentlyEditingPart;
 @property (assign) MNSLinkType linkType;
 
-- (IBAction)done:(id)sender;
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;
 

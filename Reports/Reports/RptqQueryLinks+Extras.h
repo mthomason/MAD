@@ -23,18 +23,33 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
     MNSLinkTypeFullOuterJoin = 6,
 };
 
-#define MNSLinkTypeReuseIds [NSArray arrayWithObjects: @"MNSJoinTypeInnerJoin", @"MNSJoinTypeEquiJoin", @"MNSJoinTypeNaturalJoin", @"MNSJoinTypeCrossJoin", @"MNSJoinTypeLeftOuterJoin", @"MNSJoinTypeRightOuterJoin", @"MNSJoinTypeFullOuterJoin", nil]
+extern NSString * const MNSJoinTypeInnerJoin;
+extern NSString * const MNSJoinTypeEquiJoin;
+extern NSString * const MNSJoinTypeNaturalJoin;
+extern NSString * const MNSJoinTypeCrossJoin;
+extern NSString * const MNSJoinTypeLeftOuterJoin;
+extern NSString * const MNSJoinTypeRightOuterJoin;
+extern NSString * const MNSJoinTypeFullOuterJoin;
 
-#define MNSLinkTypeNames [NSArray arrayWithObjects: NSLocalizedString(@"Inner-Join", @"Inner-Join"), NSLocalizedString(@"Equi-Join", @"Equi-Join"), NSLocalizedString(@"Natural Join", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"Left Outer Join", @"Left Outer Join"), NSLocalizedString(@"Right Outer Join", @"Right Outer Join"), NSLocalizedString(@"Full Outer Join", @"Full Outer Join"), nil]
+extern NSString * const MTLinkTypeNameInnerJoin;
+extern NSString * const MTLinkTypeNameEquiJoin;
+extern NSString * const MTLinkTypeNameNaturalJoin;
+extern NSString * const MTLinkTypeNameCrossJoin;
+extern NSString * const MTLinkTypeNameLeftOuterJoin;
+extern NSString * const MTLinkTypeNameRightOuterJoin;
+extern NSString * const MTLinkTypeNameFullOuterJoin;
 
-#define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(/*@"⟕"*/@"", @"Inner-Join"), NSLocalizedString(/*@"θ-join"*/@"", @"Equi-Join"), NSLocalizedString(/*@"⋈"*/@"", @"Natural Join"), NSLocalizedString(/*@"Cross Join"*/@"", @"Cross Join"), NSLocalizedString(/*@"⟕"*/@"", @"Left Outer Join"), NSLocalizedString(/*@"⟖"*/, @"Right Outer Join"), NSLocalizedString(/*@"⟗"*/, @"Full Outer Join"), nil]
+extern NSString * const MTLinkSqlInnerJoin;
+extern NSString * const MTLinkSqlEquiJoin;
+extern NSString * const MTLinkSqlNaturalJoin;
+extern NSString * const MTLinkSqlCrossJoin;
+extern NSString * const MTLinkSqlLeftOuterJoin;
+extern NSString * const MTLinkSqlRightOuterJoin;
+extern NSString * const MTLinkSqlFullOuterJoin;
 
-// FIXME: Left outer join and some other symbols are missing.
+//#define MNSLinkTypeSymbols [NSArray arrayWithObjects: NSLocalizedString(/*@"⟕"*/@"", @"Inner-Join"), NSLocalizedString(/*@"θ-join"*/@"", @"Equi-Join"), NSLocalizedString(/*@"⋈"*/@"", @"Natural Join"), NSLocalizedString(/*@"Cross Join"*/@"", @"Cross Join"), NSLocalizedString(/*@"⟕"*/@"", @"Left Outer Join"), NSLocalizedString(/*@"⟖"*/, @"Right Outer Join"), NSLocalizedString(/*@"⟗"*/, @"Full Outer Join"), nil]
 
-#define MNSLinkTypeSymbolsDesired [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
-
-#define MNSLinkTypeSqlRepresentation [NSArray arrayWithObjects: @"INNER JOIN", @"JOIN", @"NATURAL JOIN", @"CROSS JOIN", @"LEFT OUTER JOIN", @"RIGHT OUTER JOIN", @"FULL OUTER JOIN", nil]
-
+//#define MNSLinkTypeSymbolsDesired [NSArray arrayWithObjects: NSLocalizedString(@"⟕", @"Inner-Join"), NSLocalizedString(@"θ-join", @"Equi-Join"), NSLocalizedString(@"⋈", @"Natural Join"), NSLocalizedString(@"Cross Join", @"Cross Join"), NSLocalizedString(@"⟕", @"Left Outer Join"), NSLocalizedString(@"⟖", @"Right Outer Join"), NSLocalizedString(@"⟗", @"Full Outer Join"), nil]
 
 @class RptqDocument, RptqQueryLinks;
 
@@ -51,6 +66,10 @@ typedef NS_ENUM(NSUInteger, MNSLinkType) {
 + (NSArray *)queriesForDocument:(RptqDocument *)document;
 
 - (NSString *)linkDescription;
+
++ (NSString *)ReuseIdForLinkType:(MNSLinkType)type;
++ (NSString *)LocalizedNamesForLinkType:(MNSLinkType)type;
++ (NSString *)SqlForLinkType:(MNSLinkType)type;
 
 @end
 

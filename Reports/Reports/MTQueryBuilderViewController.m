@@ -72,6 +72,8 @@
 #import "NSManagedObject+Extras.h"
 #import "NSParagraphStyle+CommonStyles.h"
 
+#import "UIViewController+ui.h"
+
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
 NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
@@ -174,8 +176,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
 
     if (reportDocument) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -193,11 +194,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 
                 NSMutableArray *toolbarButtons = [[blockSelf toolbarItems] mutableCopy];
                 NSInteger index = [toolbarButtons count] - 1;
-                //UIBarButtonItem *barButtonItemFlexableSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
                 UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
                 [barButtonItemFixedSpace setWidth:20.0000f];
                 [toolbarButtons insertObject:[blockSelf barButtonItemShowSQL] atIndex:index+1];
-                //[toolbarButtons insertObject:barButtonItemFlexableSpace atIndex:index];
                 [toolbarButtons insertObject:barButtonItemFixedSpace atIndex:index+1];
                 
                 
@@ -228,12 +227,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    MAReportDocument *doc = [[AppDelegate app] activeDocument];
 
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: UIDocumentStateChangedNotification
-                                                  object: reportDocument];
+                                                  object: doc];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -1423,7 +1421,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [[tableController navigationItem] setTitleView:sampleDataTitleView];
    
     [[tableController navigationItem] setRightBarButtonItem:doneButton animated:NO];
-    [self presentViewController:navigationController animated:YES completion:^{ }];
+    
+    [self disableTabBarItems];
+    UIViewController *weakself = self;
+    [self presentViewController:navigationController animated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
 }
 
 - (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {

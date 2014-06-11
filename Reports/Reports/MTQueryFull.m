@@ -475,32 +475,8 @@
                                 for (NSUInteger i = 0; i <= [*linkDepth integerValue]; i++) {
                                     [result appendString:@"\t"];
                                 }
-                                switch ([[queryLink jointypeenum] integerValue]) {
-                                    case MNSLinkTypeInnerJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeInnerJoin]];
-                                        break;
-                                    case MNSLinkTypeEquiJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeEquiJoin]];
-                                        break;
-                                    case MNSLinkTypeNaturalJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeNaturalJoin]];
-                                        break;
-                                    case MNSLinkTypeCrossJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeCrossJoin]];
-                                        break;
-                                    case MNSLinkTypeLeftOuterJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeLeftOuterJoin]];
-                                        break;
-                                    case MNSLinkTypeRightOuterJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeRightOuterJoin]];
-                                        break;
-                                    case MNSLinkTypeFullOuterJoin:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeFullOuterJoin]];
-                                        break;
-                                    default:
-                                        [result appendFormat:@" %@ ",[MNSLinkTypeSqlRepresentation objectAtIndex:MNSLinkTypeInnerJoin]];
-                                        break;
-                                }
+                                NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:[[queryLink jointypeenum] integerValue]];
+                                [result appendFormat:@" %@ ", sqlForLink];
                                 
                                 RptqQueryField *rightField = [queryLink hasRightField];
                                 RptqQueryTable *rightTable = [rightField inQueryTable];

@@ -23,6 +23,30 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
+NSString * const MNSJoinTypeInnerJoin           = @"MNSJoinTypeInnerJoin";
+NSString * const MNSJoinTypeEquiJoin            = @"MNSJoinTypeEquiJoin";
+NSString * const MNSJoinTypeNaturalJoin         = @"MNSJoinTypeNaturalJoin";
+NSString * const MNSJoinTypeCrossJoin           = @"MNSJoinTypeCrossJoin";
+NSString * const MNSJoinTypeLeftOuterJoin       = @"MNSJoinTypeLeftOuterJoin";
+NSString * const MNSJoinTypeRightOuterJoin      = @"MNSJoinTypeRightOuterJoin";
+NSString * const MNSJoinTypeFullOuterJoin       = @"MNSJoinTypeFullOuterJoin";
+
+NSString * const MTLinkTypeNameInnerJoin        = @"Inner-Join";
+NSString * const MTLinkTypeNameEquiJoin         = @"Equi-Join";
+NSString * const MTLinkTypeNameNaturalJoin      = @"Natural Join";
+NSString * const MTLinkTypeNameCrossJoin        = @"Cross Join";
+NSString * const MTLinkTypeNameLeftOuterJoin    = @"Left Outer Join";
+NSString * const MTLinkTypeNameRightOuterJoin   = @"Right Outer Join";
+NSString * const MTLinkTypeNameFullOuterJoin    = @"Full Outer Join";
+
+NSString * const MTLinkSqlInnerJoin             = @"INNER JOIN";
+NSString * const MTLinkSqlEquiJoin              = @"JOIN";
+NSString * const MTLinkSqlNaturalJoin           = @"NATURAL JOIN";
+NSString * const MTLinkSqlCrossJoin             = @"CROSS JOIN";
+NSString * const MTLinkSqlLeftOuterJoin         = @"LEFT OUTER JOIN";
+NSString * const MTLinkSqlRightOuterJoin        = @"RIGHT OUTER JOIN";
+NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
+
 @implementation RptqQueryLinks (Extras)
 
 #pragma mark - Overrides
@@ -115,7 +139,7 @@
     [queryLinks setFieldleft:       [[fieldLeft databaseSchemaField] name]];
     [queryLinks setTableright:      [[fieldRight inQueryTable] alias]];
     [queryLinks setFieldright:      [[fieldRight databaseSchemaField] name]];
-    [queryLinks setJointype:        [MNSLinkTypeReuseIds objectAtIndex: joinType]];
+    [queryLinks setJointype:        [RptqQueryLinks ReuseIdForLinkType:joinType]];
     [queryLinks setJointypeenum:    [NSNumber numberWithInteger: joinType]];
 
     return queryLinks;
@@ -127,23 +151,105 @@
 }
 
 - (NSString *)linkDescription {
-    NSString *linkDescription;
+    return [RptqQueryLinks LocalizedNamesForLinkType:[[self jointypeenum] integerValue]];
+}
 
-    // FIXME: Should display the correct algebraic glyphs.
-//    switch ([[self jointype] integerValue]) {
++ (NSString *)ReuseIdForLinkType:(MNSLinkType)type {
+    NSString *reuseId;
+    switch (type) {
+        case MNSLinkTypeInnerJoin:
+            reuseId = MNSJoinTypeInnerJoin;
+            break;
+        case MNSLinkTypeEquiJoin:
+            reuseId = MNSJoinTypeEquiJoin;
+            break;
+        case MNSLinkTypeNaturalJoin:
+            reuseId = MNSJoinTypeNaturalJoin;
+            break;
+        case MNSLinkTypeCrossJoin:
+            reuseId = MNSJoinTypeCrossJoin;
+            break;
+        case MNSLinkTypeLeftOuterJoin:
+            reuseId = MNSJoinTypeLeftOuterJoin;
+            break;
+        case MNSLinkTypeRightOuterJoin:
+            reuseId = MNSJoinTypeRightOuterJoin;
+            break;
+        case MNSLinkTypeFullOuterJoin:
+            reuseId = MNSJoinTypeFullOuterJoin;
+            break;
+        default:
+            reuseId = MNSJoinTypeLeftOuterJoin;
+            break;
+    }
+    return reuseId;
+}
 
-//        case MNSLinkTypeLeftOuterJoin:
-            linkDescription = [NSString stringWithFormat:@"%@", [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
-//            break;
-            
-//        default:
-//            linkDescription = [NSString stringWithFormat:@"%@ (%@)",
-//                               [MNSLinkTypeSymbols objectAtIndex: [[self jointypeenum] integerValue]],
-//                               [MNSLinkTypeNames objectAtIndex: [[self jointypeenum] integerValue]]];
-//            break;
-//    }
-    
-    return linkDescription;
++ (NSString *)NamesForLinkType:(MNSLinkType)type {
+    NSString *reuseId;
+    switch (type) {
+        case MNSLinkTypeInnerJoin:
+            reuseId = MTLinkTypeNameInnerJoin;
+            break;
+        case MNSLinkTypeEquiJoin:
+            reuseId = MTLinkTypeNameEquiJoin;
+            break;
+        case MNSLinkTypeNaturalJoin:
+            reuseId = MTLinkTypeNameNaturalJoin;
+            break;
+        case MNSLinkTypeCrossJoin:
+            reuseId = MTLinkTypeNameCrossJoin;
+            break;
+        case MNSLinkTypeLeftOuterJoin:
+            reuseId = MTLinkTypeNameLeftOuterJoin;
+            break;
+        case MNSLinkTypeRightOuterJoin:
+            reuseId = MTLinkTypeNameRightOuterJoin;
+            break;
+        case MNSLinkTypeFullOuterJoin:
+            reuseId = MTLinkTypeNameFullOuterJoin;
+            break;
+        default:
+            reuseId = MTLinkTypeNameLeftOuterJoin;
+            break;
+    }
+    return NSLocalizedString(reuseId, reuseId);
+}
+
++ (NSString *)SqlForLinkType:(MNSLinkType)type {
+    NSString *sql;
+    switch (type) {
+        case MNSLinkTypeInnerJoin:
+            sql = MTLinkSqlInnerJoin;
+            break;
+        case MNSLinkTypeEquiJoin:
+            sql = MTLinkSqlEquiJoin;
+            break;
+        case MNSLinkTypeNaturalJoin:
+            sql = MTLinkSqlNaturalJoin;
+            break;
+        case MNSLinkTypeCrossJoin:
+            sql = MTLinkSqlCrossJoin;
+            break;
+        case MNSLinkTypeLeftOuterJoin:
+            sql = MTLinkSqlLeftOuterJoin;
+            break;
+        case MNSLinkTypeRightOuterJoin:
+            sql = MTLinkSqlRightOuterJoin;
+            break;
+        case MNSLinkTypeFullOuterJoin:
+            sql = MTLinkSqlFullOuterJoin;
+            break;
+        default:
+            sql = MTLinkSqlLeftOuterJoin;
+            break;
+    }
+    return sql;
+}
+
++ (NSString *)LocalizedNamesForLinkType:(MNSLinkType)type {
+    NSString *name = [self NamesForLinkType:type];
+    return NSLocalizedString(name, name);
 }
 
 // MARK: MTProtocolLog
