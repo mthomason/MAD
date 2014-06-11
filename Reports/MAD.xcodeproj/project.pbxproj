@@ -713,6 +713,12 @@
 		4C66355717D5C721004AC646 /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
 		4C66355817D5C73B004AC646 /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
 		4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
+		4C67B74419474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */; };
+		4C67B74519474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */; };
+		4C67B74619474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */; };
+		4C67B74719474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */; };
+		4C67B75319475A88006B4D5B /* UIPageViewController+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */; };
+		4C67B75419475A88006B4D5B /* UIPageViewController+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */; };
 		4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */; };
 		4C6C9B1E17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */; };
 		4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B2217318965000E1161 /* MTReportDesignerSectionBackgroundView.m */; };
@@ -2240,6 +2246,10 @@
 		4C6461B018C0E6590069EF8D /* MTActivityProvidence@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTActivityProvidence@2x.png"; sourceTree = "<group>"; };
 		4C6461B118C0E6590069EF8D /* MTActivityProvidence~iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTActivityProvidence~iPad.png"; sourceTree = "<group>"; };
 		4C6461B218C0E6590069EF8D /* MTActivityProvidence.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTActivityProvidence.png; sourceTree = "<group>"; };
+		4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTSliderThumbRotateDisabled@2x.png"; sourceTree = "<group>"; };
+		4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTSliderThumbRotateDisabled.png; sourceTree = "<group>"; };
+		4C67B75119475A88006B4D5B /* UIPageViewController+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPageViewController+Extras.h"; sourceTree = "<group>"; };
+		4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIPageViewController+Extras.m"; sourceTree = "<group>"; };
 		4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectFactory.h; sourceTree = "<group>"; };
 		4C6C9B1B17305FCF000E1161 /* MTReportDesignerSectionDecorationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionDecorationView.h; sourceTree = "<group>"; };
 		4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionDecorationView.m; sourceTree = "<group>"; };
@@ -3938,6 +3948,8 @@
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */,
+				4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */,
 				4CB3C23819235C7D00F3213E /* MTSliderThumbRotate.png */,
 				4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */,
 				4CB3C22C1923374200F3213E /* MTSliderThumb.png */,
@@ -4970,6 +4982,8 @@
 				4C40EC141934A22B00F12AAC /* NSThread+Extras.m */,
 				4CCD2437193AB07100E44D47 /* NSParagraphStyle+CommonStyles.h */,
 				4CCD2438193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m */,
+				4C67B75119475A88006B4D5B /* UIPageViewController+Extras.h */,
+				4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -5527,6 +5541,7 @@
 				4C80A5F31831859700242703 /* MTBarcodeGridMatrix.h in Resources */,
 				4C0E782A163B5AEC003B951E /* UIImagePatternNotebook.png in Resources */,
 				4C0E782B163B5AEC003B951E /* UIImagePatternNotebook@2x.png in Resources */,
+				4C67B74519474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */,
 				4C0E782C163B5AEC003B951E /* UIImagePatternPeachPebbled.png in Resources */,
 				4C0E782D163B5AEC003B951E /* UIImagePatternPeachPebbled@2x.png in Resources */,
 				4C0E782E163B5AEC003B951E /* UIImagePatternPinkTextured.png in Resources */,
@@ -5576,6 +5591,7 @@
 				4CB3C2311923374200F3213E /* MTSliderThumb@2x.png in Resources */,
 				4C5CB7C8189E2A7D00BB5AF8 /* ctpublic.h in Resources */,
 				4C80A60E183203C500242703 /* MTBarcodeMaxicodeIso16023.h in Resources */,
+				4C67B74719474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */,
 				4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */,
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
@@ -5779,6 +5795,7 @@
 				4CCD8D7E150385DA002B9E77 /* UIImagePatternHomemadePaper.png in Resources */,
 				4CCD8D7F150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4CCD8D80150385DA002B9E77 /* UIImagePatternKraftPaper.png in Resources */,
+				4C67B74619474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */,
 				4C6461B318C0E6590069EF8D /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4CCD8D81150385DA002B9E77 /* UIImagePatternKraftPaper@2x.png in Resources */,
 				4C95CACD182CCA3F00160E01 /* MTBarcode.h in Resources */,
@@ -5823,6 +5840,7 @@
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
 				4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */,
+				4C67B74419474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */,
 				4CCD8D9D150385DA002B9E77 /* UIImagePatternPeachPebbled@2x.png in Resources */,
 				4CCD8D9E150385DA002B9E77 /* UIImagePatternPinkTextured.png in Resources */,
 				4C1BB6EF1813D5110027C508 /* UIBarButtonItemMadDesigner.png in Resources */,
@@ -6285,6 +6303,7 @@
 				4CABE4801837DF7D007EDD9D /* RptqDocument.m in Sources */,
 				4C11BD1F18E08AEA001E3D33 /* MTDataFormatter.m in Sources */,
 				4CABE4681837DF7A007EDD9D /* RptqQuerySort.m in Sources */,
+				4C67B75419475A88006B4D5B /* UIPageViewController+Extras.m in Sources */,
 				4C773295190FFD6A005AE7C2 /* MysqlIndex.m in Sources */,
 				4CABE4901837DF7F007EDD9D /* RptqQueryLinks.m in Sources */,
 				4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
@@ -6765,6 +6784,7 @@
 				4C5CB710189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */,
 				4C11BD1E18E08AEA001E3D33 /* MTDataFormatter.m in Sources */,
 				4C23FBC018FAE4F7009F234F /* MTPaperB7.m in Sources */,
+				4C67B75319475A88006B4D5B /* UIPageViewController+Extras.m in Sources */,
 				4C773294190FFD6A005AE7C2 /* MysqlIndex.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4C23FB0418FADCE4009F234F /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,

@@ -31,6 +31,8 @@
 
 #import "MTSliderPageVertical.h"
 
+#import "UIPageViewController+Extras.h"
+
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate>
 
@@ -609,6 +611,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 #pragma mark - Actions
 
 - (void)setDisplayActive {
+    
+    [self setPageingEnabled:YES];
+    
+    [[self pageSlider] setEnabled:YES];
+    [[self pageSlider] setTintColor:[UIColor tintColorRed]];
 
     NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
     for (UITabBarItem *item in tabBarItems) {
@@ -633,7 +640,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)setDisplayInactive {
-
+    
+    [self setPageingEnabled:NO];
+    
+    [[self pageSlider] setEnabled:NO];
+    [[self pageSlider] setTintColor:[UIColor lightGrayColor]];
+    
     NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
     for (UITabBarItem *item in tabBarItems) {
         [item setEnabled:NO];
@@ -655,7 +667,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [activityIndicator startAnimating];
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
-    //[activityIndicator setColor:[UIColor tintColorGold2]];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
     

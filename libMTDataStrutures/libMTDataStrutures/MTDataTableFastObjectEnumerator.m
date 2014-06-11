@@ -50,13 +50,8 @@
             self->_statement = NULL;
             NSString *sql = [query getSqlWithError:nil];
             const char *queryStringConstChar = [sql UTF8String];
-            //MTLog(@"Sql: %@", sql);
             char *queryString = sqlite3_mprintf((char *) queryStringConstChar);
-            
-            //MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
-
-            BOOL success = sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL) == SQLITE_OK;
-            //NSAssert(success, @"sqlite3_prepare_v2 failed with message: %s", sqlite3_errmsg([[self databaseForQuery] databaseHandle]));
+            sqlite3_prepare_v2([[self databaseForQuery] databaseHandle], queryString, -1, &_statement, NULL);
             sqlite3_free(queryString);
         }
         [self setColumnKeys:columnKeys];
@@ -66,6 +61,11 @@
 
     }
     return self;
+}
+
+void sqliteCallback(void *foo, const char* statement);
+void sqliteCallback(void *foo, const char* statement) {
+    MTLogStatic(@"=> %s", statement);
 }
 
 - (NSArray *)allObjects {
@@ -164,6 +164,7 @@
         }
     }
     if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
+        NSNumber *rowid = @(sqlite3_column_int(_statement, columnCounter));
         [currentObject setValue:@(sqlite3_column_int(_statement, columnCounter)) forKey:@"ROWID"];
     }
     //NSLog(@"FEnum: %@", columnValue);

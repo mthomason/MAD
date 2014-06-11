@@ -819,33 +819,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             sectionHeights += reportSectionHeight;
             
             NSString *lastKey = [reportSectionKeyTracker lastObject];
-            id constraintItem =  sectionCounter == 0 ? [self rulerView] : /*lastCollectionView;*/ [[self sectionViews] objectForKey:lastKey];
+            id constraintItem =  sectionCounter == 0 ? [self rulerView] : [[self sectionViews] objectForKey:lastKey];
             
-            [collectionView setShowsVerticalScrollIndicator:YES];
             
-            /*
-            for (UIGestureRecognizer *parentGesture in [[self designerScrollView] gestureRecognizers]) {
-                if ([parentGesture isKindOfClass:[UIPanGestureRecognizer class]]) {
-                    [parentGesture setDelaysTouchesBegan:YES];
-                    for (UIGestureRecognizer *childGesture in [collectionView gestureRecognizers]) {
-                        if ([childGesture isKindOfClass:[UIPanGestureRecognizer class]]) {
-                            [childGesture setDelaysTouchesBegan:NO];
-                            //[parentGesture requireGestureRecognizerToFail:childGesture];
-                            NSLog(@"Parent %@", parentGesture);
-                            NSLog(@"Child  %@", childGesture);
-                        }
-                    }
-                }
-            }*/
-          
             [[self designerScrollView] setDelaysContentTouches:YES];
-            [self designerScrollView].canCancelContentTouches = YES;
+            [[self designerScrollView] setCanCancelContentTouches: YES];
 
+            [collectionView setShowsVerticalScrollIndicator:YES];
             [collectionView setDelaysContentTouches:NO];
-            collectionView.canCancelContentTouches = NO;
+            [collectionView setCanCancelContentTouches: NO];
             
             [[self designerContentView] addSubview:collectionView];
-            
             [[self designerContentView] addSubview:sectionControlView];
             
             NSLayoutConstraint *lc1a = [NSLayoutConstraint constraintWithItem: constraintItem     attribute: NSLayoutAttributeBottom relatedBy: NSLayoutRelationEqual              toItem: collectionView  attribute: NSLayoutAttributeTop            multiplier:1.0000f constant: -MTReportDesignerBorderPaddingVertical];
@@ -864,7 +848,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             NSArray *collectionViewConstraints = @[lc2a, lc2b, lc2c];
             [[self designerScrollView] addConstraints:collectionViewConstraints];
             [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:collectionViewConstraints];
-            
             
             if ([[reportSection type] integerValue] == MNSDocumentSectionTypeReportFooter) {
                 [self setReportFooterView:collectionView];
@@ -1947,11 +1930,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
     
     [[self barButtonItemObjects] setEnabled:YES];
+    [self setDisplayActive];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:NULL];
     [[self barButtonItemObjects] setEnabled:YES];
+    [self setDisplayActive];
 }
 
 #pragma mark - UITabBarControllerDelegate

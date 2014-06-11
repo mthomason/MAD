@@ -227,11 +227,12 @@
 }
 
 - (NSString *)idColumnKeyForGroupLocation:(NSInteger)groupLevel {
-    //if (groupLevel > [[self groupKeys] count]) {
-    //    [self initalizeGroupKeys];
-    //}
-    NSInteger loc = [[self groupKeys][groupLevel] integerValue];
-    return [self columnKeys][loc];
+    NSString *result = nil;
+    if ([[self groupKeys] count] > groupLevel) {
+        NSInteger loc = [[self groupKeys][groupLevel] integerValue];
+        result = [self columnKeys][loc];
+    }
+    return result;
 }
 
 - (MTDataColumn *)idDataColumnForGroupLevel:(NSInteger)groupLevel {
@@ -247,21 +248,6 @@
     }
 
     [self addRow:row toTable:[self tableName] withColumns:[self columns] andColumnKeys:[self columnKeys]];
-    /*
-    for (int i=0; i<[[self sortDescriptors] count ]; i++) {
-        NSString *tableName = [self cacheTableNameForGroupLevel:i];
-        NSInteger loc = [[self groupKeys][i] integerValue];
-        id value = row[loc];
-        MTDataColumn *oldDataColumn = [self dataColumnForGroupLevel:i];
-        MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:[self cachedGroupColumnName]];
-        [dataColumn setColumnType: [oldDataColumn columnType]];
-        [self addRow:@[value] toTable:tableName withColumns:@{[self cachedGroupColumnName] : dataColumn} andColumnKeys:@[[self cachedGroupColumnName]]];
-    }
-     */
-}
-
-- (NSString *)cachedGroupColumnName {
-    return @"c";
 }
 
 - (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
@@ -393,7 +379,8 @@
     return @{
              @(MTQueryCacheIndexCreateIndexName)         : indexName,
              @(MTQueryCacheIndexCreateTableName)         : tableName,
-             @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors
+             @(MTQueryCacheIndexCreateSortDescriptors)   : sortDescriptors,
+             @(MTQueryCacheIndexCreateColumns)           : [self columns]
              };
 }
 
@@ -424,15 +411,6 @@
     [[self groupKeys] removeAllObjects];
     [self initalizeGroupKeys];
     
-    /*
-    for (int i = 0; i < [[self sortDescriptors] count]; i++) {
-        NSString *tableName = [self cacheTableNameForGroupLevel:i];
-        MTDataColumn *oldDataColumn = [self dataColumnForGroupLevel:i];
-        MTDataColumn *dataColumn = [[MTDataColumn alloc] initWithIdentifier:[self cachedGroupColumnName]];
-        [dataColumn setColumnType: [oldDataColumn columnType]];
-        [self addColumn:dataColumn toTable:tableName columnName:@"c" createTable:YES unique:YES];
-    }
-     */
 }
 
 - (void)dropIndex {
@@ -633,8 +611,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
         
-        MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
-
         const char *sqlc = [sql UTF8String];
         char *queryString = sqlite3_mprintf((char *) sqlc);
         BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
@@ -692,6 +668,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                   @(MTQuerySelectTableName) : [self tableName],
                                   @(MTQuerySelectSortAccending) : @(accending),
                                   @(MTQuerySelectPredicates) : whereClause,
+                                  @(MTQuerySelectColumns) : [self columns]
                                   };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectGroupKeys object: querySelect];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
@@ -718,6 +695,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (MTQuery *)queryForAllRowsWithKeys:(NSArray *)columnKeys {
     
     NSDictionary *options = @{
+                              @(MTQueryCacheSelectLimitOffsetParamatersColumns) : [self columns],
                               @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : columnKeys,
                               @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
                               @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
@@ -894,7 +872,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
             [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
         }
-        //sqlite3_trace(databaseHandle, sqliteCallbackFunc, NULL);
         
         if (success && sqlite3_step(statement) == SQLITE_ROW) {
             result = [self objectOfUnknownType:statement forColumnNumber:0];
@@ -1084,6 +1061,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                               @(MTQuerySelectRowIds) : cacheIds,
                               @(MTQuerySelectTableName) : [self tableName],
                               @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
+                              @(MTQuerySelectColumns) : [self columns]
                               };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
     

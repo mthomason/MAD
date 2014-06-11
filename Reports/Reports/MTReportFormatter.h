@@ -40,6 +40,7 @@ extern NSString * const MTNullIdentifier;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex;
+- (NSDictionary *)resultsForPageIndex:(NSInteger)pageIndex;
 
 - (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
 

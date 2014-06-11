@@ -101,29 +101,12 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         }
         [self setDocument:document];
         
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *rquery = [[database hasQueries] anyObject];
-        if (rquery) {
-            
-            NSString *name = [[[[self urlThumbnail] path]lastPathComponent] stringByDeletingPathExtension];
-            NSNumber *parameterName = @(MTQueryCacheFullReportName);
-            NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
-            NSDictionary *queryFullParameters = @{
-                                                  parameterName : name,
-                                                  parameterSchema : rquery
-                                                  };
-            
-            MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
-            [self reportQueries][@"defaultq"] = query;
-            query = nil;
-            
             if ([self reportFormatter] == nil) {
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
                                                                                        andLayout:[self activeDocument]];
                 [self setReportFormatter:reportFormatter];
                 reportFormatter = nil;
             }
-        }
     }
     return [self document];
 }
@@ -138,8 +121,20 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }];
 }
 
-- (MTQueryFull *)defaultQuery {
-    return [self reportQueries][@"defaultq"];
+- (MTQuery *)defaultQuery {
+    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+    RptqQuery *rquery = [[database hasQueries] anyObject];
+    
+    NSString *name = [[[[self urlThumbnail] path] lastPathComponent] stringByDeletingPathExtension];
+    NSNumber *parameterName = @(MTQueryCacheFullReportName);
+    NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
+    NSDictionary *queryFullParameters = @{
+                                          parameterName : name,
+                                          parameterSchema : rquery
+                                          };
+    
+    MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
+    return defaultQuery;
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {

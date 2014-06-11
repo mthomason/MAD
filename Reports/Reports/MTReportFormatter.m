@@ -39,6 +39,8 @@
 
 #import "MTPageCaching.h"
 
+#import "MTLog.h"
+
 NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
@@ -245,9 +247,14 @@ NSString * const MTNullIdentifier = @"(null)";
 
         //Get row key values
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+        NSMutableString *debuggingString = [[NSMutableString alloc] initWithString:@""];
         for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
+            if ([debuggingString length] > 0) {
+                [debuggingString appendString:@", "];
+            }
             id predicateValue = [resultRow objectForKey:[sortDesc key]];
             [keyValuesForComparson addObject:predicateValue];
+            [debuggingString appendString:[NSString stringWithFormat:@"%@", predicateValue]];
         }
         
         //Display new footers if needed.
@@ -347,6 +354,15 @@ NSString * const MTNullIdentifier = @"(null)";
     return [[[self query] datatable] enumeratorForRowIds: [self rowidsForPage:pageIndex]];
 }
 
+- (NSDictionary *)resultsForPageIndex:(NSInteger)pageIndex {
+    NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
+    for (NSDictionary *rowdata in [self dataForPageIndex:pageIndex]) {
+        NSNumber *rowid = rowdata[@"ROWID"];
+        [results setObject:rowdata forKey:rowid];
+    }
+    return results;
+}
+
 - (void)cacheDetailLevelWithDetails:(NSArray *)containerDetails {
     
     for (NSInteger i=0; i<[containerDetails count]; i++) {
@@ -419,6 +435,8 @@ NSString * const MTNullIdentifier = @"(null)";
     pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.printableSize.width, self.printableSize.height);
     
     if ([self counterHeightUsedCurrentPage] + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
+        
+        //MTLog(@"Page Break");
         
         newPageCreated = YES;
         CGFloat newHeight = [self counterHeightUsedCurrentPage] + pageFooterSectionHeight;

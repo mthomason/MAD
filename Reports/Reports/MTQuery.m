@@ -69,6 +69,8 @@
 
 #import "MTDatabaseDataBinding.h"
 
+#import "MTDatabaseSqlite3.h"   //FIXME: Should only be included in Cache subset
+
 NSString * const MTQueryKeyType = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
@@ -304,7 +306,12 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
         
         for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
             if (sortCounter != 0) [sql appendString:@", "];
-            NSString *sortDirection = [sortDescriptor ascending] ? @"COLLATE LSASC" : @"COLLATE LSDESC";
+            MTDataColumn *dataColumn = nil;
+            if ([self columns]) {
+                dataColumn = [[self columns] objectForKey:[sortDescriptor key]];
+            }
+            NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
+            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
             [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
             sortCounter++;
         }

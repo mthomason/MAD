@@ -314,7 +314,6 @@
     if (query) {
         NSUInteger numberOfGroups = [[query hasQueryGroups] count];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        BOOL groupLevelKeySet = NO;
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
         if (pageIndex < numberOfPages) {
@@ -325,10 +324,11 @@
             
             NSInteger layoutSectionCounter = 0;
             NSInteger readGroupIndex = 0;
-            //NSArray *groupData = nil;
+            NSArray *groupData = nil;
             NSInteger groupDataCount;
-            
-            NSEnumerator *dataForPageIndexEnumerator = [[self reportFormatter] dataForPageIndex:pageIndex];
+
+            NSDictionary *dataForPageIndex = [[self reportFormatter] resultsForPageIndex:pageIndex];
+            NSNumber *detailRowId = nil;
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
                 @autoreleasepool {
@@ -341,8 +341,10 @@
 
                     switch (typeDocumentSection) {
                             
+                        case MNSDocumentSectionTypeBody:
+                            detailRowId = pageSection[MTReportDetailRowId];
+                            break;
                         case MNSDocumentSectionTypePageFooter: {
-                            //RptqDocumentSection
                             CGFloat sectionHeight = [[self reportFormatter] heightForSection:documentSection];
                             
                             BOOL lastPage = pageIndex == numberOfPages - 1;
@@ -363,7 +365,7 @@
                             break;
                     }
                     
-                    if (typeDocumentSection != MNSDocumentSectionTypeBody) readGroupIndex = 0;
+                    if (typeDocumentSection == MNSDocumentSectionTypeGroupHeader) readGroupIndex = 0;
 
                     NSInteger readPageIndex = pageIndex;
                     CGFloat sizeHeight = sectionIsVisible ? [RptqDocumentSection layoutHeightForSection:documentSection] : CGSizeZero.height;
@@ -375,12 +377,11 @@
                 
                     if (numberOfGroups > 0) {
                         
-                        if ([groupLevelKeys count] < numberOfGroups) {
+                        //if ([groupLevelKeys count] < numberOfGroups) {
                             [groupLevelKeys removeAllObjects];
                             NSArray *keys = [self groupLevelKeysForPage:readPageIndex row:layoutSectionCounter numberOfGroups:numberOfGroups andSection:pageSection];
                             [groupLevelKeys addObjectsFromArray:keys];
-                            groupLevelKeySet = YES;
-                        }
+                        //}
                         
                         NSMutableString *groupKey = [[NSMutableString alloc] init];
                         for (id key in groupLevelKeys) {
@@ -414,20 +415,21 @@
                                 rowData = [NSDictionary dictionaryWithDictionary:data];
                                 
                             } else {
+                                groupData = [NSArray arrayWithArray: data];
                                 groupDataCount = [(NSArray *)data count];
                                 rowData = [data firstObject];
                             }
                         }
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {
-                            if (readGroupIndex < groupDataCount) {
-                                rowData = [dataForPageIndexEnumerator nextObject];
+                            if (readGroupIndex < [groupData count]) {
+                                rowData = dataForPageIndex[detailRowId];// [dataForPageIndexEnumerator nextObject];
                             }
                             readGroupIndex++;
                         }
 
                     } else {
-                        rowData = [dataForPageIndexEnumerator nextObject];
+                        rowData = dataForPageIndex[detailRowId];
                     }
                     
                     if (sectionIsVisible) {
@@ -664,6 +666,10 @@
                 
                 layoutSectionCounter++;
             }
+            
+            MTLog(@"------");
+            MTLog(@"");
+
         }
     }
     [dataCacheForPage removeAllObjects];

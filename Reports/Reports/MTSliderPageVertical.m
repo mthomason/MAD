@@ -9,6 +9,7 @@
 #import "MTSliderPageVertical.h"
 #import "UIColor+EverydayApps.h"
 #import <CoreGraphics/CoreGraphics.h>
+#import "UIImage+ImageEffects.h"
 
 @interface MTSliderPageVertical ()
 
@@ -21,27 +22,38 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        UIImage *thumbImage = [UIImage imageNamed:@"MTSliderThumbRotate"];
+        UIImage *thumbImage = [MTSliderPageVertical sliderImageEnabled];
         [self setThumbImage:thumbImage forState:UIControlStateNormal];
         UIImage *blank = [UIImage new];
         [self setMinimumTrackImage:blank forState:UIControlStateNormal];
         [self setMaximumTrackImage:blank forState:UIControlStateNormal];
         
-        UIColor *textColor = [UIColor tintColorRed];
-        UIFont *font = [UIFont systemFontOfSize:9.0000f];
-        NSShadow *shadow = [[NSShadow alloc] init];
-        [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
-        [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
-        [shadow setShadowBlurRadius:5.0000f];
-        NSDictionary *attributes = @{
-                                     NSForegroundColorAttributeName : textColor,
-                                      NSFontAttributeName : font,
-                                      NSShadowAttributeName : shadow,
-                                      };
-        [self setStringAttributes:attributes];
-        
+        [self setDisplayEnabled];
     }
     return self;
+}
+
+- (void)setDisplayEnabled {
+    [self initalizeDisplayAttributesWithColor:[UIColor tintColorRed]];
+}
+
+- (void)setDisplayDisabled {
+    [self initalizeDisplayAttributesWithColor:[UIColor lightGrayColor]];
+}
+
+- (void)initalizeDisplayAttributesWithColor:(UIColor *)tintColor {
+    UIFont *font = [UIFont systemFontOfSize:9.0000f];
+    NSShadow *shadow = [[NSShadow alloc] init];
+    [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
+    [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
+    [shadow setShadowBlurRadius:5.0000f];
+    NSDictionary *attributes = @{
+                                 NSForegroundColorAttributeName : tintColor,
+                                 NSFontAttributeName : font,
+                                 NSShadowAttributeName : shadow,
+                                 };
+    [self setStringAttributes:attributes];
+
 }
 
 - (void)setMaximumValue:(float)maximumValue {
@@ -97,6 +109,31 @@
         }
         drawingPoint = CGPointMake(drawingPoint.x, drawingPoint.y + stringHeight + distanceBetweenTicks);
     }
+}
+
++ (UIImage *)sliderImageEnabled {
+    return [UIImage imageNamed:@"MTSliderThumbRotate"];
+}
+
++ (UIImage *)sliderImageDisabled {
+    return [UIImage imageNamed:@"MTSliderThumbRotateDisabled"];
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    [super setEnabled:enabled];
+    UIImage *thumbImage = nil;
+    if (enabled) {
+        thumbImage = [MTSliderPageVertical sliderImageEnabled];
+        [self setDisplayEnabled];
+    } else {
+        thumbImage = [MTSliderPageVertical sliderImageDisabled];
+        [self setDisplayDisabled];
+    }
+    [self setThumbImage:thumbImage forState:UIControlStateNormal];
+}
+
+- (BOOL)isEnabled {
+    return [super isEnabled];
 }
 
 - (CGRect)drawString:(NSAttributedString *)string atPoint:(CGPoint)point inContext:(CGContextRef)context {

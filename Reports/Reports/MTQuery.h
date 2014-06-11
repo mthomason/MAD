@@ -59,6 +59,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersOffset,
     MTQueryCacheSelectLimitOffsetParamatersTableNames,
     MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
+    MTQueryCacheSelectLimitOffsetParamatersColumns,
     MTQueryCacheSelectLimitOffsetParamatersSortDesc,
     MTQueryCacheSelectLimitOffsetParamatersWhere
 };
@@ -92,7 +93,8 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheIndexDropParameters) {
 typedef NS_ENUM(NSUInteger, MTQueryCacheIndexCreateParameters) {
     MTQueryCacheIndexCreateIndexName,
     MTQueryCacheIndexCreateTableName,
-    MTQueryCacheIndexCreateSortDescriptors
+    MTQueryCacheIndexCreateSortDescriptors,
+    MTQueryCacheIndexCreateColumns,
 };
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheDeleteAllFromTableParameters) {
@@ -124,7 +126,8 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
     MTQuerySelectPredicates,
     MTQuerySelectRowId,
     MTQuerySelectRowIds,
-    MTQuerySelectSortAccending
+    MTQuerySelectSortAccending,
+    MTQuerySelectColumns
 };
 
 extern NSString * const MTQueryKeyType;
