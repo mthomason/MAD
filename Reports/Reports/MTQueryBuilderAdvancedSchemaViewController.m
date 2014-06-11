@@ -108,6 +108,11 @@
     [[[self view] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
+    
+}
+
 - (NSManagedObjectID *)tableObjectId {
     return [self cachedTableObjectId];
 }

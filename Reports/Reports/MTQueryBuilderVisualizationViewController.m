@@ -836,12 +836,15 @@ typedef void(^MTBlockResultVoid)(void);
                         RptqQueryTable *leftTable = [leftField inQueryTable];
                         if ([rightTable objectID] == [table objectID]) {
                             
-                            MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[self controllersForObjectIds] objectForKey:[leftTable objectID]];
-                            NSManagedObjectID *objectIDLink = [link objectID];
                             
-                            UIAttachmentBehavior *attachmentBehaviorLeft = [MTQueryBuilderVisualizationViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:viewController];
-                            [[self dynamicAnimator] addBehavior:attachmentBehaviorLeft];
-                            [[self attachmentBehaviors] setObject:attachmentBehaviorLeft forKey:objectIDLink];
+                            MTQueryBuilderAdvancedSchemaViewController *leftTableViewController = [[self controllersForObjectIds] objectForKey:[leftTable objectID]];
+                            if (leftTableViewController != viewController) {
+                                NSManagedObjectID *objectIDLink = [link objectID];
+                                
+                                UIAttachmentBehavior *attachmentBehaviorLeft = [MTQueryBuilderVisualizationViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:viewController];
+                                [[self dynamicAnimator] addBehavior:attachmentBehaviorLeft];
+                                [[self attachmentBehaviors] setObject:attachmentBehaviorLeft forKey:objectIDLink];
+                            }
                             
                         }
                     }
@@ -1093,12 +1096,14 @@ typedef void(^MTBlockResultVoid)(void);
     }
     
     //Add connections between MTQueryBuilderAdvancedSchemaViewController
-    UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderVisualizationViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:rightTableViewController];
-    [[self dynamicAnimator] addBehavior:attachmentBehavior];
-    [[self attachmentBehaviors] setObject:attachmentBehavior forKey:[insertedQueryLinks objectID]];
-
-    //Add animation layer
-    [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];
+    if ([leftTableViewController isEqual:rightTableViewController] == NO) {
+        UIAttachmentBehavior *attachmentBehavior = [MTQueryBuilderVisualizationViewController attachmentBehaviorLinkWithLeftViewController:leftTableViewController andRightViewController:rightTableViewController];
+        [[self dynamicAnimator] addBehavior:attachmentBehavior];
+        [[self attachmentBehaviors] setObject:attachmentBehavior forKey:[insertedQueryLinks objectID]];
+        
+        //Add animation layer
+        [self addLinkViewControllerForQueryLink: insertedQueryLinks animated:YES];
+    }
 }
 
 #pragma mark - UI Items

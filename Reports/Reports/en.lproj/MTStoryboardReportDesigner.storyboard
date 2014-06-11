@@ -1620,6 +1620,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="labelRightField" destination="Kaa-PU-zDn" id="EvG-w5-R8g"/>
                         <outlet property="tableViewCellJoinType" destination="dtQ-2U-77J" id="EwX-7E-Ngh"/>
                         <outlet property="tableViewCellTableFieldOne" destination="Ehr-56-dLR" id="S0g-AC-Oam"/>
                         <outlet property="tableViewCellTableFieldTwo" destination="Ah8-hA-wIL" id="baf-n0-6jN"/>
@@ -11311,10 +11312,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="3KQ-0K-U1O"/>
-        <segue reference="PPx-4T-brk"/>
-        <segue reference="pCi-yT-77G"/>
         <segue reference="pfP-rZ-fVf"/>
-        <segue reference="giJ-oQ-sLB"/>
+        <segue reference="FvY-6k-f7g"/>
+        <segue reference="pCi-yT-77G"/>
+        <segue reference="PPx-4T-brk"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

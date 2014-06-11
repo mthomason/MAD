@@ -403,11 +403,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)setDisplayActive {
-    [self disableTabBarItems];
+    [self enableTabBarItems];
 }
 
 - (void)setDisplayInactive {
-    [self enableTabBarItems];
+    [self disableTabBarItems];
 }
 
 #pragma mark - UIViewController

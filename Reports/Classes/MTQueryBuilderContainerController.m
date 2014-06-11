@@ -21,7 +21,10 @@
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
+#import "UIViewController+ui.h"
+
 @interface MTQueryBuilderContainerController ()
+    <UIPopoverControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *leftView;
 @property (nonatomic, strong) IBOutlet UIView *rightView;
@@ -117,7 +120,9 @@
     }
     Class popoverSegueClass = [UIStoryboardPopoverSegue class];
     if ([segue isKindOfClass:popoverSegueClass]) {
+        [[(UIStoryboardPopoverSegue *)segue popoverController] setDelegate:self];
         [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
+        [self disableTabBarItems];
     }
     if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
@@ -125,7 +130,7 @@
         } else if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
             [(MTReportDesignerViewController *)[[segue destinationViewController] topViewController] setDelegate:self];
         }
-    }    
+    }
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -247,6 +252,16 @@
             [[weakSelf delegate] viewControllerDidFinish:weakSelf animated:YES];
         }
     }];
+}
+
+#pragma mark - UIPopoverController
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    [self enableTabBarItems];
 }
 
 @end

@@ -32,6 +32,7 @@
 #import "MTSliderPageVertical.h"
 
 #import "UIPageViewController+Extras.h"
+#import "UIViewController+ui.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate>
@@ -747,6 +748,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
+
+
 - (IBAction)activity:(id)sender {
 
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
@@ -774,6 +777,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [popoverController setDelegate:self];
             [popoverController presentPopoverFromBarButtonItem:[self barButtonItemActivity] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             [self setPopoverControllerActivity:popoverController];
+            [self disableTabBarItems];
         }
     } else {
 
@@ -1231,6 +1235,16 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
     }
     [self updatePageStatus];
+}
+
+#pragma mark = UIPopoverControllerDelegate
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
+    return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    [self enableTabBarItems];
 }
 
 @end

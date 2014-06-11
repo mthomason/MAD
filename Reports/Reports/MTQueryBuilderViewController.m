@@ -159,6 +159,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return self;
 }
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -222,6 +224,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [[[self navigationItem] titleView] sizeToFit];
     }
     
+    [self enableTabBarItems];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -257,6 +261,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             viewController = [segue destinationViewController];
         }
         [viewController setDelegate:self];
+        [self disableTabBarItems];
         
     } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
@@ -420,26 +425,34 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)addConnection:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
+    [self disableTabBarItems];
 }
 
 - (void)addTable:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
+    [self disableTabBarItems];
 }
 
 - (void)addLink:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
+    [self disableTabBarItems];
 }
 
 - (void)addPredicate:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
+    [self disableTabBarItems];
 }
 
 - (void)addGroup:(id)sender {
     [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
+    [self disableTabBarItems];
 }
 
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    UIViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
     
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -554,16 +567,25 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    UIViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
 }
 
 
 - (void)viewControllerDidCancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    UIViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
 }
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    UIViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
 
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -581,8 +603,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldId andSortOrder:(MNSSortOrder)sortOrder {
-
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    UIViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
@@ -614,7 +638,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    UIViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself enableTabBarItems];
+    }];
 
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
@@ -706,7 +733,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
     [reportDocument quickSave];
-
     
 }
 
@@ -1407,7 +1433,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
     MTNavigationController *navigationController = [[MTNavigationController alloc] initWithRootViewController:tableController];
 
-
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissViewControllerAnimated:completion:)];
 
 
@@ -1422,10 +1447,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
    
     [[tableController navigationItem] setRightBarButtonItem:doneButton animated:NO];
     
-    [self disableTabBarItems];
     UIViewController *weakself = self;
     [self presentViewController:navigationController animated:YES completion:^{
-        [weakself enableTabBarItems];
+        [weakself disableTabBarItems];
     }];
 }
 
@@ -1494,7 +1518,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark - NSFetchedResultsSetup
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    [super dismissViewControllerAnimated:YES completion:nil];
+    UIViewController *weakself = self;
+    [super dismissViewControllerAnimated:YES completion:^(){
+        [weakself enableTabBarItems];
+    }];
 }
 
 - (void)reloadActiveDocumentAnimated:(BOOL)animated {

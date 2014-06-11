@@ -154,11 +154,11 @@
 }
 
 - (BOOL)firstFieldSet {
-    return [self firstTable] && [self firstField];
+    return [self firstField] != nil;
 }
 
 - (BOOL)secondFieldSet {
-    return [self secondTable] && [self secondField];
+    return [self secondField] != nil && [[self firstField] isEqual:[self secondField]] == NO;
 }
 
 - (void)updateRightLabelState {
@@ -167,7 +167,7 @@
     [[[self tableViewCellTableFieldTwo] textLabel] setEnabled:enabled];
     [[[self tableViewCellTableFieldTwo] detailTextLabel] setEnabled:enabled];
     [[self labelRightField] setEnabled:enabled];
-    UIColor *darkTextColor = [UIColor darkTextColor];
+    UIColor *darkTextColor = enabled ? [UIColor blackColor] : [UIColor darkTextColor];
     [[self labelRightField] setTextColor:darkTextColor];
 }
 
