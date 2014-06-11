@@ -32,8 +32,6 @@
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 
-static char secKeyKey;
-
 @interface RptqDocumentSection ()
 
 //@property (nonatomic, retain) NSString *secKey;
@@ -64,9 +62,12 @@ static char secKeyKey;
     [self setIdentifier:identiferNumber];
     
     // MARK: Initalize section height.
-    [self setHeight:@44.0000f];
-    [self setLayoutHeight:@0.0000f];
-    [self setNumberOfRows:@1];
+    NSNumber *height = [RptqDocumentSection defaultHeight];
+    NSNumber *layoutHeight = @(0.0000f);
+    NSNumber *numberOfRows = @(1);
+    [self setHeight:height];
+    [self setLayoutHeight:layoutHeight];
+    [self setNumberOfRows:numberOfRows];
     
     
 }
@@ -106,10 +107,9 @@ static char secKeyKey;
     return [self keyForIdentifier];
 }
 
-//- (void)setSecKey:(NSString *)string {
-//    objc_setAssociatedObject(self, &secKeyKey, string, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//}
-
++ (NSNumber *)defaultHeight {
+    return @(44.0000f);
+}
 
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value {
     if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
