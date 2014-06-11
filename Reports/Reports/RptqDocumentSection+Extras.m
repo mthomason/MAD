@@ -468,7 +468,7 @@ static char secKeyKey;
     } else if (row == pageHeader) {
         groupText = NSLocalizedString(@"Page Header", @"Page Header");
     } else if (row == body) {
-        groupText = NSLocalizedString(@"Report Detail", @" Report Detail");
+        groupText = NSLocalizedString(@"Report Detail", @"Report Detail");
     } else if (row == pageFooter) {
         groupText = NSLocalizedString(@"Page Footer", @"Page Footer");
     } else if (row == documentFooter) {

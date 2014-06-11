@@ -666,10 +666,6 @@
                 
                 layoutSectionCounter++;
             }
-            
-            MTLog(@"------");
-            MTLog(@"");
-
         }
     }
     [dataCacheForPage removeAllObjects];
