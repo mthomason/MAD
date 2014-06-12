@@ -45,7 +45,9 @@ extern NSString * const MTReportGroupFooter;
 + (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
++ (void)regenThumbnailForReport:(MAReportDocument *)reportdocument;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
++ (NSArray *)cachedFilesForDocumentWithHandle:(NSString *)handle;
 
 - (void)regenThumbnail;
 - (RptqDocument *)activeDocument;
@@ -56,6 +58,7 @@ extern NSString * const MTReportGroupFooter;
 
 - (NSURL *)cachedDataUrl;
 
+- (void)initalizeMainQuery;
 - (MTQuery *)defaultQuery;
 
 @end

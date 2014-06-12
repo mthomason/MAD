@@ -77,7 +77,7 @@
     //Default type is virtual. If there is no object id, then type MUST be virtual.  That's
     //  because we won't know where to store it.
     MTDataTableType type = MTDataTableTypeVirtual;
-    NSInteger objectId = 0;
+    NSUInteger objectId = 0;
     if (dataTableType != nil && dataTableObjectId != nil) {
         type = [dataTableType integerValue];
     }
@@ -167,7 +167,7 @@
     return self;
 }
 
-- (void)initalizeWithObjectId:(NSInteger)objectId {
+- (void)initalizeWithObjectId:(NSUInteger)objectId {
     NSString *name = @"";
     [self setName:name];
     

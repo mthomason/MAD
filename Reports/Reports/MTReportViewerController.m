@@ -684,28 +684,29 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[reportViewer barButtonItemDone] setEnabled:NO];
 
     if ([reportViewer isRefreshing] == NO) {
-        [self setStartedRefresh:YES];
-        [self setIsRefreshing:YES];
+        [reportViewer setStartedRefresh:YES];
+        [reportViewer setIsRefreshing:YES];
         [reportViewer setDisplayInactive];
         
+        MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+        [reportDocument initalizeMainQuery];
+        MTDatabase *database = [[reportDocument defaultQuery] database];
+        [[NSNotificationCenter defaultCenter] addObserver: reportViewer
+                          selector: @selector(reportDocumentDidReadRows:)
+                              name: @"MTNotificationDidReadRows"
+                            object: database];
+
+        __weak MTReportViewerController *weakReportViewer = reportViewer;
+
+        __weak MAReportDocument *weakReportDocument = reportDocument;
+        __weak MTDatabase *weakDatabase = database;
         dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_async(queuePriorityBackground, ^{
-            
-            __block MTReportViewerController *reportViewer2 = reportViewer;
-            
-            MTApplicationInstance *applicationInstance = [AppDelegate app];
-            MAReportDocument *reportDocument = [applicationInstance activeDocument];
-            
-            NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-            [defaultCenter addObserver: reportViewer2
-                              selector: @selector(reportDocumentDidReadRows:)
-                                  name: @"MTNotificationDidReadRows"
-                                object: [[reportDocument defaultQuery] database]];
-            
 
-            __weak MTDatabase *weakDatabase = [[reportDocument defaultQuery] database];
+            __block MTReportViewerController *reportViewer2 = weakReportViewer;
+            __weak MTDatabase *weakDatabase2 = weakDatabase;
             [reportDocument refresh:^(BOOL success, NSError *error) {
-                __weak MTDatabase *weakDatabase3 = weakDatabase;
+                __weak MTDatabase *weakDatabase3 = weakDatabase2;
                 __block MTReportViewerController *reportViewer3 = reportViewer2;
                 if (!success) {
                     [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
@@ -718,12 +719,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     __weak MTDatabase *weakDatabase4 = weakDatabase3;
                     __block MTReportViewerController *reportViewer4 = reportViewer3;
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        
+                        [[NSNotificationCenter defaultCenter] removeObserver: reportViewer4
+                                                                        name: @"MTNotificationDidReadRows"
+                                                                      object: weakDatabase4];
                         [MTReportViewerController finishedRefreshWithReportViewer:reportViewer4];
-                        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-                        [defaultCenter removeObserver: reportViewer4
-                                                 name: @"MTNotificationDidReadRows"
-                                               object: weakDatabase4];
                         reportViewer4 = nil;
                     });
                     reportViewer3 = nil;

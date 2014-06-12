@@ -38,9 +38,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.570";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.570";
-NSString * const MTGlobalBundleRev                                  = @"1191";
+NSString * const MTGlobalBundleVersion                              = @"1.0.573";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.573";
+NSString * const MTGlobalBundleRev                                  = @"1194";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -181,22 +181,27 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         __weak MTApplicationInstance *blockSelf = self;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            __weak MAReportDocument *blockActiveDocument = [blockSelf activeDocument];
+            MAReportDocument *activeDocument = [blockSelf activeDocument];
+            __weak MAReportDocument *blockActiveDocument = activeDocument;
             __weak MTApplicationInstance *blockSelf2 = blockSelf;
-            [blockActiveDocument regenThumbnail];
-            [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
+            [MAReportDocument regenThumbnailForReport:activeDocument];
+            [activeDocument closeWithCompletionHandler:^(BOOL success) {
                 
                 if (success) {
                     
                     [[blockActiveDocument documentStatus] setSuspended:YES];
+                    
+                    __weak MAReportDocument *blockActiveDocument2 = blockActiveDocument;
+                    __weak MTApplicationInstance *blockself3 = blockSelf2;
                     [NSFileManager wrapFile:[blockActiveDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
                         
-                        [MADocument deleteFromDiskQuick:blockActiveDocument completion:^(BOOL success) {
+                        __weak MTApplicationInstance *blockself4 = blockself3;
+                        [MADocument deleteFromDiskQuick:blockActiveDocument2 completion:^(BOOL success) {
 
                             if (success) {
                                 
-                                [blockSelf2 setReportState:MTReportStateClosed];
-                                [[blockSelf2 documents] removeObjectForKey:[blockSelf2 currentDocument]];
+                                [blockself4 setReportState:MTReportStateClosed];
+                                [[blockself4 documents] removeObjectForKey:[blockself4 currentDocument]];
                                 dispatch_sync(dispatch_get_main_queue(), ^{
                                     completionHandler(success);
                                 });
@@ -358,7 +363,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 + (NSString *)storyboardName {
     NSString *_storyboardName;
-    
     if ([MTApplicationInstance isMadDesigner]) {
         if ([UIDevice isModernOS]) {
             _storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;

@@ -29,8 +29,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MTApplicationInstance *app = [AppDelegate app];
-    MAReportDocument *reportDocument = [app activeDocument];
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     MTQuery *query = [reportDocument defaultQuery];
     
     NSError *error = nil;

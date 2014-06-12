@@ -65,6 +65,8 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 @property (nonatomic, assign) BOOL didRefresh;
 
+@property (nonatomic, strong) MTQuery *mainQuery;
+
 @end
 
 @implementation MAReportDocument
@@ -121,11 +123,19 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }];
 }
 
-- (MTQuery *)defaultQuery {
+- (NSString *)fileNameMinusExtention {
+    return [[[[self fileURL] path] lastPathComponent] stringByDeletingPathExtension];
+}
+
+- (NSUInteger)fileNameHash {
+    return [[self fileNameMinusExtention] hash];
+}
+
+- (void)initalizeMainQuery {
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
     
-    NSString *name = [[[[self urlThumbnail] path] lastPathComponent] stringByDeletingPathExtension];
+    NSString *name = [self fileNameMinusExtention];
     NSNumber *parameterName = @(MTQueryCacheFullReportName);
     NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
     NSDictionary *queryFullParameters = @{
@@ -134,7 +144,14 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
                                           };
     
     MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
-    return defaultQuery;
+    [self setMainQuery:defaultQuery];
+}
+
+- (MTQuery *)defaultQuery {
+    if ([self mainQuery] == nil) {
+        [self initalizeMainQuery];
+    }
+    return [self mainQuery];
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
@@ -145,8 +162,43 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     }];
 }
 
+- (NSURL *)mcacheUrl {
+    NSString *fileName = [[NSString stringWithFormat:@"%ld", (long)[self fileNameHash]] stringByAppendingPathExtension:@"mcache"];
+    return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+}
+
+- (NSURL *)maddbUrl {
+    NSString *fileName = [[NSString stringWithFormat:@"%ld", (long)[self fileNameHash]] stringByAppendingPathExtension:@"maddb"];
+    return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+}
+
++ (NSURL *)mcacheUrlForFileHandle:(NSString *)filehandle {
+    return [MAReportDocument cachedUrlForHash:[filehandle hash] andExtension:@"mcache"];
+}
+
++ (NSURL *)maddbUrlForFileHandle:(NSString *)filehandle {
+    return [MAReportDocument cachedUrlForHash:[filehandle hash] andExtension:@"maddb"];
+}
+
++ (NSURL *)cachedUrlForHash:(NSUInteger)hash andExtension:(NSString *)extension {
+    NSString *fileName = [NSFileManager filenameId:hash extention:extension];
+    return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+}
+
+- (NSURL *)thumbnailUrl {
+    return [MAReportDocument thumbnailUrlForHandle:[self fileNameMinusExtention] andRetinaDisplay:NO];
+}
+
+- (NSURL *)thumbnailRetniaUrl {
+    return [MAReportDocument thumbnailUrlForHandle:[self fileNameMinusExtention] andRetinaDisplay:YES];
+}
+
 - (NSURL *)cachedDataUrl {
     return [[[self defaultQuery] datatable] url];
+}
+
+- (NSString *)fileHandle {
+    return [[[self urlThumbnail] path] lastPathComponent];
 }
 
 - (void)sendTo {
@@ -176,10 +228,13 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    NSString *lastPathComponent = [madUrl lastPathComponent];
-    NSString *fileName = [lastPathComponent stringByDeletingPathExtension];
+    return [MAReportDocument thumbnailUrlForHandle:[[madUrl lastPathComponent] stringByDeletingPathExtension]
+                                  andRetinaDisplay:[UIDevice isRetnaDisplay]];
+}
+
++ (NSURL *)thumbnailUrlForHandle:(NSString *)handle andRetinaDisplay:(BOOL)retinaDisplay {
     NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
-    fileName = [fileName stringByAppendingString:extention];
+    NSString *fileName = [handle stringByAppendingString:extention];
     
     NSURL *cacheDirectory = [NSFileManager cacheDirectory];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
@@ -187,6 +242,14 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
     return [self thumbnailUrlForMadUrl:madUrl];
+}
+
++ (NSArray *)cachedFilesForDocumentWithHandle:(NSString *)handle {
+    NSURL *thumbnailStandard = [MAReportDocument thumbnailUrlForHandle:handle andRetinaDisplay:NO];
+    NSURL *thumbnailRetina = [MAReportDocument thumbnailUrlForHandle:handle andRetinaDisplay:YES];
+    NSURL *maddb = [MAReportDocument maddbUrlForFileHandle:handle];
+    NSURL *mcache = [MAReportDocument mcacheUrlForFileHandle:handle];
+    return @[thumbnailStandard, thumbnailRetina, maddb, mcache];
 }
 
 + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
@@ -384,17 +447,19 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     return [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
 }
 
-- (void)regenThumbnail {
-
-    [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
-    BOOL contentChanged = [self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
-    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
++ (void)regenThumbnailForReport:(MAReportDocument *)reportdocument {
+    [[NSFileManager defaultManager] fileExistsAtPath:[[reportdocument urlThumbnail] path]];
+    BOOL contentChanged = [reportdocument activeDocument] != nil && ([[reportdocument documentStatus] contextChagned] == YES || [reportdocument didRefresh]) && [[reportdocument reportFormatter] numberOfPages] > 0;
+    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[reportdocument urlThumbnail] path]] == NO) {
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportdocument reportFormatter]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-        [pngImage writeToURL:[self urlThumbnail] atomically:YES];
+        [pngImage writeToURL:[reportdocument urlThumbnail] atomically:YES];
     }
-    
+}
+
+- (void)regenThumbnail {
+    [MAReportDocument regenThumbnailForReport:self];
 }
 
 @end

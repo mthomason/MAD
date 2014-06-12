@@ -227,8 +227,8 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
     if ([alertView tag] == MATagNewDocument) {
         MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
         if (openDocumentViewController != nil &&
-            [openDocumentViewController respondsToSelector:@selector(updateFileList:)]) {
-            [openDocumentViewController updateFileList:self];
+            [openDocumentViewController respondsToSelector:@selector(reloadData)]) {
+            [openDocumentViewController reloadData];
         }
     }
 }

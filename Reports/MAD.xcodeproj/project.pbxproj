@@ -831,6 +831,8 @@
 		4C8155C91700C90700D5330E /* MTGroupByViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8155C71700C90700D5330E /* MTGroupByViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8251551948AC9800C32335 /* UIViewController+ui.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8251541948AC9800C32335 /* UIViewController+ui.m */; };
 		4C8251561948AC9800C32335 /* UIViewController+ui.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8251541948AC9800C32335 /* UIViewController+ui.m */; };
+		4C825162194990AF00C32335 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */; };
+		4C825163194990AF00C32335 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */; };
 		4C84EEB5178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB8178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
@@ -2459,6 +2461,8 @@
 		4C8155C71700C90700D5330E /* MTGroupByViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGroupByViewController.m; sourceTree = "<group>"; };
 		4C8251531948AC9800C32335 /* UIViewController+ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ui.h"; sourceTree = "<group>"; };
 		4C8251541948AC9800C32335 /* UIViewController+ui.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ui.m"; sourceTree = "<group>"; };
+		4C825160194990AF00C32335 /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationDidReadRows.h; sourceTree = "<group>"; };
+		4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNotificationDidReadRows.m; sourceTree = "<group>"; };
 		4C84EEB3178B43F20028BF49 /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Border.h"; sourceTree = "<group>"; };
 		4C84EEB4178B43F20028BF49 /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Border.m"; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
@@ -3135,6 +3139,8 @@
 				4CF339431693E5B400390B3A /* MTFont.m */,
 				4C590B26191BC3A400C4E211 /* MTPageCaching.h */,
 				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
+				4C825160194990AF00C32335 /* MTNotificationDidReadRows.h */,
+				4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -6211,6 +6217,7 @@
 				4C23FBAD18FAE4F7009F234F /* MTPaperA8.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
 				4C50DF9416B8F9A500CD8BC0 /* MTReportViewerPrintPageRenderer.m in Sources */,
+				4C825163194990AF00C32335 /* MTNotificationDidReadRows.m in Sources */,
 				4CC182CC16C60410006FAD93 /* MTReportViewerReportPageView.m in Sources */,
 				4CA226A816C963CC00315EA2 /* MTDocumentSectionView.m in Sources */,
 				4C1680931907AB3B00980D8D /* MTQueryCacheEndTransaction.m in Sources */,
@@ -6693,6 +6700,7 @@
 				4C4C78D4169624A3000ADD1D /* UIImage+Resizable.m in Sources */,
 				4C02F74E18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
 				4CABE4971837DF7F007EDD9D /* RptqDocumentSectionRows.m in Sources */,
+				4C825162194990AF00C32335 /* MTNotificationDidReadRows.m in Sources */,
 				4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8E16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
 				4C1680921907AB3B00980D8D /* MTQueryCacheEndTransaction.m in Sources */,

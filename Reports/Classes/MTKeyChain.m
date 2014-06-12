@@ -62,7 +62,6 @@ const NSUInteger tagAlertViewAquire         = 666;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
-    //Leaks because of singleton... fine.
     return [self sharedObject];
 }
 
