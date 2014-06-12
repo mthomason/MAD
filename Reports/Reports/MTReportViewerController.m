@@ -250,8 +250,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [[[self navigationController] toolbar] setNeedsLayout];
+
+    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+    [reportDocument initalizeMainQuery];
     
     if ([self asyncDelegate]) {
         __weak MTReportViewerController *viewController = self;
