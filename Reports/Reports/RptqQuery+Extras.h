@@ -18,6 +18,8 @@
 
 + (RptqQuery *)RptqQueryForDocument:(RptqDocument *)document;
 - (RptqQueryGroup *)firstQueryGroup;
+- (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
+
 
 @end
 

@@ -239,22 +239,31 @@ NSString * const MTNullIdentifier = @"(null)";
     NSArray *sqg = [[self query] sortedHasQueryGroups];
     [self setSortedQueryGroups:sqg];
     
-    BOOL rowIdOnly = [sqg count] == 0;
+    BOOL rowIdOnly = YES;
+    BOOL calculatedRowId = NO;
     for (id resultRow in dataEnumerator) {
         
         //Get row id
+        if (calculatedRowId == NO) {
+            if ([resultRow isKindOfClass:[NSDictionary class]]) {
+                rowIdOnly = NO;
+            }
+            calculatedRowId = YES;
+        }
         NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
 
         //Get row key values
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        NSMutableString *debuggingString = [[NSMutableString alloc] initWithString:@""];
-        for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
-            if ([debuggingString length] > 0) {
-                [debuggingString appendString:@", "];
+        if (rowIdOnly == NO) {
+            NSMutableString *debuggingString = [[NSMutableString alloc] initWithString:@""];
+            for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
+                if ([debuggingString length] > 0) {
+                    [debuggingString appendString:@", "];
+                }
+                id predicateValue = [resultRow objectForKey:[sortDesc key]];
+                [keyValuesForComparson addObject:predicateValue];
+                [debuggingString appendString:[NSString stringWithFormat:@"%@", predicateValue]];
             }
-            id predicateValue = [resultRow objectForKey:[sortDesc key]];
-            [keyValuesForComparson addObject:predicateValue];
-            [debuggingString appendString:[NSString stringWithFormat:@"%@", predicateValue]];
         }
         
         //Display new footers if needed.

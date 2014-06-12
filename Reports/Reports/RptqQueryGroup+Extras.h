@@ -24,6 +24,7 @@
 - (NSString *)fieldNameNice;
 - (NSString *)fieldNameQuery;
 - (NSString *)sortDisplayNice;
+- (NSInteger)lastWeight;
 
 @end
 

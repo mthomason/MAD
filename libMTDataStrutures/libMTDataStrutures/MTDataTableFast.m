@@ -588,7 +588,7 @@
             }
         }
     }
-    NSAssert(success, @"%s", sqlite3_errmsg(databaseHandle));
+    NSAssert(success, @"%s at %s", sqlite3_errmsg(databaseHandle), __PRETTY_FUNCTION__);
     
     sqlite3_finalize(statement);
     sqlite3_free(queryString);

@@ -608,7 +608,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [weakself enableTabBarItems];
     }];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
 
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -621,20 +621,21 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     RptqQuery *query = [[database hasQueries] anyObject];
     [query addHasQueryGroupsObject: queryGroup];
 
+    //NSInteger groupCount = [[query hasQueryGroups] count];
+    //NSInteger weight = groupCount - 1;
+    //NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
+    //NSUInteger rowFirstTransaction = weight;
     
-    NSInteger groupCount = [[query hasQueryGroups] count];
-    NSInteger weight = groupCount - 1;
-    NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
-    NSUInteger rowFirstTransaction = weight;
-    
-    [[self tableView] beginUpdates];
-    [[self tableView] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
-                                        withRowAnimation: UITableViewRowAnimationAutomatic];
+    //[[self tableView] beginUpdates];
+    //[[self tableView] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
+    //                                    withRowAnimation: UITableViewRowAnimationAutomatic];
     [reportDocument saveContext];
-    [[self tableView] endUpdates];
+    //[[self tableView] endUpdates];
 
-    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     [reportDocument quickSave];
+    
+    [self performFetchGroups];
 }
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
@@ -1138,7 +1139,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     switch (ts) {
         case MTQuerySectionsGroups: {
 
-            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+            //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
             NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
             NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
             RptqQueryGroup *fromGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: fromIndex];
@@ -1151,7 +1152,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             [reportDocument saveContext];
-            [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+            [self performFetchGroups];
+            //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
             MTLog(@"%@->%@", fromIndexPath, toIndexPath);
             break;

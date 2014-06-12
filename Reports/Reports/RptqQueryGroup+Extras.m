@@ -106,7 +106,8 @@
     
     [queryGroup setHasField:queryField];
     [queryGroup setSort:@(sortOrder)];
-    [queryGroup setWeight:@(groupCount - 1)];
+    NSInteger newWeight = [queryGroup lastWeight] + 1;
+    [queryGroup setWeight:@(newWeight)];
 
     RptqDocumentSectionRows *headerSectionRow = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                               inManagedObjectContext: managedObjectContext];
@@ -137,36 +138,22 @@
 
 #pragma mark - Member functions
 
-- (id)first {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@ AND weight == 0", [self objectID]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    RptqQueryGroup *firstGroup = error == nil ? [resultArray lastObject] : nil;
-    return firstGroup;
-}
-
-- (id)next {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[self weight] integerValue] + 1)];
-    [request setPredicate:predicate];
+- (NSInteger)lastWeight {
+    
+    NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor];
+    [request setSortDescriptors: sortDescriptors];
     [request setFetchLimit:1];
     NSError *error = nil;
-    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    RptqQueryGroup *nextGroup = error == nil ? [resultArray lastObject] : nil;
-    return nextGroup;
-}
-
-- (id)previous {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weight == %d", ([[self weight] integerValue] - 1)];
-    [request setPredicate:predicate];
-    [request setFetchLimit:1];
-    NSError *error = nil;
-    NSArray *resultArray = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    RptqQueryGroup *previousGroup = error == nil ? [resultArray lastObject] : nil;
-    return previousGroup;
+    NSArray *queryGroupLast = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSInteger weight = 0;
+    if ([queryGroupLast count] > 0) {
+        RptqQueryGroup *lastGroup = queryGroupLast[0];
+        weight = [[lastGroup weight] integerValue];
+    }
+    return weight;
 }
 
 - (NSString *)fieldNameNice {

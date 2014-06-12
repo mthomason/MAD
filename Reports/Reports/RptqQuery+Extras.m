@@ -79,10 +79,20 @@
 #pragma mark - Actions
 
 - (RptqQueryGroup *)firstQueryGroup {
+    NSArray *queryGroups = [self sortedQueryGroups];
+    return ([queryGroups count] >= 1) ? [queryGroups objectAtIndex:0] : nil;
+}
+
+- (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index {
+    NSArray *queryGroups = [self sortedQueryGroups];
+    return (index < [queryGroups count]) ? [queryGroups objectAtIndex:index] : nil;
+}
+
+- (NSArray *)sortedQueryGroups {
     NSString *weight = NSStringFromSelector(@selector(weight));
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-    NSArray *results = [[self hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
-    return ([results count] >= 1) ? [results objectAtIndex:0] : nil;
+    NSArray *sortDescriptors = @[sortDescriptor];
+    return [[self hasQueryGroups] sortedArrayUsingDescriptors:sortDescriptors];
 }
 
 #pragma mark - MTProtocolCompare

@@ -276,7 +276,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
     if ([whereClause count] > 0) {
-        NSUInteger counter = 0;
+        NSUInteger counter = 0, counterBinings = 0;
         for (NSDictionary *condition in whereClause) {
             [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
             NSString *columnHandle = [condition objectForKey:@"c"];
@@ -287,12 +287,13 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
                 [sql appendFormat:@"%@ is Null", columnHandle];
             } else {
                 MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
-                                                                                          fieldIndex: counter
+                                                                                          fieldIndex: counterBinings
                                                                                                value: columnValue];
                 [[self binaryBindings] addObject:databinding];
                 [sql appendFormat:@"%@ = ?", columnHandle];
-                counter++;
+                counterBinings++;
             }
+            counter++;
         }
     }
     return sql;
