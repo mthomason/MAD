@@ -40,6 +40,7 @@
 #import "MTPageCaching.h"
 
 #import "MTLog.h"
+#import "NSData+Comparson.h"
 
 NSString * const MTNullIdentifier = @"(null)";
 
@@ -348,6 +349,8 @@ NSString * const MTNullIdentifier = @"(null)";
     } else {
         if (selector == @selector(localizedCaseInsensitiveCompare:)) {
             comparsonResult = [value localizedCaseInsensitiveCompare:value2];
+        } else if (selector == @selector(compareData:)) {
+            comparsonResult = [value compareData:value2];
         } else {
             comparsonResult = [value compare:value2];
         }

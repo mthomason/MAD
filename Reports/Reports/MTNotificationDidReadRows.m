@@ -12,6 +12,7 @@ NSString * const MTNotificationDidReadRowsName = @"MTNotificationDidReadRows";
 NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";
 
 static const NSInteger RowIntervalInital = 7;
+static const NSInteger RowIntervalInitalMax = 66;
 
 @interface MTNotificationDidReadRows ()
 
@@ -60,8 +61,10 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
         NSDictionary *parameters = [self parametersWithNumberOfRows:row];
         NSNotification *notification = [NSNotification notificationWithName:MTNotificationDidReadRowsName object:database userInfo:parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
-        if (row > self.rowInterval) {
-            self.rowInterval = ceil(self.rowInterval * 1.1);
+        if ([self rowInterval] < RowIntervalInitalMax) {
+            if (row > self.rowInterval) {
+                self.rowInterval = ceil(self.rowInterval * 1.1);
+            }
         }
     }
 }

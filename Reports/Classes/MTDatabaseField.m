@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDatabaseField.h"
+#import "NSData+Comparson.h"
 
 @interface MTDatabaseField ()
 
@@ -86,12 +87,14 @@
         case MTDataTypeYear:
         case MTDataTypeUnknown:
             NSAssert(false, @"Not implemented: selectorForSorted in MTDatabaseField.");
-        case MTDataTypeBlob:
         case MTDataTypeBit:
         case MTDataTypeFloat:
         case MTDataTypeInteger:
         case MTDataTypeNumber:
             result = @selector(compare:);
+            break;
+        case MTDataTypeBlob:
+            result = @selector(compareData:);
             break;
         case MTDataTypeString:
             result = @selector(localizedCaseInsensitiveCompare:);

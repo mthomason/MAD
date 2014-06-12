@@ -46,6 +46,7 @@
     
     [[self navigationItem] setHidesBackButton:NO];
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 #pragma mark - Actions
@@ -153,21 +154,11 @@
     }];
 }
 
-- (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish: self];
-}
-
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
 
 - (IBAction)schemaDidEndOnExit:(id)sender { }
 
 - (IBAction)usernameDidEndOnExit:(id)sender { }
-
-- (IBAction)passwordDidEndOnExit:(id)sender {
-    if ([[self textFieldHost] canBecomeFirstResponder]) {
-        [[self textFieldHost] becomeFirstResponder];
-    }
-}
 
 - (IBAction)hostDidEndOnExit:(id)sender {
     if ([[self textFieldPort] canBecomeFirstResponder]) {

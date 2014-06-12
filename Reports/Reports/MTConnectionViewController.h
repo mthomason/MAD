@@ -30,8 +30,6 @@
 
 
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorTestConnection;
-@property (nonatomic, weak) IBOutlet UITextField *textFieldUsername;
-@property (nonatomic, weak) IBOutlet UITextField *textFieldPassword;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldHost;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldPort;
 @property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
@@ -40,10 +38,8 @@
 @property (nonatomic, copy) NSString *databaseType;
 
 - (IBAction)save:(id)sender;
-- (IBAction)done:(id)sender;
 
 - (IBAction)usernameDidEndOnExit:(id)sender;
-- (IBAction)passwordDidEndOnExit:(id)sender;
 - (IBAction)hostDidEndOnExit:(id)sender;
 - (IBAction)portDidEndOnExit:(id)sender;
 

@@ -833,6 +833,8 @@
 		4C8251561948AC9800C32335 /* UIViewController+ui.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8251541948AC9800C32335 /* UIViewController+ui.m */; };
 		4C825162194990AF00C32335 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */; };
 		4C825163194990AF00C32335 /* MTNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */; };
+		4C825166194A244900C32335 /* NSData+Comparson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C825165194A244900C32335 /* NSData+Comparson.m */; };
+		4C825167194A244900C32335 /* NSData+Comparson.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C825165194A244900C32335 /* NSData+Comparson.m */; };
 		4C84EEB5178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C84EEB8178B43F20028BF49 /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
@@ -2463,6 +2465,8 @@
 		4C8251541948AC9800C32335 /* UIViewController+ui.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ui.m"; sourceTree = "<group>"; };
 		4C825160194990AF00C32335 /* MTNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationDidReadRows.h; sourceTree = "<group>"; };
 		4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNotificationDidReadRows.m; sourceTree = "<group>"; };
+		4C825164194A244900C32335 /* NSData+Comparson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Comparson.h"; sourceTree = "<group>"; };
+		4C825165194A244900C32335 /* NSData+Comparson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Comparson.m"; sourceTree = "<group>"; };
 		4C84EEB3178B43F20028BF49 /* UIImage+Border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Border.h"; sourceTree = "<group>"; };
 		4C84EEB4178B43F20028BF49 /* UIImage+Border.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Border.m"; sourceTree = "<group>"; };
 		4C85C6A514FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectLabelDataField+Extras.h"; sourceTree = "<group>"; };
@@ -4996,6 +5000,8 @@
 				4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */,
 				4C8251531948AC9800C32335 /* UIViewController+ui.h */,
 				4C8251541948AC9800C32335 /* UIViewController+ui.m */,
+				4C825164194A244900C32335 /* NSData+Comparson.h */,
+				4C825165194A244900C32335 /* NSData+Comparson.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -6202,6 +6208,7 @@
 				4CA14FF918B7D42A001AFAD8 /* MTActivityItemProviderPdf.m in Sources */,
 				4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8F16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
+				4C825167194A244900C32335 /* NSData+Comparson.m in Sources */,
 				4C75C9FF18E272F6006E8526 /* MTTableCellHeader.m in Sources */,
 				4C1680A31907B46400980D8D /* MTQueryCacheJournalModeDefault.m in Sources */,
 				4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */,
@@ -6685,6 +6692,7 @@
 				4C23FBB618FAE4F7009F234F /* MTPaperB2.m in Sources */,
 				4C3727DC168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
 				4C23FB2C18FADE46009F234F /* MADWatermarkView.m in Sources */,
+				4C825166194A244900C32335 /* NSData+Comparson.m in Sources */,
 				4CDBED24168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
 				4C1680A21907B46400980D8D /* MTQueryCacheJournalModeDefault.m in Sources */,
 				4C23FBB018FAE4F7009F234F /* MTPaperA10.m in Sources */,
