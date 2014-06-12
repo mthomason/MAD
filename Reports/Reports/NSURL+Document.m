@@ -13,27 +13,28 @@
 @implementation NSURL (Document)
 
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
-    
-    NSURL *documentsDirectoryURL = [[MACloudManager sharedManager] documentsDirectoryURL];
+    return [NSURL uniqueUrlInDirectory:[[MACloudManager sharedManager] documentsDirectoryURL]
+                     withDesiredHandle:name
+                          andExtension:extension];
+}
+
++ (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
 
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-    NSURL *baseUrl = [documentsDirectoryURL URLByAppendingPathComponent: name];
+    NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
     NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
-                                                [baseUrl URLByAppendingPathExtension: extension] :
-                                                baseUrl;
-    
+    [baseUrl URLByAppendingPathExtension: extension] :
+    baseUrl;
     NSInteger ctr = 0;
     while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
         
-        NSURL *baseUrlFormatted = [documentsDirectoryURL
-                                    URLByAppendingPathComponent: [name stringByAppendingFormat:@" %ld", (long)ctr]];
-        
-        
-        applicationFileUrlWithExtention = [baseUrlFormatted
-                                            URLByAppendingPathExtension: extension];
+        NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
+        NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];
+        applicationFileUrlWithExtention = [baseUrlFormatted URLByAppendingPathExtension: extension];
         ctr++;
     }
     return applicationFileUrlWithExtention;
+    
 }
 
 @end

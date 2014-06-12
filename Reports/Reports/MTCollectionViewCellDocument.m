@@ -88,11 +88,7 @@
 
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    BOOL result = NO;
-    if (action == @selector(email:) || action == @selector(delete:) || action == @selector(rename:)) {
-        result = YES;
-    }
-    return result;
+    return action == @selector(email:) || action == @selector(delete:) || action == @selector(rename:) || action == @selector(duplicate:);
 }
 
 - (BOOL)resignFirstResponder {
@@ -119,6 +115,10 @@
 
 - (void)rename:(id)sender {
     [[self delegate] rename:self];
+}
+
+- (void)duplicate:(id)sender {
+    [[self delegate] duplicate:self];
 }
 
 - (void)dimTint {

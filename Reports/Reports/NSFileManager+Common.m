@@ -13,6 +13,28 @@
 
 @implementation NSFileManager (Common)
 
+- (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
+    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
+    NSString *lastPathComponent = [urlToDupe lastPathComponent];
+    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
+    NSString *extention = [lastPathComponent pathExtension];
+    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
+                                 withDesiredHandle:handle
+                                      andExtension:extention];
+    NSError *error = nil; NSInteger tryCounter = 0;
+    while ([self copyItemAtURL:urlToDupe toURL:uniqueUrl error:&error] == NO) {
+        tryCounter++;
+        if (tryCounter > 2) {
+            break;
+        }
+        error = nil;
+    }
+    if (error || tryCounter > 2) {
+        uniqueUrl = nil;
+    }
+    return uniqueUrl;
+}
+
 + (NSMutableSet *)contentsOfDocumentsDirectory {
     NSMutableSet *doc = [[NSMutableSet alloc] init];
     NSString *documentsDirectoryPath = [NSFileManager applicationDocumentsDirectory];

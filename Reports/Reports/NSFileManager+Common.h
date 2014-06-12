@@ -13,6 +13,8 @@
 
 @interface NSFileManager (Common)
 
+- (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
+
 + (NSSet *)contentsOfDocumentsDirectory;
 + (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 + (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension;

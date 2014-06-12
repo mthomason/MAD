@@ -16,6 +16,7 @@
 - (void)deleteDocumentRepresentedByCell:(id)cell;
 - (void)email:(id)cell;
 - (void)rename:(id)sender;
+- (void)duplicate:(id)sender;
 
 @end
 

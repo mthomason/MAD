@@ -21,7 +21,7 @@ extern NSString * const MTSegueShowOpenDocument;
 @property (nonatomic, weak) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 @property (nonatomic, strong, readonly) UIPopoverController *aboutPopoverController;
 
-- (void)updateFileList:(id)sender;
+- (void)reloadData;
 
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;

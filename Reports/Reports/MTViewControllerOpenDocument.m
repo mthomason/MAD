@@ -31,6 +31,7 @@
 #import "UIDevice+Hack.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTAlertView.h"
+#import "NSFileManager+Common.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"openDocument";
@@ -124,7 +125,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    [self updateFileList:self];
+    [self reloadData];
     
     if ([MTApplicationInstance isMadViewer] && [UIDevice isPad]) {
 
@@ -289,6 +290,24 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
 }
 
++ (UIMenuItem *)menuItemRename {
+    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
+                                                      action: @selector(rename:)];
+    return menuItem;
+}
+
++ (UIMenuItem *)menuItemEmail {
+    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
+                                                      action: @selector(email:)];
+    return menuItem;
+}
+
++ (UIMenuItem *)menuItemDuplicate {
+    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Duplicate", @"Duplicate")
+                                                      action: @selector(duplicate:)];
+    return menuItem;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
@@ -297,11 +316,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         UIMenuController *menu = [UIMenuController sharedMenuController];
         NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
         if (menuItems == nil) {
-            menuItems = [[NSMutableArray alloc] init];
+            menuItems = [NSMutableArray new];
         }
-        UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
-                                                          action: @selector(rename:)];
-        [menuItems addObject:menuItem];
+        [menuItems addObject:[MTViewControllerOpenDocument menuItemRename]];
+        [menuItems addObject:[MTViewControllerOpenDocument menuItemDuplicate]];
         [menu setMenuItems:menuItems];
     });
     
@@ -314,10 +332,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 UIMenuController *menu = [UIMenuController sharedMenuController];
                 NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
                 if (menuItems == nil) {
-                    menuItems = [[NSMutableArray alloc] init];
+                    menuItems = [NSMutableArray new];
                 }
-                UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
-                                                                  action: @selector(email:)];
+                UIMenuItem *menuItem = [MTViewControllerOpenDocument menuItemEmail];
                 [menuItems addObject:menuItem];
                 [menu setMenuItems:menuItems];
             });
@@ -333,7 +350,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
     }];
     
-    [self updateFileList:self];
+    [self reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -655,7 +672,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     [[self barButtonItemAddNewDocument] setEnabled:YES];
     if ([UIDevice isPad]) {
-        [self updateFileList:self];
+        [self reloadData];
     }
 }
 
@@ -732,10 +749,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
 }
 
-- (IBAction)updateFileList:(id)sender {
-    MTApplicationInstance *app = [AppDelegate app];
-    NSMutableArray *madFiles = [[[app user] hasMadDocuments] mutableCopy];
-    [self setAvailableFilesCache: madFiles];
+- (void)reloadData {
+    NSArray *madFiles = [[[AppDelegate app] user] hasMadDocuments];
+    NSMutableArray *madFilesMutable = [NSMutableArray arrayWithArray:madFiles];
+    [self setAvailableFilesCache: madFilesMutable];
     [[self collectionView] reloadData];
     
 }
@@ -898,31 +915,42 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 }
             }
         }
-        NSFileManager *defaultManager = [NSFileManager defaultManager];
+        
         NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
         for (NSIndexPath *indexPath in itemsToDelete) {
-            NSUInteger index = [indexPath item];
-            NSURL *urlToDelete = [[self availableFilesCache] objectAtIndex:index];
-            NSError *error = nil;
-            [defaultManager removeItemAtURL:urlToDelete error:&error];
-            [indexSet addIndex:index];
+            [self deleteDocumentAtIndexPath:indexPath];
+            [indexSet addIndex:[indexPath item]];
         }
         [[self availableFilesCache] removeObjectsAtIndexes:indexSet];
         [[self collectionView] deleteItemsAtIndexPaths:itemsToDelete];
     }
 }
 
+- (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
+    return [[self availableFilesCache] objectAtIndex:[indexPath item]];
+}
+
 - (void)deleteDocumentAtIndexPath:(NSIndexPath *)index {
     NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:[[self availableFilesCache]
-                                                     objectAtIndex:index.item] error:&error];
+    NSURL *documentUrl = [self documentForIndexPath:index];
+    [self removeCachedFileForDocumentUrl:documentUrl];
+    [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:&error];
     if (!error) {
-        if (index.item < [[self availableFilesCache] count]) {
-            [[self availableFilesCache] removeObjectAtIndex:index.item];
+        if ([index item] < [[self availableFilesCache] count]) {
+            [[self availableFilesCache] removeObjectAtIndex:[index item]];
             [[self collectionView] deleteItemsAtIndexPaths:@[index]];
         }
     } else {
         [error presentErrorToUser];
+    }
+}
+
+- (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
+    NSError *error = nil;
+    NSString *filehandle = [[documentUrl lastPathComponent] stringByDeletingPathExtension];
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    for (NSURL *cachedFile in [MAReportDocument cachedFilesForDocumentWithHandle:filehandle]) {
+        [defaultManager removeItemAtURL:cachedFile error:&error];
     }
 }
 
@@ -955,9 +983,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
+- (void)duplicate:(id)sender {
+    MTCollectionViewCellDocument *cellDocument = sender;
+    NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
+    NSIndexPath *indexPath = [[self collectionView] indexPathForCell:cellDocument];
+    NSURL *url = [self documentForIndexPath:indexPath];
+    [[NSFileManager defaultManager] duplicateUrl:url];
+    [self reloadData];
+}
+
 - (void)rename:(id)sender {
     MTCollectionViewCellDocument *cellDocument = sender;
-    NSAssert(cellDocument != nil, @"Null cell.");
+    NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Rename Document", @"Rename Document")
                                                         message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
                                                        delegate: self
@@ -1105,7 +1142,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                     thumbnailUrlOld = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToRename];
                     thumbnailUrlNew = [MAReportDocument thumbnailWithBorderUrlForMadUrl:newUrl];
                     [fileManager moveItemAtURL:thumbnailUrlOld toURL:thumbnailUrlNew error:&error];
-                    [self updateFileList:self];
+                    [self reloadData];
                 }
             }
         }
@@ -1155,7 +1192,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         fileWrittingError = nil;
         [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
     }
-    [self updateFileList:self];
+    [self reloadData];
 }
 
 #pragma mark -
@@ -1280,7 +1317,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [result setDelegate:self];
     if ([indexPath row] < [[self availableFilesCache] count]) {
         NSURL *fileUrl = [self availableFilesCache][[indexPath row]];
-        //[[result imagePreview] setImage:[MTTableViewCellDocument defaultThumbnail]];
         [result setText: [MADocument fileNameForMadUrl:fileUrl]];
         [self loadCollectionViewPreviewImageForIndexPath:indexPath];
     } else {
