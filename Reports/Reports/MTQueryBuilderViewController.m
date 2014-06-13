@@ -225,7 +225,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
     
     [self enableTabBarItems];
-    
+    [[[self navigationItem] titleView] sizeToFit];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -1225,13 +1225,14 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             NSString *title = [NSString stringWithFormat:@"%@", [tablea alias]];
             [[result textLabel] setText: title];
-            [result setAccessoryType:UITableViewCellAccessoryDetailButton];
+            //[result setAccessoryType:UITableViewCellAccessoryDetailButton];
+            [result setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             [[result textLabel] setFont: font];
             [[result textLabel] setBackgroundColor:[UIColor whiteColor]];
             [result setIndentationLevel: 1];
             [result setTintColor:[UIColor tintColorBlue]];
             [result setBackgroundColor:[UIColor whiteColor]];
-            [result setSelectionStyle:UITableViewCellSelectionStyleNone];
+            //[result setSelectionStyle:UITableViewCellSelectionStyleNone];
             
             break;
         }
@@ -1423,21 +1424,25 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([self tableSectionTypeForIndexPathSection: [indexPath section]] == MTQuerySectionsTables) {
+        [self displayTableSampleDataForIndexPath:indexPath];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 
+}
+
+- (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+    MTTableController *tableController = [self tableControllerForTable:table];
+    [[self navigationController] pushViewController:tableController animated:YES];
+}
+
+- (MTTableController *)tableControllerForTable:(RptqQueryTable *)table {
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
-    
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
-
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
-    MTNavigationController *navigationController = [[MTNavigationController alloc] initWithRootViewController:tableController];
-
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissViewControllerAnimated:completion:)];
-
-
     UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
     [sampleDataTitleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
@@ -1446,13 +1451,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     [[tableController navigationItem] setTitle:[schemaTable name]];
     [[tableController navigationItem] setTitleView:sampleDataTitleView];
-   
-    [[tableController navigationItem] setRightBarButtonItem:doneButton animated:NO];
-    
-    UIViewController *weakself = self;
-    [self presentViewController:navigationController animated:YES completion:^{
-        [weakself disableTabBarItems];
-    }];
+    return tableController;
 }
 
 - (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
