@@ -390,7 +390,13 @@ NSString * const MTNullIdentifier = @"(null)";
         if (selector == @selector(localizedCaseInsensitiveCompare:)) {
             comparsonResult = [value localizedCaseInsensitiveCompare:value2];
         } else if (selector == @selector(compareData:)) {
-            comparsonResult = [value compareData:value2];
+            if ([value respondsToSelector:@selector(compareData:)]) {
+                comparsonResult = [value compareData:value2];
+            } else if ([value respondsToSelector:@selector(localizedCaseInsensitiveCompare:)]) {
+                comparsonResult = [value caseInsensitiveCompare:value2];
+            } else {
+                comparsonResult = [value compare:value2];
+            }
         } else {
             comparsonResult = [value compare:value2];
         }
