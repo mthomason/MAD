@@ -144,27 +144,19 @@
 
     [[[[self navigationBar] items] lastObject] setTitle:@""];
     if ([sender selectedSegmentIndex] == 0) {
-    
-        //[[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Style", @"Style")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     
         [newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 1) {
-    
-        //[[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Layout", @"Layout")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
     
         [newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 2) {
-    
-        //[[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Format", @"Format")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
 
     } else if ([sender selectedSegmentIndex] == 3) {
-    
-        //[[[[self navigationBar] items] lastObject] setTitle:NSLocalizedString(@"Grouping", @"Grouping")];
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerGrouping"];
     
     }

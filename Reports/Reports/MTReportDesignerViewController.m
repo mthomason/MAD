@@ -219,6 +219,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
 @property (nonatomic, strong) RptqDocumentObjectLabelDataField *dataFieldToEdit;
 
+@property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
+
 @end
 
 @implementation MTReportDesignerViewController
@@ -683,6 +685,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     [self addObservers];
     
+    self.lastMenuItemSelectRequiresElementView = NO;
+    
     MTApplicationInstance *app = [AppDelegate app];
     [[app reportDesigner] setZoomScaleRestore:[[self designerScrollView] zoomScale]];
     [[self designerScrollView] setZoomScale:1.0000f animated:NO];
@@ -744,7 +748,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
             [backgroundView setNumberOfRowsInBackground:[[reportSection numberOfRows] integerValue]];
-            //[backgroundView setBackgroundColor:[UIColor edaGreenLight]];
             [backgroundView setBackgroundColor:[UIColor clearColor]];
             
             NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
@@ -1518,7 +1521,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)willHideMenuNotification:(NSNotification *)notification { }
 - (void)didHideMenuNotification:(NSNotification *)notification {
-    [self deselectLastElementViewToShowMenu];
+    if ([self lastMenuItemSelectRequiresElementView] == NO) {
+        [self deselectLastElementViewToShowMenu];
+    }
+    self.lastMenuItemSelectRequiresElementView = NO;
 }
 - (void)didShowMenuNotification:(NSNotification *)notification { }
 - (void)willShowMenuNotification:(NSNotification *)notification { }
@@ -2236,6 +2242,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     [self deselectAllElementsAnimated:YES];
+    self.lastMenuItemSelectRequiresElementView = YES;
     [self selectElementView:(MTElementView *)[self viewForObjectID:[cell objectIdTag]]];
 }
 
@@ -2987,15 +2994,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;
-    //BOOL result = [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO;
-    //NSLog(@"shouldRecognizeSimultaneouslyWithGestureRecognizer: %@ %@ %@", result ? @"YES" : @"NO", [gestureRecognizer view], [otherGestureRecognizer view]);
-    
-    //return [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO;
-    
-    //return [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO  &&
-    //        [[gestureRecognizer view] isEqual:[self designerScrollView]] == NO &&
-    //        [[otherGestureRecognizer view] isEqual:[self designerScrollView]] == NO;
+    return [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO  &&
+            [[gestureRecognizer view] isEqual:[self designerScrollView]] == NO &&
+            [[otherGestureRecognizer view] isEqual:[self designerScrollView]] == NO;
 
 }
 

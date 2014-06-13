@@ -103,22 +103,6 @@
     [[self delegate] formatDocumentObjectRepresentedByCell:self];
 }
 
-//- (void)duplicate:(id)sender {
-//    [[self delegate] editDocumentObjectRepresentedByCell:self];
-//}
-
-//- (void)cut:(id)sender {
-//    [[self delegate] editDocumentObjectRepresentedByCell:self];
-//}
-
-//- (void)copy:(id)sender {
-//    [[self delegate] editDocumentObjectRepresentedByCell:self];
-//}
-
-//- (void)paste:(id)sender {
-//    [[self delegate] editDocumentObjectRepresentedByCell:self];
-//}
-
 - (void)edit:(id)sender {
     [[self delegate] editDocumentObjectRepresentedByCell:self];
 }
