@@ -27,7 +27,7 @@
 #import "MTConnectorView.h"
 
 #import "MTQueryBuilderAdvancedSchemaViewController.h"
-#import "MTScrollViewCenter.h"
+#import "MADWatermarkView.h"
 
 #import "RptqQuery+Extras.h"
 #import "RptqQueryTable+Extras.h"
@@ -67,7 +67,7 @@ typedef void(^MTBlockResultVoid)(void);
     @property (nonatomic, strong) IBOutlet UIToolbar *toolbarBottom;
     @property (nonatomic, strong) IBOutlet UIView *backgroundContainer;
 
-    @property (nonatomic, strong) MTScrollViewCenter *scrollView;
+    @property (nonatomic, strong) MADWatermarkScrollView *scrollView;
     @property (nonatomic, strong) UIView *contentView;
 
     @property (nonatomic, strong) NSMutableArray *viewControllers;  //May track child view controllers since iOS 7.
@@ -162,7 +162,7 @@ typedef void(^MTBlockResultVoid)(void);
     [containerView setContentMode:UIViewContentModeScaleAspectFit];
     [containerView setAutoresizesSubviews:NO];
     [[self contentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
-    MTScrollViewCenter *scrollView = [[MTScrollViewCenter alloc] initWithFrame:[[self backgroundContainer] bounds]];
+    MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:[[self backgroundContainer] bounds]];
     [scrollView setShowsHorizontalScrollIndicator:YES];
     [scrollView setShowsVerticalScrollIndicator:YES];
     [scrollView setAutoresizingMask:autoresizingMask];

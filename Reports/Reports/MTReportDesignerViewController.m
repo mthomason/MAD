@@ -809,14 +809,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             NSString *lastKey = [reportSectionKeyTracker lastObject];
             id constraintItem =  sectionCounter == 0 ? [self rulerView] : [[self sectionViews] objectForKey:lastKey];
             
-            
-            [[self designerScrollView] setDelaysContentTouches:YES];
-            [[self designerScrollView] setCanCancelContentTouches: YES];
-
             [collectionView setShowsVerticalScrollIndicator:YES];
-            [collectionView setDelaysContentTouches:NO];
-            [collectionView setCanCancelContentTouches: NO];
-            
+
             [[self designerContentView] addSubview:collectionView];
             [[self designerContentView] addSubview:sectionControlView];
             
@@ -1081,8 +1075,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - UIScrollViewDelegate
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    UIView *result = [self designerContentView];
-    return result;
+    return [self designerContentView];
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
@@ -1104,8 +1097,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [[controlView labelSectionIdentifer] setContentScaleFactor:scale];
     }
     
-    for (UICollectionView *collectionView in [[self sectionViews] objectEnumerator]) {
-        [collectionView setContentScaleFactor:scale];
+    for (UICollectionView *section in [[self sectionViews] objectEnumerator]) {
+        [section setContentScaleFactor:scale];
+        //[section invalidateIntrinsicContentSize];
+        //[[section collectionViewLayout] invalidateLayout];
     }
 }
 
@@ -2992,9 +2987,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO  &&
-            [[gestureRecognizer view] isEqual:[self designerScrollView]] == NO &&
-            [[otherGestureRecognizer view] isEqual:[self designerScrollView]] == NO;
+    return YES;
+    //BOOL result = [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO;
+    //NSLog(@"shouldRecognizeSimultaneouslyWithGestureRecognizer: %@ %@ %@", result ? @"YES" : @"NO", [gestureRecognizer view], [otherGestureRecognizer view]);
+    
+    //return [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isKindOfClass:[UIScrollView class]] && [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO;
+    
+    //return [[gestureRecognizer view] isEqual:[otherGestureRecognizer view]] == NO  &&
+    //        [[gestureRecognizer view] isEqual:[self designerScrollView]] == NO &&
+    //        [[otherGestureRecognizer view] isEqual:[self designerScrollView]] == NO;
 
 }
 
