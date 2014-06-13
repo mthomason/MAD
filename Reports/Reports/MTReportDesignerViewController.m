@@ -317,21 +317,24 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
         
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
+        MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
         if ([self aggregateToEdit] && [self editAggregate]) {
-            MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
-            [[self aggregateToEdit] updateAggregateFunctionWithFunctionType:[aggregateViewController aggregateFunctionType]
-                                                                  inputType:MTAggregateFunctionInputTypeField
-                                                                  groupType:[aggregateViewController aggregateGroupByType]
-                                                            aggregateObject:[aggregateViewController fieldObject]
-                                                                groupNumber:[aggregateViewController groupTypeSectionNumber]];
-            
+            if ([aggregateViewController fieldObject] != nil) {
+                [[self aggregateToEdit] updateAggregateFunctionWithFunctionType:[aggregateViewController aggregateFunctionType]
+                                                                      inputType:MTAggregateFunctionInputTypeField
+                                                                      groupType:[aggregateViewController aggregateGroupByType]
+                                                                aggregateObject:[aggregateViewController fieldObject]
+                                                                    groupNumber:[aggregateViewController groupTypeSectionNumber]];
+            }
         } else {
-            MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
-            [self insertDocumentObjectNewAggregateFunctionWithType:[aggregateViewController aggregateFunctionType]
-                                                         inputType:MTAggregateFunctionInputTypeField
-                                                       inputObject:[aggregateViewController fieldObjectId]
-                                                         groupType:[aggregateViewController aggregateGroupByType]
-                                                       groupNumber:@([aggregateViewController groupTypeSectionNumber])];
+            if ([aggregateViewController fieldObjectId] != nil) {
+                NSNumber *groupNumber = @([aggregateViewController groupTypeSectionNumber]);
+                [self insertDocumentObjectNewAggregateFunctionWithType:[aggregateViewController aggregateFunctionType]
+                                                             inputType:MTAggregateFunctionInputTypeField
+                                                           inputObject:[aggregateViewController fieldObjectId]
+                                                             groupType:[aggregateViewController aggregateGroupByType]
+                                                           groupNumber:groupNumber];
+            }
         }
         
 
