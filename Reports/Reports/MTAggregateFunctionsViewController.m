@@ -33,28 +33,26 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     }
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-
-    }
-    return self;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType {
     _selectedFunctionType = selectedFunctionType;
-    
-            for (UITableViewCell *tableViewCell in [self tableViewCells]) {
-                if ([tableViewCell tag] == selectedFunctionType) {
-                    [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
-                }
-            }
+    [self updateSelectedFunctionType];
 }
 
+- (void)updateSelectedFunctionType {
+    NSInteger numberOfSections = [[self tableView] numberOfSections];
+    for (NSInteger sectionCtr = 0; sectionCtr < numberOfSections; sectionCtr++) {
+        NSInteger numberOfRows = [[self tableView] numberOfRowsInSection:sectionCtr];
+        for (NSInteger rowCtr = 0; rowCtr < numberOfRows; rowCtr++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCtr inSection:sectionCtr];
+            UITableViewCell *tableViewCell = [[self tableView] cellForRowAtIndexPath:indexPath];
+            if ([tableViewCell tag] == [self selectedFunctionType]) {
+                [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
+            } else {
+                [tableViewCell setAccessoryType:UITableViewCellAccessoryNone];
+            }
+        }
+    }
+}
 
 #pragma mark - View lifecycle
 
@@ -66,6 +64,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self updateSelectedFunctionType];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

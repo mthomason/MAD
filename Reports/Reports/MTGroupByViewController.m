@@ -225,7 +225,11 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         
         default: {
             RptqQueryGroup *queryGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath:[self updatedIndexPath:indexPath]];
-            NSString *textLabel = [NSString stringWithFormat:@"Group %d (%@)", [[queryGroup weight] integerValue] + 1, [queryGroup fieldNameNice]];
+            NSString *fieldNameNice = [queryGroup fieldNameNice];
+            NSInteger groupLevel = [queryGroup location];
+            NSString *textLabel = fieldNameNice == nil ?
+                    [NSString stringWithFormat:@"Group %d", groupLevel] :
+                    [NSString stringWithFormat:@"Group %d (%@)", groupLevel, fieldNameNice];
             [[cell textLabel] setText:textLabel];
             if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && [indexPath row] - 2 == [self aggregateGroupNumber]) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];

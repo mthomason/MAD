@@ -28,6 +28,7 @@
 #import "RptqDocumentSectionRows.h"
 
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 
 @implementation RptqQueryGroup (Extras)
 
@@ -179,6 +180,18 @@
             break;
     }
     return [sort lowercaseString];
+}
+
+- (NSInteger)location {
+    NSArray *sortedQueryGroups = [[self inQuery] sortedQueryGroups];
+    NSInteger location = 0;
+    for (RptqQueryGroup *queryGroup in sortedQueryGroups) {
+        if ([queryGroup isEqual:self]) {
+            break;
+        }
+        location++;
+    }
+    return location;
 }
 
 #pragma mark - MTProtocolCompare

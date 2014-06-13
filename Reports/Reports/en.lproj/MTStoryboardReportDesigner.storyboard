@@ -4170,31 +4170,29 @@
                                                         <fragment content="Count">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[1],[2],…[n]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
+                                                                <font key="NSOriginalFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
@@ -4221,31 +4219,28 @@
                                                         <fragment content="First">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[1]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
@@ -4272,31 +4267,28 @@
                                                         <fragment content="Last">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[n]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
@@ -4323,31 +4315,28 @@
                                                         <fragment content="Maximum">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[1],[2],…[n]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
@@ -4374,32 +4363,28 @@
                                                         <fragment content="Mean">
                                                             <attributes>
                                                                 <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[1],[2],…[n]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
-                                                                <font key="NSOriginalFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
@@ -4426,8 +4411,9 @@
                                                         <fragment content="Minimum">
                                                             <attributes>
                                                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
                                                                 <integer key="NSLigature" value="0"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
                                                                     <tabStops>
                                                                         <textTab alignment="left" location="28.850000381469727"/>
@@ -4435,9 +4421,10 @@
                                                                 </paragraphStyle>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
                                                                     <tabStops>
                                                                         <textTab alignment="left" location="28.850000381469727"/>
@@ -4445,19 +4432,9 @@
                                                                 </paragraphStyle>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[1],[2],…[n]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
-                                                                    <tabStops>
-                                                                        <textTab alignment="left" location="28.850000381469727"/>
-                                                                    </tabStops>
-                                                                </paragraphStyle>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
                                                                     <tabStops>
                                                                         <textTab alignment="left" location="28.850000381469727"/>
@@ -4467,7 +4444,8 @@
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="28.850000000000001">
                                                                     <tabStops>
                                                                         <textTab alignment="left" location="28.850000381469727"/>
@@ -4498,31 +4476,28 @@
                                                         <fragment content="Sum">
                                                             <attributes>
                                                                 <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content=" ">
+                                                        <fragment content=" (">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
-                                                        <fragment content="(">
+                                                        <fragment content="[1],[2],…[n]">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="[1, x]...[n, x]">
-                                                            <attributes>
-                                                                <font key="NSFont" size="9" name="CourierNewPSMT"/>
+                                                                <font key="NSFont" size="9" name="Courier"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
                                                         <fragment content=")">
                                                             <attributes>
-                                                                <font key="NSFont" size="17" name="Helvetica"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
@@ -4586,10 +4561,18 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hqs-5G-Czj">
-                                                    <rect key="frame" x="15" y="12" width="118" height="21"/>
+                                                    <rect key="frame" x="15" y="12" width="111" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <attributedString key="attributedText">
-                                                        <fragment content="Function ">
+                                                        <fragment content="Function">
+                                                            <attributes>
+                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <font key="NSFont" size="17" name="Helvetica-Bold"/>
@@ -4627,10 +4610,18 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wis-r1-BMv">
-                                                    <rect key="frame" x="15" y="12" width="57" height="21"/>
+                                                    <rect key="frame" x="15" y="12" width="54" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <attributedString key="attributedText">
-                                                        <fragment content="Input ">
+                                                        <fragment content="Input">
+                                                            <attributes>
+                                                                <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment content=" ">
                                                             <attributes>
                                                                 <color key="NSColor" white="0.0" alpha="1" colorSpace="deviceWhite"/>
                                                                 <font key="NSFont" size="17" name="Helvetica-Bold"/>
@@ -4668,13 +4659,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="br6-el-gnb">
-                                                    <rect key="frame" x="15" y="12" width="164" height="21"/>
+                                                    <rect key="frame" x="15" y="12" width="159" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Group By">
                                                             <attributes>
                                                                 <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Bold"/>
+                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
+                                                                <font key="NSOriginalFont" size="17" name="Helvetica-Light"/>
                                                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                                             </attributes>
                                                         </fragment>
