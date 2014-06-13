@@ -26,6 +26,8 @@
 
 #import "MADocumentState.h"
 
+#import "NSThread+Extras.h"
+
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
@@ -186,6 +188,24 @@ NSString * MTDocumentParentContextName          = @"moc";
             MTLog(@"  Error: %@", error.userInfo);
         }
     } else {
+        BOOL showError = NO;
+        switch ([error code]) {
+            case 260:
+                showError = YES;
+                break;
+            default:
+                break;
+        }
+        if (showError) {
+            [NSThread completeOnMainThread:^(BOOL success, id obj) {
+                NSString *errorDesc = @"Failed to open document. Document incomplete, missing, or corrupt.";
+                NSString *localizedErrorDesc = NSLocalizedString(errorDesc, errorDesc);
+                NSError *err = [NSError errorWithDomain: @"MADocument"
+                                                     code: 260
+                                                 userInfo: @{ NSLocalizedDescriptionKey : localizedErrorDesc}];
+                [err presentErrorToUser];
+            } withObject:error andSuccess:YES];
+        }
         MTLog(@"  %@", error.userInfo);
     }
 }

@@ -1031,14 +1031,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MAReportDocument *documentReport = [[MAReportDocument alloc] initWithFileURL:fileToAttach];
         
         if ([documentReport documentState] != UIDocumentStateClosed) {
+            __weak MTViewControllerOpenDocument *weakself = self;
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
-                    [self email:cell];
+                    [weakself email:cell];
                 }
             }];
             
         } else {
             
+            __weak MTViewControllerOpenDocument *weakself = self;
             [documentReport performAsynchronousFileAccessUsingBlock:^{
                 NSData *data = [NSData dataWithContentsOfURL:[documentReport fileURL]];
                 if (data) {
@@ -1066,7 +1068,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                             [mailComposer setModalInPopover:NO];
                         }
 
-                        [self presentViewController:mailComposer animated:YES completion:nil];
+                        [weakself presentViewController:mailComposer animated:YES completion:nil];
                         
                     });
                 }

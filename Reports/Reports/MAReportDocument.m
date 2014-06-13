@@ -140,13 +140,15 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     NSString *name = [self fileNameMinusExtention];
     NSNumber *parameterName = @(MTQueryCacheFullReportName);
     NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
-    NSDictionary *queryFullParameters = @{
-                                          parameterName : name,
-                                          parameterSchema : rquery
-                                          };
-    
-    MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
-    [self setMainQuery:defaultQuery];
+    if (name != nil && rquery != nil) {
+        NSDictionary *queryFullParameters = @{
+                                              parameterName : name,
+                                              parameterSchema : rquery
+                                              };
+        
+        MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
+        [self setMainQuery:defaultQuery];
+    }
 }
 
 - (MTQuery *)defaultQuery {

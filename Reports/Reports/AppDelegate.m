@@ -55,9 +55,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (MTApplicationInstance *)app {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    MTApplicationInstance *result = [appDelegate applicationInstance];
-    return result;
+    return [(AppDelegate *)[[UIApplication sharedApplication] delegate] applicationInstance];
 }
 
 + (UIWindow *)window {
@@ -65,19 +63,15 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (MAReportDocument *)activeReportDocument {
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    return reportDocument;
+    return [[AppDelegate app] activeDocument];
 }
 
 + (RptqQuery *)activeRptqQuery {
-    MAReportDocument *managedDocument = [AppDelegate activeReportDocument];
-    RptqDocument *document = [managedDocument activeDocument];
+    RptqDocument *document = [[AppDelegate activeReportDocument] activeDocument];
     NSSet *databaseSchemas = [document hasDatabaseSchemas];
     RptqDatabase *databaseSchema = [databaseSchemas anyObject];
     NSSet *queries = [databaseSchema hasQueries];
-    RptqQuery *query = [queries anyObject];
-    return query;
+    return [queries anyObject];
 }
 
 - (void)dealloc {
@@ -87,7 +81,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     //Log uncaught errors.
-    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     [self initalizeApplicationInstance];
     [self initalizeICloudKvs];
@@ -99,7 +93,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
     [MTStoreKitController sharedObject];
     [MACloudManager sharedManager];
-    [[self applicationInstance] registerDefaultsFromSettingsBundle];
+    //[[self applicationInstance] registerDefaultsFromSettingsBundle];
     
     return YES;
 }
