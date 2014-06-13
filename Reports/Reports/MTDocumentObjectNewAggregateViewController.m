@@ -56,6 +56,8 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
                                                  groupType:[self aggregateGroupByType]
                                                groupNumber:groupNumber];
     }
+    BOOL enabled = [self fieldObject] != nil;
+    [[[self navigationItem] rightBarButtonItem] setEnabled:enabled];
 }
 
 - (void)updateField {
@@ -185,7 +187,7 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
         [self setAggregateFunctionType:aggregateFunctionType];
         NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:aggregateFunctionType];
-        NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
+        NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
         [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
     }
     
@@ -250,8 +252,8 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     [super viewWillAppear:animated];
     if ([self editmode]) {
         [self setEditmode:NO];
-        [self updateDisplay];
     }
+    [self updateDisplay];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

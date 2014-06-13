@@ -317,7 +317,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
         
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
-        
         if ([self aggregateToEdit] && [self editAggregate]) {
             MTDocumentObjectNewAggregateViewController *aggregateViewController = [action sourceViewController];
             [[self aggregateToEdit] updateAggregateFunctionWithFunctionType:[aggregateViewController aggregateFunctionType]
