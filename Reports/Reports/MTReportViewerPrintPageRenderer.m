@@ -522,15 +522,47 @@
                                                 switch (functionType) {
                                                         
                                                     case MTAggregateFunctionTypeFirst:
-                                                        if ([dataForGroup count] >= 1) {
-                                                            aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
-                                                        } else {
-                                                            aggregateResult = @"";
+                                                        switch (aggregateGroupType) {
+                                                            case MTAggregateGroupByTypePage:
+                                                                aggregateResult = [[[self reportFormatter] firstObjectOnPageAtIndex:pageIndex] objectForKey:fieldKey];
+                                                                break;
+                                                            case MTAggregateGroupByTypeSection:
+                                                                if ([dataForGroup count] >= 1) {
+                                                                    aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
+                                                                } else {
+                                                                    aggregateResult = @"";
+                                                                }
+                                                                break;
+                                                            case MTAggregateGroupByTypeReport:
+                                                                aggregateResult = [[[self reportFormatter] firstObjectOnReport] objectForKey:fieldKey];
+                                                                break;
+                                                            default:
+                                                                aggregateResult = [[[self reportFormatter] firstObjectOnReport] objectForKey:fieldKey];
+                                                                break;
                                                         }
                                                         break;
                                                         
                                                     case MTAggregateFunctionTypeLast:
-                                                        aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
+                                                        
+                                                        switch (aggregateGroupType) {
+                                                            case MTAggregateGroupByTypePage:
+                                                                aggregateResult = [[[self reportFormatter] lastObjectOnPageAtIndex:pageIndex] objectForKey:fieldKey];
+                                                                break;
+                                                            case MTAggregateGroupByTypeSection:
+                                                                if ([dataForGroup count] >= 1) {
+                                                                    aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
+                                                                } else {
+                                                                    aggregateResult = @"";
+                                                                }
+                                                                break;
+                                                            case MTAggregateGroupByTypeReport:
+                                                                aggregateResult = [[[self reportFormatter] lastObjectOnReport] objectForKey:fieldKey];
+                                                                break;
+                                                            default:
+                                                                aggregateResult = [[[self reportFormatter] lastObjectOnReport] objectForKey:fieldKey];
+                                                                break;
+                                                        }
+
                                                         break;
                                                         
                                                     default:

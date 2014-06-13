@@ -69,6 +69,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
 
+@property (nonatomic, assign) BOOL setFirstRowIdTemporary;
+@property (nonatomic, strong) NSNumber *firstRowIdTemporary;
+@property (nonatomic, strong) NSNumber *lastRowIdTemporary;
 
 @end
 
@@ -119,6 +122,8 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setPageIndexesTemporary:temporaryDataForPage];
     
     [self setLayoutHeightsBySectionKey:nil];
+    
+    [self setSetFirstRowIdTemporary:NO];
     
 }
 
@@ -253,6 +258,7 @@ NSString * const MTNullIdentifier = @"(null)";
         }
         NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
 
+
         //Get row key values
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         if (rowIdOnly == NO) {
@@ -277,11 +283,45 @@ NSString * const MTNullIdentifier = @"(null)";
         [self addHeightFromDocumentSectionToReportLayout:detailSection];
         
         [self addDetail:rowid];
+
         
         [self setLastResultRowComparsonValues: keyValuesForComparson];
 
         firstRow = NO;
     }
+}
+
+
+- (NSDictionary *)firstObjectOnReport {
+    return [self firstObjectOnPageAtIndex:0];
+}
+
+- (NSDictionary *)lastObjectOnReport {
+    return [self lastObjectOnPageAtIndex:[self numberOfPages] - 1];
+}
+
+- (NSDictionary *)firstObjectOnPageAtIndex:(NSInteger)pageIndex {
+    NSNumber *firstRowid = nil;
+    for (NSDictionary *pageSection in [self reportLayout][pageIndex]) {
+        MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: MTReportSectionType] integerValue];
+        if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+            firstRowid = pageSection[MTReportDetailRowId];
+            break;
+        }
+    }
+    return firstRowid != nil ? [self dataForCacheId:firstRowid] : nil;
+}
+
+- (NSDictionary *)lastObjectOnPageAtIndex:(NSInteger)pageIndex {
+    NSNumber *lastRowid = nil;
+    for (NSDictionary *pageSection in [[self reportLayout][pageIndex] reverseObjectEnumerator]) {
+        MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: MTReportSectionType] integerValue];
+        if (typeDocumentSection == MNSDocumentSectionTypeBody) {
+            lastRowid = pageSection[MTReportDetailRowId];
+            break;
+        }
+    }
+    return lastRowid != nil ? [self dataForCacheId:lastRowid] : nil;
 }
 
 - (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
@@ -469,6 +509,8 @@ NSString * const MTNullIdentifier = @"(null)";
         [self setCounterHeightUsedCurrentPage: pageHeaderHeight];
         
         [self addPageHeader];
+        
+        [self setFirstRowIdTemporary:NO];
     }
     return newPageCreated;
 }
@@ -510,7 +552,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addPageFooter {
-    NSDictionary *d = @{MTReportSectionType : @(MNSDocumentSectionTypePageFooter)};
+    NSNumber *section = @(MNSDocumentSectionTypePageFooter);
+    NSDictionary *d = @{MTReportSectionType : section,
+                        //MTReportPageFirstRowId : [self firstRowIdTemporary],
+                        //MTReportPageLastRowId : [self lastRowIdTemporary],
+                        };
     [[self pageLayoutTemporary] addObject: d];
 }
 
@@ -551,6 +597,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page {
+    NSAssert(false, @"FIXME: This is broke yo: %s. Not sorted. Not even.", __PRETTY_FUNCTION__);
     id rowData = nil;
     if (page < [[self reportIndexes] count]) {
         

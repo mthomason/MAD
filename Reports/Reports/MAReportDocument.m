@@ -43,6 +43,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSThread+Extras.h"
 #import "MADocumentState.h"
 
+NSString * const MTReportPageFirstRowId = @"MTReportPageFirstRowId";
+NSString * const MTReportPageLastRowId = @"MTReportPageLastRowId";
 NSString * const MTReportSectionType = @"MTReportSectionType";
 NSString * const MTReportSectionValues = @"MTReportSectionValues";
 NSString * const MTReportGroupLevel = @"MTReportGroupLevel";

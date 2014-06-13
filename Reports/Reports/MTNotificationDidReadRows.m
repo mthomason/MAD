@@ -12,7 +12,7 @@ NSString * const MTNotificationDidReadRowsName = @"MTNotificationDidReadRows";
 NSString * const MTDatabaseNumberOfRowsReadKey = @"MTDatabaseNumberOfRowsReadKey";
 
 static const NSInteger RowIntervalInital = 7;
-static const NSInteger RowIntervalInitalMax = 66;
+static const NSInteger RowIntervalInitalMax = 77;
 
 @interface MTNotificationDidReadRows ()
 
