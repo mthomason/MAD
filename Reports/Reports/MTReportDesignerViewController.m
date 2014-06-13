@@ -1654,7 +1654,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[self popoverControllerInformation] setPassthroughViews:[[self elementViews] allObjects]];
             [[self popoverControllerInformation] setPopoverContentSize: CGSizeMake(320.0000f, 300.0000f) animated:NO];
 
-            [self repositionPopoverControllerInformationAnimated:YES];
+                [self repositionPopoverControllerInformationAnimated:YES];
             [self setDisplayInactive];
         }
         
@@ -1838,6 +1838,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 + (void)positionDesigner:(MTReportDesignerViewController *)reportDesigner forRectOfInterest:(CGRect)rectOfInterest {
     
+    //rectOfInterest = [MTReportDesignerViewController adjustRect:rectOfInterest forZoomScale:reportDesigner.designerScrollView.zoomScale];
     CGRect visableRect = [MTReportDesignerViewController visableRect:reportDesigner.designerScrollView];
     CGRect bounds = [reportDesigner.designerScrollView convertRect: reportDesigner.designerScrollView.bounds
                                                        toView: reportDesigner.view];
@@ -1853,6 +1854,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         } else {
             contentOffset = [MTReportDesignerViewController contectOffsetBottomOfRect:rectOfInterest inRect:visableRect];
         }
+        contentOffset = CGPointMake(contentOffset.x, contentOffset.y * reportDesigner.designerScrollView.zoomScale);
         [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
     }
 }
@@ -2153,7 +2155,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (CGFloat)heightScrollViewAdjustment {
-    return [self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f);
+    return (([self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f)) * self.designerScrollView.zoomScale);
 }
 
 + (CGRect)visableRect:(UIScrollView *)scrollView {
