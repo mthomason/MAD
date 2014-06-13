@@ -66,7 +66,13 @@
     return self;
 }
 
-- (void)initialize { }
+- (void)initialize {
+    
+    [self initalizeFontListSettingsTableViewController];
+    [self initalizeFontSettingsTableViewController];
+    [self initalizeSegmentedControl];
+
+}
 
 - (void)initalizeFontSettingsTableViewController {
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
@@ -97,10 +103,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self initalizeFontListSettingsTableViewController];
-    [self initalizeFontSettingsTableViewController];
-    [self initalizeSegmentedControl];
 
     [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
 }
