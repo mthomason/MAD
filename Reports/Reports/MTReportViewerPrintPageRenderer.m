@@ -33,8 +33,8 @@
 #import "RptqDocumentSectionRows.h"
 
 #import "RptqDocumentObjectAggregate.h"
-#import "RptqDocumentObjectBarcode.h"
 
+#import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
 
 #import "RptqDatabaseSchemaField.h"
@@ -441,8 +441,6 @@
                                     
                                     NSMutableString *displayString = [NSMutableString new];
                                     id drawingObject = nil;
-                                    
-                                    
                                     
                                     switch ([item getType]) {
                                             

@@ -941,6 +941,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/Barcodes.dst;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
@@ -960,6 +961,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/Barcodes.dst;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
 				LIBRARY_SEARCH_PATHS = (
