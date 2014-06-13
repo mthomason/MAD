@@ -477,27 +477,15 @@
                                                                                                                                 rowids: [[self reportFormatter] rowidsForPage:pageIndex]];
                                                 
                                                 
-                                            } else {
+                                            } else {    //Handle first and last
                                                 
                                                 
                                                 NSArray *dataForGroup = nil;
+                                                NSDictionary *dataOfInterest = nil;
                                                 NSNumber *aggregateFieldGroupType = [aggregateField groupType];
                                                 MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
                                                 
                                                 switch (aggregateGroupType) {
-                                                        // FIXME: Check to see which ones of these are correct.
-                                                    case MTAggregateGroupByTypePage: {
-                                                        
-                                                        NSUInteger pageIndicesCount = [[self reportFormatter] countOnPageIndex:pageIndex];
-                                                        dataForGroup = [[NSMutableArray alloc] initWithCapacity:pageIndicesCount];
-                                                        NSIndexSet *indexSet = [[self reportFormatter] objectEnumeratorForPage:pageIndex];
-                                                        
-                                                        NSArray *objectsToAdd = [[[[self reportFormatter] query] datatable] objectAtRow: [indexSet firstIndex]
-                                                                                                                                  limit: [indexSet count]];
-                                                        
-                                                        [(NSMutableArray *)dataForGroup addObjectsFromArray:objectsToAdd];
-                                                        break;
-                                                    }
                                                     case MTAggregateGroupByTypeSection: {
                                                         NSInteger groupCount = [[aggregateField groupNumber] integerValue];
                                                         if (groupCount < [groupLevelKeys count]) {
@@ -507,68 +495,51 @@
                                                         } else {
                                                             dataForGroup = @[];
                                                         }
+                                                        switch (functionType) {
+                                                            case MTAggregateFunctionTypeFirst:
+                                                                dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup objectAtIndex:0] : @{fieldKey:@""};
+                                                                break;
+                                                            case MTAggregateFunctionTypeLast:
+                                                                dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup lastObject] : @{fieldKey:@""};
+                                                                break;
+                                                            default:
+                                                                dataOfInterest = @{fieldKey:@""};
+                                                                break;
+                                                        }
+                                                        break;
+                                                    }
+                                                    case MTAggregateGroupByTypePage: {
+                                                        switch (functionType) {
+                                                            case MTAggregateFunctionTypeFirst:
+                                                                dataOfInterest = [[self reportFormatter] firstObjectOnPageAtIndex:pageIndex];
+                                                                break;
+                                                            case MTAggregateFunctionTypeLast:
+                                                                dataOfInterest = [[self reportFormatter] lastObjectOnPageAtIndex:pageIndex];
+                                                                break;
+                                                            default:
+                                                                dataOfInterest = @{fieldKey:@""};
+                                                                break;
+                                                        }
                                                         break;
                                                     }
                                                     case MTAggregateGroupByTypeReport: {
-                                                        dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
+                                                        switch (functionType) {
+                                                            case MTAggregateFunctionTypeFirst:
+                                                                dataOfInterest = [[self reportFormatter] firstObjectOnReport];
+                                                                break;
+                                                            case MTAggregateFunctionTypeLast:
+                                                                dataOfInterest = [[self reportFormatter] lastObjectOnReport];
+                                                                break;
+                                                            default:
+                                                                dataOfInterest = @{fieldKey:@""};
+                                                                break;
+                                                        }
                                                         break;
                                                     }
-                                                        
                                                     default:
-                                                        dataForGroup = [[[[self reportFormatter] query] datatable] allObjects];
                                                         break;
                                                 }
-                                                
-                                                switch (functionType) {
-                                                        
-                                                    case MTAggregateFunctionTypeFirst:
-                                                        switch (aggregateGroupType) {
-                                                            case MTAggregateGroupByTypePage:
-                                                                aggregateResult = [[[self reportFormatter] firstObjectOnPageAtIndex:pageIndex] objectForKey:fieldKey];
-                                                                break;
-                                                            case MTAggregateGroupByTypeSection:
-                                                                if ([dataForGroup count] >= 1) {
-                                                                    aggregateResult = [[dataForGroup objectAtIndex:0] objectForKey:fieldKey];
-                                                                } else {
-                                                                    aggregateResult = @"";
-                                                                }
-                                                                break;
-                                                            case MTAggregateGroupByTypeReport:
-                                                                aggregateResult = [[[self reportFormatter] firstObjectOnReport] objectForKey:fieldKey];
-                                                                break;
-                                                            default:
-                                                                aggregateResult = [[[self reportFormatter] firstObjectOnReport] objectForKey:fieldKey];
-                                                                break;
-                                                        }
-                                                        break;
-                                                        
-                                                    case MTAggregateFunctionTypeLast:
-                                                        
-                                                        switch (aggregateGroupType) {
-                                                            case MTAggregateGroupByTypePage:
-                                                                aggregateResult = [[[self reportFormatter] lastObjectOnPageAtIndex:pageIndex] objectForKey:fieldKey];
-                                                                break;
-                                                            case MTAggregateGroupByTypeSection:
-                                                                if ([dataForGroup count] >= 1) {
-                                                                    aggregateResult = [[dataForGroup lastObject] objectForKey:fieldKey];
-                                                                } else {
-                                                                    aggregateResult = @"";
-                                                                }
-                                                                break;
-                                                            case MTAggregateGroupByTypeReport:
-                                                                aggregateResult = [[[self reportFormatter] lastObjectOnReport] objectForKey:fieldKey];
-                                                                break;
-                                                            default:
-                                                                aggregateResult = [[[self reportFormatter] lastObjectOnReport] objectForKey:fieldKey];
-                                                                break;
-                                                        }
-
-                                                        break;
-                                                        
-                                                    default:
-                                                        NSAssert(false, @"Not implemented");
-                                                        break;
-                                                }
+                                                aggregateResult = [dataOfInterest objectForKey:fieldKey];
                                             }
                                             
                                             [displayString setString: [item formattedString:aggregateType
