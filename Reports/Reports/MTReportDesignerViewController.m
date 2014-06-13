@@ -402,7 +402,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else if ([[action identifier] isEqualToString:@"MTStoryboardSegueUnwindToDesigner"]) {
 
     }
-
+    [self setDisplayActive];
 }
 
 - (void)setDisplayActive {
@@ -887,7 +887,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self designerScrollView] setBackgroundColor:[MTReportDesignerViewController designerBackgroundColor]];
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
     [[self designerScrollView] flashScrollIndicators];
-    
+    [self enableTabBarItems];
 }
 
 + (UIColor *)designerBackgroundColor {
@@ -1727,9 +1727,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)dismissToolboxPopoverControllers {
     if ([[self popoverControllerInformation] isPopoverVisible]) {
         [[self popoverControllerInformation] dismissPopoverAnimated:YES];
+        [self setDisplayActive];
     }
     if ([[self popoverControllerSectionSettings] isPopoverVisible]) {
         [[self popoverControllerSectionSettings] dismissPopoverAnimated:YES];
+        [self setDisplayActive];
     }
     [self setDisplayActive];
 }
@@ -2035,6 +2037,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
         [self deselectAllElementsAnimated:YES];
     }
+    [self setDisplayActive];
     return result;
 }
 
@@ -2880,11 +2883,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else if ([sender isKindOfClass:[MTReportViewerController class]]) {
         if ([UIDevice isPad]) {
             [self dismissViewControllerAnimated:YES completion:^{}];
+            [self setDisplayActive];
         }
     } else {
         if ([UIDevice isPad]) {
             if ([[self popoverControllerObjectSelector] isPopoverVisible]) {
                 [[self popoverControllerObjectSelector] dismissPopoverAnimated:YES];
+                [self setDisplayActive];
             } else {
                 [[self designerScrollView] setZoomScale:1.0000f animated:NO];
                 __weak MTReportDesignerViewController *reportDesigner = self;
@@ -2892,12 +2897,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     [[reportDesigner view] setNeedsUpdateConstraints];
                     [[reportDesigner designerContentView] setNeedsLayout];
                     [[reportDesigner designerContentView] setNeedsDisplay];
+                    [reportDesigner setDisplayActive];
                 }];
             }
         } else {
             __weak MTReportDesignerViewController *reportDesigner = self;
             [self dismissViewControllerAnimated:YES completion:^{
                 [[reportDesigner designerContentView] setNeedsDisplay];
+                [reportDesigner setDisplayActive];
             }];
         }
     }

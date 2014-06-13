@@ -608,8 +608,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [weakself enableTabBarItems];
     }];
 
-    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
-
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
@@ -620,19 +618,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     [query addHasQueryGroupsObject: queryGroup];
-
-    //NSInteger groupCount = [[query hasQueryGroups] count];
-    //NSInteger weight = groupCount - 1;
-    //NSUInteger secFirstTransaction = [self sectionPositionForTableSectionType:MTQuerySectionsGroups];
-    //NSUInteger rowFirstTransaction = weight;
-    
-    //[[self tableView] beginUpdates];
-    //[[self tableView] insertRowsAtIndexPaths: @[[NSIndexPath indexPathForRow: rowFirstTransaction inSection: secFirstTransaction]]
-    //                                    withRowAnimation: UITableViewRowAnimationAutomatic];
     [reportDocument saveContext];
-    //[[self tableView] endUpdates];
-
-    //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
     [reportDocument quickSave];
     
     [self performFetchGroups];
@@ -670,9 +656,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             indexCounter++;
         }
     }
-    
-    
-    //NSUInteger indexCounter = [[query hasQueryTables] count] - 1;
     
     NSUInteger sectionPosition = [self sectionPositionForTableSectionType: MTQuerySectionsTables];
     NSIndexPath *insertedRowIndexPath = [NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition];
@@ -712,22 +695,21 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
     }
-    //NSLog(@"Add table at %@", insertedRowIndexPath);
     if (indexSetSections != nil) {
-
+        
         [[self tableView] beginUpdates];
         [[self tableView] insertRowsAtIndexPaths: @[insertedRowIndexPath]
-                                            withRowAnimation: UITableViewRowAnimationAutomatic];
+                                withRowAnimation: UITableViewRowAnimationAutomatic];
         [[self tableView] insertSections: indexSetSections
-                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+                        withRowAnimation: UITableViewRowAnimationAutomatic];
         [managedObjectContext save:nil];
         [[self tableView] endUpdates];
-
+        
     } else {
-
+        
         [[self tableView] beginUpdates];
         [[self tableView] insertRowsAtIndexPaths: @[insertedRowIndexPath]
-                                            withRowAnimation: UITableViewRowAnimationAutomatic];
+                                withRowAnimation: UITableViewRowAnimationAutomatic];
         [managedObjectContext save:nil];
         [[self tableView] endUpdates];
     }
