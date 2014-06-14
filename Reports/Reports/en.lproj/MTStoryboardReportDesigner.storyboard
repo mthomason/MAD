@@ -5757,10 +5757,6 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <connections>
-                            <outlet property="dataSource" destination="F7A-ai-FfA" id="I2h-Bg-KnJ"/>
-                            <outlet property="delegate" destination="F7A-ai-FfA" id="d0M-Ci-4rZ"/>
-                        </connections>
                     </collectionView>
                     <toolbarItems>
                         <barButtonItem enabled="NO" systemItem="trash" id="HJd-Zb-f53">

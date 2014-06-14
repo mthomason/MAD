@@ -5101,10 +5101,6 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <connections>
-                            <outlet property="dataSource" destination="9ul-yk-EvR" id="C7h-nJ-vhV"/>
-                            <outlet property="delegate" destination="9ul-yk-EvR" id="LCm-1W-xP9"/>
-                        </connections>
                     </collectionView>
                     <toolbarItems>
                         <barButtonItem enabled="NO" systemItem="trash" id="10T-nH-IAQ">

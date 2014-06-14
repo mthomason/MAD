@@ -10,10 +10,14 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+NSString * const MTImageBlank                               = @"UIImageDocumentBlank";
+
 #import "MTCollectionViewCellDocument.h"
 #import "UIDevice+Hack.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+EverydayApps.h"
+#import "MADocument.h"
+#import "MAReportDocument.h"
 
 @interface MTCollectionViewCellDocument ()
 @property (nonatomic, strong) UIColor *bgColor;
@@ -46,6 +50,29 @@
 
 - (void)performDeselectionAnimations {
     [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
+}
+
+- (void)configureCellForUrl:(NSURL *)url {
+    [self setText: [MADocument fileNameForMadUrl:url]];
+    [self loadPreviewImageForUrl:url];
+}
+
+- (void)loadPreviewImageForUrl:(NSURL *)url {
+    __weak MTCollectionViewCellDocument *weakself = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        dispatch_sync(dispatch_get_main_queue(), ^(void) {
+            NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:url];
+            NSString *path = [thumbnailUrl path];
+            UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+            if (image) {
+                [[weakself imagePreview] setImage: image];
+            } else {
+                UIImage *defaultThumbnail = [UIImage imageNamed:MTImageBlank];
+                [[weakself imagePreview] setImage: defaultThumbnail];
+            }
+            [weakself setNeedsLayout];
+        });
+    });
 }
 
 - (void)setText:(NSString *)text {
