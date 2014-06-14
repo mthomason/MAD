@@ -167,7 +167,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSURL *)mcacheUrl {
-    NSString *fileName = [[NSString stringWithFormat:@"%ld", (long)[self fileNameHash]] stringByAppendingPathExtension:@"mcache"];
+    NSString *fileName = [[NSString stringWithFormat:@"%ld", (long)[self fileNameHash]] stringByAppendingPathExtension:@"mdcache"];
     return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
