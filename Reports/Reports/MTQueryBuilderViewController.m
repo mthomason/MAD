@@ -94,7 +94,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         MTQueryBuilderLinkBuilderDelegate,
         MTViewControllerProtocol,
         MTReportDesignerSectionLayoutSettingsDelegate,
-        MTQueryBuilderPredicateFormatDelegate>
+        MTQueryBuilderPredicateFormatDelegate,
+        MTTabBarImageProtocol>
 
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
@@ -120,17 +121,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 @end
 
-#pragma mark - Main
-
 @implementation MTQueryBuilderViewController
 
-- (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
-}
+#pragma mark - Exit
 
-- (NSString *)title {
-    return NSLocalizedString(@"MAD Query", "MAD Query");
-}
+- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
+
+#pragma mark - NSObject
 
 - (void)dealloc {
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
@@ -139,15 +136,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
 }
-
-- (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [[[self navigationItem] titleView] sizeToFit];
-}
-
-#pragma mark - View lifecycle
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -159,7 +147,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return self;
 }
 
+#pragma mark - UIViewController
 
+- (NSString *)title {
+    return NSLocalizedString(@"MAD Query", "MAD Query");
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [[[self navigationItem] titleView] sizeToFit];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -364,89 +361,14 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return shouldPerformSegueWithIdentifier;
 }
 
-- (void)documentStateChanged {
-    
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-    UIDocumentState state = [reportDocument documentState];
-    switch (state) {
-        case UIDocumentStateClosed:
-            [self disableUserInteraction];
-            break;
-        case UIDocumentStateInConflict:
-            [self enableUserInteraction];
-            break;
-        case UIDocumentStateSavingError:
-            [self enableUserInteraction];
-            break;
-        case UIDocumentStateEditingDisabled:
-            [self disableUserInteraction];
-            break;
-        case UIDocumentStateNormal:
-        default:
-            [self enableUserInteraction];
-            break;
-    }
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
+    UIViewController *weakself = self;
+    [super dismissViewControllerAnimated:YES completion:^(){
+        [weakself enableTabBarItems];
+    }];
 }
 
-- (void)enableUserInteraction {
-    [[self tableView] setUserInteractionEnabled:YES];
-}
-
-- (void)disableUserInteraction {
-    [[self tableView] setUserInteractionEnabled:NO];
-}
-
-#pragma mark - Toolbar Actions
-
-#pragma mark Top Toolbar Actions
-
-- (IBAction)edit:(id)sender {
-    
-    BOOL editing = ![[self tableView] isEditing];
-    
-    if ([UIDevice isPad] == NO) {
-        UIBarButtonSystemItem buttonType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
-        SEL toggleEditModeQueryDesigner = @selector(edit:);
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                       target: self
-                                                                                       action: toggleEditModeQueryDesigner];
-        
-        
-        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
-        [self setBarButtonItemEdit:barButtonItem];
-    }
-
-    [[self tableView] setEditing: editing];
-}
-
-#pragma mark Table Header Actions
-
-- (void)addConnection:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
-    [self disableTabBarItems];
-}
-
-- (void)addTable:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
-    [self disableTabBarItems];
-}
-
-- (void)addLink:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
-    [self disableTabBarItems];
-}
-
-- (void)addPredicate:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
-    [self disableTabBarItems];
-}
-
-- (void)addGroup:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
-    [self disableTabBarItems];
-}
+#pragma mark - MTQueryBuilderPredicateFormatDelegate
 
 - (void)addQueryPredicate:(RptqQueryPredicate *)predicate {
     UIViewController *weakself = self;
@@ -462,71 +384,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [reportDocument quickSave];
 }
 
-- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
-    if (groupToRemove) {
-        RptqQuery *query = [groupToRemove inQuery];
-        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
-        
-        NSSet *sectionsToRemove = [groupToRemove hasSection];
-        NSArray *sections = [sectionsToRemove allObjects];
-        if ([sections count] == 2) {
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
-        }
-        [[query managedObjectContext] deleteObject: groupToRemove];
-        [query removeHasQueryGroupsObject: groupToRemove];
-        [managedObjectContext save:nil];
-        
-        //Reweight Groups
-        NSString *weight = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
-        NSUInteger counter = 0;
-        for (RptqQueryGroup *group in sortedQueryGroups) {
-            [group setWeight:@(counter)];
-            counter++;
-        }
-        [managedObjectContext save:nil];
-    }
-}
-
-#pragma mark - Modal helper
-
-- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section withNumberOfTables:(NSInteger)numberOfTables {
-    MTQuerySections result = section;
-    NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
-    NSArray *sectionTypes = [dataModel objectForKey: MTTableSectionSectionsKey];
-    if ([sectionTypes count] >= section) {
-        result = [[sectionTypes objectAtIndex:section] integerValue];
-    }
-    return result;
-}
-
-- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
-    MTQuerySections result = sec;
-    NSDictionary *datamodel = [self datamodel];
-    NSArray *sectionTypes = [datamodel objectForKey: MTTableSectionSectionsKey];
-    if ([sectionTypes count] >= sec) {
-        result = [[sectionTypes objectAtIndex:sec] integerValue];
-    }
-    return result;
-}
-
-- (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
-    NSInteger result = 0;
-    NSArray *sectionTypes = [[self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey];
-    NSInteger secPos = 0;
-    for (NSNumber *num in sectionTypes) {
-        if ([num integerValue] == sec) {
-            result = secPos;
-            break;
-        }
-        secPos++;
-    }
-    return result;
-}
-
-#pragma mark - Layout Settings Delegate
+#pragma mark - MTReportDesignerSectionLayoutSettingsDelegate
 
 - (void)sectionLayoutDidUpdateHeight:(CGFloat)height {
     
@@ -562,8 +420,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [reportDocument saveContext];
 }
 
-#pragma mark - Delegates
-
 #pragma mark MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
@@ -580,6 +436,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [weakself enableTabBarItems];
     }];
 }
+
+#pragma mark - MTQueryBuilderLinkBuilderDelegate
 
 - (void)viewControllerSchemaAddLinkDidAdd:(RptqQueryLinks *)link {
     UIViewController *weakself = self;
@@ -602,6 +460,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [reportDocument quickSave];
 }
 
+#pragma mark - MTQueryBuilderAddGroupDelegate
+
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldId andSortOrder:(MNSSortOrder)sortOrder {
     UIViewController *weakself = self;
     [self dismissViewControllerAnimated:YES completion:^{
@@ -623,6 +483,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     [self performFetchGroups];
 }
+
+#pragma mark - MTQueryBuilderAddTableDelegate
 
 - (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)table {
     UIViewController *weakself = self;
@@ -786,331 +648,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 	switch (editingStyle) {
 
         // MARK: UITableViewCellEditingStyleDelete
-        case UITableViewCellEditingStyleDelete: {
-            switch (querySection) {
-                    
-                // MARK: Delete MTQuerySectionsTables
-                case MTQuerySectionsTables: {
-                    
-                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
-                    
-                    MTApplicationInstance *applicationInstance = [AppDelegate app];
-                    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-                    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-                    
-                    NSIndexSet *deleteSections = nil;
-                    RptqDocument *document = [reportDocument activeDocument];
-                    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForDocument:document];
-                    NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
-                    
-                    RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
-                    NSManagedObjectID *deleatedTableObjectId = [table objectID];
-                    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                    RptqQuery *query = [[database hasQueries] anyObject];
-                    [query removeHasQueryTablesObject:table];
-                    numberOfTables--;
-                    
-                    NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [self datamodelForNumberOfTables: numberOfTables]];
-                    NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:MTTableSectionSectionsKey];
-                    NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:MTTableSectionSectionsKey];
-                    
-                    if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
-                        NSInteger secctr = 0;
-                        BOOL startIndexSet = NO;
-                        NSInteger startIndex = -1;
-                        NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
-                        for (NSNumber *typenum in oldLayoutSectionTypes) {
-                            MTQuerySections stsection = [typenum integerValue];
-                            if (secctr < [newLayoutSectionTypes count]) {
-                                if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
-                                    secctr++;
-                                } else {
-                                    if (!startIndexSet) {
-                                        startIndex = secctr;
-                                        startIndexSet = YES;
-                                    }
-                                }
-                            } else {
-                                if (!startIndexSet) {
-                                    startIndex = secctr;
-                                    startIndexSet = YES;
-                                }
-                                secctr++;
-                            }
-                        }
-                        
-                        if (startIndex >= 0 && lengtho > 0) {
-                            NSRange sectionRange = NSMakeRange(startIndex, lengtho);
-                            deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
-                        }
-                    }
-                    
-                    
-                    [tableView beginUpdates];
-                    
-                    //Delete document data fields related to the table being deleted.
-                    {
-                        NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
-                        NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-                        NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
-                        
-                        [fetchReqest setPredicate:documentObjectsPredicate];
-                        NSError *fetchError = nil;
-                        NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
-                        if (fetchError == nil) {
-                            for (RptqDocumentObject *documentObject in objectsToDelete) {
-                                [managedObjectContext deleteObject:[documentObject isLabelDataField]];
-                                [managedObjectContext deleteObject:documentObject];
-                            }
-                            [managedObjectContext save:&fetchError];
-                        }
-                    }
-                    //Delete document data objects related to the table being deleted.
-                    {
-                        NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
-                        NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-                        NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
-                        
-                        [fetchReqest setPredicate:documentObjectsPredicate];
-                        NSError *fetchError = nil;
-                        NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
-                        if (fetchError == nil) {
-                            for (RptqDocumentObject *documentObject in objectsToDelete) {
-                                [managedObjectContext deleteObject:[documentObject isAggregate]];
-                                [managedObjectContext deleteObject:documentObject];
-                            }
-                            [managedObjectContext save:&fetchError];
-                        }
-                    }
-                    
-                    //Delete links, groups, and predicates related to the table being deleted.
-                    
-                    NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
-                    for (NSInteger section = 0; section < [tableView numberOfSections]; section++) {
-                        NSInteger numberOfTablesPlusOne = numberOfTables + 1;
-                        MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:section withNumberOfTables:numberOfTablesPlusOne];
-
-                        if (querySection == MTQuerySectionsLinks) {
-                            
-                            NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
-                            NSFetchedResultsController *fetchedLinkes = [self fetchedResultsControllerLinks];
-                            for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
-                                NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                                NSError *error = nil;
-                                NSManagedObject *object = nil;
-                                UITableViewCellQueryLink *tableViewCellLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
-                                if (tableViewCellLink) {
-                                    object = [managedObjectContext existingObjectWithID:[tableViewCellLink tableID] error:&error];
-                                } else {
-                                    NSIndexPath *testLinkIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-                                    
-                                    object = [fetchedLinkes objectAtIndexPath:testLinkIndexPath];
-                                }
-                                if (!error && object && [object isKindOfClass:[RptqQueryLinks class]]) {
-                                    RptqQueryLinks *queryLink = (RptqQueryLinks *)object;
-                                    NSManagedObjectID *tableLeftObjectId = [[[queryLink hasLeftField] inQueryTable] objectID];
-                                    NSManagedObjectID *tableRightObjectId = [[[queryLink hasRightField] inQueryTable] objectID];
-                                    if ([tableLeftObjectId isEqual:deleatedTableObjectId] ||
-                                        [tableRightObjectId isEqual:deleatedTableObjectId]
-                                        ) {
-                                        [RptqQueryLinks deleteLinkWithID:[queryLink objectID] fromObjectContext:managedObjectContext];
-                                        [cellsToDelete addObject:linkIndexPath];
-                                    }
-                                }
-                            }
-                            NSError *error = nil;
-                            [managedObjectContext save:&error];
-
-                            
-                        } else if (querySection == MTQuerySectionsGroups) {
-                            
-                            NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
-                            for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
-                                NSIndexPath *groupIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                                NSError *error = nil;
-                                NSManagedObject *object = nil;
-
-                                UITableViewCellQueryGroup *tableViewCellGroup = (UITableViewCellQueryGroup *)[tableView cellForRowAtIndexPath:groupIndexPath];
-                                if (tableViewCellGroup) {
-                                    NSError *error = nil;
-                                    object = [managedObjectContext existingObjectWithID:[tableViewCellGroup tableID] error:&error];
-                                } else {
-                                    NSIndexPath *testGroupIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-                                    object = [[self fetchedResultsControllerGroups] objectAtIndexPath:testGroupIndexPath];
-                                }
-                                if (!error && object && [object isKindOfClass:[RptqQueryGroup class]]) {
-                                    RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
-                                    NSManagedObjectID *tableObjectId = [[[groupToRemove hasField] inQueryTable] objectID];
-                                    if ([tableObjectId isEqual:deleatedTableObjectId]) {
-                                        [self removeGroup:groupToRemove];
-                                        [cellsToDelete addObject:groupIndexPath];
-                                    }
-                                }
-                            
-                            }
-                            
-                        } else if (querySection == MTQuerySectionsPredicate) {
-                            
-                            NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
-                            for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
-                                NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                                
-
-                                MTTableViewCellQueryPredicate *tableViewCellPredicate = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
-                                NSError *error = nil;
-                                NSManagedObject *object = nil;
-                                if (tableViewCellPredicate) {
-                                    object = [managedObjectContext existingObjectWithID:[tableViewCellPredicate tableID] error:&error];
-                                } else {
-                                    NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
-                                    object = [[self fetchedResultsControllerPredicates] objectAtIndexPath: testPredicateIndexPath];
-                                }
-                                if (!error && object && [object isKindOfClass:[RptqQueryPredicate class]]) {
-                                    RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
-                                    NSManagedObjectID *leftTableObjectId = [[[predicateToRemove hasLeftField] inQueryTable] objectID];
-                                    NSManagedObjectID *rightTableObjectId = [[[predicateToRemove hasRightField] inQueryTable] objectID];
-                                    BOOL deleted = NO;
-                                    if (leftTableObjectId) {
-                                        if ([leftTableObjectId isEqual:deleatedTableObjectId]) {
-                                            [RptqQueryPredicate deletePredicate:predicateToRemove];
-                                            [cellsToDelete addObject:predicateIndexPath];
-                                            deleted = YES;
-                                        }
-                                    }
-                                    if (deleted == NO) {
-                                        if (rightTableObjectId) {
-                                            if ([rightTableObjectId isEqual:deleatedTableObjectId]) {
-                                                [RptqQueryPredicate deletePredicate:predicateToRemove];
-                                                [cellsToDelete addObject:predicateIndexPath];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    
-                    [managedObjectContext save:nil];
-                    if (deleteSections != nil) {
-                        [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
-                        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    } else {
-                        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    }
-                    if ([cellsToDelete count]) {
-                        [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
-                    }
-                    [tableView endUpdates];
-                    
-
-                    // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
-                    
-                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                    
-
-                    break;
-                }
-
-                // MARK: Delete MTQuerySectionsLinks
-                case MTQuerySectionsLinks: {
-                    UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
-                    if (tvcLink) {
-                        NSManagedObjectID *objid = [tvcLink tableID];
-
-                        MTApplicationInstance *applicationInstance = [AppDelegate app];
-                        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-                        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
-                        [reportDocument saveContext];
-                    }
-                    break;
-                }
-                    
-                // MARK: Delete MTQuerySectionsGroups
-                case MTQuerySectionsGroups: {
-                    
-
-                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
-
-                    RptqDocument *document = [[[AppDelegate app] activeDocument] activeDocument];
-
-                    if (document) {
-                        RptqQuery *query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-                        NSInteger weightToRemove = [indexPath row];
-
-                        RptqQueryGroup *groupToRemove = nil;
-                        for (RptqQueryGroup *group in [query hasQueryGroups]) {
-                            if ([[group weight] integerValue] > weightToRemove) {
-                                [group setWeight:[NSNumber numberWithInteger:([[group weight] integerValue] - 1)]];
-                            } else
-                                if ([[group weight] integerValue] == weightToRemove) {
-                                groupToRemove = group;
-                            }
-                        }
-                        
-                        if (groupToRemove) {
-                            NSSet *sectionsToRemove = [groupToRemove hasSection];
-                            NSArray *sections = [sectionsToRemove allObjects];
-                            if ([sections count] == 2) {
-                                [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-                                [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
-                            }
-                            [[query managedObjectContext] deleteObject: groupToRemove];
-                            [query removeHasQueryGroupsObject: groupToRemove];
-                            
-                            //Reweight Groups
-                            
-                            [tableView beginUpdates];
-                            [[self tableView] deleteRowsAtIndexPaths: @[indexPath]
-                                                                withRowAnimation: UITableViewRowAnimationAutomatic];
-                            [[query managedObjectContext] save:nil];
-                            NSString *weight = NSStringFromSelector(@selector(weight));
-                            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-                            NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
-                            NSUInteger counter = 0;
-                            for (RptqQueryGroup *group in sortedQueryGroups) {
-                                [group setWeight:@(counter)];
-                                counter++;
-                            }
-                            [[query managedObjectContext] save:nil];
-                            [tableView endUpdates];
-                        }
-                    }
-                    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
-                    break;
-                }
-                
-                case MTQuerySectionsPredicate: {
-
-                    MTTableViewCellQueryPredicate *tvcPred = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
-                    
-                    if (tvcPred) {
-                        NSManagedObjectID *objid = [tvcPred tableID];
-                        RptqDocument *doc = [[[AppDelegate app] activeDocument] activeDocument];
-                        NSManagedObject *predicate = [[doc managedObjectContext] objectRegisteredForID:objid];
-                        [[doc managedObjectContext] deleteObject:predicate];
-                        [doc saveContext];
-                    }
-
-                    break;
-                }
-                default: {
-                    break;
-                }
-                
-            }
+        case UITableViewCellEditingStyleDelete:
+            [self deleteItemFromQuerySection:querySection fromTableView:tableView atIndexPath:indexPath];
             break;
-        }
-        // MARK: UITableViewCellEditingStyleInsert
-        case UITableViewCellEditingStyleInsert: {
+
+        case UITableViewCellEditingStyleInsert:
             break;
-        }
-        // MARK: UITableViewCellEditingStyleNone
-        case UITableViewCellEditingStyleNone: {
+
+        case UITableViewCellEditingStyleNone:
             break;
-        }
+
         default:
             break;
     }
@@ -1401,8 +948,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 
-#pragma mark -
-#pragma mark Table View Delegate Protocol
+#pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -1413,52 +959,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 
-}
-
-- (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
-    RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
-    MTTableController *tableController = [self tableControllerForTable:table];
-    [[self navigationController] pushViewController:tableController animated:YES];
-}
-
-- (MTTableController *)tableControllerForTable:(RptqQueryTable *)table {
-    RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
-    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
-    MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
-    UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
-    [sampleDataTitleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    
-    NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName:[schemaTable name]];
-    [sampleDataTitleView setAttributedText:titleViewText];
-    
-    [[tableController navigationItem] setTitle:[schemaTable name]];
-    [[tableController navigationItem] setTitleView:sampleDataTitleView];
-    return tableController;
-}
-
-- (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
-
-    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
-
-    NSString *firstPart = @"Data Sample";
-    NSString *titleString = [NSString stringWithFormat:@"%1@ %2@", firstPart, tableName];
-
-    NSRange rangeFirstPart = NSMakeRange(0, [firstPart length]);
-    NSRange rangeSecondPart = NSMakeRange([firstPart length], [titleString length] - [firstPart length]);
-    
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fonti = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:18.0000f];
-    
-    UIColor *foregroundColor = [UIColor whiteColor];
-    NSDictionary *attributes = @{NSParagraphStyleAttributeName: paragraphStyle,
-                                 NSForegroundColorAttributeName: foregroundColor};
-    NSMutableAttributedString *titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
-                                                                                      attributes:attributes];
-
-    [titleViewText addAttribute:NSFontAttributeName value:fontb range:rangeFirstPart];
-    [titleViewText addAttribute:NSFontAttributeName value:fonti range:rangeSecondPart];
-
-    return titleViewText;
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath { }
@@ -1482,14 +982,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     return result;
 }
 
-
-// MARK: - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath { }
-// MARK: - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section { }
-// MARK: - (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath { }
-// MARK: - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
-// MARK: - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath { }
-
-
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
     return NSLocalizedString(@"Remove", @"Remove button title.");
  }
@@ -1497,197 +989,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath { }
-
-#pragma mark - NSFetchedResultsSetup
-
-- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    UIViewController *weakself = self;
-    [super dismissViewControllerAnimated:YES completion:^(){
-        [weakself enableTabBarItems];
-    }];
-}
-
-- (void)reloadActiveDocumentAnimated:(BOOL)animated {
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    [self reloadDocument:reportDocument animated:animated];
-}
-
-- (void)reloadDocument:(MAReportDocument *)reportDocument animated:(BOOL)animated {
-    
-    if (reportDocument) {
-        
-        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-        
-        {
-            
-            
-            RptqDocument *document = [reportDocument activeDocument];
-            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqQuery *query = [[database hasQueries] anyObject];
-            
-            NSString *entityName = NSStringFromClass([RptqQueryTable class]);
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias" ascending:YES];
-            [request setSortDescriptors: @[sortDescriptor]];
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCacheTables];
-            [frc setDelegate:self];
-            [self setFetchedResultsControllerTables: frc];
-            [self performFetchTables];
-            frc = nil;
-        }
-        
-        {
-            NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
-            [request setSortDescriptors: @[sortDescriptor]];
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCacheLinks];
-            [frc setDelegate:self];
-            [self setFetchedResultsControllerLinks: frc];
-            [self performFetchLinks];
-            frc = nil;
-        }
-        
-        {
-            NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
-            [request setSortDescriptors: @[sortDescriptor]];
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCacheGroups];
-            [frc setDelegate:self];
-            [self setFetchedResultsControllerGroups: frc];
-            [self performFetchGroups];
-            frc = nil;
-            
-        }
-        
-        {
-            NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
-            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"fieldleftpred" ascending:YES];
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-            [request setSortDescriptors: sortDescriptors];
-            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                                  managedObjectContext: managedObjectContext
-                                                                                    sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCachePredicates];
-            [frc setDelegate:self];
-            [self setFetchedResultsControllerPredicates: frc];
-            [self performFetchPredicate];
-            frc = nil;
-        }
-        [[self tableView] reloadData];
-    }
-
-}
-
-- (NSMutableDictionary *)datamodel {
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-    RptqDocument *document = [reportDocument activeDocument];
-    NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForDocument:document];
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
-    return result;
-}
-
-- (NSDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
-
-    NSDictionary *result;
-
-    NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
-    NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
-    NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
-    NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
-    NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
-
-    switch (numberOfTables) {
-        case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
-            
-            NSArray *sections = @[@(MTQuerySectionsDatasource),
-                                  @(MTQuerySectionsTables)];
-            
-            NSArray *countRowsForSection = @[@(1), @(-1)];
-            NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
-            
-            NSArray *headersSection = @[h2, h3];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
-            
-            NSArray *heightRowsForSection = @[@(50.0000f), @([UITableViewCellTableName defaultHeight])];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-            
-            result = @{MTTableSectionSectionsKey : sections,
-                                           MTTableHeaderSectionKey : headersSectionDictionary,
-                                           MTTableSectionRowKey : countRowsForSectionDictionary,
-                                           MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-
-            
-            break;
-        }
-        case 1: {   //Only one table in query.  No ability to add links.
-            
-            NSArray *sections = @[@(MTQuerySectionsDatasource),
-                         @(MTQuerySectionsTables),
-                         @(MTQuerySectionsGroups),
-                         @(MTQuerySectionsPredicate)];
-            
-            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
-            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
-            
-            NSArray *headersSection = @[h2, h3, h5, h6];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
-            
-            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]),
-                                     @(44.0000f), @(44.0000f)];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-            
-            result = @{MTTableSectionSectionsKey : sections,
-                             MTTableHeaderSectionKey : headersSectionDictionary,
-                             MTTableSectionRowKey : countRowsForSectionDictionary,
-                             MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-
-            break;
-        }
-        default: {   //Two more more tables in query.  All features available.
-
-            NSArray *sections = @[@(MTQuerySectionsDatasource),
-                                  @(MTQuerySectionsTables),
-                                  @(MTQuerySectionsLinks),
-                                  @(MTQuerySectionsGroups),
-                                  @(MTQuerySectionsPredicate)];
-            
-            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
-            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
-            
-            NSArray *headersSection = @[h2, h3, h4, h5, h6];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
-            
-            
-            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellQueryLink defaultHeight]),
-                                     @(44.0000f), @(44.0000f)];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-            
-            result = @{MTTableSectionSectionsKey : sections,
-                             MTTableHeaderSectionKey : headersSectionDictionary,
-                             MTTableSectionRowKey : countRowsForSectionDictionary,
-                             MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
-            
-            break;
-        }
-    }
-    return result;
-}
 
 #pragma mark - NSFetchedResultsControllerDelegate
 
@@ -1832,7 +1133,304 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [[self tableView] reloadData];
 }
 
-#pragma mark - Table Headers
+
+#pragma mark - MTTabBarImageProtocol
+
+- (UIImage *)tabBarImage {
+    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+}
+
+#pragma mark - Actions
+
+- (IBAction)edit:(id)sender {
+    
+    BOOL editing = ![[self tableView] isEditing];
+    
+    if ([UIDevice isPad] == NO) {
+        UIBarButtonSystemItem buttonType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
+        SEL toggleEditModeQueryDesigner = @selector(edit:);
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
+                                                                                       target: self
+                                                                                       action: toggleEditModeQueryDesigner];
+        
+        
+        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+        [self setBarButtonItemEdit:barButtonItem];
+    }
+    
+    [[self tableView] setEditing: editing];
+}
+
+- (void)addConnection:(id)sender {
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
+    [self disableTabBarItems];
+}
+
+- (void)addTable:(id)sender {
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
+    [self disableTabBarItems];
+}
+
+- (void)addLink:(id)sender {
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
+    [self disableTabBarItems];
+}
+
+- (void)addPredicate:(id)sender {
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
+    [self disableTabBarItems];
+}
+
+- (void)addGroup:(id)sender {
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
+    [self disableTabBarItems];
+}
+
+#pragma mark - Helper functions
+
+- (void)documentStateChanged {
+    
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    
+    UIDocumentState state = [reportDocument documentState];
+    switch (state) {
+        case UIDocumentStateClosed:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateInConflict:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateSavingError:
+            [self enableUserInteraction];
+            break;
+        case UIDocumentStateEditingDisabled:
+            [self disableUserInteraction];
+            break;
+        case UIDocumentStateNormal:
+        default:
+            [self enableUserInteraction];
+            break;
+    }
+}
+
+- (void)enableUserInteraction {
+    [[self tableView] setUserInteractionEnabled:YES];
+}
+
+- (void)disableUserInteraction {
+    [[self tableView] setUserInteractionEnabled:NO];
+}
+
+- (void)removeGroup:(RptqQueryGroup *)groupToRemove {
+    if (groupToRemove) {
+        RptqQuery *query = [groupToRemove inQuery];
+        NSManagedObjectContext *managedObjectContext = [query managedObjectContext];
+        
+        NSSet *sectionsToRemove = [groupToRemove hasSection];
+        NSArray *sections = [sectionsToRemove allObjects];
+        if ([sections count] == 2) {
+            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
+            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+        }
+        [[query managedObjectContext] deleteObject: groupToRemove];
+        [query removeHasQueryGroupsObject: groupToRemove];
+        [managedObjectContext save:nil];
+        
+        //Reweight Groups
+        NSString *weight = NSStringFromSelector(@selector(weight));
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        NSUInteger counter = 0;
+        for (RptqQueryGroup *group in sortedQueryGroups) {
+            [group setWeight:@(counter)];
+            counter++;
+        }
+        [managedObjectContext save:nil];
+    }
+}
+
+- (void)reloadActiveDocumentAnimated:(BOOL)animated {
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    [self reloadDocument:reportDocument animated:animated];
+}
+
+- (void)reloadDocument:(MAReportDocument *)reportDocument animated:(BOOL)animated {
+    
+    if (reportDocument) {
+        
+        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+        
+        {
+            
+            
+            RptqDocument *document = [reportDocument activeDocument];
+            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+            RptqQuery *query = [[database hasQueries] anyObject];
+            
+            NSString *entityName = NSStringFromClass([RptqQueryTable class]);
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+            request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias" ascending:YES];
+            [request setSortDescriptors: @[sortDescriptor]];
+            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                  managedObjectContext: managedObjectContext
+                                                                                    sectionNameKeyPath: nil
+                                                                                             cacheName: NSFetchedResultsCacheTables];
+            [frc setDelegate:self];
+            [self setFetchedResultsControllerTables: frc];
+            [self performFetchTables];
+            frc = nil;
+        }
+        
+        {
+            NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"tableleft" ascending:YES];
+            [request setSortDescriptors: @[sortDescriptor]];
+            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                  managedObjectContext: managedObjectContext
+                                                                                    sectionNameKeyPath: nil
+                                                                                             cacheName: NSFetchedResultsCacheLinks];
+            [frc setDelegate:self];
+            [self setFetchedResultsControllerLinks: frc];
+            [self performFetchLinks];
+            frc = nil;
+        }
+        
+        {
+            NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+            NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:YES];
+            [request setSortDescriptors: @[sortDescriptor]];
+            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                  managedObjectContext: managedObjectContext
+                                                                                    sectionNameKeyPath: nil
+                                                                                             cacheName: NSFetchedResultsCacheGroups];
+            [frc setDelegate:self];
+            [self setFetchedResultsControllerGroups: frc];
+            [self performFetchGroups];
+            frc = nil;
+            
+        }
+        
+        {
+            NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"fieldleftpred" ascending:YES];
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            [request setSortDescriptors: sortDescriptors];
+            NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                                  managedObjectContext: managedObjectContext
+                                                                                    sectionNameKeyPath: nil
+                                                                                             cacheName: NSFetchedResultsCachePredicates];
+            [frc setDelegate:self];
+            [self setFetchedResultsControllerPredicates: frc];
+            [self performFetchPredicate];
+            frc = nil;
+        }
+        [[self tableView] reloadData];
+    }
+    
+}
+
+- (NSMutableDictionary *)datamodel {
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    
+    RptqDocument *document = [reportDocument activeDocument];
+    NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForDocument:document];
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
+    return result;
+}
+
+- (NSDictionary *)datamodelForNumberOfTables:(NSInteger)numberOfTables {
+    
+    NSDictionary *result;
+    
+    NSString *h2 = NSLocalizedString(@"Setup Data Source", @"Setup Data Source");
+    NSString *h3 = NSLocalizedString(@"Select Tables to Use", @"Select Tables to Use");
+    NSString *h4 = NSLocalizedString(@"Link the Tables", @"Link the Tables");
+    NSString *h5 = NSLocalizedString(@"Groups", @"Groups");
+    NSString *h6 = NSLocalizedString(@"Predicate", @"Predicate");
+    
+    switch (numberOfTables) {
+        case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
+            
+            NSArray *sections = @[@(MTQuerySectionsDatasource),
+                                  @(MTQuerySectionsTables)];
+            
+            NSArray *countRowsForSection = @[@(1), @(-1)];
+            NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            
+            NSArray *headersSection = @[h2, h3];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
+            
+            NSArray *heightRowsForSection = @[@(50.0000f), @([UITableViewCellTableName defaultHeight])];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            
+            result = @{MTTableSectionSectionsKey : sections,
+                       MTTableHeaderSectionKey : headersSectionDictionary,
+                       MTTableSectionRowKey : countRowsForSectionDictionary,
+                       MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+            
+            
+            break;
+        }
+        case 1: {   //Only one table in query.  No ability to add links.
+            
+            NSArray *sections = @[@(MTQuerySectionsDatasource),
+                                  @(MTQuerySectionsTables),
+                                  @(MTQuerySectionsGroups),
+                                  @(MTQuerySectionsPredicate)];
+            
+            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
+            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            
+            NSArray *headersSection = @[h2, h3, h5, h6];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
+            
+            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]),
+                                              @(44.0000f), @(44.0000f)];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            
+            result = @{MTTableSectionSectionsKey : sections,
+                       MTTableHeaderSectionKey : headersSectionDictionary,
+                       MTTableSectionRowKey : countRowsForSectionDictionary,
+                       MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+            
+            break;
+        }
+        default: {   //Two more more tables in query.  All features available.
+            
+            NSArray *sections = @[@(MTQuerySectionsDatasource),
+                                  @(MTQuerySectionsTables),
+                                  @(MTQuerySectionsLinks),
+                                  @(MTQuerySectionsGroups),
+                                  @(MTQuerySectionsPredicate)];
+            
+            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
+            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            
+            NSArray *headersSection = @[h2, h3, h4, h5, h6];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
+            
+            
+            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellQueryLink defaultHeight]),
+                                              @(44.0000f), @(44.0000f)];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            
+            result = @{MTTableSectionSectionsKey : sections,
+                       MTTableHeaderSectionKey : headersSectionDictionary,
+                       MTTableSectionRowKey : countRowsForSectionDictionary,
+                       MTTableSectionRowHeightKey: heightRowsForSectionDictionaryDictionary};
+            
+            break;
+        }
+    }
+    return result;
+}
 
 - (MTViewTableHeader *)tableHeaderDatabaseInfo {
     NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
@@ -1880,6 +1478,409 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
     MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:rect];
     return tableHeader;
+}
+
+- (MTTableController *)tableControllerForTable:(RptqQueryTable *)table {
+    RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
+    MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
+    MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
+    UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
+    [sampleDataTitleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    
+    NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName:[schemaTable name]];
+    [sampleDataTitleView setAttributedText:titleViewText];
+    
+    [[tableController navigationItem] setTitle:[schemaTable name]];
+    [[tableController navigationItem] setTitleView:sampleDataTitleView];
+    return tableController;
+}
+
+- (NSAttributedString *)saveDataViewTitleWithTableName:(NSString *)tableName {
+    
+    NSParagraphStyle *paragraphStyle = [NSParagraphStyle titleBarStyle];
+    
+    NSString *firstPart = @"Data Sample";
+    NSString *titleString = [NSString stringWithFormat:@"%1@ %2@", firstPart, tableName];
+    
+    NSRange rangeFirstPart = NSMakeRange(0, [firstPart length]);
+    NSRange rangeSecondPart = NSMakeRange([firstPart length], [titleString length] - [firstPart length]);
+    
+    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
+    UIFont *fonti = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:18.0000f];
+    
+    UIColor *foregroundColor = [UIColor whiteColor];
+    NSDictionary *attributes = @{NSParagraphStyleAttributeName: paragraphStyle,
+                                 NSForegroundColorAttributeName: foregroundColor};
+    NSMutableAttributedString *titleViewText = [[NSMutableAttributedString alloc] initWithString:titleString
+                                                                                      attributes:attributes];
+    
+    [titleViewText addAttribute:NSFontAttributeName value:fontb range:rangeFirstPart];
+    [titleViewText addAttribute:NSFontAttributeName value:fonti range:rangeSecondPart];
+    
+    return titleViewText;
+}
+
+- (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
+    RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+    MTTableController *tableController = [self tableControllerForTable:table];
+    [[self navigationController] pushViewController:tableController animated:YES];
+}
+
+// MARK: Deleting items from table view
+
+- (void)deleteQueryTableFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext:YES];
+    
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    
+    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
+    
+    NSIndexSet *deleteSections = nil;
+    RptqDocument *document = [reportDocument activeDocument];
+    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForDocument:document];
+    NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
+    
+    RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+    NSManagedObjectID *deleatedTableObjectId = [table objectID];
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    [query removeHasQueryTablesObject:table];
+    numberOfTables--;
+    
+    NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [self datamodelForNumberOfTables: numberOfTables]];
+    NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:MTTableSectionSectionsKey];
+    NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:MTTableSectionSectionsKey];
+    
+    if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
+        NSInteger secctr = 0;
+        BOOL startIndexSet = NO;
+        NSInteger startIndex = -1;
+        NSInteger lengtho = [oldLayoutSectionTypes count] - [newLayoutSectionTypes count];
+        for (NSNumber *typenum in oldLayoutSectionTypes) {
+            MTQuerySections stsection = [typenum integerValue];
+            if (secctr < [newLayoutSectionTypes count]) {
+                if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                    secctr++;
+                } else {
+                    if (!startIndexSet) {
+                        startIndex = secctr;
+                        startIndexSet = YES;
+                    }
+                }
+            } else {
+                if (!startIndexSet) {
+                    startIndex = secctr;
+                    startIndexSet = YES;
+                }
+                secctr++;
+            }
+        }
+        
+        if (startIndex >= 0 && lengtho > 0) {
+            NSRange sectionRange = NSMakeRange(startIndex, lengtho);
+            deleteSections = [[NSIndexSet alloc] initWithIndexesInRange: sectionRange];
+        }
+    }
+    
+    
+    [tableView beginUpdates];
+    
+    //Delete document data fields related to the table being deleted.
+    {
+        NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+        NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+        NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isLabelDataField.referencesQueryField.inQueryTable == %@", deleatedTableObjectId];
+        
+        [fetchReqest setPredicate:documentObjectsPredicate];
+        NSError *fetchError = nil;
+        NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
+        if (fetchError == nil) {
+            for (RptqDocumentObject *documentObject in objectsToDelete) {
+                [managedObjectContext deleteObject:[documentObject isLabelDataField]];
+                [managedObjectContext deleteObject:documentObject];
+            }
+            [managedObjectContext save:&fetchError];
+        }
+    }
+    //Delete document data objects related to the table being deleted.
+    {
+        NSString *entityName = NSStringFromClass([RptqDocumentObject class]);
+        NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+        NSPredicate *documentObjectsPredicate = [NSPredicate predicateWithFormat:@"isAggregate.aggregateField.inQueryTable == %@", deleatedTableObjectId];
+        
+        [fetchReqest setPredicate:documentObjectsPredicate];
+        NSError *fetchError = nil;
+        NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
+        if (fetchError == nil) {
+            for (RptqDocumentObject *documentObject in objectsToDelete) {
+                [managedObjectContext deleteObject:[documentObject isAggregate]];
+                [managedObjectContext deleteObject:documentObject];
+            }
+            [managedObjectContext save:&fetchError];
+        }
+    }
+    
+    //Delete links, groups, and predicates related to the table being deleted.
+    
+    NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
+    for (NSInteger section = 0; section < [tableView numberOfSections]; section++) {
+        NSInteger numberOfTablesPlusOne = numberOfTables + 1;
+        MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:section withNumberOfTables:numberOfTablesPlusOne];
+        
+        if (querySection == MTQuerySectionsLinks) {
+            
+            NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
+            NSFetchedResultsController *fetchedLinkes = [self fetchedResultsControllerLinks];
+            for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
+                NSIndexPath *linkIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSError *error = nil;
+                NSManagedObject *object = nil;
+                UITableViewCellQueryLink *tableViewCellLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:linkIndexPath];
+                if (tableViewCellLink) {
+                    object = [managedObjectContext existingObjectWithID:[tableViewCellLink tableID] error:&error];
+                } else {
+                    NSIndexPath *testLinkIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
+                    
+                    object = [fetchedLinkes objectAtIndexPath:testLinkIndexPath];
+                }
+                if (!error && object && [object isKindOfClass:[RptqQueryLinks class]]) {
+                    RptqQueryLinks *queryLink = (RptqQueryLinks *)object;
+                    NSManagedObjectID *tableLeftObjectId = [[[queryLink hasLeftField] inQueryTable] objectID];
+                    NSManagedObjectID *tableRightObjectId = [[[queryLink hasRightField] inQueryTable] objectID];
+                    if ([tableLeftObjectId isEqual:deleatedTableObjectId] ||
+                        [tableRightObjectId isEqual:deleatedTableObjectId]
+                        ) {
+                        [RptqQueryLinks deleteLinkWithID:[queryLink objectID] fromObjectContext:managedObjectContext];
+                        [cellsToDelete addObject:linkIndexPath];
+                    }
+                }
+            }
+            NSError *error = nil;
+            [managedObjectContext save:&error];
+            
+            
+        } else if (querySection == MTQuerySectionsGroups) {
+            
+            NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
+            for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
+                NSIndexPath *groupIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSError *error = nil;
+                NSManagedObject *object = nil;
+                
+                UITableViewCellQueryGroup *tableViewCellGroup = (UITableViewCellQueryGroup *)[tableView cellForRowAtIndexPath:groupIndexPath];
+                if (tableViewCellGroup) {
+                    NSError *error = nil;
+                    object = [managedObjectContext existingObjectWithID:[tableViewCellGroup tableID] error:&error];
+                } else {
+                    NSIndexPath *testGroupIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
+                    object = [[self fetchedResultsControllerGroups] objectAtIndexPath:testGroupIndexPath];
+                }
+                if (!error && object && [object isKindOfClass:[RptqQueryGroup class]]) {
+                    RptqQueryGroup *groupToRemove = (RptqQueryGroup *)object;
+                    NSManagedObjectID *tableObjectId = [[[groupToRemove hasField] inQueryTable] objectID];
+                    if ([tableObjectId isEqual:deleatedTableObjectId]) {
+                        [self removeGroup:groupToRemove];
+                        [cellsToDelete addObject:groupIndexPath];
+                    }
+                }
+                
+            }
+            
+        } else if (querySection == MTQuerySectionsPredicate) {
+            
+            NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
+            for (NSInteger row = 0; row < numberOfRowsInSection; row++) {
+                NSIndexPath *predicateIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                
+                
+                MTTableViewCellQueryPredicate *tableViewCellPredicate = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:predicateIndexPath];
+                NSError *error = nil;
+                NSManagedObject *object = nil;
+                if (tableViewCellPredicate) {
+                    object = [managedObjectContext existingObjectWithID:[tableViewCellPredicate tableID] error:&error];
+                } else {
+                    NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
+                    object = [[self fetchedResultsControllerPredicates] objectAtIndexPath: testPredicateIndexPath];
+                }
+                if (!error && object && [object isKindOfClass:[RptqQueryPredicate class]]) {
+                    RptqQueryPredicate *predicateToRemove = (RptqQueryPredicate *)object;
+                    NSManagedObjectID *leftTableObjectId = [[[predicateToRemove hasLeftField] inQueryTable] objectID];
+                    NSManagedObjectID *rightTableObjectId = [[[predicateToRemove hasRightField] inQueryTable] objectID];
+                    BOOL deleted = NO;
+                    if (leftTableObjectId) {
+                        if ([leftTableObjectId isEqual:deleatedTableObjectId]) {
+                            [RptqQueryPredicate deletePredicate:predicateToRemove];
+                            [cellsToDelete addObject:predicateIndexPath];
+                            deleted = YES;
+                        }
+                    }
+                    if (deleted == NO) {
+                        if (rightTableObjectId) {
+                            if ([rightTableObjectId isEqual:deleatedTableObjectId]) {
+                                [RptqQueryPredicate deletePredicate:predicateToRemove];
+                                [cellsToDelete addObject:predicateIndexPath];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    [managedObjectContext save:nil];
+    if (deleteSections != nil) {
+        [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else {
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    if ([cellsToDelete count]) {
+        [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    [tableView endUpdates];
+    
+    
+    // FIXME: Only allow table to be deleted if it's not linked or otherwise used in the query.
+    
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+}
+
+- (void)deleteQueryLinksFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCellQueryLink *tvcLink = (UITableViewCellQueryLink *)[tableView cellForRowAtIndexPath:indexPath];
+    if (tvcLink) {
+        NSManagedObjectID *objid = [tvcLink tableID];
+        
+        MTApplicationInstance *applicationInstance = [AppDelegate app];
+        MAReportDocument *reportDocument = [applicationInstance activeDocument];
+        
+        [RptqQueryLinks deleteLinkWithID:objid fromObjectContext:[reportDocument managedObjectContext]];
+        [reportDocument saveContext];
+    }
+}
+
+- (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
+    
+    RptqDocument *document = [[[AppDelegate app] activeDocument] activeDocument];
+    
+    if (document) {
+        RptqQuery *query = [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+        NSInteger weightToRemove = [indexPath row];
+        
+        RptqQueryGroup *groupToRemove = nil;
+        for (RptqQueryGroup *group in [query hasQueryGroups]) {
+            if ([[group weight] integerValue] > weightToRemove) {
+                [group setWeight:[NSNumber numberWithInteger:([[group weight] integerValue] - 1)]];
+            } else
+                if ([[group weight] integerValue] == weightToRemove) {
+                    groupToRemove = group;
+                }
+        }
+        
+        if (groupToRemove) {
+            NSSet *sectionsToRemove = [groupToRemove hasSection];
+            NSArray *sections = [sectionsToRemove allObjects];
+            if ([sections count] == 2) {
+                [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
+                [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+            }
+            [[query managedObjectContext] deleteObject: groupToRemove];
+            [query removeHasQueryGroupsObject: groupToRemove];
+            
+            //Reweight Groups
+            
+            [tableView beginUpdates];
+            [[self tableView] deleteRowsAtIndexPaths: @[indexPath]
+                                    withRowAnimation: UITableViewRowAnimationAutomatic];
+            [[query managedObjectContext] save:nil];
+            NSString *weight = NSStringFromSelector(@selector(weight));
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+            NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
+            NSUInteger counter = 0;
+            for (RptqQueryGroup *group in sortedQueryGroups) {
+                [group setWeight:@(counter)];
+                counter++;
+            }
+            [[query managedObjectContext] save:nil];
+            [tableView endUpdates];
+        }
+    }
+    [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+}
+
+- (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    
+    MTTableViewCellQueryPredicate *tvcPred = (MTTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
+    if (tvcPred) {
+        NSManagedObjectID *objid = [tvcPred tableID];
+        RptqDocument *doc = [[[AppDelegate app] activeDocument] activeDocument];
+        NSManagedObject *predicate = [[doc managedObjectContext] objectRegisteredForID:objid];
+        [[doc managedObjectContext] deleteObject:predicate];
+        [doc saveContext];
+    }
+}
+
+- (void)deleteItemFromQuerySection:(MTQuerySections)querySection fromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
+    
+    switch (querySection) {
+            
+        case MTQuerySectionsTables:
+            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            break;
+            
+        case MTQuerySectionsLinks:
+            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            break;
+            
+        case MTQuerySectionsGroups:
+            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            break;
+            
+        case MTQuerySectionsPredicate:
+            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+// MARK: Modal helper
+
+- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section withNumberOfTables:(NSInteger)numberOfTables {
+    MTQuerySections result = section;
+    NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
+    NSArray *sectionTypes = [dataModel objectForKey: MTTableSectionSectionsKey];
+    if ([sectionTypes count] >= section) {
+        result = [[sectionTypes objectAtIndex:section] integerValue];
+    }
+    return result;
+}
+
+- (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
+    MTQuerySections result = sec;
+    NSDictionary *datamodel = [self datamodel];
+    NSArray *sectionTypes = [datamodel objectForKey: MTTableSectionSectionsKey];
+    if ([sectionTypes count] >= sec) {
+        result = [[sectionTypes objectAtIndex:sec] integerValue];
+    }
+    return result;
+}
+
+- (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
+    NSInteger result = 0;
+    NSArray *sectionTypes = [[self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey];
+    NSInteger secPos = 0;
+    for (NSNumber *num in sectionTypes) {
+        if ([num integerValue] == sec) {
+            result = secPos;
+            break;
+        }
+        secPos++;
+    }
+    return result;
 }
 
 @end

@@ -42,10 +42,6 @@
 
 @implementation MTQueryBuilderContainerController
 
-- (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
-}
-
 - (NSString *)title {
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
@@ -254,7 +250,14 @@
     }];
 }
 
-#pragma mark - UIPopoverController
+#pragma mark - MTTabBarImageProtocol
+
+- (UIImage *)tabBarImage {
+    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+}
+
+
+#pragma mark - UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     return YES;

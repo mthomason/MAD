@@ -71,6 +71,7 @@
 #import "Constants.h"
 
 #import "UIViewController+ui.h"
+#import "UIViewController+tabBarItem.h"
 
 typedef void (^block_insertObject)(UIStoryboardSegue *);
 
@@ -114,6 +115,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         MTDocumentSectionViewDelegate,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderChooseFieldDelegate,
+        MTTabBarImageProtocol,
         UIPopoverControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
@@ -418,6 +420,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+#pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
     return [UIImage imageNamed:@"UIBarButtonItemMadDesigner"];
