@@ -11,6 +11,23 @@
 
 typedef void(^MTBlockCompletionSimple)(BOOL finished);
 typedef void(^MTBlockCompletionNoReturn)(void);
+typedef void (^block_insertObject)(UIStoryboardSegue *);
+
+typedef NS_ENUM(NSUInteger, MTToolboxType) {
+    MTToolboxTypeElement = 2,
+    MTToolboxTypeSection = 3,
+};
+
+typedef NS_ENUM(NSUInteger, MTDirection) {
+    MTDirectionNorth,       //60˚-120˚
+    MTDirectionNorthWest,   //120˚-150˚
+    MTDirectionNorthEast,
+    MTDirectionSouth,       //240˚-300˚
+    MTDirectionSouthWest,   //210˚-240˚
+    MTDirectionSouthEast,
+    MTDirectionEast,        //330˚-360˚,0-30˚
+    MTDirectionWest,        //210˚-150˚
+};
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"

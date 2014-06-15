@@ -169,7 +169,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="barButtonItemObjects" destination="U4m-Tl-FVb" id="P9q-uL-3Oo"/>
+                        <outlet property="barButtonAddReportObject" destination="U4m-Tl-FVb" id="oTk-vL-p5M"/>
                         <outlet property="designerContentView" destination="Yyc-Zp-ZTq" id="5rj-6a-Nm3"/>
                         <outlet property="designerScrollView" destination="lma-we-TIM" id="rFb-YO-vzO"/>
                         <outlet property="toolbarBottom" destination="cSM-my-rda" id="psB-WE-cMp"/>
@@ -5757,10 +5757,6 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <connections>
-                            <outlet property="dataSource" destination="F7A-ai-FfA" id="I2h-Bg-KnJ"/>
-                            <outlet property="delegate" destination="F7A-ai-FfA" id="d0M-Ci-4rZ"/>
-                        </connections>
                     </collectionView>
                     <toolbarItems>
                         <barButtonItem enabled="NO" systemItem="trash" id="HJd-Zb-f53">

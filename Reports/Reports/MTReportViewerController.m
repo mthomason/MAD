@@ -33,9 +33,10 @@
 
 #import "UIPageViewController+Extras.h"
 #import "UIViewController+ui.h"
+#import "UIViewController+tabBarItem.h"
 
 @interface MTReportViewerController ()
-    <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate>
+    <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate, MTTabBarImageProtocol>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -353,6 +354,8 @@
         [self sliderChangedPage:slider];
     }
 }
+
+#pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
     return [UIImage imageNamed:@"UIBarButtonItemMadViewer"];

@@ -21,6 +21,8 @@
 
 @property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
 
+- (void)configureCellForUrl:(NSURL *)url;
+
 - (void)dimTint;
 - (void)normalizeTint;
 - (void)performSelectionAnimations;
