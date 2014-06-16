@@ -837,7 +837,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     [self setViewDidAppearDesignerScrollViewConstraints:viewDidAppearDesignerScrollViewConstraints];
     [self setViewDidAppearDesignerContentViewConstraints:viewDidAppearDesignerContentViewConstraints];
-    
+
+    [self designerScrollViewWillAppear];
+    [self enableTabBarItems];
+}
+
+- (void)designerScrollViewWillAppear {
     [[self designerScrollView] setScrollEnabled:YES];
     [[self designerScrollView] setMaximumZoomScale:4.0000f];
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
@@ -846,7 +851,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self designerScrollView] setBackgroundColor:[MTReportDesignerViewController designerBackgroundColor]];
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
     [[self designerScrollView] flashScrollIndicators];
-    [self enableTabBarItems];
 }
 
 + (UIColor *)designerBackgroundColor {
