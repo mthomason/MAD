@@ -160,7 +160,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="U4m-Tl-FVb">
                             <connections>
-                                <action selector="showObjects:" destination="d6e-CT-kmt" id="toG-y2-acM"/>
+                                <action selector="add:" destination="d6e-CT-kmt" id="3Ui-lb-kga"/>
                                 <segue destination="MHx-xg-Pj8" kind="modal" identifier="showObjects" modalTransitionStyle="coverVertical" id="0zr-qb-4zz"/>
                             </connections>
                         </barButtonItem>

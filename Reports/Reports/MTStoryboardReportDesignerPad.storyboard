@@ -147,7 +147,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="1QU-im-22s">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <action selector="showObjects:" destination="SZT-w9-gB7" id="Uqc-M4-yu4"/>
+                                <action selector="add:" destination="SZT-w9-gB7" id="NJm-Ar-8J3"/>
                                 <segue destination="Hl5-7b-oyD" kind="popover" identifier="showObjects" popoverAnchorBarButtonItem="1QU-im-22s" id="deP-iv-9fn">
                                     <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                                 </segue>

@@ -9,6 +9,9 @@
 #ifndef Reports_MTReportDesignerViewController_h
 #define Reports_MTReportDesignerViewController_h
 
+#import <UIKit/UIKit.h>
+#import "MUIViewControllerDelegate.h"
+
 typedef void(^MTBlockCompletionSimple)(BOOL finished);
 typedef void(^MTBlockCompletionNoReturn)(void);
 typedef void (^block_insertObject)(UIStoryboardSegue *);
@@ -29,15 +32,12 @@ typedef NS_ENUM(NSUInteger, MTDirection) {
     MTDirectionWest,        //210˚-150˚
 };
 
-#import <UIKit/UIKit.h>
-#import "MUIViewControllerDelegate.h"
-
 @interface MTReportDesignerViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 
 - (IBAction)done:(id)sender;
-- (IBAction)showObjects:(id)sender;
+- (IBAction)add:(id)sender;
 
 @end
 
