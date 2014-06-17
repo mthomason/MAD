@@ -21,11 +21,15 @@
  
 #endif
 
-//@protocol ScrimpterDataSource
-//- (id)dataForRow:(NSInteger)row andColumn:(NSInteger)column;
-//@end
+@protocol ScrimpterDataSource <NSObject>
+
+- (id)dataForkey:(NSString *)key;
+
+@end
 
 @interface Scrimpter : NSObject
+
+@property (nonatomic, weak) IBOutlet id <ScrimpterDataSource> datasource;
 
 - (void)run:(NSString *)scrimpt;
 - (void)run:(NSString *)scrimpt completion:(void (^)(BOOL success, id result, NSError *error))completion;

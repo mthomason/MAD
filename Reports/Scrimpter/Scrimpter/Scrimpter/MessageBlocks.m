@@ -6,4 +6,5 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+id (^ScrimptData)(NSString *key);
 void (^Scrimpted)(BOOL success, id result, NSError *error);

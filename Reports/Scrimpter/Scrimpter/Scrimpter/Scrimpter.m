@@ -31,6 +31,10 @@
 
 - (void)run:(NSString *)scrimpt completion:(void (^)(BOOL success, id result, NSError *error))completion {
 
+    ScrimptData = ^id(NSString *key) {
+        return [[self datasource] dataForkey:key];
+    };
+    
     YY_BUFFER_STATE buffer = [self scan:scrimpt];
     Scrimpted = completion;
     [self parse];
