@@ -1658,6 +1658,20 @@
 			remoteGlobalIDString = 4CEBFA181760EF8B00FFA4F4;
 			remoteInfo = libTdsClientTests;
 		};
+		4CF3C5CC194F80F700E5705B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF3C595194F80F600E5705B;
+			remoteInfo = Scrimpter;
+		};
+		4CF3C5CE194F80F700E5705B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF3C5A5194F80F600E5705B;
+			remoteInfo = ScrimpterTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -2916,6 +2930,7 @@
 		4CF2F27817564C8000DC34E3 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
+		4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Scrimpter.xcodeproj; path = Scrimpter/Scrimpter/Scrimpter.xcodeproj; sourceTree = "<group>"; };
 		4CF8670716D6572A00F716A8 /* MTAutoLayoutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoLayoutTableViewCell.h; sourceTree = "<group>"; };
 		4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoLayoutTableViewCell.m; sourceTree = "<group>"; };
 		4CF8670B16D72E0800F716A8 /* MTScrollViewCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTScrollViewCenter.h; sourceTree = "<group>"; };
@@ -3574,6 +3589,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */,
 				4C258036192D01A000BE74EB /* XCTest.framework */,
 				4C77324B190FFC51005AE7C2 /* libMySqlClientObjectiveC */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
@@ -5177,6 +5193,15 @@
 			name = "Query Builder";
 			sourceTree = "<group>";
 		};
+		4CF3C5BF194F80F600E5705B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C5CD194F80F700E5705B /* libScrimpter.a */,
+				4CF3C5CF194F80F700E5705B /* ScrimpterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -5359,6 +5384,10 @@
 					ProductGroup = 4CEBFA331760EF8B00FFA4F4 /* Products */;
 					ProjectRef = 4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */;
 				},
+				{
+					ProductGroup = 4CF3C5BF194F80F600E5705B /* Products */;
+					ProjectRef = 4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -5433,6 +5462,20 @@
 			fileType = wrapper.cfbundle;
 			path = libTdsClientTests.octest;
 			remoteRef = 4CEBFA391760EF8C00FFA4F4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CF3C5CD194F80F700E5705B /* libScrimpter.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libScrimpter.a;
+			remoteRef = 4CF3C5CC194F80F700E5705B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CF3C5CF194F80F700E5705B /* ScrimpterTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ScrimpterTests.xctest;
+			remoteRef = 4CF3C5CE194F80F700E5705B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

@@ -1,0 +1,59 @@
+%{
+
+#import "y.tab.h"
+#import "MessageBlocks.h"
+    
+void yyerror(char *s);
+    
+%}
+
+%%
+
+"+" { return ADD; }
+"-" { return SUBTRACT; }
+"*" { return MULTIPLY; }
+"/" { return DIVIDE; }
+
+[0-9]+\.[0-9]*[f] {
+            yylval.argumentFloat = atof(yytext);
+            return FLOAT;
+        }
+
+[0-9]+\.[0-9]* {
+    yylval.argumentDouble = atof(yytext);
+    return DOUBLE;
+    }
+
+[0-9]+ {
+            yylval.argumentInteger = atoi(yytext);
+            return INTEGER;
+        }
+
+[a-zA-Z]+ {
+            yylval.identifier = [NSString stringWithFormat:@"%s", yytext];
+            return IDENTIFIER;
+        }
+
+
+"//".*
+[\n\t ] { /* Ingnore white space */ }
+
+
+. { return yytext[0]; };
+
+%%
+
+int yywrap()  {
+    return 1;
+}
+
+void yyerror(char *s)  {
+    
+    if (Scrimpted) {
+        NSString *display = [NSString stringWithFormat: @"%s", s];
+        NSError *err = [NSError errorWithDomain: @"Scrimpter"
+                                           code: 1
+                                       userInfo: @{ NSLocalizedDescriptionKey : display}];
+        Scrimpted(NO, nil, err);
+    }
+}

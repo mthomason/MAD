@@ -1,0 +1,446 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
+		4CF3C59E194F80F600E5705B /* Scrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* Scrimpter.h */; };
+		4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* Scrimpter.m */; };
+		4CF3C5A7194F80F600E5705B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5A6194F80F600E5705B /* XCTest.framework */; };
+		4CF3C5A8194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
+		4CF3C5AA194F80F600E5705B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5A9194F80F600E5705B /* UIKit.framework */; };
+		4CF3C5AD194F80F600E5705B /* libScrimpter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C595194F80F600E5705B /* libScrimpter.a */; };
+		4CF3C5B3194F80F600E5705B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3C5B1194F80F600E5705B /* InfoPlist.strings */; };
+		4CF3C5B5194F80F600E5705B /* ScrimpterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */; };
+		4CF3C5D4194F812900E5705B /* parser.ym in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D0194F812900E5705B /* parser.ym */; };
+		4CF3C5D5194F812900E5705B /* parser.ym in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D0194F812900E5705B /* parser.ym */; };
+		4CF3C5D6194F812900E5705B /* scanner.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D1194F812900E5705B /* scanner.lm */; };
+		4CF3C5D7194F812900E5705B /* scanner.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D1194F812900E5705B /* scanner.lm */; };
+		4CF3C5D8194F812900E5705B /* MessageBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D3194F812900E5705B /* MessageBlocks.m */; };
+		4CF3C5D9194F812900E5705B /* MessageBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D3194F812900E5705B /* MessageBlocks.m */; };
+		4CF3C5DB194FE0F300E5705B /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4CF3C5AB194F80F600E5705B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CF3C58D194F80F600E5705B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CF3C594194F80F600E5705B;
+			remoteInfo = Scrimpter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4CF3C593194F80F600E5705B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				4CF3C59E194F80F600E5705B /* Scrimpter.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4CF3C595194F80F600E5705B /* libScrimpter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libScrimpter.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF3C598194F80F600E5705B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4CF3C59C194F80F600E5705B /* Scrimpter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scrimpter-Prefix.pch"; sourceTree = "<group>"; };
+		4CF3C59D194F80F600E5705B /* Scrimpter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scrimpter.h; sourceTree = "<group>"; };
+		4CF3C59F194F80F600E5705B /* Scrimpter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Scrimpter.m; sourceTree = "<group>"; };
+		4CF3C5A5194F80F600E5705B /* ScrimpterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScrimpterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CF3C5A6194F80F600E5705B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4CF3C5A9194F80F600E5705B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		4CF3C5B0194F80F600E5705B /* ScrimpterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ScrimpterTests-Info.plist"; sourceTree = "<group>"; };
+		4CF3C5B2194F80F600E5705B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrimpterTests.m; sourceTree = "<group>"; };
+		4CF3C5D0194F812900E5705B /* parser.ym */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; path = parser.ym; sourceTree = "<group>"; };
+		4CF3C5D1194F812900E5705B /* scanner.lm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = scanner.lm; sourceTree = "<group>"; };
+		4CF3C5D2194F812900E5705B /* MessageBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBlocks.h; sourceTree = "<group>"; };
+		4CF3C5D3194F812900E5705B /* MessageBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBlocks.m; sourceTree = "<group>"; };
+		4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4CF3C592194F80F600E5705B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF3C5DB194FE0F300E5705B /* libstdc++.dylib in Frameworks */,
+				4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF3C5A2194F80F600E5705B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF3C5A7194F80F600E5705B /* XCTest.framework in Frameworks */,
+				4CF3C5AD194F80F600E5705B /* libScrimpter.a in Frameworks */,
+				4CF3C5AA194F80F600E5705B /* UIKit.framework in Frameworks */,
+				4CF3C5A8194F80F600E5705B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4CF3C58C194F80F600E5705B = {
+			isa = PBXGroup;
+			children = (
+				4CF3C59A194F80F600E5705B /* Scrimpter */,
+				4CF3C5AE194F80F600E5705B /* ScrimpterTests */,
+				4CF3C597194F80F600E5705B /* Frameworks */,
+				4CF3C596194F80F600E5705B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CF3C596194F80F600E5705B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C595194F80F600E5705B /* libScrimpter.a */,
+				4CF3C5A5194F80F600E5705B /* ScrimpterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CF3C597194F80F600E5705B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */,
+				4CF3C598194F80F600E5705B /* Foundation.framework */,
+				4CF3C5A6194F80F600E5705B /* XCTest.framework */,
+				4CF3C5A9194F80F600E5705B /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CF3C59A194F80F600E5705B /* Scrimpter */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C5D1194F812900E5705B /* scanner.lm */,
+				4CF3C5D0194F812900E5705B /* parser.ym */,
+				4CF3C5D2194F812900E5705B /* MessageBlocks.h */,
+				4CF3C5D3194F812900E5705B /* MessageBlocks.m */,
+				4CF3C59D194F80F600E5705B /* Scrimpter.h */,
+				4CF3C59F194F80F600E5705B /* Scrimpter.m */,
+				4CF3C59B194F80F600E5705B /* Supporting Files */,
+			);
+			path = Scrimpter;
+			sourceTree = "<group>";
+		};
+		4CF3C59B194F80F600E5705B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C59C194F80F600E5705B /* Scrimpter-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CF3C5AE194F80F600E5705B /* ScrimpterTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */,
+				4CF3C5AF194F80F600E5705B /* Supporting Files */,
+			);
+			path = ScrimpterTests;
+			sourceTree = "<group>";
+		};
+		4CF3C5AF194F80F600E5705B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CF3C5B0194F80F600E5705B /* ScrimpterTests-Info.plist */,
+				4CF3C5B1194F80F600E5705B /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4CF3C594194F80F600E5705B /* Scrimpter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF3C5B8194F80F600E5705B /* Build configuration list for PBXNativeTarget "Scrimpter" */;
+			buildPhases = (
+				4CF3C591194F80F600E5705B /* Sources */,
+				4CF3C592194F80F600E5705B /* Frameworks */,
+				4CF3C593194F80F600E5705B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Scrimpter;
+			productName = Scrimpter;
+			productReference = 4CF3C595194F80F600E5705B /* libScrimpter.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4CF3C5A4194F80F600E5705B /* ScrimpterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CF3C5BB194F80F600E5705B /* Build configuration list for PBXNativeTarget "ScrimpterTests" */;
+			buildPhases = (
+				4CF3C5A1194F80F600E5705B /* Sources */,
+				4CF3C5A2194F80F600E5705B /* Frameworks */,
+				4CF3C5A3194F80F600E5705B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CF3C5AC194F80F600E5705B /* PBXTargetDependency */,
+			);
+			name = ScrimpterTests;
+			productName = ScrimpterTests;
+			productReference = 4CF3C5A5194F80F600E5705B /* ScrimpterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4CF3C58D194F80F600E5705B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+			};
+			buildConfigurationList = 4CF3C590194F80F600E5705B /* Build configuration list for PBXProject "Scrimpter" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4CF3C58C194F80F600E5705B;
+			productRefGroup = 4CF3C596194F80F600E5705B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4CF3C594194F80F600E5705B /* Scrimpter */,
+				4CF3C5A4194F80F600E5705B /* ScrimpterTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4CF3C5A3194F80F600E5705B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF3C5B3194F80F600E5705B /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4CF3C591194F80F600E5705B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF3C5D4194F812900E5705B /* parser.ym in Sources */,
+				4CF3C5D8194F812900E5705B /* MessageBlocks.m in Sources */,
+				4CF3C5D6194F812900E5705B /* scanner.lm in Sources */,
+				4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CF3C5A1194F80F600E5705B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF3C5D5194F812900E5705B /* parser.ym in Sources */,
+				4CF3C5D9194F812900E5705B /* MessageBlocks.m in Sources */,
+				4CF3C5D7194F812900E5705B /* scanner.lm in Sources */,
+				4CF3C5B5194F80F600E5705B /* ScrimpterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4CF3C5AC194F80F600E5705B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CF3C594194F80F600E5705B /* Scrimpter */;
+			targetProxy = 4CF3C5AB194F80F600E5705B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4CF3C5B1194F80F600E5705B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CF3C5B2194F80F600E5705B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4CF3C5B6194F80F600E5705B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4CF3C5B7194F80F600E5705B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4CF3C5B9194F80F600E5705B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Scrimpter.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4CF3C5BA194F80F600E5705B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Scrimpter.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		4CF3C5BC194F80F600E5705B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "ScrimpterTests/ScrimpterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		4CF3C5BD194F80F600E5705B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
+				INFOPLIST_FILE = "ScrimpterTests/ScrimpterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4CF3C590194F80F600E5705B /* Build configuration list for PBXProject "Scrimpter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF3C5B6194F80F600E5705B /* Debug */,
+				4CF3C5B7194F80F600E5705B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CF3C5B8194F80F600E5705B /* Build configuration list for PBXNativeTarget "Scrimpter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF3C5B9194F80F600E5705B /* Debug */,
+				4CF3C5BA194F80F600E5705B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CF3C5BB194F80F600E5705B /* Build configuration list for PBXNativeTarget "ScrimpterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CF3C5BC194F80F600E5705B /* Debug */,
+				4CF3C5BD194F80F600E5705B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4CF3C58D194F80F600E5705B /* Project object */;
+}
