@@ -63,4 +63,24 @@
     }];
 }
 
+- (void)testMultplyDivide {
+    [[self scrimpter] run:@"2*2/(2+2)" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result integerValue] == 1, @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"(2+2)*2/2-2" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result integerValue] == 2, @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"(2+2*2)/2" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result integerValue] == 3, @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"2*2/2+2" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
+    }];
+    
+}
+
 @end
