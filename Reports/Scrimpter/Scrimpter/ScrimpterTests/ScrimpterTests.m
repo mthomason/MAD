@@ -31,10 +31,11 @@
 {
     
     Scrimpter *scrimpter = [Scrimpter new];
-    [scrimpter run:@"2+2"];
-    [scrimpter run:@"2 + 2"];
+    [scrimpter run:@"2+2\n"];
+    [scrimpter run:@"2.0+2.0\n"];
+    [scrimpter run:@"2 + 2\n"];
     [scrimpter run:@"((2 + 2 - 5 + 5) / 4)+3\n"];
-    [scrimpter run:@"2+2" completion:^(BOOL success, id result, NSError *error) {
+    [scrimpter run:@"2+2\n" completion:^(BOOL success, id result, NSError *error) {
         NSLog(@"Success %d %@ %@", success, result, error);
     }];
     //XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);

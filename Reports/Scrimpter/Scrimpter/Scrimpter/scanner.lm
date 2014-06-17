@@ -13,20 +13,16 @@ void yyerror(char *s);
 "-" { return SUBTRACT; }
 "*" { return MULTIPLY; }
 "/" { return DIVIDE; }
-
-[0-9]+\.[0-9]*[f] {
-            yylval.argumentFloat = atof(yytext);
-            return FLOAT;
-        }
+"|" { return ABSOLUTE_VALUE; }
 
 [0-9]+\.[0-9]* {
     yylval.argumentDouble = atof(yytext);
-    return DOUBLE;
+    return NUMBER;
     }
 
 [0-9]+ {
-            yylval.argumentInteger = atoi(yytext);
-            return INTEGER;
+            yylval.argumentDouble = atof(yytext);
+            return NUMBER;
         }
 
 [a-zA-Z]+ {
@@ -34,9 +30,10 @@ void yyerror(char *s);
             return IDENTIFIER;
         }
 
+[\n]    { return END_OF_LINE; }
 
 "//".*
-[\n\t ] { /* Ingnore white space */ }
+[\t ] { /* Ingnore white space */ }
 
 
 . { return yytext[0]; };

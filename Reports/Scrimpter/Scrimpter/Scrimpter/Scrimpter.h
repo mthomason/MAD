@@ -22,9 +22,7 @@
 #endif
 
 @protocol ScrimpterDataSource <NSObject>
-
 - (id)dataForkey:(NSString *)key;
-
 @end
 
 @interface Scrimpter : NSObject
