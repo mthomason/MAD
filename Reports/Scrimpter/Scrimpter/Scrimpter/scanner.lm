@@ -3,8 +3,9 @@
 #import "y.tab.h"
 #import "MessageBlocks.h"
     
+extern int yylineno;
 void yyerror(char *s);
-    
+
 %}
 
 %%
@@ -47,7 +48,7 @@ int yywrap()  {
 void yyerror(char *s)  {
     
     if (Scrimpted) {
-        NSString *display = [NSString stringWithFormat: @"%s", s];
+        NSString *display = [NSString stringWithFormat: @"%s at %d", s, yylineno];
         NSError *err = [NSError errorWithDomain: @"Scrimpter"
                                            code: 1
                                        userInfo: @{ NSLocalizedDescriptionKey : display}];
