@@ -14,6 +14,8 @@ void yyerror(char *s);
 "*" { return MULTIPLY; }
 "/" { return DIVIDE; }
 "|" { return ABSOLUTE_VALUE; }
+"(" { return OPEN_PERN; }
+")" { return CLOSE_PERN; }
 
 [0-9]+\.[0-9]* {
     yylval.argumentDouble = atof(yytext);
@@ -30,10 +32,8 @@ void yyerror(char *s);
             return IDENTIFIER;
         }
 
-[\n]    { return END_OF_LINE; }
-
 "//".*
-[\t ] { /* Ingnore white space */ }
+[\t\n ] { /* Ingnore white space */ }
 
 
 . { return yytext[0]; };

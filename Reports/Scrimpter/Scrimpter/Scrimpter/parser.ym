@@ -5,6 +5,7 @@
 
 int yylex(void);
 void yyerror(char *s);
+void sc_evaluate(double db);
 
 %}
 
@@ -15,6 +16,7 @@ void yyerror(char *s);
 }
 
 %token ADD SUBTRACT MULTIPLY DIVIDE ABSOLUTE_VALUE
+%token OPEN_PERN CLOSE_PERN
 %token END_OF_LINE
 %token END_OF_FILE
 
@@ -32,12 +34,7 @@ void yyerror(char *s);
 
 
 scrimpt:
-    | scrimpt expression END_OF_LINE   {
-        if (Scrimpted) {
-            NSNumber *number = [NSNumber numberWithDouble:$2];
-            Scrimpted(YES, number, nil);
-        }
-    }
+    | scrimpt expression             { sc_evaluate($2); }
 ;
 
 expression : factor                     { $$ = $1; }
@@ -52,8 +49,14 @@ factor : term                           { $$ = $1; }
 
 term : NUMBER
     | ABSOLUTE_VALUE term               { $$ = $2 > 0 ? $2 : -$2; }
+    | SUBTRACT term                     { $$ = -$2; }
+    | OPEN_PERN expression CLOSE_PERN   { $$ = $2; }
 ;
 
-
-
 %%
+void sc_evaluate(double db) {
+    if (Scrimpted) {
+        NSNumber *number = [NSNumber numberWithDouble:db];
+        Scrimpted(YES, number, nil);
+    }
+}
