@@ -63,7 +63,7 @@
 }
 
 - (void)testNegativeNumber {
-    [[self scrimpter] run:@"((( 2+2) -22) +2 - (-20));" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"return ((( 2+2) -22) +2 - (-20));" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
     }];

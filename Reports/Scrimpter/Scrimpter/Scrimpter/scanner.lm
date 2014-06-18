@@ -10,29 +10,31 @@ void yyerror(char *s);
 
 %%
 
-"+"     { return ADD; }
-"-"     { return SUBTRACT; }
-"*"     { return MULTIPLY; }
-"/"     { return DIVIDE; }
-"|"     { return ABSOLUTE_VALUE; }
-","     { return COMMA; }
-";"     { return SIMICOLON; }
-"("     { return OPEN_PERN; }
-")"     { return CLOSE_PERN; }
+"+"         { return ADD; }
+"-"         { return SUBTRACT; }
+"*"         { return MULTIPLY; }
+"/"         { return DIVIDE; }
+"|"         { return ABSOLUTE_VALUE; }
+","         { return COMMA; }
+";"         { return SIMICOLON; }
+"("         { return OPEN_PERN; }
+")"         { return CLOSE_PERN; }
 
-">"     { yylval.fn = SCComparesonGreaterThan; return COMPARESON; }
-"<"     { yylval.fn = SCComparesonLessThan; return COMPARESON; }
-"<>"    { yylval.fn = SCComparesonNotEqualTo; return COMPARESON; }
-"=="    { yylval.fn = SCComparesonEqualTo; return COMPARESON; }
-">="    { yylval.fn = SCComparesonGreatThanOrEqualTo; return COMPARESON; }
-"<="    { yylval.fn = SCComparesonLessThanOrEqualTo; return COMPARESON; }
+">"         { yylval.fn = SCComparesonGreaterThan; return COMPARESON; }
+"<"         { yylval.fn = SCComparesonLessThan; return COMPARESON; }
+"<>"        { yylval.fn = SCComparesonNotEqualTo; return COMPARESON; }
+"=="        { yylval.fn = SCComparesonEqualTo; return COMPARESON; }
+">="        { yylval.fn = SCComparesonGreatThanOrEqualTo; return COMPARESON; }
+"<="        { yylval.fn = SCComparesonLessThanOrEqualTo; return COMPARESON; }
 
-"if"    { return IF; }
-"then"  { return THEN; }
-"else"  { return ELSE; }
-"while" { return WHILE; }
-"do"    { return DO; }
-"let"   { return LET;}
+"if"        { return IF; }
+"then"      { return THEN; }
+"else"      { return ELSE; }
+"while"     { return WHILE; }
+"do"        { return DO; }
+"let"       { return LET;}
+
+"return"    { return RETURN; }
 
 [0-9]+\.[0-9]* {
     yylval.d = atof(yytext);
