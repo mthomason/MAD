@@ -32,6 +32,7 @@
     __block BOOL valid = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [[self scrimpter] run:script completion:^(BOOL success, id result, NSError *err) {
+        NSLog(@"Result: %@", result);
         valid = success && ([result isEqual:value] || (result == nil && value == nil)) && err == nil;
         *error = err;
         dispatch_semaphore_signal(semaphore);
@@ -110,6 +111,10 @@
     BOOL success = [self testScript:script forValue:@(YES) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 
+    script = @"return 7 + 5 <= 10;";
+    success = [self testScript:script forValue:@(NO) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
     script = @"return 5 < 10;";
     success = [self testScript:script forValue:@(YES) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
@@ -122,6 +127,10 @@
     success = [self testScript:script forValue:@(NO) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 
+    script = @"return 10 == 10;";
+    success = [self testScript:script forValue:@(YES) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+    
     script = @"return 5 >= 10;";
     success = [self testScript:script forValue:@(NO) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
@@ -136,6 +145,24 @@
     __autoreleasing NSError *error = nil;
     NSString *script = @"7 + 5 >= 10;return 2+2;";
     BOOL success = [self testScript:script forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testConditionIf1 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"if (7 + 5 >= 10) then\n"
+                        "   return 1;\n"
+                        "else return 0;";
+    BOOL success = [self testScript:script forValue:@(1) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testConditionIf2 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"if (7 + 5 <= 10) then\n"
+                        "   return 10;\n"
+                        "else\nreturn 30;";
+    BOOL success = [self testScript:script forValue:@(30) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 

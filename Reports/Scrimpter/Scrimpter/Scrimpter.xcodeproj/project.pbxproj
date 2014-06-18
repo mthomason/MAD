@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */; };
+		4C9E0FD51952041E0052AED6 /* MADSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD41952041E0052AED6 /* MADSymbol.m */; };
+		4C9E0FD8195204860052AED6 /* MADSymbolReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD7195204860052AED6 /* MADSymbolReference.m */; };
 		4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
 		4CF3C59E194F80F600E5705B /* Scrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* Scrimpter.h */; };
 		4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* Scrimpter.m */; };
@@ -49,6 +52,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C9E0FD0195203D80052AED6 /* MADSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbolTable.h; sourceTree = "<group>"; };
+		4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbolTable.m; sourceTree = "<group>"; };
+		4C9E0FD31952041E0052AED6 /* MADSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbol.h; sourceTree = "<group>"; };
+		4C9E0FD41952041E0052AED6 /* MADSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbol.m; sourceTree = "<group>"; };
+		4C9E0FD6195204860052AED6 /* MADSymbolReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbolReference.h; sourceTree = "<group>"; };
+		4C9E0FD7195204860052AED6 /* MADSymbolReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbolReference.m; sourceTree = "<group>"; };
 		4CF3C595194F80F600E5705B /* libScrimpter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libScrimpter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF3C598194F80F600E5705B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CF3C59C194F80F600E5705B /* Scrimpter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scrimpter-Prefix.pch"; sourceTree = "<group>"; };
@@ -130,6 +139,12 @@
 				4CF3C5D3194F812900E5705B /* MessageBlocks.m */,
 				4CF3C59D194F80F600E5705B /* Scrimpter.h */,
 				4CF3C59F194F80F600E5705B /* Scrimpter.m */,
+				4C9E0FD0195203D80052AED6 /* MADSymbolTable.h */,
+				4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */,
+				4C9E0FD31952041E0052AED6 /* MADSymbol.h */,
+				4C9E0FD41952041E0052AED6 /* MADSymbol.m */,
+				4C9E0FD6195204860052AED6 /* MADSymbolReference.h */,
+				4C9E0FD7195204860052AED6 /* MADSymbolReference.m */,
 				4CF3C59B194F80F600E5705B /* Supporting Files */,
 			);
 			path = Scrimpter;
@@ -243,8 +258,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF3C5D4194F812900E5705B /* parser.ym in Sources */,
+				4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */,
 				4CF3C5D8194F812900E5705B /* MessageBlocks.m in Sources */,
 				4CF3C5D6194F812900E5705B /* scanner.lm in Sources */,
+				4C9E0FD51952041E0052AED6 /* MADSymbol.m in Sources */,
+				4C9E0FD8195204860052AED6 /* MADSymbolReference.m in Sources */,
 				4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
