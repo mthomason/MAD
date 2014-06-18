@@ -17,111 +17,126 @@
 
 @implementation ScrimpterTests
 
-- (void)setUp
-{
+- (void)setUp {
     [super setUp];
     Scrimpter *scrimpter = [Scrimpter new];
     [self setScrimpter:scrimpter];
 }
 
-- (void)tearDown
-{
+- (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testEmpty {
-    [[self scrimpter] run:@"" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+- (BOOL)testScript:(NSString *)script forValue:(id)value error:(NSError **)error {
+    __block BOOL valid = NO;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [[self scrimpter] run:script completion:^(BOOL success, id result, NSError *err) {
+        valid = success && ([result isEqual:value] || (result == nil && value == nil)) && err == nil;
+        *error = err;
+        dispatch_semaphore_signal(semaphore);
     }];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    return valid;
+}
+
+- (void)testEmpty {
+    __autoreleasing NSError *error = nil;
+    BOOL success = [self testScript:@"" forValue:nil error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)testNewLine {
-    [[self scrimpter] run:@"\n" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-    }];
+    __autoreleasing NSError *error = nil;
+    BOOL success = [self testScript:@"\n" forValue:nil error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)testNewLineSimicolon {
-    [[self scrimpter] run:@"\n;;\n\n;\n" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-    }];
+    __autoreleasing NSError *error = nil;
+    BOOL success = [self testScript:@"\n;;\n\n;\n" forValue:nil error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)test2Plus2 {
-    [[self scrimpter] run:@"2+2;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
-    }];
+    __autoreleasing NSError *error = nil;
+    BOOL success = [self testScript:@"return 2+2;" forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testReturn2Plus2 {
+    __autoreleasing NSError *error = nil;
+    BOOL success = [self testScript:@"return 2+2;" forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)test2Plus2Pern {
-    [[self scrimpter] run:@"((( 2+2) -22) +2 + 20);" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
-    }];
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return ((( 2+2) -22) +2 + 20);";
+    BOOL success = [self testScript:script forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)testNegativeNumber {
-    [[self scrimpter] run:@"return ((( 2+2) -22) +2 - (-20));" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
-    }];
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"((( 2+2) -22) +2 - (-20)); return 5;";
+    BOOL success = [self testScript:script forValue:@(5) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)testMultplyDivide {
-    [[self scrimpter] run:@"2*2/(2+2);" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 1, @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"(2+2)*2/2-2;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 2, @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"(2+2*2)/2;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 3, @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"2*2/2+2;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
-    }];
-    
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return 2*2/(2+2);";
+    BOOL success = [self testScript:script forValue:@(1) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return (2+2)*2/2-2;";
+    success = [self testScript:script forValue:@(2) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return (2+2*2)/2;";
+    success = [self testScript:script forValue:@(3) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return 2*2/2+2;";
+    success = [self testScript:script forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)testComparson {
-    [[self scrimpter] run:@"7 + 5 >= 10;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue], @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"5 < 10;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue], @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"5 > 10;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue] == NO, @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"5 == 10;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue] == NO, @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"5 >= 10;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue] == NO, @"Invalid result %@", result);
-    }];
-    [[self scrimpter] run:@"5 <= 10;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue], @"Invalid result %@", result);
-    }];
+    
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return 7 + 5 >= 10;";
+    BOOL success = [self testScript:script forValue:@(YES) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return 5 < 10;";
+    success = [self testScript:script forValue:@(YES) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return 5 > 10;";
+    success = [self testScript:script forValue:@(NO) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return 5 == 10;";
+    success = [self testScript:script forValue:@(NO) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return 5 >= 10;";
+    success = [self testScript:script forValue:@(NO) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return 5 <= 10;";
+    success = [self testScript:script forValue:@(YES) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 
 }
 
 - (void)testMultiExpressions {
-    [[self scrimpter] run:@"7 + 5 >= 10;2+2;" completion:^(BOOL success, id result, NSError *error) {
-        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
-        XCTAssert([result boolValue], @"Invalid result %@", result);
-    }];
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"7 + 5 >= 10;return 2+2;";
+    BOOL success = [self testScript:script forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 @end

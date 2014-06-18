@@ -30,17 +30,25 @@
 }
 
 - (void)run:(NSString *)scrimpt completion:(void (^)(BOOL success, id result, NSError *error))completion {
+    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    scrimpt = [scrimpt stringByTrimmingCharactersInSet:whitespace];
+    if ([scrimpt length] > 0) {
 
-    ScrimptData = ^id(NSString *key) {
-        return [[self datasource] dataForkey:key];
-    };
-    
-    YY_BUFFER_STATE buffer = [self scan:scrimpt];
-    Scrimpted = ^(BOOL success, id result, NSError *error) {
-        completion(success, result, error);
-    };
-    [self parse];
-    [self cleanup:buffer];
+        ScrimptData = ^id(NSString *key) {
+            return [[self datasource] dataForkey:key];
+        };
+        
+        YY_BUFFER_STATE buffer = [self scan:scrimpt];
+        Scrimpted = ^(BOOL success, id result, NSError *error) {
+            completion(success, result, error);
+        };
+        [self parse];
+        [self cleanup:buffer];
+
+    } else {
+        completion(YES, nil, nil);  //Empty is valid, but does nothing.
+    }
+
 }
 
 - (YY_BUFFER_STATE)scan:(NSString *)scrimpt {

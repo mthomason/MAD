@@ -261,6 +261,7 @@
                                       @(MTQueryCacheAddColumnUnique) : @(unique),
                                       };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddColumn object:queryDefination];
+    
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
         NSAssert(success, @"Error %@", error);

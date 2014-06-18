@@ -6,7 +6,7 @@
 int yylex(void);
 void yyerror(char *s);
 void sc_return(id result);
-bool sc_evaluate_compareson(SCCompareson comparson, double left, double right);
+static bool sc_evaluate_compareson(SCCompareson comparson, double left, double right);
 double sc_control_if(bool expression, double list);
 
 %}
@@ -44,24 +44,25 @@ double sc_control_if(bool expression, double list);
 
 
 scrimpt:
-    | result                                            { $$ = NULL; }
-    | statements result                                 { $$ = NULL; }
+    | result                                            { $$ = nil; }
+    | statements result                                 { $$ = nil; }
+    | statements                                        { $$ = nil; sc_return(nil); }
 ;
 
 statements:                                             { }
-    | statements statement SIMICOLON                    { }
-    | statement SIMICOLON                               { }
+    | statements statement
 ;
 
 result:
     | RETURN statement SIMICOLON                        { sc_return($2); }
-    | statement SIMICOLON                               { sc_return($1); }
 ;
 
-statement: IF expression THEN statements                {  }
-    | IF expression THEN statements ELSE statements     {  }
-    | WHILE expression DO statements                    {  }
+statement:
+    | IF expression THEN statements                     { $$ = $2 ? $4 : nil; }
+    | IF expression THEN statements ELSE statements     { $$ = $2 ? $4 : $6; }
+    | WHILE expression DO statements                    { while ($2) { $$ = $4; } }
     | expression                                        { double d = $1; $$ = [NSNumber numberWithDouble:d]; }
+    | SIMICOLON { $$ = nil; }
 ;
 
 expression :
@@ -97,7 +98,7 @@ void sc_return(id result) {
 //    }
 //}
 
-bool sc_evaluate_compareson(SCCompareson comparson, double left, double right) {
+static bool sc_evaluate_compareson(SCCompareson comparson, double left, double right) {
     switch (comparson) {
         case SCComparesonGreaterThan:
             return left > right;
