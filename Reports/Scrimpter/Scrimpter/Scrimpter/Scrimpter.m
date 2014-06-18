@@ -36,7 +36,9 @@
     };
     
     YY_BUFFER_STATE buffer = [self scan:scrimpt];
-    Scrimpted = completion;
+    Scrimpted = ^(BOOL success, id result, NSError *error) {
+        completion(success, result, error);
+    };
     [self parse];
     [self cleanup:buffer];
 }

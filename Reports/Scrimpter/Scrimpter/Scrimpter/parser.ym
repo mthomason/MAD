@@ -6,38 +6,53 @@
 int yylex(void);
 void yyerror(char *s);
 void sc_evaluate(double db);
+bool sc_evaluate_compareson(SCCompareson comparson, double left, double right);
+double sc_control_if(bool expression, double list);
 
 %}
 
 %union {
     struct ast                      *a;
-    double                          argumentDouble;
+    NSInteger                       fn;
+    double                          d;
+    bool                            b;
+    __unsafe_unretained id          result;
     __unsafe_unretained NSString    *identifier;
 }
 
 %token ADD SUBTRACT MULTIPLY DIVIDE ABSOLUTE_VALUE
 %token OPEN_PERN CLOSE_PERN
+%token COMMA SIMICOLON
+%token <b> COMPARESON
 %token END_OF_LINE
 %token END_OF_FILE
+
+%token IF THEN ELSE WHILE DO LET
 
 %token NUMBER
 %token IDENTIFIER
 
-%type <argumentDouble> scrimpt
-%type <argumentDouble> expression
-%type <argumentDouble> factor
-
-%type <argumentDouble> term
-
+%type <result> scrimpt
+%type <result> expressions;
+%type <d> expression
+%type <d> factor
+%type <d> term
 
 %%
 
 
 scrimpt:
-    | scrimpt expression             { sc_evaluate($2); }
+    | scrimpt expressions                { $$ = NULL; }
 ;
 
-expression : factor                     { $$ = $1; }
+expressions:    { $$ = NULL;  }
+    | expressions expression SIMICOLON          { $$ = NULL; sc_evaluate($2); }
+    | expressions SIMICOLON                     { $$ = NULL; }
+;
+
+expression :
+    | factor                            { $$ = $1; }
+    | expression COMPARESON factor      { $$ = sc_evaluate_compareson($2, $1, $3); }
     | expression ADD factor             { $$ = $1 + $3; }
     | expression SUBTRACT factor        { $$ = $1 - $3; }
 ;
@@ -60,3 +75,39 @@ void sc_evaluate(double db) {
         Scrimpted(YES, number, nil);
     }
 }
+
+bool sc_evaluate_compareson(SCCompareson comparson, double left, double right) {
+    switch (comparson) {
+        case SCComparesonGreaterThan:
+            return left > right;
+        break;
+        
+        case SCComparesonLessThan:
+            return left < right;
+        break;
+
+        case SCComparesonEqualTo:
+            return left == right;
+        break;
+
+        case SCComparesonNotEqualTo:
+            return left != right;
+        break;
+        
+        case SCComparesonGreatThanOrEqualTo:
+            return left >= right;
+        break;
+        
+        case SCComparesonLessThanOrEqualTo:
+            return left <= right;
+        break;
+        
+        default:
+            return false;
+        break;
+    }
+}
+
+//double sc_control_if(bool expression, double list) {
+//    return expression ? list : NULL;
+//}

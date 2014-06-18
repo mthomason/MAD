@@ -42,45 +42,86 @@
     }];
 }
 
+- (void)testNewLineSimicolon {
+    [[self scrimpter] run:@"\n;;\n\n;\n" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+    }];
+}
+
 - (void)test2Plus2 {
-    [[self scrimpter] run:@"2+2" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"2+2;" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
     }];
 }
 
 - (void)test2Plus2Pern {
-    [[self scrimpter] run:@"((( 2+2) -22) +2 + 20)" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"((( 2+2) -22) +2 + 20);" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
     }];
 }
 
 - (void)testNegativeNumber {
-    [[self scrimpter] run:@"((( 2+2) -22) +2 - (-20))" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"((( 2+2) -22) +2 - (-20));" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
     }];
 }
 
 - (void)testMultplyDivide {
-    [[self scrimpter] run:@"2*2/(2+2)" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"2*2/(2+2);" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 1, @"Invalid result %@", result);
     }];
-    [[self scrimpter] run:@"(2+2)*2/2-2" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"(2+2)*2/2-2;" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 2, @"Invalid result %@", result);
     }];
-    [[self scrimpter] run:@"(2+2*2)/2" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"(2+2*2)/2;" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 3, @"Invalid result %@", result);
     }];
-    [[self scrimpter] run:@"2*2/2+2" completion:^(BOOL success, id result, NSError *error) {
+    [[self scrimpter] run:@"2*2/2+2;" completion:^(BOOL success, id result, NSError *error) {
         XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
         XCTAssert([result integerValue] == 4, @"Invalid result %@", result);
     }];
     
+}
+
+- (void)testComparson {
+    [[self scrimpter] run:@"7 + 5 >= 10;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue], @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"5 < 10;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue], @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"5 > 10;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue] == NO, @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"5 == 10;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue] == NO, @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"5 >= 10;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue] == NO, @"Invalid result %@", result);
+    }];
+    [[self scrimpter] run:@"5 <= 10;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue], @"Invalid result %@", result);
+    }];
+
+}
+
+- (void)testMultiExpressions {
+    [[self scrimpter] run:@"7 + 5 >= 10;2+2;" completion:^(BOOL success, id result, NSError *error) {
+        XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+        XCTAssert([result boolValue], @"Invalid result %@", result);
+    }];
 }
 
 @end
