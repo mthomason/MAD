@@ -25,7 +25,6 @@
 		4CF3C5D7194F812900E5705B /* scanner.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D1194F812900E5705B /* scanner.lm */; };
 		4CF3C5D8194F812900E5705B /* MessageBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D3194F812900E5705B /* MessageBlocks.m */; };
 		4CF3C5D9194F812900E5705B /* MessageBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D3194F812900E5705B /* MessageBlocks.m */; };
-		4CF3C5DB194FE0F300E5705B /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +68,7 @@
 		4CF3C5B0194F80F600E5705B /* ScrimpterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ScrimpterTests-Info.plist"; sourceTree = "<group>"; };
 		4CF3C5B2194F80F600E5705B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrimpterTests.m; sourceTree = "<group>"; };
-		4CF3C5D0194F812900E5705B /* parser.ym */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; path = parser.ym; sourceTree = "<group>"; };
+		4CF3C5D0194F812900E5705B /* parser.ym */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parser.ym; sourceTree = "<group>"; };
 		4CF3C5D1194F812900E5705B /* scanner.lm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = scanner.lm; sourceTree = "<group>"; };
 		4CF3C5D2194F812900E5705B /* MessageBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBlocks.h; sourceTree = "<group>"; };
 		4CF3C5D3194F812900E5705B /* MessageBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBlocks.m; sourceTree = "<group>"; };
@@ -81,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF3C5DB194FE0F300E5705B /* libstdc++.dylib in Frameworks */,
 				4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,8 +330,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LEX = /opt/local/bin/flex;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				YACC = /usr/local/bin/yacc;
 			};
 			name = Debug;
 		};
@@ -363,17 +363,21 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LEX = /opt/local/bin/flex;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				YACC = /usr/local/bin/yacc;
 			};
 			name = Release;
 		};
 		4CF3C5B9194F80F600E5705B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/Scrimpter.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -383,9 +387,11 @@
 		4CF3C5BA194F80F600E5705B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				DSTROOT = /tmp/Scrimpter.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Scrimpter/Scrimpter-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

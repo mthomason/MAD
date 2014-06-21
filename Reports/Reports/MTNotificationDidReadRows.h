@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTNotificationDidReadRows_h
+#define Reports_MTNotificationDidReadRows_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTNotificationDidReadRows : NSObject
@@ -14,3 +17,5 @@
 - (void)database:(id)database readRow:(NSUInteger)row;
 
 @end
+
+#endif

@@ -150,19 +150,108 @@
 
 - (void)testConditionIf1 {
     __autoreleasing NSError *error = nil;
-    NSString *script = @"if (7 + 5 >= 10) then\n"
+    NSString *script = @"if (7 + 5 >= 10) {\n"
                         "   return 1;\n"
-                        "else return 0;";
+                        "} else { return 0; }";
     BOOL success = [self testScript:script forValue:@(1) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
 - (void)testConditionIf2 {
     __autoreleasing NSError *error = nil;
-    NSString *script = @"if (7 + 5 <= 10) then\n"
+    NSString *script = @"if (7 + 5 <= 10) {\n"
                         "   return 10;\n"
-                        "else\nreturn 30;";
+                        "}else{\nreturn 30;}";
     BOOL success = [self testScript:script forValue:@(30) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable1 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 10;\n"
+                        "return i;";
+    BOOL success = [self testScript:script forValue:@(10) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable2 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 10;\nvar j = 11;var k=12;"
+                        "return k;";
+    BOOL success = [self testScript:script forValue:@(12) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable3 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 10;\nvar j = 11;var k=12;"
+    "return j;";
+    BOOL success = [self testScript:script forValue:@(11) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable4 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 10;\nvar j = 11;var k=12;"
+    "return i;";
+    BOOL success = [self testScript:script forValue:@(10) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable5 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 10;\nj = 11;var k=12;j=13;k=14;"
+    "return j;";
+    BOOL success = [self testScript:script forValue:@(13) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable6 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 10;\nj = 11;var k=12;j=13;k=14;"
+    "return k;";
+    BOOL success = [self testScript:script forValue:@(14) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable7 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 10;\nj = 11;k=12;j=13;k=14;"
+    "return k;";
+    BOOL success = [self testScript:script forValue:@(14) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable8 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 10;\nj = 11;k=12;j=13;k=14;if k == 12 { i = 7;}"
+    "return i;";
+    BOOL success = [self testScript:script forValue:@(7) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable9 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 10;\nj = 11;k=12;j=13;k=14;if (k == 12) { i = 7; } else { i = 10; }"
+    "return i;";
+    BOOL success = [self testScript:script forValue:@(10) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable10 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 10;\nj = 11;k=12;j=13;k=14;if (k != 14) { i = 7; } else { i = 10; }"
+    "return i;";
+    BOOL success = [self testScript:script forValue:@(10) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testVarable11 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 11;\nj = 11;k=12;j=13;k=14;"
+    "if (k != 14) { i = 7; } else { i = 20; }"
+    "return i;";
+    BOOL success = [self testScript:script forValue:@(7) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 

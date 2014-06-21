@@ -6,6 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Scrimpter_MessageBlocks_h
+#define MAD_Scrimpter_MessageBlocks_h
+
+@class MADSymbolReference, MADSymbol;
+
 typedef NS_ENUM(NSInteger, SCCompareson) {
     SCComparesonGreaterThan,
     SCComparesonLessThan,
@@ -15,5 +20,4 @@ typedef NS_ENUM(NSInteger, SCCompareson) {
     SCComparesonLessThanOrEqualTo,
 };
 
-extern id (^ScrimptData)(NSString *key);
-extern void (^Scrimpted)(BOOL success, id result, NSError *error);
+#endif

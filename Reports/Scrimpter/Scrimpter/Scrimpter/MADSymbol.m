@@ -8,6 +8,10 @@
 
 #import "MADSymbol.h"
 
+MADSymbol *(^ScrimptSymbolReference)(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger columns);
+id (^ScrimptData)(NSString *key);
+void (^Scrimpted)(BOOL success, id result, NSError *error);
+
 @interface MADSymbol ()
 
 @property (nonatomic, weak) NSString *name;

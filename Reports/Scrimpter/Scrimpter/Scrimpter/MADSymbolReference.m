@@ -27,7 +27,7 @@
     return self;
 }
 
-- (id)symbolReferenceWithFilename:(NSString *)filename flags:(NSInteger)flags line:(NSInteger)line andColumns:(NSInteger)columns {
++ (id)symbolReferenceWithFilename:(NSString *)filename flags:(NSInteger)flags line:(NSInteger)line andColumns:(NSInteger)columns {
     MADSymbolReference *result = [MADSymbolReference new];
     if (result) {
         [result setFilename:filename];

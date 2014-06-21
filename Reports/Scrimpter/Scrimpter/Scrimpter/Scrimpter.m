@@ -8,8 +8,13 @@
 
 #import "Scrimpter.h"
 #import "MessageBlocks.h"
+#import "MADSymbol.h"
+#import "MADSymbolTable.h"
+#import "MADSymbolReference.h"
 
 @interface Scrimpter ()
+
+@property (nonatomic, strong) MADSymbolTable *symbolTable;
 
 @end
 
@@ -30,12 +35,22 @@
 }
 
 - (void)run:(NSString *)scrimpt completion:(void (^)(BOOL success, id result, NSError *error))completion {
+    
     NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     scrimpt = [scrimpt stringByTrimmingCharactersInSet:whitespace];
     if ([scrimpt length] > 0) {
 
+        MADSymbolTable *table = [MADSymbolTable new];
+        [self setSymbolTable:table];
+        
         ScrimptData = ^id(NSString *key) {
             return [[self datasource] dataForkey:key];
+        };
+        
+
+        ScrimptSymbolReference = ^(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger column) {
+            MADSymbolReference *symbolReference = [MADSymbolReference symbolReferenceWithFilename:filename flags:flags line:line andColumns:column];
+            return [[self symbolTable] addSymbolReference:symbol reference:symbolReference];
         };
         
         YY_BUFFER_STATE buffer = [self scan:scrimpt];

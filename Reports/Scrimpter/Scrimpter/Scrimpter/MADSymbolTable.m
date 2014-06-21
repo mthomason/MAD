@@ -27,13 +27,14 @@
     return self;
 }
 
-- (void)addSymbolReference:(NSString *)key reference:(MADSymbolReference *)symbolReference {
+- (MADSymbolReference *)addSymbolReference:(NSString *)key reference:(MADSymbolReference *)symbolReference {
     MADSymbol *symbol = self.symbolTable[key];
     if (symbol == nil) {
         symbol = [[MADSymbol alloc] initWithName:key];
     }
     [symbol addReference:symbolReference];
     self.symbolTable[key] = symbol;
+    return self.symbolTable[key];
 }
 
 - (MADSymbol *)symbolForString:(NSString *)symbol {

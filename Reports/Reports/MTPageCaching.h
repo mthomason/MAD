@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTPageCaching_h
+#define Reports_MTPageCaching_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTPageCaching : NSObject
@@ -16,3 +19,5 @@
 - (void)trimCache:(NSUInteger)index;
 
 @end
+
+#endif

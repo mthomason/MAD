@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Scrimpter_Scrimpter_h
-#define Scrimpter_Scrimpter_h
+#ifndef MAD_Scrimpter_Scrimpter_h
+#define MAD_Scrimpter_Scrimpter_h
 
 #import <Foundation/Foundation.h>
+#import "MADSymbol.h"
 
 #ifndef FLEXINT_H
  
