@@ -8,7 +8,7 @@
 
 #import "MTTree.h"
 
-typedef NS_ENUM(NSInteger, SCNodeType) {
+typedef NS_ENUM(NSUInteger, SCNodeType) {
     SCNodeTypeArithmetic,
     SCNodeTypeComparison,
     SCNodeTypeUnaryMinus,
@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, SCNodeType) {
     SCNodeTypeUserFunction,
 };
 
-typedef NS_ENUM(NSInteger, SCCompareson) {
+typedef NS_ENUM(NSUInteger, SCCompareson) {
     SCComparesonGreaterThan,
     SCComparesonLessThan,
     SCComparesonEqualTo,
@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, SCCompareson) {
     SCComparesonLessThanOrEqualTo,
 };
 
-@class MTPair;
+@class MTPair, MADValue;
 
 @interface MTAbstractSyntaxTree : MTTree
 
@@ -46,6 +46,6 @@ typedef NS_ENUM(NSInteger, SCCompareson) {
 @property (nonatomic, strong) MTAbstractSyntaxTree *rightNode;
 
 - (id)initWithNodeType:(SCNodeType)type andValues:(MTPair *)values;
-- (double)evaluate;
+- (MADValue *)evaluate;
 
 @end

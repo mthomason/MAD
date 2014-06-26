@@ -7,6 +7,7 @@
 //
 
 #import "MTAstNodeNumberValue.h"
+#import "MADValue.h"
 
 @interface MTAstNodeNumberValue ()
 
@@ -36,8 +37,9 @@
     return SCNodeTypeNumberValue;
 }
 
-- (double)evaluate {
-    return self.number;
+- (MADValue *)evaluate {
+    NSNumber *number = [NSNumber numberWithDouble:[self number]];
+    return [MADValue value:number withType:SCVarableTypeDouble];
 }
 
 @end

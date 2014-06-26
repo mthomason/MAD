@@ -8,6 +8,7 @@
 
 #import "MTAstNodeStatement.h"
 #import "MTPair.h"
+#import "MADValue.h"
 
 @implementation MTAstNodeStatement
 
@@ -24,8 +25,8 @@
     return [self leftNode];
 }
 
-- (double)evaluate {
-    return [self statement] == nil ? NSNotFound : [[self statement] evaluate];
+- (MADValue *)evaluate {
+    return [self statement] == nil ? [MADValue nullValue] : [[self statement] evaluate];
 }
 
 - (SCNodeType)nodetype {

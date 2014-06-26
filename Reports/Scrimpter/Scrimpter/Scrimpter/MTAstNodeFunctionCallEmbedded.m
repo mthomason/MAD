@@ -8,6 +8,7 @@
 
 #import "MTAstNodeFunctionCallEmbedded.h"
 #import "MTPair.h"
+#import "MADValue.h"
 
 @interface MTAstNodeFunctionCallEmbedded ()
 
@@ -34,20 +35,22 @@
     return nil;
 }
 
-- (double)evaluate {
-    double result;
+- (MADValue *)evaluate {
+    MADValue *result;
     switch (self.functionType) {
         case SCFunctionTypeUniaryMinus:
             result = [MTAstNodeFunctionCallEmbedded uniaryMinus:[[self leftNode] evaluate]];
             break;
         default:
+            result = [[self leftNode] evaluate];
             break;
     }
     return result;
 }
 
-+ (double)uniaryMinus:(double)d {
-    return -d;
++ (MADValue *)uniaryMinus:(MADValue *)value {
+    NSNumber *um = [NSNumber numberWithDouble: -[[value value] doubleValue]];
+    return [MADValue value:um withType:SCVarableTypeDouble];
 }
 
 @end

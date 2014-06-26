@@ -7,6 +7,7 @@
 //
 
 #import "MTAstNodeArithmetic.h"
+#import "MADValue.h"
 
 @interface MTAstNodeArithmetic ()
 
@@ -24,24 +25,31 @@
     return self;
 }
 
-- (double)evaluate {
+- (MADValue *)evaluate {
+    MADValue *left = [[self leftNode] evaluate];
+    MADValue *right = [[self rightNode] evaluate];
+    double leftValue = [[left value] doubleValue];
+    double rightValue = [[right value] doubleValue];
+    double result;
     switch (self.prodcure) {
         case SCArithmeticAdd:
-            return self.leftNode.evaluate + self.rightNode.evaluate;
+            result = leftValue + rightValue;
             break;
         case SCArithmeticSubtract:
-            return self.leftNode.evaluate - self.rightNode.evaluate;
+            result = leftValue - rightValue;
             break;
         case SCArithmeticMultiply:
-            return self.leftNode.evaluate * self.rightNode.evaluate;
+            result = leftValue * rightValue;
             break;
         case SCArithmeticDivide:
-            return self.leftNode.evaluate / self.rightNode.evaluate;
+            result = leftValue / rightValue;
             break;
         default:
-            return self.leftNode.evaluate + self.rightNode.evaluate;
+            result = leftValue + rightValue;
             break;
     }
+    NSNumber *nv = [NSNumber numberWithDouble:result];
+    return [MADValue value:nv withType:SCVarableTypeDouble];
 }
 
 - (SCNodeType)nodetype {

@@ -32,8 +32,8 @@
     return  [self rightNode];
 }
 
-- (double)evaluate {
-    double result = [[self statement] evaluate];
+- (MADValue *)evaluate {
+    MADValue *result = [[self statement] evaluate];
     if (self.statement.nodetype != SCNodeTypeResult) {
         result = [[self statementList] evaluate];
     }

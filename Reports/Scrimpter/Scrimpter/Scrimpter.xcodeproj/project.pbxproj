@@ -40,6 +40,8 @@
 		4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */; };
 		4C9E0FD51952041E0052AED6 /* MADSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD41952041E0052AED6 /* MADSymbol.m */; };
 		4C9E0FD8195204860052AED6 /* MADSymbolReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD7195204860052AED6 /* MADSymbolReference.m */; };
+		4CF13209195BEB1C00659446 /* MADValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF13208195BEB1C00659446 /* MADValue.m */; };
+		4CF1320A195BEB1C00659446 /* MADValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF13208195BEB1C00659446 /* MADValue.m */; };
 		4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
 		4CF3C59E194F80F600E5705B /* Scrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* Scrimpter.h */; };
 		4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* Scrimpter.m */; };
@@ -118,6 +120,8 @@
 		4C9E0FD41952041E0052AED6 /* MADSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbol.m; sourceTree = "<group>"; };
 		4C9E0FD6195204860052AED6 /* MADSymbolReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbolReference.h; sourceTree = "<group>"; };
 		4C9E0FD7195204860052AED6 /* MADSymbolReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbolReference.m; sourceTree = "<group>"; };
+		4CF13207195BEB1C00659446 /* MADValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADValue.h; sourceTree = "<group>"; };
+		4CF13208195BEB1C00659446 /* MADValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADValue.m; sourceTree = "<group>"; };
 		4CF3C595194F80F600E5705B /* libScrimpter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libScrimpter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF3C598194F80F600E5705B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CF3C59C194F80F600E5705B /* Scrimpter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scrimpter-Prefix.pch"; sourceTree = "<group>"; };
@@ -259,6 +263,8 @@
 				4CF3C59F194F80F600E5705B /* Scrimpter.m */,
 				4C9E0FD31952041E0052AED6 /* MADSymbol.h */,
 				4C9E0FD41952041E0052AED6 /* MADSymbol.m */,
+				4CF13207195BEB1C00659446 /* MADValue.h */,
+				4CF13208195BEB1C00659446 /* MADValue.m */,
 				4C9E0FD6195204860052AED6 /* MADSymbolReference.h */,
 				4C9E0FD7195204860052AED6 /* MADSymbolReference.m */,
 				4CF3C59B194F80F600E5705B /* Supporting Files */,
@@ -374,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C1044BA195688B200820EFE /* MTAstNodeFunctionCallUserDefined.m in Sources */,
+				4CF13209195BEB1C00659446 /* MADValue.m in Sources */,
 				4C0F84851958C35C00EF4BC9 /* MTAstNodeStatementList.m in Sources */,
 				4C0F848D1958CC4B00EF4BC9 /* MTAstNodeResult.m in Sources */,
 				4CF3C5D4194F812900E5705B /* parser.ym in Sources */,
@@ -415,6 +422,7 @@
 				4CF3C5D9194F812900E5705B /* MessageBlocks.m in Sources */,
 				4C1044B1195683F000820EFE /* MTAbstractSyntaxTree.m in Sources */,
 				4C1044C71956891200820EFE /* MTAstNodeSymbolReference.m in Sources */,
+				4CF1320A195BEB1C00659446 /* MADValue.m in Sources */,
 				4C0F848E1958CC4B00EF4BC9 /* MTAstNodeResult.m in Sources */,
 				4C0F848A1958C91800EF4BC9 /* MTAstNodeExpression.m in Sources */,
 				4CF3C5D7194F812900E5705B /* scanner.lm in Sources */,

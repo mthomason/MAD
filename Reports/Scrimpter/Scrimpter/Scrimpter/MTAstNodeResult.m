@@ -22,7 +22,7 @@
     return [self leftNode];
 }
 
-- (double)evaluate {
+- (MADValue *)evaluate {
     return [[self expression] evaluate];
 }
 

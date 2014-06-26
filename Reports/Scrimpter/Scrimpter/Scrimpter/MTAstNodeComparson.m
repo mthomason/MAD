@@ -7,6 +7,7 @@
 //
 
 #import "MTAstNodeComparson.h"
+#import "MADValue.h"
 
 @interface MTAstNodeComparson ()
 
@@ -24,38 +25,44 @@
     return self;
 }
 
-- (BOOL)evaluate {
+- (MADValue *)evaluate {
     BOOL evalution;
+    MADValue *left = self.leftNode.evaluate;
+    MADValue *right = self.rightNode.evaluate;
+    double dl = [[left value] doubleValue];
+    double dr = [[right value] doubleValue];
+
     switch (self.comparsonType) {
         case SCComparesonGreaterThan:
-            evalution = self.leftNode.evaluate > self.rightNode.evaluate;
+            evalution = dl > dr;
             break;
             
         case SCComparesonLessThan:
-            evalution = self.leftNode.evaluate < self.rightNode.evaluate;
+            evalution = dl < dr;
             break;
             
         case SCComparesonEqualTo:
-            evalution = self.leftNode.evaluate == self.rightNode.evaluate;
+            evalution = dl == dr;
             break;
             
         case SCComparesonNotEqualTo:
-            evalution = self.leftNode.evaluate != self.rightNode.evaluate;
+            evalution = dl != dr;
             break;
             
         case SCComparesonGreatThanOrEqualTo:
-            evalution = self.leftNode.evaluate >= self.rightNode.evaluate;
+            evalution = dl >= dr;
             break;
             
         case SCComparesonLessThanOrEqualTo:
-            evalution = self.leftNode.evaluate <= self.rightNode.evaluate;
+            evalution = dl <= dr;
             break;
             
         default:
             evalution = false;
             break;
     }
-    return evalution;
+    NSNumber *bv = [NSNumber numberWithBool:evalution];
+    return  [MADValue value:bv withType:SCVarableTypeBoolean];
 
 }
 

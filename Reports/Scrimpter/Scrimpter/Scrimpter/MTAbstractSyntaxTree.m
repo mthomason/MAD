@@ -9,6 +9,7 @@
 #import "MTAbstractSyntaxTree.h"
 #import "MTPair.h"
 #import "MTAstNodeSymbolAsignNumber.h"
+#import "MADValue.h"
 
 @implementation MTAbstractSyntaxTree
 
@@ -20,8 +21,8 @@
     return self;
 }
 
-- (double)evaluate {
-    return 0;
+- (MADValue *)evaluate {
+    return [MADValue value:nil withType:SCVarableTypeNull];
 }
 
 @end

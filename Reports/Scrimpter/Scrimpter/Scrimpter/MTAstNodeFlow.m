@@ -8,6 +8,7 @@
 
 #import "MTAstNodeFlow.h"
 #import "MTAstNodeComparson.h"
+#import "MADValue.h"
 
 @interface MTAstNodeFlow ()
 
@@ -56,27 +57,34 @@
     return type;
 }
 
-- (double)evaluate {
-    double result = 0.0;
+- (MADValue *)evaluate {
+    MADValue *result;
     switch (self.flowType) {
-        case SCFlowTypeIf:
+        case SCFlowTypeIf: {
             
-            if ([[self condition] evaluate]) {
+            MADValue *conditionValue = [[self condition] evaluate];
+            BOOL condition = [[conditionValue value] boolValue];
+            if (condition) {
                 result = [[self leftNode] evaluate];
             } else {
                 result = [[self rightNode] evaluate];
             }
             
             break;
+        }
+        case SCFlowTypeWhile: {
             
-        case SCFlowTypeWhile:
             
-            while ([[self condition] evaluate]) {
+            MADValue *conditionValue = [[self condition] evaluate];
+            BOOL condition = [[conditionValue value] boolValue];
+            while (condition) {
                 result = [[self leftNode] evaluate];
+                conditionValue = [[self condition] evaluate];
+                condition = [[conditionValue value] boolValue];
             }
             
             break;
-            
+        }
         default:
             NSAssert(false, @"Not set at %s", __PRETTY_FUNCTION__);
             break;

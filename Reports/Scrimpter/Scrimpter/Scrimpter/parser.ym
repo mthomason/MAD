@@ -17,6 +17,7 @@
     #import "MTAstNodeStatement.h"
     #import "MTAstNodeResult.h"
     #import "MTAstNodeStatementList.h"
+    #import "MADValue.h"
     
     //#define YYDEBUG 1
 
@@ -37,9 +38,15 @@
     MTAstNodeSymbolAsignNumber *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value);
     MTAstNodeFlow *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue);
     MTAstNodeExpression *nodeForExpression(MTAbstractSyntaxTree *expression);
+    
     MTAstNodeStatement *nodeForStatement(MTAbstractSyntaxTree *statement);
+    
+    
     MTAstNodeResult *nodeForResult(MTAbstractSyntaxTree *expression);
-    MTAstNodeStatementList *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAstNodeStatementList *list);
+    
+    
+    
+    MTAstNodeStatementList *nodeForStatementAndList(MTAstNodeStatement *statement, MTAstNodeStatementList *list);
     //int yydebug = 1;
     
 
@@ -123,8 +130,10 @@ scrimpt:                                                { sc_return(nil); }
     | statements                                        { sc_return($1); }
 ;
 
-statements: statement statements                        { $$ = nodeForStatementAndList(nodeForStatement($1), $2); }
-    | statement                                         { $$ = nodeForStatement($1); }
+statements: statement statements                        {
+    MTAstNodeStatement * s = nodeForStatement((MTAstNodeStatement *)$1);
+                                                            $$ = (MTAbstractSyntaxTree *)nodeForStatementAndList((MTAstNodeStatement *)s, (MTAstNodeStatementList *)$2); }
+    | statement                                         { $$ = (MTAbstractSyntaxTree *)nodeForStatement($1); }
 ;
 
 statement: IF expression OPEN_CURLY_BRACKET statements CLOSE_CURLY_BRACKET  { $$ = nodeForIfThenStatement($2, $4, nil); }
@@ -217,7 +226,7 @@ MTAstNodeComparson *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstract
     return result;
 }
 
-MTAstNodeStatementList *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAstNodeStatementList *list) {
+MTAstNodeStatementList *nodeForStatementAndList(MTAstNodeStatement *statement, MTAstNodeStatementList *list) {
     MTAstNodeStatementList *node = [[MTAstNodeStatementList alloc] initWithStatement:statement andList:list];
     return node;
 }
@@ -240,11 +249,11 @@ void sc_return(MTAbstractSyntaxTree *value) {
         if (value == nil) {
             result = nil;
         } else {
-            double d = [value evaluate];
-            if (d == NSNotFound) {
-                result = nil;
+            MADValue *mv = [value evaluate];
+            if (mv) {
+                result = [mv value];
             } else {
-                result = [NSNumber numberWithDouble:d];
+                result = nil;
             }
         }
         Scrimpted(YES, result, nil);

@@ -12,6 +12,4 @@
 
 - (id)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values;
 
-- (BOOL)evaluate;
-
 @end

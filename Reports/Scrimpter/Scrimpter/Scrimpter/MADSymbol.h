@@ -11,22 +11,16 @@
 
 #import <Foundation/Foundation.h>
 
-@class MADSymbol, MADSymbolReference;
+@class MADSymbol, MADSymbolReference, MADValue;
 
 extern MADSymbolReference *(^ScrimptSymbolReference)(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger columns);
 extern id (^ScrimptData)(NSString *key);    //For gettting values from dictionary
 extern MADSymbol *(^ScrimptSymbol)(NSString *key);
 extern void (^Scrimpted)(BOOL success, id result, NSError *error);
 
-typedef NS_ENUM(NSInteger, SCVarableType) {
-    SCVarableTypeDouble,
-    SCVarableTypeString,
-};
-
 @interface MADSymbol : NSObject
 
-@property (nonatomic, strong) id value;
-@property (nonatomic, assign) SCVarableType type;
+@property (nonatomic, strong) MADValue *mvalue;
 
 - (id)initWithName:(NSString *)name;
 - (void)addReference:(MADSymbolReference *)symbolReference;
