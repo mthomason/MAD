@@ -37,9 +37,18 @@
     return self;
 }
 
+- (id)initWithLeft:(id)left andRight:(id)right {
+    MTPair *pair = [[MTPair alloc] initWithFormer:left andLatter:right];
+    return pair;
+}
+
 + (id)pairWithFormer:(id)former andLatter:(id)latter {
     id result = [[self alloc] initWithFormer:former andLatter:latter];
     return result;
+}
+
++ (id)pairWithLeft:(id)left andRight:(id)right   {
+    return [MTPair pairWithFormer:left andLatter:right];
 }
 
 - (NSString *)toStringHumanReadable {
@@ -49,6 +58,14 @@
     NSString *formerToString = formerConfirmsToLoggingProtocol ? [[self former] toStringHumanReadable] : [NSString stringWithFormat:@"%@", [self former]];
     NSString *latterToString = latterConfirmsToLoggingProtocol ? [[self latter] toStringHumanReadable] : [NSString stringWithFormat:@"%@", [self latter]];
     return [NSString stringWithFormat:@"(%@, %@)", formerToString, latterToString];
+}
+
+- (id)left {
+    return [self former];
+}
+
+- (id)right {
+    return [self latter];
 }
 
 - (NSString *)toString {

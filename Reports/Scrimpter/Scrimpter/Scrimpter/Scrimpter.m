@@ -36,8 +36,6 @@
 
 - (void)run:(NSString *)scrimpt completion:(void (^)(BOOL success, id result, NSError *error))completion {
     
-    NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    scrimpt = [scrimpt stringByTrimmingCharactersInSet:whitespace];
     if ([scrimpt length] > 0) {
 
         MADSymbolTable *table = [MADSymbolTable new];
@@ -47,9 +45,12 @@
             return [[self datasource] dataForkey:key];
         };
         
+        ScrimptSymbol = ^id(NSString *key) {
+            return [[self symbolTable] symbolForString:key];
+        };
 
         ScrimptSymbolReference = ^(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger column) {
-            MADSymbolReference *symbolReference = [MADSymbolReference symbolReferenceWithFilename:filename flags:flags line:line andColumns:column];
+            MADSymbolReference *symbolReference = [MADSymbolReference symbolReferenceWithSymbol:symbol filename:filename flags:flags line:line andColumns:column];
             return [[self symbolTable] addSymbolReference:symbol reference:symbolReference];
         };
         

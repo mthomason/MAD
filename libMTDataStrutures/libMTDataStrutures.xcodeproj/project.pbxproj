@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1044A61956736800820EFE /* MTTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044A51956736800820EFE /* MTTree.m */; };
 		4C22799E1676B37700B1150D /* MTLinkedList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C22799D1676B37700B1150D /* MTLinkedList.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2279A21676C2AB00B1150D /* MTPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A11676C2AB00B1150D /* MTPair.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2279A51677092E00B1150D /* MTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2279A41677092E00B1150D /* MTObject.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -73,6 +74,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C1044A41956736800820EFE /* MTTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTree.h; sourceTree = "<group>"; };
+		4C1044A51956736800820EFE /* MTTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTree.m; sourceTree = "<group>"; };
 		4C22799C1676B37700B1150D /* MTLinkedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLinkedList.h; sourceTree = "<group>"; };
 		4C22799D1676B37700B1150D /* MTLinkedList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLinkedList.m; sourceTree = "<group>"; };
 		4C2279A01676C2AB00B1150D /* MTPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPair.h; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 		4C4C6F01167635B8004A3B04 /* libMTDataStrutures */ = {
 			isa = PBXGroup;
 			children = (
+				4C1044A41956736800820EFE /* MTTree.h */,
+				4C1044A51956736800820EFE /* MTTree.m */,
 				4C8ECDDF16BF63E2003D3B30 /* MTProtocolEnumerator.h */,
 				4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */,
 				4C8EC08C167A221000F37DA7 /* MTProtocolLog.h */,
@@ -408,6 +413,7 @@
 				4C2279B01677AFFB00B1150D /* MTStack.m in Sources */,
 				4C2279B31677B00F00B1150D /* MTQueue.m in Sources */,
 				4C860BCD167F658A00AC1904 /* NSNumber+Extras.m in Sources */,
+				4C1044A61956736800820EFE /* MTTree.m in Sources */,
 				4C860BCE167F658A00AC1904 /* NSNumber+MTProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

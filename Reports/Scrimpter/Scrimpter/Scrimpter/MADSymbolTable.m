@@ -34,7 +34,7 @@
     }
     [symbol addReference:symbolReference];
     self.symbolTable[key] = symbol;
-    return self.symbolTable[key];
+    return symbolReference;
 }
 
 - (MADSymbol *)symbolForString:(NSString *)symbol {

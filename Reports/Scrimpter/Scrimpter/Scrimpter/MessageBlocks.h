@@ -11,13 +11,5 @@
 
 @class MADSymbolReference, MADSymbol;
 
-typedef NS_ENUM(NSInteger, SCCompareson) {
-    SCComparesonGreaterThan,
-    SCComparesonLessThan,
-    SCComparesonEqualTo,
-    SCComparesonNotEqualTo,
-    SCComparesonGreatThanOrEqualTo,
-    SCComparesonLessThanOrEqualTo,
-};
 
 #endif

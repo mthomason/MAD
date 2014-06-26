@@ -8,8 +8,9 @@
 
 #import "MADSymbol.h"
 
-MADSymbol *(^ScrimptSymbolReference)(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger columns);
-id (^ScrimptData)(NSString *key);
+MADSymbolReference *(^ScrimptSymbolReference)(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger columns);
+id (^ScrimptData)(NSString *key);    //For gettting values from dictionary
+MADSymbol *(^ScrimptSymbol)(NSString *key);
 void (^Scrimpted)(BOOL success, id result, NSError *error);
 
 @interface MADSymbol ()

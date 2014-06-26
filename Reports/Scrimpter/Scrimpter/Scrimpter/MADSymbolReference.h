@@ -13,7 +13,9 @@
 
 @interface MADSymbolReference : NSObject
 
-+ (id)symbolReferenceWithFilename:(NSString *)filename flags:(NSInteger)flags line:(NSInteger)line andColumns:(NSInteger)columns;
+@property (nonatomic, weak, readonly) NSString *symbol;
+
++ (id)symbolReferenceWithSymbol:(NSString *)symbol filename:(NSString *)filename flags:(NSInteger)flags line:(NSInteger)line andColumns:(NSInteger)columns;
 
 @end
 

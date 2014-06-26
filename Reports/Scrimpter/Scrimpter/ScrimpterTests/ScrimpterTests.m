@@ -55,7 +55,7 @@
 
 - (void)testNewLineSimicolon {
     __autoreleasing NSError *error = nil;
-    BOOL success = [self testScript:@"\n;;\n\n;\n" forValue:nil error:&error];
+    BOOL success = [self testScript:@"\n;" forValue:nil error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
@@ -109,6 +109,10 @@
     __autoreleasing NSError *error = nil;
     NSString *script = @"return 7 + 5 >= 10;";
     BOOL success = [self testScript:script forValue:@(YES) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+
+    script = @"return (7 + 5 <= 10);";
+    success = [self testScript:script forValue:@(NO) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 
     script = @"return 7 + 5 <= 10;";
@@ -245,7 +249,7 @@
     BOOL success = [self testScript:script forValue:@(10) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
-
+/*
 - (void)testVarable11 {
     __autoreleasing NSError *error = nil;
     NSString *script = @"i = 11;\nj = 11;k=12;j=13;k=14;"
@@ -254,5 +258,5 @@
     BOOL success = [self testScript:script forValue:@(7) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
-
+*/
 @end

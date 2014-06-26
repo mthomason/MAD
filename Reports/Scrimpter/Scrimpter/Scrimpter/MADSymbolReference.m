@@ -10,6 +10,7 @@
 
 @interface MADSymbolReference ()
 
+@property (nonatomic, weak, readwrite) NSString *symbol;
 @property (nonatomic, weak) NSString *filename;
 @property (nonatomic, assign) NSInteger flasgs;
 @property (nonatomic, assign) NSInteger line;
@@ -27,9 +28,10 @@
     return self;
 }
 
-+ (id)symbolReferenceWithFilename:(NSString *)filename flags:(NSInteger)flags line:(NSInteger)line andColumns:(NSInteger)columns {
++ (id)symbolReferenceWithSymbol:(NSString *)symbol filename:(NSString *)filename flags:(NSInteger)flags line:(NSInteger)line andColumns:(NSInteger)columns {
     MADSymbolReference *result = [MADSymbolReference new];
     if (result) {
+        [result setSymbol:symbol];
         [result setFilename:filename];
         result.flasgs = flags;
         result.line = line;

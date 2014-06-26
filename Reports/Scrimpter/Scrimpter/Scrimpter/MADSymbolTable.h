@@ -14,7 +14,7 @@
 
 @interface MADSymbolTable : NSObject
 
-- (MADSymbol *)addSymbolReference:(NSString *)symbol reference:(MADSymbolReference *)symbolReference;
+- (MADSymbolReference *)addSymbolReference:(NSString *)symbol reference:(MADSymbolReference *)symbolReference;
 - (MADSymbol *)symbolForString:(NSString *)symbol;
 
 @end

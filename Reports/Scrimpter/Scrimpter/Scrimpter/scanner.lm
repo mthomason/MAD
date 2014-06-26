@@ -2,11 +2,13 @@
 
 #import "MADSymbol.h"
 #import "MessageBlocks.h"
+#import "MTAbstractSyntaxTree.h"
+
 #import "y.tab.h"
 
 extern int yylineno;
 void yyerror(char *s);
-MADSymbol *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column);
+MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column);
 
 /* handle locations */
 int yycolumn = 1;
@@ -64,8 +66,10 @@ int yycolumn = 1;
         }
 
 [a-zA-Z]+ {
-            MADSymbol *s = sc_symbolize(yytext, yylloc.filename, 0, yylloc.first_line, yylloc.first_column);
-            yylval.sym = s;
+            MADSymbolReference *sr = sc_symbolize(yytext, yylloc.filename, 0, yylloc.first_line, yylloc.first_column);
+            //MADSymbol *s = sc_symbol_for_key(yytext);
+            //yylval.sym = s;
+            yylval.symref = sr;
             //yylval.identifier = [NSString stringWithUTF8String:yytext];
             return IDENTIFIER;
         }
@@ -75,6 +79,7 @@ int yycolumn = 1;
 \n          { yycolumn = 1; }
 
 .           { return yytext[0]; };
+
 
 %%
 
@@ -99,8 +104,8 @@ void yyerror(char *s)  {
     }
 }
 
-MADSymbol *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column) {
-    MADSymbol *result = nil;
+MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column) {
+    MADSymbolReference *result = nil;
     if (ScrimptSymbolReference) {
         if (filename == NULL) {
             filename = "embedded.scrimpt";
@@ -111,3 +116,4 @@ MADSymbol *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger
     }
     return result;
 }
+

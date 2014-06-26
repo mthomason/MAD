@@ -10,12 +10,12 @@
 #define MAD_Scrimpter_MADSymbol_h
 
 #import <Foundation/Foundation.h>
-#import "MADSymbolReference.h"
 
-@class MADSymbol;
+@class MADSymbol, MADSymbolReference;
 
-extern MADSymbol *(^ScrimptSymbolReference)(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger columns);
-extern id (^ScrimptData)(NSString *key);
+extern MADSymbolReference *(^ScrimptSymbolReference)(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger columns);
+extern id (^ScrimptData)(NSString *key);    //For gettting values from dictionary
+extern MADSymbol *(^ScrimptSymbol)(NSString *key);
 extern void (^Scrimpted)(BOOL success, id result, NSError *error);
 
 typedef NS_ENUM(NSInteger, SCVarableType) {
