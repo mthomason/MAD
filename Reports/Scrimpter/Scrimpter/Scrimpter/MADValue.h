@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_Scrimpter_MADValue_h
+#define MAD_Scrimpter_MADValue_h
+
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, SCVarableType) {
@@ -24,3 +27,5 @@ typedef NS_ENUM(NSUInteger, SCVarableType) {
 + (id)nullValue;
 
 @end
+
+#endif

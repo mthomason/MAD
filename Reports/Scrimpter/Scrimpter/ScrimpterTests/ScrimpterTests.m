@@ -7,11 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Scrimpter.h"
+#import "MADScrimpter.h"
 
 @interface ScrimpterTests : XCTestCase
 
-@property (nonatomic, strong) Scrimpter *scrimpter;
+@property (nonatomic, strong) MADScrimpter *scrimpter;
 
 @end
 
@@ -19,7 +19,7 @@
 
 - (void)setUp {
     [super setUp];
-    Scrimpter *scrimpter = [Scrimpter new];
+    MADScrimpter *scrimpter = [MADScrimpter new];
     [self setScrimpter:scrimpter];
 }
 

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADScrimpter_MTAstNodeSymbolAsignNumber_h
+#define MAD_MADScrimpter_MTAstNodeSymbolAsignNumber_h
+
 #import "MTAbstractSyntaxTree.h"
 
 @class MADSymbol, MADValue;
@@ -18,3 +21,5 @@
 @property (nonatomic, strong, readonly) MADSymbol *symbol;
 
 @end
+
+#endif

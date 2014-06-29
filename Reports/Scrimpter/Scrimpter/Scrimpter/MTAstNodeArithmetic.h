@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADScrimpter_MTAstNodeArithmetic_h
+#define MAD_MADScrimpter_MTAstNodeArithmetic_h
+
 #import "MTAbstractSyntaxTree.h"
 
 typedef NS_ENUM(NSInteger, SCArithmetic) {
@@ -20,3 +23,5 @@ typedef NS_ENUM(NSInteger, SCArithmetic) {
 - (id)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values;
 
 @end
+
+#endif

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADScrimpter_MTAstNodeSymbolReference_h
+#define MAD_MADScrimpter_MTAstNodeSymbolReference_h
+
 #import "MTAbstractSyntaxTree.h"
 
 @class MADSymbol, MADSymbolReference;
@@ -19,3 +22,5 @@
 - (NSString *)symbol;
 
 @end
+
+#endif

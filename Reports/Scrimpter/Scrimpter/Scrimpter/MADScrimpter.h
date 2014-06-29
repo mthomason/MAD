@@ -31,7 +31,7 @@ extern MADSymbolTable *(^ScrimptSymbolTable)();
 - (id)dataForkey:(NSString *)key;
 @end
 
-@interface Scrimpter : NSObject
+@interface MADScrimpter : NSObject
 
 @property (nonatomic, weak) IBOutlet id <ScrimpterDataSource> datasource;
 

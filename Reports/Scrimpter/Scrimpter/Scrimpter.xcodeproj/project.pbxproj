@@ -48,8 +48,8 @@
 		4CF132131960858700659446 /* MTAstNodeBoolValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF132121960858700659446 /* MTAstNodeBoolValue.m */; };
 		4CF132141960858700659446 /* MTAstNodeBoolValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF132121960858700659446 /* MTAstNodeBoolValue.m */; };
 		4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
-		4CF3C59E194F80F600E5705B /* Scrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* Scrimpter.h */; };
-		4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* Scrimpter.m */; };
+		4CF3C59E194F80F600E5705B /* MADScrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* MADScrimpter.h */; };
+		4CF3C5A0194F80F600E5705B /* MADScrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* MADScrimpter.m */; };
 		4CF3C5A7194F80F600E5705B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5A6194F80F600E5705B /* XCTest.framework */; };
 		4CF3C5A8194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
 		4CF3C5AA194F80F600E5705B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5A9194F80F600E5705B /* UIKit.framework */; };
@@ -60,8 +60,6 @@
 		4CF3C5D5194F812900E5705B /* parser.ym in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D0194F812900E5705B /* parser.ym */; };
 		4CF3C5D6194F812900E5705B /* scanner.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D1194F812900E5705B /* scanner.lm */; };
 		4CF3C5D7194F812900E5705B /* scanner.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D1194F812900E5705B /* scanner.lm */; };
-		4CF3C5D8194F812900E5705B /* MessageBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D3194F812900E5705B /* MessageBlocks.m */; };
-		4CF3C5D9194F812900E5705B /* MessageBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5D3194F812900E5705B /* MessageBlocks.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +79,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				4CF3C59E194F80F600E5705B /* Scrimpter.h in CopyFiles */,
+				4CF3C59E194F80F600E5705B /* MADScrimpter.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,8 +132,8 @@
 		4CF3C595194F80F600E5705B /* libScrimpter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libScrimpter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF3C598194F80F600E5705B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CF3C59C194F80F600E5705B /* Scrimpter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scrimpter-Prefix.pch"; sourceTree = "<group>"; };
-		4CF3C59D194F80F600E5705B /* Scrimpter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scrimpter.h; sourceTree = "<group>"; };
-		4CF3C59F194F80F600E5705B /* Scrimpter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Scrimpter.m; sourceTree = "<group>"; };
+		4CF3C59D194F80F600E5705B /* MADScrimpter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADScrimpter.h; sourceTree = "<group>"; };
+		4CF3C59F194F80F600E5705B /* MADScrimpter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADScrimpter.m; sourceTree = "<group>"; };
 		4CF3C5A5194F80F600E5705B /* ScrimpterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScrimpterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF3C5A6194F80F600E5705B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4CF3C5A9194F80F600E5705B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -144,8 +142,6 @@
 		4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrimpterTests.m; sourceTree = "<group>"; };
 		4CF3C5D0194F812900E5705B /* parser.ym */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; lineEnding = 0; path = parser.ym; sourceTree = "<group>"; };
 		4CF3C5D1194F812900E5705B /* scanner.lm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = scanner.lm; sourceTree = "<group>"; };
-		4CF3C5D2194F812900E5705B /* MessageBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBlocks.h; sourceTree = "<group>"; };
-		4CF3C5D3194F812900E5705B /* MessageBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBlocks.m; sourceTree = "<group>"; };
 		4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -278,10 +274,8 @@
 				4C1044B2195683FA00820EFE /* Data Structures */,
 				4CF3C5D1194F812900E5705B /* scanner.lm */,
 				4CF3C5D0194F812900E5705B /* parser.ym */,
-				4CF3C5D2194F812900E5705B /* MessageBlocks.h */,
-				4CF3C5D3194F812900E5705B /* MessageBlocks.m */,
-				4CF3C59D194F80F600E5705B /* Scrimpter.h */,
-				4CF3C59F194F80F600E5705B /* Scrimpter.m */,
+				4CF3C59D194F80F600E5705B /* MADScrimpter.h */,
+				4CF3C59F194F80F600E5705B /* MADScrimpter.m */,
 				4C9E0FD31952041E0052AED6 /* MADSymbol.h */,
 				4C9E0FD41952041E0052AED6 /* MADSymbol.m */,
 				4CF13207195BEB1C00659446 /* MADValue.h */,
@@ -408,7 +402,6 @@
 				4CF3C5D4194F812900E5705B /* parser.ym in Sources */,
 				4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */,
 				4CF1320D195FF65C00659446 /* MTAstNodeStringValue.m in Sources */,
-				4CF3C5D8194F812900E5705B /* MessageBlocks.m in Sources */,
 				4CF3C5D6194F812900E5705B /* scanner.lm in Sources */,
 				4C1044B5195687B200820EFE /* MTAstNodeFunctionCallEmbedded.m in Sources */,
 				4C1044C2195688F500820EFE /* MTAstNodeNumberValue.m in Sources */,
@@ -423,7 +416,7 @@
 				4C9E0FD8195204860052AED6 /* MADSymbolReference.m in Sources */,
 				4C1044BE195688DD00820EFE /* MTAstNodeFlow.m in Sources */,
 				4C1044C61956891200820EFE /* MTAstNodeSymbolReference.m in Sources */,
-				4CF3C5A0194F80F600E5705B /* Scrimpter.m in Sources */,
+				4CF3C5A0194F80F600E5705B /* MADScrimpter.m in Sources */,
 				4C0F84891958C91800EF4BC9 /* MTAstNodeExpression.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,7 +438,6 @@
 				4C1044BB195688B200820EFE /* MTAstNodeFunctionCallUserDefined.m in Sources */,
 				4C1044D41956B57F00820EFE /* MTAstNodeArithmetic.m in Sources */,
 				4C0F84821958C34800EF4BC9 /* MTAstNodeStatement.m in Sources */,
-				4CF3C5D9194F812900E5705B /* MessageBlocks.m in Sources */,
 				4C1044B1195683F000820EFE /* MTAbstractSyntaxTree.m in Sources */,
 				4C1044C71956891200820EFE /* MTAstNodeSymbolReference.m in Sources */,
 				4CF1320A195BEB1C00659446 /* MADValue.m in Sources */,

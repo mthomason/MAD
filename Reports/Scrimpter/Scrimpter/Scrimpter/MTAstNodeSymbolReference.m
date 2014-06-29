@@ -9,7 +9,7 @@
 #import "MTAstNodeSymbolReference.h"
 #import "MADSymbolReference.h"
 #import "MADSymbol.h"
-#import "Scrimpter.h"
+#import "MADScrimpter.h"
 #import "MADSymbolTable.h"
 
 @interface MTAstNodeSymbolReference ()

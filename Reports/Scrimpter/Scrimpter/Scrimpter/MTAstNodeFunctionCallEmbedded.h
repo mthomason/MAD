@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADScrimpter_MTAstNodeFunctionCallEmbedded_h
+#define MAD_MADScrimpter_MTAstNodeFunctionCallEmbedded_h
+
 #import "MTAbstractSyntaxTree.h"
 
 typedef NS_ENUM(NSInteger, SCFunctionType) {
@@ -22,3 +25,5 @@ typedef NS_ENUM(NSInteger, SCFunctionType) {
 
 
 @end
+
+#endif

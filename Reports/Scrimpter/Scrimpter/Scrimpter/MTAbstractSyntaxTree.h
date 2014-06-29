@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADScrimpter_MTAbstractSyntaxTree_h
+#define MAD_MADScrimpter_MTAbstractSyntaxTree_h
+
 #import "MTTree.h"
 
 typedef NS_ENUM(NSUInteger, SCNodeType) {
@@ -51,3 +54,5 @@ typedef NS_ENUM(NSUInteger, SCCompareson) {
 - (MADValue *)evaluate;
 
 @end
+
+#endif

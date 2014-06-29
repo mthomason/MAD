@@ -6,21 +6,20 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "Scrimpter.h"
-#import "MessageBlocks.h"
+#import "MADScrimpter.h"
 #import "MADSymbol.h"
 #import "MADSymbolTable.h"
 #import "MADSymbolReference.h"
 
 MADSymbolTable *(^ScrimptSymbolTable)();
 
-@interface Scrimpter ()
+@interface MADScrimpter ()
 
 @property (nonatomic, strong) MADSymbolTable *symbolTable;
 
 @end
 
-@implementation Scrimpter
+@implementation MADScrimpter
 
 - (id)init {
     self = [super init];

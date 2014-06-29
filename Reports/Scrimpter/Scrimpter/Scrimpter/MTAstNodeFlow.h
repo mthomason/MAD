@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADScrimpter_MTAstNodeFlow_h
+#define MAD_MADScrimpter_MTAstNodeFlow_h
+
 #import "MTAbstractSyntaxTree.h"
 
 typedef NS_ENUM(NSInteger, SCFlowType) {
@@ -23,3 +26,5 @@ typedef NS_ENUM(NSInteger, SCFlowType) {
 - (id)initLoopWithList:(MTAbstractSyntaxTree *)list andCondition:(MTAbstractSyntaxTree *)condition;
 
 @end
+
+#endif

@@ -1,7 +1,6 @@
 %{
     
     #import <Foundation/Foundation.h>
-    #import "MessageBlocks.h"
     #import "MTPair.h"
     #import "MADSymbol.h"
     #import "MADSymbolReference.h"
