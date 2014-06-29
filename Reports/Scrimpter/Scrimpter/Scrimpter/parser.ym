@@ -98,26 +98,21 @@
 
 %locations
 
-%token ADD SUBTRACT MULTIPLY DIVIDE ABSOLUTE_VALUE
-%token OPEN_PERN CLOSE_PERN
-%token COMMA SIMICOLON
 %token <fn> COMPARESON
 %token END_OF_LINE
 %token END_OF_FILE
 %token RETURN
 %token VARABLE
-%token ASSIGNMENT
-%token OPEN_CURLY_BRACKET CLOSE_CURLY_BRACKET
 
-%token IF THEN ELSE WHILE DO LET
+%token IF ELSE WHILE DO LET
 
 %token <d> NUMBER
 %token <symref> IDENTIFIER
 
-%type <ast> statements
-%type <ast> statement
+%type <ast> list
+%type <ast> stmt
 
-%type <ast> expression
+%type <ast> exp
 %type <ast> factor
 %type <ast> term
 
@@ -125,45 +120,42 @@
 
 %%
 
-
-scrimpt:                                                { sc_return(nil); }
-    | statements                                        { sc_return($1); }
+scrimpt:                                        { sc_return(nil); }
+    | list                                      { sc_return($1); }
 ;
 
-statements: statement statements                        {
-    MTAstNodeStatement * s = nodeForStatement((MTAstNodeStatement *)$1);
-                                                            $$ = (MTAbstractSyntaxTree *)nodeForStatementAndList((MTAstNodeStatement *)s, (MTAstNodeStatementList *)$2); }
-    | statement                                         { $$ = (MTAbstractSyntaxTree *)nodeForStatement($1); }
+list: stmt list                                 { $$ = (MTAbstractSyntaxTree *)nodeForStatementAndList(nodeForStatement((MTAstNodeStatement *)$1), (MTAstNodeStatementList *)$2); }
+    | stmt                                      { $$ = (MTAbstractSyntaxTree *)nodeForStatement($1); }
 ;
 
-statement: IF expression OPEN_CURLY_BRACKET statements CLOSE_CURLY_BRACKET  { $$ = nodeForIfThenStatement($2, $4, nil); }
-    | IF expression OPEN_CURLY_BRACKET statements CLOSE_CURLY_BRACKET ELSE OPEN_CURLY_BRACKET statements CLOSE_CURLY_BRACKET  { $$ = nodeForIfThenStatement($2, $4, $8); }
-    | WHILE expression DO statements                    { while ($2) { $$ = $4; } }
-    | expression                                        { $$ = nodeForExpression($1); }
+stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2, $4, nil); }
+    | IF exp '{' list '}' ELSE '{' list '}'     { $$ = nodeForIfThenStatement($2, $4, $8); }
+    | WHILE exp DO list                         { while ($2) { $$ = $4; } }
+    | exp                                       { $$ = nodeForExpression($1); }
 
-    | VARABLE IDENTIFIER ASSIGNMENT expression SIMICOLON { $$ = nodeForAssigningValueToSymbolReference($2, $4); }
-    | IDENTIFIER ASSIGNMENT expression SIMICOLON        { $$ = nodeForAssigningValueToSymbolReference($1, $3); }
-    | RETURN expression SIMICOLON                       { $$ = nodeForResult($2); }
-    | SIMICOLON                                         { $$ = nil; }
+    | VARABLE IDENTIFIER '=' exp ';'            { $$ = nodeForAssigningValueToSymbolReference($2, $4); }
+    | IDENTIFIER '=' exp ';'                    { $$ = nodeForAssigningValueToSymbolReference($1, $3); }
+    | RETURN exp ';'                            { $$ = nodeForResult($2); }
+    | ';'                                       { $$ = nil; }
 ;
 
-expression : OPEN_PERN expression CLOSE_PERN            { $$ = nodeForExpression($2); }
-    | factor                                            { $$ = nodeForExpression($1); }
-    | expression COMPARESON factor                      { $$ = nodeForComparsonOfValues($2, $1, $3); }
-    | expression ADD factor                             { $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
-    | expression SUBTRACT factor                        { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
+exp : '(' exp ')'                               { $$ = nodeForExpression($2); }
+    | factor                                    { $$ = nodeForExpression($1); }
+    | exp COMPARESON factor                     { $$ = nodeForComparsonOfValues($2, $1, $3); }
+    | exp '+' factor                            { $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
+    | exp '-' factor                            { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
 ;
 
-factor : term                                           { $$ = nodeForExpression($1); }
-    | factor MULTIPLY term                              { $$ = nodeForArithmeticOfValues(SCArithmeticMultiply, $1, $3); }
-    | factor DIVIDE term                                { $$ = nodeForArithmeticOfValues(SCArithmeticDivide, $1, $3); }
+factor : term                                   { $$ = nodeForExpression($1); }
+    | factor '*' term                           { $$ = nodeForArithmeticOfValues(SCArithmeticMultiply, $1, $3); }
+    | factor '/' term                           { $$ = nodeForArithmeticOfValues(SCArithmeticDivide, $1, $3); }
 ;
 
-term : NUMBER                                           { $$ = nodeForNumber($1); }
-    | IDENTIFIER                                        { $$ = nodeForSymbolReference($1); }
-    | ABSOLUTE_VALUE term                               { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeAbsoluteValue, @[$2]); }
-    | SUBTRACT term                                     { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeUniaryMinus, @[$2]); }
-    | OPEN_PERN expression CLOSE_PERN                   { $$ = nodeForExpression($2); }
+term : NUMBER                                   { $$ = nodeForNumber($1); }
+    | IDENTIFIER                                { $$ = nodeForSymbolReference($1); }
+    | '|' term                                  { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeAbsoluteValue, @[$2]); }
+    | '-' term                                  { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeUniaryMinus, @[$2]); }
+    | '(' exp ')'                               { $$ = nodeForExpression($2); }
 ;
 
 %%

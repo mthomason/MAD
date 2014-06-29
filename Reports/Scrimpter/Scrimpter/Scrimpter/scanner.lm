@@ -23,17 +23,17 @@ int yycolumn = 1;
 
 %%
 
-"+"         { return ADD; }
-"-"         { return SUBTRACT; }
-"*"         { return MULTIPLY; }
-"/"         { return DIVIDE; }
-"|"         { return ABSOLUTE_VALUE; }
-","         { return COMMA; }
-";"         { return SIMICOLON; }
-"("         { return OPEN_PERN; }
-")"         { return CLOSE_PERN; }
-"{"         { return OPEN_CURLY_BRACKET; }
-"}"         { return CLOSE_CURLY_BRACKET; }
+"+" |
+"-" |
+"*" |
+"/" |
+"|" |
+";" |
+"=" |
+"(" |
+")" |
+"{" |
+"}"         { return yytext[0]; }
 
 ">"         { yylval.fn = SCComparesonGreaterThan; return COMPARESON; }
 "<"         { yylval.fn = SCComparesonLessThan; return COMPARESON; }
@@ -44,14 +44,11 @@ int yycolumn = 1;
 "<="        { yylval.fn = SCComparesonLessThanOrEqualTo; return COMPARESON; }
 
 "if"        { return IF; }
-"then"      { return THEN; }
 "else"      { return ELSE; }
 "while"     { return WHILE; }
 "do"        { return DO; }
 "var"       { return VARABLE; }
 "let"       { return LET;}
-
-"="         { return ASSIGNMENT; }
 
 "return"    { return RETURN; }
 
