@@ -259,4 +259,20 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+- (void)testVarable12 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 11;\nj = 11;k=12;j=13;k=14;"
+    "if (j == 13) { i = 7; } else { i = 20; }"
+    "return i;";
+    BOOL success = [self testScript:script forValue:@(7) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testStringVarable1 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; return i;";
+    BOOL success = [self testScript:script forValue:@"11" error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 @end

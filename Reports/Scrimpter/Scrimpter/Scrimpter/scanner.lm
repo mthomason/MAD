@@ -9,6 +9,7 @@
 extern int yylineno;
 void yyerror(char *s);
 MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column);
+NSString *stripFirstAndLastFromString(NSString *s);
 
 /* handle locations */
 int yycolumn = 1;
@@ -52,6 +53,7 @@ int yycolumn = 1;
 
 "return"    { return RETURN; }
 
+    /* numbers */
 [0-9]+\.[0-9]* {
             yylval.d = atof(yytext);
             return NUMBER;
@@ -62,11 +64,21 @@ int yycolumn = 1;
             return NUMBER;
         }
 
+    /* strings */
+'(\\.|''|[^'\n])*'	|
+\"(\\.|\"\"|[^"\n])*\"  { char *strval = strdup(yytext);
+                            NSString *sv = stripFirstAndLastFromString([NSString stringWithUTF8String:strval]);
+                            yylval.strval = sv; free(strval); return STRING; }
+
+'(\\.|[^'\n])*$	        { char *f = "Unterminated string %s."; int l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
+\"(\\.|[^"\n])*$	{ char *f = "Unterminated string %s."; int l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
+
 [a-zA-Z]+ {
             MADSymbolReference *sr = sc_symbolize(yytext, yylloc.filename, 0, yylloc.first_line, yylloc.first_column);
             yylval.symref = sr;
             return IDENTIFIER;
         }
+
 
 "//".*
 [ \t]       { /* Ingnore white space */ }
@@ -79,6 +91,17 @@ int yycolumn = 1;
 
 int yywrap()  {
     return 1;
+}
+
+NSString *stripFirstAndLastFromString(NSString *s) {
+    NSString *result;
+    if (s.length >= 2) {
+        NSRange range = NSMakeRange(1, s.length-2);
+        result = [s substringWithRange:range];
+    } else {
+        result = @"";
+    }
+    return result;
 }
 
 void yyerror(char *s)  {

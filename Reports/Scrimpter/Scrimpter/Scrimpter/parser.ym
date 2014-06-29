@@ -17,6 +17,7 @@
     #import "MTAstNodeStatement.h"
     #import "MTAstNodeResult.h"
     #import "MTAstNodeStatementList.h"
+    #import "MTAstNodeStringValue.h"
     #import "MADValue.h"
     
     //#define YYDEBUG 1
@@ -40,8 +41,8 @@
     MTAstNodeExpression *nodeForExpression(MTAbstractSyntaxTree *expression);
     
     MTAstNodeStatement *nodeForStatement(MTAbstractSyntaxTree *statement);
-    
-    
+    MTAstNodeStringValue *nodeForString(NSString *s);
+
     MTAstNodeResult *nodeForResult(MTAbstractSyntaxTree *expression);
     
     
@@ -94,6 +95,7 @@
     __unsafe_unretained MADSymbolReference      *symref;
     __unsafe_unretained id                      value;
     __unsafe_unretained NSString                *identifier;
+    __unsafe_unretained NSString                *strval;
 }
 
 %locations
@@ -103,6 +105,7 @@
 %token END_OF_FILE
 %token RETURN
 %token VARABLE
+%token <strval> STRING
 
 %token IF ELSE WHILE DO LET
 
@@ -113,6 +116,8 @@
 %type <ast> stmt
 
 %type <ast> exp
+%type <ast> expstr
+%type <ast> expnum
 %type <ast> factor
 %type <ast> term
 
@@ -139,11 +144,18 @@ stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2
     | ';'                                       { $$ = nil; }
 ;
 
-exp : '(' exp ')'                               { $$ = nodeForExpression($2); }
+exp : expstr
+    | expnum
+;
+
+expstr : STRING                                 { $$ = nodeForString($1); }
+;
+
+expnum : '(' expnum ')'                         { $$ = nodeForExpression($2); }
     | factor                                    { $$ = nodeForExpression($1); }
-    | exp COMPARESON factor                     { $$ = nodeForComparsonOfValues($2, $1, $3); }
-    | exp '+' factor                            { $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
-    | exp '-' factor                            { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
+    | expnum COMPARESON factor                  { $$ = nodeForComparsonOfValues($2, $1, $3); }
+    | expnum '+' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
+    | expnum '-' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
 ;
 
 factor : term                                   { $$ = nodeForExpression($1); }
@@ -155,7 +167,7 @@ term : NUMBER                                   { $$ = nodeForNumber($1); }
     | IDENTIFIER                                { $$ = nodeForSymbolReference($1); }
     | '|' term                                  { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeAbsoluteValue, @[$2]); }
     | '-' term                                  { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeUniaryMinus, @[$2]); }
-    | '(' exp ')'                               { $$ = nodeForExpression($2); }
+    | '(' expnum ')'                            { $$ = nodeForExpression($2); }
 ;
 
 %%
@@ -197,6 +209,11 @@ MTAstNodeSymbolReference *nodeForSymbolReference(MADSymbolReference *symbolRefer
 
 MTAstNodeNumberValue *nodeForNumber(double n) {
     MTAstNodeNumberValue *result = [[MTAstNodeNumberValue alloc] initWithNumber:n];
+    return result;
+}
+
+MTAstNodeStringValue *nodeForString(NSString *s) {
+    MTAstNodeStringValue *result = [[MTAstNodeStringValue alloc] initWithString:s];
     return result;
 }
 
