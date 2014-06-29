@@ -9,8 +9,13 @@
 #ifndef MAD_Scrimpter_Scrimpter_h
 #define MAD_Scrimpter_Scrimpter_h
 
+
 #import <Foundation/Foundation.h>
 #import "MADSymbol.h"
+
+@class  MADSymbolTable;
+
+extern MADSymbolTable *(^ScrimptSymbolTable)();
 
 #ifndef FLEXINT_H
  

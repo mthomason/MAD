@@ -12,6 +12,8 @@
 #import "MADSymbolTable.h"
 #import "MADSymbolReference.h"
 
+MADSymbolTable *(^ScrimptSymbolTable)();
+
 @interface Scrimpter ()
 
 @property (nonatomic, strong) MADSymbolTable *symbolTable;
@@ -52,6 +54,10 @@
         ScrimptSymbolReference = ^(NSString *symbol, NSString *filename, NSInteger flags, NSInteger line, NSInteger column) {
             MADSymbolReference *symbolReference = [MADSymbolReference symbolReferenceWithSymbol:symbol filename:filename flags:flags line:line andColumns:column];
             return [[self symbolTable] addSymbolReference:symbol reference:symbolReference];
+        };
+        
+        ScrimptSymbolTable = ^MADSymbolTable *() {
+            return [self symbolTable];
         };
         
         YY_BUFFER_STATE buffer = [self scan:scrimpt];

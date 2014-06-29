@@ -230,7 +230,7 @@
     __autoreleasing NSError *error = nil;
     NSString *script = @"i = 10;\nj = 11;k=12;j=13;k=14;if k == 12 { i = 7;}"
     "return i;";
-    BOOL success = [self testScript:script forValue:@(7) error:&error];
+    BOOL success = [self testScript:script forValue:@(10) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
@@ -249,14 +249,14 @@
     BOOL success = [self testScript:script forValue:@(10) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
-/*
+
 - (void)testVarable11 {
     __autoreleasing NSError *error = nil;
     NSString *script = @"i = 11;\nj = 11;k=12;j=13;k=14;"
     "if (k != 14) { i = 7; } else { i = 20; }"
     "return i;";
-    BOOL success = [self testScript:script forValue:@(7) error:&error];
+    BOOL success = [self testScript:script forValue:@(20) error:&error];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
-*/
+
 @end

@@ -9,6 +9,7 @@
 #import "MTAstNodeSymbolAsignNumber.h"
 #import "MTAbstractSyntaxTree.h"
 #import "MTPair.h"
+#import "MADSymbol.h"
 
 @interface MTAstNodeSymbolAsignNumber ()
 
@@ -29,6 +30,12 @@
 
 - (MTTree *)leftNode {
     return nil;
+}
+
+- (MADValue *)evaluate {
+    MADValue *result = [[self value] evaluate];
+    [[self symbol] setMvalue:result];
+    return [[self symbol] mvalue];
 }
 
 - (MTAbstractSyntaxTree *)value {

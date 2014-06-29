@@ -26,7 +26,13 @@
 }
 
 - (MADValue *)evaluate {
-    return [self statement] == nil ? [MADValue nullValue] : [[self statement] evaluate];
+    id result;
+    if ([self statement] == nil) {
+        result = [MADValue nullValue];
+    } else {
+        result = [[self statement] evaluate];
+    }
+    return result;
 }
 
 - (SCNodeType)nodetype {

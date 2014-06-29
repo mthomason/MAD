@@ -64,10 +64,7 @@ int yycolumn = 1;
 
 [a-zA-Z]+ {
             MADSymbolReference *sr = sc_symbolize(yytext, yylloc.filename, 0, yylloc.first_line, yylloc.first_column);
-            //MADSymbol *s = sc_symbol_for_key(yytext);
-            //yylval.sym = s;
             yylval.symref = sr;
-            //yylval.identifier = [NSString stringWithUTF8String:yytext];
             return IDENTIFIER;
         }
 

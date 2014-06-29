@@ -8,6 +8,9 @@
 
 #import "MTAstNodeSymbolReference.h"
 #import "MADSymbolReference.h"
+#import "MADSymbol.h"
+#import "Scrimpter.h"
+#import "MADSymbolTable.h"
 
 @interface MTAstNodeSymbolReference ()
 
@@ -39,6 +42,12 @@
 
 - (NSString *)symbol {
     return [[self symbolReference] symbol];
+}
+
+- (MADValue *)evaluate {
+    MADSymbolTable *symbolTable = ScrimptSymbolTable();
+    MADSymbol *symbol = [symbolTable symbolForString:[self symbol]];
+    return [symbol mvalue];
 }
 
 @end

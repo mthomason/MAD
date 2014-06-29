@@ -8,7 +8,7 @@
 
 #import "MTAbstractSyntaxTree.h"
 
-@class MADSymbol;
+@class MADSymbol, MADValue;
 
 @interface MTAstNodeSymbolAsignNumber : MTAbstractSyntaxTree
 
@@ -16,6 +16,5 @@
 - (MTAbstractSyntaxTree *)value;
 
 @property (nonatomic, strong, readonly) MADSymbol *symbol;
-
 
 @end
