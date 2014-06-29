@@ -18,7 +18,7 @@
 @implementation MTAstNodeStringValue
 
 - (id)initWithString:(NSString *)string {
-    self = [super initWithNodeType:SCNodeTypeNumberValue andValues:nil];
+    self = [super initWithNodeType:SCNodeTypeStringValue andValues:nil];
     if (self) {
         NSString *s = [NSString stringWithString:string];
         [self setString:s];
@@ -35,7 +35,7 @@
 }
 
 - (SCNodeType)nodetype {
-    return SCNodeTypeNumberValue;
+    return SCNodeTypeStringValue;
 }
 
 - (MADValue *)evaluate {

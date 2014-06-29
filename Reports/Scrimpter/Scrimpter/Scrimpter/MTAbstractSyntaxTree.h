@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, SCNodeType) {
     SCNodeTypeWhile,
     SCNodeTypeResult,
     SCNodeTypeNumberValue,
+    SCNodeTypeStringValue,
+    SCNodeTypeBooleanValue,
     SCNodeTypeSymbolReference,
     SCNodeTypeAssignemnt,
     SCNodeTypeListOfSymbols,

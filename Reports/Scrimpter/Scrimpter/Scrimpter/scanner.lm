@@ -51,6 +51,9 @@ int yycolumn = 1;
 "var"       { return VARABLE; }
 "let"       { return LET;}
 
+"true"      { yylval.b = true; return BOOLEAN; }
+"false"     { yylval.b = false; return BOOLEAN; }
+
 "return"    { return RETURN; }
 
     /* numbers */

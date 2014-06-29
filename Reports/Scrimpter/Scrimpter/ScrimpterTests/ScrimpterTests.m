@@ -275,4 +275,47 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+
+- (void)testStringVarable2 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; if (i == 11) { return true; } else { return false; }";
+    BOOL success = [self testScript:script forValue:@NO error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testStringVarable3 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; j = \"111\"; if (i == j) { return true; } else { return false; }";
+    BOOL success = [self testScript:script forValue:@NO error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testStringVarable4 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; j = \"11\"; if (i == j) { return true; } else { return false; }";
+    BOOL success = [self testScript:script forValue:@YES error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testStringVarable5 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; j = \"111\"; if (i >= j) { return true; } else { return false; }";
+    BOOL success = [self testScript:script forValue:@NO error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testStringVarable6 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; j = \"111\"; if (i < j) { return true; } else { return false; }";
+    BOOL success = [self testScript:script forValue:@YES error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testStringVarable7 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = \"11\"; j = \"111\"; if (i <= j) { return true; } else { return false; }";
+    BOOL success = [self testScript:script forValue:@YES error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 @end
