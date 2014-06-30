@@ -12,7 +12,7 @@
 
 @interface MTAstNodeFunctionCallEmbedded ()
 
-@property (nonatomic, assign) SCFunctionType functionType;
+@property (nonatomic, strong) NSString *functionName;
 
 @end
 
@@ -22,7 +22,8 @@
     MTPair *pair = [MTPair pairWithLeft:expression andRight:expressionList];
     self = [super initWithNodeType:SCNodeTypeBuiltInFunction andValues:pair];
     if (self) {
-        
+        NSString *fn = [NSString stringWithString:functionName];
+        [self setFunctionName:fn];
     }
     return self;
 }
@@ -33,13 +34,15 @@
 
 - (MADValue *)evaluate {
     MADValue *result;
-    switch (self.functionType) {
-        case SCFunctionTypeUniaryMinus:
-            result = [MTAstNodeFunctionCallEmbedded uniaryMinus:[[self leftNode] evaluate]];
-            break;
-        default:
-            result = [[self leftNode] evaluate];
-            break;
+    if ([[self functionName] isEqualToString:@"power"]) {
+        MADValue *baseWrapper = [[self leftNode] evaluate];
+        MADValue *exponantWrapper = [[self rightNode] evaluate];
+        double base = [[baseWrapper value] doubleValue];
+        double exponant = [[exponantWrapper value] doubleValue];
+        double r = pow(base, exponant);
+        
+        result = [MADValue value:[NSNumber numberWithDouble:r]
+                                  withType:SCVarableTypeDouble];
     }
     return result;
 }

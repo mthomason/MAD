@@ -337,6 +337,20 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+- (void)testPower {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return (2.0000+2.00).power(2);";
+    BOOL success = [self testScript:script forValue:@(16) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testPower2 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 2+2-2+2; return i.power(2+2.00-2+2);";
+    BOOL success = [self testScript:script forValue:@(256) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 - (void)testError {
     __autoreleasing NSError *error = nil;
     NSString *script = @"$.$...i = 11;\n"
