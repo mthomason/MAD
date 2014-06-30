@@ -90,6 +90,7 @@
 %token <fn> COMPARESON
 %token END_OF_LINE
 %token END_OF_FILE
+%token ERROR
 %token RETURN
 %token VARABLE
 %token <b> BOOLEAN
@@ -115,8 +116,8 @@
 
 %%
 
-scrimpt:                                        { sc_return(nil); }
-    | list                                      { sc_return($1); }
+scrimpt:                                        { sc_return(nil); YYACCEPT; }
+    | list                                      { sc_return($1); YYACCEPT; }
 ;
 
 list: stmt list                                 { $$ = nodeForStatementAndList(nodeForStatement($1), $2); }
@@ -137,6 +138,7 @@ stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2
 exp : expstr                                    { $$ = $1; }
     | expnum                                    { $$ = $1; }
     | expbool                                   { $$ = $1; }
+    | ERROR                                     { YYABORT; }
     | '(' exp ')'                               { $$ = nodeForExpression($2); }
     | exp COMPARESON exp                        { $$ = nodeForComparsonOfValues($2, $1, $3); }
 ;
@@ -267,6 +269,7 @@ lyyerror(YYLTYPE t, char *s, ...) {
     }
     vfprintf(stderr, s, ap);
     fprintf(stderr, "\n");
+    va_end(ap);
 }
 
 MADSymbol *sc_symbol_for_key(NSString *symbol) {

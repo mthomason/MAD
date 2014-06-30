@@ -6,7 +6,7 @@
 #import "y.tab.h"
 
 extern int yylineno;
-void yyerror(char *s);
+void yyerror(char *s, ...);
 MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column);
 NSString *stripFirstAndLastFromString(NSString *s);
 
@@ -87,7 +87,7 @@ int yycolumn = 1;
 [ \t]       { /* Ingnore white space */ }
 \n          { yycolumn = 1; }
 
-.           { return yytext[0]; };
+.           { yyerror("Mystery character '%c'\n", *yytext); return ERROR; };
 
 
 %%
@@ -107,21 +107,26 @@ NSString *stripFirstAndLastFromString(NSString *s) {
     return result;
 }
 
-void yyerror(char *s)  {
+void yyerror(char *s, ...)  {
+    va_list args;
+    va_start(args, s);
+    NSString *formatString = [NSString stringWithUTF8String:s];
+    NSString *errorMessage = [[NSString alloc] initWithFormat:formatString arguments:args];
     if (Scrimpted) {
         NSString *display = nil;
         if (yylloc.first_line) {
             char loc[40];
             sprintf(loc, "(%d %d %d %d)", yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
-            display = [NSString stringWithFormat:@"%s at location %s.", s, loc];
+            display = [NSString stringWithFormat:@"%@ at location %s.", errorMessage, loc];
         } else {
-            display = [NSString stringWithFormat: @"%s at line %d.", s, yylineno];
+            display = [NSString stringWithFormat: @"%@ at line %d.", errorMessage, yylineno];
         }
         NSError *err = [NSError errorWithDomain: @"Scrimpter"
                                            code: 1
                                        userInfo: @{ NSLocalizedDescriptionKey : display}];
         Scrimpted(NO, nil, err);
     }
+    va_end(args);
 }
 
 MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column) {

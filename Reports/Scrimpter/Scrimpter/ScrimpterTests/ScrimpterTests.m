@@ -29,12 +29,22 @@
 }
 
 - (BOOL)testScript:(NSString *)script forValue:(id)value error:(NSError **)error {
+    return [self testScript:script forValue:value error:error expectsError:NO];
+}
+
+- (BOOL)testScript:(NSString *)script forValue:(id)value error:(NSError **)error expectsError:(BOOL)builtToSpill {
     __block BOOL valid = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [[self scrimpter] run:script completion:^(BOOL success, id result, NSError *err) {
-        NSLog(@"Result: %@", result);
-        valid = success && ([result isEqual:value] || (result == nil && value == nil)) && err == nil;
-        *error = err;
+        if (builtToSpill) {
+            valid = success == NO && err != nil;
+            *error = err;
+            NSLog(@"%@", err.userInfo[NSLocalizedDescriptionKey]);
+        } else {
+            NSLog(@"Result: %@", result);
+            valid = success && ([result isEqual:value] || (result == nil && value == nil)) && err == nil;
+            *error = err;
+        }
         dispatch_semaphore_signal(semaphore);
     }];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
@@ -324,6 +334,15 @@
                        @"//i = 111;\n"
                        @"return i;";
     BOOL success = [self testScript:script forValue:@(11) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testError {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"$.$...i = 11;\n"
+    @"//i = 111;\n"
+    @"return i;";
+    BOOL success = [self testScript:script forValue:@(11) error:&error expectsError:YES];
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
