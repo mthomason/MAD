@@ -13,6 +13,9 @@
 @interface MTAstNodeFunctionCallEmbedded ()
 
 @property (nonatomic, strong) NSString *functionName;
+@property (nonatomic, assign) SCFunctionClass class;
+@property (nonatomic, assign) NSUInteger function;
+
 
 @end
 
@@ -24,6 +27,29 @@
     if (self) {
         NSString *fn = [NSString stringWithString:functionName];
         [self setFunctionName:fn];
+
+        if ([functionName isEqualToString:@"power"]) {
+
+            [self setClass:SCFunctionClassNumber];
+            [self setFunction:SCFunctionTypeNumericPower];
+            
+        } else if ([functionName isEqualToString:@"floor"]) {
+            [self setClass:SCFunctionClassNumber];
+            [self setFunction:SCFunctionTypeNumericFloor];
+            
+        } else if ([functionName isEqualToString:@"ceiling"]) {
+            [self setClass:SCFunctionClassNumber];
+            [self setFunction:SCFunctionTypeNumericCeiling];
+        } else if ([functionName isEqualToString:@"truncate"]) {
+            [self setClass:SCFunctionClassNumber];
+            [self setFunction:SCFunctionTypeNumericTruncate];
+        } else if ([functionName isEqualToString:@"mod"]) {
+            [self setClass:SCFunctionClassNumber];
+            [self setFunction:SCFunctionTypeNumericModulus];
+        } else if ([functionName isEqualToString:@"round"]) {
+            [self setClass:SCFunctionClassNumber];
+            [self setFunction:SCFunctionTypeNumericRound];
+        }
     }
     return self;
 }
@@ -34,17 +60,83 @@
 
 - (MADValue *)evaluate {
     MADValue *result;
-    if ([[self functionName] isEqualToString:@"power"]) {
-        MADValue *baseWrapper = [[self leftNode] evaluate];
-        MADValue *exponantWrapper = [[self rightNode] evaluate];
-        double base = [[baseWrapper value] doubleValue];
-        double exponant = [[exponantWrapper value] doubleValue];
-        double r = pow(base, exponant);
-        
-        result = [MADValue value:[NSNumber numberWithDouble:r]
-                                  withType:SCVarableTypeDouble];
+    switch ([self class]) {
+        case SCFunctionClassBoolean:
+            result = [self evaluateBoolean];
+            break;
+        case SCFunctionClassString:
+            result = [self evaluateString];
+            break;
+        case SCFunctionClassNumber:
+            result = [self evaluateNumber];
+            break;
+        default:
+            result = [MADValue value:nil withType:SCVarableTypeNull];
+            break;
     }
     return result;
+}
+
+- (MADValue *)evaluateNumber {
+    MADValue *result;
+    MADValue *baseWrapper = [[self leftNode] evaluate];
+    double base = [baseWrapper doubleValue];
+    double r;
+    if (base != NAN) {
+
+        switch ((SCFunctionTypeNumber)[self function]) {
+                
+            case SCFunctionTypeNumericPower: {
+                MADValue *exponantWrapper = [[self rightNode] evaluate];
+                double exponant = [exponantWrapper doubleValue];
+                r = exponant != NAN ? pow(base, exponant) : NAN;
+                break;
+            }
+                
+            case SCFunctionTypeNumericCeiling:
+                r = ceil(base);
+                break;
+                
+            case SCFunctionTypeNumericFloor:
+                r = floor(base);
+                break;
+
+            case SCFunctionTypeNumericTruncate:
+                r = trunc(base);
+                break;
+                
+            case SCFunctionTypeNumericRound:
+                r = round(base);
+                break;
+
+            case SCFunctionTypeNumericModulus: {
+                MADValue *exponantWrapper = [[self rightNode] evaluate];
+                double divisor = [exponantWrapper doubleValue];
+                r = divisor != NAN ? fmod(base, divisor) : NAN;
+                break;
+            }
+                
+            default:
+                break;
+        }
+    } else {
+        r = NAN;
+    }
+    if (isnan(r)) {
+        result = [MADValue value:nil withType:SCVarableTypeNull];
+    } else {
+        result = [MADValue value:[NSNumber numberWithDouble:r]
+                        withType:SCVarableTypeDouble];
+    }
+    return result;
+}
+
+- (MADValue *)evaluateString {
+    return nil;
+}
+
+- (MADValue *)evaluateBoolean {
+    return nil;
 }
 
 + (MADValue *)uniaryMinus:(MADValue *)value {

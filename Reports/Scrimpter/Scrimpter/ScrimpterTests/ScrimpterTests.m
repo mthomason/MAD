@@ -351,6 +351,55 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+- (void)testPowerRound3 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 2+2-2+2; return i.power(2+2.00-2+2.555).round();";
+    BOOL success = [self testScript:script forValue:@(553) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testCeiling {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"var i = 2+2-2+2; return i.power(2+2.00-2+2.555).ceiling();";
+    BOOL success = [self testScript:script forValue:@(553) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testCeiling2 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return (3.14).ceiling();";
+    BOOL success = [self testScript:script forValue:@(4) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testFloor {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return (3.14).floor();";
+    BOOL success = [self testScript:script forValue:@(3) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testMod {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return (55).mod(4);";
+    BOOL success = [self testScript:script forValue:@(3) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testMod2 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return (55).mod(3.5);";
+    BOOL success = [self testScript:script forValue:@(2.5) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testMod3 {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return (55).mod(3.5).floor();";
+    BOOL success = [self testScript:script forValue:@(2.0) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 - (void)testError {
     __autoreleasing NSError *error = nil;
     NSString *script = @"$.$...i = 11;\n"

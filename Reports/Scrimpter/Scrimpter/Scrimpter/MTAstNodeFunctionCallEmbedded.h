@@ -11,18 +11,30 @@
 
 #import "MTAbstractSyntaxTree.h"
 
-typedef NS_ENUM(NSInteger, SCFunctionClass) {
+typedef NS_ENUM(NSUInteger, SCFunctionClass) {
     SCFunctionClassString,
     SCFunctionClassNumber,
     SCFunctionClassBoolean,
 };
 
-typedef NS_ENUM(NSInteger, SCFunctionType) {
-    SCFunctionTypeSqureRoot,
-    SCFunctionTypeSqureExp,
-    SCFunctionTypeSqureLog,
-    SCFunctionTypeAbsoluteValue,
-    SCFunctionTypeUniaryMinus
+typedef NS_ENUM(NSUInteger, SCFunctionTypeBoolean) {
+    SCFunctionTypeBooleanExclusiveOr
+};
+
+typedef NS_ENUM(NSUInteger, SCFunctionTypeString) {
+    SCFunctionTypeStringUpper,
+    SCFunctionTypeStringLower,
+};
+
+typedef NS_ENUM(NSUInteger, SCFunctionTypeNumber) {
+    SCFunctionTypeNumericSqureRoot,
+    SCFunctionTypeNumericPower,
+    SCFunctionTypeNumericAbsoluteValue,
+    SCFunctionTypeNumericFloor,
+    SCFunctionTypeNumericCeiling,
+    SCFunctionTypeNumericTruncate,
+    SCFunctionTypeNumericRound,
+    SCFunctionTypeNumericModulus,
 };
 
 @interface MTAstNodeFunctionCallEmbedded : MTAbstractSyntaxTree

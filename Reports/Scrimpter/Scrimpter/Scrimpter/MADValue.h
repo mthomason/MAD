@@ -25,6 +25,7 @@ typedef NS_ENUM(NSUInteger, SCVarableType) {
 
 + (id)value:(id)value withType:(SCVarableType)type;
 + (id)nullValue;
+- (double)doubleValue;
 
 @end
 
