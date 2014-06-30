@@ -18,21 +18,17 @@
 
 @implementation MTAstNodeFunctionCallEmbedded
 
-- (id)initWithEmbededProcedure:(SCFunctionType)procedure withValue:(MTAbstractSyntaxTree *)value {
-    MTPair *pair = [MTPair pairWithLeft:value andRight:nil];
+- (id)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList {
+    MTPair *pair = [MTPair pairWithLeft:expression andRight:expressionList];
     self = [super initWithNodeType:SCNodeTypeBuiltInFunction andValues:pair];
     if (self) {
-        [self setFunctionType:procedure];
+        
     }
     return self;
 }
 
 - (SCNodeType)nodetype {
     return SCNodeTypeBuiltInFunction;
-}
-
-- (MTTree *)rightNode {
-    return nil;
 }
 
 - (MADValue *)evaluate {

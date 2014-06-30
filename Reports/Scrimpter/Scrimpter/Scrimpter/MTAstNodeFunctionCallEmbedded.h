@@ -11,6 +11,12 @@
 
 #import "MTAbstractSyntaxTree.h"
 
+typedef NS_ENUM(NSInteger, SCFunctionClass) {
+    SCFunctionClassString,
+    SCFunctionClassNumber,
+    SCFunctionClassBoolean,
+};
+
 typedef NS_ENUM(NSInteger, SCFunctionType) {
     SCFunctionTypeSqureRoot,
     SCFunctionTypeSqureExp,
@@ -21,8 +27,7 @@ typedef NS_ENUM(NSInteger, SCFunctionType) {
 
 @interface MTAstNodeFunctionCallEmbedded : MTAbstractSyntaxTree
 
-- (id)initWithEmbededProcedure:(SCFunctionType)procedure withValue:(MTAbstractSyntaxTree *)value;
-
+- (id)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList;
 
 @end
 

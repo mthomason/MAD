@@ -5,7 +5,7 @@
     #import "MADSymbol.h"
     #import "MADSymbolReference.h"
     #import "MTAbstractSyntaxTree.h"
-    #import "MTAstNodeFunctionCallEmbedded.h"
+    #import "MTAstNodeFunctionCallEmbeddedUniaryMinus.h"
     #import "MADValue.h"
     
     //#define YYDEBUG 1
@@ -25,13 +25,17 @@
     MTAbstractSyntaxTree *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value);
     MTAbstractSyntaxTree *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue);
 
-    MTAstNodeFunctionCallEmbedded *nodeForEmbeddedFunctionAndValues(SCFunctionType function, NSArray *values);
+    MTAstNodeFunctionCallEmbeddedUniaryMinus *nodeForUniaryMinus(MTAbstractSyntaxTree *value);
+
     MTAbstractSyntaxTree *nodeForExpression(MTAbstractSyntaxTree *expression);
     MTAbstractSyntaxTree *nodeForStatement(MTAbstractSyntaxTree *statement);
     MTAbstractSyntaxTree *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAbstractSyntaxTree *list);
-
+    MTAbstractSyntaxTree *nodeForExpressionAndList(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *list);
+    
     MTAbstractSyntaxTree *nodeForString(NSString *s);
     MTAbstractSyntaxTree *nodeForBool(bool b);
+    
+    MTAbstractSyntaxTree *nodeForFunction(MTAbstractSyntaxTree *expression, NSString *functionIdentifier, MTAbstractSyntaxTree *expressionList);
 
     MTAbstractSyntaxTree *nodeForResult(MTAbstractSyntaxTree *expression);
     
@@ -83,6 +87,7 @@
     __unsafe_unretained id                      value;
     __unsafe_unretained NSString                *identifier;
     __unsafe_unretained NSString                *strval;
+    __unsafe_unretained NSString                *fuctname;
 }
 
 %locations
@@ -94,6 +99,7 @@
 %token RETURN
 %token VARABLE
 %token <b> BOOLEAN
+%token <fuctname> FUNCT
 %token <strval> STRING
 
 %token IF ELSE WHILE DO LET
@@ -104,7 +110,7 @@
 %type <ast> list
 %type <ast> stmt
 
-%type <ast> exp
+%type <ast> exp explist
 %type <ast> expstr
 %type <ast> expnum
 %type <ast> expbool
@@ -141,7 +147,12 @@ exp : expstr                                    { $$ = $1; }
     | ERROR                                     { YYABORT; }
     | '(' exp ')'                               { $$ = nodeForExpression($2); }
     | exp COMPARESON exp                        { $$ = nodeForComparsonOfValues($2, $1, $3); }
+    | exp '.' IDENTIFIER '(' ')'                { $$ = nodeForFunction($1, [$3 symbol], nil); }
+    | exp '.' IDENTIFIER '(' explist ')'        { $$ = nodeForFunction($1, [$3 symbol], $5); }
 ;
+
+explist : exp
+    | exp ',' explist                           { $$ = nodeForExpressionAndList(nodeForExpression($1), $3); }
 
 expbool: BOOLEAN                                { $$ = nodeForBool($1); }
 ;
@@ -163,12 +174,17 @@ factor : term                                   { $$ = nodeForExpression($1); }
 
 term : NUMBER                                   { $$ = nodeForNumber($1); }
     | IDENTIFIER                                { $$ = nodeForSymbolReference($1); }
-    | '|' term                                  { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeAbsoluteValue, @[$2]); }
-    | '-' term                                  { $$ = nodeForEmbeddedFunctionAndValues(SCFunctionTypeUniaryMinus, @[$2]); }
+    | '|' term                                  { $$ = nodeForUniaryMinus($2); }
+    | '-' term                                  { $$ = nodeForUniaryMinus($2); }
     | '(' expnum ')'                            { $$ = nodeForExpression($2); }
 ;
 
 %%
+
+MTAbstractSyntaxTree *nodeForFunction(MTAbstractSyntaxTree *expression, NSString *functionIdentifier, MTAbstractSyntaxTree *expressionList) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithExpression:expression functionName:functionIdentifier andExpressionList:expressionList];
+    return node;
+}
 
 MTAbstractSyntaxTree *nodeForResult(MTAbstractSyntaxTree *expression) {
     MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithResult:expression];
@@ -220,10 +236,9 @@ MTAbstractSyntaxTree *nodeForString(NSString *s) {
     return result;
 }
 
-MTAstNodeFunctionCallEmbedded *nodeForEmbeddedFunctionAndValues(SCFunctionType function, NSArray *values) {
-    id value = [values objectAtIndex:0];
-    MTAstNodeFunctionCallEmbedded *result = [[MTAstNodeFunctionCallEmbedded alloc] initWithEmbededProcedure:function withValue:value];
-    return result;
+MTAstNodeFunctionCallEmbeddedUniaryMinus *nodeForUniaryMinus(MTAbstractSyntaxTree *value) {
+    MTAstNodeFunctionCallEmbeddedUniaryMinus *node = [[MTAstNodeFunctionCallEmbeddedUniaryMinus alloc] initWithValueForUniaryMinus:value];
+    return node;
 }
 
 MTAbstractSyntaxTree *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
@@ -240,6 +255,11 @@ MTAbstractSyntaxTree *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstra
 
 MTAbstractSyntaxTree *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAbstractSyntaxTree *list) {
     MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithStatement:statement andList:list];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForExpressionAndList(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *list) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithExpression:expression andList:list];
     return node;
 }
 

@@ -21,7 +21,10 @@
 #import "MTAstNodeExpression.h"
 #import "MTAstNodeStatement.h"
 #import "MTAstNodeStatementList.h"
-#import <UIKit/UIKit.h>
+#import "MTAstNodeExpressionList.h"
+#import "MTAstNodeFunctionCallEmbedded.h"
+#import "MTAstNodeFunctionCallEmbeddedUniaryMinus.h"
+
 @implementation MTAbstractSyntaxTree
 
 - (id)initWithNodeType:(SCNodeType)type andValues:(MTPair *)values {
@@ -112,6 +115,24 @@
 //MTAstNodeStatementList
 - (instancetype)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAbstractSyntaxTree *)list {
     MTAstNodeStatementList *node = [[MTAstNodeStatementList alloc] initWithStatement:statement andList:list];
+    return node;
+}
+
+//MTAstNodeExpressionList
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression andList:(MTAbstractSyntaxTree *)list {
+    MTAstNodeStatementList *node = [[MTAstNodeStatementList alloc] initWithExpression:expression andList:list];
+    return node;
+}
+
+//MTAstNodeFunctionCallEmbedded
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList {
+    MTAstNodeFunctionCallEmbedded *node = [[MTAstNodeFunctionCallEmbedded alloc] initWithExpression:expression functionName:functionName andExpressionList:expressionList];
+    return node;
+}
+
+//MTAstNodeFunctionCallEmbeddedUniaryMinus
+- (instancetype)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value {
+    MTAstNodeFunctionCallEmbeddedUniaryMinus *node = [[MTAstNodeFunctionCallEmbeddedUniaryMinus alloc] initWithValueForUniaryMinus:value];
     return node;
 }
 

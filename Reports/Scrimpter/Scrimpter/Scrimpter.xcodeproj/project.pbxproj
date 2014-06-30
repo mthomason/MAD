@@ -47,6 +47,13 @@
 		4CF132111960856C00659446 /* MTAstNodeBoolValue.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CF132101960856C00659446 /* MTAstNodeBoolValue.h */; };
 		4CF132131960858700659446 /* MTAstNodeBoolValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF132121960858700659446 /* MTAstNodeBoolValue.m */; };
 		4CF132141960858700659446 /* MTAstNodeBoolValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF132121960858700659446 /* MTAstNodeBoolValue.m */; };
+		4CF1321919614A6300659446 /* MTAstNodeExpressionList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1321819614A6300659446 /* MTAstNodeExpressionList.m */; };
+		4CF1321A19614A6300659446 /* MTAstNodeExpressionList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1321819614A6300659446 /* MTAstNodeExpressionList.m */; };
+		4CF1321D19614A7700659446 /* MTAstNodeSymbolList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1321C19614A7700659446 /* MTAstNodeSymbolList.m */; };
+		4CF1321E19614A7700659446 /* MTAstNodeSymbolList.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1321C19614A7700659446 /* MTAstNodeSymbolList.m */; };
+		4CF132201961C8A200659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CF1321F1961C8A200659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.h */; };
+		4CF132221961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF132211961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m */; };
+		4CF132231961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF132211961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m */; };
 		4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
 		4CF3C59E194F80F600E5705B /* MADScrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* MADScrimpter.h */; };
 		4CF3C5A0194F80F600E5705B /* MADScrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* MADScrimpter.m */; };
@@ -129,6 +136,12 @@
 		4CF1320C195FF65C00659446 /* MTAstNodeStringValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeStringValue.m; sourceTree = "<group>"; };
 		4CF132101960856C00659446 /* MTAstNodeBoolValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeBoolValue.h; sourceTree = "<group>"; };
 		4CF132121960858700659446 /* MTAstNodeBoolValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeBoolValue.m; sourceTree = "<group>"; };
+		4CF1321719614A6300659446 /* MTAstNodeExpressionList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeExpressionList.h; sourceTree = "<group>"; };
+		4CF1321819614A6300659446 /* MTAstNodeExpressionList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeExpressionList.m; sourceTree = "<group>"; };
+		4CF1321B19614A7700659446 /* MTAstNodeSymbolList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeSymbolList.h; sourceTree = "<group>"; };
+		4CF1321C19614A7700659446 /* MTAstNodeSymbolList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeSymbolList.m; sourceTree = "<group>"; };
+		4CF1321F1961C8A200659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeFunctionCallEmbeddedUniaryMinus.h; sourceTree = "<group>"; };
+		4CF132211961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeFunctionCallEmbeddedUniaryMinus.m; sourceTree = "<group>"; };
 		4CF3C595194F80F600E5705B /* libScrimpter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libScrimpter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF3C598194F80F600E5705B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CF3C59C194F80F600E5705B /* Scrimpter-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scrimpter-Prefix.pch"; sourceTree = "<group>"; };
@@ -202,6 +215,8 @@
 				4C0F847E1958C2B600EF4BC9 /* Unfinished */,
 				4C1044B3195687B200820EFE /* MTAstNodeFunctionCallEmbedded.h */,
 				4C1044B4195687B200820EFE /* MTAstNodeFunctionCallEmbedded.m */,
+				4CF1321F1961C8A200659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.h */,
+				4CF132211961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m */,
 			);
 			name = Nodes;
 			sourceTree = "<group>";
@@ -222,6 +237,7 @@
 		4CF132151960A22B00659446 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				4CF1321619614A3A00659446 /* List */,
 				4CF1320F1960855000659446 /* Types */,
 				4C1044BC195688DD00820EFE /* MTAstNodeFlow.h */,
 				4C1044BD195688DD00820EFE /* MTAstNodeFlow.m */,
@@ -239,10 +255,21 @@
 				4C0F84881958C91800EF4BC9 /* MTAstNodeExpression.m */,
 				4C0F847F1958C34800EF4BC9 /* MTAstNodeStatement.h */,
 				4C0F84801958C34800EF4BC9 /* MTAstNodeStatement.m */,
-				4C0F84831958C35C00EF4BC9 /* MTAstNodeStatementList.h */,
-				4C0F84841958C35C00EF4BC9 /* MTAstNodeStatementList.m */,
 			);
 			name = Subclasses;
+			sourceTree = "<group>";
+		};
+		4CF1321619614A3A00659446 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				4C0F84831958C35C00EF4BC9 /* MTAstNodeStatementList.h */,
+				4C0F84841958C35C00EF4BC9 /* MTAstNodeStatementList.m */,
+				4CF1321719614A6300659446 /* MTAstNodeExpressionList.h */,
+				4CF1321819614A6300659446 /* MTAstNodeExpressionList.m */,
+				4CF1321B19614A7700659446 /* MTAstNodeSymbolList.h */,
+				4CF1321C19614A7700659446 /* MTAstNodeSymbolList.m */,
+			);
+			name = List;
 			sourceTree = "<group>";
 		};
 		4CF3C58C194F80F600E5705B = {
@@ -391,6 +418,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF132201961C8A200659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.h in Resources */,
 				4CF132111960856C00659446 /* MTAstNodeBoolValue.h in Resources */,
 				4CF3C5B3194F80F600E5705B /* InfoPlist.strings in Resources */,
 			);
@@ -407,6 +435,7 @@
 				4CF13209195BEB1C00659446 /* MADValue.m in Sources */,
 				4C0F84851958C35C00EF4BC9 /* MTAstNodeStatementList.m in Sources */,
 				4C0F848D1958CC4B00EF4BC9 /* MTAstNodeResult.m in Sources */,
+				4CF132221961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m in Sources */,
 				4CF3C5D4194F812900E5705B /* parser.ym in Sources */,
 				4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */,
 				4CF1320D195FF65C00659446 /* MTAstNodeStringValue.m in Sources */,
@@ -418,6 +447,8 @@
 				4C0F84811958C34800EF4BC9 /* MTAstNodeStatement.m in Sources */,
 				4C1044D31956B57F00820EFE /* MTAstNodeArithmetic.m in Sources */,
 				4CF132131960858700659446 /* MTAstNodeBoolValue.m in Sources */,
+				4CF1321919614A6300659446 /* MTAstNodeExpressionList.m in Sources */,
+				4CF1321D19614A7700659446 /* MTAstNodeSymbolList.m in Sources */,
 				4C1044D71956B88400820EFE /* MTAstNodeUniaryMinus.m in Sources */,
 				4C1044CA1956893400820EFE /* MTAstNodeSymbolAsignNumber.m in Sources */,
 				4C1044CF1956B22D00820EFE /* MTAstNodeComparson.m in Sources */,
@@ -445,12 +476,15 @@
 				4CF132141960858700659446 /* MTAstNodeBoolValue.m in Sources */,
 				4C1044BB195688B200820EFE /* MTAstNodeFunctionCallUserDefined.m in Sources */,
 				4C1044D41956B57F00820EFE /* MTAstNodeArithmetic.m in Sources */,
+				4CF1321A19614A6300659446 /* MTAstNodeExpressionList.m in Sources */,
 				4C0F84821958C34800EF4BC9 /* MTAstNodeStatement.m in Sources */,
 				4C1044B1195683F000820EFE /* MTAbstractSyntaxTree.m in Sources */,
 				4C1044C71956891200820EFE /* MTAstNodeSymbolReference.m in Sources */,
 				4CF1320A195BEB1C00659446 /* MADValue.m in Sources */,
 				4C0F848E1958CC4B00EF4BC9 /* MTAstNodeResult.m in Sources */,
+				4CF132231961C8BF00659446 /* MTAstNodeFunctionCallEmbeddedUniaryMinus.m in Sources */,
 				4C0F848A1958C91800EF4BC9 /* MTAstNodeExpression.m in Sources */,
+				4CF1321E19614A7700659446 /* MTAstNodeSymbolList.m in Sources */,
 				4CF3C5D7194F812900E5705B /* scanner.lm in Sources */,
 				4CF3C5B5194F80F600E5705B /* ScrimpterTests.m in Sources */,
 			);

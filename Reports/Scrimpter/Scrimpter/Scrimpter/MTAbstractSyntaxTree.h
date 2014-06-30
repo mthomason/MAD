@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, SCNodeType) {
     SCNodeTypeExpressionList,
     SCNodeTypeStatement,
     SCNodeTypeStatementList,
+    SCNodeTypeSymbolList,
     SCNodeTypeIf,
     SCNodeTypeWhile,
     SCNodeTypeResult,
@@ -27,7 +28,6 @@ typedef NS_ENUM(NSUInteger, SCNodeType) {
     SCNodeTypeBooleanValue,
     SCNodeTypeSymbolReference,
     SCNodeTypeAssignemnt,
-    SCNodeTypeListOfSymbols,
     SCNodeTypeBuiltInFunction,
     SCNodeTypeUserFunction,
 };
@@ -97,6 +97,15 @@ typedef NS_ENUM(NSInteger, SCArithmetic) {
 
 //MTAstNodeStatementList
 - (instancetype)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAbstractSyntaxTree *)list;
+
+//MTAstNodeExpressionList
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression andList:(MTAbstractSyntaxTree *)list;
+
+//MTAstNodeFunctionCallEmbedded
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)expression functionName:(NSString *)functionName andExpressionList:(MTAbstractSyntaxTree *)expressionList;
+
+//MTAstNodeFunctionCallEmbeddedUniaryMinus
+- (instancetype)initWithValueForUniaryMinus:(MTAbstractSyntaxTree *)value;
 
 @end
 

@@ -29,7 +29,7 @@ int yycolumn = 1;
 "/" |
 "|" |
 ";" |
-"." |
+"," |
 "=" |
 "(" |
 ")" |
@@ -82,6 +82,7 @@ int yycolumn = 1;
             return IDENTIFIER;
         }
 
+    /*[.][a-zA-Z]+ { yytext++; yylval.fuctname = [NSString stringWithUTF8String:yytext]; return FUNCT; }*/
 
 "//".*
 [ \t]       { /* Ingnore white space */ }
