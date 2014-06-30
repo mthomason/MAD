@@ -177,8 +177,6 @@
 				4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */,
 				4C1044B8195688B200820EFE /* MTAstNodeFunctionCallUserDefined.h */,
 				4C1044B9195688B200820EFE /* MTAstNodeFunctionCallUserDefined.m */,
-				4C0F84831958C35C00EF4BC9 /* MTAstNodeStatementList.h */,
-				4C0F84841958C35C00EF4BC9 /* MTAstNodeStatementList.m */,
 			);
 			name = Unfinished;
 			sourceTree = "<group>";
@@ -198,28 +196,12 @@
 		4C1044B71956888A00820EFE /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
-				4CF1320F1960855000659446 /* Types */,
-				4C0F847E1958C2B600EF4BC9 /* Unfinished */,
 				4C1044AE195683F000820EFE /* MTAbstractSyntaxTree.h */,
 				4C1044AF195683F000820EFE /* MTAbstractSyntaxTree.m */,
-				4C1044D11956B57F00820EFE /* MTAstNodeArithmetic.h */,
-				4C1044D21956B57F00820EFE /* MTAstNodeArithmetic.m */,
-				4C1044BC195688DD00820EFE /* MTAstNodeFlow.h */,
-				4C1044BD195688DD00820EFE /* MTAstNodeFlow.m */,
-				4C1044CD1956B22D00820EFE /* MTAstNodeComparson.h */,
-				4C1044CE1956B22D00820EFE /* MTAstNodeComparson.m */,
+				4CF132151960A22B00659446 /* Subclasses */,
+				4C0F847E1958C2B600EF4BC9 /* Unfinished */,
 				4C1044B3195687B200820EFE /* MTAstNodeFunctionCallEmbedded.h */,
 				4C1044B4195687B200820EFE /* MTAstNodeFunctionCallEmbedded.m */,
-				4C1044C41956891200820EFE /* MTAstNodeSymbolReference.h */,
-				4C1044C51956891200820EFE /* MTAstNodeSymbolReference.m */,
-				4C1044C81956893400820EFE /* MTAstNodeSymbolAsignNumber.h */,
-				4C1044C91956893400820EFE /* MTAstNodeSymbolAsignNumber.m */,
-				4C0F84871958C91800EF4BC9 /* MTAstNodeExpression.h */,
-				4C0F84881958C91800EF4BC9 /* MTAstNodeExpression.m */,
-				4C0F847F1958C34800EF4BC9 /* MTAstNodeStatement.h */,
-				4C0F84801958C34800EF4BC9 /* MTAstNodeStatement.m */,
-				4C0F848B1958CC4B00EF4BC9 /* MTAstNodeResult.h */,
-				4C0F848C1958CC4B00EF4BC9 /* MTAstNodeResult.m */,
 			);
 			name = Nodes;
 			sourceTree = "<group>";
@@ -235,6 +217,32 @@
 				4CF132121960858700659446 /* MTAstNodeBoolValue.m */,
 			);
 			name = Types;
+			sourceTree = "<group>";
+		};
+		4CF132151960A22B00659446 /* Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				4CF1320F1960855000659446 /* Types */,
+				4C1044BC195688DD00820EFE /* MTAstNodeFlow.h */,
+				4C1044BD195688DD00820EFE /* MTAstNodeFlow.m */,
+				4C1044D11956B57F00820EFE /* MTAstNodeArithmetic.h */,
+				4C1044D21956B57F00820EFE /* MTAstNodeArithmetic.m */,
+				4C1044CD1956B22D00820EFE /* MTAstNodeComparson.h */,
+				4C1044CE1956B22D00820EFE /* MTAstNodeComparson.m */,
+				4C1044C41956891200820EFE /* MTAstNodeSymbolReference.h */,
+				4C1044C51956891200820EFE /* MTAstNodeSymbolReference.m */,
+				4C0F848B1958CC4B00EF4BC9 /* MTAstNodeResult.h */,
+				4C0F848C1958CC4B00EF4BC9 /* MTAstNodeResult.m */,
+				4C1044C81956893400820EFE /* MTAstNodeSymbolAsignNumber.h */,
+				4C1044C91956893400820EFE /* MTAstNodeSymbolAsignNumber.m */,
+				4C0F84871958C91800EF4BC9 /* MTAstNodeExpression.h */,
+				4C0F84881958C91800EF4BC9 /* MTAstNodeExpression.m */,
+				4C0F847F1958C34800EF4BC9 /* MTAstNodeStatement.h */,
+				4C0F84801958C34800EF4BC9 /* MTAstNodeStatement.m */,
+				4C0F84831958C35C00EF4BC9 /* MTAstNodeStatementList.h */,
+				4C0F84841958C35C00EF4BC9 /* MTAstNodeStatementList.m */,
+			);
+			name = Subclasses;
 			sourceTree = "<group>";
 		};
 		4CF3C58C194F80F600E5705B = {

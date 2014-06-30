@@ -11,7 +11,7 @@
 
 @implementation MTAstNodeExpression
 
-- (id)initWithNode:(MTAbstractSyntaxTree *)node {
+- (id)initWithExpression:(MTAbstractSyntaxTree *)node {
     MTPair *pair = [MTPair pairWithLeft:node andRight:nil];
     self = [super initWithNodeType:SCNodeTypeExpression andValues:pair];
     if (self) {

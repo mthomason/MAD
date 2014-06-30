@@ -11,13 +11,6 @@
 
 #import "MTAbstractSyntaxTree.h"
 
-typedef NS_ENUM(NSInteger, SCArithmetic) {
-    SCArithmeticAdd,
-    SCArithmeticSubtract,
-    SCArithmeticMultiply,
-    SCArithmeticDivide,
-};
-
 @interface MTAstNodeArithmetic : MTAbstractSyntaxTree
 
 - (id)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values;

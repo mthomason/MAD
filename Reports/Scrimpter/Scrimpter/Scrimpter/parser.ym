@@ -4,20 +4,8 @@
     #import "MTPair.h"
     #import "MADSymbol.h"
     #import "MADSymbolReference.h"
-    #import "MTAstNodeComparson.h"
     #import "MTAbstractSyntaxTree.h"
-    #import "MTAstNodeArithmetic.h"
-    #import "MTAstNodeNumberValue.h"
     #import "MTAstNodeFunctionCallEmbedded.h"
-    #import "MTAstNodeSymbolReference.h"
-    #import "MTAstNodeSymbolAsignNumber.h"
-    #import "MTAstNodeFlow.h"
-    #import "MTAstNodeExpression.h"
-    #import "MTAstNodeStatement.h"
-    #import "MTAstNodeResult.h"
-    #import "MTAstNodeStatementList.h"
-    #import "MTAstNodeStringValue.h"
-    #import "MTAstNodeBoolValue.h"
     #import "MADValue.h"
     
     //#define YYDEBUG 1
@@ -29,27 +17,26 @@
 
     MADSymbol *sc_symbol_for_key(NSString *symbol);
 
-    MTAstNodeArithmetic *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue);
-    MTAstNodeComparson *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue);
-    MTAstNodeFunctionCallEmbedded *nodeForEmbeddedFunctionAndValues(SCFunctionType function, NSArray *values);
-    MTAstNodeNumberValue *nodeForNumber(double n);
-    MTAstNodeSymbolReference *nodeForSymbolReference(MADSymbolReference *symbolReference);
-    MTAstNodeSymbolAsignNumber *nodeForAssigningValueToSymbol(MADSymbol *symbol, MTAbstractSyntaxTree *value);
-    MTAstNodeSymbolAsignNumber *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value);
-    MTAstNodeFlow *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue);
-    MTAstNodeExpression *nodeForExpression(MTAbstractSyntaxTree *expression);
-    
-    MTAstNodeStatement *nodeForStatement(MTAbstractSyntaxTree *statement);
-    MTAstNodeStringValue *nodeForString(NSString *s);
-    MTAstNodeBoolValue *nodeForBool(bool b);
+    MTAbstractSyntaxTree *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue);
+    MTAbstractSyntaxTree *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue);
+    MTAbstractSyntaxTree *nodeForNumber(double n);
+    MTAbstractSyntaxTree *nodeForSymbolReference(MADSymbolReference *symbolReference);
+    MTAbstractSyntaxTree *nodeForAssigningValueToSymbol(MADSymbol *symbol, MTAbstractSyntaxTree *value);
+    MTAbstractSyntaxTree *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value);
+    MTAbstractSyntaxTree *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue);
 
-    MTAstNodeResult *nodeForResult(MTAbstractSyntaxTree *expression);
+    MTAstNodeFunctionCallEmbedded *nodeForEmbeddedFunctionAndValues(SCFunctionType function, NSArray *values);
+    MTAbstractSyntaxTree *nodeForExpression(MTAbstractSyntaxTree *expression);
+    MTAbstractSyntaxTree *nodeForStatement(MTAbstractSyntaxTree *statement);
+    MTAbstractSyntaxTree *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAbstractSyntaxTree *list);
+
+    MTAbstractSyntaxTree *nodeForString(NSString *s);
+    MTAbstractSyntaxTree *nodeForBool(bool b);
+
+    MTAbstractSyntaxTree *nodeForResult(MTAbstractSyntaxTree *expression);
     
-    
-    
-    MTAstNodeStatementList *nodeForStatementAndList(MTAstNodeStatement *statement, MTAstNodeStatementList *list);
+
     //int yydebug = 1;
-    
 
 %}
 
@@ -132,8 +119,8 @@ scrimpt:                                        { sc_return(nil); }
     | list                                      { sc_return($1); }
 ;
 
-list: stmt list                                 { $$ = (MTAbstractSyntaxTree *)nodeForStatementAndList(nodeForStatement((MTAstNodeStatement *)$1), (MTAstNodeStatementList *)$2); }
-    | stmt                                      { $$ = (MTAbstractSyntaxTree *)nodeForStatement($1); }
+list: stmt list                                 { $$ = nodeForStatementAndList(nodeForStatement($1), $2); }
+    | stmt                                      { $$ = nodeForStatement($1); }
 ;
 
 stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2, $4, nil); }
@@ -181,53 +168,53 @@ term : NUMBER                                   { $$ = nodeForNumber($1); }
 
 %%
 
-MTAstNodeResult *nodeForResult(MTAbstractSyntaxTree *expression) {
-    MTAstNodeResult *node = [[MTAstNodeResult alloc] initWithExpression:expression];
+MTAbstractSyntaxTree *nodeForResult(MTAbstractSyntaxTree *expression) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithResult:expression];
     return node;
 }
 
-MTAstNodeStatement *nodeForStatement(MTAbstractSyntaxTree *statement) {
-    MTAstNodeStatement *node = [[MTAstNodeStatement alloc] initWithNode:statement];
+MTAbstractSyntaxTree *nodeForStatement(MTAbstractSyntaxTree *statement) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithStatement:statement];
     return node;
 }
 
-MTAstNodeExpression *nodeForExpression(MTAbstractSyntaxTree *expression) {
-    MTAstNodeExpression *node = [[MTAstNodeExpression alloc] initWithNode:expression];
+MTAbstractSyntaxTree *nodeForExpression(MTAbstractSyntaxTree *expression) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithExpression:expression];
     return node;
 }
 
-MTAstNodeFlow *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue) {
-    MTAstNodeFlow *node = [[MTAstNodeFlow alloc] initConditionalWithIfList:ifValue thenList:thenValue andCondition:expression];
+MTAbstractSyntaxTree *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initConditionalWithIfList:ifValue thenList:thenValue andCondition:expression];
     return node;
 }
 
-MTAstNodeSymbolAsignNumber *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value) {
+MTAbstractSyntaxTree *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value) {
     MADSymbol *sy = sc_symbol_for_key(symbolReference.symbol);
     return nodeForAssigningValueToSymbol(sy, value);
 }
 
-MTAstNodeSymbolAsignNumber *nodeForAssigningValueToSymbol(MADSymbol *symbol, MTAbstractSyntaxTree *value) {
-    MTAstNodeSymbolAsignNumber *result = [[MTAstNodeSymbolAsignNumber alloc] initWithSymbol:symbol andValue: value];
+MTAbstractSyntaxTree *nodeForAssigningValueToSymbol(MADSymbol *symbol, MTAbstractSyntaxTree *value) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithSymbol:symbol andValue: value];
     return result;
 }
 
-MTAstNodeSymbolReference *nodeForSymbolReference(MADSymbolReference *symbolReference) {
-    MTAstNodeSymbolReference *node = [[MTAstNodeSymbolReference alloc] initWithSymbolReference:symbolReference];
+MTAbstractSyntaxTree *nodeForSymbolReference(MADSymbolReference *symbolReference) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithSymbolReference:symbolReference];
     return node;
 }
 
-MTAstNodeNumberValue *nodeForNumber(double n) {
-    MTAstNodeNumberValue *result = [[MTAstNodeNumberValue alloc] initWithNumber:n];
+MTAbstractSyntaxTree *nodeForNumber(double n) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithNumber:n];
     return result;
 }
 
-MTAstNodeBoolValue *nodeForBool(bool b) {
-    MTAstNodeBoolValue *result = [[MTAstNodeBoolValue alloc] initWithBool:b];
+MTAbstractSyntaxTree *nodeForBool(bool b) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithBool:b];
     return result;
 }
 
-MTAstNodeStringValue *nodeForString(NSString *s) {
-    MTAstNodeStringValue *result = [[MTAstNodeStringValue alloc] initWithString:s];
+MTAbstractSyntaxTree *nodeForString(NSString *s) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithString:s];
     return result;
 }
 
@@ -237,20 +224,20 @@ MTAstNodeFunctionCallEmbedded *nodeForEmbeddedFunctionAndValues(SCFunctionType f
     return result;
 }
 
-MTAstNodeArithmetic *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
+MTAbstractSyntaxTree *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
     MTPair *values = [MTPair pairWithLeft:leftValue andRight:rightValue];
-    MTAstNodeArithmetic *result = [[MTAstNodeArithmetic alloc] initWithArithmeticProcedure:arithmeticType withValues:values];
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithArithmeticProcedure:arithmeticType withValues:values];
     return result;
 }
 
-MTAstNodeComparson *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
+MTAbstractSyntaxTree *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
     MTPair *values = [MTPair pairWithLeft:leftValue andRight:rightValue];
-    MTAstNodeComparson *result = [[MTAstNodeComparson alloc] initWithComparson:comparsonType ofValues:values];
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithComparson:comparsonType ofValues:values];
     return result;
 }
 
-MTAstNodeStatementList *nodeForStatementAndList(MTAstNodeStatement *statement, MTAstNodeStatementList *list) {
-    MTAstNodeStatementList *node = [[MTAstNodeStatementList alloc] initWithStatement:statement andList:list];
+MTAbstractSyntaxTree *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAbstractSyntaxTree *list) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithStatement:statement andList:list];
     return node;
 }
 

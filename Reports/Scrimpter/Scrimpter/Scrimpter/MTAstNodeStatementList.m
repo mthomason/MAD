@@ -11,7 +11,7 @@
 
 @implementation MTAstNodeStatementList
 
-- (id)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAstNodeStatementList *)list {
+- (id)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAbstractSyntaxTree *)list {
     MTPair *pair = [MTPair pairWithLeft:statement andRight:list];
     self = [super initWithNodeType:SCNodeTypeStatementList andValues:pair];
     if (self) {

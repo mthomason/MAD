@@ -318,4 +318,13 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+- (void)testComment {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"i = 11;\n"
+                       @"//i = 111;\n"
+                       @"return i;";
+    BOOL success = [self testScript:script forValue:@(11) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 @end

@@ -41,7 +41,14 @@ typedef NS_ENUM(NSUInteger, SCCompareson) {
     SCComparesonLessThanOrEqualTo,
 };
 
-@class MTPair, MADValue;
+typedef NS_ENUM(NSInteger, SCArithmetic) {
+    SCArithmeticAdd,
+    SCArithmeticSubtract,
+    SCArithmeticMultiply,
+    SCArithmeticDivide,
+};
+
+@class MTPair, MADValue, MADSymbolReference, MADSymbol;
 
 @interface MTAbstractSyntaxTree : MTTree
 
@@ -52,6 +59,44 @@ typedef NS_ENUM(NSUInteger, SCCompareson) {
 
 - (id)initWithNodeType:(SCNodeType)type andValues:(MTPair *)values;
 - (MADValue *)evaluate;
+
+
+//MTAstNodeFlow
+- (instancetype)initConditionalWithIfList:(MTAbstractSyntaxTree *)iflist thenList:(MTAbstractSyntaxTree *)thenlist andCondition:(MTAbstractSyntaxTree *)condition;
+- (instancetype)initLoopWithList:(MTAbstractSyntaxTree *)list andCondition:(MTAbstractSyntaxTree *)condition;
+
+//MTAstArithmetic
+- (instancetype)initWithArithmeticProcedure:(SCArithmetic)procedure withValues:(MTPair *)values;
+
+//MTAstNodeComparson
+- (instancetype)initWithComparson:(SCCompareson)comparson ofValues:(MTPair *)values;
+
+//MTAstNodeNumberValue
+- (instancetype)initWithNumber:(double)number;
+
+//MTAstNodeStringValue
+- (instancetype)initWithString:(NSString *)string;
+
+//MTAstNodeBoolValue
+- (instancetype)initWithBool:(bool)b;
+
+//MTAstNodeSymbolReference
+- (instancetype)initWithSymbolReference:(MADSymbolReference *)symbol;
+
+//MTAstNodeResult
+- (instancetype)initWithResult:(MTAbstractSyntaxTree *)expression;
+
+//MTAstNodeSymbolAsignNumber
+- (instancetype)initWithSymbol:(MADSymbol *)symbol andValue:(MTAbstractSyntaxTree *)value;
+
+//MTAstNodeExpression
+- (instancetype)initWithExpression:(MTAbstractSyntaxTree *)node;
+
+//MTAstNodeStatement
+- (instancetype)initWithStatement:(MTAbstractSyntaxTree *)node;
+
+//MTAstNodeStatementList
+- (instancetype)initWithStatement:(MTAbstractSyntaxTree *)statement andList:(MTAbstractSyntaxTree *)list;
 
 @end
 

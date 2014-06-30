@@ -10,7 +10,7 @@
 
 @implementation MTAstNodeResult
 
-- (id)initWithExpression:(MTAbstractSyntaxTree *)expression {
+- (id)initWithResult:(MTAbstractSyntaxTree *)expression {
     self = [super initWithLeftTree:expression andRightTree:nil];
     if (self) {
         [self setNodetype:SCNodeTypeResult];

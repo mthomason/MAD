@@ -13,7 +13,7 @@
 
 @interface MTAstNodeResult : MTAbstractSyntaxTree
 
-- (id)initWithExpression:(MTAbstractSyntaxTree *)expression;
+- (id)initWithResult:(MTAbstractSyntaxTree *)expression;
 
 @end
 
