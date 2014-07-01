@@ -400,6 +400,34 @@
     XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
 }
 
+- (void)testConcatByStringAddingSoftFail {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return \"Michael\" +\" \" + \"Thomason\";";
+    BOOL success = [self testScript:script forValue:@(0) error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testConcat {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return \"Michael\".concat(\" \").concat(\"Thomason\");";
+    BOOL success = [self testScript:script forValue:@("Michael Thomason") error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testConcatUPPER {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return \"Michael\".concat(\" \").concat(\"Thomason\").upper();";
+    BOOL success = [self testScript:script forValue:@("MICHAEL THOMASON") error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
+- (void)testConcatLower {
+    __autoreleasing NSError *error = nil;
+    NSString *script = @"return \"Michael\".concat(\" \").concat(\"Thomason\").upper().lower();";
+    BOOL success = [self testScript:script forValue:@("michael thomason") error:&error];
+    XCTAssert(success, @"%s failed with error %@.", __PRETTY_FUNCTION__, error);
+}
+
 - (void)testError {
     __autoreleasing NSError *error = nil;
     NSString *script = @"$.$...i = 11;\n"

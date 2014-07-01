@@ -139,8 +139,7 @@ stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2
     | ';'                                       { $$ = nil; }
 ;
 
-exp : expstr                                    { $$ = $1; }
-    | expnum                                    { $$ = $1; }
+exp : expnum                                    { $$ = $1; }
     | expbool                                   { $$ = $1; }
     | ERROR                                     { YYABORT; }
     | '(' exp ')'                               { $$ = nodeForExpression($2); }
@@ -155,8 +154,8 @@ explist: exp
 expbool: BOOLEAN                                { $$ = nodeForBool($1); }
 ;
 
-expstr: STRING                                  { $$ = nodeForString($1); }
-;
+    //expstr: STRING                                  { $$ = nodeForString($1); }
+    //;
 
 expnum : '(' expnum ')'                         { $$ = nodeForExpression($2); }
     | factor                                    { $$ = nodeForExpression($1); }
@@ -171,6 +170,7 @@ factor : term                                   { $$ = nodeForExpression($1); }
 ;
 
 term : NUMBER                                   { $$ = nodeForNumber($1); }
+    | STRING                                    { $$ = nodeForString($1); }
     | IDENTIFIER                                { $$ = nodeForSymbolReference($1); }
     | '|' term                                  { $$ = nodeForUniaryMinus($2); }
     | '-' term                                  { $$ = nodeForUniaryMinus($2); }

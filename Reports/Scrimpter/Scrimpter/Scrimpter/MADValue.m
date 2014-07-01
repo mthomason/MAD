@@ -12,6 +12,7 @@
 
 @property (nonatomic, assign, readwrite) SCVarableType type;
 @property (nonatomic, retain, readwrite) id value;
+@property (nonatomic, retain) NSNumberFormatter *numberFormatterDecimalLazy;
 
 @end
 
@@ -29,12 +30,10 @@
 - (double)doubleValue {
     double r;
     switch (self.type) {
-        case SCVarableTypeString: {
-            NSNumberFormatter *nf = [NSNumberFormatter new];
-            [nf setNumberStyle:NSNumberFormatterDecimalStyle];
-            r = [[nf numberFromString:[self value]] doubleValue];
+        case SCVarableTypeString:
+            r = [[[self numberFormatterDecimal] numberFromString:[self value]] doubleValue];
             break;
-             }
+
         case SCVarableTypeBoolean:
             r = [[self value] boolValue] ? 0 : 1.0;
             break;
@@ -49,6 +48,43 @@
             break;
     }
     return r;
+}
+
+- (NSString *)stringValue {
+    NSString *result;
+
+    switch (self.type) {
+
+        case SCVarableTypeString:
+            result = [self value];
+            break;
+            
+        case SCVarableTypeBoolean:
+            result = [[self value] boolValue] ? NSLocalizedString(@"YES", @"YES") : NSLocalizedString(@"NO", @"NO");
+            break;
+            
+        case SCVarableTypeDouble:
+            result = [[self numberFormatterDecimal] stringFromNumber:[self value]];
+            break;
+
+        case SCVarableTypeNull:
+            result = @"NULL";
+            break;
+            
+        default:
+            result = @"NULL";
+            break;
+    }
+    return result;
+}
+
+- (NSNumberFormatter *)numberFormatterDecimal {
+    if ([self numberFormatterDecimalLazy] == nil) {
+        NSNumberFormatter *nf = [NSNumberFormatter new];
+        [nf setNumberStyle:NSNumberFormatterDecimalStyle];
+        [self setNumberFormatterDecimalLazy:nf];
+    }
+    return [self numberFormatterDecimalLazy];
 }
 
 + (id)value:(id)value withType:(SCVarableType)type {

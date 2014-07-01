@@ -24,6 +24,7 @@ typedef NS_ENUM(NSUInteger, SCFunctionTypeBoolean) {
 typedef NS_ENUM(NSUInteger, SCFunctionTypeString) {
     SCFunctionTypeStringUpper,
     SCFunctionTypeStringLower,
+    SCFunctionTypeStringConcat,
 };
 
 typedef NS_ENUM(NSUInteger, SCFunctionTypeNumber) {

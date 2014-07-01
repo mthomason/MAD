@@ -28,27 +28,51 @@
         NSString *fn = [NSString stringWithString:functionName];
         [self setFunctionName:fn];
 
-        if ([functionName isEqualToString:@"power"]) {
+        if ([functionName isEqualToString:@"concat"] || [functionName isEqualToString:@"concatenate"]) {
+
+            [self setClass:SCFunctionClassString];
+            [self setFunction:SCFunctionTypeStringConcat];
+            
+        } else if ([functionName isEqualToString:@"upper"]) {
+            
+            [self setClass:SCFunctionClassString];
+            [self setFunction:SCFunctionTypeStringUpper];
+            
+        } else if ([functionName isEqualToString:@"lower"]) {
+
+            [self setClass:SCFunctionClassString];
+            [self setFunction:SCFunctionTypeStringLower];
+            
+        } else if ([functionName isEqualToString:@"power"]) {
 
             [self setClass:SCFunctionClassNumber];
             [self setFunction:SCFunctionTypeNumericPower];
             
         } else if ([functionName isEqualToString:@"floor"]) {
+            
             [self setClass:SCFunctionClassNumber];
             [self setFunction:SCFunctionTypeNumericFloor];
             
         } else if ([functionName isEqualToString:@"ceiling"]) {
+            
             [self setClass:SCFunctionClassNumber];
             [self setFunction:SCFunctionTypeNumericCeiling];
+        
         } else if ([functionName isEqualToString:@"truncate"]) {
+            
             [self setClass:SCFunctionClassNumber];
             [self setFunction:SCFunctionTypeNumericTruncate];
+
         } else if ([functionName isEqualToString:@"mod"]) {
+        
             [self setClass:SCFunctionClassNumber];
             [self setFunction:SCFunctionTypeNumericModulus];
+
         } else if ([functionName isEqualToString:@"round"]) {
+
             [self setClass:SCFunctionClassNumber];
             [self setFunction:SCFunctionTypeNumericRound];
+
         }
     }
     return self;
@@ -132,7 +156,28 @@
 }
 
 - (MADValue *)evaluateString {
-    return nil;
+    
+    NSString *rs;
+    switch ((SCFunctionTypeString)[self function]) {
+        
+        case SCFunctionTypeStringConcat:
+            rs = [[[[self leftNode] evaluate] stringValue] stringByAppendingString:[[[self rightNode] evaluate] stringValue]];
+            break;
+        
+        case SCFunctionTypeStringLower:
+            rs = [[[[self leftNode] evaluate] stringValue] lowercaseString];
+            break;
+
+        case SCFunctionTypeStringUpper:
+            rs = [[[[self leftNode] evaluate] stringValue] uppercaseString];
+            break;
+            
+        default:
+            rs = [[[self leftNode] evaluate] stringValue];
+            break;
+    }
+    return [MADValue value: rs
+                  withType: SCVarableTypeString];
 }
 
 - (MADValue *)evaluateBoolean {
