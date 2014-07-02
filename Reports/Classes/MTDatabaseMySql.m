@@ -153,7 +153,8 @@
             
             if (successConnection) {
                 
-                NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
+                NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
+                //NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                 MTDataTable *dataTable = [myFetch fetchWithCommand:command onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
@@ -166,7 +167,7 @@
                     [resultsDictionary setObject:field forKey:safeId];
                 }
                 
-                NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", tableName];
+                NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
                 MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
                 MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 onConnection:conn];
                 
