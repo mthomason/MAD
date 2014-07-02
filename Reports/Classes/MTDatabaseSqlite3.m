@@ -571,9 +571,75 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     completion(success, error);
 }
 
-//+ (id)currentObjectForStatement:(sqlite3_stmt *)statement and {
-    
-//}
+
++ (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type {
+    id columnValue;
+    switch (type) {
+        case MTDataTypeLong:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeLongLong:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeInt24:
+        case MTDataTypeInteger:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeShort:
+            columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
+            break;
+        case MTDataTypeImage:
+        case MTDataTypeBlob:
+            columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
+                                         length: sqlite3_column_bytes(statement, columnCounter)];
+            break;
+        case MTDataTypeFloat:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeNumber:
+        case MTDataTypeDouble:
+        case MTDataTypeDecimal:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeBit:
+        case MTDataTypeVarChar:
+        case MTDataTypeString:
+        case MTDataTypeEnum:
+        case MTDataTypeYear:
+        case MTDataTypeSet: {
+            const unsigned char *text = sqlite3_column_text(statement, columnCounter);
+            if (text == NULL) {
+                columnValue = [NSNull null];
+            } else {
+                columnValue = [NSString stringWithUTF8String:(const char *) text];
+            }
+            break;
+        }
+        case MTDataTypeUnknown:
+        case MTDataTypeNull: {
+            columnValue = [NSNull null];
+            break;
+        }
+        case MTDataTypeTimeStamp:
+        case MTDataTypeTime:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        default: {
+            NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
+            if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
+                const unsigned char *text = sqlite3_column_text(statement, columnCounter);
+                if (text == NULL) {
+                    columnValue = [NSNull null];
+                } else {
+                    columnValue = [NSString stringWithUTF8String:(const char *) text];
+                }
+            }
+            break;
+        }
+    }
+    return columnValue;
+}
 
 - (void)cleanupBulkInsert {
     BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);

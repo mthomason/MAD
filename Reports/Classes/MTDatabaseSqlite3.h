@@ -44,6 +44,8 @@ int compare_string_utf8_localized_desc_collation(void* data, int len1, const voi
 + (NSString *)nativeTypeForDataType:(MTDataType)dataType;
 + (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending;
 
++ (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type;
+
 @end
 
 #endif
