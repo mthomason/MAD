@@ -895,11 +895,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
 
         MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
-                                                                               andLayout:[doc activeDocument]];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
-
-        [printPageRender writeToPdf:temporaryFile];
+        [doc writeToPdf:temporaryFile];
         
         __weak MTReportViewerController *blockself2 = blockself;
         dispatch_sync(dispatch_get_main_queue(), ^{

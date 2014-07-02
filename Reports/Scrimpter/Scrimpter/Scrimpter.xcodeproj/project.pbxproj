@@ -15,8 +15,7 @@
 		4C0F848A1958C91800EF4BC9 /* MTAstNodeExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F84881958C91800EF4BC9 /* MTAstNodeExpression.m */; };
 		4C0F848D1958CC4B00EF4BC9 /* MTAstNodeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F848C1958CC4B00EF4BC9 /* MTAstNodeResult.m */; };
 		4C0F848E1958CC4B00EF4BC9 /* MTAstNodeResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F848C1958CC4B00EF4BC9 /* MTAstNodeResult.m */; };
-		4C1044AB1956764F00820EFE /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1044AA1956764F00820EFE /* libMTDataStrutures.a */; };
-		4C1044AC1956765A00820EFE /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1044AA1956764F00820EFE /* libMTDataStrutures.a */; };
+		4C1044AC1956765A00820EFE /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1044AA1956764F00820EFE /* libMTDataStrutures.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4C1044B0195683F000820EFE /* MTAbstractSyntaxTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044AF195683F000820EFE /* MTAbstractSyntaxTree.m */; };
 		4C1044B1195683F000820EFE /* MTAbstractSyntaxTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044AF195683F000820EFE /* MTAbstractSyntaxTree.m */; };
 		4C1044B5195687B200820EFE /* MTAstNodeFunctionCallEmbedded.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044B4195687B200820EFE /* MTAstNodeFunctionCallEmbedded.m */; };
@@ -163,7 +162,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C1044AB1956764F00820EFE /* libMTDataStrutures.a in Frameworks */,
 				4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

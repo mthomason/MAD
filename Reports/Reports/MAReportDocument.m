@@ -43,6 +43,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSThread+Extras.h"
 #import "MADocumentState.h"
 
+#import "MTPaper.h"
+
 NSString * const MTReportPageFirstRowId = @"MTReportPageFirstRowId";
 NSString * const MTReportPageLastRowId = @"MTReportPageLastRowId";
 NSString * const MTReportSectionType = @"MTReportSectionType";
@@ -113,6 +115,24 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             }
     }
     return [self document];
+}
+
+- (void)writeToPdf:(NSURL *)filepath {
+    NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
+    CGRect letterRect = [MTPaper rectLetter];
+    [[self reportFormatter] formatForSize:letterRect.size];
+    
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
+    NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
+    UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
+    
+    for (NSUInteger i=0; i<numberOfPages; i++) {
+        UIGraphicsBeginPDFPageWithInfo(letterRect, nil);
+        [printPageRender drawPageAtIndex:i inRect:letterRect];
+    }
+    
+    // Close the PDF context and write the contents out.
+    UIGraphicsEndPDFContext();
 }
 
 //Add a new connection to the report

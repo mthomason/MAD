@@ -10,9 +10,8 @@
 #define Reports_MTElementView_h
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 
-@class MTElementView, MTBarcode;
+@class MTElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 
 @protocol MTElementViewDelegate
 - (void)didTouchElementView:(MTElementView *)elementView;

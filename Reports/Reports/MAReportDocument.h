@@ -53,6 +53,8 @@ extern NSString * const MTReportGroupFooter;
 + (NSArray *)cachedFilesForDocumentWithHandle:(NSString *)handle;
 
 - (void)regenThumbnail;
+- (void)writeToPdf:(NSURL *)url;
+
 - (RptqDocument *)activeDocument;
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention

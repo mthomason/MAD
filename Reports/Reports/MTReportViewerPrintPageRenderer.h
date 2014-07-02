@@ -17,7 +17,6 @@
 
 - (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter;
 - (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter andPrintableAreaSize:(CGSize)printableAreaSize;
-- (void)writeToPdf:(NSURL *)filepath;
 - (UIImage *)thumbnail;
 
 @end

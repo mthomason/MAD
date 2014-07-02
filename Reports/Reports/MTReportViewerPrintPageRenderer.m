@@ -105,22 +105,6 @@
     }
 }
 
-- (void)writeToPdf:(NSURL *)filepath {
-    NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
-    CGRect letterRect = [MTPaper rectLetter];
-    [[self reportFormatter] formatForSize:letterRect.size];
-    NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
-    UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
-    
-    for (NSUInteger i=0; i<numberOfPages; i++) {
-        UIGraphicsBeginPDFPageWithInfo(letterRect, nil);
-        [self drawPageAtIndex:i inRect:letterRect];
-    }
-    
-    // Close the PDF context and write the contents out.
-    UIGraphicsEndPDFContext();
-}
-
 - (int)getRandomNumberBetween:(int)from to:(int)to {
     return (int)from + arc4random() % (to-from+1);
 }
