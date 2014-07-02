@@ -638,7 +638,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (id)dataForGroupKeys:(NSArray *)keys {
-    return [[[self query] datatable] objectsForGroupKeys:keys];
+    NSArray *results = [[[self query] datatable] objectsForGroupKeys:keys];
+    return [NSArray arrayWithArray:results];
 }
 
 /*

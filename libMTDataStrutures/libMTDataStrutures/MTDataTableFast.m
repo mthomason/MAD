@@ -922,23 +922,33 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     }
 }
 
-- (int)columnIndexForKey:(NSString *)key {
+- (NSUInteger)columnIndexForKey:(NSString *)key {
     return [[self columnKeys] indexOfObject:key];
 }
 
-- (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(NSUInteger)columnIndex {
+- (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
     MTDataType aggregateResultType = mad_sqlite3_datatype_for_sqlite3_type(sqlite3_column_type(statement, columnIndex));
-    return [self object:statement forColumnNumber:columnIndex withType:aggregateResultType];
+    return [MTDatabaseSqlite3 object:statement forColumnNumber:columnIndex withType:aggregateResultType];
 }
 
-- (id)object:(sqlite3_stmt *)statement forColumnNumber:(NSUInteger)columnCounter withType:(MTDataType)type {
+/*
+- (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type {
     id columnValue;
     switch (type) {
         case MTDataTypeLong:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
         case MTDataTypeLongLong:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeInt24:
         case MTDataTypeInteger:
             columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
             break;
+        case MTDataTypeShort:
+            columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
+            break;
+        case MTDataTypeImage:
         case MTDataTypeBlob:
             columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
                                          length: sqlite3_column_bytes(statement, columnCounter)];
@@ -946,13 +956,17 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         case MTDataTypeFloat:
             columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
             break;
+        case MTDataTypeNumber:
         case MTDataTypeDouble:
-            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
-            break;
         case MTDataTypeDecimal:
             columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
             break;
-        case MTDataTypeString: {
+        case MTDataTypeBit:
+        case MTDataTypeVarChar:
+        case MTDataTypeString:
+        case MTDataTypeEnum:
+        case MTDataTypeYear:
+        case MTDataTypeSet: {
             const unsigned char *text = sqlite3_column_text(statement, columnCounter);
             if (text == NULL) {
                 columnValue = [NSNull null];
@@ -961,12 +975,18 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
             }
             break;
         }
+        case MTDataTypeUnknown:
         case MTDataTypeNull: {
             columnValue = [NSNull null];
             break;
         }
+        case MTDataTypeTimeStamp:
+        case MTDataTypeTime:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
         default: {
-            NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3");
+            NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", type);
             if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                 const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {
@@ -979,14 +999,14 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         }
     }
     return columnValue;
-}
+}*/
 
 - (id)currentObject:(sqlite3_stmt *)statement {
     NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
     int columnCounter = 0;
     for (id key in [self columnKeys]) {
         MTDataColumn *dataColumn = [self columns][key];
-        id columnValue = [self object:statement forColumnNumber:columnCounter withType:[[dataColumn columnType] integerValue]];
+        id columnValue = [MTDatabaseSqlite3 object:statement forColumnNumber:columnCounter withType:[[dataColumn columnType] integerValue]];
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];
         }

@@ -54,6 +54,7 @@
 
 #import "MTBarcode.h"
 #import "MTFont.h"
+#import "MTMath.h"
 
 @interface MTReportViewerPrintPageRenderer ()
 
@@ -105,14 +106,6 @@
     }
 }
 
-- (int)getRandomNumberBetween:(int)from to:(int)to {
-    return (int)from + arc4random() % (to-from+1);
-}
-
-- (NSInteger)numberOfPages {
-    return [[self reportFormatter] numberOfPages];
-}
-
 - (UIImage *)thumbnail {
     
     CGRect letterRect = [MTPaper rectLetter];
@@ -160,7 +153,7 @@
 
     NSInteger numberOfZigs = pathRect.size.height / zigDivisor;
     for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
-        int zigNumber = [self getRandomNumberBetween: 0 to: topRandNumber];
+        NSInteger zigNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
         CGFloat zigReal = zigNumber / scale;
         CGFloat zigDistance = pow(zigNumber, 1.0001) + zigReal;
         CGFloat zigX = topRightPoint.x - zigDistance;
@@ -186,7 +179,7 @@
     NSInteger numberOfZags = pathRect.size.height / zagDivisor;
     for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
         
-        int zagNumber = [self getRandomNumberBetween: 0 to: topRandNumber];
+        NSInteger zagNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
         CGFloat zagReal = zagNumber / scale;
         CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
         CGFloat zagDistance = pow(zagNumber, 1.0001) + zagReal;
@@ -211,13 +204,6 @@
     CGImageRelease(imageRef);
     UIGraphicsEndImageContext();
     return croppedImage;
-}
-
-#pragma mark - UIPrintPageRenderer Overrides
-
-
-- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-    [self drawPageAtIndex:index inRect:pageRect withTransparentBackground:NO];
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
@@ -311,7 +297,7 @@
             NSArray *groupData = nil;
             NSInteger groupDataCount;
 
-            NSDictionary *dataForPageIndex = [[self reportFormatter] resultsForPageIndex:pageIndex];
+            NSDictionary *dataForPageIndex = [NSDictionary dictionaryWithDictionary:[[self reportFormatter] resultsForPageIndex:pageIndex]];
             NSNumber *detailRowId = nil;
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
@@ -407,7 +393,7 @@
                         
                         if (typeDocumentSection == MNSDocumentSectionTypeBody) {
                             if (readGroupIndex < [groupData count]) {
-                                rowData = dataForPageIndex[detailRowId];// [dataForPageIndexEnumerator nextObject];
+                                rowData = [NSDictionary dictionaryWithDictionary: dataForPageIndex[detailRowId]];// [dataForPageIndexEnumerator nextObject];
                             }
                             readGroupIndex++;
                         }
@@ -613,7 +599,7 @@
                                     
                                     if (drawingObject == nil) {
                                         
-                                        NSDictionary *attributes = [self attributesForDocumentObject:item];
+                                        NSDictionary *attributes = [item attributesForDrawingText];
                                         
                                         // FIXME: This hack gets around known iOS7 bug.
                                         //          Want to draw the fucking rect without
@@ -792,222 +778,14 @@
     } while (logoRect.origin.y + logoRect.size.height < pageRect.size.height);
 }
 
-- (NSDictionary *)attributesForDocumentObject:(RptqDocumentObject *)documentObject {
-    MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname]
-                                         andPointSize:[[documentObject fontsize] floatValue]
-                                               isBold:[[documentObject bold] boolValue]
-                                             isItalic:[[documentObject italic] boolValue]];
-    UIFont *customFont = [font font];
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+#pragma mark - UIPrintPageRender
 
-    // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    switch ([[documentObject horizontalAlignment] integerValue]) {
-        case MTHorizontalAlignmentLeft:
-            [paragraphStyle setAlignment:NSTextAlignmentLeft];
-            break;
-        case MTHorizontalAlignmentRight:
-            [paragraphStyle setAlignment:NSTextAlignmentRight];
-            break;
-        case MTHorizontalAlignmentCenter:
-            [paragraphStyle setAlignment:NSTextAlignmentCenter];
-            break;
-        case MTHorizontalAlignmentJustified:
-            [paragraphStyle setAlignment:NSTextAlignmentJustified];
-            break;
-        case MTHorizontalAlignmentNatrual:
-            [paragraphStyle setAlignment:NSTextAlignmentNatural];
-            break;
-        default:
-            [paragraphStyle setAlignment:NSTextAlignmentLeft];
-            break;
-    }
-    
-    NSNumber *baselineOffset = @(0.0000f);
-    NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    NSNumber *strikethroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-    return  @{
-              NSFontAttributeName : customFont,
-              NSBaselineOffsetAttributeName : baselineOffset,
-              NSUnderlineStyleAttributeName : underlineStyle,
-              NSStrikethroughStyleAttributeName : strikethroughStyle,
-              NSParagraphStyleAttributeName: paragraphStyle
-              };
+- (NSInteger)numberOfPages {
+    return [[self reportFormatter] numberOfPages];
 }
 
-- (NSDictionary *)coreTextAttributesForDocumentObject:(RptqDocumentObject *)documentObject {
-    MTFont *font = [[MTFont alloc] initWithFamilyName:[documentObject fontname] andPointSize:[[documentObject fontsize] floatValue] isBold:[[documentObject bold] boolValue] isItalic:[[documentObject italic] boolValue]];
-    CTFontRef customFont = [font coreTextFont];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    CTTextAlignment alignment;
-    switch ([[documentObject horizontalAlignment] integerValue]) {
-        case MTHorizontalAlignmentLeft:
-            alignment = kCTLeftTextAlignment;
-            break;
-        case MTHorizontalAlignmentRight:
-            alignment = kCTRightTextAlignment;
-            break;
-        case MTHorizontalAlignmentCenter:
-            alignment = kCTCenterTextAlignment;
-            break;
-        case MTHorizontalAlignmentJustified:
-            alignment = kCTJustifiedTextAlignment;
-            break;
-        case MTHorizontalAlignmentNatrual:
-            alignment = kCTNaturalTextAlignment;
-            break;
-        default:
-            alignment = kCTLeftTextAlignment;
-            break;
-    }
-    
-    CTParagraphStyleSetting altSettings[] =
-    {
-        { kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment},
-    };
-    
-    CTParagraphStyleRef style;
-    style = CTParagraphStyleCreate( altSettings, sizeof(altSettings) / sizeof(CTParagraphStyleSetting) );
-
-    
-    CFRelease(style);
-    NSNumber *underline = [[documentObject underline] boolValue] ? @(kCTUnderlineStyleSingle) : @(kCTUnderlineStyleNone);
-    NSNumber *strikethough = [[documentObject strike] boolValue] ? @(kCTUnderlineStyleSingle) : @(kCTUnderlineStyleNone);
-    NSDictionary *result = @{(NSString *)kCTFontAttributeName : (id)CFBridgingRelease(customFont),
-                             (NSString *)kCTUnderlineStyleAttributeName : underline,
-                             (NSString *)NSStrikethroughStyleAttributeName : strikethough,
-                             (NSString *)kCTParagraphStyleAttributeName: paragraphStyle};
-    CFRelease(customFont);
-    return result;
-    
-}
-
-- (id)sumObject:(id)obj1 andObject:(id)obj2 forType:(MTDataType)dataType {
-    id result;
-    switch (dataType) {
-        case MTDataTypeBit:
-            result = @([obj1 boolValue] + [obj2 boolValue]);
-            break;
-        case MTDataTypeFloat:
-            result = @([obj1 floatValue] + [obj2 floatValue]);
-            break;
-        case MTDataTypeInteger:
-            result = @([obj1 integerValue] + [obj2 integerValue]);
-            break;
-        case MTDataTypeNumber:
-        case MTDataTypeDecimal:
-        case MTDataTypeDouble:
-            result = @([obj1 integerValue] + [obj2 doubleValue]);
-            break;
-        case MTDataTypeEnum:
-        case MTDataTypeInt24:
-            result = @([obj1 intValue] + [obj2 intValue]);
-            break;
-        case MTDataTypeLong:
-            result = @([obj1 longValue] + [obj2 longValue]);
-            break;
-        case MTDataTypeLongLong:
-            result = @([obj1 longLongValue] + [obj2 longLongValue]);
-            break;
-        case MTDataTypeShort:
-            result = @([obj1 shortValue] + [obj2 shortValue]);
-            break;
-        case MTDataTypeBlob:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        case MTDataTypeImage:
-        case MTDataTypeSet:
-        case MTDataTypeString:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeUnknown:
-        case MTDataTypeVarChar:
-        default: {
-            if ([obj1 isKindOfClass:[NSNumber class]]) {
-                if ([obj2 isKindOfClass:[NSNumber class]]) {
-                    result = @([obj2 doubleValue] + [obj1 doubleValue]);
-                } else {
-                    result = obj1;
-                }
-            } else {
-                if ([obj1 isKindOfClass:[NSString class]] == NO || [obj1 length] <= 0) {
-                    obj1 = @"";
-                }
-                if ([obj2 isKindOfClass:[NSString class]] == NO || [obj2 length] <= 0) {
-                    obj2 = @"";
-                }
-                result = [obj1 stringByAppendingString:obj2];
-            }
-            break;
-        }
-    }
-    return result;
-}
-
-- (id)divideObject:(id)obj1 andObject:(id)obj2 forType:(MTDataType)dataType {
-    id result;
-    switch (dataType) {
-        case MTDataTypeBit:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 boolValue] / [obj2 boolValue]);
-            break;
-        case MTDataTypeFloat:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 floatValue] / [obj2 floatValue]);
-            break;
-        case MTDataTypeInteger:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 integerValue] / [obj2 integerValue]);
-            break;
-        case MTDataTypeNumber:
-        case MTDataTypeDecimal:
-        case MTDataTypeDouble:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 integerValue] / [obj2 doubleValue]);
-            break;
-        case MTDataTypeEnum:
-        case MTDataTypeInt24:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 intValue] / [obj2 intValue]);
-            break;
-        case MTDataTypeLong:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 longValue] / [obj2 longValue]);
-            break;
-        case MTDataTypeLongLong:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 longLongValue] / [obj2 longLongValue]);
-            break;
-        case MTDataTypeShort:
-            result = @([obj2 boolValue] == 0 ? 0 : [obj1 shortValue] / [obj2 shortValue]);
-            break;
-        case MTDataTypeBlob:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        case MTDataTypeImage:
-        case MTDataTypeSet:
-        case MTDataTypeString:
-        case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeUnknown:
-        case MTDataTypeVarChar:
-        default: {
-            if ([obj1 isKindOfClass:[NSString class]] == NO) {
-                obj1 = @"";
-            }
-            if ([obj2 isKindOfClass:[NSString class]]) {
-                [obj1 removeCharactersInString:obj2];
-                result = obj1;
-            } else {
-                obj1 = [NSString stringWithFormat:@"%@", obj1];
-                [obj1 appendFormat:@"%@", obj2];
-                result = obj1;
-            }
-            break;
-        }
-    }
-    return result;
+- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
+    [self drawPageAtIndex:index inRect:pageRect withTransparentBackground:NO];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {

@@ -520,6 +520,10 @@
 		4C2AC3121535919400738091 /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87408515078836007FC473 /* RptqQueryGroup+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C2DC49119638AE5003A9FB0 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC49019638AE5003A9FB0 /* MTMath.m */; };
+		4C2DC49219638AE5003A9FB0 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC49019638AE5003A9FB0 /* MTMath.m */; };
+		4C2DC49319638AE5003A9FB0 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC49019638AE5003A9FB0 /* MTMath.m */; };
+		4C2DC49419638AE5003A9FB0 /* MTMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2DC49019638AE5003A9FB0 /* MTMath.m */; };
 		4C2F6E6B194C3450009D192B /* MTArrayDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */; };
 		4C2F6E6C194C3450009D192B /* MTArrayDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */; };
 		4C2F6E78194C3609009D192B /* MTArrayDataSourceTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F6E77194C3609009D192B /* MTArrayDataSourceTableView.m */; };
@@ -2026,6 +2030,8 @@
 		4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeAppEngine@2x.png"; path = "Reports/UIImageExportTypeAppEngine@2x.png"; sourceTree = "<group>"; };
 		4C2AC3141535926100738091 /* UIImageExportTypeRSS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeRSS.png; path = Reports/UIImageExportTypeRSS.png; sourceTree = "<group>"; };
 		4C2AC3151535926100738091 /* UIImageExportTypeRSS@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageExportTypeRSS@2x.png"; path = "Reports/UIImageExportTypeRSS@2x.png"; sourceTree = "<group>"; };
+		4C2DC48F19638AE5003A9FB0 /* MTMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMath.h; sourceTree = "<group>"; };
+		4C2DC49019638AE5003A9FB0 /* MTMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMath.m; sourceTree = "<group>"; };
 		4C2F6E69194C3450009D192B /* MTArrayDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSource.h; sourceTree = "<group>"; };
 		4C2F6E6A194C3450009D192B /* MTArrayDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayDataSource.m; sourceTree = "<group>"; };
 		4C2F6E76194C3609009D192B /* MTArrayDataSourceTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayDataSourceTableView.h; sourceTree = "<group>"; };
@@ -3179,6 +3185,8 @@
 				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
 				4C825160194990AF00C32335 /* MTNotificationDidReadRows.h */,
 				4C825161194990AF00C32335 /* MTNotificationDidReadRows.m */,
+				4C2DC48F19638AE5003A9FB0 /* MTMath.h */,
+				4C2DC49019638AE5003A9FB0 /* MTMath.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -4472,18 +4480,12 @@
 			children = (
 				4C8779CC14CA9605005CBE6F /* Auto Generated */,
 				4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */,
-				4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */,
-				4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */,
-				4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */,
-				4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */,
-				4CE17E1F16501A800002F8EA /* RptqDatabaseSchemaField+Extras.h */,
-				4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */,
-				4CE17E231650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.h */,
-				4CE17E241650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m */,
-				4C45742614E795CE00FF326C /* RptqDocument+Extras.h */,
-				4C45742714E795CE00FF326C /* RptqDocument+Extras.m */,
+				4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */,
+				4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */,
 				4C8BF46D16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.h */,
 				4C8BF46E16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m */,
+				4CABE4B51837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.h */,
+				4CABE4B61837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.m */,
 				4C8BF47116F6459F002D9F9B /* RptqDocumentObjectChart+Extras.h */,
 				4C8BF47216F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m */,
 				4C9F400616F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.h */,
@@ -4498,8 +4500,16 @@
 				4C85C6A614FE5B57003785AC /* RptqDocumentObjectLabelDataField+Extras.m */,
 				4CA16338167CAD9C00540A14 /* RptqDocumentObjectLabelLink+Extras.h */,
 				4CA16339167CAD9C00540A14 /* RptqDocumentObjectLabelLink+Extras.m */,
-				4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */,
-				4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */,
+				4C1A586414E23DDA00184445 /* RptqFieldSelectorManager.h */,
+				4C1A586514E23DDB00184445 /* RptqFieldSelectorManager.m */,
+				4C9A6B1915106F5D00FDD69D /* RptqDatabase+Extras.h */,
+				4C9A6B1A15106F5D00FDD69D /* RptqDatabase+Extras.m */,
+				4CE17E1F16501A800002F8EA /* RptqDatabaseSchemaField+Extras.h */,
+				4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */,
+				4CE17E231650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.h */,
+				4CE17E241650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m */,
+				4C45742614E795CE00FF326C /* RptqDocument+Extras.h */,
+				4C45742714E795CE00FF326C /* RptqDocument+Extras.m */,
 				4C88A99014E7AB640069A0AF /* RptqDocumentSection+Extras.h */,
 				4C88A99114E7AB640069A0AF /* RptqDocumentSection+Extras.m */,
 				4CB4575C1705F735005269B7 /* RptqDocumentSectionRows+Extras.h */,
@@ -4526,8 +4536,6 @@
 				4CE9BC8016EF702600B0808C /* RptqQueryTable+Extras.m */,
 				4C8BA95A17417FC700B646E2 /* RptqQueryField+Extras.h */,
 				4C8BA95B17417FC800B646E2 /* RptqQueryField+Extras.m */,
-				4CABE4B51837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.h */,
-				4CABE4B61837E085007EDD9D /* RptqDocumentObjectBarcode+Extras.m */,
 			);
 			name = Rptq;
 			sourceTree = "<group>";
@@ -6203,6 +6211,7 @@
 				4C0E7777163B5AEC003B951E /* RptqDocumentSection+Extras.m in Sources */,
 				4C0E7778163B5AEC003B951E /* SectionEnumerator.m in Sources */,
 				4C23FBBB18FAE4F7009F234F /* MTPaperB4.m in Sources */,
+				4C2DC49219638AE5003A9FB0 /* MTMath.m in Sources */,
 				4C23FBA318FAE4F7009F234F /* MTPaperA3.m in Sources */,
 				4C16808B1907913900980D8D /* MTQueryCacheDropTable.m in Sources */,
 				4C23FBCD18FAE4F7009F234F /* MTPaperC2.m in Sources */,
@@ -6569,6 +6578,7 @@
 				4C515EBE1741348F0004A664 /* UIView+Animations.m in Sources */,
 				4C515EBF1741348F0004A664 /* UIDevice+Hack.m in Sources */,
 				4C8BA95F17417FC900B646E2 /* RptqQueryField+Extras.m in Sources */,
+				4C2DC49319638AE5003A9FB0 /* MTMath.m in Sources */,
 				4C8BA990174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */,
 				4C5625EE1759730200433E88 /* UIImage+Resize.m in Sources */,
 				4C5625F31759730200433E88 /* UIImage+Alpha.m in Sources */,
@@ -6585,6 +6595,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C2DC49419638AE5003A9FB0 /* MTMath.m in Sources */,
 				4C258048192D090F00BE74EB /* MAD_Designer_Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6690,6 +6701,7 @@
 				4C23FBDA18FAE4F7009F234F /* MTPaperC9.m in Sources */,
 				4CDB61EF14E3144C00A5389E /* MTQueryBuilderPredicateFormatViewController.m in Sources */,
 				4C11BCFB18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */,
+				4C2DC49119638AE5003A9FB0 /* MTMath.m in Sources */,
 				4CDB625214E395E400A5389E /* UIColor+EverydayApps.m in Sources */,
 				4C23FB9A18FAE4F7009F234F /* MTPaper.m in Sources */,
 				4C16808A1907913900980D8D /* MTQueryCacheDropTable.m in Sources */,
@@ -7572,6 +7584,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
 				GCC_VERSION = "";
