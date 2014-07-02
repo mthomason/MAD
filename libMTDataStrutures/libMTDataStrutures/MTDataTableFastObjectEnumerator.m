@@ -17,6 +17,7 @@
 #import "libSqlite3_8.h"
 #import "MTQuery.h"
 #import "MTLog.h"
+#import "MTDatabaseSqlite3.h"
 
 @interface MTDataTableFastObjectEnumerator ()
 
@@ -106,51 +107,7 @@ void sqliteCallback(void *foo, const char* statement) {
             } else {
                 
                 MTDataType madDataType = [[dataColumn columnType] integerValue];
-                switch (madDataType) {
-                    case MTDataTypeInteger:
-                        columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeBlob: {
-                        const void *blob = sqlite3_column_blob(_statement, columnCounter);
-                        if (blob == NULL) {
-                            columnValue = nil;
-                        } else {
-                            int bytes = sqlite3_column_bytes(_statement, columnCounter);
-                            columnValue = [NSData dataWithBytes: blob
-                                                         length: bytes];
-                        }
-                        break;
-                    }
-                    case MTDataTypeFloat:
-                        columnValue = [NSNumber numberWithFloat:sqlite3_column_double(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeDouble:
-                        columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeDecimal:
-                        columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeString: {
-                        const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
-                        if (text == NULL) {
-                            columnValue = [NSNull null];
-                        } else {
-                            columnValue = [NSString stringWithUTF8String:(const char *) text];
-                        }
-                        break;
-                    }
-                    default: {
-                        if (sqlite3_column_type(_statement, columnCounter) == SQLITE3_TEXT) {
-                            const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
-                            if (text == NULL) {
-                                columnValue = [NSNull null];
-                            } else {
-                                columnValue = [NSString stringWithUTF8String:(const char *) text];
-                            }
-                        }
-                        break;
-                    }
-                }
+                columnValue = [MTDatabaseSqlite3 object:_statement forColumnNumber:columnCounter withType:madDataType];
             }
             
             if (columnValue == nil) {
@@ -165,9 +122,8 @@ void sqliteCallback(void *foo, const char* statement) {
     }
     if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
         NSNumber *rowid = @(sqlite3_column_int(_statement, columnCounter));
-        [currentObject setValue:@(sqlite3_column_int(_statement, columnCounter)) forKey:@"ROWID"];
+        [currentObject setValue:rowid forKey:@"ROWID"];
     }
-    //NSLog(@"FEnum: %@", columnValue);
     return self.singleColumnNoWrapper ? columnValue : currentObject;
 }
 
