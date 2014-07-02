@@ -56,6 +56,8 @@ extern NSString * const MTDocumentObjectDefinationField2;
 - (void)setDropPoint:(CGPoint)dropPoint;
 - (void)setOrigin:(CGPoint)origin;
 
+- (NSDictionary *)attributesForDrawingText;
+
 @end
 
 #endif

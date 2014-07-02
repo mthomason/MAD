@@ -548,6 +548,52 @@ static NSNumberFormatter *currencyNumberFormatter;
     return result;
 }
 
+- (NSDictionary *)attributesForDrawingText {
+    MTFont *font = [[MTFont alloc] initWithFamilyName:[self fontname]
+                                         andPointSize:[[self fontsize] floatValue]
+                                               isBold:[[self bold] boolValue]
+                                             isItalic:[[self italic] boolValue]];
+    UIFont *customFont = [font font];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    
+    // ???: Where is NSLineBreakByClipping in iOS7... There attributed string is buggy as fuck.
+    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+    
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    switch ([[self horizontalAlignment] integerValue]) {
+        case MTHorizontalAlignmentLeft:
+            [paragraphStyle setAlignment:NSTextAlignmentLeft];
+            break;
+        case MTHorizontalAlignmentRight:
+            [paragraphStyle setAlignment:NSTextAlignmentRight];
+            break;
+        case MTHorizontalAlignmentCenter:
+            [paragraphStyle setAlignment:NSTextAlignmentCenter];
+            break;
+        case MTHorizontalAlignmentJustified:
+            [paragraphStyle setAlignment:NSTextAlignmentJustified];
+            break;
+        case MTHorizontalAlignmentNatrual:
+            [paragraphStyle setAlignment:NSTextAlignmentNatural];
+            break;
+        default:
+            [paragraphStyle setAlignment:NSTextAlignmentLeft];
+            break;
+    }
+    
+    NSNumber *baselineOffset = @(0.0000f);
+    NSNumber *underlineStyle = [[self underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    NSNumber *strikethroughStyle = [[self strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+    return  @{
+              NSFontAttributeName : customFont,
+              NSBaselineOffsetAttributeName : baselineOffset,
+              NSUnderlineStyleAttributeName : underlineStyle,
+              NSStrikethroughStyleAttributeName : strikethroughStyle,
+              NSParagraphStyleAttributeName: paragraphStyle
+              };
+}
+
 #pragma mark - MTProtocolLog
 
 - (NSString *)toString {
