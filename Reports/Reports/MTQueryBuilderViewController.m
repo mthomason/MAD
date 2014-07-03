@@ -1794,6 +1794,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [tableView beginUpdates];
             [[self tableView] deleteRowsAtIndexPaths: @[indexPath]
                                     withRowAnimation: UITableViewRowAnimationAutomatic];
+            
+            
             [[query managedObjectContext] save:nil];
             NSString *weight = NSStringFromSelector(@selector(weight));
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
@@ -1804,6 +1806,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 counter++;
             }
             [[query managedObjectContext] save:nil];
+            
             [tableView endUpdates];
         }
     }
@@ -1831,15 +1834,15 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             break;
             
         case MTQuerySectionsLinks:
-            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryLinksFromTableView:tableView atIndexPath:indexPath];
             break;
             
         case MTQuerySectionsGroups:
-            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryGroupFromTableView:tableView atIndexPath:indexPath];
             break;
             
         case MTQuerySectionsPredicate:
-            [self deleteQueryTableFromTableView:tableView atIndexPath:indexPath];
+            [self deleteQueryPredicateFromTableView:tableView atIndexPath:indexPath];
             break;
             
         default:
