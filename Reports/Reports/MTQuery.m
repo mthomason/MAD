@@ -258,10 +258,6 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     return @"";
 }
 
-- (NSArray *)sortedHasQueryGroups {
-    return [NSArray array];
-}
-
 - (NSArray *)sortDescriptors {
     return [NSArray array];
 }

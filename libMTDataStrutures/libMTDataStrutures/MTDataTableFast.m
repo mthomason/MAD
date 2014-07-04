@@ -348,6 +348,7 @@
     dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
 
     [[self columnKeys] removeAllObjects];
+    //[[self sortDescriptors] removeAllObjects];
     [[self columns] removeAllObjects];
     [self setRowCounter:0];
     

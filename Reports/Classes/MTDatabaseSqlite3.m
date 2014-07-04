@@ -374,10 +374,20 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 break;
             }
             case MTDataTypeString: {
-                NSString *stringValue = [databinding value];
-                const char *cstr = [stringValue UTF8String];
-                int len = (int)strlen(cstr);
-                success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
+                NSString *stringValue;
+                if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
+                    NSDateComponents *dc = [databinding value];
+                    NSCalendar *cal = [NSCalendar autoupdatingCurrentCalendar];
+                    NSDate *date = [cal dateFromComponents:dc];
+                    NSTimeInterval ti = [date timeIntervalSince1970];
+                    success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, ti);
+                } else if ([[databinding value] isKindOfClass:[NSString class]]) {
+                    stringValue = [databinding value];
+                    int len = (int)[stringValue lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [stringValue UTF8String], len, SQLITE_TRANSIENT);
+                } else {
+                    NSAssert(false, @"What else is there? %s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
+                }
                 NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 break;
             }

@@ -17,6 +17,8 @@
 #import "MTGraph.h"
 
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
@@ -81,11 +83,20 @@
         [self setQueryObject:queryObject];
 
         NSMutableArray *sortDesc = [[NSMutableArray alloc] initWithArray:[self sortDescriptors]];
-        [datatable sortUsingDescriptors:sortDesc];
+        [[self datatable] sortUsingDescriptors:sortDesc];
 
         
     }
     return self;
+}
+
+- (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
+    [[self datatable] sortUsingDescriptors:[self sortDescriptors]];
+    [super performQuery:completion];
+}
+- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion {
+    [[self datatable] sortUsingDescriptors:[self sortDescriptors]];
+    [super performQueryWithDatabase:database completion:completion];
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
@@ -467,7 +478,7 @@
                             [vertexTableDestination setSortVertexColor:MTColorGray];
                             
                             NSManagedObjectID *queryLinkID = [edge object];
-                            RptqQueryLinks *queryLink = [RptqQueryLinks getQueryLinkWithID:queryLinkID fromObjectContext:managedObjectContext];
+                            RptqQueryLinks *queryLink = (RptqQueryLinks *)[managedObjectContext objectRegisteredForID:queryLinkID];
                             
                             
                             if (queryLink) {
@@ -545,21 +556,11 @@
     return result;
 }
 
-- (NSArray *)sortedHasQueryGroups {
-    NSSet *hasQueryGroups = [[self queryObject] hasQueryGroups];
-    
-    NSString *sortKey = NSStringFromSelector(@selector(weight));
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];
-    return [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
-}
-
 - (NSArray *)sortDescriptors {
-
-    NSArray *sortedHasQueryGroups = [self sortedHasQueryGroups];
 
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
-    for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
+    for (RptqQueryGroup *queryGroup in [[self queryObject] sortedQueryGroups]) {
         
         BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
         RptqQueryField *groupField = [queryGroup hasField];

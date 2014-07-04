@@ -110,18 +110,6 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return [queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
-+ (id)getQueryLinkWithID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
-    return result;
-}
-
-+ (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    RptqQueryLinks *link = [RptqQueryLinks getQueryLinkWithID:objid fromObjectContext:managedObjectContext];
-    if (link) {
-        [managedObjectContext deleteObject: link];
-    }
-}
-
 + (id)createQueryLinkWithLeftField:(RptqQueryField *)fieldLeft
                          rightField:(RptqQueryField *)fieldRight
                            andJoinType:(MNSLinkType)joinType {

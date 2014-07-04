@@ -242,7 +242,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
     NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForKeyObjectsSorted];
 
-    NSArray *sqg = [[self query] sortedHasQueryGroups];
+    NSArray *sqg = [[[self query] queryObject] sortedQueryGroups];
     [self setSortedQueryGroups:sqg];
     
     BOOL rowIdOnly = YES;

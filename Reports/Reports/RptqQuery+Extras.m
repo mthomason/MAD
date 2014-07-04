@@ -95,6 +95,33 @@
     return [[self hasQueryGroups] sortedArrayUsingDescriptors:sortDescriptors];
 }
 
+- (void)deleteQueryGroupAtIndex:(NSInteger)index {
+    RptqQueryGroup *groupToRemove = [self queryGroupForIndex:index];
+    if (groupToRemove) {
+        NSSet *sectionsToRemove = [groupToRemove hasSection];
+        NSArray *sections = [sectionsToRemove allObjects];
+        if ([sections count] == 2) {
+            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
+            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+        }
+        [[self managedObjectContext] deleteObject: groupToRemove];
+        [self removeHasQueryGroupsObject: groupToRemove];
+        
+        [[self managedObjectContext] save:nil];
+        NSString *weight = NSStringFromSelector(@selector(weight));
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+        NSArray *sortedQueryGroups = [[self hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        NSUInteger counter = 0;
+        for (RptqQueryGroup *group in sortedQueryGroups) {
+            [group setWeight:@(counter)];
+            counter++;
+        }
+        [[self managedObjectContext] save:nil];
+        
+    }
+
+}
+
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

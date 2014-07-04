@@ -166,7 +166,6 @@ extern NSString * const MTQueryKeyObject;
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3
 
 - (id)initWithObject:(id)object;
-- (NSArray *)sortedHasQueryGroups;
 - (NSArray *)sortDescriptors;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 

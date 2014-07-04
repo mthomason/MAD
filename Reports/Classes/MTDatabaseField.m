@@ -86,7 +86,7 @@
         case MTDataTypeTimeStamp:
         case MTDataTypeYear:
         case MTDataTypeUnknown:
-            NSAssert(false, @"Not implemented: selectorForSorted in MTDatabaseField.");
+            //NSAssert(false, @"Not implemented: selectorForSorted in MTDatabaseField.");
         case MTDataTypeBit:
         case MTDataTypeFloat:
         case MTDataTypeInteger:

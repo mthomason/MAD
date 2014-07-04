@@ -80,6 +80,10 @@
     }
 }
 
+- (RptqQuery *)defaultQuery {
+    return [[[[self hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+}
+
 #pragma mark - Static
 
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {

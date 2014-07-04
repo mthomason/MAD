@@ -55,9 +55,6 @@ extern NSString * const MTLinkSqlFullOuterJoin;
 
 @interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>
 
-+ (id)getQueryLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
-+ (void)deleteLinkWithID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
-
 + (id)createQueryLinkWithLeftField:(RptqQueryField *)fieldLeft
                         rightField:(RptqQueryField *)fieldRight
                        andJoinType:(MNSLinkType)joinType;
