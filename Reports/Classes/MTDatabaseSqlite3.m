@@ -110,13 +110,13 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 	NSString *query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
     sqlite3_stmt *statement = NULL;
     const char *queryc = [query UTF8String];
-	char *sql = sqlite3_mprintf((char *) queryc);
-	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
         sqlite3_bind_text(statement, 1, [tablename UTF8String], strlen([tablename UTF8String]), SQLITE_STATIC);
 		if (sqlite3_step(statement) == SQLITE_ROW) {
             exist = sqlite3_column_int(statement, 0) == 1;
         }
     }
+    sqlite3_finalize(statement);
     return exist;
 }
 

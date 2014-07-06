@@ -99,7 +99,7 @@
     NSString *sql = [self createTable] ?
     
     [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, unique] :
-                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@", tableName, columnDefination];
+                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@;", tableName, columnDefination];
     
     return sql;
 }

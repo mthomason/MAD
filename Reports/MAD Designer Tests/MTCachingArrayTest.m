@@ -21,42 +21,51 @@
 @property (nonatomic, strong) NSNumber *yes;
 @property (nonatomic, strong) NSValue *rec;
 
+@property (nonatomic, assign) BOOL firstTime;
+
 @end
 
 @implementation MTCachingArrayTest
 
 - (void)setUp {
     [super setUp];
+    
+    [self setIdentifier:@"2398"];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self removeDatabaseFile];
+    });
 
     [self setCat:@"Cat"];
     [self setDog:@"dog"];
     [self setPi:@3.14];
     [self setYes:@YES];
     [self setRec:[NSValue valueWithCGSize:CGSizeMake(100.0000f, 300.0000f)]];
-
-    [self setIdentifier:@"2398"];
-    
-    NSURL *urlToCleanup = [MTArrayCached urlForIdentifier:[self identifier]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[urlToCleanup path]]) {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:urlToCleanup error:&error];
-    }
     
     MTArrayCached *array = [[MTArrayCached alloc] initWithIdentifier:[self identifier]];
-    [array beginBulkInserts];
-    [array addObject:self.cat];
-    [array addObject:self.dog];
-    [array addObject:self.pi];
-    [array addObject:self.yes];
-    [array addObject:self.rec];
-    [array endBulkInserts];
+    static dispatch_once_t onceToken1;
+    dispatch_once(&onceToken1, ^{
+        [array beginBulkInserts];
+        [array addObject:self.cat];
+        [array addObject:self.dog];
+        [array addObject:self.pi];
+        [array addObject:self.yes];
+        [array addObject:self.rec];
+        [array endBulkInserts];
+    });
     [self setArray:array];
 }
 
 - (void)tearDown {
     [super tearDown];
-    [[self array] removeAllObjects];
-    
+}
+
+- (void)removeDatabaseFile {
+    NSURL *urlToCleanup = [MTArrayCached urlForIdentifier:[self identifier]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[urlToCleanup path]]) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:urlToCleanup error:&error];
+    }
 }
 
 - (void)testCheckValues {
@@ -65,6 +74,10 @@
     XCTAssertEqualObjects([[self array] objectAtIndex:2], self.pi, @"Object value check failed.");
     XCTAssertEqualObjects([[self array] objectAtIndex:3], self.yes, @"Object value check failed.");
     XCTAssertEqualObjects([[self array] objectAtIndex:4], self.rec, @"Object value check failed.");
+}
+
+- (void)testCount {
+    XCTAssertEqual([[self array] count], 5, @"Object value check failed.");
 }
 
 @end

@@ -24,6 +24,9 @@ NSString * const MTArrayCachedColumnKey = @"ci";
 NSString * const MTArrayCachedColumnValue = @"ck";
 NSString * const MTArrayCachedExtension = @"madac";
 
+NSString * const MTArrayCachedQueryInsert = @"INSERT INTO %@ (%@, %@) VALUES (?1, ?2);";
+NSString * const MTArrayCachedQuerySelect = @"SELECT %@ FROM %@ WHERE %@ = ? LIMIT 1  OFFSET 0;";
+NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0";
 
 @interface MTArrayCached ()
 
@@ -32,6 +35,7 @@ NSString * const MTArrayCachedExtension = @"madac";
 @property (nonatomic, assign) NSInteger numberOrRows;
 @property (nonatomic, assign) sqlite3_stmt *statementInsert;
 @property (nonatomic, assign) sqlite3_stmt *statementSelect;
+@property (nonatomic, assign) sqlite3_stmt *statementCount;
 
 @end
 
@@ -40,6 +44,8 @@ NSString * const MTArrayCachedExtension = @"madac";
 - (void)dealloc {
     sqlite3_finalize(_statementInsert);
     sqlite3_finalize(_statementSelect);
+    sqlite3_close(_database.databaseHandle);
+    _database = nil;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier {
@@ -47,7 +53,6 @@ NSString * const MTArrayCachedExtension = @"madac";
     if (self) {
         NSString *i = [NSString stringWithString:identifier];
         [self setIdentifier:i];
-
         [self initalizeDatabase];
     }
     return self;
@@ -70,7 +75,7 @@ NSString * const MTArrayCachedExtension = @"madac";
     if (createDatabase == NO) {
         createDatabase = [self.database tableExist:MTArrayCachedTableName] == NO;
     }
-    if (createDatabase) {
+    if ([self.database tableExist:MTArrayCachedTableName] == NO) {
         MTDataColumn *columnKey = [MTArrayCached columnKey];
         MTDataColumn *columnValue = [MTArrayCached columnValue];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnKey identifier] createTable:YES unique:NO];
@@ -93,19 +98,25 @@ NSString * const MTArrayCachedExtension = @"madac";
 }
 
 - (BOOL)prepareStatements {
-    return [self prepareStatementInsert] && [self prepareStatementSelect];
+    return [self prepareStatementInsert] && [self prepareStatementSelect] && [self prepareStatementCount];
 }
 
 - (BOOL)prepareStatementInsert {
-    NSString *queryString = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@) VALUES (?1, ?2);", MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
+    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryInsert, MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
     _statementInsert = NULL;
     return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementInsert, NULL) == SQLITE_OK;
 }
 
 - (BOOL)prepareStatementSelect {
-    NSString *queryString = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ = ? LIMIT 1  OFFSET 0;", MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQuerySelect, MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
     _statementSelect = NULL;
     return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementSelect, NULL) == SQLITE_OK;
+}
+
+- (BOOL)prepareStatementCount {
+    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryLastId, MTArrayCachedColumnKey, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    _statementCount = NULL;
+    return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementCount, NULL) == SQLITE_OK;
 }
 
 #ifdef MAD_MTArrayCached_DEBUG
@@ -190,41 +201,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    NSNumber *indexObj = [NSNumber numberWithInteger:index];
-    NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : MTArrayCachedColumnKey,
-                                     MTQueryKeyPredicateValue : indexObj};
-    NSArray *predicates = @[whereStatement];
-    NSArray *columnNameIndex = @[MTArrayCachedColumnValue];
-    NSArray *sortdesc = @[];
-    NSDictionary *queryDefinationSelect = [MTQuery queryDefinationSelect:columnNameIndex tableName:MTArrayCachedTableName sortDescriptors:sortdesc];
-    NSDictionary *queryDef = [MTQuery queryDefinationSelect:queryDefinationSelect withLimit:1 andOffset:0 dropRowid:YES];
-    NSMutableDictionary *queryDefWithPredicates = [NSMutableDictionary dictionaryWithDictionary:queryDef];
-    NSNumber *key = @(MTQueryCacheSelectLimitOffsetParamatersWhere);
-    [queryDefWithPredicates setObject:predicates forKey:key];
-    
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefWithPredicates];
-
-    sqlite3_stmt *statement = NULL;
-    NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
-    
-    const char *sqlc = [sql UTF8String];
-    char *queryString = sqlite3_mprintf((char *) sqlc);
-    BOOL success = sqlite3_prepare_v2([[self database] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
-
+    sqlite3_bind_int(_statementSelect, 1, index);
     id result = nil;
-    
-    if (success) {
-        if (sqlite3_step(statement) == SQLITE_ROW) {
-            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(statement, 0)
-                                         length: sqlite3_column_bytes(statement, 0)];
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-        }
+    if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
+        NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
+                                             length: sqlite3_column_bytes(_statementSelect, 0)];
+        result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+        sqlite3_reset(_statementSelect);
     }
-    
-    sqlite3_finalize(statement);
-    sqlite3_free(queryString);
-    
     return result;
 }
 
@@ -265,26 +249,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSUInteger)count {
-    NSUInteger count = 0;
-    NSDictionary *queryDefinationSelectLastIndex = [NSDictionary dictionaryWithDictionary:[self queryDefinationLastObject]];
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectLimitOffset object:queryDefinationSelectLastIndex];
-    
-    sqlite3_stmt *statement = NULL;
-    NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
-    NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, [error localizedDescription]);
-    const char *sqlc = [sql UTF8String];
-    char *queryString = sqlite3_mprintf((char *) sqlc);
-    BOOL success = sqlite3_prepare_v2([[self database] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
-    NSAssert(success, @"%s", sqlite3_errmsg([[self database] databaseHandle]));
-    if (success) {
-        if (sqlite3_step(statement) == SQLITE_ROW) {
-            count = sqlite3_column_int(statement, 0);
-        }
+    NSUInteger lastRowid = 0;
+    if (sqlite3_step(_statementCount) == SQLITE_ROW) {
+        lastRowid = sqlite3_column_int(_statementCount, 0);
     }
-    sqlite3_finalize(statement);
-    sqlite3_free(queryString);
-    return count;
+    return lastRowid + 1;
 }
 
 @end
