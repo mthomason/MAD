@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MTArrayCached : NSObject
+@interface MTArrayCached : NSEnumerator
 
 - (id)initWithIdentifier:(NSString *)identifier;
 - (NSURL *)url;

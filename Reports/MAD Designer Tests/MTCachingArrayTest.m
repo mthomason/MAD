@@ -12,6 +12,7 @@
 @interface MTCachingArrayTest : XCTestCase
 
 @property (nonatomic, strong) MTArrayCached *array;
+@property (nonatomic, strong) NSMutableArray *arrayControl;
 
 @property (nonatomic, strong) NSString *identifier;
 
@@ -42,18 +43,26 @@
     [self setYes:@YES];
     [self setRec:[NSValue valueWithCGSize:CGSizeMake(100.0000f, 300.0000f)]];
     
+    NSMutableArray *arrayControl = [[NSMutableArray alloc] init];
+    [self addObjectsToArray:&arrayControl];
+    [self setArrayControl:arrayControl];
+    
     MTArrayCached *array = [[MTArrayCached alloc] initWithIdentifier:[self identifier]];
     static dispatch_once_t onceToken1;
     dispatch_once(&onceToken1, ^{
         [array beginBulkInserts];
-        [array addObject:self.cat];
-        [array addObject:self.dog];
-        [array addObject:self.pi];
-        [array addObject:self.yes];
-        [array addObject:self.rec];
+        [self addObjectsToArray:(NSMutableArray **) &array];
         [array endBulkInserts];
     });
     [self setArray:array];
+}
+
+- (void)addObjectsToArray:(NSMutableArray **)object {
+    [*object addObject:self.cat];
+    [*object addObject:self.dog];
+    [*object addObject:self.pi];
+    [*object addObject:self.yes];
+    [*object addObject:self.rec];
 }
 
 - (void)tearDown {
@@ -78,6 +87,14 @@
 
 - (void)testCount {
     XCTAssertEqual([[self array] count], 5, @"Object value check failed.");
+}
+
+- (void)testEnum {
+    NSUInteger objCtr = 0;
+    for (id obj in [self array]) {
+        XCTAssertEqualObjects(obj, [[self arrayControl] objectAtIndex:objCtr], @"Object value check failed.");
+        objCtr++;
+    }
 }
 
 @end

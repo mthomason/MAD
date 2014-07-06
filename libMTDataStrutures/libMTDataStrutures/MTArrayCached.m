@@ -26,7 +26,8 @@ NSString * const MTArrayCachedExtension = @"madac";
 
 NSString * const MTArrayCachedQueryInsert = @"INSERT INTO %@ (%@, %@) VALUES (?1, ?2);";
 NSString * const MTArrayCachedQuerySelect = @"SELECT %@ FROM %@ WHERE %@ = ? LIMIT 1  OFFSET 0;";
-NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0";
+NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0;";
+NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 @interface MTArrayCached ()
 
@@ -36,6 +37,7 @@ NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC
 @property (nonatomic, assign) sqlite3_stmt *statementInsert;
 @property (nonatomic, assign) sqlite3_stmt *statementSelect;
 @property (nonatomic, assign) sqlite3_stmt *statementCount;
+@property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
 @end
 
@@ -98,7 +100,14 @@ NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC
 }
 
 - (BOOL)prepareStatements {
-    return [self prepareStatementInsert] && [self prepareStatementSelect] && [self prepareStatementCount];
+    return [self prepareStatementInsert] && [self prepareStatementSelect] &&
+           [self prepareStatementCount] && [self prepareStatementEnum];
+}
+
+- (BOOL)prepareStatementEnum {
+    NSString *sql = [NSString stringWithFormat:MTArrayCachedQueryEnumer,  MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    _statementEnumer = NULL;
+    return sqlite3_prepare_v2([[self database] databaseHandle], [sql UTF8String], -1, &_statementEnumer, NULL) == SQLITE_OK;
 }
 
 - (BOOL)prepareStatementInsert {
@@ -254,6 +263,42 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         lastRowid = sqlite3_column_int(_statementCount, 0);
     }
     return lastRowid + 1;
+}
+
+- (BOOL)isEmpty {
+    return [self numberOrRows] > 0;
+}
+
+- (NSArray *)allObjects {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    if ([self isEmpty] == NO) {
+        while (sqlite3_step(_statementEnumer) == SQLITE_ROW) {
+            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                                 length: sqlite3_column_bytes(_statementEnumer, 0)];
+            id result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+            [results addObject:result];
+        }
+    }
+    return results;
+}
+
+- (id)nextObject {
+    int stepResult;
+    id result = nil;
+    if ([self isEmpty]) {
+        stepResult = sqlite3_step(_statementEnumer);
+        if (stepResult == SQLITE_ROW) {
+            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                                 length: sqlite3_column_bytes(_statementEnumer, 0)];
+            result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+        } else if (stepResult == SQLITE_DONE) {
+            sqlite3_reset(_statementEnumer);
+            result = nil;
+        }
+    } else {
+        sqlite3_reset(_statementEnumer);
+    }
+    return result;
 }
 
 @end
