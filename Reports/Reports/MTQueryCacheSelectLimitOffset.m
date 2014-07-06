@@ -21,6 +21,8 @@
 @property (nonatomic, assign) NSUInteger limit;
 @property (nonatomic, assign) NSUInteger offset;
 
+@property (nonatomic, assign) bool droprowid;
+
 @end
 
 @implementation MTQueryCacheSelectLimitOffset
@@ -51,6 +53,13 @@
         
         NSDictionary *columns = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersColumns)];
         [self setColumns:columns];
+        
+        NSNumber *dropRowid = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersDropRowid)];
+        if (dropRowid != nil) {
+            self.droprowid = [dropRowid boolValue];
+        } else {
+            self.droprowid = NO;
+        }
     }
     return self;
 }
@@ -76,12 +85,8 @@
 
 - (NSString *)sqlQuery {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"SELECT "];
-    
-    BOOL rowIdOnly = [[self columnKeys] count] == 0;
-    
-    //NSAssert([[self columnKeys] count] != 0, @"Bad parameter data.");  // FIXME: Handle case where no columns.
-    
-    if (rowIdOnly) {
+        
+    if ([[self columnKeys] count] == 0) {
         [sql appendFormat:@" rowid FROM %@", [self tableName]];
     } else {
 
@@ -93,7 +98,11 @@
             [sql appendFormat:@"\"%@\"", key];
             columnCounter++;
         }
-        [sql appendFormat:@", rowid FROM %@", [self tableName]];
+        if (self.droprowid) {
+            [sql appendFormat:@" FROM %@", [self tableName]];
+        } else {
+            [sql appendFormat:@", rowid FROM %@", [self tableName]];
+        }
     }
     
     if ([[self sortDesc] count] > 0) {
@@ -106,7 +115,8 @@
             if ([self columns]) {
                 dataColumn = [[self columns] objectForKey:[sortDescriptor key]];
             }
-            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
+            NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue]
+                                                                       ascending:[sortDescriptor ascending]];
             
             [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDescription];
             sortCounter++;
@@ -119,8 +129,8 @@
         NSUInteger counter = 0;
         for (NSDictionary *condition in [self whereClause]) {
             if (counter > 0) [sql appendString:@" AND "];
-            NSString *columnHandle = [condition objectForKey:@"col"];
-            NSString *columnValue = [condition objectForKey:@"val"];
+            NSString *columnHandle = [condition objectForKey:MTQueryKeyPredicateColumn];
+            NSString *columnValue = [condition objectForKey:MTQueryKeyPredicateValue];
             [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
             counter++;
         }

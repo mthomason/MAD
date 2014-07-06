@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheAggregateFunctionParamaters) {
     MTQueryCacheAggregateFunctionParamatersRowids,
     MTQueryCacheAggregateFunctionParamatersAggregateFunctionType,
     MTQueryCacheAggregateFunctionParamatersFieldKey,
-    MTQueryCacheAggregateFunctionParamatersWhere,
+    MTQueryCacheAggregateFunctionParamatersPredicates,
     MTQueryCacheAggregateFunctionParamatersFieldDescriptors,
     
 };
@@ -61,7 +61,8 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
     MTQueryCacheSelectLimitOffsetParamatersColumns,
     MTQueryCacheSelectLimitOffsetParamatersSortDesc,
-    MTQueryCacheSelectLimitOffsetParamatersWhere
+    MTQueryCacheSelectLimitOffsetParamatersWhere,
+    MTQueryCacheSelectLimitOffsetParamatersDropRowid
 };
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheFullParameters) {
@@ -133,6 +134,9 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
 
+extern NSString * const MTQueryKeyPredicateColumn;
+extern NSString * const MTQueryKeyPredicateValue;
+
 @class MTDatabase, MTDataTable;
 
 @interface MTQuery : NSObject
@@ -172,6 +176,11 @@ extern NSString * const MTQueryKeyObject;
 - (BOOL)returnsResults;
 
 - (BOOL)partOfTransactionSet;
+
++ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid;
++ (NSDictionary *)queryDefinationSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
++ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset;
++ (NSDictionary *)queryDefinationCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 

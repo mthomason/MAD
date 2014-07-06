@@ -56,6 +56,8 @@
 #import "MTFont.h"
 #import "MTMath.h"
 
+#import "MTReportFormatter.h"
+
 @interface MTReportViewerPrintPageRenderer ()
 
 
@@ -305,7 +307,7 @@
                     
                     NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
                     
-                    MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: MTReportSectionType] integerValue];
+                    MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue];
                     RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:document andType:typeDocumentSection andLevel:groupLevel];
                     BOOL sectionIsVisible = [[documentSection visibility] boolValue];
 
@@ -432,83 +434,70 @@
                                             NSNumber *databaseSchemaFieldDataType = [databaseSchemaField dataType];
                                             MTDataType aggregateType = [databaseSchemaFieldDataType integerValue];
 
-                                            BOOL calculateInMemory = functionType == MTAggregateFunctionTypeFirst || functionType == MTAggregateFunctionTypeLast;
                                             
                                             id aggregateResult;
                                             
-                                            if (calculateInMemory == NO) {
-
-                                                aggregateResult = [[[[self reportFormatter] query] datatable] resultsForAggregateType: [[aggregateField groupType] integerValue]
-                                                                                                                              function: [[aggregateField function] integerValue]
-                                                                                                                              fieldKey: fieldKey
-                                                                                                                             groupKeys: groupKeys
-                                                                                                                                rowids: [[self reportFormatter] rowidsForPage:pageIndex]];
-                                                
-                                                
-                                            } else {    //Handle first and last
-                                                
-                                                
-                                                NSArray *dataForGroup = nil;
-                                                NSDictionary *dataOfInterest = nil;
-                                                NSNumber *aggregateFieldGroupType = [aggregateField groupType];
-                                                MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
-                                                
-                                                switch (aggregateGroupType) {
-                                                    case MTAggregateGroupByTypeSection: {
-                                                        NSInteger groupCount = [[aggregateField groupNumber] integerValue];
-                                                        if (groupCount < [groupLevelKeys count]) {
-                                                            NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
-                                                            NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
-                                                            dataForGroup = [[self reportFormatter] dataForGroupKeys:groupKeys];
-                                                        } else {
-                                                            dataForGroup = @[];
-                                                        }
-                                                        switch (functionType) {
-                                                            case MTAggregateFunctionTypeFirst:
-                                                                dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup objectAtIndex:0] : @{fieldKey:@""};
-                                                                break;
-                                                            case MTAggregateFunctionTypeLast:
-                                                                dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup lastObject] : @{fieldKey:@""};
-                                                                break;
-                                                            default:
-                                                                dataOfInterest = @{fieldKey:@""};
-                                                                break;
-                                                        }
-                                                        break;
+                                            
+                                            NSArray *dataForGroup = nil;
+                                            NSDictionary *dataOfInterest = nil;
+                                            NSNumber *aggregateFieldGroupType = [aggregateField groupType];
+                                            MTAggregateGroupByType aggregateGroupType = [aggregateFieldGroupType integerValue];
+                                            
+                                            switch (aggregateGroupType) {
+                                                case MTAggregateGroupByTypeSection: {
+                                                    NSInteger groupCount = [[aggregateField groupNumber] integerValue];
+                                                    if (groupCount < [groupLevelKeys count]) {
+                                                        NSRange rangeForLevel = NSMakeRange(0, groupCount + 1);
+                                                        NSArray *groupKeys = [groupLevelKeys subarrayWithRange: rangeForLevel];
+                                                        dataForGroup = [[self reportFormatter] dataForGroupKeys:groupKeys];
+                                                    } else {
+                                                        dataForGroup = @[];
                                                     }
-                                                    case MTAggregateGroupByTypePage: {
-                                                        switch (functionType) {
-                                                            case MTAggregateFunctionTypeFirst:
-                                                                dataOfInterest = [[self reportFormatter] firstObjectOnPageAtIndex:pageIndex];
-                                                                break;
-                                                            case MTAggregateFunctionTypeLast:
-                                                                dataOfInterest = [[self reportFormatter] lastObjectOnPageAtIndex:pageIndex];
-                                                                break;
-                                                            default:
-                                                                dataOfInterest = @{fieldKey:@""};
-                                                                break;
-                                                        }
-                                                        break;
+                                                    switch (functionType) {
+                                                        case MTAggregateFunctionTypeFirst:
+                                                            dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup objectAtIndex:0] : @{fieldKey:@""};
+                                                            break;
+                                                        case MTAggregateFunctionTypeLast:
+                                                            dataOfInterest = ([dataForGroup count] >= 1) ? [dataForGroup lastObject] : @{fieldKey:@""};
+                                                            break;
+                                                        default:
+                                                            dataOfInterest = @{fieldKey:@""};
+                                                            break;
                                                     }
-                                                    case MTAggregateGroupByTypeReport: {
-                                                        switch (functionType) {
-                                                            case MTAggregateFunctionTypeFirst:
-                                                                dataOfInterest = [[self reportFormatter] firstObjectOnReport];
-                                                                break;
-                                                            case MTAggregateFunctionTypeLast:
-                                                                dataOfInterest = [[self reportFormatter] lastObjectOnReport];
-                                                                break;
-                                                            default:
-                                                                dataOfInterest = @{fieldKey:@""};
-                                                                break;
-                                                        }
-                                                        break;
-                                                    }
-                                                    default:
-                                                        break;
+                                                    break;
                                                 }
-                                                aggregateResult = [dataOfInterest objectForKey:fieldKey];
+                                                case MTAggregateGroupByTypePage: {
+                                                    switch (functionType) {
+                                                        case MTAggregateFunctionTypeFirst:
+                                                            dataOfInterest = [[self reportFormatter] firstObjectOnPageAtIndex:pageIndex];
+                                                            break;
+                                                        case MTAggregateFunctionTypeLast:
+                                                            dataOfInterest = [[self reportFormatter] lastObjectOnPageAtIndex:pageIndex];
+                                                            break;
+                                                        default:
+                                                            dataOfInterest = @{fieldKey:@""};
+                                                            break;
+                                                    }
+                                                    break;
+                                                }
+                                                case MTAggregateGroupByTypeReport: {
+                                                    switch (functionType) {
+                                                        case MTAggregateFunctionTypeFirst:
+                                                            dataOfInterest = [[self reportFormatter] firstObjectOnReport];
+                                                            break;
+                                                        case MTAggregateFunctionTypeLast:
+                                                            dataOfInterest = [[self reportFormatter] lastObjectOnReport];
+                                                            break;
+                                                        default:
+                                                            dataOfInterest = @{fieldKey:@""};
+                                                            break;
+                                                    }
+                                                    break;
+                                                }
+                                                default:
+                                                    break;
                                             }
+                                            aggregateResult = [dataOfInterest objectForKey:fieldKey];
                                             
                                             [displayString setString: [item formattedString:aggregateType
                                                                                    forValue:aggregateResult]];
@@ -645,7 +634,7 @@
 - (NSArray *)groupLevelKeysForPage:(NSUInteger)page row:(NSInteger)row numberOfGroups:(NSInteger)numberOfGroups andSection:(NSDictionary *)pageSection {
     
     NSMutableArray *currentGroupLevelKeys = [[NSMutableArray alloc] init];
-    MNSDocumentSectionType type = [[pageSection objectForKey: MTReportSectionType] integerValue];
+    MNSDocumentSectionType type = [[pageSection objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue];
 
     if (type == MNSDocumentSectionTypeReportHeader) {
         NSArray *sectionsForPage = [[self reportFormatter] layoutForPage:page];
@@ -683,7 +672,7 @@
         NSInteger sectionRowCounter = [sectionsForPage count] - 1;
         NSRange range = NSMakeRange(0, firstTime ? row : [sectionsForPage count] - 1);
         for (NSDictionary *pageSec in [[sectionsForPage subarrayWithRange:range] reverseObjectEnumerator]) {
-            if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
+            if ([[pageSec objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue] == MNSDocumentSectionTypeGroupHeader &&
                 [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
                 [currentGroupLevelKeys addObjectsFromArray:[pageSec objectForKey: MTReportGroupLevelKeys]];
                 pageCtr = -1;
@@ -714,7 +703,7 @@
                 NSRange range = NSMakeRange(rangeStartLocation, [sectionsForPage count] - rangeStartLocation);
                 NSArray *subArray = [sectionsForPage subarrayWithRange:range];
                 for (NSDictionary *pageSec in subArray) {
-                    if ([[pageSec objectForKey: MTReportSectionType] integerValue] == MNSDocumentSectionTypeGroupHeader &&
+                    if ([[pageSec objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue] == MNSDocumentSectionTypeGroupHeader &&
                         [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {
                         [currentGroupLevelKeys addObjectsFromArray:[pageSec objectForKey: MTReportGroupLevelKeys]];
                         pageCtr = numberOfPages;

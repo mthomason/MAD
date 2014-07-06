@@ -53,8 +53,8 @@
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT DISTINCT %@ FROM %@", self.columnName, self.tableName];
     NSInteger i = 0;
     for (NSDictionary *predicate in [self predicates]) {
-        NSString *left = [predicate objectForKey:@"c"];
-        NSString *right = [predicate objectForKey:@"v"];
+        NSString *left = [predicate objectForKey:MTQueryKeyPredicateColumn];
+        NSString *right = [predicate objectForKey:MTQueryKeyPredicateValue];
         if (i == 0) {
             [sql appendString:@" WHERE "];
         } else {

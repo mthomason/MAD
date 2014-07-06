@@ -86,6 +86,11 @@
     }];
 }
 
+- (BOOL)tableExist:(NSString *)tablename {
+    NSAssert(false, @"Not implemented: %s.", __PRETTY_FUNCTION__);
+    return NO;
+}
+
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {

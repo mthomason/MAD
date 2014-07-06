@@ -33,6 +33,9 @@
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
+- (void)beginBulkInserts;
+- (void)endBulkInsert;
+
 + (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database;
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
 

@@ -73,6 +73,8 @@
 
 NSString * const MTQueryKeyType = @"MTQueryKeyType";
 NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
+NSString * const MTQueryKeyPredicateColumn = @"c";
+NSString * const MTQueryKeyPredicateValue = @"v";
 
 @interface MTQuery ()
 
@@ -232,7 +234,7 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
     [self setDatabase:database];
     @autoreleasepool {
         [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
-            [[self datatable] cache];
+            [[self datatable] cache];   //Datatable is often nil by design
             completion(success, error);
         }];
     }
@@ -335,6 +337,41 @@ NSString * const MTQueryKeyObject = @"MTQueryKeyObject";
 
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
     return [[(MTDataColumn *)[[self columns] objectForKey:columnHandle] columnType] integerValue];
+}
+
++ (NSDictionary *)queryDefinationSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {
+    NSNumber *keyColumnKeys = @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys);
+    NSNumber *keyTableName = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);
+    NSNumber *keySortDescriptors = @(MTQueryCacheSelectLimitOffsetParamatersSortDesc);
+    return  @{
+              keyColumnKeys : columnKeys,
+              keyTableName : tableName,
+              keySortDescriptors : sortDescriptors,
+              };
+}
+
++ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid {
+    NSMutableDictionary *queryDefination = [NSMutableDictionary dictionaryWithDictionary:queryDefinationSelect];
+    NSNumber *limitw = @(limit);
+    NSNumber *offsetw = @(offset);
+    NSNumber *keyLimit = @(MTQueryCacheSelectLimitOffsetParamatersLimit);
+    NSNumber *keyOffset = @(MTQueryCacheSelectLimitOffsetParamatersOffset);
+    [queryDefination setObject:limitw forKey:keyLimit];
+    [queryDefination setObject:offsetw forKey:keyOffset];
+    if (droprowid) {
+        NSNumber *keyDropRow = @(MTQueryCacheSelectLimitOffsetParamatersDropRowid);
+        NSNumber *dropRowidObj = @YES;
+        [queryDefination setObject:dropRowidObj forKey:keyDropRow];
+    }
+    return  queryDefination;
+}
++ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset {
+    return [self queryDefinationSelect:queryDefinationSelect withLimit:limit andOffset:offset dropRowid:NO];
+}
+
++ (NSDictionary *)queryDefinationCacheDeleteAllFromTable:(NSString *)table {
+    NSNumber *tableNameKey = @(MTQueryCacheDeleteAllFromTableTableName);
+    return @{tableNameKey : table};
 }
 
 @end

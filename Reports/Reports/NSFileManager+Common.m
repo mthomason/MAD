@@ -146,9 +146,13 @@
     return  [fileUrlWithPath URLByAppendingPathComponent:@"tmp" isDirectory:YES];
 }
 
-+ (NSURL *)cacheDirectory {
++ (NSString *)cachedPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesPath = [paths firstObject];
+    return [paths firstObject];
+}
+
++ (NSURL *)cacheDirectory {
+    NSString *cachesPath = [self cachedPath];
     return [NSURL fileURLWithPath:cachesPath isDirectory:YES];
 }
 

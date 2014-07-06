@@ -26,13 +26,9 @@ extern NSString * const MTNullIdentifier;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged;
 
-- (NSDictionary *)dataForRow:(NSUInteger)row onPage:(NSUInteger)page;
-
 - (id)dataForGroupKeys:(NSArray *)keys;
 - (NSUInteger)numberOfPages;
-- (NSUInteger)countOnPageIndex:(NSUInteger)pageIndex;
 
-- (NSIndexSet *)objectEnumeratorForPage:(NSUInteger)pageIndex;
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 
 - (NSArray *)layoutForPage:(NSUInteger)page;
@@ -42,12 +38,12 @@ extern NSString * const MTNullIdentifier;
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex;
 - (NSDictionary *)resultsForPageIndex:(NSInteger)pageIndex;
 
-- (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
-
 - (NSDictionary *)firstObjectOnReport;
 - (NSDictionary *)lastObjectOnReport;
 - (NSDictionary *)firstObjectOnPageAtIndex:(NSInteger)pageIndex;
 - (NSDictionary *)lastObjectOnPageAtIndex:(NSInteger)pageIndex;
+
++ (NSValue *)KeyReportSectionType;
 
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 

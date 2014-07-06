@@ -105,16 +105,29 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     [self openDatabase];
 }
 
+- (BOOL)tableExist:(NSString *)tablename {
+    BOOL exist = NO;
+	NSString *query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
+    sqlite3_stmt *statement = NULL;
+    const char *queryc = [query UTF8String];
+	char *sql = sqlite3_mprintf((char *) queryc);
+	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
+        sqlite3_bind_text(statement, 1, [tablename UTF8String], strlen([tablename UTF8String]), SQLITE_STATIC);
+		if (sqlite3_step(statement) == SQLITE_ROW) {
+            exist = sqlite3_column_int(statement, 0) == 1;
+        }
+    }
+    return exist;
+}
+
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
 	sqlite3_stmt *statement;
-	NSString *queryStart = @"SELECT \"tbl_name\" FROM \"main\".\"sqlite_master\" WHERE \"type\"='table';";
+	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     const char *queryStartChar = [queryStart UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
 
-    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
-    
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
 		while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -139,8 +152,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 	NSString *queryStart = [NSString stringWithFormat: @"PRAGMA \"main\".table_info(\"%@\");", tableName];
     const char *queryStartChar = [queryStart UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
-    
-    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
     
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -374,17 +385,11 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 break;
             }
             case MTDataTypeString: {
-                NSString *stringValue;
-                if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
-                    NSDateComponents *dc = [databinding value];
-                    NSCalendar *cal = [NSCalendar autoupdatingCurrentCalendar];
-                    NSDate *date = [cal dateFromComponents:dc];
-                    NSTimeInterval ti = [date timeIntervalSince1970];
-                    success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, ti);
-                } else if ([[databinding value] isKindOfClass:[NSString class]]) {
-                    stringValue = [databinding value];
-                    int len = (int)[stringValue lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [stringValue UTF8String], len, SQLITE_TRANSIENT);
+                if ([[databinding value] isKindOfClass:[NSString class]]) {
+                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [[databinding value] UTF8String], [[databinding value] lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
+                } else if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
+                    NSDate *date = [[NSCalendar autoupdatingCurrentCalendar] dateFromComponents:[databinding value]];
+                    success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, [date timeIntervalSince1970]);
                 } else {
                     NSAssert(false, @"What else is there? %s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 }
@@ -392,16 +397,13 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 break;
             }
             case MTDataTypeFloat:
-            case MTDataTypeDouble: {
-                double doubeValue = [[databinding value] doubleValue];
-                success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, doubeValue);
+            case MTDataTypeDouble:
+                sqlite3_bind_double(*statement, columnNumber, [[databinding value] doubleValue]);
                 NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
                 break;
-            }
-            case MTDataTypeNull: {
-                success = SQLITE_OK == sqlite3_bind_null(*statement, columnNumber);
+            case MTDataTypeNull:
+                sqlite3_bind_null(*statement, columnNumber);
                 NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
-            }
             default:
                 NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
                 break;
@@ -548,7 +550,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             }
         } else {
             int result = sqlite3_step(statement);
-            //MTLog(@"Sqlite message %s", (char *)sqlite3_errmsg(_database));
             NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s", (char *)sqlite3_errmsg(_database));
             NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
         }
@@ -572,7 +573,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         if (success == NO) {
             NSString *title = NSLocalizedString(@"Error", @"Error");
             error = [NSError errorWithDomain:@"MTDatabaseSqlite3" code:4784 title:title andMessage:message];
-            //NSLog(@"Sqlite3Error: %@\nQuery\n%@", error, queryString);
         }
         sqlite3_free(sql);
         
@@ -636,7 +636,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         case MTDataTypeDateTime:
         case MTDataTypeGeometry:
         default: {
-            NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
+            //NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
             if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
                 const unsigned char *text = sqlite3_column_text(statement, columnCounter);
                 if (text == NULL) {
@@ -697,6 +697,57 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 
 - (NSString *)tableAliasConnector {
     return @" ";
+}
+
+- (void)beginBulkInsert {
+
+    
+    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s1);
+    }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeOverride object:@{}];
+    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
+    [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s2);
+    }];
+    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
+    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s3);
+    }];
+    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+}
+
+- (void)endBulkInsert {
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s1);
+    }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
+    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
+    [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s2);
+    }];
+    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+    
+    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
+    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
+    [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        dispatch_semaphore_signal(s3);
+    }];
+    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+    
+    [self cleanupBulkInsert];
 }
 
 @end

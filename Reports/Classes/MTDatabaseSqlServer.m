@@ -46,6 +46,11 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     return NULL;
 }
 
+- (BOOL)tableExist:(NSString *)tablename {
+    NSAssert(false, @"Not implemented: %s.", __PRETTY_FUNCTION__);
+    return NO;
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     __block MTDatabaseSqlServer *blockSelf = self;

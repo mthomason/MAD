@@ -271,11 +271,15 @@
 }
 
 - (void)addRow:(NSArray *)row toTable:(NSString *)tableName withColumns:(NSDictionary *)columns andColumnKeys:(NSArray *)columnKeys {
+    NSNumber *keyKeys = @(MTQueryCacheAddRowColumnKeys);
+    NSNumber *keyColumns = @(MTQueryCacheAddRowColumns);
+    NSNumber *keyData = @(MTQueryCacheAddRowData);
+    NSNumber *keyTableName = @(MTQueryCacheAddRowTableName);
     NSDictionary *queryDefination = @{
-                                      @(MTQueryCacheAddRowColumnKeys)   : columnKeys,
-                                      @(MTQueryCacheAddRowColumns)      : columns,
-                                      @(MTQueryCacheAddRowData)         : row,
-                                      @(MTQueryCacheAddRowTableName)    : tableName
+                                      keyKeys : columnKeys,
+                                      keyColumns : columns,
+                                      keyData : row,
+                                      keyTableName : tableName
                                       };
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
@@ -292,8 +296,7 @@
     NSMutableArray *rowData = [[NSMutableArray alloc] init];
     for (id columnDefKey in [self columnKeys]) {
         MTDataColumn *columnDef = [[self columns] objectForKey:columnDefKey];
-        NSString *fieldKey = [columnDef fieldName];
-        id obj = row[fieldKey];
+        id obj = row[[columnDef fieldName]];
         if (obj == nil) obj = [NSNull null];
         [rowData addObject:obj];
     }
@@ -468,10 +471,7 @@
 }
 
 - (void)deleteAll {
-    NSNumber *tableNameKey = @(MTQueryCacheDeleteAllFromTableTableName);
-    NSDictionary *queryDefination = @{
-                                      tableNameKey : [self tableName]
-                                      };
+    NSDictionary *queryDefination = [MTQuery queryDefinationCacheDeleteAllFromTable:[self tableName]];
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     
@@ -497,18 +497,11 @@
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return  @{
-                @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys) : [self columnKeys],
-                @(MTQueryCacheSelectLimitOffsetParamatersTableNames) : [self tableName],
-                @(MTQueryCacheSelectLimitOffsetParamatersSortDesc) : [self sortDescriptors],
-            };
+    return [MTQuery queryDefinationSelect:[self columnKeys] tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSInteger)limit andOffset:(NSInteger)offset {
-    NSMutableDictionary *queryDefination = [NSMutableDictionary dictionaryWithDictionary:[self queryDefinationSelect]];
-    [queryDefination setObject:@(limit) forKey:@(MTQueryCacheSelectLimitOffsetParamatersLimit)];
-    [queryDefination setObject:@(offset) forKey:@(MTQueryCacheSelectLimitOffsetParamatersOffset)];
-    return  queryDefination;
+    return [MTQuery queryDefinationSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
 }
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
@@ -545,8 +538,8 @@
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
     NSInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
-        NSDictionary *whereStatement = @{@"c" : [self idColumnKeyForGroupLocation:groupLevel],
-                                         @"v" : key};
+        NSDictionary *whereStatement = @{MTQueryKeyPredicateColumn : [self idColumnKeyForGroupLocation:groupLevel],
+                                         MTQueryKeyPredicateValue : key};
         [whereClause addObject:whereStatement];
         groupLevel++;
     }
@@ -595,11 +588,6 @@
     sqlite3_finalize(statement);
     sqlite3_free(queryString);
     return results;
-}
-
-void sqliteCallbackFunc(void *foo, const char* statement);
-void sqliteCallbackFunc(void *foo, const char* statement) {
-    MTLogStatic(@"=> %s", statement);
 }
 
 - (NSArray *)objectAtRow:(NSInteger)row limit:(NSUInteger)limit {
@@ -822,7 +810,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSDictionary *)paramatersAggregateByGroupKeys:(NSArray *)groupKeys andFieldKey:(NSString *)fieldKey andFunctionType:(MTAggregateFunctionType)functionType {
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
-    NSNumber *keyWhereClause = @(MTQueryCacheAggregateFunctionParamatersWhere);
+    NSNumber *keyWhereClause = @(MTQueryCacheAggregateFunctionParamatersPredicates);
     [parameters setObject:[self whereClauseForGroupKeys:groupKeys] forKey:keyWhereClause];
     return parameters;
 }
@@ -1014,7 +1002,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
         columnCounter++;
     }
     if (sqlite3_column_count(statement) >= columnCounter) {
-        [currentObject setValue:@(sqlite3_column_int(statement, columnCounter)) forKey:@"ROWID"];
+        NSNumber *rowid = @(sqlite3_column_int(statement, columnCounter));
+        [currentObject setValue:rowid forKey:@"ROWID"];
     }
     return currentObject;
 }
@@ -1023,57 +1012,18 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [self setBulkInsertLoop:YES];
     
     [self reopenDbConnection];
-
-    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    [querySyncMode performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(s1);
-    }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    
-    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeOverride object:@{}];
-    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
-    [queryJournalMode performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(s2);
-    }];
-    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
     
     [self setSortDescriptorsSet:NO];
     [self createIndex];
     
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
-    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(s3);
-    }];
-    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+    [(MTDatabaseSqlite3 *)[self databaseForInserts] beginBulkInserts];
+
 }
 
 - (void)endBulkInsert {
     [self setBulkInsertLoop:NO];
+    [(MTDatabaseSqlite3 *)[self databaseForInserts] endBulkInsert];
     
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(s1);
-    }];
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    
-    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
-    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
-    [querySyncMode performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(s2);
-    }];
-    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
-
-    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
-    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
-    [queryJournalMode performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
-        dispatch_semaphore_signal(s3);
-    }];
-    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
-
-    [[self databaseForInserts] cleanupBulkInsert];
 }
 
 - (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {

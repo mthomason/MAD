@@ -53,7 +53,7 @@
         NSString *columnKey = [NSString stringWithString:[object objectForKey:keyParametersFieldKey]];
         [self setColumnKey:columnKey];
         
-        NSNumber *keyWhere = @(MTQueryCacheAggregateFunctionParamatersWhere);
+        NSNumber *keyWhere = @(MTQueryCacheAggregateFunctionParamatersPredicates);
         NSArray *whereClause = [NSArray arrayWithArray:[object objectForKey:keyWhere]];
         [self setWhereClause:whereClause];
         
