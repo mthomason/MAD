@@ -705,6 +705,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s1);
     }];
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
@@ -712,6 +713,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeOverride object:@{}];
     dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
     [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s2);
     }];
     dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
@@ -719,6 +721,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
     dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s3);
     }];
     dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
@@ -729,6 +732,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s1);
     }];
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
@@ -736,6 +740,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
     dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
     [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s2);
     }];
     dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
@@ -743,6 +748,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
     [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s3);
     }];
     dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);

@@ -70,7 +70,6 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (NSString *)sqlAggregateFunctionMax;
 - (NSString *)sqlSampleDataForField:(RptqDatabaseSchemaField *)schemaField;
 
-- (BOOL)tableExist:(NSString *)tablename;
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion;
 
 - (void)getCredentalsWithConnection:(MTDatabaseConnection *)connection
@@ -78,10 +77,8 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id dbconn, BOOL success, NSError *error))completion;
 - (void)removeCredentalsBecauseOfError:(NSError *)error;
 
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType;
 
 - (void)cleanupBulkInsert;
-- (void *)databaseHandle;
 
 - (void)readRow:(NSUInteger)row;
 

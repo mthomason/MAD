@@ -6,13 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-//#ifndef MAD_MTArrayCached_DEBUG
-//#define MAD_MTArrayCached_DEBUG
+#ifndef MAD_MTArrayCached_DEBUG
+#define MAD_MTArrayCached_DEBUG
+#endif
 
 #import "MTArrayCached.h"
 #import "NSFileManager+Common.h"
 #import "MTDatabaseConnection.h"
-#import "MTDatabase.h"
+#import "MTDatabaseCache.h"
 #import "MTDataColumn.h"
 #import "MTQuery.h"
 #import "libSqlite3_8.h"
@@ -27,15 +28,18 @@ NSString * const MTArrayCachedExtension = @"madac";
 @interface MTArrayCached ()
 
 @property (nonatomic, strong) NSString *identifier;
-@property (nonatomic, strong) MTDatabase *database;
+@property (nonatomic, strong) MTDatabaseCache *database;
 @property (nonatomic, assign) NSInteger numberOrRows;
+@property (nonatomic, assign) sqlite3_stmt *statementInsert;
+@property (nonatomic, assign) sqlite3_stmt *statementSelect;
 
 @end
 
 @implementation MTArrayCached
 
 - (void)dealloc {
-
+    sqlite3_finalize(_statementInsert);
+    sqlite3_finalize(_statementSelect);
 }
 
 - (id)initWithIdentifier:(NSString *)identifier {
@@ -49,18 +53,22 @@ NSString * const MTArrayCachedExtension = @"madac";
     return self;
 }
 
+- (void)reopenDatabaseAtUrl:(NSURL *)url {
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:url];
+    MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
+#ifdef MAD_MTArrayCached_DEBUG
+    sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
+#endif
+    [self setDatabase:database];
+}
+
 - (void)initalizeDatabase {
 
     NSURL *url = [self url];
     BOOL createDatabase = [[NSFileManager defaultManager] fileExistsAtPath:[url path]] == NO;
-    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:url];
-    MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
-    [self setDatabase:database];
-#ifdef MAD_MTArrayCached_DEBUG
-    sqlite3_trace(database.databaseHandle, sqliteCallbackFunc, NULL);
-#endif
+    [self reopenDatabaseAtUrl:[self url]];
     if (createDatabase == NO) {
-        createDatabase = [database tableExist:MTArrayCachedTableName] == NO;
+        createDatabase = [self.database tableExist:MTArrayCachedTableName] == NO;
     }
     if (createDatabase) {
         MTDataColumn *columnKey = [MTArrayCached columnKey];
@@ -71,6 +79,33 @@ NSString * const MTArrayCachedExtension = @"madac";
     } else {
         [self setNumberOrRows:[self count]];
     }
+    [self prepareStatements];
+}
+
+- (void)beginBulkInserts {
+    [[self database] beginBulkInsert];
+}
+
+- (void)endBulkInserts {
+    [[self database] endBulkInsert];
+    [self reopenDatabaseAtUrl:[self url]];
+    [self prepareStatements];
+}
+
+- (BOOL)prepareStatements {
+    return [self prepareStatementInsert] && [self prepareStatementSelect];
+}
+
+- (BOOL)prepareStatementInsert {
+    NSString *queryString = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@) VALUES (?1, ?2);", MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
+    _statementInsert = NULL;
+    return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementInsert, NULL) == SQLITE_OK;
+}
+
+- (BOOL)prepareStatementSelect {
+    NSString *queryString = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ = ? LIMIT 1  OFFSET 0;", MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    _statementSelect = NULL;
+    return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementSelect, NULL) == SQLITE_OK;
 }
 
 #ifdef MAD_MTArrayCached_DEBUG
@@ -146,32 +181,12 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (void)addObject:(id)object {
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
-    NSNumber *index = @(self.numberOrRows);
-    NSArray *row = @[index, data];
-    
-    NSNumber *keyKeys = @(MTQueryCacheAddRowColumnKeys);
-    NSNumber *keyColumns = @(MTQueryCacheAddRowColumns);
-    NSNumber *keyData = @(MTQueryCacheAddRowData);
-    NSNumber *keyTableName = @(MTQueryCacheAddRowTableName);
-    MTDataColumn *ck = [MTArrayCached columnKey];
-    MTDataColumn *cv = [MTArrayCached columnValue];
-    NSArray *columnKeys = @[MTArrayCachedColumnKey, MTArrayCachedColumnValue];
-    NSDictionary *columns = @{MTArrayCachedColumnKey : ck, MTArrayCachedColumnValue : cv};
-    NSDictionary *queryDefination = @{
-                                      keyKeys : columnKeys,
-                                      keyColumns : columns,
-                                      keyData : row,
-                                      keyTableName : MTArrayCachedTableName
-                                      };
-
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
-    dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
-    [query performQueryWithDatabase:[self database] completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"Error %@", error);
-        dispatch_semaphore_signal(semaphoreQuery);
-    }];
-    self.numberOrRows++;
-    dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
+    sqlite3_bind_int(_statementInsert, 1, self.numberOrRows);
+    sqlite3_bind_blob(_statementInsert, 2, [data bytes], [data length], SQLITE_TRANSIENT);
+    if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
+        sqlite3_reset(_statementInsert);
+        self.numberOrRows++;
+    }
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
@@ -196,7 +211,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
     BOOL success = sqlite3_prepare_v2([[self database] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
-    NSAssert(success, @"%s", sqlite3_errmsg([[self database] databaseHandle]));
 
     id result = nil;
     
@@ -241,7 +255,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                             ascending:NO
                                                              selector:@selector(compare:)];
     NSArray *sortdesc = @[sortn];
-    NSMutableDictionary *queryDefinationSelect = [NSMutableDictionary dictionaryWithDictionary:[MTQuery queryDefinationSelect:columnNameIndex tableName:MTArrayCachedTableName sortDescriptors:sortdesc]];
+    NSMutableDictionary *queryDefinationSelect = [NSMutableDictionary dictionaryWithDictionary:[MTQuery queryDefinationSelect:columnNameIndex
+                                                                                                                    tableName:MTArrayCachedTableName
+                                                                                                              sortDescriptors:sortdesc]];
     NSNumber *yes = @YES;
     NSNumber *key = @(MTQueryCacheSelectLimitOffsetParamatersDropRowid);
     [queryDefinationSelect setObject:yes forKey:key];

@@ -9,14 +9,14 @@
 #ifndef Reports_MTDatabaseSqlite3_h
 #define Reports_MTDatabaseSqlite3_h
 
-#import "MTDatabase.h"
+#import "MTDatabaseCache.h"
 #import "libSqlite3_8.h"
 
 #import "MTDatabaseConnection.h"
 
 @class MTDatabaseDataBinding;
 
-@interface MTDatabaseSqlite3 : MTDatabase
+@interface MTDatabaseSqlite3 : MTDatabaseCache
 
 - (void *)databaseHandle;
 
@@ -32,9 +32,6 @@
 + (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
-
-- (void)beginBulkInserts;
-- (void)endBulkInsert;
 
 + (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database;
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;

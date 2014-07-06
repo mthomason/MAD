@@ -41,16 +41,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 @implementation MTDatabaseSqlServer
 
-- (void *)databaseHandle {
-    NSAssert(false, @"Not yet implemented");
-    return NULL;
-}
-
-- (BOOL)tableExist:(NSString *)tablename {
-    NSAssert(false, @"Not implemented: %s.", __PRETTY_FUNCTION__);
-    return NO;
-}
-
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     __block MTDatabaseSqlServer *blockSelf = self;
@@ -1456,11 +1446,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
                      safeField, [self tableAliasConnector], safeFieldAlias,
                      MTSqlFrom, safeTable];
     return sql;
-}
-
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
-    // FIXME: Not implemented.  Needed for insert statement generation.
-    return @"";
 }
 
 @end

@@ -24,8 +24,8 @@
 
 @interface MTDataTableFast ()
 
-@property (nonatomic, strong) MTDatabase *databaseForInserts;
-@property (nonatomic, strong) MTDatabase *databaseForSelects;
+@property (nonatomic, strong) MTDatabaseCache *databaseForInserts;
+@property (nonatomic, strong) MTDatabaseCache *databaseForSelects;
 
 @property (nonatomic, strong) NSURL *urlFastCache;
 @property (nonatomic, assign, readwrite) NSUInteger tag;
@@ -193,9 +193,9 @@
 
 - (void)reopenDbConnection {
     MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
-    MTDatabase *database = [MTDatabase databaseFactory:connection];
+    MTDatabaseCache *database = [MTDatabaseCache databaseFactory:connection];
     [self setDatabaseForInserts:database];
-    MTDatabase *database2 = [MTDatabase databaseFactory:connection];
+    MTDatabaseCache *database2 = [MTDatabaseCache databaseFactory:connection];
     [self setDatabaseForSelects:database2];
 }
 
@@ -351,7 +351,6 @@
     dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
 
     [[self columnKeys] removeAllObjects];
-    //[[self sortDescriptors] removeAllObjects];
     [[self columns] removeAllObjects];
     [self setRowCounter:0];
     
@@ -1016,7 +1015,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [self setSortDescriptorsSet:NO];
     [self createIndex];
     
-    [(MTDatabaseSqlite3 *)[self databaseForInserts] beginBulkInserts];
+    [[self databaseForInserts] beginBulkInsert];
 
 }
 

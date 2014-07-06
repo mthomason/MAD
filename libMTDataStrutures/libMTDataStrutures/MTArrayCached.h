@@ -17,6 +17,9 @@
 - (void)addObject:(id)object;
 - (void)removeAllObjects;
 
+- (void)beginBulkInserts;
+- (void)endBulkInserts;
+
 + (NSURL *)urlForIdentifier:(NSString *)identifer;
 
 @end

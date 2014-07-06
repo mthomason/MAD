@@ -11,7 +11,7 @@
 #endif
 
 #import "MTDataTableFastObjectEnumerator.h"
-#import "MTDatabase.h"
+#import "MTDatabaseCache.h"
 #import "MTDatabaseConnection.h"
 #import "MTDataColumn.h"
 #import "libSqlite3_8.h"
@@ -26,7 +26,7 @@
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (assign) BOOL empty;
 
-@property (nonatomic, strong) MTDatabase *databaseForQuery;
+@property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
 
 @end
 
@@ -41,7 +41,7 @@
     self = [super init];
     if (self) {
 
-        MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+        MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
         [self setDatabaseForQuery:database];
 
         NSUInteger numberOfColumns = [columnKeys count];

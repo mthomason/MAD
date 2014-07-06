@@ -27,7 +27,6 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
 
     [self setCat:@"Cat"];
     [self setDog:@"dog"];
@@ -44,16 +43,17 @@
     }
     
     MTArrayCached *array = [[MTArrayCached alloc] initWithIdentifier:[self identifier]];
+    [array beginBulkInserts];
     [array addObject:self.cat];
     [array addObject:self.dog];
     [array addObject:self.pi];
     [array addObject:self.yes];
     [array addObject:self.rec];
+    [array endBulkInserts];
     [self setArray:array];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
     [[self array] removeAllObjects];
     

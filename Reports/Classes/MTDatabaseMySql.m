@@ -59,11 +59,6 @@
     [self readRow:row];
 }
 
-- (void *)databaseHandle {
-    NSAssert(false, @"Not yet implemented");
-    return NULL;
-}
-
 - (void)connectWithCredentals:(MTDatabaseConnection *)connection completion:(void (^)(id, BOOL, NSError *))completion {
     
     [self getCredentalsWithConnection:connection completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
@@ -84,11 +79,6 @@
         completion(conn, success, connError);
         
     }];
-}
-
-- (BOOL)tableExist:(NSString *)tablename {
-    NSAssert(false, @"Not implemented: %s.", __PRETTY_FUNCTION__);
-    return NO;
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
@@ -319,11 +309,6 @@
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     return [NSString stringWithFormat:@"`%@`", fieldOrTableName];
-}
-
-- (NSString *)nativeTypeForDataType:(MTDataType)dataType {
-    // FIXME: Not implemented.  Needed for insert statement generation.
-    return @"";
 }
 
 @end

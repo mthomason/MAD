@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MTQuery.h"
+#import "MTQueryCache.h"
 
-@interface MTQueryCacheAddColumn : MTQuery
+@interface MTQueryCacheAddColumn : MTQueryCache
 
 @end
