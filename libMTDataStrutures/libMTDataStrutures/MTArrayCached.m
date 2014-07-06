@@ -308,4 +308,29 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     sqlite3_reset(_statementEnumer);
 }
 
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained *)stackbuf count:(NSUInteger)len {
+    if(state->state == 0) {
+        state->state = 1;
+        state->mutationsPtr = &state->extra[0];
+        sqlite3_reset(_statementEnumer);
+    }
+    state->mutationsPtr = &_database.databaseHandle[0];
+
+    NSUInteger count = 0;
+    for (NSUInteger i = 0; i<len; i++) {
+        int stepResult = sqlite3_step(_statementEnumer);
+        if (stepResult == SQLITE_ROW) {
+            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                                 length: sqlite3_column_bytes(_statementEnumer, 0)];
+            stackbuf[i] = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+        } else if (stepResult == SQLITE_DONE) {
+            sqlite3_reset(_statementEnumer);
+            stackbuf[i] = nil;
+            break;
+            count = i + 1;
+        }
+    }
+    return count;
+}
+
 @end
