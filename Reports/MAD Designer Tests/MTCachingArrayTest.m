@@ -94,7 +94,19 @@
     for (id obj in [self array]) {
         XCTAssertEqualObjects(obj, [[self arrayControl] objectAtIndex:objCtr], @"Object value check failed.");
         objCtr++;
+        
+        if (objCtr == 2) {
+            break;
+        }
     }
+
+    [[self array] resetEnumerator];
+    objCtr = 0;
+    for (id obj in [self array]) {
+        XCTAssertEqualObjects(obj, [[self arrayControl] objectAtIndex:objCtr], @"Object value check failed.");
+        objCtr++;
+    }
+
 }
 
 @end

@@ -22,4 +22,6 @@
 
 + (NSURL *)urlForIdentifier:(NSString *)identifer;
 
+- (void)resetEnumerator;
+
 @end

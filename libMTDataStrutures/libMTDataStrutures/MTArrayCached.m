@@ -39,6 +39,8 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 @property (nonatomic, assign) sqlite3_stmt *statementCount;
 @property (nonatomic, assign) sqlite3_stmt *statementEnumer;
 
+@property (nonatomic, assign) NSUInteger nextObjectCounter;
+
 @end
 
 @implementation MTArrayCached
@@ -283,6 +285,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (id)nextObject {
+    
     int stepResult;
     id result = nil;
     if ([self isEmpty]) {
@@ -299,6 +302,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         sqlite3_reset(_statementEnumer);
     }
     return result;
+}
+
+- (void)resetEnumerator {
+    sqlite3_reset(_statementEnumer);
 }
 
 @end
