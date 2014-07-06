@@ -90,6 +90,7 @@
 }
 
 - (void)testEnum {
+    
     NSUInteger objCtr = 0;
     for (id obj in [self array]) {
         XCTAssertEqualObjects(obj, [[self arrayControl] objectAtIndex:objCtr], @"Object value check failed.");
@@ -107,6 +108,59 @@
         objCtr++;
     }
 
+}
+
+- (void)addLotsOfNumbersToArrays {
+    [[self array] beginBulkInserts];
+    for (NSUInteger i = 0; i<500; i++) {
+        NSNumber *iobj = [NSNumber numberWithUnsignedInteger:i];
+        [[self arrayControl] addObject:iobj];
+        [[self array] addObject:iobj];
+    }
+    [[self array] endBulkInserts];
+}
+
+- (void)testLargeEnum {
+
+    [self addLotsOfNumbersToArrays];
+    NSUInteger objCtr = 0;
+    for (id obj in [self array]) {
+        XCTAssertEqualObjects(obj, [[self arrayControl] objectAtIndex:objCtr], @"Object value check failed.");
+        objCtr++;
+    }
+    BOOL success = objCtr == [self.arrayControl count] && objCtr == [[self array] count];
+    XCTAssert(success, @"");
+}
+
+- (void)addLotsOfNumbersToArray {
+    [[self array] beginBulkInserts];
+    for (NSUInteger i = 0; i<5000; i++) {
+        @autoreleasepool {
+            NSNumber *iobj = [NSNumber numberWithUnsignedInteger:i];
+            [[self array] addObject:iobj];
+        }
+    }
+    [[self array] endBulkInserts];
+}
+
+- (void)testLargeEnumLowMemory {
+    [[self array] removeAllObjects];
+    [self addLotsOfNumbersToArray];
+    NSUInteger objCtr = 0;
+    BOOL allgood = YES;
+    for (id obj in [self array]) {
+        @autoreleasepool {
+            NSNumber *n = [NSNumber numberWithUnsignedInteger:objCtr];
+            allgood = [obj isEqual:n];
+            if (allgood == NO) {
+                break;
+            }
+            objCtr++;
+        }
+    }
+    XCTAssert(allgood, @"Object value check failed.");
+    BOOL success = objCtr == [[self array] count];
+    XCTAssert(success, @"");
 }
 
 @end

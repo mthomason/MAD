@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTArrayCached_DEBUG
-#define MAD_MTArrayCached_DEBUG
-#endif
+//#ifndef MAD_MTArrayCached_DEBUG
+//#define MAD_MTArrayCached_DEBUG
+//#endif
 
 #import "MTArrayCached.h"
 #import "NSFileManager+Common.h"
@@ -41,6 +41,8 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 @property (nonatomic, assign) NSUInteger nextObjectCounter;
 
+@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
+
 @end
 
 @implementation MTArrayCached
@@ -55,6 +57,9 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 - (id)initWithIdentifier:(NSString *)identifier {
     self = [super init];
     if (self) {
+        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
+        [self setFastEnumerationObjects:fastEnumerationObjects];
+        
         NSString *i = [NSString stringWithString:identifier];
         [self setIdentifier:i];
         [self initalizeDatabase];
@@ -309,28 +314,40 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained *)stackbuf count:(NSUInteger)len {
+
+    NSUInteger i = 0;
+    int stepResult;
+
     if(state->state == 0) {
         state->state = 1;
         state->mutationsPtr = &state->extra[0];
         sqlite3_reset(_statementEnumer);
     }
-    state->mutationsPtr = &_database.databaseHandle[0];
-
-    NSUInteger count = 0;
-    for (NSUInteger i = 0; i<len; i++) {
-        int stepResult = sqlite3_step(_statementEnumer);
-        if (stepResult == SQLITE_ROW) {
-            NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
-                                                 length: sqlite3_column_bytes(_statementEnumer, 0)];
-            stackbuf[i] = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
-        } else if (stepResult == SQLITE_DONE) {
-            sqlite3_reset(_statementEnumer);
-            stackbuf[i] = nil;
-            break;
-            count = i + 1;
+    
+    if (state->state != 2) {
+        //state->mutationsPtr = (unsigned long *)&_statementEnumer;
+        state->itemsPtr = stackbuf;
+        [[self fastEnumerationObjects] removeAllObjects];
+        
+        for (i = 0; i<len; i++) {
+            @autoreleasepool {
+                stepResult = sqlite3_step(_statementEnumer);
+                if (stepResult == SQLITE_ROW) {
+                    NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
+                                                         length: sqlite3_column_bytes(_statementEnumer, 0)];
+                    id obj = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+                    [[self fastEnumerationObjects] addObject:obj];
+                    stackbuf[i] = obj;
+                } else if (stepResult == SQLITE_DONE) {
+                    sqlite3_reset(_statementEnumer);
+                    stackbuf[i] = nil;
+                    state->state = 2;
+                    break;
+                }
+            }
         }
     }
-    return count;
+    return i;
 }
 
 @end
