@@ -44,6 +44,12 @@ extern NSString * const MTNullIdentifier;
 - (NSDictionary *)lastObjectOnPageAtIndex:(NSInteger)pageIndex;
 
 + (NSValue *)KeyReportSectionType;
+- (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
+
+- (NSArray *)keysForGroup:(NSUInteger)group;
+- (NSArray *)keysForGroup:(NSUInteger)group depth:(NSUInteger)depth onPage:(NSUInteger)page;
+
+- (NSUInteger)numberOfGroups;
 
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 

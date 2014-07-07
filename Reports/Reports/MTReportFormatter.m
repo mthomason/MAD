@@ -52,13 +52,14 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong, readwrite) MTArrayCached *reportIndexes;
 @property (nonatomic, strong, readwrite) MTArrayCached *reportLayout;
+@property (nonatomic, strong, readwrite) MTArrayCached *groupKeys;
 
 @property (nonatomic, strong) MTPageCaching *pageCachingVirtual;
 @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
 @property (nonatomic, assign) CGSize layoutSize;
-@property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
 
+@property (nonatomic, assign) NSUInteger groupCounter;
 
 @property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
 @property (nonatomic, strong) NSMutableIndexSet *pageIndexesTemporary;
@@ -67,9 +68,44 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
 
+//State machine
+@property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
+@property (nonatomic, retain) NSNumber *detailRowId;
+
 @end
 
 @implementation MTReportFormatter
+
+- (NSArray *)keysForGroup:(NSUInteger)group {
+    return [self groupKeys][group];
+}
+
+- (NSArray *)keysForGroup:(NSUInteger)group depth:(NSUInteger)depth onPage:(NSUInteger)page {
+    NSArray *results = nil;
+    NSArray *layout = [self reportLayout][page];
+    NSInteger groupCounter = 0;
+    for (NSDictionary *section in layout) {
+        NSNumber *typeobj = section[MTReportSectionType];
+        MNSDocumentSectionType type = [typeobj integerValue];
+        if (type == MNSDocumentSectionTypeGroupHeader) {
+            NSArray *values = section[MTReportGroupLevelKeys];
+            NSNumber *groupLevel = section[MTReportGroupLevel];
+            if ([groupLevel integerValue] + 1 == depth && groupCounter == group) {
+                if (groupCounter == group) {
+                    results = [NSArray arrayWithArray:values];
+                    break;
+                }
+            }
+        }
+        if (type == MNSDocumentSectionTypeGroupFooter) {
+            NSNumber *groupLevel = section[MTReportGroupLevel];
+            if ([groupLevel integerValue] + 1 == depth) {
+                groupCounter++;
+            }
+        }
+    }
+    return results;
+}
 
 - (void)dealloc {
     [[self reportFormatterCache] dumpCache];
@@ -107,6 +143,9 @@ NSString * const MTNullIdentifier = @"(null)";
 - (NSString *)nameVirticalReportIndexes {
     return [NSString stringWithFormat:@"%@%s", [[self reportDocument] name], "iv"];
 }
+- (NSString *)identifierForGroupKeys {
+    return [NSString stringWithFormat:@"%@%s", [[self reportDocument] name], "gk"];
+}
 - (NSString *)identifierForSizeIndexes:(CGSize)size {
     NSString *s1 = NSStringFromCGSize(size);
     NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -141,6 +180,9 @@ NSString * const MTNullIdentifier = @"(null)";
     MTArrayCached *reportLayout = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
     [self setReportLayout:reportLayout];
     
+    MTArrayCached *groupKeys = [[MTArrayCached alloc] initWithIdentifier:[self identifierForGroupKeys]];
+    [self setGroupKeys:groupKeys];
+    
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
@@ -154,7 +196,11 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setPageIndexesTemporary:temporaryDataForPage];
     
     [self setLayoutHeightsBySectionKey:nil];
+
+    [self setGroupCounter:0];
     
+    NSNumber *zero = @(0);
+    [self setDetailRowId:zero];
     
 }
 
@@ -259,80 +305,13 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageIndexesTemporary] removeAllIndexes];
 }
 
-- (void)addReportHeader {
-    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeReportHeader)};
-    [[self pageLayoutTemporary] addObject: d];
-}
-
-- (void)addPageHeader {
-    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypePageHeader)};
-    [[self pageLayoutTemporary] addObject:  d];
-}
-
 + (NSString *)KeyReportSectionType {
     return MTReportSectionType;
 }
 
-- (void)addAllDetail {
-    
-    [self initReportLayoutContainers];
-
-    NSInteger numberOfGroups = [[self sortDescriptorsByGroupSorted] count];
-    
-    RptqDocumentSection *detailSection = [[[self reportDocument] activeDocument] hasDetailSection];
-
-    BOOL firstRow = YES;
-
-    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForKeyObjectsSorted];
-
-    NSArray *sqg = [[[self query] queryObject] sortedQueryGroups];
-    [self setSortedQueryGroups:sqg];
-    
-    BOOL rowIdOnly = YES;
-    BOOL calculatedRowId = NO;
-    for (id resultRow in dataEnumerator) {
-        @autoreleasepool {
-            
-            
-            //Get row id
-            if (calculatedRowId == NO) {
-                if ([resultRow isKindOfClass:[NSDictionary class]]) {
-                    rowIdOnly = NO;
-                }
-                calculatedRowId = YES;
-            }
-            NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
-            
-            
-            //Get row key values
-            NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-            if (rowIdOnly == NO) {
-                for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
-                    id predicateValue = [resultRow objectForKey:[sortDesc key]];
-                    [keyValuesForComparson addObject:predicateValue];
-                }
-            }
-            
-            //Display new footers if needed.
-            if (!firstRow) {
-                [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-            }
-            
-            //Display new group headers if needed.
-            [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-            [self addHeightFromDocumentSectionToReportLayout:detailSection];
-            
-            [self addDetail:rowid];
-            
-            
-            [self setLastResultRowComparsonValues: keyValuesForComparson];
-            
-            firstRow = NO;
-
-        }
-    }
+- (NSUInteger)numberOfGroups {
+    return [[self sortDescriptorsByGroupSorted] count];
 }
-
 
 - (NSDictionary *)firstObjectOnReport {
     return [self firstObjectOnPageAtIndex:0];
@@ -469,7 +448,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
             [self addHeightFromDocumentSectionToReportLayout:[[[self reportDocument] activeDocument] hasDetailSection]];
             NSNumber *rowid = containerDetails[i][@"ROWID"];
-            [self addDetail:rowid];
+            [self setDetailRowId:rowid];
+            [self addDetail];
 
         }
     }
@@ -518,7 +498,64 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addDetailToReportLayout {
-    [self addAllDetail];
+    [self initReportLayoutContainers];
+    
+    [[self groupKeys] removeAllObjects];
+    
+    NSInteger numberOfGroups = [self numberOfGroups];
+    
+    RptqDocumentSection *detailSection = [[[self reportDocument] activeDocument] hasDetailSection];
+    
+    BOOL firstRow = YES;
+    
+    NSEnumerator *dataEnumerator = [[[self query] datatable] enumeratorForKeyObjectsSorted];
+    
+    NSArray *sqg = [[[self query] queryObject] sortedQueryGroups];
+    [self setSortedQueryGroups:sqg];
+    
+    BOOL rowIdOnly = YES;
+    BOOL calculatedRowId = NO;
+    for (id resultRow in dataEnumerator) {
+        @autoreleasepool {
+            
+            
+            //Get row id
+            if (calculatedRowId == NO) {
+                if ([resultRow isKindOfClass:[NSDictionary class]]) {
+                    rowIdOnly = NO;
+                }
+                calculatedRowId = YES;
+            }
+            NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
+            [self setDetailRowId:rowid];
+            
+            //Get row key values
+            NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+            if (rowIdOnly == NO) {
+                for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
+                    id predicateValue = [resultRow objectForKey:[sortDesc key]];
+                    [keyValuesForComparson addObject:predicateValue];
+                }
+            }
+            
+            //Display new footers if needed.
+            if (!firstRow) {
+                [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            }
+            
+            //Display new group headers if needed.
+            [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            [self addHeightFromDocumentSectionToReportLayout:detailSection];
+            
+            [self addDetail];
+            
+            
+            [self setLastResultRowComparsonValues: keyValuesForComparson];
+            
+            firstRow = NO;
+            
+        }
+    }
 }
 
 // FIXME: Make sure paper rect is passed in to the software
@@ -590,37 +627,79 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
     NSNumber *level = @(groupLevel);
     NSArray *newKeys = [NSArray arrayWithArray:keys];
-    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType]     : @(MNSDocumentSectionTypeGroupHeader),
-                        MTReportGroupLevelKeys  : newKeys,
-                        MTReportGroupLevel      : level};
+    NSNumber *type = @(MNSDocumentSectionTypeGroupHeader);
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
+    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : type,
+                        MTReportGroupLevelKeys : newKeys,
+                        MTReportGroupLevelNumber : groupNumber,
+                        MTReportGroupLevel : level,
+                        MTReportDetailRowId : rowid};
+    if (groupLevel == [self numberOfGroups] - 1) {
+        [[self groupKeys] addObject:newKeys];
+        self.groupCounter++;
+    }
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addPageFooter {
     NSNumber *section = @(MNSDocumentSectionTypePageFooter);
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : section,
-                        };
+                        MTReportGroupLevelNumber : groupNumber,
+                        MTReportDetailRowId : rowid};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addReportFooter {
-    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeReportFooter)};
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
+    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeReportFooter),
+                        MTReportGroupLevelNumber : groupNumber,
+                        MTReportDetailRowId : rowid};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
     NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeGroupFooter),
-                        MTReportGroupLevel : gl};
+                        MTReportGroupLevelNumber : groupNumber,
+                        MTReportGroupLevel : gl,
+                        MTReportDetailRowId : rowid};
     [[self pageLayoutTemporary] addObject: d];
 }
 
-- (void)addDetail:(NSNumber *)detailRowId {
+- (void)addDetail {
     NSNumber *type = @(MNSDocumentSectionTypeBody);
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
     NSDictionary *detail = @{[MTReportFormatter KeyReportSectionType] : type,
-                             MTReportDetailRowId : detailRowId};
+                             MTReportGroupLevelNumber : groupNumber,
+                             MTReportDetailRowId : rowid};
     [[self pageLayoutTemporary] addObject: detail];
-    [[self pageIndexesTemporary] addIndex:[detailRowId integerValue]];
+    [[self pageIndexesTemporary] addIndex:[[self detailRowId] integerValue]];
+}
+
+
+- (void)addReportHeader {
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
+    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeReportHeader),
+                        MTReportGroupLevelNumber : groupNumber,
+                        MTReportDetailRowId : rowid};
+    [[self pageLayoutTemporary] addObject: d];
+}
+
+- (void)addPageHeader {
+    NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
+    NSNumber *rowid = [self detailRowId];
+    NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypePageHeader),
+                        MTReportGroupLevelNumber : groupNumber,
+                        MTReportDetailRowId : rowid};
+    [[self pageLayoutTemporary] addObject:  d];
 }
 
 - (NSUInteger)numberOfPages {

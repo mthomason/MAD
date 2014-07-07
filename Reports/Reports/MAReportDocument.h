@@ -22,6 +22,7 @@ extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportSectionValues;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MTReportGroupLevelKeys;
+extern NSString * const MTReportGroupLevelNumber;
 
 extern NSString * const MTPageDetail;
 extern NSString * const MTPageHeader;
