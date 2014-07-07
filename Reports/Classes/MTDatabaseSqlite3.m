@@ -111,7 +111,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     sqlite3_stmt *statement = NULL;
     const char *queryc = [query UTF8String];
 	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
-        sqlite3_bind_text(statement, 1, [tablename UTF8String], strlen([tablename UTF8String]), SQLITE_STATIC);
+        sqlite3_bind_text(statement, 1, [tablename UTF8String], (int)strlen([tablename UTF8String]), SQLITE_STATIC);
 		if (sqlite3_step(statement) == SQLITE_ROW) {
             exist = sqlite3_column_int(statement, 0) == 1;
         }
@@ -386,7 +386,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             }
             case MTDataTypeString: {
                 if ([[databinding value] isKindOfClass:[NSString class]]) {
-                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [[databinding value] UTF8String], [[databinding value] lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
+                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [[databinding value] UTF8String], (int)[[databinding value] lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
                 } else if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
                     NSDate *date = [[NSCalendar autoupdatingCurrentCalendar] dateFromComponents:[databinding value]];
                     success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, [date timeIntervalSince1970]);

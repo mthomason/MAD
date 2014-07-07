@@ -15,12 +15,12 @@ typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
 
 extern NSString * const MTNullIdentifier;
 
-@class RptqDocument, RptqDocumentSection;
+@class RptqDocumentSection, MAReportDocument;
 
 @interface MTReportFormatter : MTTableFormatter
 
-- (id)initWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
-+ (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
+- (id)initWithQuery:(MTQuery *)query andLayout:(MAReportDocument *)layout;
++ (id)reportFormatterWithQuery:(MTQuery *)query andDocument:(MAReportDocument *)layout;
 
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;

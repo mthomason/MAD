@@ -221,8 +221,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
         data = [NSKeyedArchiver archivedDataWithRootObject:v];
     }
-    sqlite3_bind_int(_statementInsert, 1, self.numberOrRows);
-    sqlite3_bind_blob(_statementInsert, 2, [data bytes], [data length], SQLITE_TRANSIENT);
+    sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
+    sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
     if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
         sqlite3_reset(_statementInsert);
         self.numberOrRows++;
@@ -234,7 +234,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
-    sqlite3_bind_int(_statementSelect, 1, index);
+    sqlite3_bind_int(_statementSelect, 1, (int)index);
     id result = nil;
 
     if (sqlite3_step(_statementSelect) == SQLITE_ROW) {

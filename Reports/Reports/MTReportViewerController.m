@@ -827,8 +827,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
     MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
-                                                                           andLayout:[doc activeDocument]];
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andDocument:doc];
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
     [self setPrintPageRendererReport:printPageRender];
     [doc setReportFormatter:reportFormatter];
@@ -960,8 +959,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         
         MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
-                                                                               andLayout:[doc activeDocument]];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andDocument:doc];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
 
         [controller setPrintPageRenderer:printPageRender];
