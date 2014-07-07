@@ -54,7 +54,7 @@
 }
 
 - (void)openDatabase {
-    [self openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
+    [self openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE];// | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
 }
 
 - (void)openDatabaseWithFlags:(int)flags {
@@ -97,7 +97,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
     if (_database != NULL && sqlite3_close(_database) != SQLITE_OK) {   // close short circuts (skips) on null database
-        NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+        //NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
 }
 

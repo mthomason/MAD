@@ -32,6 +32,8 @@
 
 #import "MTReportFormatterCache.h"
 
+#import "MTArrayCached.h"
+
 //Why the fuck!!!
 
 #import "MTDatabaseConnection.h"
@@ -48,8 +50,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong, readwrite) RptqDocument *layout;
 
-@property (nonatomic, strong, readwrite) NSMutableArray *reportIndexes;
-@property (nonatomic, strong, readwrite) NSMutableArray *reportLayout;
+@property (nonatomic, strong, readwrite) MTArrayCached *reportIndexes;
+@property (nonatomic, strong, readwrite) MTArrayCached *reportLayout;
 
 @property (nonatomic, strong) MTPageCaching *pageCachingVirtual;
 @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
@@ -73,15 +75,13 @@ NSString * const MTNullIdentifier = @"(null)";
 @property (nonatomic, strong) NSNumber *firstRowIdTemporary;
 @property (nonatomic, strong) NSNumber *lastRowIdTemporary;
 
-@property (nonatomic, strong) NSValue *keyReportSectionType;
-
 @end
 
 @implementation MTReportFormatter
 
 - (void)dealloc {
     [[self reportFormatterCache] dumpCache];
-    [[self reportIndexes] removeAllObjects];
+    //[[self reportIndexes] removeAllObjects];
     [[self pageCachingVirtual] dumpCache];
 }
 
@@ -95,7 +95,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSArray *)layoutForPage:(NSUInteger)page {
-    return (page < [[self reportLayout] count]) ? [[self reportLayout] objectAtIndex:page] : nil;
+    NSArray *result = [NSArray arrayWithArray:[[self reportLayout] objectAtIndex:page]];
+    return (page < [[self reportLayout] count]) ? result : nil;
 }
 
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout {
@@ -103,18 +104,56 @@ NSString * const MTNullIdentifier = @"(null)";
     return result;
 }
 
+- (NSString *)nameHorizontalReportLayoutCache {
+    return [NSString stringWithFormat:@"%@%s", [[self layout] name], "lh"];
+}
+- (NSString *)nameVirticalReportLayoutCache {
+    return [NSString stringWithFormat:@"%@%s", [[self layout] name], "lv"];
+}
+- (NSString *)nameHorizontalReportIndexes {
+    return [NSString stringWithFormat:@"%@%s", [[self layout] name], "ih"];
+}
+- (NSString *)nameVirticalReportIndexes {
+    return [NSString stringWithFormat:@"%@%s", [[self layout] name], "iv"];
+}
+- (NSString *)identifierForSizeIndexes:(CGSize)size {
+    NSString *s1 = NSStringFromCGSize(size);
+    NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return [NSString stringWithFormat:@"%@%s%@", [[self layout] name], "i", s2];
+}
+- (NSString *)identifierForSizeLayout:(CGSize)size {
+    NSString *s1 = NSStringFromCGSize(size);
+    NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return [NSString stringWithFormat:@"%@%s%@", [[self layout] name], "l", s2];
+}
+
+- (NSString *)nameCurrentReportIndexes {
+    if ([self isLandscape]) {
+        return [self nameHorizontalReportIndexes];
+    } else {
+        return [self nameVirticalReportIndexes];
+    }
+}
+- (NSString *)nameCurrentReportLayout {
+    if ([self isLandscape]) {
+        return [self nameHorizontalReportLayoutCache];
+    } else {
+        return [self nameVirticalReportLayoutCache];
+    }
+}
+
 - (void)initalize {
     
     MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];
     [self setReportFormatterCache:reportFormatterCache];
     
-    NSMutableArray *reportLayout = [[NSMutableArray alloc] init];
+    MTArrayCached *reportLayout = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
     [self setReportLayout:reportLayout];
     
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
-    NSMutableArray *reportIndexes = [NSMutableArray new];
+    MTArrayCached *reportIndexes = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]];
     [self setReportIndexes:reportIndexes];
     
     MTPageCaching *pageCaching = [[MTPageCaching alloc] init];
@@ -166,16 +205,22 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)formatDocumentForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options {
-    [[self reportIndexes] removeAllObjects];
+    NSString *identifier = [self identifierForSizeIndexes:printableSize];
+    MTArrayCached *indexes = [[MTArrayCached alloc] initWithIdentifier:identifier];
+    [self setReportIndexes:indexes];
     [[self pageCachingVirtual] dumpCache];
     
     NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
     [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     
     [self cleanupTemporaryReportIndexes];
-    [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
     
+    [self setCounterHeightUsedCurrentPage:CGSizeZero.height];
     [self setCounterHeightUsedCurrentPage: CGSizeZero.height];
+    
+    [[self reportIndexes] beginBulkInserts];
+    [[self reportLayout] beginBulkInserts];
+    
     [self addReportHeaderToReportLayout];
     [self addPageHeaderToReportLayout];
     [self addDetailToReportLayout];
@@ -187,22 +232,25 @@ NSString * const MTNullIdentifier = @"(null)";
     NSIndexSet *tdfp = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
     [[self reportIndexes] addObject:tdfp];
     
+    [[self reportLayout] endBulkInserts];
+    [[self reportIndexes] endBulkInserts];
+    
     [self cleanupTemporaryReportIndexes];
     
-    [[self reportFormatterCache] setLayout:[self reportLayout] andIndexes:[self reportIndexes] forSize:printableSize];
+    [[self reportFormatterCache] setLayout:[[self reportLayout] identifier] andIndexes:[[self reportIndexes] identifier] forSize:printableSize];
     
 }
 
 - (void)loadLayoutAndIndexesFromCacheForSize:(CGSize)size andOptions:(MTReportFormatterOptions)options {
-    NSArray *indexes = [[self reportFormatterCache] indexesForSize:size];
-    NSArray *layout = [[self reportFormatterCache] layoutForSize:size];
-    if (indexes == nil || layout == nil) {
+    NSString *indexesHandle = [[self reportFormatterCache] indexesForSize:size];
+    NSString *layoutHandle = [[self reportFormatterCache] layoutForSize:size];
+    if (indexesHandle == nil || layoutHandle == nil) {
         [self formatDocumentForSize:size options:options];
     } else {
-        NSMutableArray *reportIndexes = [NSMutableArray arrayWithArray:indexes];
-        NSMutableArray *reportLayout = [NSMutableArray arrayWithArray:layout];
-        [self setReportIndexes:reportIndexes];
-        [self setReportLayout:reportLayout];
+        MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:indexesHandle];
+        MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:layoutHandle];
+        [self setReportIndexes:ixarray];
+        [self setReportLayout:lyarray];
         [self cleanupTemporaryReportIndexes];
     }
 }
@@ -232,12 +280,8 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self pageLayoutTemporary] addObject:  d];
 }
 
-+ (NSValue *)KeyReportSectionType {
-    static NSValue *value;
-    if (value == nil) {
-        value = [NSValue valueWithPointer:(__bridge const void *)(MTReportSectionType)];
-    }
-    return value;
++ (NSString *)KeyReportSectionType {
+    return MTReportSectionType;
 }
 
 - (void)addAllDetail {
@@ -258,41 +302,45 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL rowIdOnly = YES;
     BOOL calculatedRowId = NO;
     for (id resultRow in dataEnumerator) {
-        
-        //Get row id
-        if (calculatedRowId == NO) {
-            if ([resultRow isKindOfClass:[NSDictionary class]]) {
-                rowIdOnly = NO;
+        @autoreleasepool {
+            
+            
+            //Get row id
+            if (calculatedRowId == NO) {
+                if ([resultRow isKindOfClass:[NSDictionary class]]) {
+                    rowIdOnly = NO;
+                }
+                calculatedRowId = YES;
             }
-            calculatedRowId = YES;
-        }
-        NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
-
-
-        //Get row key values
-        NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        if (rowIdOnly == NO) {
-            for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
-                id predicateValue = [resultRow objectForKey:[sortDesc key]];
-                [keyValuesForComparson addObject:predicateValue];
+            NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
+            
+            
+            //Get row key values
+            NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+            if (rowIdOnly == NO) {
+                for (NSSortDescriptor *sortDesc in [self sortDescriptorsByGroupSorted]) {
+                    id predicateValue = [resultRow objectForKey:[sortDesc key]];
+                    [keyValuesForComparson addObject:predicateValue];
+                }
             }
-        }
-        
-        //Display new footers if needed.
-        if (!firstRow) {
-            [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        }
-        
-        //Display new group headers if needed.
-        [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        [self addHeightFromDocumentSectionToReportLayout:detailSection];
-        
-        [self addDetail:rowid];
+            
+            //Display new footers if needed.
+            if (!firstRow) {
+                [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            }
+            
+            //Display new group headers if needed.
+            [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            [self addHeightFromDocumentSectionToReportLayout:detailSection];
+            
+            [self addDetail:rowid];
+            
+            
+            [self setLastResultRowComparsonValues: keyValuesForComparson];
+            
+            firstRow = NO;
 
-        
-        [self setLastResultRowComparsonValues: keyValuesForComparson];
-
-        firstRow = NO;
+        }
     }
 }
 
@@ -413,7 +461,8 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex {
-    return [[[self query] datatable] enumeratorForRowIds: [self rowidsForPage:pageIndex]];
+    NSIndexSet *rowids = [self rowidsForPage:pageIndex];
+    return [[[self query] datatable] enumeratorForRowIds: rowids];
 }
 
 - (NSDictionary *)resultsForPageIndex:(NSInteger)pageIndex {
@@ -678,35 +727,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults setObject:NSStringFromCGSize(size) forKey:@"MTCachedSizeHorizontal"];
     [standardUserDefaults synchronize];
-}
-
-// !!!: Broke, in such a way that it says it should fucking format every fucking time.
-
-- (BOOL)shouldFormatAgain:(CGSize)printableSize options:(MTReportFormatterOptions)options {
-    return YES;
-        /*
-    BOOL landscape = [self isLandscape];
-    CGSize lastCachedPageSizeForOrientation = landscape ? [self sizeLastCachedPageLayoutLandscape]:
-    [self sizeLastCachedPageLayoutPortrate];
-    
-    BOOL formatAgain = [self didRefresh] || (CGSizeEqualToSize(lastCachedPageSizeForOrientation, self.layoutSize) == NO);
-    if (formatAgain) {
-        if (landscape) {
-            [self setPageLayoutSizeForCacheLandscape:printableSize];
-        } else {
-            [self setPageLayoutSizeForCachePortrate:printableSize];
-        }
-    }
-    return formatAgain;*/
-}
-
-- (RptqQueryGroup *)firstQueryGroup {
-    
-    RptqDatabase *database = [[[self layout] hasDatabaseSchemas] anyObject];
-    NSSet *hasQueries = [database hasQueries];
-    RptqQuery *query = [hasQueries anyObject];
-    return [query firstQueryGroup];
-    
 }
 
 @end

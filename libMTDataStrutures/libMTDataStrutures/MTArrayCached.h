@@ -10,6 +10,8 @@
 
 @interface MTArrayCached : NSEnumerator
 
+@property (nonatomic, strong, readonly) NSString *identifier;
+
 - (id)initWithIdentifier:(NSString *)identifier;
 - (NSURL *)url;
 - (id)objectAtIndex:(NSUInteger)index;
@@ -23,5 +25,6 @@
 + (NSURL *)urlForIdentifier:(NSString *)identifer;
 
 - (void)resetEnumerator;
+- (id)objectAtIndexedSubscript:(NSUInteger)idx;
 
 @end

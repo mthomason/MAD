@@ -671,7 +671,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     switch (ts) {
         case MTQuerySectionsGroups: {
 
-            //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: YES];
             NSIndexPath *fromIndex = [NSIndexPath indexPathForRow: fromIndexPath.row inSection: 0];
             NSIndexPath *toIndex = [NSIndexPath indexPathForRow: toIndexPath.row inSection: 0];
             RptqQueryGroup *fromGroup = [[self fetchedResultsControllerGroups] objectAtIndexPath: fromIndex];
@@ -680,12 +679,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSInteger toWeight = [[fromGroup weight] integerValue];
             [toGroup setWeight:@(toWeight)];
             [fromGroup setWeight:@(fromWeight)];
-
-            MTApplicationInstance *applicationInstance = [AppDelegate app];
-            MAReportDocument *reportDocument = [applicationInstance activeDocument];
-            [reportDocument saveContext];
-            [self performFetchGroups];
-            //[self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
+            NSError *error = nil;
+            [[[self fetchedResultsControllerGroups] managedObjectContext] save:&error];
 
             MTLog(@"%@->%@", fromIndexPath, toIndexPath);
             break;
@@ -1062,8 +1057,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 
-- (void)controller: (NSFetchedResultsController *)controller didChangeObject: (id)anObject
-	   atIndexPath: (NSIndexPath *)indexPath forChangeType: (NSFetchedResultsChangeType)type
+- (void)controller: (NSFetchedResultsController *)controller
+   didChangeObject: (id)anObject
+	   atIndexPath: (NSIndexPath *)indexPath
+     forChangeType: (NSFetchedResultsChangeType)type
 	  newIndexPath: (NSIndexPath *)newIndexPath {
     
     NSMutableArray *sections = [self sectionsUsedByFetchedResultsController: controller];

@@ -303,7 +303,7 @@
             NSNumber *detailRowId = nil;
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 
-                @autoreleasepool {
+                //@autoreleasepool {
                     
                     NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
                     
@@ -625,8 +625,12 @@
                 }
                 
                 layoutSectionCounter++;
-            }
+        } else {
+            NSAssert(false, @"Error: %s", __PRETTY_FUNCTION__);
         }
+        //}
+    } else {
+        NSAssert(false, @"Error");
     }
     [dataCacheForPage removeAllObjects];
 }
@@ -669,8 +673,8 @@
     BOOL firstTime = YES;
     for (NSInteger pageCtr = page; pageCtr >= 0; pageCtr--) {
         NSArray *sectionsForPage = [NSArray arrayWithArray:[[self reportFormatter] layoutForPage:pageCtr]];
-        NSInteger sectionRowCounter = [sectionsForPage count] - 1;
-        NSRange range = NSMakeRange(0, firstTime ? row : [sectionsForPage count] - 1);
+        NSUInteger sectionRowCounter = [sectionsForPage count];
+        NSRange range = NSMakeRange(0, firstTime || sectionsForPage == 0 ? row : sectionRowCounter);
         for (NSDictionary *pageSec in [[sectionsForPage subarrayWithRange:range] reverseObjectEnumerator]) {
             if ([[pageSec objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue] == MNSDocumentSectionTypeGroupHeader &&
                 [[pageSec objectForKey: MTReportGroupLevelKeys] count] == numberOfGroups) {

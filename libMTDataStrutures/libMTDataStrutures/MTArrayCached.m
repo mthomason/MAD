@@ -31,7 +31,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 @interface MTArrayCached ()
 
-@property (nonatomic, strong) NSString *identifier;
+@property (nonatomic, strong, readwrite) NSString *identifier;
 @property (nonatomic, strong) MTDatabaseCache *database;
 @property (nonatomic, assign) NSInteger numberOrRows;
 @property (nonatomic, assign) sqlite3_stmt *statementInsert;
@@ -51,7 +51,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     sqlite3_finalize(_statementInsert);
     sqlite3_finalize(_statementSelect);
     sqlite3_close(_database.databaseHandle);
-    _database = nil;
+    //_database = nil;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier {
@@ -207,7 +207,20 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)addObject:(id)object {
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+    NSData *data = nil;
+    if ([object conformsToProtocol:@protocol(NSCoding)]) {
+        @try {
+            data = [NSKeyedArchiver archivedDataWithRootObject:object];
+        }
+        @catch (NSException *exception) {
+            NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
+            data = [NSKeyedArchiver archivedDataWithRootObject:v];
+        }
+        @finally { }
+    } else {
+        NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
+        data = [NSKeyedArchiver archivedDataWithRootObject:v];
+    }
     sqlite3_bind_int(_statementInsert, 1, self.numberOrRows);
     sqlite3_bind_blob(_statementInsert, 2, [data bytes], [data length], SQLITE_TRANSIENT);
     if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
@@ -216,9 +229,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     }
 }
 
+- (id)objectAtIndexedSubscript:(NSUInteger)idx {
+    return [self objectAtIndex:idx];
+}
+
 - (id)objectAtIndex:(NSUInteger)index {
     sqlite3_bind_int(_statementSelect, 1, index);
     id result = nil;
+
     if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
         NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
                                              length: sqlite3_column_bytes(_statementSelect, 0)];
@@ -268,6 +286,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     NSUInteger lastRowid = 0;
     if (sqlite3_step(_statementCount) == SQLITE_ROW) {
         lastRowid = sqlite3_column_int(_statementCount, 0);
+        sqlite3_reset(_statementCount);
     }
     return lastRowid + 1;
 }

@@ -1026,20 +1026,29 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {
+   
+    NSNumber *keyRowIds = @(MTQuerySelectRowIds);
+    NSNumber *keyTableN = @(MTQuerySelectTableName);
+    NSNumber *keySortDe = @(MTQuerySelectSortDescriptors);
+    NSNumber *keyColumn = @(MTQuerySelectColumns);
     
+    NSString *tableName = [NSString stringWithString:[self tableName]];
+    NSArray *sortDescs = [NSArray arrayWithArray:[self sortDescriptors]];
+    NSDictionary *columns = [NSDictionary dictionaryWithDictionary:[self columns]];
     
     NSDictionary *options = @{
-                              @(MTQuerySelectRowIds) : cacheIds,
-                              @(MTQuerySelectTableName) : [self tableName],
-                              @(MTQuerySelectSortDescriptors) : [self sortDescriptors],
-                              @(MTQuerySelectColumns) : [self columns]
+                              keyRowIds : cacheIds,
+                              keyTableN : tableName,
+                              keySortDe : sortDescs,
+                              keyColumn : columns
                               };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowIds object:options];
     
+    NSArray *columnKeys = [NSArray arrayWithArray:[self columnKeys]];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
     NSEnumerator *data = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection:databaseConnection
-                                                                                     columns:[self columns]
-                                                                                  columnKeys:[self columnKeys]
+                                                                                     columns:columns
+                                                                                  columnKeys:columnKeys
                                                                                        query:query];
     return data;
 }
