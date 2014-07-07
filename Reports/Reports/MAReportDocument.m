@@ -110,7 +110,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         
             if ([self reportFormatter] == nil) {
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
-                                                                                       andDocument:self];
+                                                                                       andLayout:[self activeDocument]];
                 [self setReportFormatter:reportFormatter];
                 reportFormatter = nil;
             }

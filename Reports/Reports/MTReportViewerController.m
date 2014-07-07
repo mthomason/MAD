@@ -827,7 +827,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     CGSize viewBounds = [[reportViewer view] bounds].size;
     
     MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andDocument:doc];
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
     [self setPrintPageRendererReport:printPageRender];
     [doc setReportFormatter:reportFormatter];
@@ -846,19 +846,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [blockViewer2 setDisplayActive];
             
             NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
-            [blockViewer2 setNumberOfPages:numberOfPages];
-            NSInteger maxValue = numberOfPages > 0 ? (numberOfPages - 1) : 0;
-            [blockViewer2 setMaxNumberOfPages:maxValue];
+            blockViewer2.numberOfPages = numberOfPages;
+            blockViewer2.maxNumberOfPages = numberOfPages > 0 ? (numberOfPages - 1) : 0;
 
-            NSInteger pageNumber = [blockViewer2 currentPageIndex] + 1;
-            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
-                                                                                                                         ofPages:numberOfPages];
+            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber: ([blockViewer2 currentPageIndex] + 1)
+                                                                                                                         ofPages: numberOfPages];
             [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
             
             [pageOne setDelegate:reportViewer];
             
             NSArray *viewControllers = @[pageOne];
-            [blockViewer2 setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
+            [blockViewer2 setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
             [blockViewer2 setIsRefreshing:NO];
             [blockViewer2 setStartedRefresh:NO];
             [[doc2 reportFormatter] setDidRefresh:NO];
@@ -959,7 +957,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         
         MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andDocument:doc];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
 
         [controller setPrintPageRenderer:printPageRender];

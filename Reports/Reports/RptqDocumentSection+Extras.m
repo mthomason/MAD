@@ -100,10 +100,6 @@
 }
 
 - (NSString *)sectionKey {
-    return [self secKey];
-}
-
-- (NSString *)secKey {
     return [self keyForIdentifier];
 }
 
