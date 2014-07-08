@@ -21,11 +21,14 @@
 #import "UIColor+EverydayApps.h"
 
 #import "MTDataTable.h"
+#import "MTDatabase.h"
+#import <CoreData/CoreData.h>
 
 @interface MTTableController ()
-    <UICollectionViewDataSource, MTTableLayoutDelegate>
+    <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol>
 
 @property (nonatomic, strong) MTQuery *query;
+@property (nonatomic, strong) MTDataTable *datatable;
 @property (nonatomic, strong, readwrite) MTDataFormatter *tableFormatter;
 @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
 @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
@@ -34,13 +37,24 @@
 
 @implementation MTTableController
 
+- (void)dealloc {
+    [[_query database] setDelegate:nil];
+}
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [self datatable];
+}
+
 - (id)initWithQuery:(MTQuery *)query {
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
     MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
+        [[query database] setDelegate:self];
         
+        MTDataTable *datatable = [MTTableController dataTableWithObjectId:[[query queryObject] objectID]];
+        [self setDatatable:datatable];
         [tableLayout setDelegate:self];
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         [self setTableFormatter:tableFormatter];
@@ -84,6 +98,19 @@
         }];
 
     });
+}
+
++ (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
+    NSUInteger hash = [[[objectID URIRepresentation] absoluteString] hash];
+    
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(hash);
+    NSDictionary *parameters = @{
+                                 typeKey : type,
+                                 objectIdKey : objectIdV};
+    return [MTDataTable dataTableFactory:parameters];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -157,11 +184,12 @@
 }
 
 - (NSUInteger)rowCount {
-    return [[[[self tableFormatter] query] datatable] numberOfRows];
+    return [[self datatable] numberOfRows];
 }
 
 - (NSUInteger)columnCount {
-    return [[[[self tableFormatter] query] datatable] numberOfColumns];
+    return [[self datatable] numberOfColumns];
+
 }
 #pragma mark - Delegates
 
@@ -186,7 +214,7 @@
     MTTableCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseId
                                                                   forIndexPath:indexPath];
     
-    NSDictionary *rowData = [[self tableFormatter] dataForRow:row];
+    NSDictionary *rowData = [[self datatable] objectAtRow:row];
     NSString *fieldKey = [[self query] fieldKeyForIndex:column];
     id fieldValue = [rowData objectForKey:fieldKey];
     NSString *fieldString = [NSString stringWithFormat:@"%@", fieldValue];

@@ -681,6 +681,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             [fromGroup setWeight:@(fromWeight)];
             NSError *error = nil;
             [[[self fetchedResultsControllerGroups] managedObjectContext] save:&error];
+            [self performFetchGroups];
 
             MTLog(@"%@->%@", fromIndexPath, toIndexPath);
             break;

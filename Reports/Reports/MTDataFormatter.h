@@ -20,7 +20,7 @@
  - (id)initWithQuery:(MTQuery *)query;
 
 - (BOOL)format;
-- (NSDictionary *)dataForRow:(NSUInteger)row;
-- (NSUInteger)numberOfResults;
+//- (NSDictionary *)dataForRow:(NSUInteger)row;
+//- (NSUInteger)numberOfResults;
 
 @end

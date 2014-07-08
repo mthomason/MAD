@@ -62,41 +62,17 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryFull expects NSDictionary with parameters.");
 
         NSDictionary *parameters = (NSDictionary *)object;
-        NSNumber *parameterName = @(MTQueryCacheFullReportName);
         NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
         RptqQuery *queryObject = [parameters objectForKey: parameterScheam];
-        NSString *name = [parameters objectForKey:parameterName];
-        
-        NSUInteger hash = [name hash];
-        NSNumber *typeKey = @(MTDataTableTypeOfTable);
-        NSNumber *type = @(MTDataTableTypePhysical);
-        NSNumber *objectIdKey = @(MTDataTableObjectId);
-        NSNumber *objectIdV =  @(hash);
-        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
-                                                                 typeKey : type,
-                                                                 objectIdKey : objectIdV}];
-        [self setDatatable:datatable];
         RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         [self setDatabase:db];
         [self setQueryObject:queryObject];
 
-        NSMutableArray *sortDesc = [[NSMutableArray alloc] initWithArray:[self sortDescriptors]];
-        [[self datatable] sortUsingDescriptors:sortDesc];
-
         
     }
     return self;
-}
-
-- (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
-    [[self datatable] sortUsingDescriptors:[self sortDescriptors]];
-    [super performQuery:completion];
-}
-- (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion {
-    [[self datatable] sortUsingDescriptors:[self sortDescriptors]];
-    [super performQueryWithDatabase:database completion:completion];
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {

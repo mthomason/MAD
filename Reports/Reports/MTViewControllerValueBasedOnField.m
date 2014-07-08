@@ -21,6 +21,7 @@
 #import "MTQuery.h"
 #import "NSError+UserInterface.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+#import "MTDataTable.h"
 
 @interface MTViewControllerValueBasedOnField ()
     <UITextFieldDelegate>
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
 @property (nonatomic, strong) NSArray *pickerData;
 @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
+@property (nonatomic, strong) MTDataTable *dataTable;
 
 @end
 
@@ -73,13 +75,16 @@
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
     
+    MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[[[field objectID] URIRepresentation] absoluteString]];
+    [self setDataTable:dataTable];
+    
     __weak MTViewControllerValueBasedOnField *weakself2 = self;
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             
             //__weak MTViewControllerValueBasedOnField *weakself3 = weakself2;
             
-            [weakself2 setPickerData:[querySampleDataField datatable]];
+            [weakself2 setPickerData:[weakself2 dataTable]];
             [[weakself2 pickerView] reloadAllComponents];
             
             [[weakself2 pickerView] setNeedsDisplay];

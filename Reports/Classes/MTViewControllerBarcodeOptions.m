@@ -27,9 +27,13 @@
 #import "MTQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaField.h"
 #import "AppDelegate.h"
+#import "MTDataTable.h"
+#import <CoreData/CoreData.h>
 
 @interface MTViewControllerBarcodeOptions ()
+    <MTDatabaseProtocol>
 
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
 @property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
@@ -44,6 +48,8 @@
 @property (nonatomic, assign) BOOL selectingField2;
 
 @property (nonatomic, assign) BOOL selecting2dComponentType;
+
+@property (nonatomic, strong) MTDataTable *sampleDataTable;
 
 @end
 
@@ -696,19 +702,28 @@
     }
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:[field databaseSchemaField]];
+    NSString *identifier = [[[[field databaseSchemaField] objectID] URIRepresentation] absoluteString];
+    MTDataTable *datatable = [MTDataTable newDataTableForIdentifier:identifier];
+    [self setSampleDataTable:datatable];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");
             NSAssert(([self selectingField1] == YES && [self selectingField2] == YES) == NO, @"Can't be setting both at the same time, now can we?");
             if ([self selectingField1]) {
-                [self setSampleBarcodeData:[querySampleDataField datatable]];
+                [self setSampleBarcodeData:[self sampleDataTable]];
             } else if ([self selectingField2]) {
-                [self setSampleBarcodeData2dComponent:[querySampleDataField datatable]];
+                [self setSampleBarcodeData2dComponent:[self sampleDataTable]];
             }
             [[self tableView] reloadData];
 
         }
     }];
+}
+
+#pragma mark - MTDatabaseProtocol
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [self sampleDataTable];
 }
 
 #pragma mark - MTTableViewControllerBarcodeExtraAztecDelegate

@@ -32,19 +32,8 @@
         
         NSAssert([[array firstObject] isKindOfClass:[RptqDatabaseSchemaField class]], @"Need RptqDatabaseSchemaField's!");
 
-
         [self setQueryObject: array];
         RptqDatabaseSchemaField *field = [array firstObject];
-        
-        NSNumber *typeKey = @(MTDataTableTypeOfTable);
-        NSNumber *type = @(MTDataTableTypeVirtual);
-        NSNumber *objectIdKey = @(MTDataTableObjectId);
-        NSNumber *objectId =  @([field hash]);
-        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
-                                                    typeKey : type,
-                                                    objectIdKey : objectId}];
-        
-        [self setDatatable:datatable];
 
         RptqUserCredentals *userCredentals = [[[field inTable] inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];

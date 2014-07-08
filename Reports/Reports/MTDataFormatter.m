@@ -53,27 +53,27 @@
 
 - (BOOL)format {
     
-    BOOL updatedData = NO;
+    //BOOL updatedData = NO;
         
-    NSAssert([[self query] datatable] != nil, @"We need a datatable way before here");
+    //NSAssert([[self query] datatable] != nil, @"We need a datatable way before here");
     
-    NSURL *url = [[[self query] datatable] url];
-    BOOL cacheExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+    //NSURL *url = [[[self query] datatable] url];
+    //BOOL cacheExist = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
 
     
-    if (cacheExist == YES || [self didRefresh]) {
-        updatedData = YES;
+    //if (cacheExist == YES || [self didRefresh]) {
+    //    updatedData = YES;
         
-    }
-    return updatedData;
+    //}
+    return YES;
 }
 
-- (NSDictionary *)dataForRow:(NSUInteger)row {
-    return [[[self query] datatable] objectAtRow:row];
-}
+//- (NSDictionary *)dataForRow:(NSUInteger)row {
+//    return [[[self query] datatable] objectAtRow:row];
+//}
 
-- (NSUInteger)numberOfResults {
-    return [[[self query] datatable] numberOfRows];
-}
+//- (NSUInteger)numberOfResults {
+//    return [[[self query] datatable] numberOfRows];
+//}
 
 @end

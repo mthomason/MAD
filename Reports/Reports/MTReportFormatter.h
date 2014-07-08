@@ -15,7 +15,13 @@ typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
 
 extern NSString * const MTNullIdentifier;
 
-@class RptqDocumentSection, RptqDocument;
+@class RptqDocumentSection, RptqDocument, MTArrayCached;
+
+@protocol MTReportFormatterDataSource <NSObject>
+
+- (NSEnumerator *)enumeratorForReportData;
+
+@end
 
 @interface MTReportFormatter : MTTableFormatter
 
@@ -26,30 +32,23 @@ extern NSString * const MTNullIdentifier;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged;
 
-- (id)dataForGroupKeys:(NSArray *)keys;
 - (NSUInteger)numberOfPages;
-
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
-
 - (NSArray *)layoutForPage:(NSUInteger)page;
+
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
-
-- (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;
-- (NSEnumerator *)dataForPageIndex:(NSInteger)pageIndex;
-- (NSDictionary *)resultsForPageIndex:(NSInteger)pageIndex;
-
-- (NSDictionary *)firstObjectOnReport;
-- (NSDictionary *)lastObjectOnReport;
-- (NSDictionary *)firstObjectOnPageAtIndex:(NSInteger)pageIndex;
-- (NSDictionary *)lastObjectOnPageAtIndex:(NSInteger)pageIndex;
-
 + (NSValue *)KeyReportSectionType;
 - (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
-
 - (NSArray *)keysForGroup:(NSUInteger)group;
-
 - (NSUInteger)numberOfGroups;
 
+@property (nonatomic, assign) id <MTReportFormatterDataSource> datasource;
+
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
+@property (nonatomic, strong, readonly) RptqDocument *layout;
+
+@property (nonatomic, strong, readonly) MTArrayCached *reportIndexes;
+@property (nonatomic, strong, readonly) MTArrayCached *reportLayout;
+@property (nonatomic, strong, readonly) MTArrayCached *groupKeys;
 
 @end

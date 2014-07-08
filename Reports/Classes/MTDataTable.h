@@ -35,9 +35,11 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
 
++ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier;
 + (id)dataTableFactory:(NSDictionary *)parameters;
 
 - (id)initWithId:(NSUInteger)objectId;
+- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
 - (void)setObjectId:(NSUInteger)objectId;   //Object id needs to be set for caching.

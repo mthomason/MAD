@@ -11,12 +11,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class MAReportDocument, MTReportFormatter;
+@class MTReportFormatter, MTDataTable;
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
-- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter;
-- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter andPrintableAreaSize:(CGSize)printableAreaSize;
+- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
 - (UIImage *)thumbnail;
 
 @end

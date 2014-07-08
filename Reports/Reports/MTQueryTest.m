@@ -16,6 +16,14 @@
 #import "MTDataTable.h"
 #import "MTDatabaseConnection.h"
 
+@interface MTQueryTest ()
+    <MTDatabaseProtocol>
+
+@property (nonatomic, strong) MTDataTable *datatable;   // Holds datatable since used
+                                                        //  in static function
+
+@end
+
 @implementation MTQueryTest
 
 - (id)initWithObject:(id)object {
@@ -51,6 +59,10 @@
     [[self fieldKeys] addObject:key];
     NSString *sql = [NSString stringWithFormat:@"%@ 255 AS %@", [[self database] selectPart], key];
     return sql;
+}
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [self datatable];
 }
 
 @end

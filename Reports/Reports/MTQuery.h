@@ -142,7 +142,7 @@ extern NSString * const MTQueryKeyPredicateValue;
 @interface MTQuery : NSObject
 
 @property (nonatomic, strong, readwrite) MTDatabase *database;
-@property (nonatomic, strong, readwrite) MTDataTable *datatable;
+//@property (nonatomic, strong, readwrite) MTDataTable *datatable;
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;

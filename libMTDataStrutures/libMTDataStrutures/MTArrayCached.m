@@ -51,7 +51,6 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     sqlite3_finalize(_statementInsert);
     sqlite3_finalize(_statementSelect);
     sqlite3_close(_database.databaseHandle);
-    //_database = nil;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier {

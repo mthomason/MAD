@@ -55,6 +55,10 @@
 
 @implementation MTDatabaseMySql
 
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [[self delegate] dataTableForQuery:query];
+}
+
 - (void)didFetchRow:(NSUInteger)row {
     [self readRow:row];
 }

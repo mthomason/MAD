@@ -13,30 +13,20 @@
 #import "MADocument.h"
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
-
-extern NSString * const MTReportPageFirstRowId;
-extern NSString * const MTReportPageLastRowId;
+#import "MTReportFormatter.h"
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
-extern NSString * const MTReportSectionValues;
 extern NSString * const MTReportGroupLevel;
-extern NSString * const MTReportGroupLevelKeys;
 extern NSString * const MTReportGroupLevelNumber;
-
-extern NSString * const MTPageDetail;
-extern NSString * const MTPageHeader;
-extern NSString * const MTPageFooter;
-extern NSString * const MTReportHeader;
-extern NSString * const MTReportFooter;
-extern NSString * const MTReportGroupHeader;
-extern NSString * const MTReportGroupFooter;
 
 @class MTQuery, MTReportFormatter, MTQueryFull;
 
 @interface MAReportDocument : MADocument
+    <MTReportFormatterDataSource>
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
+@property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
 
 - (id)initWithFileURL:(NSURL *)url;
 
@@ -65,6 +55,7 @@ extern NSString * const MTReportGroupFooter;
 - (NSURL *)cachedDataUrl;
 
 - (void)initalizeMainQuery;
+- (void)prepareForQuery;
 - (MTQuery *)defaultQuery;
 
 @end

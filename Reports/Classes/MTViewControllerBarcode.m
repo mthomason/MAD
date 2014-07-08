@@ -21,8 +21,12 @@
 #import "MTQuery.h"
 
 #import "RptqQueryField.h"
+#import "RptqDatabaseSchemaField.h"
 #import "RptqDocumentObjectBarcode.h"
 #import "RptqDocumentObjectBarcode+Extras.h"
+
+#import "MTDataTable.h"
+#import "MTDatabase.h"
 
 NSString * const MTIdentifierSegueDocumentObjectEditBarcode = @"MTIdentifierSegueDocumentObjectEditBarcode";
 NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
@@ -30,6 +34,7 @@ NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocume
 NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = @"MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier";
 
 @interface MTViewControllerBarcode ()
+    <MTDatabaseProtocol>
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSave;
 
@@ -46,6 +51,12 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 @property (nonatomic, weak) IBOutlet UIView *topView;
 @property (nonatomic, weak) IBOutlet UIView *bottomView;
+
+@property (nonatomic, strong) MTQuery *query;
+@property (nonatomic, strong) MTQuery *query2;
+
+@property (nonatomic, strong) MTDataTable *dataTableSampleData;
+@property (nonatomic, strong) MTDataTable *dataTableSampleData2;
 
 @end
 
@@ -109,10 +120,15 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
-
-            [querySampleDataField performQuery:^(BOOL success, NSError *error) {
+            MTDataTable *dataTable = [MTViewControllerBarcode newDataTableForMangedObject:[schemaField objectID]];
+            [self setDataTableSampleData:dataTable];
+            __weak MTViewControllerBarcode *weakself = self;
+            [[querySampleDataField database] setDelegate:self];
+            [self setQuery:querySampleDataField];
+            [[self query] performQuery:^(BOOL success, NSError *error) {
                 if (success) {
-                    [optionsViewController setSampleBarcodeData:[querySampleDataField datatable]];
+                    [[weakself dataTableSampleData] cache];
+                    [optionsViewController setSampleBarcodeData:[weakself dataTableSampleData]];
                     [[optionsViewController tableView] reloadData];
                 }
             }];
@@ -120,16 +136,38 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         
         if ([self queryField2] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
+            
+            MTDataTable *dataTable2 = [MTViewControllerBarcode newDataTableForMangedObject:[schemaField objectID]];
+            [self setDataTableSampleData2:dataTable2];
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
-            [querySampleDataField performQuery:^(BOOL success, NSError *error) {
+            __weak MTViewControllerBarcode *weakself = self;
+            [[querySampleDataField database] setDelegate:self];
+            [self setQuery2:querySampleDataField];
+            [[self query2] performQuery:^(BOOL success, NSError *error) {
                 if (success) {
-                    [optionsViewController setSampleBarcodeData2dComponent:[querySampleDataField datatable]];
+                    [[weakself dataTableSampleData] cache];
+                    [optionsViewController setSampleBarcodeData2dComponent:[weakself dataTableSampleData2]];
                     [[optionsViewController tableView] reloadData];
                 }
             }];
         }
 
     }
+}
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    if ([query isEqual:self.query]) {
+        return [self dataTableSampleData];
+    } else if ([query isEqual:self.query2]) {
+        return [self dataTableSampleData2];
+    } else {
+        NSAssert(false, @"Unknown query at %s.", __PRETTY_FUNCTION__);
+        return nil;
+    }
+}
+
++ (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
+    return [MTDataTable newDataTableForIdentifier:[[objectID URIRepresentation] absoluteString]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

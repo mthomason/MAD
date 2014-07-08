@@ -11,10 +11,7 @@
 
 @interface MTTableFormatter : MTDataFormatter
 
-@property (nonatomic, strong, readwrite) NSArray *sortDescriptorsByGroupSorted;
 @property (nonatomic, assign) BOOL didRefresh;
-
-// FIXME: Make initWithQuery andLayout... passlayout to 
 
 - (id)initWithQuery:(MTQuery *)query;
 + (id)reportFormatterWithQuery:(MTQuery *)query;

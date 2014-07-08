@@ -330,8 +330,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 }
 
 - (void)runQuery:(MTQuery *)query onProcess:(MTDatabaseProcessSqlServer *)process {
-
-    __block MTDataTable *datatable = [query datatable];
+    __block MTDataTable *datatable = [[self delegate] dataTableForQuery:query];
     
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     

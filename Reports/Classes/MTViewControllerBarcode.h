@@ -26,8 +26,6 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 @property (nonatomic, assign) id <MTViewControllerBarcodeDelegate> delegate;
 
-//@property (nonatomic, retain) MTApplicaitonInstance *applicationInstance;
-
 @property (nonatomic, strong, readwrite) RptqQueryField *queryField1;
 @property (nonatomic, strong, readwrite) RptqQueryField *queryField2;
 @property (nonatomic, strong, readwrite) MTBarcode *barcode;

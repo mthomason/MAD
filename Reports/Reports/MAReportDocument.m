@@ -45,21 +45,11 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MTPaper.h"
 
-NSString * const MTReportPageFirstRowId = @"MTReportPageFirstRowId";
-NSString * const MTReportPageLastRowId = @"MTReportPageLastRowId";
-NSString * const MTReportSectionType = @"MTReportSectionType";
-NSString * const MTReportSectionValues = @"MTReportSectionValues";
-NSString * const MTReportGroupLevel = @"MTReportGroupLevel";
-NSString * const MTReportGroupLevelKeys = @"MTReportGroupLevelKeys";
-NSString * const MTReportGroupLevelNumber = @"MTReportGroupLevelNumber";
-NSString * const MTReportDetailRowId = @"MTReportDetailRowId";
-NSString * const MTPageDetail = @"MTPageDetail";
-NSString * const MTPageHeader = @"MTPageHeader";
-NSString * const MTPageFooter = @"MTPageFooter";
-NSString * const MTReportHeader = @"MTReportHeader";
-NSString * const MTReportFooter = @"MTReportFooter";
-NSString * const MTReportGroupHeader = @"MTReportGroupHeader";
-NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
+//Keys stored in the cache.  Short and unique.
+NSString * const MTReportSectionType = @"st";
+NSString * const MTReportGroupLevel = @"gl";
+NSString * const MTReportGroupLevelNumber = @"gln";
+NSString * const MTReportDetailRowId = @"ix";
 
 @interface MAReportDocument ()
 
@@ -71,10 +61,16 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 @property (nonatomic, assign) BOOL didRefresh;
 
 @property (nonatomic, strong) MTQuery *mainQuery;
+@property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
+@property (nonatomic, strong) MTDataTable *connectionTestDataTable;
 
 @end
 
 @implementation MAReportDocument
+
+- (void)dealloc {
+    [[_mainQuery database] setDelegate:nil];
+}
 
 - (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
@@ -83,6 +79,9 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
         NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
         [self setReportQueries:reportQueries];
         [self setDidRefresh:NO];
+        
+        NSString *name = [self fileNameMinusExtention];
+        [self initalizeMainDataTableWithName:name];
         
     }
     return self;
@@ -111,6 +110,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
             if ([self reportFormatter] == nil) {
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
                                                                                        andLayout:[self activeDocument]];
+                [reportFormatter setDatasource:self];
                 [self setReportFormatter:reportFormatter];
                 reportFormatter = nil;
             }
@@ -118,12 +118,21 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     return [self document];
 }
 
+- (void)prepareForQuery {
+    [[self mainDataTable] sortUsingDescriptors:[[self mainQuery] sortDescriptors]];
+}
+
+- (NSEnumerator *)enumeratorForReportData {
+    return [[self mainDataTable] enumeratorForKeyObjectsSorted];
+}
+
 - (void)writeToPdf:(NSURL *)filepath {
     NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
     CGRect letterRect = [MTPaper rectLetter];
+    [[self mainDataTable] sortUsingDescriptors:[[self mainQuery] sortDescriptors]];
     [[self reportFormatter] formatForSize:letterRect.size];
     
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]];
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter] dataTable:[self mainDataTable]];
     NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
     UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
     
@@ -158,18 +167,29 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
     
-    NSString *name = [self fileNameMinusExtention];
-    NSNumber *parameterName = @(MTQueryCacheFullReportName);
     NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
-    if (name != nil && rquery != nil) {
+    if (rquery != nil) {
         NSDictionary *queryFullParameters = @{
-                                              parameterName : name,
                                               parameterSchema : rquery
                                               };
         
         MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
+        [[self mainDataTable] sortUsingDescriptors:[defaultQuery sortDescriptors]];
         [self setMainQuery:defaultQuery];
+        
     }
+}
+
+- (void)initalizeMainDataTableWithName:(NSString *)name {
+    NSUInteger hash = [name hash];
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypePhysical);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(hash);
+    MTDataTable *datatable = [MTDataTable dataTableFactory:@{
+                                                             typeKey : type,
+                                                             objectIdKey : objectIdV}];
+    [self setMainDataTable:datatable];
 }
 
 - (MTQuery *)defaultQuery {
@@ -180,9 +200,12 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
-
-    [[self defaultQuery] performQuery:^(BOOL success, NSError *error) {
-        [self setDidRefresh:success];
+    MTQuery *fullQuery = [self defaultQuery];
+    [[self mainDataTable] sortUsingDescriptors:[fullQuery sortDescriptors]];
+    __weak MAReportDocument *weakself = self;
+    [fullQuery performQuery:^(BOOL success, NSError *error) {
+        [[weakself mainDataTable] cache];
+        [weakself setDidRefresh:success];
         completion(success, error);
     }];
 }
@@ -219,7 +242,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
 }
 
 - (NSURL *)cachedDataUrl {
-    return [[[self defaultQuery] datatable] url];
+    return [[self mainDataTable] url];
 }
 
 - (NSString *)fileHandle {
@@ -476,7 +499,7 @@ NSString * const MTReportGroupFooter = @"MTReportGroupFooter";
     [[NSFileManager defaultManager] fileExistsAtPath:[[reportdocument urlThumbnail] path]];
     BOOL contentChanged = [reportdocument activeDocument] != nil && ([[reportdocument documentStatus] contextChagned] == YES || [reportdocument didRefresh]) && [[reportdocument reportFormatter] numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[reportdocument urlThumbnail] path]] == NO) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportdocument reportFormatter]];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportdocument reportFormatter] dataTable:[reportdocument mainDataTable]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:[reportdocument urlThumbnail] atomically:YES];

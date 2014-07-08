@@ -224,7 +224,6 @@ NSString * const MTQueryKeyPredicateValue = @"v";
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     @autoreleasepool {
         [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
-            [[self datatable] cache];
             completion(success, error);
         }];
     }
@@ -234,7 +233,6 @@ NSString * const MTQueryKeyPredicateValue = @"v";
     [self setDatabase:database];
     @autoreleasepool {
         [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
-            [[self datatable] cache];   //Datatable is often nil by design
             completion(success, error);
         }];
     }

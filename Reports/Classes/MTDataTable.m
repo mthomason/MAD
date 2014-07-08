@@ -53,6 +53,17 @@
     return nil;
 }
 
++ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
+    NSUInteger hash = [identifier hash];
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(hash);
+    return [MTDataTable dataTableFactory:@{
+                                           typeKey : type,
+                                           objectIdKey : objectIdV}];
+}
+
 + (id)dataTableFactory:(NSDictionary *)parameters {
 
     NSNumber *keyDataTableType = @(MTDataTableTypeOfTable);
@@ -154,20 +165,23 @@
 - (id)init {
     self = [super init];
     if (self) {
-        [self initalizeWithObjectId:0];
+        [self initalizeWithObjectId:0 fromCache:NO];
     }
     return self;
 }
 
 - (id)initWithId:(NSUInteger)objectId {
+    return [self initWithId:objectId fromCache:YES];
+}
+- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     self = [super init];
     if (self) {
-        [self initalizeWithObjectId:objectId];
+        [self initalizeWithObjectId:objectId fromCache:fromCache];
     }
     return self;
 }
 
-- (void)initalizeWithObjectId:(NSUInteger)objectId {
+- (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     NSString *name = @"";
     [self setName:name];
     
@@ -184,7 +198,9 @@
     
     [self setObjectId:objectId];
     
-    [self loadFromCache];
+    if (fromCache) {
+        [self loadFromCache];
+    }
     
 }
 
@@ -256,7 +272,7 @@
 - (NSDictionary *)columnsPlist {
     
     NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
-    for (NSString *key in [[self columns] keyEnumerator]) {
+    for (NSString *key in [self columnKeys]) {
         MTDataColumn *dataColumn = [[self columns] objectForKey:key];
         columnsPlist[key] = [dataColumn plist];
     }
@@ -272,7 +288,7 @@
     NSNumber *rowCounter = @([self rowCounter]);
     
     NSArray *columnKeys = [[NSArray alloc] initWithArray:[self columnKeys]];
-    NSDictionary *columnsPlist = [self columnsPlist];
+    NSDictionary *columnsPlist = [NSDictionary dictionaryWithDictionary:[self columnsPlist]];
     
     return @{
              keyName        : [self name],
@@ -301,16 +317,14 @@
     
     NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:[plist objectForKey: [MTDataTable keyColumns]]];
     
-    NSUInteger count = [columnsPlist count];
-    NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:count];
-    for (NSString *key in [columnsPlist keyEnumerator]) {
-        @autoreleasepool {
+    //NSUInteger count = [columnsPlist count];
+    //NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:count];
+    for (NSString *key in [self columnKeys]) {
             NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
             MTDataColumn *column = [[MTDataColumn alloc] initWithPlist: columnPlist];
-            columns[key] = column;
-        }
+            [self columns][key] = column;
     }
-    [self setColumns: columns];
+    //[self setColumns: columns];
     
     NSUInteger rowCounter = [[plist objectForKey: [MTDataTable keyRowCounter]] integerValue];
     [self setRowCounter:rowCounter];

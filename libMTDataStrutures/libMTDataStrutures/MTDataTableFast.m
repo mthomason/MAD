@@ -39,6 +39,10 @@
 
 @implementation MTDataTableFast
 
+- (void)dealloc {
+    
+}
+
 - (id)plist {
     
     NSDictionary *superPlist = [super plist];
@@ -67,7 +71,7 @@
     return plist;
 }
 
--(void)loadWithPlist:(NSDictionary *)plist {
+- (void)loadWithPlist:(NSDictionary *)plist {
     [super loadWithPlist:plist];
     
     NSString *absoluteString = [plist objectForKey: [MTDataTableFast keyUrlFastCache]];
@@ -167,7 +171,11 @@
 }
 
 - (id)initWithId:(NSUInteger)objectId {
-    self = [super initWithId:objectId];
+    return [self initWithId:objectId fromCache:YES];
+}
+
+- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+    self = [super initWithId:objectId fromCache:fromCache];
     if (self) {
         [self setBulkInsertLoop:NO];
         [self setTag:objectId];
@@ -312,7 +320,7 @@
             
             for (NSSortDescriptor *sort in sortDescriptors) {
                 NSInteger i = 0;
-                for (NSString *columnKey in [[self columns] keyEnumerator]) {
+                for (NSString *columnKey in [self columnKeys]) {
                     MTDataColumn *column = [[self columns] objectForKey:columnKey];
                     if ([[column fieldName] isEqualToString:[sort key]]) {
                         NSSortDescriptor *sortn = [NSSortDescriptor sortDescriptorWithKey:columnKey
@@ -504,16 +512,20 @@
 }
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
+    NSNumber *keyRowId = @(MTQuerySelectRowId);
+    NSNumber *keyFieldKey = @(MTQuerySelectFieldKeys);
+    NSNumber *keyTableNmae = @(MTQuerySelectTableName);
+    NSNumber *keyFieldDef = @(MTQuerySelectFieldDescriptors);
     NSDictionary *options = @{
-                              @(MTQuerySelectRowId) : cacheId,
-                              @(MTQuerySelectTableName) : [self tableName],
+                              keyRowId : cacheId,
+                              keyFieldKey : [self columnKeys],
+                              keyTableNmae : [self tableName],
+                              keyFieldDef : [self columns]
                                   };
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
     sqlite3_stmt *statement = NULL;
     NSError *error = nil;
     NSString *sql = [query getSqlWithError:&error];
-
-    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, sql);
     
     const char *sqlc = [sql UTF8String];
     char *queryString = sqlite3_mprintf((char *) sqlc);
@@ -876,7 +888,7 @@
 
 - (NSString *)columnKeyForColumnName:(NSString *)columnName {
     NSString *key;
-    for (NSString *columnKey in [[self columns] keyEnumerator]) {
+    for (NSString *columnKey in [self columnKeys]) {
         MTDataColumn *column = [[self columns] objectForKey:columnKey];
         if ([[column fieldName] isEqualToString:columnName]) {
             key = [NSString stringWithString: columnKey];
@@ -992,8 +1004,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 - (id)currentObject:(sqlite3_stmt *)statement {
     NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
     int columnCounter = 0;
-    for (id key in [self columnKeys]) {
-        MTDataColumn *dataColumn = [self columns][key];
+    for (NSString *key in [self columnKeys]) {
+        MTDataColumn *dataColumn = [[self columns] objectForKey:key];
         id columnValue = [MTDatabaseSqlite3 object:statement forColumnNumber:columnCounter withType:[[dataColumn columnType] integerValue]];
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];

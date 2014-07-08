@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTDatabaseSqlite3_DEBUG
+#define MAD_MTDatabaseSqlite3_DEBUG
+#endif
+
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseTable.h"
@@ -54,7 +58,7 @@
 }
 
 - (void)openDatabase {
-    [self openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE];// | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
+    [self openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
 }
 
 - (void)openDatabaseWithFlags:(int)flags {
@@ -69,6 +73,10 @@
             sqlite3_create_collation(_database, "LSASC",
                                         SQLITE_UTF8, _database,
                                         compare_string_utf8_localized_asc_collation);
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+            sqlite3_trace(_database, sqliteLog, NULL);
+#endif
+
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
@@ -79,6 +87,12 @@
     }
 }
 
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+void sqliteLog(void *foo, const char* statement);
+void sqliteLog(void *foo, const char* statement) {
+    MTLogStatic(@"=> %s", statement);
+}
+#endif
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
     NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:len1 encoding:NSUTF8StringEncoding];
@@ -444,7 +458,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 
                 int numberOfColumns = sqlite3_column_count(statement);
                 
-                [[query datatable] removeAllObjects];
+                MTDataTable *dataTable = [[self delegate] dataTableForQuery:query];
+                [dataTable removeAllObjects];
                 
                 NSUInteger rowCounter = 0;
                 
@@ -482,12 +497,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                                 [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
                                 [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
                                 [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
-                                [[query datatable] addColumn:dataColumn];
+                                [dataTable addColumn:dataColumn];
                                 dataColumn = nil;
                             }
                         }
                         
-                        [[query datatable] beginBulkInsert];
+                        [dataTable beginBulkInsert];
                     }
                     [self readRow:rowCounter];
                     
@@ -541,11 +556,11 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                         [resultsForRow setObject:value forKey:fieldName];
                     }
                     
-                    [[query datatable] addRowWithDataForFieldKeys:resultsForRow];
+                    [dataTable addRowWithDataForFieldKeys:resultsForRow];
                     resultsForRow = nil;
                     rowCounter++;
                 }
-                [[query datatable] endBulkInsert];
+                [dataTable endBulkInsert];
                 
             }
         } else {

@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @protocol MTDatabaseProtocol <NSObject>
 @required
 @optional
-- (void)receivedResults:(NSUInteger)resultCount ofTotalResults:(NSUInteger)results;
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query;
 @end
 
 

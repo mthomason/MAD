@@ -34,6 +34,7 @@
 #import "UIPageViewController+Extras.h"
 #import "UIViewController+ui.h"
 #import "UIViewController+tabBarItem.h"
+#import "MTDataTable.h"
 
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate, MTTabBarImageProtocol>
@@ -274,7 +275,7 @@
     if ([self printPageRendererReport] == nil) {
         __block MAReportDocument *doc = [[AppDelegate app] activeDocument];
         [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter] dataTable:[doc mainDataTable]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
     }
 }
@@ -569,12 +570,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     [reportViewerController setDisplayActive];
-    MAReportDocument *doc = [[AppDelegate app] activeDocument];
+    //MAReportDocument *doc = [[AppDelegate app] activeDocument];
+    [reportViewerController reload:reportViewerController withSize:frame.size];
+    /*
     [[doc reportFormatter] formatForSize:frame.size options:0 contentChanged:NO];
     
     NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
     [reportViewerController setNumberOfPages:numberOfPages];
-    [self setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+    [reportViewerController setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
     
     NSInteger pageNumber = [reportViewerController currentPageIndex] + 1;
     MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
@@ -591,7 +594,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }];
     
     [[reportViewerController barButtonItemDone] setEnabled:YES];
-    
+    */
 }
 
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
@@ -820,35 +823,40 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)reload:(MTReportViewerController *)reportViewer {
-    
+    [reportViewer reload:reportViewer withSize:[[reportViewer view] bounds].size];
+}
+
+- (void)reload:(MTReportViewerController *)reportViewer withSize:(CGSize)viewBounds {
     [reportViewer setDisplayInactive];
     
     __weak MTReportViewerController *blockViewer = reportViewer;
-    CGSize viewBounds = [[reportViewer view] bounds].size;
     
     MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
-    [self setPrintPageRendererReport:printPageRender];
-    [doc setReportFormatter:reportFormatter];
-
+    [doc prepareForQuery];
     __weak MAReportDocument *weakdoc = doc;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
-        [[weakdoc reportFormatter] setDidRefresh:[blockViewer startedRefresh]];
-        [[weakdoc reportFormatter] formatForSize:viewBounds];
+        if ([blockViewer startedRefresh]) {
+            [[weakdoc reportFormatter] setDidRefresh:YES];
+            [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:YES];
+        } else {
+            [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:NO];
+            
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[weakdoc reportFormatter] dataTable:[weakdoc mainDataTable]];
+            [reportViewer setPrintPageRendererReport:printPageRender];
+            
+        }
         
         __weak MAReportDocument *doc2 = weakdoc;
         __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
+            NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
+            [blockViewer2 setNumberOfPages:numberOfPages];
+            [blockViewer2 setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
             [blockViewer2 setDisplayActive];
             
-            NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
-            blockViewer2.numberOfPages = numberOfPages;
-            blockViewer2.maxNumberOfPages = numberOfPages > 0 ? (numberOfPages - 1) : 0;
-
             MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber: ([blockViewer2 currentPageIndex] + 1)
                                                                                                                          ofPages: numberOfPages];
             [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
@@ -861,7 +869,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [blockViewer2 setStartedRefresh:NO];
             [[doc2 reportFormatter] setDidRefresh:NO];
             [[blockViewer2 barButtonItemDone] setEnabled:YES];
-           
+            
             [blockViewer2 updateRecordsReadStatus];
             
         });
@@ -958,7 +966,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         
         MAReportDocument *doc = [[AppDelegate app] activeDocument];
         MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter dataTable:[doc mainDataTable]];
 
         [controller setPrintPageRenderer:printPageRender];
         
@@ -1199,7 +1207,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     } else {
         MTApplicationInstance *app = [AppDelegate app];
         MAReportDocument *doc = [app activeDocument];
-        NSNumber *numberOfResults = @([[doc reportFormatter] numberOfResults]);
+        NSNumber *numberOfResults = @([[doc mainDataTable] numberOfRows]);
         [self updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
     }
 }
