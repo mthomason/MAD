@@ -40,8 +40,8 @@
         RptqUserCredentals *userCredentals = [[(RptqDatabaseSchemaTable *)object inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-        [self setDatabase:db];
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[[[object objectID] URIRepresentation] absoluteString]];
+        [self setDatabase:db];
         [self setDataTableMaxFieldLength:dataTable];
         [self setQueryObject:object];
 
@@ -70,6 +70,7 @@
     
     NSOrderedSet *fields = [[self queryObject] hasFields];
     MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType:MTQueryTypeMaxFieldLength object:fields];
+    [[queryMaxFieldLenght database] setDelegate:self];
     [[queryMaxFieldLenght database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
         if (success && [[self dataTableMaxFieldLength] numberOfRows] > 0) {
             
