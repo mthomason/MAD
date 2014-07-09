@@ -78,6 +78,8 @@ NSString * const MTQueryKeyPredicateValue = @"v";
 
 @interface MTQuery ()
 
+@property (nonatomic, assign, readwrite) MTQueryType type;
+
 @end
 
 @implementation MTQuery
@@ -190,7 +192,9 @@ NSString * const MTQueryKeyPredicateValue = @"v";
             NSAssert(false, @"Did you forget a constructor?");
             break;
     }
-    
+    if (self) {
+        [self setType:type];
+    }
     return self;
 }
 

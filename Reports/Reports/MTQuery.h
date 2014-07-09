@@ -142,10 +142,12 @@ extern NSString * const MTQueryKeyPredicateValue;
 @interface MTQuery : NSObject
 
 @property (nonatomic, strong, readwrite) MTDatabase *database;
-//@property (nonatomic, strong, readwrite) MTDataTable *datatable;
+
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;
+
+@property (nonatomic, assign, readonly) MTQueryType type;
 
 @property (nonatomic, strong) NSMutableArray *binaryBindings; // Used by database to bind NSData to insert statements
 
@@ -162,7 +164,6 @@ extern NSString * const MTQueryKeyPredicateValue;
 @end
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
-
 
 - (NSString *)whereClauseWithRowIds:(NSIndexSet *)rowids;
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3

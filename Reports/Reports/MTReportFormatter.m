@@ -69,7 +69,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 //State machine
 @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
-@property (nonatomic, retain) NSNumber *detailRowId;
+@property (nonatomic, strong) NSNumber *detailRowId;
+@property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end
 
@@ -80,7 +81,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)dealloc {
-    [[self reportFormatterCache] dumpCache];
+    //[[self reportFormatterCache] dumpCache];
 }
 
 - (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
@@ -217,6 +218,9 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)formatDocumentWithOptions:(MTReportFormatterOptions)options {
+    NSArray *sortDescriptors = [NSArray arrayWithArray:[[self query] sortDescriptors]];
+    [self setSortDescriptors:sortDescriptors];
+    
     NSString *identifier = [self identifierForSizeIndexes:self.layoutSize];
     MTArrayCached *indexes = [[MTArrayCached alloc] initWithIdentifier:identifier];
     [self setReportIndexes:indexes];
@@ -296,12 +300,12 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)numberOfGroups {
-    return [[[self query] sortDescriptors] count];
+    return [[self sortDescriptors] count];
 }
 
 - (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
     for (NSInteger groupLevel = [lastValues count] - 1; groupLevel >= 0; groupLevel--) {
-        NSSortDescriptor *sortDesc = [[self query] sortDescriptors][groupLevel];
+        NSSortDescriptor *sortDesc = [self sortDescriptors][groupLevel];
         SEL comparec = [sortDesc selector];
         NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel]
                                                       withValue: currentValues[groupLevel]
@@ -326,7 +330,7 @@ NSString * const MTNullIdentifier = @"(null)";
             id value = lastValues[groupLevel];
             id value2 = currentValues[groupLevel];
             
-            NSSortDescriptor *sortDesc = [[self query] sortDescriptors][groupLevel];
+            NSSortDescriptor *sortDesc = [self sortDescriptors][groupLevel];
             SEL comparec = [sortDesc selector];
             NSComparisonResult comparsonResult = [self compareValue:value withValue:value2 usingSelector:comparec];
             
@@ -338,12 +342,12 @@ NSString * const MTNullIdentifier = @"(null)";
             RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
             [self addHeightFromGroupHeaderWithQueryGroup: gh];
             
-            @autoreleasepool {
+            //@autoreleasepool {
                 NSRange range = NSMakeRange(0, groupLevel + 1);
                 NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
                 [self addGroupHeaderLevel:groupLevel
                                  withKeys:[currentValues objectsAtIndexes:indexSet]];
-            }
+            //}
         }
     }
 }
@@ -419,9 +423,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
-    CGFloat layoutHeight = [self heightForSection:documentSection];
-    [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
-    self.counterHeightUsedCurrentPage = ([self counterHeightUsedCurrentPage] + layoutHeight);
+    //@autoreleasepool {
+        CGFloat layoutHeight = [self heightForSection:documentSection];
+        [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
+        self.counterHeightUsedCurrentPage = ([self counterHeightUsedCurrentPage] + layoutHeight);
+    //}
 }
 
 - (RptqQueryGroup *)sortGroupAtLevel:(NSInteger)level {
@@ -453,42 +459,43 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL rowIdOnly = YES;
     BOOL calculatedRowId = NO;
     for (id resultRow in [[self datasource] enumeratorForReportData]) {
-        
-        //Get row id
-        if (calculatedRowId == NO) {
-            if ([resultRow isKindOfClass:[NSDictionary class]]) {
-                rowIdOnly = NO;
+        //@autoreleasepool {
+            //Get row id
+            if (calculatedRowId == NO) {
+                if ([resultRow isKindOfClass:[NSDictionary class]]) {
+                    rowIdOnly = NO;
+                }
+                calculatedRowId = YES;
             }
-            calculatedRowId = YES;
-        }
-        NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
-        [self setDetailRowId:rowid];
-        
-        //Get row key values
-        NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-        if (rowIdOnly == NO) {
-            for (NSSortDescriptor *sortDesc in [[self query] sortDescriptors]) {
-                id predicateValue = [resultRow objectForKey:[sortDesc key]];
-                [keyValuesForComparson addObject:predicateValue];
+            NSNumber *rowid = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
+            [self setDetailRowId:rowid];
+            
+            //Get row key values
+            NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
+            if (rowIdOnly == NO) {
+                for (NSSortDescriptor *sortDesc in [self sortDescriptors]) {
+                    id predicateValue = [resultRow objectForKey:[sortDesc key]];
+                    [keyValuesForComparson addObject:predicateValue];
+                }
             }
-        }
-        
-        //Display new footers if needed.
-        if (!firstRow) {
-            [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        }
-        
-        //Display new group headers if needed.
-        [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        [self addHeightFromDocumentSectionToReportLayout:detailSection];
-        
-        [self addDetail];
-        
-        
-        [self setLastResultRowComparsonValues: keyValuesForComparson];
-        
-        firstRow = NO;
-        
+            
+            //Display new footers if needed.
+            if (!firstRow) {
+                [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            }
+            
+            //Display new group headers if needed.
+            [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            [self addHeightFromDocumentSectionToReportLayout:detailSection];
+            
+            [self addDetail];
+            
+            
+            [self setLastResultRowComparsonValues: keyValuesForComparson];
+            
+            firstRow = NO;
+  
+        //}
     }
 }
 

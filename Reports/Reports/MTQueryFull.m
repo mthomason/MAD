@@ -93,7 +93,9 @@
         
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
-            [graph addVertexWithObject:[table objectID]];
+            @autoreleasepool {
+                [graph addVertexWithObject:[table objectID]];
+            }
         }
         
         //Create an edge in the graph for each query link.
@@ -537,21 +539,23 @@
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
     for (RptqQueryGroup *queryGroup in [[self queryObject] sortedQueryGroups]) {
-        
-        BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-        RptqQueryField *groupField = [queryGroup hasField];
-        
-        NSString *queryTable = [[groupField inQueryTable] queryAlias];
-        NSString *safeQueryTable = [[self database] safeIdentifier:queryTable];
-        NSString *fieldName = [[groupField databaseSchemaField] name];
-        NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
-        NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
-        
-        SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                       ascending: sortAscending
-                                                                        selector: sel];
-        [sortedSortDescriptorsGroup addObject:sortDescriptor];
+        @autoreleasepool {
+            BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
+            RptqQueryField *groupField = [queryGroup hasField];
+            
+            NSString *queryTable = [[groupField inQueryTable] queryAlias];
+            NSString *safeQueryTable = [[self database] safeIdentifier:queryTable];
+            NSString *fieldName = [[groupField databaseSchemaField] name];
+            NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
+            NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
+            NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
+            
+            SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                                           ascending: sortAscending
+                                                                            selector: sel];
+            [sortedSortDescriptorsGroup addObject:sortDescriptor];
+        }
     }
     
     return sortedSortDescriptorsGroup;

@@ -33,6 +33,8 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 - (void)removeEdge:(MTEdge *)edge;
 - (BOOL)isAdjacentToVertex:(MTVertex *)vertex;
 
+@property (nonatomic, strong, readonly) NSNumber *uniqueIdForStructure;
+
 @property (assign) MTAlgorithmColor sortVertexColor;
 
 @property (assign) MTAlgorithmColor bfsVertexColor;

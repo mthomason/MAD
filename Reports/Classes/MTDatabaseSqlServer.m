@@ -1313,23 +1313,25 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     dberrhandle(err_handler);
     
     if (*error == nil) {
-        
-        if ((login = dblogin()) == FAIL) {
+        login = dblogin();
+        if (login == FAIL) {
             NSString *message = @"Could not initialize dblogin() structure.";
             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
             *error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
         }
         
         //char *h = (char *)[[blockCredentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
-        char *s = (char *)[[[self databaseConnection] server] cStringUsingEncoding:NSUTF8StringEncoding];
         
         if (*error == nil) {
             /* Initialize the login params in the structure */
-            DBSETLUSER(login, [username cStringUsingEncoding:NSUTF8StringEncoding]);
-            DBSETLPWD(login, [password cStringUsingEncoding:NSUTF8StringEncoding]);
-            DBSETLAPP(login, [[[self databaseConnection] appname] cStringUsingEncoding:NSUTF8StringEncoding]);
-            DBSETLDBNAME(login, [[[self databaseConnection] database] cStringUsingEncoding:NSUTF8StringEncoding]);
-            
+            const char *u = [username cStringUsingEncoding:NSUTF8StringEncoding];
+            const char *p = [password cStringUsingEncoding:NSUTF8StringEncoding];
+            const char *a = [[[self databaseConnection] appname] cStringUsingEncoding:NSUTF8StringEncoding];
+            const char *n = [[[self databaseConnection] database] cStringUsingEncoding:NSUTF8StringEncoding];
+            DBSETLUSER(login, u);
+            DBSETLPWD(login, p);
+            DBSETLAPP(login, a);
+            DBSETLDBNAME(login, n);
             
             if (gethostname(hostname, max_len) == 0) {
                 DBSETLHOST(login, hostname);
@@ -1338,6 +1340,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         }
         DBSETLSECURE(login);
         if (*error == nil) {
+            char *s = (char *)[[[self databaseConnection] server] cStringUsingEncoding:NSUTF8StringEncoding];
             dbconn = dbopen(login, s);
             if (dbconn == NULL) {
                 NSString *message = [NSString stringWithFormat:@"Could not connect to DB Server: %s\n", s];
@@ -1346,6 +1349,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             }
         }
         connected = (*error == nil);
+        
+        dbloginfree(login);
     }
     return dbconn;
 }

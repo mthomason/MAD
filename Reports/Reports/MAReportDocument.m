@@ -52,6 +52,7 @@ NSString * const MTReportGroupLevelNumber = @"gln";
 NSString * const MTReportDetailRowId = @"ix";
 
 @interface MAReportDocument ()
+    <MTDatabaseProtocol>
 
 @property (nonatomic, strong) NSManagedObjectModel *mom;
 @property (nonatomic, strong) RptqDocument *document;
@@ -67,6 +68,20 @@ NSString * const MTReportDetailRowId = @"ix";
 @end
 
 @implementation MAReportDocument
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    switch (query.type) {
+        case MTQueryTypeFull:
+            return [self mainDataTable];
+            break;
+        case MTQueryTypeConnectionTest:
+            return [self connectionTestDataTable];
+            break;
+        default:
+            return nil;
+            break;
+    }
+}
 
 - (void)dealloc {
     [[_mainQuery database] setDelegate:nil];
@@ -201,6 +216,7 @@ NSString * const MTReportDetailRowId = @"ix";
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
     MTQuery *fullQuery = [self defaultQuery];
+    [[fullQuery database] setDelegate:self];
     [[self mainDataTable] sortUsingDescriptors:[fullQuery sortDescriptors]];
     __weak MAReportDocument *weakself = self;
     [fullQuery performQuery:^(BOOL success, NSError *error) {

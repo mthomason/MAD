@@ -71,16 +71,14 @@
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
 	NSArray *directoryContents = [defaultFileManager contentsOfDirectoryAtPath:directory error:&error];
     for (NSString *filename in directoryContents) {
-        @autoreleasepool {
-            NSString *fullPath = [directoryPath stringByAppendingPathComponent:filename];
-            NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
-            BOOL isDirectory;
-            NSString *filePath = [fileURL path];
-            if ([defaultFileManager fileExistsAtPath:filePath isDirectory:&isDirectory]) {
-                NSString *pathExtension = [fileURL pathExtension];
-                if ([pathExtension isEqualToString:extension]) {
-                    [result addObject:fileURL];
-                }
+        NSString *fullPath = [directoryPath stringByAppendingPathComponent:filename];
+        NSURL *fileURL = [NSURL fileURLWithPath:fullPath];
+        BOOL isDirectory;
+        NSString *filePath = [fileURL path];
+        if ([defaultFileManager fileExistsAtPath:filePath isDirectory:&isDirectory]) {
+            NSString *pathExtension = [fileURL pathExtension];
+            if ([pathExtension isEqualToString:extension]) {
+                [result addObject:fileURL];
             }
         }
     }

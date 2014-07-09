@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef MAD_MTDatabaseSqlite3_DEBUG
-#define MAD_MTDatabaseSqlite3_DEBUG
-#endif
+//#ifndef MAD_MTDatabaseSqlite3_DEBUG
+//#define MAD_MTDatabaseSqlite3_DEBUG
+//#endif
 
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
