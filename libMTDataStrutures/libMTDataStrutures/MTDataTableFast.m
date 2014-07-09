@@ -208,13 +208,16 @@
 }
 
 - (NSString *)tableName {
-    return [NSString stringWithFormat:@"t%lu", (unsigned long)[self tag]];
+    char buf[12];
+    sprintf(buf, "t%lu", (unsigned long)self.tag);
+    return [NSString stringWithUTF8String:buf];
 }
 
 - (void)addColumn:(MTDataColumn *)column {
     NSUInteger columnId = [[self columnKeys] count];
-    NSString *columnName = [NSString stringWithFormat:@"c%lu", (unsigned long)columnId];
-    
+    char buf[12];
+    sprintf(buf, "c%lu", (unsigned long)(unsigned long)columnId);
+    NSString *columnName = [NSString stringWithUTF8String:buf];
     [[self columns] setObject:column forKey:columnName];
     [[self columnKeys] addObject:columnName];
     
