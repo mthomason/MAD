@@ -141,6 +141,15 @@ NSString * const MTReportDetailRowId = @"ix";
     return [[self mainDataTable] enumeratorForKeyObjectsSorted];
 }
 
+- (BOOL)cacheExist {
+    NSURL *url = [[self mainDataTable] url];
+    return [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+}
+
+- (NSDictionary *)dataForCacheId:(NSNumber *)cachedID {
+    return  [[self mainDataTable] dataForCacheId:cachedID];
+}
+
 - (void)writeToPdf:(NSURL *)filepath {
     NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
     CGRect letterRect = [MTPaper rectLetter];

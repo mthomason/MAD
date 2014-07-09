@@ -19,7 +19,9 @@ extern NSString * const MTNullIdentifier;
 
 @protocol MTReportFormatterDataSource <NSObject>
 
+- (BOOL)cacheExist;
 - (NSEnumerator *)enumeratorForReportData;
+- (NSDictionary *)dataForCacheId:(NSNumber *)cachedID;
 
 @end
 
@@ -39,7 +41,7 @@ extern NSString * const MTNullIdentifier;
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
 + (NSValue *)KeyReportSectionType;
 - (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
-- (NSArray *)keysForGroup:(NSUInteger)group;
+- (NSArray *)keysForCachedID:(NSNumber *)rowid;
 - (NSUInteger)numberOfGroups;
 
 @property (nonatomic, assign) id <MTReportFormatterDataSource> datasource;
@@ -49,6 +51,5 @@ extern NSString * const MTNullIdentifier;
 
 @property (nonatomic, strong, readonly) MTArrayCached *reportIndexes;
 @property (nonatomic, strong, readonly) MTArrayCached *reportLayout;
-@property (nonatomic, strong, readonly) MTArrayCached *groupKeys;
 
 @end

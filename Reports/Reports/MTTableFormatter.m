@@ -34,8 +34,10 @@
 #pragma mark - Reading cached data
 
 - (BOOL)format {
-    [super format];
-    return YES;
+    
+    
+    
+    return [super format];
 }
 
 @end

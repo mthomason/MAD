@@ -331,7 +331,7 @@
                 [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
                 
                 if (numberOfGroups > 0) {
-                    NSArray *keys = [[self reportFormatter] keysForGroup:groupNumber];
+                    NSArray *keys = [[self reportFormatter] keysForCachedID:pageSection[MTReportDetailRowId]];
                     [groupLevelKeys setArray:keys];
                 }
                 if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter && groupLevel == [[self reportFormatter] numberOfGroups] - 1) {

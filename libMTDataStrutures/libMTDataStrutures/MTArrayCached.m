@@ -241,6 +241,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)addObject:(id)object {
+    [self setLastObjectSelected:nil];
     NSData *data = nil;
     if ([object conformsToProtocol:@protocol(NSCoding)]) {
         @try {
@@ -294,6 +295,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)removeAllObjects {
+    [self setLastObjectSelected:nil];
     self.numberOrRows = 0;
     NSDictionary *queryDefination = [MTQuery queryDefinationCacheDeleteAllFromTable:MTArrayCachedTableName];
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable

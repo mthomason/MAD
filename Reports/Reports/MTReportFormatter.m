@@ -52,7 +52,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong, readwrite) MTArrayCached *reportIndexes;
 @property (nonatomic, strong, readwrite) MTArrayCached *reportLayout;
-@property (nonatomic, strong, readwrite) MTArrayCached *groupKeys;
 
 @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
@@ -76,8 +75,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @implementation MTReportFormatter
 
-- (NSArray *)keysForGroup:(NSUInteger)group {
-    return [self groupKeys][group];
+- (NSArray *)keysForCachedID:(NSNumber *)rowid {
+    NSDictionary *row = [[self datasource] dataForCacheId: rowid];
+    return [NSArray arrayWithArray:[self keyValuesForResultRow:row]];
 }
 
 - (void)dealloc {
@@ -156,9 +156,6 @@ NSString * const MTNullIdentifier = @"(null)";
     MTArrayCached *reportLayout = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
     [self setReportLayout:reportLayout];
     
-    MTArrayCached *groupKeys = [[MTArrayCached alloc] initWithIdentifier:[self identifierForGroupKeys]];
-    [self setGroupKeys:groupKeys];
-    
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
@@ -168,7 +165,12 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
     [self setPageIndexesTemporary:temporaryDataForPage];
     
-    [self setLayoutHeightsBySectionKey:nil];
+    if ([self layout]) {
+        NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
+        [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
+    } else {
+        [self setLayoutHeightsBySectionKey:nil];
+    }
 
     [self setGroupCounter:0];
     
@@ -182,7 +184,14 @@ NSString * const MTNullIdentifier = @"(null)";
 //  Data is cached by group, page, and report.
 
 - (BOOL)format {
-    return [super format];
+    BOOL updatedData = NO;
+    
+    NSAssert([self datasource] != nil, @"We need a datatable way before here");
+    
+    if ([[self datasource] cacheExist] == NO || [self didRefresh]) {
+        updatedData = YES;
+    }
+    return updatedData;
 }
 
 - (void)formatForSize:(CGSize)printableSize {
@@ -196,7 +205,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged {
 
-    if ([super format]) {
+    if ([self format]) {
         
         [self setLayoutSize:printableSize];
 
@@ -204,13 +213,14 @@ NSString * const MTNullIdentifier = @"(null)";
             [self dropIndexes];
         }
         [self formatDocumentWithOptions:options];
+    } else {
+        [self loadLayoutAndIndexesFromCacheWithOptions:options];
     }
 }
 
 - (void)dropIndexes {
     [[self reportIndexes] removeAllObjects];
     [[self reportLayout] removeAllObjects];
-    [[self groupKeys] removeAllObjects];
 }
 
 - (void)dumpCache {
@@ -218,8 +228,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)formatDocumentWithOptions:(MTReportFormatterOptions)options {
+    [self setGroupCounter:0];
+    
     NSArray *sortDescriptors = [NSArray arrayWithArray:[[self query] sortDescriptors]];
     [self setSortDescriptors:sortDescriptors];
+    
     
     NSString *identifier = [self identifierForSizeIndexes:self.layoutSize];
     MTArrayCached *indexes = [[MTArrayCached alloc] initWithIdentifier:identifier];
@@ -250,34 +263,28 @@ NSString * const MTNullIdentifier = @"(null)";
     
     [self cleanupTemporaryReportIndexes];
     
-    [[self reportFormatterCache] setLayout:[[self reportLayout] identifier] andIndexes:[[self reportIndexes] identifier] forSize:self.layoutSize];
+    [[self reportFormatterCache] setLayout:[[self reportLayout] identifier]
+                                andIndexes:[[self reportIndexes] identifier]
+                                   forSize:self.layoutSize];
     
 }
 
 - (void)beginBulkInserts {
     [[self reportIndexes] beginBulkInserts];
     [[self reportLayout] beginBulkInserts];
-    [[self groupKeys] beginBulkInserts];
 }
 
 - (void)endBulkInserts {
     [[self reportLayout] endBulkInserts];
     [[self reportIndexes] endBulkInserts];
-    [[self groupKeys] endBulkInserts];
 }
 
 - (void)loadLayoutAndIndexesFromCacheWithOptions:(MTReportFormatterOptions)options {
-    NSString *indexesHandle = [[self reportFormatterCache] indexesForSize:self.layoutSize];
-    NSString *layoutHandle = [[self reportFormatterCache] layoutForSize:self.layoutSize];
-    if (indexesHandle == nil || layoutHandle == nil) {
-        [self formatDocumentWithOptions:options];
-    } else {
-        MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:indexesHandle];
-        MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:layoutHandle];
-        [self setReportIndexes:ixarray];
-        [self setReportLayout:lyarray];
-        [self cleanupTemporaryReportIndexes];
-    }
+    MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]];
+    MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
+    [self setReportIndexes:ixarray];
+    [self setReportLayout:lyarray];
+    [self cleanupTemporaryReportIndexes];
 }
 
 - (void)initReportLayoutContainers {
@@ -341,13 +348,7 @@ NSString * const MTNullIdentifier = @"(null)";
         if (newHeader) {
             RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
             [self addHeightFromGroupHeaderWithQueryGroup: gh];
-            
-            //@autoreleasepool {
-                NSRange range = NSMakeRange(0, groupLevel + 1);
-                NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
-                [self addGroupHeaderLevel:groupLevel
-                                 withKeys:[currentValues objectsAtIndexes:indexSet]];
-            //}
+            [self addGroupHeaderLevel:groupLevel];
         }
     }
 }
@@ -423,11 +424,9 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
-    //@autoreleasepool {
-        CGFloat layoutHeight = [self heightForSection:documentSection];
-        [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
-        self.counterHeightUsedCurrentPage = ([self counterHeightUsedCurrentPage] + layoutHeight);
-    //}
+    CGFloat layoutHeight = [self heightForSection:documentSection];
+    [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
+    self.counterHeightUsedCurrentPage = ([self counterHeightUsedCurrentPage] + layoutHeight);
 }
 
 - (RptqQueryGroup *)sortGroupAtLevel:(NSInteger)level {
@@ -444,10 +443,6 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addDetailToReportLayout {
     [self initReportLayoutContainers];
-    
-    //[[self groupKeys] removeAllObjects];
-    
-    NSInteger numberOfGroups = [self numberOfGroups];
     
     RptqDocumentSection *detailSection = [[self layout] hasDetailSection];
     
@@ -471,14 +466,8 @@ NSString * const MTNullIdentifier = @"(null)";
             [self setDetailRowId:rowid];
             
             //Get row key values
-            NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
-            if (rowIdOnly == NO) {
-                for (NSSortDescriptor *sortDesc in [self sortDescriptors]) {
-                    id predicateValue = [resultRow objectForKey:[sortDesc key]];
-                    [keyValuesForComparson addObject:predicateValue];
-                }
-            }
-            
+            NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
+        
             //Display new footers if needed.
             if (!firstRow) {
                 [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
@@ -497,6 +486,21 @@ NSString * const MTNullIdentifier = @"(null)";
   
         //}
     }
+}
+
+- (NSArray *)keyValuesForResultRow:(id)resultRow {
+    NSArray *keyValues = nil;
+    if ([resultRow isKindOfClass:[NSDictionary class]]) {
+        NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:[self numberOfGroups]];
+        for (NSSortDescriptor *sortDesc in [self sortDescriptors]) {
+            id predicateValue = [resultRow objectForKey:[sortDesc key]];
+            [keyValuesForComparson addObject:predicateValue];
+        }
+        keyValues = [NSArray arrayWithArray:keyValuesForComparson];
+    } else {
+        keyValues = [NSArray array];
+    }
+    return keyValues;
 }
 
 // FIXME: Make sure paper rect is passed in to the software
@@ -563,7 +567,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self addReportFooter];
 }
 
-- (void)addGroupHeaderLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys {
+- (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
     NSNumber *level = @(groupLevel);
     NSNumber *type = @(MNSDocumentSectionTypeGroupHeader);
     NSNumber *groupNumber = [NSNumber numberWithInteger:self.groupCounter];
@@ -573,8 +577,6 @@ NSString * const MTNullIdentifier = @"(null)";
                         MTReportGroupLevel : level,
                         MTReportDetailRowId : rowid};
     if (groupLevel == [self numberOfGroups] - 1) {
-        NSArray *newKeys = [NSArray arrayWithArray:keys];
-        [[self groupKeys] addObject:newKeys];
         self.groupCounter++;
     }
     [[self pageLayoutTemporary] addObject: d];
