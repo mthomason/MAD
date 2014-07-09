@@ -44,17 +44,17 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 @property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
 
-@property (nonatomic, strong) MTPair *lastObjectRead;
+@property (nonatomic, strong) MTPair *lastObjectSelected;
 
 @end
 
 @implementation MTArrayCached
 
 - (void)dealloc {
-    if (_statementEnumer != NULL) sqlite3_finalize(_statementEnumer);
-    if (_statementInsert != NULL) sqlite3_finalize(_statementInsert);
-    if (_statementSelect != NULL) sqlite3_finalize(_statementSelect);
-    if (_statementCount != NULL) sqlite3_finalize(_statementCount);
+    sqlite3_finalize(_statementInsert);
+    sqlite3_finalize(_statementSelect);
+    sqlite3_finalize(_statementCount);
+    sqlite3_finalize(_statementEnumer);
     sqlite3_close(_database.databaseHandle);
 }
 
@@ -63,16 +63,15 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     if (self) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
         [self setFastEnumerationObjects:fastEnumerationObjects];
-
-        //_statementCount = NULL;
-        //_statementEnumer = NULL;
-        //_statementInsert = NULL;
-        //_statementSelect = NULL;
+        
+        _statementCount = NULL;
+        _statementEnumer = NULL;
+        _statementInsert = NULL;
+        _statementSelect = NULL;
         
         NSString *i = [NSString stringWithString:identifier];
         [self setIdentifier:i];
         [self initalizeDatabase];
-        
     }
     return self;
 }
@@ -87,7 +86,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 }
 
 - (void)initalizeDatabase {
-
+    
     NSURL *url = [self url];
     BOOL createDatabase = [[NSFileManager defaultManager] fileExistsAtPath:[url path]] == NO;
     [self reopenDatabaseAtUrl:[self url]];
@@ -118,70 +117,57 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 - (BOOL)prepareStatements {
     return [self prepareStatementInsert] && [self prepareStatementSelect] &&
-           [self prepareStatementCount] && [self prepareStatementEnum];
+    [self prepareStatementCount] && [self prepareStatementEnum];
 }
+
 - (BOOL)prepareStatementEnum {
     NSString *sql = [NSString stringWithFormat:MTArrayCachedQueryEnumer,  MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
-    _statementEnumer = NULL;
-    return sqlite3_prepare_v2([[self database] databaseHandle], [sql UTF8String], -1, &_statementEnumer, NULL) == SQLITE_OK;
-}
-
-- (BOOL)prepareStatementInsert {
-    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryInsert, MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
-    _statementInsert = NULL;
-    return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementInsert, NULL) == SQLITE_OK;
-}
-
-- (BOOL)prepareStatementSelect {
-    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQuerySelect, MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
-    _statementSelect = NULL;
-    return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementSelect, NULL) == SQLITE_OK;
-}
-
-- (BOOL)prepareStatementCount {
-    NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryLastId, MTArrayCachedColumnKey, MTArrayCachedTableName, MTArrayCachedColumnKey];
-    _statementCount = NULL;
-    return sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementCount, NULL) == SQLITE_OK;
-}
-
-/*
-- (BOOL)prepareStatementEnum {
-    NSString *sql = [NSString stringWithFormat:MTArrayCachedQueryEnumer,  MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    if (_statementEnumer != NULL) {
+        sqlite3_finalize(_statementEnumer);
+        _statementEnumer = NULL;
+    }
     BOOL success = YES;
-    //if (_statementEnumer == NULL)
+    if (_statementEnumer == NULL)
         success = sqlite3_prepare_v2([[self database] databaseHandle], [sql UTF8String], -1, &_statementEnumer, NULL) == SQLITE_OK;
-    NSAssert(success, @"%s at %s.", sqlite3_errmsg(self.database.databaseHandle), __PRETTY_FUNCTION__);
     return success;
 }
 
 - (BOOL)prepareStatementInsert {
     NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryInsert, MTArrayCachedTableName, MTArrayCachedColumnKey, MTArrayCachedColumnValue];
+    if (_statementInsert != NULL) {
+        sqlite3_finalize(_statementInsert);
+        _statementInsert = NULL;
+    }
     BOOL success = YES;
-    //if (_statementInsert == NULL)
+    if (_statementInsert == NULL)
         success = sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementInsert, NULL) == SQLITE_OK;
-    NSAssert(success, @"%s at %s.", sqlite3_errmsg(self.database.databaseHandle), __PRETTY_FUNCTION__);
     return success;
 }
 
 - (BOOL)prepareStatementSelect {
     NSString *queryString = [NSString stringWithFormat:MTArrayCachedQuerySelect, MTArrayCachedColumnValue, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    if (_statementSelect != NULL) {
+        sqlite3_finalize(_statementSelect);
+        _statementSelect = NULL;
+    }
     BOOL success = YES;
-    //if (_statementSelect == NULL)
+    if (_statementSelect == NULL)
         success = sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementSelect, NULL) == SQLITE_OK;
-    NSAssert(success, @"%s at %s.", sqlite3_errmsg(self.database.databaseHandle), __PRETTY_FUNCTION__);
     return success;
+
 }
 
 - (BOOL)prepareStatementCount {
     NSString *queryString = [NSString stringWithFormat:MTArrayCachedQueryLastId, MTArrayCachedColumnKey, MTArrayCachedTableName, MTArrayCachedColumnKey];
+    if (_statementCount != NULL) {
+        sqlite3_finalize(_statementCount);
+        _statementCount = NULL;
+    }
     BOOL success = YES;
-    //if (_statementCount == NULL)
+    if (_statementCount == NULL)
         success = sqlite3_prepare_v2([[self database] databaseHandle], [queryString UTF8String], -1, &_statementCount, NULL) == SQLITE_OK;
-    NSAssert(success, @"%s at %s.", sqlite3_errmsg(self.database.databaseHandle), __PRETTY_FUNCTION__);
     return success;
 }
-
-*/
 
 #ifdef MAD_MTArrayCached_DEBUG
 void sqliteCallbackFunc(void *foo, const char* statement);
@@ -255,31 +241,26 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)addObject:(id)object {
-    //@autoreleasepool {
-        NSData *data = nil;
-        if ([object conformsToProtocol:@protocol(NSCoding)]) {
-            @try {
-                data = [NSKeyedArchiver archivedDataWithRootObject:object];
-            }
-            @catch (NSException *exception) {
-                NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
-                data = [NSKeyedArchiver archivedDataWithRootObject:v];
-            }
-            @finally { }
-        } else {
+    NSData *data = nil;
+    if ([object conformsToProtocol:@protocol(NSCoding)]) {
+        @try {
+            data = [NSKeyedArchiver archivedDataWithRootObject:object];
+        }
+        @catch (NSException *exception) {
             NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
             data = [NSKeyedArchiver archivedDataWithRootObject:v];
         }
-        sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
-        sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
-    int stepResult = sqlite3_step(_statementInsert);
-        if (stepResult == SQLITE_DONE) {
-            sqlite3_reset(_statementInsert);
-            self.numberOrRows++;
-        } else {
-            NSAssert(false, @"Error '%s' at %s.", sqlite3_errmsg(self.database.databaseHandle), __PRETTY_FUNCTION__);
-        }
-    //}
+        @finally { }
+    } else {
+        NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
+        data = [NSKeyedArchiver archivedDataWithRootObject:v];
+    }
+    sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
+    sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+    if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
+        sqlite3_reset(_statementInsert);
+        self.numberOrRows++;
+    }
 }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
@@ -287,18 +268,25 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (id)objectAtIndex:(NSUInteger)index {
+    NSUInteger lastIndex = NSNotFound;
     id result = nil;
-    NSNumber *lastIndexObj = self.lastObjectRead.former;
-    if (lastIndexObj != nil && lastIndexObj.unsignedIntegerValue == index) {
-        result = self.lastObjectRead.latter;
+    
+    if (self.lastObjectSelected != nil) {
+        NSNumber *lastObjectIndex = self.lastObjectSelected.former;
+        lastIndex = [lastObjectIndex unsignedIntegerValue];
+    }
+    if (lastIndex == index) {
+        result = self.lastObjectSelected.latter;
     } else {
         sqlite3_bind_int(_statementSelect, 1, (int)index);
-        id result = nil;
         
         if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
                                                  length: sqlite3_column_bytes(_statementSelect, 0)];
             result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+            NSNumber *idx = @(index);
+            MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
+            self.lastObjectSelected = pair;
             sqlite3_reset(_statementSelect);
         }
     }
@@ -392,10 +380,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained *)stackbuf count:(NSUInteger)len {
-
+    
     NSUInteger i = 0;
     int stepResult;
-
+    
     if(state->state == 0) {
         state->state = 1;
         state->mutationsPtr = &state->extra[0];
