@@ -517,7 +517,11 @@ NSString * const MTNullIdentifier = @"(null)";
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:[self numberOfGroups]];
         for (NSSortDescriptor *sortDesc in self.machineState.sortDescriptors) {
             id predicateValue = [resultRow objectForKey:[sortDesc key]];
-            [keyValuesForComparson addObject:predicateValue];
+            if (predicateValue != nil) {
+                [keyValuesForComparson addObject:predicateValue];
+            } else {
+                [keyValuesForComparson addObject:[NSNull null]];
+            }
         }
         keyValues = [NSArray arrayWithArray:keyValuesForComparson];
     } else {

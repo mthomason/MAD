@@ -285,7 +285,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: [reportDocument managedObjectContext]
                                                                                             sectionNameKeyPath: nil
-                                                                                                     cacheName: NSFetchedResultsCacheName];
+                                                                                                     cacheName: nil];
                     [tvc setFetchedResultsController: frc];
                 }
             }
@@ -1278,7 +1278,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCacheTables];
+                                                                                             cacheName: nil];
             [frc setDelegate:self];
             [self setFetchedResultsControllerTables: frc];
             [self performFetchTables];
@@ -1293,7 +1293,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCacheLinks];
+                                                                                             cacheName: nil];
             [frc setDelegate:self];
             [self setFetchedResultsControllerLinks: frc];
             [self performFetchLinks];
@@ -1308,7 +1308,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCacheGroups];
+                                                                                             cacheName: nil];
             [frc setDelegate:self];
             [self setFetchedResultsControllerGroups: frc];
             [self performFetchGroups];
@@ -1325,7 +1325,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
-                                                                                             cacheName: NSFetchedResultsCachePredicates];
+                                                                                             cacheName: nil];
             [frc setDelegate:self];
             [self setFetchedResultsControllerPredicates: frc];
             [self performFetchPredicate];

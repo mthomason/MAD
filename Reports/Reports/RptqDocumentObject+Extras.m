@@ -457,31 +457,87 @@ static NSNumberFormatter *currencyNumberFormatter;
 #pragma mark - MTProtocolCompare
 
 - (NSString *)formattedString:(MTDataType)dataType forValue:(id)value {
-    
-    if (!currencyNumberFormatter) {
-        currencyNumberFormatter = [[NSNumberFormatter alloc] init];
-        [currencyNumberFormatter setLocale:[NSLocale currentLocale]];
-        [currencyNumberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    }
+
     
     NSString *result;
     switch (dataType) {
+        case MTDataTypeYear:
+            if ([value isKindOfClass:[NSString class]]) {
+                result = value;
+            } else if ([value isKindOfClass:[NSNumber class]]) {
+                result = [NSString stringWithFormat:@"%d", [(NSNumber *)value integerValue]];
+            } else {
+                result = [NSString stringWithFormat:@"%@", value];
+            }
+            break;
+        case MTDataTypeGeometry:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        case MTDataTypeImage:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        case MTDataTypeSet:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
+        case MTDataTypeUnknown:
+            result = [NSString stringWithFormat:@"%@", value];
+            break;
         case MTDataTypeDate:
         case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        case MTDataTypeImage:
-        case MTDataTypeSet:
         case MTDataTypeTime:
-        case MTDataTypeTimeStamp:
-        case MTDataTypeYear:
-        case MTDataTypeUnknown:
-            //result = NSLocalizedString(@"Not implemented.", @"Not implemented.");
-                        result = [NSString stringWithFormat:@"%@", value];
-            /*            @throw [NSException exceptionWithName: NSInternalInconsistencyException
-             reason: [NSString stringWithFormat:@"Not implemented: %@.  Subclass MNSDtabase; don't use it directly.", NSStringFromSelector(_cmd)]
-             userInfo: nil];*/
-            
+        case MTDataTypeTimeStamp: {
+            static NSDateFormatter *dateformatter;
+            static NSDateFormatter *timeformatter;
+            static NSDateFormatter *dateTimeformatter;
+            if (dateformatter == nil) {
+                dateformatter = [[NSDateFormatter alloc] init];
+                [dateformatter setDateStyle:NSDateFormatterShortStyle];
+                [dateformatter setTimeStyle:NSDateFormatterNoStyle];
+            }
+            if (timeformatter == nil) {
+                timeformatter = [[NSDateFormatter alloc] init];
+                [timeformatter setDateStyle:NSDateFormatterNoStyle];
+                [timeformatter setTimeStyle:NSDateFormatterShortStyle];
+            }
+            if (dateTimeformatter == nil) {
+                dateTimeformatter = [[NSDateFormatter alloc] init];
+                [dateTimeformatter setDateStyle:NSDateFormatterShortStyle];
+                [dateTimeformatter setTimeStyle:NSDateFormatterShortStyle];
+            }
+            NSDate *d = nil;
+            if ([value isKindOfClass:[NSData class]]) {
+                d = value;
+            } else {
+                NSTimeInterval t = 0;
+                if ([value isKindOfClass:[NSString class]]) {
+                    t = [(NSString *)value longLongValue];
+                } else if ([value isKindOfClass:[NSNumber class]]) {
+                    t = [value longLongValue];
+                }
+                d = [NSDate dateWithTimeIntervalSince1970:t];
+            }
+            switch (dataType) {
+                case MTDataTypeDate:
+                    result = [dateformatter stringFromDate:d];
+                    break;
+                case MTDataTypeDateTime:
+                    result = [dateTimeformatter stringFromDate:d];
+                    break;
+                case MTDataTypeTime:
+                    result = [timeformatter stringFromDate:d];
+                    break;
+                    
+                case MTDataTypeTimeStamp:
+                    result = [dateformatter stringFromDate:d];
+                    break;
+
+                default:
+                    result = [NSString stringWithFormat:@"%@", value];
+                    break;
+            }
+  
             break;
+        }
         case MTDataTypeBlob:
             result = [NSString stringWithFormat:@"%@", value];
             break;
@@ -498,9 +554,11 @@ static NSNumberFormatter *currencyNumberFormatter;
         {
             if ([value isKindOfClass:[NSNumber class]]) {
                 if ([[self formatNumericCurrency] boolValue]) {
-                    //NSNumberFormatter *currencyNumberFormatter = [[NSNumberFormatter alloc] init];
-                    //[currencyNumberFormatter setLocale:[NSLocale currentLocale]];
-                    //[currencyNumberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                    if (!currencyNumberFormatter) {
+                        currencyNumberFormatter = [[NSNumberFormatter alloc] init];
+                        [currencyNumberFormatter setLocale:[NSLocale currentLocale]];
+                        [currencyNumberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                    }
                     result = [currencyNumberFormatter stringFromNumber:value];
                 } else {
                     NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"%."];
