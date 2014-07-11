@@ -59,7 +59,9 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
     if (row % self.rowInterval == 0) {
         if (row == 0) [self initalizeRowInterval];
         NSDictionary *parameters = [self parametersWithNumberOfRows:row];
-        NSNotification *notification = [NSNotification notificationWithName:MTNotificationDidReadRowsName object:database userInfo:parameters];
+        NSNotification *notification = [NSNotification notificationWithName: MTNotificationDidReadRowsName
+                                                                     object: database
+                                                                   userInfo: parameters];
         [[NSNotificationCenter defaultCenter] postNotification:notification];
         if ([self rowInterval] < RowIntervalInitalMax) {
             if (row > self.rowInterval) {

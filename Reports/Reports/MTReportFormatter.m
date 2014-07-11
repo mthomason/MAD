@@ -44,6 +44,8 @@
 #import "MTLog.h"
 #import "NSData+Comparson.h"
 
+#import "MTNotificationDidFormatPage.h"
+
 NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatterState : NSObject
@@ -550,7 +552,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [self cleanupTemporaryPageIndexes];
             
             self.machineState.pageCounter++;
-            
+            [[MTNotificationDidFormatPage sharedObject] reportFormatter:self formattedPage:self.machineState.pageCounter];
             RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
             CGFloat pageHeaderHeight = CGPointZero.y;
             pageHeaderHeight += [self heightForSection:pageHeaderSection];

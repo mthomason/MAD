@@ -36,6 +36,9 @@
 #import "UIViewController+tabBarItem.h"
 #import "MTDataTable.h"
 
+#import "MTNotificationDidFormatPage.h"
+#import "MTNotificationDidReadRows.h"
+
 @interface MTReportViewerController ()
     <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate, MTTabBarImageProtocol>
 
@@ -88,6 +91,8 @@
 @property (nonatomic, strong) NSAttributedString *statusMessage3;
 
 @property (nonatomic, strong) UIProgressView *progressView;
+
+@property (nonatomic, strong) NSAttributedString *lineReturnString;
 
 @end
 
@@ -146,6 +151,8 @@
 }
 
 - (void)initalize {
+    NSAttributedString *lineReturnString = [[NSAttributedString alloc] initWithString:@"\n"];
+    [self setLineReturnString:lineReturnString];
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
     [self initalizeStatusMessages];
@@ -267,6 +274,11 @@
     }
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(reportFormatterDidFormatPage:)
+                                                 name: MTNotificationDidFormatPagesName
+                                               object: [reportDocument reportFormatter]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -282,6 +294,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    MAReportDocument *doc = [[AppDelegate app] activeDocument];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MTNotificationDidFormatPagesName
+                                                  object: [doc reportFormatter]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -449,6 +465,9 @@
     [[[self navigationController] toolbar] setNeedsLayout];
     [[self view] bringSubviewToFront:[self toolbarSideRight]];
     [self addSliderPagination];
+    
+    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
+    [[self labelStatus] setBounds:bounds];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -699,11 +718,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
         [reportDocument initalizeMainQuery];
         MTDatabase *database = [[reportDocument defaultQuery] database];
-        [[NSNotificationCenter defaultCenter] addObserver: reportViewer
-                          selector: @selector(reportDocumentDidReadRows:)
-                              name: @"MTNotificationDidReadRows"
-                            object: database];
+        
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver: reportViewer
+                               selector: @selector(reportDocumentDidReadRows:)
+                                   name: MTNotificationDidReadRowsName
+                                 object: database];
 
+        
         __weak MTReportViewerController *weakReportViewer = reportViewer;
 
         __weak MAReportDocument *weakReportDocument = reportDocument;
@@ -713,7 +735,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
             __block MTReportViewerController *reportViewer2 = weakReportViewer;
             __weak MTDatabase *weakDatabase2 = weakDatabase;
-            [reportDocument refresh:^(BOOL success, NSError *error) {
+            [weakReportDocument refresh:^(BOOL success, NSError *error) {
                 __weak MTDatabase *weakDatabase3 = weakDatabase2;
                 __block MTReportViewerController *reportViewer3 = reportViewer2;
                 if (!success) {
@@ -727,9 +749,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     __weak MTDatabase *weakDatabase4 = weakDatabase3;
                     __block MTReportViewerController *reportViewer4 = reportViewer3;
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [[NSNotificationCenter defaultCenter] removeObserver: reportViewer4
-                                                                        name: @"MTNotificationDidReadRows"
-                                                                      object: weakDatabase4];
+                        
+                        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+                        [defaultCenter removeObserver: reportViewer4
+                                                 name: MTNotificationDidReadRowsName
+                                               object: weakDatabase4];
                         [MTReportViewerController finishedRefreshWithReportViewer:reportViewer4];
                         reportViewer4 = nil;
                     });
@@ -748,9 +772,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [viewer updateLateRefreshedLabel:viewer];
 }
 
+- (void)reportFormatterDidFormatPage:(NSNotification *)sender {
+    NSDictionary *parameters = [sender userInfo];
+    NSNumber *pageNumber = [parameters objectForKey:MTDatabaseNumberOfPagesFormattedKey];
+    [self updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
+}
+
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];
-    NSNumber *rowNumber = [parameters objectForKey:@"MTDatabaseNumberOfRowsReadKey"];
+    NSNumber *rowNumber = [parameters objectForKey:MTDatabaseNumberOfRowsReadKey];
     [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
@@ -1109,29 +1139,20 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)updateStatusLabel:(NSAttributedString *)timeMessage recordsReadMessage:(NSAttributedString *)recordsReadMessage andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
-    
-    NSAttributedString *newlineString = [[NSAttributedString alloc] initWithString:@"\n"];
 
-    
     if ([[recordsReadMessage string] length] > 0) {
-        [status appendAttributedString:newlineString];
+        [status appendAttributedString:self.lineReturnString];
         [status appendAttributedString:recordsReadMessage];
     }
 
     if ([[numberOfPagesMessage string] length] > 0) {
-        [status appendAttributedString:newlineString];
+        [status appendAttributedString:self.lineReturnString];
         [status appendAttributedString:numberOfPagesMessage];
     }
     
     NSRange range = NSMakeRange(0, [status length]);
     [status addAttributes:[self attributesStatusLabelCentered] range:range];
-
-    //NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin);
-    //CGSize labelSize = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size;
-    //CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelSize.width, 44.0000f);
     
-    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
-    [[self labelStatus] setBounds:bounds];
     [[self labelStatus] setAttributedText:status];
 }
 
@@ -1215,6 +1236,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Read %@ records.", @"Read %@ records.");
+    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    [self updateStatusWithRecordsRead:readRecords];
+}
+
+- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
 }

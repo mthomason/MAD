@@ -11,10 +11,15 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MTNotificationDidReadRowsName;
+extern NSString * const MTDatabaseNumberOfRowsReadKey;
+
+@class MTDatabase;
+
 @interface MTNotificationDidReadRows : NSObject
 
 + (MTNotificationDidReadRows *)sharedObject;
-- (void)database:(id)database readRow:(NSUInteger)row;
+- (void)database:(MTDatabase *)database readRow:(NSUInteger)row;
 
 @end
 
