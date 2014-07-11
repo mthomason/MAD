@@ -128,7 +128,9 @@
 }
 
 - (NSString *)keyForIdentifier {
-    return [[[self objectID] URIRepresentation] absoluteString];
+    NSManagedObjectID *objectID = [self objectID];
+    NSURL *url = [objectID URIRepresentation];
+    return [url absoluteString];
 }
 
 - (NSUInteger)nextDropIndexForSection {

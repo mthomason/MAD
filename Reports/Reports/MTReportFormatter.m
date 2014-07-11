@@ -327,18 +327,20 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)displayNewGroupFootersIfNeeded:(NSArray *)currentValues  andLastValues:(NSArray *)lastValues {
     for (NSInteger groupLevel = [lastValues count] - 1; groupLevel >= 0; groupLevel--) {
-        NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel];
-        SEL comparec = [sortDesc selector];
-        NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel]
-                                                      withValue: currentValues[groupLevel]
-                                                  usingSelector: comparec];
-        
-        BOOL newFooter = comparsonResult != NSOrderedSame;
-        
-        if (newFooter) {
-            RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
-            [self addHeightFromGroupFooterWithQueryGroup: group];
-            [self addGroupFooterAtLevel:groupLevel];
+        @autoreleasepool {
+            NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel];
+            SEL comparec = [sortDesc selector];
+            NSComparisonResult comparsonResult = [self compareValue: lastValues[groupLevel]
+                                                          withValue: currentValues[groupLevel]
+                                                      usingSelector: comparec];
+            
+            BOOL newFooter = comparsonResult != NSOrderedSame;
+            
+            if (newFooter) {
+                RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+                [self addHeightFromGroupFooterWithQueryGroup: group];
+                [self addGroupFooterAtLevel:groupLevel];
+            }
         }
     }
 }
@@ -346,24 +348,26 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)displayNewGroupHeadersIfNeeded:(NSArray *)currentValues andLastValues:(NSArray *)lastValues {
 
     for (NSInteger groupLevel = 0; groupLevel < [currentValues count]; groupLevel++) {
-        BOOL newHeader = [lastValues count] == 0;
-        if (newHeader == NO) {
+        @autoreleasepool {
+            BOOL newHeader = [lastValues count] == 0;
+            if (newHeader == NO) {
+                
+                id value = lastValues[groupLevel];
+                id value2 = currentValues[groupLevel];
+                
+                NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel];
+                SEL comparec = [sortDesc selector];
+                NSComparisonResult comparsonResult = [self compareValue:value withValue:value2 usingSelector:comparec];
+                
+                newHeader = comparsonResult != NSOrderedSame;
+            }
             
-            id value = lastValues[groupLevel];
-            id value2 = currentValues[groupLevel];
             
-            NSSortDescriptor *sortDesc = self.machineState.sortDescriptors[groupLevel];
-            SEL comparec = [sortDesc selector];
-            NSComparisonResult comparsonResult = [self compareValue:value withValue:value2 usingSelector:comparec];
-            
-            newHeader = comparsonResult != NSOrderedSame;
-        }
-        
-        
-        if (newHeader) {
-            RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
-            [self addHeightFromGroupHeaderWithQueryGroup: gh];
-            [self addGroupHeaderLevel:groupLevel];
+            if (newHeader) {
+                RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+                [self addHeightFromGroupHeaderWithQueryGroup: gh];
+                [self addGroupHeaderLevel:groupLevel];
+            }
         }
     }
 }
@@ -417,9 +421,11 @@ NSString * const MTNullIdentifier = @"(null)";
 // !!!: Is this getting the height correctly?
 - (void)addHeightFromGroupHeaderWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-        if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
-            [self addHeightFromDocumentSectionToReportLayout:documentSection];
-            break;
+        @autoreleasepool {
+            if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+                [self addHeightFromDocumentSectionToReportLayout:documentSection];
+                break;
+            }
         }
     }
 }
@@ -427,9 +433,11 @@ NSString * const MTNullIdentifier = @"(null)";
 // !!!: Is this getting the height correctly?
 - (void)addHeightFromGroupFooterWithQueryGroup:(RptqQueryGroup *)queryGroup {
     for (RptqDocumentSection *documentSection in [[queryGroup hasSection] allObjects]) {
-        if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
-            [self addHeightFromDocumentSectionToReportLayout:documentSection];
-            break;
+        @autoreleasepool {
+            if ([[documentSection type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+                [self addHeightFromDocumentSectionToReportLayout:documentSection];
+                break;
+            }
         }
     }
 }
@@ -470,35 +478,33 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL rowIdOnly = YES;
     BOOL calculatedRowId = NO;
     for (id resultRow in [[self datasource] enumeratorForReportData]) {
-        //@autoreleasepool {
-            //Get row id
-            if (calculatedRowId == NO) {
-                if ([resultRow isKindOfClass:[NSDictionary class]]) {
-                    rowIdOnly = NO;
-                }
-                calculatedRowId = YES;
+        //Get row id
+        if (calculatedRowId == NO) {
+            if ([resultRow isKindOfClass:[NSDictionary class]]) {
+                rowIdOnly = NO;
             }
-            self.machineState.detailRowId = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
+            calculatedRowId = YES;
+        }
+        self.machineState.detailRowId = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
         
-            //Get row key values
-            NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
+        //Get row key values
+        NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
         
-            //Display new footers if needed.
-            if (!firstRow) {
-                [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-            }
-            
-            //Display new group headers if needed.
-            [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-            [self addHeightFromDocumentSectionToReportLayout:detailSection];
-            
-            [self addDetail];
-            
-            
-            [self setLastResultRowComparsonValues: keyValuesForComparson];
-            
-            firstRow = NO;
-  
+        //Display new footers if needed.
+        if (!firstRow) {
+            [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+        }
+        
+        //Display new group headers if needed.
+        [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+        [self addHeightFromDocumentSectionToReportLayout:detailSection];
+        
+        [self addDetail];
+        
+        
+        [self setLastResultRowComparsonValues: keyValuesForComparson];
+        
+        firstRow = NO;
         self.machineState.rowCounter++;
     }
 }
@@ -522,38 +528,39 @@ NSString * const MTNullIdentifier = @"(null)";
 - (BOOL)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
     
     BOOL newPageCreated = NO;
-    CGRect pageRect;
-    //RptqDocument *document = [[self reportDocument] activeDocument];
-    RptqDocumentSection *pageFooterSection = [[self layout] hasPageFooterSection];
-    CGFloat pageFooterSectionHeight = [self heightForSection:pageFooterSection];
     
-    pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.layoutSize.width, self.layoutSize.height);
-    
-    if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
+//    @autoreleasepool {
+        CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.hasPageFooterSection];
         
-        newPageCreated = YES;
-        CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + pageFooterSectionHeight;
-        self.machineState.counterHeightUsedCurrentPage = newHeight;
-        [self addPageFooter];
+        CGRect pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.layoutSize.width, self.layoutSize.height);
         
-        NSArray *pageInfo = [NSArray arrayWithArray: [self pageLayoutTemporary]];
-        [[self reportLayout] addObject:pageInfo];
-        
-        NSIndexSet *rowids = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
-        [[self reportIndexes] addObject:rowids];
-        
-        [self cleanupTemporaryPageIndexes];
+        if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
+            
+            newPageCreated = YES;
+            CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + pageFooterSectionHeight;
+            self.machineState.counterHeightUsedCurrentPage = newHeight;
+            [self addPageFooter];
+            
+            NSArray *pageInfo = [NSArray arrayWithArray: [self pageLayoutTemporary]];
+            [[self reportLayout] addObject:pageInfo];
+            
+            NSIndexSet *rowids = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
+            [[self reportIndexes] addObject:rowids];
+            
+            [self cleanupTemporaryPageIndexes];
+            
+            self.machineState.pageCounter++;
+            
+            RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
+            CGFloat pageHeaderHeight = CGPointZero.y;
+            pageHeaderHeight += [self heightForSection:pageHeaderSection];
+            self.machineState.counterHeightUsedCurrentPage = pageHeaderHeight;
+            
+            [self addPageHeader];
+            
+        }
+//    }
 
-        self.machineState.pageCounter++;
-
-        RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
-        CGFloat pageHeaderHeight = CGPointZero.y;
-        pageHeaderHeight += [self heightForSection:pageHeaderSection];
-        self.machineState.counterHeightUsedCurrentPage = pageHeaderHeight;
-        
-        [self addPageHeader];
-        
-    }
     return newPageCreated;
 }
 

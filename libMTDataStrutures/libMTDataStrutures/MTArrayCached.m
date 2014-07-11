@@ -220,7 +220,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     return column;
 }
 
-- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
+- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName
+      createTable:(BOOL)create unique:(BOOL)unique {
     
     NSNumber *createTable = @(create);
     NSDictionary *queryDefination = @{
@@ -241,26 +242,28 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (void)addObject:(id)object {
-    [self setLastObjectSelected:nil];
-    NSData *data = nil;
-    if ([object conformsToProtocol:@protocol(NSCoding)]) {
-        @try {
-            data = [NSKeyedArchiver archivedDataWithRootObject:object];
-        }
-        @catch (NSException *exception) {
+    @autoreleasepool {
+        [self setLastObjectSelected:nil];
+        NSData *data = nil;
+        if ([object conformsToProtocol:@protocol(NSCoding)]) {
+            @try {
+                data = [NSKeyedArchiver archivedDataWithRootObject:object];
+            }
+            @catch (NSException *exception) {
+                NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
+                data = [NSKeyedArchiver archivedDataWithRootObject:v];
+            }
+            @finally { }
+        } else {
             NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
             data = [NSKeyedArchiver archivedDataWithRootObject:v];
         }
-        @finally { }
-    } else {
-        NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
-        data = [NSKeyedArchiver archivedDataWithRootObject:v];
-    }
-    sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
-    sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
-    if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
-        sqlite3_reset(_statementInsert);
-        self.numberOrRows++;
+        sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
+        sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+        if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
+            sqlite3_reset(_statementInsert);
+            self.numberOrRows++;
+        }
     }
 }
 

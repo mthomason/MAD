@@ -616,7 +616,7 @@
                                     [drawingObject drawInRect:elementCanvasRect];
                                 }
                                 //displayString = nil;
-                                drawingObject = nil;
+                                //drawingObject = nil;
                             }
                         }
                     }

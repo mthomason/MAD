@@ -176,17 +176,20 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler {
     
-    if ([self activeDocument]) {
-
+    __weak MAReportDocument *activeDocument = [self activeDocument];
+    if (activeDocument) {
         __weak MTApplicationInstance *blockSelf = self;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            MAReportDocument *activeDocument = [blockSelf activeDocument];
+            
             __weak MAReportDocument *blockActiveDocument = activeDocument;
             __weak MTApplicationInstance *blockSelf2 = blockSelf;
-            if ([activeDocument documentState] != UIDocumentStateClosed) {
-                [MAReportDocument regenThumbnailForReport:activeDocument];
-                [activeDocument closeWithCompletionHandler:^(BOOL success) {
+
+            if ([blockActiveDocument documentState] != UIDocumentStateClosed) {
+                
+                [MAReportDocument regenThumbnailForReport:blockActiveDocument];
+
+                [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
                     
                     if (success) {
                         
@@ -194,7 +197,10 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                         
                         __weak MAReportDocument *blockActiveDocument2 = blockActiveDocument;
                         __weak MTApplicationInstance *blockself3 = blockSelf2;
-                        [NSFileManager wrapFile:[blockActiveDocument fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:^(BOOL success, NSURL *resultUrl) {
+                        
+                        [NSFileManager wrapFile: [blockActiveDocument2 fileURL]
+                                  withExtention: MTDocumentExtentionMobleApplicationDocument
+                                      overwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
                             
                             __weak MTApplicationInstance *blockself4 = blockself3;
                             [MADocument deleteFromDiskQuick:blockActiveDocument2 completion:^(BOOL success) {
@@ -203,9 +209,11 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                                     
                                     [blockself4 setReportState:MTReportStateClosed];
                                     [[blockself4 documents] removeObjectForKey:[blockself4 currentDocument]];
+                                    
                                     dispatch_sync(dispatch_get_main_queue(), ^{
                                         completionHandler(success);
                                     });
+                                    
                                 }
                                 
                             }];
