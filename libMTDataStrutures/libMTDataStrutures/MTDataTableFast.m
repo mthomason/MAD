@@ -211,8 +211,8 @@
 }
 
 - (NSString *)tableName {
-    char buf[12];
-    sprintf(buf, "t%lu", (unsigned long)self.tag);
+    char buf[18];
+    snprintf(buf, 18, "t%lu", (unsigned long)self.tag);
     return [NSString stringWithUTF8String:buf];
 }
 
