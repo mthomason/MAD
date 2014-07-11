@@ -21,6 +21,7 @@
 #import "libSqlite3_8.h"
 #import "MTLog.h"
 #import "MTDatabaseSqlite3.h"
+#import "MTPair.h"
 
 @interface MTDataTableFast ()
 
@@ -34,6 +35,8 @@
 
 @property (nonatomic, strong) NSMutableArray *groupKeys;
 @property (nonatomic, strong) NSArray *groupTableNames;
+
+@property (nonatomic, strong) MTPair *lastDataForCacheId;
 
 @end
 
@@ -294,6 +297,7 @@
                                       };
     
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAddRow object:queryDefination];
+    
     dispatch_semaphore_t semaphoreQuery = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:[self databaseForInserts] completion:^(BOOL success, NSError *error) {
         NSAssert(success, @"Error %@", error);
@@ -361,6 +365,7 @@
     });
     dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
 
+    [self setLastDataForCacheId:nil];
     [[self columnKeys] removeAllObjects];
     [[self columns] removeAllObjects];
     [self setRowCounter:0];
@@ -515,36 +520,47 @@
 }
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
-    NSNumber *keyRowId = @(MTQuerySelectRowId);
-    NSNumber *keyFieldKey = @(MTQuerySelectFieldKeys);
-    NSNumber *keyTableNmae = @(MTQuerySelectTableName);
-    NSNumber *keyFieldDef = @(MTQuerySelectFieldDescriptors);
-    NSDictionary *options = @{
-                              keyRowId : cacheId,
-                              keyFieldKey : [self columnKeys],
-                              keyTableNmae : [self tableName],
-                              keyFieldDef : [self columns]
-                                  };
-    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
-    sqlite3_stmt *statement = NULL;
-    NSError *error = nil;
-    NSString *sql = [query getSqlWithError:&error];
-    
-    const char *sqlc = [sql UTF8String];
-    char *queryString = sqlite3_mprintf((char *) sqlc);
-    BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+
     NSDictionary *result = nil;
-    if (success) {
-        success = sqlite3_step(statement) == SQLITE_ROW;
-        result = [self currentObject:statement];
-    } else {
-        const char *errorMessage = sqlite3_errmsg([[self databaseForSelects] databaseHandle]);
-        NSString *message = [NSString stringWithUTF8String: errorMessage];
-        MTLog(@"%@", message);
+    if ([self lastDataForCacheId] != nil) {
+        if ([cacheId isEqualToNumber:[self.lastDataForCacheId former]]) {
+            result = [NSDictionary dictionaryWithDictionary:[self.lastDataForCacheId latter]];
+        }
     }
-    
-    sqlite3_finalize(statement);
-    sqlite3_free(queryString);
+    if (result == nil) {
+        
+        NSNumber *keyRowId = @(MTQuerySelectRowId);
+        NSNumber *keyFieldKey = @(MTQuerySelectFieldKeys);
+        NSNumber *keyTableNmae = @(MTQuerySelectTableName);
+        NSNumber *keyFieldDef = @(MTQuerySelectFieldDescriptors);
+        NSDictionary *options = @{
+                                  keyRowId : cacheId,
+                                  keyFieldKey : [self columnKeys],
+                                  keyTableNmae : [self tableName],
+                                  keyFieldDef : [self columns]
+                                  };
+        MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSelectRowId object:options];
+        sqlite3_stmt *statement = NULL;
+        NSError *error = nil;
+        NSString *sql = [query getSqlWithError:&error];
+        
+        const char *sqlc = [sql UTF8String];
+        char *queryString = sqlite3_mprintf((char *) sqlc);
+        BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+        if (success) {
+            success = sqlite3_step(statement) == SQLITE_ROW;
+            result = [self currentObject:statement];
+            self.lastDataForCacheId = [MTPair pairWithFormer:cacheId andLatter:result];
+        } else {
+            const char *errorMessage = sqlite3_errmsg([[self databaseForSelects] databaseHandle]);
+            NSString *message = [NSString stringWithUTF8String: errorMessage];
+            MTLog(@"%@", message);
+        }
+        
+        sqlite3_finalize(statement);
+        sqlite3_free(queryString);
+
+    }
     return result;
 }
 

@@ -283,16 +283,19 @@ NSString * const MTQueryKeyPredicateValue = @"v";
             NSString *columnValue = [condition objectForKey:@"v"];
             
             
+            MTDatabaseDataBinding *databinding;
             if ([[NSNull null] isEqual: columnValue]) {
-                [sql appendFormat:@"%@ is Null", columnHandle];
+                databinding = [[MTDatabaseDataBinding alloc] initWithDataType: MTDataTypeNull
+                                                                   fieldIndex: counterBinings
+                                                                        value: columnValue];
             } else {
-                MTDatabaseDataBinding *databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
+                databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
                                                                                           fieldIndex: counterBinings
                                                                                                value: columnValue];
-                [[self binaryBindings] addObject:databinding];
-                [sql appendFormat:@"%@ = ?", columnHandle];
-                counterBinings++;
             }
+            [[self binaryBindings] addObject:databinding];
+            [sql appendFormat:@"%@ = ?", columnHandle];
+            counterBinings++;
             counter++;
         }
     }

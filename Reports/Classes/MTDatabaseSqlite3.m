@@ -450,6 +450,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                     [self bindStatement:&statement withBindings:databinding];
                 }
             }
+        } else if ([query partOfTransactionSet]) {
+            if ([[query binaryBindings] count] > 0) {
+                for (MTDatabaseDataBinding *databinding in [query binaryBindings]) {
+                    [self bindStatement:&statement withBindings:databinding];
+                }
+            }
         }
         
         if ([query returnsResults]) {
@@ -571,6 +577,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         if ([query partOfTransactionSet] == NO) {
             success = SQLITE_OK == sqlite3_finalize(statement);
         } else {
+            sqlite3_reset(statement);
             _bulkStatement = statement;
         }
         
@@ -747,7 +754,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s1);
     }];
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
@@ -755,18 +762,21 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
     dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
     [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s2);
     }];
     dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
     
+    /*
     dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
     MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
     [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
-        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
         dispatch_semaphore_signal(s3);
     }];
     dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+    
+    */
     
     [self cleanupBulkInsert];
 }

@@ -46,10 +46,10 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTPaper.h"
 
 //Keys stored in the cache.  Short and unique.
-NSString * const MTReportSectionType = @"st";
-NSString * const MTReportGroupLevel = @"gl";
-NSString * const MTReportGroupLevelNumber = @"gln";
-NSString * const MTReportDetailRowId = @"ix";
+NSString * const MTReportSectionType = @"a";
+NSString * const MTReportGroupLevel = @"b";
+NSString * const MTReportGroupLevelNumber = @"c";
+NSString * const MTReportDetailRowId = @"d";
 
 @interface MAReportDocument ()
     <MTDatabaseProtocol>

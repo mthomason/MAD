@@ -302,7 +302,8 @@
                 NSUInteger groupNumber = [[pageSection objectForKey:MTReportGroupLevelNumber] integerValue];
                 
                 MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue];
-                RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:[[self reportFormatter] layout]  andType:typeDocumentSection andLevel:groupLevel];
+                RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:[[self reportFormatter] layout]
+                                                                                                   andType:typeDocumentSection andLevel:groupLevel];
                 BOOL sectionIsVisible = [[documentSection visibility] boolValue];
                 
                 
