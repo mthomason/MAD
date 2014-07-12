@@ -18,7 +18,6 @@
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
-extern NSString * const MTReportGroupLevelNumber;
 
 @class MTQuery, MTReportFormatter, MTQueryFull;
 

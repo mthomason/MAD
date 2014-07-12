@@ -398,7 +398,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     }
     
     if (state->state != 2) {
-        //state->mutationsPtr = (unsigned long *)&_statementEnumer;
         state->itemsPtr = stackbuf;
         [[self fastEnumerationObjects] removeAllObjects];
         

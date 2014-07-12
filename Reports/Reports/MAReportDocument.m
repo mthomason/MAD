@@ -48,7 +48,6 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 //Keys stored in the cache.  Short and unique.
 NSString * const MTReportSectionType = @"a";
 NSString * const MTReportGroupLevel = @"b";
-NSString * const MTReportGroupLevelNumber = @"c";
 NSString * const MTReportDetailRowId = @"d";
 
 @interface MAReportDocument ()

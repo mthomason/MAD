@@ -593,9 +593,7 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)addGroupHeaderLevel:(NSUInteger)groupLevel {
     NSNumber *level = @(groupLevel);
     NSNumber *type = @(MNSDocumentSectionTypeGroupHeader);
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : type,
-                        MTReportGroupLevelNumber : groupNumber,
                         MTReportGroupLevel : level,
                         MTReportDetailRowId : self.machineState.detailRowId};
     if (groupLevel == [self numberOfGroups] - 1) {
@@ -606,26 +604,20 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addPageFooter {
     NSNumber *section = @(MNSDocumentSectionTypePageFooter);
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : section,
-                        MTReportGroupLevelNumber : groupNumber,
                         MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addReportFooter {
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeReportFooter),
-                        MTReportGroupLevelNumber : groupNumber,
                         MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
     NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeGroupFooter),
-                        MTReportGroupLevelNumber : groupNumber,
                         MTReportGroupLevel : gl,
                         MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: d];
@@ -633,9 +625,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)addDetail {
     NSNumber *type = @(MNSDocumentSectionTypeBody);
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *detail = @{[MTReportFormatter KeyReportSectionType] : type,
-                             MTReportGroupLevelNumber : groupNumber,
                              MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: detail];
     [[self pageIndexesTemporary] addIndex:[self.machineState.detailRowId integerValue]];
@@ -643,17 +633,13 @@ NSString * const MTNullIdentifier = @"(null)";
 
 
 - (void)addReportHeader {
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeReportHeader),
-                        MTReportGroupLevelNumber : groupNumber,
                         MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: d];
 }
 
 - (void)addPageHeader {
-    NSNumber *groupNumber = [NSNumber numberWithInteger:self.machineState.groupCounter];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypePageHeader),
-                        MTReportGroupLevelNumber : groupNumber,
                         MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject:  d];
 }
