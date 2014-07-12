@@ -71,6 +71,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
         
         NSString *i = [NSString stringWithString:identifier];
         [self setIdentifier:i];
+        
         [self initalizeDatabase];
     }
     return self;
@@ -99,10 +100,9 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnKey identifier] createTable:YES unique:NO];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnValue identifier] createTable:NO unique:NO];
         [self setNumberOrRows:0];
-    } else {
-        [self setNumberOrRows:[self count]];
     }
     [self prepareStatements];
+    [self setNumberOrRows:[self count]];
 }
 
 - (void)beginBulkInserts {
@@ -337,10 +337,10 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (NSUInteger)count {
     NSUInteger lastRowid = 0;
     if (sqlite3_step(_statementCount) == SQLITE_ROW) {
-        lastRowid = sqlite3_column_int(_statementCount, 0);
+        lastRowid = sqlite3_column_int(_statementCount, 0) + 1;
         sqlite3_reset(_statementCount);
     }
-    return lastRowid + 1;
+    return lastRowid;
 }
 
 - (BOOL)isEmpty {

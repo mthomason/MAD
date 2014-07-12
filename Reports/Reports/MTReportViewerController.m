@@ -243,7 +243,8 @@
     
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
-    [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
+    [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward
+                    animated:NO completion:^(BOOL finished) { }];
     
     [self addPageSliderToView];
     
@@ -259,6 +260,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [[[self navigationController] toolbar] setNeedsLayout];
 
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
@@ -287,7 +289,8 @@
     if ([self printPageRendererReport] == nil) {
         __block MAReportDocument *doc = [[AppDelegate app] activeDocument];
         [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter] dataTable:[doc mainDataTable]];
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [doc reportFormatter]
+                                                                                                                           dataTable: [doc mainDataTable]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
     }
 }
@@ -510,8 +513,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (MTReportViewerReportPageViewController *)currentPageviewController {
-    NSInteger pageIndex = [self currentPageIndex];
-    return [self pageViewControllerAtIndex:pageIndex];
+    return [self pageViewControllerAtIndex:[self currentPageIndex]];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -589,31 +591,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     [reportViewerController setDisplayActive];
-    //MAReportDocument *doc = [[AppDelegate app] activeDocument];
     [reportViewerController reload:reportViewerController withSize:frame.size];
-    /*
-    [[doc reportFormatter] formatForSize:frame.size options:0 contentChanged:NO];
-    
-    NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
-    [reportViewerController setNumberOfPages:numberOfPages];
-    [reportViewerController setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
-    
-    NSInteger pageNumber = [reportViewerController currentPageIndex] + 1;
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
-                                                                                                                 ofPages:numberOfPages];
-    [[pageOne view] setFrame:frame];
-    
-    [pageOne setDelegate:reportViewerController];
-    
-    NSArray *viewControllers = @[pageOne];
-    [reportViewerController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-        if (finished) {
-            [[pageOne view] setNeedsDisplay];
-        }
-    }];
-    
-    [[reportViewerController barButtonItemDone] setEnabled:YES];
-    */
 }
 
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
@@ -873,7 +851,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         } else {
             [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:NO];
             
-            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[weakdoc reportFormatter] dataTable:[weakdoc mainDataTable]];
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
+                                                                                                                      dataTable: [weakdoc mainDataTable]];
             [reportViewer setPrintPageRendererReport:printPageRender];
             
         }
@@ -894,7 +873,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [pageOne setDelegate:reportViewer];
             
             NSArray *viewControllers = @[pageOne];
-            [blockViewer2 setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+            [blockViewer2 setViewControllers: viewControllers direction:UIPageViewControllerNavigationDirectionForward
+                                    animated: NO completion: nil];
             [blockViewer2 setIsRefreshing:NO];
             [blockViewer2 setStartedRefresh:NO];
             [[doc2 reportFormatter] setDidRefresh:NO];

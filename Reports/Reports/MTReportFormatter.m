@@ -143,19 +143,6 @@ NSString * const MTNullIdentifier = @"(null)";
 - (NSString *)nameVirticalReportIndexes {
     return [NSString stringWithFormat:@"%lu%s", (unsigned long)[self layoutIdentifier], "iv"];
 }
-- (NSString *)identifierForGroupKeys {
-    return [NSString stringWithFormat:@"%lu%s", (unsigned long)[self layoutIdentifier], "gk"];
-}
-- (NSString *)identifierForSizeIndexes:(CGSize)size {
-    NSString *s1 = NSStringFromCGSize(size);
-    NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "i", s2];
-}
-- (NSString *)identifierForSizeLayout:(CGSize)size {
-    NSString *s1 = NSStringFromCGSize(size);
-    NSString *s2 = [s1 stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "l", s2];
-}
 
 - (NSString *)nameCurrentReportIndexes {
     if ([self isLandscape]) {
@@ -181,14 +168,14 @@ NSString * const MTNullIdentifier = @"(null)";
     MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];
     [self setReportFormatterCache:reportFormatterCache];
     
-    MTArrayCached *reportLayout = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
-    [self setReportLayout:reportLayout];
+    //MTArrayCached *reportLayout = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
+    //[self setReportLayout:reportLayout];
     
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
-    MTArrayCached *reportIndexes = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]];
-    [self setReportIndexes:reportIndexes];
+    //MTArrayCached *reportIndexes = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]];
+    //[self setReportIndexes:reportIndexes];
     
     NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
     [self setPageIndexesTemporary:temporaryDataForPage];
@@ -206,12 +193,18 @@ NSString * const MTNullIdentifier = @"(null)";
 
 //  Data is cached by group, page, and report.
 
+- (BOOL)cachedIndexesExist {
+    return [[self reportIndexes] count] > 0 && [[self reportLayout] count] > 0;
+}
+
 - (BOOL)format {
     BOOL updatedData = NO;
     
     NSAssert([self datasource] != nil, @"We need a datatable way before here");
     
-    if ([[self datasource] cacheExist] == NO || [self didRefresh]) {
+    if ([self didRefresh] ||
+        [self cachedIndexesExist] == NO ||
+        [[self datasource] cacheExist] == NO) {
         updatedData = YES;
     }
     return updatedData;
@@ -228,36 +221,24 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged {
 
+    [self setLayoutSize:printableSize];
+
+
+    [self loadLayoutAndIndexesFromCacheWithOptions:options];
+    
     if ([self format]) {
         
-        [self setLayoutSize:printableSize];
-
         if (contextChanged) {
             [self dropIndexes];
         }
         [self formatDocumentWithOptions:options];
-    } else {
-        [self loadLayoutAndIndexesFromCacheWithOptions:options];
     }
 }
 
-- (void)dropIndexes {
-    [[self reportIndexes] removeAllObjects];
-    [[self reportLayout] removeAllObjects];
-}
-
-- (void)dumpCache {
-    [[self reportFormatterCache] dumpCache];
-}
-
 - (void)formatDocumentWithOptions:(MTReportFormatterOptions)options {
+
     [self initalizeStateMachine];
-    
-    
-    NSString *identifier = [self identifierForSizeIndexes:self.layoutSize];
-    MTArrayCached *indexes = [[MTArrayCached alloc] initWithIdentifier:identifier];
-    [self setReportIndexes:indexes];
-    
+
     NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
     [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     
@@ -284,6 +265,15 @@ NSString * const MTNullIdentifier = @"(null)";
                                 andIndexes:[[self reportIndexes] identifier]
                                    forSize:self.layoutSize];
     
+}
+
+- (void)dropIndexes {
+    [[self reportIndexes] removeAllObjects];
+    [[self reportLayout] removeAllObjects];
+}
+
+- (void)dumpCache {
+    [[self reportFormatterCache] dumpCache];
 }
 
 - (void)beginBulkInserts {
