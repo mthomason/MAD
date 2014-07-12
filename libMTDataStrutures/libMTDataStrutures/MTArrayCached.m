@@ -384,7 +384,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     sqlite3_reset(_statementEnumer);
 }
 
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id __unsafe_unretained *)stackbuf count:(NSUInteger)len {
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained *)stackbuf
+                                    count:(NSUInteger)len {
     
     NSUInteger i = 0;
     int stepResult;
@@ -410,6 +412,11 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                     [[self fastEnumerationObjects] addObject:obj];
                     stackbuf[i] = obj;
                 } else if (stepResult == SQLITE_DONE) {
+                    sqlite3_reset(_statementEnumer);
+                    stackbuf[i] = nil;
+                    state->state = 2;
+                    break;
+                } else {
                     sqlite3_reset(_statementEnumer);
                     stackbuf[i] = nil;
                     state->state = 2;

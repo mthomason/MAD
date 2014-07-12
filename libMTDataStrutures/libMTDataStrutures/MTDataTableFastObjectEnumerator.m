@@ -27,6 +27,7 @@
 @property (assign) BOOL empty;
 
 @property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
+@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
 
 @end
 
@@ -40,6 +41,9 @@
 - (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
     self = [super init];
     if (self) {
+        
+        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
+        [self setFastEnumerationObjects:fastEnumerationObjects];
 
         MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
         [self setDatabaseForQuery:database];
@@ -88,6 +92,52 @@ void sqliteCallback(void *foo, const char* statement) {
         success = NO;
     }
     return success ? [self currentObject] : nil;
+}
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained *)stackbuf
+                                    count:(NSUInteger)len {
+    
+    NSUInteger i = 0;
+    int stepResult;
+    
+    if(state->state == 0) {
+        state->state = 1;
+        state->mutationsPtr = &state->extra[0];
+        sqlite3_reset(_statement);
+    }
+    
+    if (state->state != 2) {
+        state->itemsPtr = stackbuf;
+        
+        [[self fastEnumerationObjects] removeAllObjects];
+        
+        for (i = 0; i<len; i++) {
+            @autoreleasepool {
+                stepResult = sqlite3_step(_statement);
+                if (stepResult == SQLITE_ROW) {
+                    id co = [self currentObject];
+                    if (co) {
+                        stackbuf[i] = co;
+                        [[self fastEnumerationObjects] addObject:co];
+                    } else {
+                        stackbuf[i] = nil;
+                    }
+                } else if (stepResult == SQLITE_DONE) {
+                    sqlite3_reset(_statement);
+                    stackbuf[i] = nil;
+                    state->state = 2;
+                    break;
+                } else {
+                    sqlite3_reset(_statement);
+                    stackbuf[i] = nil;
+                    state->state = 2;
+                    break;
+                }
+            }
+        }
+    }
+    return i;
 }
 
 - (id)currentObject {

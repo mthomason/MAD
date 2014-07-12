@@ -118,7 +118,8 @@
             if (successConnection) {
                 
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" onConnection:conn];
+                MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+                MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
                 NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
                 for (NSInteger i=0; i<[dataTable count]; i++) {
@@ -138,7 +139,6 @@
     }];
 }
 
-
 - (void)getFieldsForTableName: (NSString *)tableName
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
@@ -155,7 +155,8 @@
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
                 //NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                MTDataTable *dataTable = [myFetch fetchWithCommand:command onConnection:conn];
+                MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
+                MTDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn];
                 NSInteger resultsCount = [dataTable count];
                 resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
 
@@ -166,9 +167,10 @@
                     [resultsDictionary setObject:field forKey:safeId];
                 }
                 
+                MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
                 NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
                 MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
-                MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 onConnection:conn];
+                MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn];
                 
                 for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
                     MTDatabaseField *databaseField = [resultsDictionary objectForKey:[dataColumn fieldName]];

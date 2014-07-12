@@ -470,34 +470,37 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL rowIdOnly = YES;
     BOOL calculatedRowId = NO;
     for (id resultRow in [[self datasource] enumeratorForReportData]) {
-        //Get row id
-        if (calculatedRowId == NO) {
-            if ([resultRow isKindOfClass:[NSDictionary class]]) {
-                rowIdOnly = NO;
+        @autoreleasepool {
+            //Get row id
+            if (calculatedRowId == NO) {
+                if ([resultRow isKindOfClass:[NSDictionary class]]) {
+                    rowIdOnly = NO;
+                }
+                calculatedRowId = YES;
             }
-            calculatedRowId = YES;
+            self.machineState.detailRowId = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
+            
+            //Get row key values
+            NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
+            
+            //Display new footers if needed.
+            if (!firstRow) {
+                [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            }
+            
+            //Display new group headers if needed.
+            [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
+            [self addHeightFromDocumentSectionToReportLayout:detailSection];
+            
+            [self addDetail];
+            
+            
+            [self setLastResultRowComparsonValues: keyValuesForComparson];
+            
+            firstRow = NO;
+            self.machineState.rowCounter++;
+            
         }
-        self.machineState.detailRowId = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
-        
-        //Get row key values
-        NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
-        
-        //Display new footers if needed.
-        if (!firstRow) {
-            [self displayNewGroupFootersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        }
-        
-        //Display new group headers if needed.
-        [self displayNewGroupHeadersIfNeeded:keyValuesForComparson andLastValues:[self lastResultRowComparsonValues]];
-        [self addHeightFromDocumentSectionToReportLayout:detailSection];
-        
-        [self addDetail];
-        
-        
-        [self setLastResultRowComparsonValues: keyValuesForComparson];
-        
-        firstRow = NO;
-        self.machineState.rowCounter++;
     }
 }
 
