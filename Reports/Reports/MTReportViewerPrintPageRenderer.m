@@ -299,18 +299,14 @@
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
                 //                @autoreleasepool {
                 NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
-                NSUInteger groupNumber = [[pageSection objectForKey:MTReportGroupLevelNumber] integerValue];
+                //NSUInteger groupNumber = [[pageSection objectForKey:MTReportGroupLevelNumber] integerValue];
                 
                 MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue];
                 RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:[[self reportFormatter] layout]
                                                                                                    andType:typeDocumentSection andLevel:groupLevel];
                 BOOL sectionIsVisible = [[documentSection visibility] boolValue];
                 
-                
-                
                 CGFloat sizeHeight = sectionIsVisible ? [[self reportFormatter] heightForSection:documentSection] : CGSizeZero.height;
-                CGRect sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
-                
                 switch (typeDocumentSection) {
                     case MNSDocumentSectionTypePageFooter: {
                         BOOL lastPage = pageIndex == numberOfPages - 1;
@@ -328,6 +324,8 @@
                     default:
                         break;
                 }
+                
+                CGRect sectionRect = CGRectMake(originX, originY, sizeWidth, sizeHeight);
                 
                 [self setBackgroundColorForDocumentSection:documentSection inRect:sectionRect];
                 
