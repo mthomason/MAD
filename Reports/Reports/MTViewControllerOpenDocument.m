@@ -1223,8 +1223,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 if (data) {
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         
-                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
-                                                                                                                 @"The attached document can be opened with the Mad Viewer available on iOS.")];
+                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
+                                                                                                                 @"The attached document can be opened with MAD Viewer.")];
                         
                         NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
                         [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
