@@ -722,7 +722,23 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 }
 
 - (void)beginBulkInsert {
-
+    int size_of_wal_log;
+    int number_of_checkpointed_frames;
+    int	wal = sqlite3_wal_checkpoint_v2(_database, NULL, SQLITE_CHECKPOINT_RESTART,
+                                   &size_of_wal_log, &number_of_checkpointed_frames);
+    NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
+    dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
+    [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        for (MTDatabaseTable *table in tables) {
+            NSDictionary *queryDefination = [MTQuery queryDefinationCacheDeleteAllFromTable:table.name];
+            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
+            [dropTable performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+                NSAssert(success && error == nil, @"Error %@ at %s.", error, __PRETTY_FUNCTION__);
+            }];
+        }
+        dispatch_semaphore_signal(s0);
+    }];
+    dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
     
     MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
