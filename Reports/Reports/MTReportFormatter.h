@@ -33,6 +33,7 @@ extern NSString * const MTNullIdentifier;
 - (void)formatForSize:(CGSize)printableSize;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged;
+- (void)reformatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
 
 - (NSUInteger)numberOfPages;
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
@@ -44,6 +45,7 @@ extern NSString * const MTNullIdentifier;
 - (NSArray *)keysForCachedID:(NSNumber *)rowid;
 - (NSUInteger)numberOfGroups;
 
+
 @property (nonatomic, assign) id <MTReportFormatterDataSource> datasource;
 
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
@@ -51,5 +53,7 @@ extern NSString * const MTNullIdentifier;
 
 @property (nonatomic, strong, readonly) MTArrayCached *reportIndexes;
 @property (nonatomic, strong, readonly) MTArrayCached *reportLayout;
+
+@property (nonatomic, strong) NSString *overrideIdentifier; //Use this to cache in location other than default.
 
 @end

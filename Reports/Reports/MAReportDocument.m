@@ -45,6 +45,11 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MTPaper.h"
 
+#import "UIColor+EverydayApps.h"
+#import "UIColor+Gradients.h"
+
+#import "MTNotificationDidFormatPage.h"
+
 //Keys stored in the cache.  Short and unique.
 NSString * const MTReportSectionType = @"a";
 NSString * const MTReportGroupLevel = @"b";
@@ -63,6 +68,8 @@ NSString * const MTReportDetailRowId = @"d";
 @property (nonatomic, strong) MTQuery *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
 @property (nonatomic, strong) MTDataTable *connectionTestDataTable;
+
+@property (nonatomic, weak) UILabel *statusLabel;
 
 @end
 
@@ -149,23 +156,214 @@ NSString * const MTReportDetailRowId = @"d";
     return  [[self mainDataTable] dataForCacheId:cachedID];
 }
 
+- (void)disableUserInteraction:(UIView *)view {
+    for (UIView *subview in [view subviews]) {
+        if ([subview isKindOfClass:[UILabel class]]) {
+            [(UILabel *)subview performSelectorOnMainThread:@selector(setTextColor:) withObject:[UIColor lightGrayColor] waitUntilDone:NO];
+        } else if ([subview isKindOfClass:[UIImageView class]]) {
+            dispatch_queue_t dipatchQueueMain = dispatch_get_main_queue();
+            dispatch_sync(dipatchQueueMain, ^{
+                [(UIImageView *)subview setAlpha:0.3333f];
+            });
+        }
+        [self disableUserInteraction:subview];
+    }
+}
+
+- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
+    [self disableUserInteraction:window.view];
+    
+    UIViewAutoresizing maskView = UIViewAutoresizingFlexibleLeftMargin |
+                                  UIViewAutoresizingFlexibleRightMargin |
+                                  UIViewAutoresizingFlexibleTopMargin |
+                                  UIViewAutoresizingFlexibleBottomMargin;
+    UIViewAutoresizing maskIndicatorView = UIViewAutoresizingFlexibleLeftMargin |
+                                           UIViewAutoresizingFlexibleRightMargin |
+                                           UIViewAutoresizingFlexibleTopMargin;
+    UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
+                                       UIViewAutoresizingFlexibleWidth;
+    CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
+    
+    UIView *activtyView = [[UIView alloc] initWithFrame:frame];
+    
+    [activtyView.layer setCornerRadius:5.0000f];
+    UIColor *bgColor = [UIColor edaBlueLightBackground];
+    [activtyView setBackgroundColor:bgColor];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    
+    [activtyView setAutoresizingMask:maskView];
+    [activityIndicator setAutoresizingMask:maskIndicatorView];
+    
+    
+    activtyView.center = window.view.center;
+    [activtyView addSubview:activityIndicator];
+    CGPoint indicatorCenter = CGPointMake(activtyView.bounds.size.width / 2.0000f, activtyView.bounds.size.height / 2.0000f);
+    activityIndicator.center = indicatorCenter;
+    [activityIndicator startAnimating];
+    
+    CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f);
+    UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
+    [status setTextColor:[UIColor lightTextColor]];
+    UIFont *font = [UIFont fontWithName:@"Helvetica-Light" size:11.0000f];
+    
+    [status setFont:font];
+    [status setText:@"Formatting report."];
+    [status setAutoresizingMask:maskLabelView];
+    [status setTextAlignment:NSTextAlignmentCenter];
+    [activtyView addSubview:status];
+    [self setStatusLabel:status];
+    
+    [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activtyView waitUntilDone:YES];
+    
+    
+    __weak MAReportDocument *weakself = self;
+    
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(dipatchQueue, ^{
+        
+        NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
+        CGRect letterRect = [MTPaper rectLetter];
+        [[weakself mainDataTable] sortUsingDescriptors:[[weakself mainQuery] sortDescriptors]];
+        
+        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
+                                                                  andLayout:weakself.document];
+
+        [[NSNotificationCenter defaultCenter] addObserver: weakself
+                                                 selector: @selector(reportFormatterDidFormatPage:)
+                                                     name: MTNotificationDidFormatPagesName
+                                                   object: rf];
+
+    
+        [rf setDatasource:weakself];
+        [rf setOverrideIdentifier:@"madpreview"];
+        [rf reformatForSize:letterRect.size options:0];
+
+        
+        [[NSNotificationCenter defaultCenter] removeObserver: weakself
+                                                        name: MTNotificationDidFormatPagesName
+                                                      object: rf];
+        
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:rf
+                                                                                                                  dataTable:[weakself mainDataTable]];
+        NSUInteger numberOfPages = [rf numberOfPages];
+        UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
+        
+        
+        NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect:letterRect]};
+        NSString *numberOfPagesString = [NSNumberFormatter localizedStringFromNumber:@(numberOfPages) numberStyle:NSNumberFormatterDecimalStyle];
+        for (NSUInteger i=0; i<numberOfPages; i++) {
+            @autoreleasepool {
+                UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
+                [printPageRender drawPageAtIndex:i inRect:letterRect];
+                //if (i%1==0) {
+                    NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
+                    NSString *text = [NSString stringWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
+                    [status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
+                //}
+            }
+        }
+        UIGraphicsEndPDFContext();
+        
+        dispatch_semaphore_signal(s1);
+        
+    });
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    [activityIndicator stopAnimating];
+    [activityIndicator removeFromSuperview];
+    [activtyView removeFromSuperview];
+
+}
+
+- (void)reportFormatterDidFormatPage:(NSNotification *)sender {
+    NSDictionary *parameters = [sender userInfo];
+    NSNumber *pageNumber = [parameters objectForKey:MTDatabaseNumberOfPagesFormattedKey];
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
+    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    [[self statusLabel] performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
+    //[[self statusLabel] setText:readRecords];
+}
+
 - (void)writeToPdf:(NSURL *)filepath {
-    NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"Mad Designer"};
-    CGRect letterRect = [MTPaper rectLetter];
-    [[self mainDataTable] sortUsingDescriptors:[[self mainQuery] sortDescriptors]];
-    [[self reportFormatter] formatForSize:letterRect.size];
+    /*
+    UIViewAutoresizing mask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+    CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, 300.0000f, 300.0000f);
     
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter] dataTable:[self mainDataTable]];
-    NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
-    UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
+    UIView *activtyView = [[UIView alloc] initWithFrame:frame];
+    [activtyView setBackgroundColor:[UIColor blackColor]];
+    //[activtyView setAlpha:0.9000f];
+    [activtyView setOpaque:YES];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
-    for (NSUInteger i=0; i<numberOfPages; i++) {
-        UIGraphicsBeginPDFPageWithInfo(letterRect, nil);
-        [printPageRender drawPageAtIndex:i inRect:letterRect];
+    [activtyView setAutoresizingMask:mask];
+    [activityIndicator setAutoresizingMask:mask];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    
+    for (UIWindow *win in [[UIApplication sharedApplication] windows]) {
+        NSLog(@"%@", win);
+        [win setBackgroundColor:[UIColor greenColor]];
     }
     
-    // Close the PDF context and write the contents out.
-    UIGraphicsEndPDFContext();
+    activtyView.center = window.center;
+    CGPoint indicatorCenter = CGPointMake(activtyView.center.x, activityIndicator.bounds.size.height + 20.0000f);
+    activityIndicator.center = indicatorCenter;
+    [activtyView addSubview:activityIndicator];
+    [activityIndicator startAnimating];
+    
+    CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f);
+    UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
+    [status setText:@"Formatting report."];
+    [activtyView addSubview:status];
+    
+    [window.subviews.lastObject addSubview:activtyView];
+    __weak MAReportDocument *weakself = self;
+    
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_queue_t dipatchQueueMain = dispatch_get_main_queue();
+    dispatch_async(dipatchQueue, ^{
+
+        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery andLayout:weakself.document];
+        NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
+        CGRect letterRect = [MTPaper rectLetter];
+        [[weakself mainDataTable] sortUsingDescriptors:[[weakself mainQuery] sortDescriptors]];
+        [rf formatForSize:letterRect.size];
+        
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[weakself reportFormatter]
+                                                                                                                  dataTable:[weakself mainDataTable]];
+        NSUInteger numberOfPages = [[weakself reportFormatter] numberOfPages];
+        UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
+
+        
+        NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect:letterRect]};
+        for (NSUInteger i=0; i<numberOfPages; i++) {
+            @autoreleasepool {
+                UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
+                [printPageRender drawPageAtIndex:i inRect:letterRect];
+                
+                dispatch_sync(dipatchQueueMain, ^{
+                    NSString *text = [NSString stringWithFormat:@"Drawing page %d.", i];
+                    [status setText:text];
+                });
+
+                
+            }
+        }
+        UIGraphicsEndPDFContext();
+        
+        dispatch_semaphore_signal(s1);
+        
+    });
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+
+    [activityIndicator stopAnimating];
+    [activityIndicator removeFromSuperview];
+    [activtyView removeFromSuperview];
+     */
 }
 
 //Add a new connection to the report

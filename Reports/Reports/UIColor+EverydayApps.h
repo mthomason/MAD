@@ -26,6 +26,7 @@
 + (id)edaGreenDark;
 + (id)edaGreenLight;
 
++ (id)edaBlueLightBackground;
 + (id)edaTableHeaderBackground;
 + (id)tintColorBlue;
 + (id)tintColorRed;

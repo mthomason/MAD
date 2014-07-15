@@ -82,6 +82,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
 
+
+
 @end
 
 
@@ -128,20 +130,24 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)layoutIdentifier {
-    return [[[[[self layout] objectID] URIRepresentation] absoluteString] hash];
+    return self.overrideIdentifier == nil ? [[[[[self layout] objectID] URIRepresentation] absoluteString] hash] : [self.overrideIdentifier hash];
 }
 
 - (NSString *)nameHorizontalReportLayoutCache {
-    return [NSString stringWithFormat:@"%lu%s", (unsigned long)[self layoutIdentifier], "lh"];
+    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", sizeString];
 }
 - (NSString *)nameVirticalReportLayoutCache {
-    return [NSString stringWithFormat:@"%lu%s", (unsigned long)[self layoutIdentifier], "lv"];
+    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lv", sizeString];
 }
 - (NSString *)nameHorizontalReportIndexes {
-    return [NSString stringWithFormat:@"%lu%s", (unsigned long)[self layoutIdentifier], "ih"];
+    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "ih", sizeString];
 }
 - (NSString *)nameVirticalReportIndexes {
-    return [NSString stringWithFormat:@"%lu%s", (unsigned long)[self layoutIdentifier], "iv"];
+    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "iv", sizeString];
 }
 
 - (NSString *)nameCurrentReportIndexes {
@@ -168,14 +174,8 @@ NSString * const MTNullIdentifier = @"(null)";
     MTReportFormatterCache *reportFormatterCache = [MTReportFormatterCache new];
     [self setReportFormatterCache:reportFormatterCache];
     
-    //MTArrayCached *reportLayout = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
-    //[self setReportLayout:reportLayout];
-    
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
-    
-    //MTArrayCached *reportIndexes = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]];
-    //[self setReportIndexes:reportIndexes];
     
     NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
     [self setPageIndexesTemporary:temporaryDataForPage];
@@ -217,6 +217,13 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options {
     [self formatForSize:printableSize options:options contentChanged:YES];
 
+}
+
+- (void)reformatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options {
+    [self format];
+    [self setLayoutSize:printableSize];
+    [self loadLayoutAndIndexesFromCacheWithOptions:options];
+    [self formatDocumentWithOptions:options];
 }
 
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged {

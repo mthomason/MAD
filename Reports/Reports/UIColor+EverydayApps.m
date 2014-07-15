@@ -15,6 +15,7 @@
 + (id)edaBlueLight                      {vendColor(185.0000f, 224.0000f, 247.0000f);}
 + (id)edaBlueDarkSelection              {vendColorWithAlpha(2.0000f, 108.0000f, 182.0000f, 0.5000f);}
 + (id)edaBlueLightSelection             {vendColorWithAlpha(185.0000f, 224.0000f, 247.0000f, 0.5000f);}
++ (id)edaBlueLightBackground            {vendColorWithAlpha(2.0000f, 108.0000f, 182.0000f, 0.8900f);}
 + (id)edaBlackFiftyPercent              {vendColor(147.0000f, 149.0000f, 152.0000f);}
 + (id)edaBlackTwentyFivePercent         {vendColor(199.0000f, 200.0000f, 202.0000f);}
 + (id)edaOrange                         {vendColor(246.0000f, 160.0000f, 26.0000f);}

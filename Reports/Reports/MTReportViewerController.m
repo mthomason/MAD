@@ -276,11 +276,6 @@
     }
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reportFormatterDidFormatPage:)
-                                                 name: MTNotificationDidFormatPagesName
-                                               object: [reportDocument reportFormatter]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -297,10 +292,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MTNotificationDidFormatPagesName
-                                                  object: [doc reportFormatter]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -611,6 +602,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
         NSError *error = nil;
         [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    [self redrawReportViewer:self withFrame:self.view.frame];
 }
 
 #pragma mark - Actions
@@ -781,8 +773,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     [printPreview setDelegate:self];
+    
     NSArray *applicationActivities = @[printPreview];
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
+                                                                                         applicationActivities:applicationActivities];
     [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
 
     if ([UIDevice isPad]) {
@@ -845,6 +839,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
+        [[NSNotificationCenter defaultCenter] addObserver: blockViewer
+                                                 selector: @selector(reportFormatterDidFormatPage:)
+                                                     name: MTNotificationDidFormatPagesName
+                                                   object: [weakdoc reportFormatter]];
         if ([blockViewer startedRefresh]) {
             [[weakdoc reportFormatter] setDidRefresh:YES];
             [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:YES];
@@ -856,7 +854,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [reportViewer setPrintPageRendererReport:printPageRender];
             
         }
-        
+        [[NSNotificationCenter defaultCenter] removeObserver: blockViewer
+                                                        name: MTNotificationDidFormatPagesName
+                                                      object: [weakdoc reportFormatter]];
         __weak MAReportDocument *doc2 = weakdoc;
         __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -884,59 +884,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
         });
     });
-}
-
-- (void)sendToPdfWithCompletionHandler:(void (^)(BOOL))completionHandler {
-
-    [[self barButtonItemDone] setEnabled:NO];
-    [[self barButtonItemSendToPdf] setEnabled:NO];
-    [[self barButtonItemActivity] setEnabled:NO];
-    [[self barButtonItemRefresh] setEnabled:NO];
-    [[self barButtonItemPrint] setEnabled:NO];
-    [self setUpdatingOfTimerIsPaused:YES];
-    [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Exporting data.", @"Exporting data.")];
-    [[self labelDateLastRefreshed] setNeedsDisplay];
-    
-    for (UITabBarItem *i in [[[self tabBarController] tabBar] items]) {
-        [i setEnabled:NO];
-    }
-    __weak MTReportViewerController *blockself = self;
-    
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        
-        NSString *temporaryDirectoryPath = NSTemporaryDirectory();
-        NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
-        NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-
-        MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        [doc writeToPdf:temporaryFile];
-        
-        __weak MTReportViewerController *blockself2 = blockself;
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockself2 setUpdatingOfTimerIsPaused:NO];
-            [blockself2 updateLateRefreshedLabel:blockself2];
-            [[blockself2 barButtonItemRefresh] setEnabled:YES];
-            [[blockself2 barButtonItemDone] setEnabled:YES];
-            [[blockself2 barButtonItemPrint] setEnabled:YES];
-            [[blockself2 barButtonItemSendToPdf] setEnabled:YES];
-            [[blockself2 barButtonItemActivity] setEnabled:YES];
-            
-            for (UITabBarItem *i in [[[blockself2 tabBarController] tabBar] items]) {
-                [i setEnabled:YES];
-            }
-            UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
-            
-            [c setDelegate:blockself2];
-            [c presentPreviewAnimated:YES];
-        });
-        
-    });
-
-}
-
-- (IBAction)sendToPdf:(id)sender {
-    [self sendToPdfWithCompletionHandler:^(BOOL success){ }];
 }
 
 - (IBAction)print:(id)sender {

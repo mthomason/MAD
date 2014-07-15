@@ -19,7 +19,33 @@
 #import "MTReportFormatter.h"
 #import "MTReportViewerPrintPageRenderer.h"
 
+@interface  MTActivityItemProviderPdf ()
+
+@property (nonatomic, weak) UIActivityViewController *activityViewController;
+
+@end
+
 @implementation MTActivityItemProviderPdf
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+    [self setActivityViewController:activityViewController];
+    return [super activityViewController:activityViewController itemForActivityType:activityType];
+}
+
+- (NSString *)activityViewController:(UIActivityViewController *)activityViewController dataTypeIdentifierForActivityType:(NSString *)activityType {
+    [self setActivityViewController:activityViewController];
+    return [super activityViewController:activityViewController dataTypeIdentifierForActivityType:activityType];
+}
+
+- (UIImage *)activityViewController:(UIActivityViewController *)activityViewController thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size {
+    [self setActivityViewController:activityViewController];
+    return [super activityViewController:activityViewController thumbnailImageForActivityType:activityType suggestedSize:size];
+}
+
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+    [self setActivityViewController:activityViewController];
+    return [super activityViewControllerPlaceholderItem:activityViewController];
+}
 
 - (id)item {
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
@@ -27,7 +53,7 @@
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
 
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-    [reportDocument writeToPdf:temporaryFile];
+    [reportDocument writeToPdf:temporaryFile withViewController:[self activityViewController]];
     return temporaryFile;
 }
 

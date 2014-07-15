@@ -44,6 +44,7 @@ extern NSString * const MTReportGroupLevel;
 
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)url;
+- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
 
 - (RptqDocument *)activeDocument;
 
