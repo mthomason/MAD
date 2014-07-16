@@ -94,7 +94,8 @@
                 @autoreleasepool {
                     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                     [myFetch setDelegate:self];
-                    [myFetch performQuery:query onConnection:conn];
+                    [myFetch performQuery: query
+                             onConnection: conn];
                     completion(YES, nil);
                 }
                 
@@ -153,7 +154,6 @@
             if (successConnection) {
                 
                 NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
-                //NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", tableName];
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                 MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
                 MTDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn];

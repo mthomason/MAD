@@ -359,8 +359,12 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
             
             if (error == nil) {
                 
+                [self startNetworkActivityIndicator];
+                
                 dbcmd(dbconn, [sql cStringUsingEncoding:NSUTF8StringEncoding]);
                 success = dbsqlexec(dbconn);
+
+                [self stopNetworkActivityIndicator];
                 
                 if (success != SUCCEED) {
                     
@@ -520,7 +524,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                         }
                         
                         [datatable beginBulkInsert];
-                        
+                        [self startNetworkActivityIndicator];
+
                         while (dbresults(dbconn) != NO_MORE_RESULTS) {
                             
                             //SYBREAL, SYBFLTN, and SYBFLT8
@@ -1211,7 +1216,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                             
                         }
-                        
+                        [self stopNetworkActivityIndicator];
                         [datatable endBulkInsert];
                         
                     }
@@ -1292,8 +1297,30 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return result;
 }
 
+- (void)startNetworkActivityIndicator {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        });
+    } else {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    }
+}
+
+- (void)stopNetworkActivityIndicator {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        });
+    } else {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }
+}
+
 - (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error {
 
+    [self startNetworkActivityIndicator];
+    
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;
     *error = nil;
@@ -1319,8 +1346,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
             NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
             *error = [NSError errorWithDomain:@"MTDatabaseTds" code:2 userInfo:errorInfo];
         }
-        
-        //char *h = (char *)[[blockCredentals objectForKey:MTDatabaseConnectionHost] cStringUsingEncoding:NSUTF8StringEncoding];
         
         if (*error == nil) {
             /* Initialize the login params in the structure */
@@ -1352,6 +1377,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         
         dbloginfree(login);
     }
+    
+    [self stopNetworkActivityIndicator];
+    
     return dbconn;
 }
 

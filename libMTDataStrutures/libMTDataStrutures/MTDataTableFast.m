@@ -773,9 +773,9 @@
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
         
         enumerator = [[MTDataTableFastObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
-                                                                                                                  columns: [self columns]
-                                                                                                               columnKeys: columnKeys
-                                                                                                                    query: query];
+                                                                                 columns: [self columns]
+                                                                              columnKeys: columnKeys
+                                                                                   query: query];
         [(MTDataTableFastObjectEnumerator *)enumerator setAddRowId:YES];
         [(MTDataTableFastObjectEnumerator *)enumerator setSingleColumnNoWrapper:NO];
     }
