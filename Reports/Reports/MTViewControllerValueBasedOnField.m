@@ -22,6 +22,7 @@
 #import "NSError+UserInterface.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDataTable.h"
+#import "UIDevice+Hack.h"
 
 @interface MTViewControllerValueBasedOnField ()
     <UITextFieldDelegate>
@@ -88,44 +89,51 @@
 }
 
 - (void)keyboardDidHide:(id)sender {
-    [self done:sender];
+    if ([UIDevice isPad]) {
+        [self done:sender];
+    }
 }
 
 - (void)keyboardDidShow:(NSNotification *)sender {
-    NSDictionary *userInfo = [sender userInfo];
-    //NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
-    NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
-    NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval duration = [keyboardAnimationDurationUserInfoKey longLongValue];
-    NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
-    //CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
-    CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
-    CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
-    CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
-    __weak MTViewControllerValueBasedOnField *weakself = self;
-    UIViewAnimationOptions options;
-    switch ([keyboardAnimationCurveUserInfoKey integerValue]) {
-        case UIViewAnimationCurveEaseInOut:
-            options = UIViewAnimationOptionCurveEaseInOut;
-            break;
-        case UIViewAnimationCurveEaseIn:
-            options = UIViewAnimationOptionCurveEaseIn;
-            break;
-        case UIViewAnimationCurveEaseOut:
-            options = UIViewAnimationOptionCurveEaseOut;
-            break;
-        case UIViewAnimationCurveLinear:
-            options = UIViewAnimationOptionCurveLinear;
-            break;
-        default:
-            options = UIViewAnimationOptionCurveLinear;
-            break;
-    }
-    [UIView animateWithDuration:duration delay:0.0 options:options animations:^{
-        [[weakself pickerView] setFrame:pickerViewFrameEnd];
-    } completion:^(BOOL finished) {
+    if ([UIDevice isPad] == NO) {
+
+        NSDictionary *userInfo = [sender userInfo];
+        //NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
+        NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
+        NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
+        NSTimeInterval duration = [keyboardAnimationDurationUserInfoKey longLongValue];
+        NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
+        //CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
+        CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
+        CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
+        CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
+        __weak MTViewControllerValueBasedOnField *weakself = self;
+        UIViewAnimationOptions options;
+        switch ([keyboardAnimationCurveUserInfoKey integerValue]) {
+            case UIViewAnimationCurveEaseInOut:
+                options = UIViewAnimationOptionCurveEaseInOut;
+                break;
+            case UIViewAnimationCurveEaseIn:
+                options = UIViewAnimationOptionCurveEaseIn;
+                break;
+            case UIViewAnimationCurveEaseOut:
+                options = UIViewAnimationOptionCurveEaseOut;
+                break;
+            case UIViewAnimationCurveLinear:
+                options = UIViewAnimationOptionCurveLinear;
+                break;
+            default:
+                options = UIViewAnimationOptionCurveLinear;
+                break;
+        }
+        [UIView animateWithDuration:duration delay:0.0 options:options animations:^{
+            [[weakself pickerView] setFrame:pickerViewFrameEnd];
+        } completion:^(BOOL finished) {
+            
+        }];
+
         
-    }];
+    }
 }
 
 #pragma mark - View lifecycle

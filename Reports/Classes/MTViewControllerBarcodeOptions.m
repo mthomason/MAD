@@ -355,18 +355,36 @@
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderNone forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
+                if (accessory == UITableViewCellAccessoryCheckmark) {
+                    NSIndexPath *row1 = [NSIndexPath indexPathForRow:1 inSection:indexPath.section];
+                    NSIndexPath *row2 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
+                    [[tableView cellForRowAtIndexPath:row1] setAccessoryType:UITableViewCellAccessoryNone];
+                    [[tableView cellForRowAtIndexPath:row2] setAccessoryType:UITableViewCellAccessoryNone];
+                }
                 break;
             }
             case 1: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorder forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBox ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
+                if (accessory == UITableViewCellAccessoryCheckmark) {
+                    NSIndexPath *row0 = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+                    NSIndexPath *row2 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
+                    [[tableView cellForRowAtIndexPath:row0] setAccessoryType:UITableViewCellAccessoryNone];
+                    [[tableView cellForRowAtIndexPath:row2] setAccessoryType:UITableViewCellAccessoryNone];
+                }
                 break;
             }
             case 2: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderOption2 forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBind ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
+                if (accessory == UITableViewCellAccessoryCheckmark) {
+                    NSIndexPath *row0 = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+                    NSIndexPath *row1 = [NSIndexPath indexPathForRow:1 inSection:indexPath.section];
+                    [[tableView cellForRowAtIndexPath:row0] setAccessoryType:UITableViewCellAccessoryNone];
+                    [[tableView cellForRowAtIndexPath:row1] setAccessoryType:UITableViewCellAccessoryNone];
+                }
                 break;
             }
             case 3: {
@@ -702,9 +720,6 @@
     }
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:[field databaseSchemaField]];
-    //NSString *identifier = [[[[field databaseSchemaField] objectID] URIRepresentation] absoluteString];
-    //MTDataTable *datatable = [MTDataTable newDataTableForIdentifier:identifier];
-    //[self setSampleDataTable:datatable];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
