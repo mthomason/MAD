@@ -149,14 +149,14 @@
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
                     [weakself2 setDataTable:dt];
-                    [weakself2 setPickerData:[weakself2 dataTable]];
+                    NSArray *allObjects = [[weakself2 dataTable] allObjects];
+                    [weakself2 setPickerData:allObjects];
                     [[weakself2 pickerView] reloadAllComponents];
                     
                     [[weakself2 pickerView] setNeedsDisplay];
                     
                     [[weakself2 pickerView] selectRow:0 inComponent:0 animated:NO];
                     [weakself2 pickerView:[weakself2 pickerView] didSelectRow:0 inComponent:0];
-                    //[[weakself2 textField] setText:[weakself2 pickerView:pickerView titleForRow:row forComponent:component]];
                 });
                 
                 

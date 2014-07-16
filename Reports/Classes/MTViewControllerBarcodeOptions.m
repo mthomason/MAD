@@ -702,17 +702,21 @@
     }
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:[field databaseSchemaField]];
-    NSString *identifier = [[[[field databaseSchemaField] objectID] URIRepresentation] absoluteString];
-    MTDataTable *datatable = [MTDataTable newDataTableForIdentifier:identifier];
-    [self setSampleDataTable:datatable];
+    //NSString *identifier = [[[[field databaseSchemaField] objectID] URIRepresentation] absoluteString];
+    //MTDataTable *datatable = [MTDataTable newDataTableForIdentifier:identifier];
+    //[self setSampleDataTable:datatable];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
+            MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
+            [self setSampleDataTable:dt];
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");
             NSAssert(([self selectingField1] == YES && [self selectingField2] == YES) == NO, @"Can't be setting both at the same time, now can we?");
             if ([self selectingField1]) {
-                [self setSampleBarcodeData:[self sampleDataTable]];
+                NSArray *allObjects = [[self sampleDataTable] allObjects];
+                [self setSampleBarcodeData:allObjects];
             } else if ([self selectingField2]) {
-                [self setSampleBarcodeData2dComponent:[self sampleDataTable]];
+                NSArray *allObjects = [[self sampleDataTable] allObjects];
+                [self setSampleBarcodeData2dComponent:allObjects];
             }
             [[self tableView] reloadData];
 

@@ -120,15 +120,13 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
-            MTDataTable *dataTable = [MTViewControllerBarcode newDataTableForMangedObject:[schemaField objectID]];
-            [self setDataTableSampleData:dataTable];
             __weak MTViewControllerBarcode *weakself = self;
             [[querySampleDataField database] setDelegate:self];
             [self setQuery:querySampleDataField];
             [[self query] performQuery:^(BOOL success, NSError *error) {
                 if (success) {
-                    [[weakself dataTableSampleData] cache];
-                    [optionsViewController setSampleBarcodeData:[weakself dataTableSampleData]];
+                    NSArray *allObjects = [[weakself dataTableSampleData] allObjects];
+                    [optionsViewController setSampleBarcodeData:allObjects];
                     [[optionsViewController tableView] reloadData];
                 }
             }];
@@ -136,17 +134,14 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         
         if ([self queryField2] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
-            
-            MTDataTable *dataTable2 = [MTViewControllerBarcode newDataTableForMangedObject:[schemaField objectID]];
-            [self setDataTableSampleData2:dataTable2];
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
             __weak MTViewControllerBarcode *weakself = self;
             [[querySampleDataField database] setDelegate:self];
             [self setQuery2:querySampleDataField];
             [[self query2] performQuery:^(BOOL success, NSError *error) {
                 if (success) {
-                    [[weakself dataTableSampleData] cache];
-                    [optionsViewController setSampleBarcodeData2dComponent:[weakself dataTableSampleData2]];
+                    NSArray *allObjects = [[weakself dataTableSampleData2] allObjects];
+                    [optionsViewController setSampleBarcodeData2dComponent:allObjects];
                     [[optionsViewController tableView] reloadData];
                 }
             }];

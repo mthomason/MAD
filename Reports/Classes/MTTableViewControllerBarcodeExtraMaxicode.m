@@ -50,8 +50,10 @@
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
-            [[self dataTableSampleData] cache];
-            [[self delegate] barcodeMaxicodeDidChooseSampleData:[self dataTableSampleData]];
+            MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
+            [self setDataTableSampleData:dt];
+            NSArray *allObjects = [[self dataTableSampleData] allObjects];
+            [[self delegate] barcodeMaxicodeDidChooseSampleData:allObjects];
             [[self tableView] reloadData];
         }
     }];
