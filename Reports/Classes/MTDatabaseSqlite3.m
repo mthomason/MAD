@@ -402,7 +402,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 if ([[databinding value] isKindOfClass:[NSString class]]) {
                     success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [[databinding value] UTF8String], (int)[[databinding value] lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
                 } else if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
-                    NSDate *date = [[NSCalendar autoupdatingCurrentCalendar] dateFromComponents:[databinding value]];
+                    NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:[databinding value]];
                     success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, [date timeIntervalSince1970]);
                 } else {
                     NSAssert(false, @"What else is there? %s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));

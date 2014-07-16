@@ -213,7 +213,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self setEdgesForExtendedLayout: UIRectEdgeNone];
     [self setTitle:@"MAD Viewer"];
     
@@ -262,7 +261,11 @@
     [super viewWillAppear:animated];
     
     [[[self navigationController] toolbar] setNeedsLayout];
+}
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     [reportDocument initalizeMainQuery];
     
@@ -276,10 +279,6 @@
     }
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     
     if ([self printPageRendererReport] == nil) {
         __block MAReportDocument *doc = [[AppDelegate app] activeDocument];
@@ -800,9 +799,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return [self navigationController];
 }
 
-- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
+- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
+                  withCompletionHandler:(void (^)(BOOL))completionHandler {
     
-
     if ([UIDevice isPad] == NO) {
         [self dismissViewControllerAnimated:YES completion:^{
             completionHandler(YES);
@@ -1063,7 +1062,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 }
 
-- (void)updateStatusLabel:(NSAttributedString *)timeMessage recordsReadMessage:(NSAttributedString *)recordsReadMessage andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
+- (void)updateStatusLabel:(NSAttributedString *)timeMessage
+       recordsReadMessage:(NSAttributedString *)recordsReadMessage
+  andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
 

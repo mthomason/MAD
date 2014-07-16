@@ -148,7 +148,6 @@ void sqliteCallback(void *foo, const char* statement) {
         
         @autoreleasepool {
             
-            
             MTDataColumn *dataColumn = [self columns][key];
             
             int sqlite3DataType = sqlite3_column_type(_statement, columnCounter);

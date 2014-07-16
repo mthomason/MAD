@@ -128,9 +128,13 @@
 }
 
 - (NSString *)keyForIdentifier {
-    NSManagedObjectID *objectID = [self objectID];
-    NSURL *url = [objectID URIRepresentation];
-    return [url absoluteString];
+    char buf[18];
+    snprintf(buf, 18, "s%lu", (unsigned long)[[self objectID] hash]);
+    return [NSString stringWithUTF8String:buf];
+    
+    //NSManagedObjectID *objectID = [[self objectID] hash];
+    //NSURL *url = [objectID URIRepresentation];
+    //return [url absoluteString];
 }
 
 - (NSUInteger)nextDropIndexForSection {

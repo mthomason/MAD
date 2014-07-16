@@ -229,6 +229,7 @@ NSString * const MTReportDetailRowId = @"d";
         
         MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
                                                                   andLayout:weakself.document];
+        [rf setOverrideIdentifier:@"madpreview"];
 
         [[NSNotificationCenter defaultCenter] addObserver: weakself
                                                  selector: @selector(reportFormatterDidFormatPage:)
@@ -237,7 +238,6 @@ NSString * const MTReportDetailRowId = @"d";
 
     
         [rf setDatasource:weakself];
-        [rf setOverrideIdentifier:@"madpreview"];
         [rf reformatForSize:letterRect.size options:0];
 
         
