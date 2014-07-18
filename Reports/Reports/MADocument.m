@@ -498,4 +498,13 @@ NSString * MTDocumentParentContextName          = @"moc";
     }
 }
 
+- (NSURL *)cachedFilesDirectory {
+    return [MAReportDocument cacheFilesDirectoryForFilename:[self fileName]];
+}
+
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
+    NSString *filenameId = [NSFileManager filenameId:[filename hash]];
+    return [[NSFileManager defaultManager] cacheDirectoryNamed:filenameId];
+}
+
 @end

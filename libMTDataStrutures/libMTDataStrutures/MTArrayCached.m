@@ -77,6 +77,25 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     return self;
 }
 
+- (id)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
+    self = [super init];
+    if (self) {
+        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
+        [self setFastEnumerationObjects:fastEnumerationObjects];
+        
+        _statementCount = NULL;
+        _statementEnumer = NULL;
+        _statementInsert = NULL;
+        _statementSelect = NULL;
+        
+        NSString *i = [NSString stringWithString:identifier];
+        [self setIdentifier:i];
+        [self setCachedDelegate:cachedDelegate];
+        [self initalizeDatabase];
+    }
+    return self;
+}
+
 - (void)reopenDatabaseAtUrl:(NSURL *)url {
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:url];
     MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
@@ -177,27 +196,19 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 #endif
 
 
-+ (NSURL *)directoryCachedArray {
-    NSURL *cachedArrayDirectories = [[NSFileManager cacheDirectory] URLByAppendingPathComponent:MTArrayCachedTableName isDirectory:YES];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    BOOL exist, isDirectory;
-    exist = [fm fileExistsAtPath:[cachedArrayDirectories path] isDirectory:&isDirectory];
-    if (exist == NO || isDirectory == NO) {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:@{} error:&error];
-        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
-    }
-    return cachedArrayDirectories;
-}
-
 + (NSURL *)urlForIdentifier:(NSString *)identifer {
-    NSURL *cachedArrayDirectories = [self directoryCachedArray];
+    
+    NSURL *cachedArrayDirectories = [NSFileManager cacheDirectory];
     NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
     return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 - (NSURL *)url {
-    return [MTArrayCached urlForIdentifier:[self identifier]];
+    NSURL *result = nil;
+    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ? [NSFileManager cacheDirectory] : [self.cachedDelegate cachedFilesDirectory];
+    NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
+    result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
+    return result;
 }
 
 + (MTDataColumn *)columnKey {
@@ -266,10 +277,75 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         }
     }
 }
+/*- (void)addObject:(id)object {
+    @autoreleasepool {
+        [self setLastObjectSelected:nil];
+        NSData *data = nil;
+        if ([object conformsToProtocol:@protocol(NSCoding)]) {
+            @try {
+                data = [NSKeyedArchiver archivedDataWithRootObject:object];
+            }
+            @catch (NSException *exception) {
+                NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
+                data = [NSKeyedArchiver archivedDataWithRootObject:v];
+            }
+            @finally { }
+        } else {
+            NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
+            data = [NSKeyedArchiver archivedDataWithRootObject:v];
+        }
+        [self writeData:data];
+    }
+}*/
 
-- (id)objectAtIndexedSubscript:(NSUInteger)idx {
-    return [self objectAtIndex:idx];
+- (void)writeData:(NSData *)data {
+    sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
+    sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
+    if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
+        sqlite3_reset(_statementInsert);
+        self.numberOrRows++;
+    }
 }
+
+- (NSData *)readDataAtIndex:(NSUInteger)index {
+    NSUInteger lastIndex = NSNotFound;
+    NSData *result = nil;
+    
+    if (self.lastObjectSelected != nil) {
+        NSNumber *lastObjectIndex = self.lastObjectSelected.former;
+        lastIndex = [lastObjectIndex unsignedIntegerValue];
+    }
+    if (lastIndex == index) {
+        result = self.lastObjectSelected.latter;
+    } else {
+        sqlite3_bind_int(_statementSelect, 1, (int)index);
+        
+        if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
+            result = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
+                                    length: sqlite3_column_bytes(_statementSelect, 0)];
+            sqlite3_reset(_statementSelect);
+        }
+    }
+    return result;
+}
+
+- (id)objectAtIndexedSubscript:(NSUInteger)index {
+    return [self objectAtIndex:index];
+}
+/*
+- (id)objectAtIndex:(NSUInteger)index {
+    [self readDataAtIndex:index];
+    id result = nil;
+    NSData *queryResult = [self readDataAtIndex:index];
+    if (queryResult != nil) {
+        result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+    }
+    NSNumber *idx = @(index);
+    MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
+    self.lastObjectSelected = pair;
+    return result;
+}
+*/
 
 - (id)objectAtIndex:(NSUInteger)index {
     NSUInteger lastIndex = NSNotFound;

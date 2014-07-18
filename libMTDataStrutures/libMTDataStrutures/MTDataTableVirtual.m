@@ -29,11 +29,6 @@
     return nil;
 }
 
-- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
-    return nil;
-}
-
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
@@ -288,5 +283,16 @@
 
 - (void)beginBulkInsert {}
 - (void)endBulkInsert {}
+
+/*! Returns an array of NSURLs that represent all the cached files used by the class.
+ 
+ @brief All cahced files.
+ @returns NSURLs
+ 
+ */
+
+- (NSArray *)cachedFiles {
+    return @[];
+}
 
 @end

@@ -6,8 +6,12 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTReportFormatter_h
+#define MAD_MTReportFormatter_h
+
 #import <Foundation/Foundation.h>
 #import "MTTableFormatter.h"
+#import "MTCacheProtocol.h"
 
 typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone   = 1 << 0,
@@ -46,7 +50,8 @@ extern NSString * const MTNullIdentifier;
 - (NSUInteger)numberOfGroups;
 
 
-@property (nonatomic, assign) id <MTReportFormatterDataSource> datasource;
+@property (nonatomic, weak) id <MTReportFormatterDataSource> datasource;
+@property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 @property (nonatomic, strong, readonly) RptqDocument *layout;
@@ -57,3 +62,5 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic, strong) NSString *overrideIdentifier; //Use this to cache in location other than default.
 
 @end
+
+#endif

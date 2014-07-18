@@ -580,8 +580,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
-    [reportViewerController setDisplayActive];
-    [reportViewerController reload:reportViewerController withSize:frame.size];
+    if (self.isRefreshing == NO && self.startedRefresh == NO) {
+        [reportViewerController setDisplayActive];
+        [reportViewerController reload:reportViewerController withSize:frame.size];
+    }
 }
 
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
@@ -596,11 +598,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     
-        // FIXME: Delete preview
-        NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
-        NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-        NSError *error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    // FIXME: Delete preview
+    NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
     [self redrawReportViewer:self withFrame:self.view.frame];
 }
 
@@ -885,6 +887,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     });
 }
 
+// FIXME: This can't work... set cacheDelgate
 - (IBAction)print:(id)sender {
     
     UIPrintInteractionController *controller = [UIPrintInteractionController sharedPrintController];

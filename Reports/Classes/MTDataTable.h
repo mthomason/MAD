@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
+#import "MTCacheProtocol.h"
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,
@@ -28,12 +29,15 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @interface MTDataTable : NSObject
     <NSCoding, NSFastEnumeration>
 
-@property (nonatomic, strong, readwrite) NSURL *url;
+
+@property (nonatomic, weak) IBOutlet id <MTCacheProtocol> cacheDelegate;
+
 @property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, strong, readwrite) NSMutableArray *columnKeys;
 @property (nonatomic, strong, readwrite) NSMutableArray *sortDescriptors;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *columns;  // The data for fast summeraztion.
 @property (nonatomic, assign, readwrite) NSUInteger rowCounter;
+@property (nonatomic, assign) NSUInteger tag;
 
 + (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier;
 + (id)dataTableFactory:(NSDictionary *)parameters;
@@ -42,8 +46,7 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
-- (void)setObjectId:(NSUInteger)objectId;   //Object id needs to be set for caching.
-
+- (NSURL *)url;
 - (void)cache;
 - (id)plist;
 
@@ -78,7 +81,6 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 - (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending;
 - (NSEnumerator *)enumeratorForAllObjectsSorted;
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
-- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids;
 - (NSEnumerator *)enumeratorForKeyObjectsSorted;
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId;

@@ -67,7 +67,6 @@ NSString * const MTReportDetailRowId = @"d";
 
 @property (nonatomic, strong) MTQuery *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
-@property (nonatomic, strong) MTDataTable *connectionTestDataTable;
 
 @property (nonatomic, weak) UILabel *statusLabel;
 
@@ -79,9 +78,6 @@ NSString * const MTReportDetailRowId = @"d";
     switch (query.type) {
         case MTQueryTypeFull:
             return [self mainDataTable];
-            break;
-        case MTQueryTypeConnectionTest:
-            return [self connectionTestDataTable];
             break;
         default:
             return nil;
@@ -131,6 +127,7 @@ NSString * const MTReportDetailRowId = @"d";
             if ([self reportFormatter] == nil) {
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
                                                                                        andLayout:[self activeDocument]];
+                [reportFormatter setCachedDelegate:self];
                 [reportFormatter setDatasource:self];
                 [self setReportFormatter:reportFormatter];
                 reportFormatter = nil;
@@ -229,6 +226,7 @@ NSString * const MTReportDetailRowId = @"d";
         
         MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
                                                                   andLayout:weakself.document];
+        [rf setCachedDelegate:self];
         [rf setOverrideIdentifier:@"madpreview"];
 
         [[NSNotificationCenter defaultCenter] addObserver: weakself
@@ -284,86 +282,6 @@ NSString * const MTReportDetailRowId = @"d";
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [[self statusLabel] performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
-    //[[self statusLabel] setText:readRecords];
-}
-
-- (void)writeToPdf:(NSURL *)filepath {
-    /*
-    UIViewAutoresizing mask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
-    CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, 300.0000f, 300.0000f);
-    
-    UIView *activtyView = [[UIView alloc] initWithFrame:frame];
-    [activtyView setBackgroundColor:[UIColor blackColor]];
-    //[activtyView setAlpha:0.9000f];
-    [activtyView setOpaque:YES];
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    
-    [activtyView setAutoresizingMask:mask];
-    [activityIndicator setAutoresizingMask:mask];
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    
-    for (UIWindow *win in [[UIApplication sharedApplication] windows]) {
-        NSLog(@"%@", win);
-        [win setBackgroundColor:[UIColor greenColor]];
-    }
-    
-    activtyView.center = window.center;
-    CGPoint indicatorCenter = CGPointMake(activtyView.center.x, activityIndicator.bounds.size.height + 20.0000f);
-    activityIndicator.center = indicatorCenter;
-    [activtyView addSubview:activityIndicator];
-    [activityIndicator startAnimating];
-    
-    CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f);
-    UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
-    [status setText:@"Formatting report."];
-    [activtyView addSubview:status];
-    
-    [window.subviews.lastObject addSubview:activtyView];
-    __weak MAReportDocument *weakself = self;
-    
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_queue_t dipatchQueueMain = dispatch_get_main_queue();
-    dispatch_async(dipatchQueue, ^{
-
-        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery andLayout:weakself.document];
-        NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
-        CGRect letterRect = [MTPaper rectLetter];
-        [[weakself mainDataTable] sortUsingDescriptors:[[weakself mainQuery] sortDescriptors]];
-        [rf formatForSize:letterRect.size];
-        
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[weakself reportFormatter]
-                                                                                                                  dataTable:[weakself mainDataTable]];
-        NSUInteger numberOfPages = [[weakself reportFormatter] numberOfPages];
-        UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
-
-        
-        NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect:letterRect]};
-        for (NSUInteger i=0; i<numberOfPages; i++) {
-            @autoreleasepool {
-                UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-                [printPageRender drawPageAtIndex:i inRect:letterRect];
-                
-                dispatch_sync(dipatchQueueMain, ^{
-                    NSString *text = [NSString stringWithFormat:@"Drawing page %d.", i];
-                    [status setText:text];
-                });
-
-                
-            }
-        }
-        UIGraphicsEndPDFContext();
-        
-        dispatch_semaphore_signal(s1);
-        
-    });
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-
-    [activityIndicator stopAnimating];
-    [activityIndicator removeFromSuperview];
-    [activtyView removeFromSuperview];
-     */
 }
 
 //Add a new connection to the report
@@ -410,6 +328,7 @@ NSString * const MTReportDetailRowId = @"d";
     MTDataTable *datatable = [MTDataTable dataTableFactory:@{
                                                              typeKey : type,
                                                              objectIdKey : objectIdV}];
+    [datatable setCacheDelegate:self];
     [self setMainDataTable:datatable];
 }
 
@@ -433,13 +352,13 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (NSURL *)mcacheUrl {
-    NSString *fileName = [[NSString stringWithFormat:@"%ld", (long)[self fileNameHash]] stringByAppendingPathExtension:@"mdcache"];
-    return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+    NSString *fileName = [[NSString stringWithFormat:@"%ld", (unsigned long)[self fileNameHash]] stringByAppendingPathExtension:@"mdcache"];
+    return [[self cachedFilesDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
 - (NSURL *)maddbUrl {
-    NSString *fileName = [[NSString stringWithFormat:@"%ld", (long)[self fileNameHash]] stringByAppendingPathExtension:@"maddb"];
-    return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+    NSString *fileName = [[NSString stringWithFormat:@"%ld", (unsigned long)[self fileNameHash]] stringByAppendingPathExtension:@"maddb"];
+    return [[self cachedFilesDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
 + (NSURL *)mcacheUrlForFileHandle:(NSString *)filehandle {
@@ -452,7 +371,8 @@ NSString * const MTReportDetailRowId = @"d";
 
 + (NSURL *)cachedUrlForHash:(NSUInteger)hash andExtension:(NSString *)extension {
     NSString *fileName = [NSFileManager filenameId:hash extention:extension];
-    return [[NSFileManager cacheDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+    NSURL *cachedDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileName];
+    return [cachedDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
 - (NSURL *)thumbnailUrl {
@@ -469,12 +389,6 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (NSString *)fileHandle {
     return [[[self urlThumbnail] path] lastPathComponent];
-}
-
-- (void)sendTo {
-    [NSException exceptionWithName: NSInternalInconsistencyException
-                                   reason: [NSString stringWithFormat:@"Not implemented: %@.", NSStringFromSelector(_cmd)]
-                                 userInfo: nil];
 }
 
 - (NSString *)fileNameExtensionForType:(NSString *)typeName saveOperation:(UIDocumentSaveOperation)saveOperation {
@@ -506,7 +420,8 @@ NSString * const MTReportDetailRowId = @"d";
     NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
     NSString *fileName = [handle stringByAppendingString:extention];
     
-    NSURL *cacheDirectory = [NSFileManager cacheDirectory];
+    NSString *fileNameId = [NSFileManager filenameId:[handle hash]];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
@@ -529,7 +444,10 @@ NSString * const MTReportDetailRowId = @"d";
     if (exists) {
         NSError *deleteError = nil;
         if (isDirectory) {
-            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:destinationUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:destinationUrl
+                                                  includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                                     options:-1
+                                                                errorHandler:^BOOL(NSURL *url, NSError *error) {
                 MTLog(@"Error %@", error);
                 return YES;
             }];
@@ -617,7 +535,8 @@ NSString * const MTReportDetailRowId = @"d";
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
     
-    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType:MTQueryTypeConnectionTest object:databaseConnection];
+    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
+                                                     object: databaseConnection];
     __weak MTDatabaseConnection *weakDatabaseConnection = databaseConnection;
 
     [queryTest performQuery:^(BOOL success, NSError *error) {
@@ -731,5 +650,24 @@ NSString * const MTReportDetailRowId = @"d";
 - (void)regenThumbnail {
     [MAReportDocument regenThumbnailForReport:self];
 }
+
+
+/*! Returns an array of NSURLs that represent all the cached files used by the software.
+
+ @brief All cahced files.
+ @returns NSURLs
+ 
+ */
+/*
+- (NSArray *)cachedFiles {
+    NSArray *c1 = [self.mainDataTable cachedFiles];
+    NSArray *c2 = [self.connectionTestDataTable cachedFiles];
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: ([c1 count] + [c2 count]) ];
+    [result addObjectsFromArray:c1];
+    [result addObjectsFromArray:c2];
+
+    return result;
+}
+*/
 
 @end

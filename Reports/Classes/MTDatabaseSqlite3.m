@@ -571,7 +571,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             }
         } else {
             int result = sqlite3_step(statement);
-            NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s", (char *)sqlite3_errmsg(_database));
+            NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s with result code: %d", (char *)sqlite3_errmsg(_database), result);
             NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
         }
         if ([query partOfTransactionSet] == NO) {

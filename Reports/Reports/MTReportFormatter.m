@@ -106,15 +106,12 @@ NSString * const MTNullIdentifier = @"(null)";
     return [NSArray arrayWithArray:[self keyValuesForResultRow:row]];
 }
 
-- (void)dealloc {
-    //[[self reportFormatterCache] dumpCache];
-}
+- (void)dealloc { }
 
 - (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
     self = [super initWithQuery:query];
     if (self) {
         [self setLayout:layout];
-        [self initalize];
     }
     return self;
 }
@@ -163,6 +160,11 @@ NSString * const MTNullIdentifier = @"(null)";
     } else {
         return [self nameVirticalReportLayoutCache];
     }
+}
+
+- (void)setCachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
+    _cachedDelegate = cachedDelegate;
+    [self initalize];
 }
 
 - (void)initalize {
@@ -220,25 +222,27 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)reformatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options {
-    [self format];
-    [self setLayoutSize:printableSize];
-    [self loadLayoutAndIndexesFromCacheWithOptions:options];
-    [self formatDocumentWithOptions:options];
+    @synchronized(self) {
+        [self format];
+        [self setLayoutSize:printableSize];
+        [self loadLayoutAndIndexesFromCacheWithOptions:options];
+        [self formatDocumentWithOptions:options];
+    }
 }
 
 - (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged {
 
-    [self setLayoutSize:printableSize];
-
-
-    [self loadLayoutAndIndexesFromCacheWithOptions:options];
-    
-    if ([self format]) {
+    @synchronized(self) {
+        [self setLayoutSize:printableSize];
+        [self loadLayoutAndIndexesFromCacheWithOptions:options];
         
-        if (contextChanged) {
-            [self dropIndexes];
+        if ([self format]) {
+            
+            if (contextChanged) {
+                [self dropIndexes];
+            }
+            [self formatDocumentWithOptions:options];
         }
-        [self formatDocumentWithOptions:options];
     }
 }
 
@@ -294,9 +298,11 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)loadLayoutAndIndexesFromCacheWithOptions:(MTReportFormatterOptions)options {
-    MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]];
-    MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]];
+    MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]
+                                                        cachedDelegate:self.cachedDelegate];
     [self setReportIndexes:ixarray];
+    MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]
+                                                        cachedDelegate:self.cachedDelegate];
     [self setReportLayout:lyarray];
     [self cleanupTemporaryReportIndexes];
 }
@@ -360,7 +366,6 @@ NSString * const MTNullIdentifier = @"(null)";
                 
                 newHeader = comparsonResult != NSOrderedSame;
             }
-            
             
             if (newHeader) {
                 RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
@@ -547,10 +552,10 @@ NSString * const MTNullIdentifier = @"(null)";
             self.machineState.counterHeightUsedCurrentPage = newHeight;
             [self addPageFooter];
             
-            NSArray *pageInfo = [NSArray arrayWithArray: [self pageLayoutTemporary]];
+            NSArray *pageInfo = [self pageLayoutTemporary] != nil ? [NSArray arrayWithArray: [self pageLayoutTemporary]] : @[];
             [[self reportLayout] addObject:pageInfo];
             
-            NSIndexSet *rowids = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
+            NSIndexSet *rowids = [self pageIndexesTemporary] != nil ? [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]] : [NSIndexSet indexSet];
             [[self reportIndexes] addObject:rowids];
             
             [self cleanupTemporaryPageIndexes];
@@ -694,5 +699,24 @@ NSString * const MTNullIdentifier = @"(null)";
     UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
+
+/*! Returns an array of NSURLs that represent all the cached files used by the report formatter.
+ 
+ @brief All cahced files.
+ @returns NSURLs
+ 
+ */
+
+/*
+- (NSArray *)cachedFiles {
+    NSArray *c1 = [self.reportIndexes cachedFiles];
+    NSArray *c2 = [self.reportLayout cachedFiles];
+    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: ([c1 count] + [c2 count]) ];
+    [result addObjectsFromArray:c1];
+    [result addObjectsFromArray:c2];
+    
+    return result;
+}
+*/
 
 @end

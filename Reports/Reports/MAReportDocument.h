@@ -14,6 +14,7 @@
 #import "MTDatabase.h"
 #import "MTDatabaseConnection.h"
 #import "MTReportFormatter.h"
+#import "MTCacheProtocol.h"
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
@@ -22,7 +23,7 @@ extern NSString * const MTReportGroupLevel;
 @class MTQuery, MTReportFormatter, MTQueryFull;
 
 @interface MAReportDocument : MADocument
-    <MTReportFormatterDataSource>
+    <MTReportFormatterDataSource, MTCacheProtocol>
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
@@ -33,7 +34,11 @@ extern NSString * const MTReportGroupLevel;
                    completion: (void (^)(BOOL success, NSError *error))completion;
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
-- (void)sendTo;
+
+- (void)regenThumbnail;
+- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
+
+- (RptqDocument *)activeDocument;
 
 + (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
@@ -41,12 +46,6 @@ extern NSString * const MTReportGroupLevel;
 + (void)regenThumbnailForReport:(MAReportDocument *)reportdocument;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 + (NSArray *)cachedFilesForDocumentWithHandle:(NSString *)handle;
-
-- (void)regenThumbnail;
-- (void)writeToPdf:(NSURL *)url;
-- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
-
-- (RptqDocument *)activeDocument;
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention
              andConnection:(MTDatabaseConnection *)databaseConnection

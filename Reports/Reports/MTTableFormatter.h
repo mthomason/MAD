@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTTableFormatter_h
+#define MAD_MTTableFormatter_h
+
 #import <Foundation/Foundation.h>
 #import "MTDataFormatter.h"
 
@@ -17,3 +20,5 @@
 + (id)reportFormatterWithQuery:(MTQuery *)query;
 
 @end
+
+#endif

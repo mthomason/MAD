@@ -29,7 +29,6 @@
 @property (nonatomic, strong) MTDatabaseCache *databaseForSelects;
 
 @property (nonatomic, strong) NSURL *urlFastCache;
-@property (nonatomic, assign, readwrite) NSUInteger tag;
 @property (nonatomic, assign) BOOL bulkInsertLoop;
 @property (nonatomic, assign) BOOL sortDescriptorsSet;
 
@@ -133,7 +132,8 @@
     [super encodeWithCoder:encoder];
 
     [encoder encodeObject:  [_urlFastCache absoluteString]      forKey: [MTDataTableFast keyUrlFastCache]];
-    [encoder encodeInteger: _tag                                forKey: [MTDataTableFast keyTag]];
+    NSNumber *objid = [NSNumber numberWithUnsignedInteger:self.tag];
+    [encoder encodeObject: objid                                forKey: [MTDataTableFast keyTag]];
     [encoder encodeBool: _bulkInsertLoop                        forKey: [MTDataTableFast keyBulkInsertLoop]];
     [encoder encodeBool:_sortDescriptorsSet forKey:[MTDataTableFast keySortDescriptorsSet]];
 
@@ -147,8 +147,8 @@
         NSURL *url = [NSURL URLWithString:absoluteString];
         [self setUrlFastCache: url];
         
-        NSUInteger tag = [decoder decodeIntegerForKey: [MTDataTableFast keyTag]];
-        [self setTag:tag];
+        NSNumber *tag = [decoder decodeObjectForKey: [MTDataTableFast keyTag]];
+        [self setTag:tag.unsignedIntegerValue];
 
         BOOL bulkInsertLoop = [decoder decodeBoolForKey: [MTDataTableFast keyBulkInsertLoop]];;
         [self setBulkInsertLoop:bulkInsertLoop];
@@ -182,24 +182,27 @@
     if (self) {
         [self setBulkInsertLoop:NO];
         [self setTag:objectId];
-        [self setObjectId:objectId];
         [self setSortDescriptorsSet:NO];
-        [self reopenDbConnection];
+        //[self reopenDbConnection];
     }
     return self;
 }
 
-- (void)setObjectId:(NSUInteger)objectId {
-    [super setObjectId:objectId];
-    NSString *filename = [NSFileManager filenameId:objectId extention:@"maddb"];
-    NSURL *cacheDirectory = [NSFileManager cacheDirectory];
-    NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-    [self setUrlFastCache:fileUrl];
+- (NSURL *)urlFastCache {
+    NSString *filename = [NSFileManager filenameId:self.tag extention:@"maddb"];
+    NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager cacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
+    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 - (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
     NSAssert(false, @"Not implemented");
     return nil;
+}
+
+- (void)setCacheDelegate:(id<MTCacheProtocol>)cacheDelegate {
+    super.cacheDelegate = cacheDelegate;
+    [super loadFromCache];
+    [self reopenDbConnection];
 }
 
 - (void)reopenDbConnection {
@@ -264,7 +267,8 @@
     [self addRow:row toTable:[self tableName] withColumns:[self columns] andColumnKeys:[self columnKeys]];
 }
 
-- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
+- (void)addColumn:(MTDataColumn *)column toTable:(NSString *)table
+       columnName:(NSString *)columnName createTable:(BOOL)create unique:(BOOL)unique {
     
     NSNumber *createTable = @(create);
     NSDictionary *queryDefination = @{
@@ -950,76 +954,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     return [MTDatabaseSqlite3 object:statement forColumnNumber:columnIndex withType:aggregateResultType];
 }
 
-/*
-- (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type {
-    id columnValue;
-    switch (type) {
-        case MTDataTypeLong:
-            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
-            break;
-        case MTDataTypeLongLong:
-            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
-            break;
-        case MTDataTypeInt24:
-        case MTDataTypeInteger:
-            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
-            break;
-        case MTDataTypeShort:
-            columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
-            break;
-        case MTDataTypeImage:
-        case MTDataTypeBlob:
-            columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
-                                         length: sqlite3_column_bytes(statement, columnCounter)];
-            break;
-        case MTDataTypeFloat:
-            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
-            break;
-        case MTDataTypeNumber:
-        case MTDataTypeDouble:
-        case MTDataTypeDecimal:
-            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
-            break;
-        case MTDataTypeBit:
-        case MTDataTypeVarChar:
-        case MTDataTypeString:
-        case MTDataTypeEnum:
-        case MTDataTypeYear:
-        case MTDataTypeSet: {
-            const unsigned char *text = sqlite3_column_text(statement, columnCounter);
-            if (text == NULL) {
-                columnValue = [NSNull null];
-            } else {
-                columnValue = [NSString stringWithUTF8String:(const char *) text];
-            }
-            break;
-        }
-        case MTDataTypeUnknown:
-        case MTDataTypeNull: {
-            columnValue = [NSNull null];
-            break;
-        }
-        case MTDataTypeTimeStamp:
-        case MTDataTypeTime:
-        case MTDataTypeDate:
-        case MTDataTypeDateTime:
-        case MTDataTypeGeometry:
-        default: {
-            NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", type);
-            if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
-                const unsigned char *text = sqlite3_column_text(statement, columnCounter);
-                if (text == NULL) {
-                    columnValue = [NSNull null];
-                } else {
-                    columnValue = [NSString stringWithUTF8String:(const char *) text];
-                }
-            }
-            break;
-        }
-    }
-    return columnValue;
-}*/
-
 - (id)currentObject:(sqlite3_stmt *)statement {
     NSDictionary *currentObject = [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
     int columnCounter = 0;
@@ -1038,6 +972,8 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     return currentObject;
 }
 
+/*! Call before bulk insert of data. */
+
 - (void)beginBulkInsert {
     [self setBulkInsertLoop:YES];
     
@@ -1050,14 +986,30 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 }
 
+/*! Call right after bulk insert of data. */
+
 - (void)endBulkInsert {
     [self setBulkInsertLoop:NO];
     [(MTDatabaseSqlite3 *)[self databaseForInserts] endBulkInsert];
-    
 }
 
+/*! Returns an array of NSURLs that represent all the cached files used by the class.
+ 
+ @brief All cahced files.
+ @returns NSURLs
+ 
+ */
+
+- (NSArray *)cachedFiles {
+    NSArray *cachedFiles = @[self.databaseForInserts.databaseConnection.databaseUrl,
+                             self.urlFastCache];
+    return cachedFiles;
+}
+
+#pragma mark - Unused
+
 - (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {
-   
+    
     NSNumber *keyRowIds = @(MTQuerySelectRowIds);
     NSNumber *keyTableN = @(MTQuerySelectTableName);
     NSNumber *keySortDe = @(MTQuerySelectSortDescriptors);

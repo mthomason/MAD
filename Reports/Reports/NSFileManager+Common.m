@@ -184,9 +184,24 @@
     }
 }
 
++ (NSString *)filenameId:(NSUInteger)tag {
+    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+}
+
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
-    NSString *filename = [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-    return [filename stringByAppendingPathExtension:fileExtention];
+    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
+}
+
+- (NSURL *)cacheDirectoryNamed:(NSString *)handle {
+    NSURL *cachedArrayDirectories = [[NSFileManager cacheDirectory] URLByAppendingPathComponent:handle isDirectory:YES];
+    BOOL exist, isDirectory;
+    exist = [self fileExistsAtPath:[cachedArrayDirectories path] isDirectory:&isDirectory];
+    if (exist == NO || isDirectory == NO) {
+        NSError *error = nil;
+        [self createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:@{} error:&error];
+        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
+    }
+    return cachedArrayDirectories;
 }
 
 @end
