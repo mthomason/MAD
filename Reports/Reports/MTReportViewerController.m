@@ -1173,7 +1173,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
-    NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
+    NSString *formatString = NSLocalizedString(@"Formatting page %@.", @"Formatting page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
 }
