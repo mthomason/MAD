@@ -34,6 +34,7 @@
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle;
+- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
 
 @end
 

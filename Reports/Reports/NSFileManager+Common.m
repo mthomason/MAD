@@ -13,6 +13,12 @@
 
 @implementation NSFileManager (Common)
 
+- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
+    NSString *handle = [fileUrl filenameMinusExtention];
+    NSString *fileNameId = [NSFileManager filenameId:[handle hash]];
+    return [self cacheDirectoryNamed:fileNameId];
+}
+
 - (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
     NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
     NSString *lastPathComponent = [urlToDupe lastPathComponent];
