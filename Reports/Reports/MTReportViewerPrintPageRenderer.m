@@ -297,9 +297,7 @@
             NSNumber *detailRowId = nil;
             
             for (NSDictionary *pageSection in [[self reportFormatter] layoutEnumeratorForPage:pageIndex]) {
-                //                @autoreleasepool {
                 NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
-                //NSUInteger groupNumber = [[pageSection objectForKey:MTReportGroupLevelNumber] integerValue];
                 
                 MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue];
                 RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:[[self reportFormatter] layout]
@@ -506,7 +504,7 @@
                                         drawingObject = [NSString stringWithString:[item formattedString:aggregateType
                                                                                                 forValue:aggregateResult]];
                                         if ([drawingObject isEqualToString:MTNullIdentifier]) {
-                                            [drawingObject setString: @""];
+                                            drawingObject = @"";
                                         }
                                         
                                         break;
