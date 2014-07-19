@@ -2050,8 +2050,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             }
         }
         
-        NSAssert(quickHashWorks, @"Maybe not such a good idea.");
-        if (quickHashWorks == NO) {     // FIXME: This case should be unneeded now.
+        //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
+        if (quickHashWorks == NO) {     //Case when views are off screen.
             
             MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
