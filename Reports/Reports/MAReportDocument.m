@@ -50,6 +50,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MTNotificationDidFormatPage.h"
 
+#import "NSURL+Document.h"
+
 //Keys stored in the cache.  Short and unique.
 NSString * const MTReportSectionType = @"a";
 NSString * const MTReportGroupLevel = @"b";
@@ -295,7 +297,7 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (NSString *)fileNameMinusExtention {
-    return [[[[self fileURL] path] lastPathComponent] stringByDeletingPathExtension];
+    return [[self fileURL] filenameMinusExtention];
 }
 
 - (NSUInteger)fileNameHash {
@@ -313,6 +315,7 @@ NSString * const MTReportDetailRowId = @"d";
                                               };
         
         MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
+
         [[self mainDataTable] sortUsingDescriptors:[defaultQuery sortDescriptors]];
         [self setMainQuery:defaultQuery];
         
@@ -650,24 +653,5 @@ NSString * const MTReportDetailRowId = @"d";
 - (void)regenThumbnail {
     [MAReportDocument regenThumbnailForReport:self];
 }
-
-
-/*! Returns an array of NSURLs that represent all the cached files used by the software.
-
- @brief All cahced files.
- @returns NSURLs
- 
- */
-/*
-- (NSArray *)cachedFiles {
-    NSArray *c1 = [self.mainDataTable cachedFiles];
-    NSArray *c2 = [self.connectionTestDataTable cachedFiles];
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: ([c1 count] + [c2 count]) ];
-    [result addObjectsFromArray:c1];
-    [result addObjectsFromArray:c2];
-
-    return result;
-}
-*/
 
 @end
