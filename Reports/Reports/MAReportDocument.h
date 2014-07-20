@@ -46,9 +46,7 @@ extern NSString * const MTReportGroupLevel;
 + (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
-+ (void)regenThumbnailForReport:(MAReportDocument *)reportdocument;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
-+ (NSArray *)cachedFilesForDocumentWithHandle:(NSString *)handle;
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention
              andConnection:(MTDatabaseConnection *)databaseConnection

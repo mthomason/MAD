@@ -28,6 +28,8 @@
 
 #import "NSThread+Extras.h"
 
+#import "MACloudManager.h"
+
 typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
@@ -240,8 +242,7 @@ NSString * MTDocumentParentContextName          = @"moc";
 }
 
 - (NSData *)thumbnailData {
-    NSURL *thumbnailUrl = [self urlThumbnail];
-    return [MADocument dataForUrl:thumbnailUrl];
+    return [[NSFileManager defaultManager] dataForUrl:[self urlThumbnail]];
 }
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
@@ -355,13 +356,42 @@ NSString * MTDocumentParentContextName          = @"moc";
         [blockSelf saveToURL: url forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
             
             [[blockSelf documentStatus] setSuspended:YES];
-            NSURL *url = [blockSelf fileURL];
-            [NSFileManager wrapFile:url withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:YES completion:nil];
+            [self wrapFileOverwrite:YES completion:nil];
             [[blockSelf documentStatus] setSuspended:NO];
             
             [[blockSelf documentStatus] setSaveInProgressLock:NO];
             blockSelf = nil;
         }];
+    }
+}
+
+- (void)wrapFileOverwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion {
+    NSError *fileWrapperError = nil;
+    BOOL success = NO;
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: [self fileURL]
+                                                            options: NSFileWrapperReadingImmediate
+                                                              error: &fileWrapperError];
+    
+    if (fileWrapperError == nil) {
+        NSString *fileName = [[[self fileURL] lastPathComponent] stringByDeletingPathExtension];
+        if (overwrite) {
+            fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+            NSURL *resultUrl = [[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO];
+            NSData *data = [fileWrapper serializedRepresentation];
+            NSError *errorWriting = nil;
+            success = [data writeToURL:resultUrl options:NSDataWritingAtomic error:&errorWriting];
+            if (completion != NULL) {
+                completion(success, resultUrl);
+            }
+        } else {
+            NSURL *resultUrl = [NSURL uniqueUrlForDocumentWithName:fileName
+                                                     withExtension:MTDocumentExtentionMobleApplicationDocument];
+            NSData *data = [fileWrapper serializedRepresentation];
+            success = [data writeToURL:resultUrl atomically:YES];
+            if (completion != NULL) {
+                completion(success, resultUrl);
+            }
+        }
     }
 }
 

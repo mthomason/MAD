@@ -20,6 +20,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTDatabaseField.h"
 #import "MTDataTable.h"
 #import "NSFileManager+Common.h"
+#import "NSFileManager+Reports.h"
 
 #import "RptqDocument+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
@@ -149,14 +150,16 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (void)initalizeMainQuery {
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
-    
-    NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
-    MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:parameters];
-    [defaultQuery setDataDelegate:self];
-    
-    [[self mainDataTable] sortUsingDescriptors:[self sortDescriptors]];
-    [self setMainQuery:defaultQuery];
+    if (database) {
+        RptqQuery *rquery = [[database hasQueries] anyObject];
+        
+        NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
+        MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:parameters];
+        [defaultQuery setDataDelegate:self];
+        
+        [[self mainDataTable] sortUsingDescriptors:[self sortDescriptors]];
+        [self setMainQuery:defaultQuery];
+    }
 }
 
 - (void)initalizeMainDataTableWithName:(NSString *)name {
@@ -375,8 +378,6 @@ NSString * const MTReportDetailRowId = @"d";
     @autoreleasepool {
         [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
             [[weakself mainDataTable] cache];
-//            [[weakself mainDataTable] sortUsingDescriptors:[weakself sortDescriptors]];
-
             [weakself setDidRefresh:success];
             completion(success, error);
         }];
@@ -435,14 +436,6 @@ NSString * const MTReportDetailRowId = @"d";
     return MTDocumentTypeUtiMad;
 }
 
-+ (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *destinationName = [[[madUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [NSFileManager localTemporaryDirectory];
-    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
-    [directories lastObject];
-    return [destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES];
-}
-
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
     return [MAReportDocument thumbnailUrlForHandle:[[madUrl lastPathComponent] stringByDeletingPathExtension]
                                   andRetinaDisplay:[UIDevice isRetnaDisplay]];
@@ -461,76 +454,15 @@ NSString * const MTReportDetailRowId = @"d";
     return [self thumbnailUrlForMadUrl:madUrl];
 }
 
-+ (NSArray *)cachedFilesForDocumentWithHandle:(NSString *)handle {
-    NSURL *thumbnailStandard = [MAReportDocument thumbnailUrlForHandle:handle andRetinaDisplay:NO];
-    NSURL *thumbnailRetina = [MAReportDocument thumbnailUrlForHandle:handle andRetinaDisplay:YES];
-    NSURL *maddb = [MAReportDocument maddbUrlForFileHandle:handle];
-    NSURL *mcache = [MAReportDocument mcacheUrlForFileHandle:handle];
-    return @[thumbnailStandard, thumbnailRetina, maddb, mcache];
-}
-
-+ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDirectory;
-    BOOL exists = [fileManager fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
-    if (exists) {
-        NSError *deleteError = nil;
-        if (isDirectory) {
-            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:destinationUrl
-                                                  includingPropertiesForKeys:@[NSURLIsDirectoryKey]
-                                                                     options:-1
-                                                                errorHandler:^BOOL(NSURL *url, NSError *error) {
-                MTLog(@"Error %@", error);
-                return YES;
-            }];
-            for (NSURL *file in enumerator) {
-                NSError *error = nil;
-                [fileManager removeItemAtURL:file error:&error];
-                if (error != nil) {
-                    MTLog(@"Error %@", error);
-                }
-            }
-            [fileManager removeItemAtURL:destinationUrl error:&deleteError];
-            if (deleteError != nil) {
-                MTLog(@"%@", deleteError);
-            }
-        } else {
-            [fileManager removeItemAtURL:destinationUrl error:&deleteError];
-        }
-    }
-}
-
-+ (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl {
-    NSURL *urlToOpen = nil;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL fileexist = [fileManager fileExistsAtPath:[url path]];
-    if (fileexist) {
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-        NSError* fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-        if (fileWrittingError) {
-            fileWrittingError = nil;
-            [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-        }
-        if (fileWrittingError == nil) {
-            urlToOpen = destinationUrl;
-        }
-    } else {
-        urlToOpen = url;
-    }
-    return urlToOpen;
-}
-
 + (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
     MAReportDocument *managedDocumentAtUrl = nil;
     NSURL *urlToOpen = nil;
     if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
         
-        NSURL *destinationUrl = [MAReportDocument archiveUrlForMadUrl:url];
-        [MAReportDocument deleteCoreDataFilesAtDirectory:destinationUrl];
-        urlToOpen = [MAReportDocument unpackMadFile:url toDestinationUrl:destinationUrl];
+        NSURL *destinationUrl = [fileManager archiveUrlForMadUrl:url];
+        [fileManager deleteCoreDataFilesAtDirectory:destinationUrl];
+        urlToOpen = [fileManager unpackMadFile:url toDestinationUrl:destinationUrl];
         
     } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
         urlToOpen = url;
@@ -581,17 +513,13 @@ NSString * const MTReportDetailRowId = @"d";
                 
                 if (success) {
                     
-                    __weak MAReportDocument *documentReport = managedDocument;
-
-                    RptqDocument *rptqDocument = [documentReport activeDocument];
+                    RptqDocument *rptqDocument = [managedDocument activeDocument];
                     MTDatabase *database = [MTDatabase databaseFactory:weakDatabaseConnection];
                     
                     if (database) {
-                        
-                        [MAReportDocument addDatabase:database toDocument:rptqDocument ofDocumentReport:documentReport completion:^(BOOL success, NSError *error){
+                        [managedDocument addDatabase:database toDocument:rptqDocument completion:^(BOOL success, NSError *error) {
                             completion(success, error);
                         }];
-                        
                     }
                     
                 } else {
@@ -607,37 +535,30 @@ NSString * const MTReportDetailRowId = @"d";
 
 }
 
-+ (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document ofDocumentReport:(MAReportDocument *)documentReport completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
-
-    __weak MAReportDocument *weakDocumentReport = documentReport;
+- (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [RptqDocument addDatabase:database toDocument:document completion:^(BOOL successAddingDatasource, NSError *error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (successAddingDatasource) {
-
-                [self closeReportDocument:weakDocumentReport withCompletion:^(BOOL success, NSError *error) {
+                [self closeDocument:^(BOOL success, NSError *error) {
                     completion(success, error);
                 }];
-                
             } else {
-                [self discardReportDocument:weakDocumentReport withCompletion:^(BOOL success, NSError *error) {
+                [self closeAndDeleteDocument:^(BOOL success, NSError *error) {
                     completion(success, error);
                 }];
             }
         });
     }];
-
 }
 
-
-+ (void)closeReportDocument:(MAReportDocument *)documentReport withCompletion:(void(^)(BOOL success, NSError *error))completion {
-
-    [documentReport closeWithCompletionHandler:^(BOOL success) {
+- (void)closeDocument:(void(^)(BOOL success, NSError *error))completion {
+    [self closeWithCompletionHandler:^(BOOL success) {
         if (success) {
-            [[documentReport documentStatus] setSuspended:YES];
-            [[documentReport managedObjectContext] lock];
-            [NSFileManager wrapFile:[documentReport fileURL] withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
-                [documentReport deleteFromDiskCompletion:^(BOOL success) {
+            [[self documentStatus] setSuspended:YES];
+            [[self managedObjectContext] lock];
+            [self wrapFileOverwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
+                [self deleteFromDiskCompletion:^(BOOL success) {
                     [NSThread completeOnMainThread:completion withObject:nil andSuccess:YES];
                 }];
             }];
@@ -645,15 +566,14 @@ NSString * const MTReportDetailRowId = @"d";
     }];
 }
 
-+ (void)discardReportDocument:(MAReportDocument *)documentReport withCompletion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
-    [documentReport closeWithCompletionHandler:^(BOOL successClosingReport) {
+- (void)closeAndDeleteDocument:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
+    [self closeWithCompletionHandler:^(BOOL successClosingReport) {
         if (successClosingReport) {
-            [documentReport deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
+            [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
             NSError *error = [MAReportDocument errorConnectionProblem];
             [NSThread completeOnMainThread:completion withObject:error andSuccess:NO];
         }
     }];
-
 }
 
 + (NSError *)errorConnectionProblem {
@@ -668,19 +588,15 @@ NSString * const MTReportDetailRowId = @"d";
     return [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
 }
 
-+ (void)regenThumbnailForReport:(MAReportDocument *)reportdocument {
-    [[NSFileManager defaultManager] fileExistsAtPath:[[reportdocument urlThumbnail] path]];
-    BOOL contentChanged = [reportdocument activeDocument] != nil && ([[reportdocument documentStatus] contextChagned] == YES || [reportdocument didRefresh]) && [[reportdocument reportFormatter] numberOfPages] > 0;
-    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[reportdocument urlThumbnail] path]] == NO) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[reportdocument reportFormatter] dataTable:[reportdocument mainDataTable]];
+- (void)regenThumbnail {
+    [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
+    BOOL contentChanged = [self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
+    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter] dataTable:[self mainDataTable]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-        [pngImage writeToURL:[reportdocument urlThumbnail] atomically:YES];
+        [pngImage writeToURL:[self urlThumbnail] atomically:YES];
     }
-}
-
-- (void)regenThumbnail {
-    [MAReportDocument regenThumbnailForReport:self];
 }
 
 - (NSArray *)sortDescriptors {

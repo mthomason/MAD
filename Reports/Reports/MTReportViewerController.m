@@ -242,14 +242,17 @@
     
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
-    [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO completion:^(BOOL finished) { }];
+
+    [self setViewControllers: blankPageArray
+                   direction: UIPageViewControllerNavigationDirectionForward
+                    animated: NO
+                  completion: ^(BOOL finished) { }];
     
     [self addPageSliderToView];
     
-    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray:[self toolbarItems]];
-    [toolbarItems insertObject:[self barButtonLabelStatus] atIndex:1];
-    [self setToolbarItems:toolbarItems animated:NO];
+    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray: [self toolbarItems]];
+    [toolbarItems insertObject: [self barButtonLabelStatus] atIndex: 1];
+    [self setToolbarItems: toolbarItems animated: NO];
     
     [self setTintColorForToolbar:[[self navigationController] toolbar]];
     [self setTintColorForSidebar:[self toolbarSideRight]];

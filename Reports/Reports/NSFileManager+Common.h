@@ -15,26 +15,25 @@
 
 - (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
 
-+ (NSSet *)contentsOfDocumentsDirectory;
-+ (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
-+ (NSMutableArray *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension;
-+ (NSMutableArray *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension;
+- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 
-+ (NSURL *)applicationSupportDirectory;
-+ (NSString *)applicationSupportDirectoryPath;
-+ (NSString *)applicationDocumentsDirectory;
+- (NSSet *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension;
 
-+ (NSURL *)localTemporaryDirectory;
+- (NSURL *)applicationSupportDirectory;
+- (NSString *)applicationDocumentsDirectory;
+
+- (NSURL *)localTemporaryDirectory;
 + (NSString *)cachedPath;
 + (NSURL *)cacheDirectory;
-
-+ (void)wrapFile:(NSURL *)fileToAttach withExtention:(NSString *)extention overwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion;
 
 + (NSString *)filenameId:(NSUInteger)tag;
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle;
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
+- (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl;
+- (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl;
+- (NSData *)dataForUrl:(NSURL *)url;
 
 @end
 

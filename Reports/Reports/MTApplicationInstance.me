@@ -38,9 +38,9 @@ NSString * const MTBundleIdMadViewer                                = @"com.ever
 NSString * const MTBundleIdDesigner                                 = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdViewer                                   = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"1.0.677";
-NSString * const MTGlobalBundleShortVersion                         = @"1.0.677";
-NSString * const MTGlobalBundleRev                                  = @"1297";
+NSString * const MTGlobalBundleVersion                              = @"1.0.678";
+NSString * const MTGlobalBundleShortVersion                         = @"1.0.678";
+NSString * const MTGlobalBundleRev                                  = @"1299";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -186,8 +186,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
             __weak MTApplicationInstance *blockSelf2 = blockSelf;
 
             if ([blockActiveDocument documentState] != UIDocumentStateClosed) {
-                
-                [MAReportDocument regenThumbnailForReport:blockActiveDocument];
+                [blockActiveDocument regenThumbnail];
 
                 [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
                     
@@ -198,9 +197,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                         __weak MAReportDocument *blockActiveDocument2 = blockActiveDocument;
                         __weak MTApplicationInstance *blockself3 = blockSelf2;
                         
-                        [NSFileManager wrapFile: [blockActiveDocument2 fileURL]
-                                  withExtention: MTDocumentExtentionMobleApplicationDocument
-                                      overwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
+                        [blockActiveDocument2 wrapFileOverwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
                             
                             __weak MTApplicationInstance *blockself4 = blockself3;
                             [MADocument deleteFromDiskQuick:blockActiveDocument2 completion:^(BOOL success) {

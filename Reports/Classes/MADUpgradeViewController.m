@@ -99,7 +99,8 @@ const NSInteger currentMajorVersion = 2;
 }
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
-    NSURL *appSupportDirectory = [NSFileManager applicationSupportDirectory];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *appSupportDirectory = [fileManager applicationSupportDirectory];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -194,30 +195,6 @@ const NSInteger currentMajorVersion = 2;
     if ([self upgradeRequired]) {
         if ([self upgradeVersion1] == YES) {
             
-            //Wrap all modo files from the ~/Documents/Data folder, and save as
-            //  mad files in the ~/Documents folder.
-            NSArray *oldSchemaFiles = [NSArray arrayWithArray:[NSFileManager schemaFilesOld]];
-            for (NSURL *urlToUpgrade in oldSchemaFiles) {
-                [NSFileManager wrapFile:urlToUpgrade withExtention:MTDocumentExtentionMobleApplicationDocument overwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
-                    if (success) {
-                        [MADocument deleteFromDisk:urlToUpgrade completion:^(BOOL success) {
-                            
-                            NSString *path = [[[MACloudManager sharedManager] documentsDataDirectoryURL] path];
-                            NSError *error = nil;
-                            NSArray *contentsOfDirectoryToDelete = [defaultManager contentsOfDirectoryAtPath:path error:&error];
-                            if (error == nil) {
-                                if ([contentsOfDirectoryToDelete count] == 0) {
-                                    [defaultManager removeItemAtPath:path error:&error];
-                                    if (error) {
-                                        MTLog(@"%@", error);
-                                    }
-                                }
-                            }
-                            
-                        }];
-                    }
-                }];
-            }
         } else if ([self upgradeVersion2] == YES) {
             //For the future
         }

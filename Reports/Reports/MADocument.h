@@ -36,6 +36,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (NSURL *)urlThumbnail;
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
+- (void)wrapFileOverwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion;
 
 @end
 
