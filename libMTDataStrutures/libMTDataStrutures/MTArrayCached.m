@@ -376,7 +376,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (void)removeAllObjects {
     [self setLastObjectSelected:nil];
     self.numberOrRows = 0;
-    NSDictionary *queryDefination = [MTQuery queryDefinationCacheDeleteAllFromTable:MTArrayCachedTableName];
+    NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:MTArrayCachedTableName];
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     dispatch_semaphore_t semaphoreDeleteAll = dispatch_semaphore_create(0);
@@ -392,7 +392,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                             ascending:NO
                                                              selector:@selector(compare:)];
     NSArray *sortdesc = @[sortn];
-    return [MTQuery queryDefinationSelect:columnNameIndex tableName:MTArrayCachedTableName sortDescriptors:sortdesc];
+    return [MTQuery queryDefinitionSelect:columnNameIndex tableName:MTArrayCachedTableName sortDescriptors:sortdesc];
 }
 
 - (NSDictionary *)queryDefinationLastObject {
@@ -401,13 +401,13 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                             ascending:NO
                                                              selector:@selector(compare:)];
     NSArray *sortdesc = @[sortn];
-    NSMutableDictionary *queryDefinationSelect = [NSMutableDictionary dictionaryWithDictionary:[MTQuery queryDefinationSelect:columnNameIndex
+    NSMutableDictionary *queryDefinationSelect = [NSMutableDictionary dictionaryWithDictionary:[MTQuery queryDefinitionSelect:columnNameIndex
                                                                                                                     tableName:MTArrayCachedTableName
                                                                                                               sortDescriptors:sortdesc]];
     NSNumber *yes = @YES;
     NSNumber *key = @(MTQueryCacheSelectLimitOffsetParamatersDropRowid);
     [queryDefinationSelect setObject:yes forKey:key];
-    return [MTQuery queryDefinationSelect:queryDefinationSelect withLimit:1 andOffset:0];
+    return [MTQuery queryDefinitionSelect:queryDefinationSelect withLimit:1 andOffset:0];
 }
 
 - (NSUInteger)count {

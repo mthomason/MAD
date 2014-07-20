@@ -91,7 +91,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)initalizeStateMachine {
     NSNumber *zero = @(0);
-    NSArray *sortDescriptors = [NSArray arrayWithArray:[[self query] sortDescriptors]];
+    NSArray *sortDescriptors = [NSArray arrayWithArray:[[self dataDelegate] sortDescriptors]];
 
     self.machineState.rowCounter = 0;
     self.machineState.groupCounter = 0;

@@ -31,6 +31,10 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqQueryCache+Extras.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryField.h"
 
 #import "MTLog.h"
 #import "MTQuery.h"
@@ -67,6 +71,7 @@ NSString * const MTReportDetailRowId = @"d";
 
 @property (nonatomic, assign) BOOL didRefresh;
 
+@property (nonatomic, strong) MTDatabase *mainDatabase;
 @property (nonatomic, strong) MTQuery *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
 
@@ -79,6 +84,7 @@ NSString * const MTReportDetailRowId = @"d";
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
     switch (query.type) {
         case MTQueryTypeFull:
+            [[self mainDataTable] setDataDelegate:self];
             return [self mainDataTable];
             break;
         default:
@@ -126,20 +132,66 @@ NSString * const MTReportDetailRowId = @"d";
         }
         [self setDocument:document];
         
-            if ([self reportFormatter] == nil) {
-                MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
-                                                                                       andLayout:[self activeDocument]];
-                [reportFormatter setCachedDelegate:self];
-                [reportFormatter setDatasource:self];
-                [self setReportFormatter:reportFormatter];
-                reportFormatter = nil;
-            }
+        if (self.reportFormatter == nil) {
+            [self initalizeReportFormatter];
+        }
+        
+        if (self.mainDatabase == nil) {
+            [self initalizeMainDatabase];
+        }
     }
     return [self document];
 }
 
+- (MTDatabase *)database {
+    return [self mainDatabase];
+}
+
+- (void)initalizeMainQuery {
+    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+    RptqQuery *rquery = [[database hasQueries] anyObject];
+    
+    NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
+    MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:parameters];
+    [defaultQuery setDataDelegate:self];
+    
+    [[self mainDataTable] sortUsingDescriptors:[self sortDescriptors]];
+    [self setMainQuery:defaultQuery];
+}
+
+- (void)initalizeMainDataTableWithName:(NSString *)name {
+    NSUInteger hash = [name hash];
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypePhysical);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(hash);
+    NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
+    MTDataTable *datatable = [MTDataTable dataTableFactory:parameters];
+    [datatable setCacheDelegate:self];
+    [self setMainDataTable:datatable];
+}
+
+- (void)initalizeReportFormatter {
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
+                                                                           andLayout:[self activeDocument]];
+    [reportFormatter setDataDelegate:self];
+    [reportFormatter setCachedDelegate:self];
+    [reportFormatter setDatasource:self];
+    [self setReportFormatter:reportFormatter];
+}
+
+- (void)initalizeMainDatabase {
+    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+    RptqQuery *queryObject = [[database hasQueries] anyObject];
+    RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
+    MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+    MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+    [db setDelegate:self];
+    [self setMainDatabase:db];
+}
+
 - (void)prepareForQuery {
-    [[self mainDataTable] sortUsingDescriptors:[[self mainQuery] sortDescriptors]];
+    [[self mainDataTable] sortUsingDescriptors:[self sortDescriptors]];
 }
 
 - (NSEnumerator *)enumeratorForReportData {
@@ -224,7 +276,7 @@ NSString * const MTReportDetailRowId = @"d";
         
         NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
         CGRect letterRect = [MTPaper rectLetter];
-        [[weakself mainDataTable] sortUsingDescriptors:[[weakself mainQuery] sortDescriptors]];
+        [[weakself mainDataTable] sortUsingDescriptors:[weakself sortDescriptors]];
         
         MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
                                                                   andLayout:weakself.document];
@@ -304,37 +356,6 @@ NSString * const MTReportDetailRowId = @"d";
     return [[self fileNameMinusExtention] hash];
 }
 
-- (void)initalizeMainQuery {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
-    
-    NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
-    if (rquery != nil) {
-        NSDictionary *queryFullParameters = @{
-                                              parameterSchema : rquery
-                                              };
-        
-        MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:queryFullParameters];
-
-        [[self mainDataTable] sortUsingDescriptors:[defaultQuery sortDescriptors]];
-        [self setMainQuery:defaultQuery];
-        
-    }
-}
-
-- (void)initalizeMainDataTableWithName:(NSString *)name {
-    NSUInteger hash = [name hash];
-    NSNumber *typeKey = @(MTDataTableTypeOfTable);
-    NSNumber *type = @(MTDataTableTypePhysical);
-    NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(hash);
-    MTDataTable *datatable = [MTDataTable dataTableFactory:@{
-                                                             typeKey : type,
-                                                             objectIdKey : objectIdV}];
-    [datatable setCacheDelegate:self];
-    [self setMainDataTable:datatable];
-}
-
 - (MTQuery *)defaultQuery {
     if ([self mainQuery] == nil) {
         [self initalizeMainQuery];
@@ -343,15 +364,23 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
+    NSString *name = [self fileNameMinusExtention];
+    [self initalizeMainDataTableWithName:name];
+    [self initalizeMainQuery];
+    [self initalizeReportFormatter];
     MTQuery *fullQuery = [self defaultQuery];
     [[fullQuery database] setDelegate:self];
-    [[self mainDataTable] sortUsingDescriptors:[fullQuery sortDescriptors]];
     __weak MAReportDocument *weakself = self;
-    [fullQuery performQuery:^(BOOL success, NSError *error) {
-        [[weakself mainDataTable] cache];
-        [weakself setDidRefresh:success];
-        completion(success, error);
-    }];
+    
+    @autoreleasepool {
+        [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
+            [[weakself mainDataTable] cache];
+//            [[weakself mainDataTable] sortUsingDescriptors:[weakself sortDescriptors]];
+
+            [weakself setDidRefresh:success];
+            completion(success, error);
+        }];
+    }
 }
 
 - (NSURL *)mcacheUrl {
@@ -652,6 +681,36 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (void)regenThumbnail {
     [MAReportDocument regenThumbnailForReport:self];
+}
+
+- (NSArray *)sortDescriptors {
+    
+    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+    RptqQuery *rquery = [[database hasQueries] anyObject];
+
+    NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
+    
+    for (RptqQueryGroup *queryGroup in [rquery sortedQueryGroups]) {
+        @autoreleasepool {
+            BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
+            RptqQueryField *groupField = [queryGroup hasField];
+            
+            NSString *queryTable = [[groupField inQueryTable] queryAlias];
+            NSString *safeQueryTable = [[self mainDatabase] safeIdentifier:queryTable];
+            NSString *fieldName = [[groupField databaseSchemaField] name];
+            NSString *safeFieldName = [[self mainDatabase] safeIdentifier:fieldName];
+            NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
+            NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
+            
+            SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                                           ascending: sortAscending
+                                                                            selector: sel];
+            [sortedSortDescriptorsGroup addObject:sortDescriptor];
+        }
+    }
+    
+    return sortedSortDescriptorsGroup;
 }
 
 @end

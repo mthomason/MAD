@@ -2217,6 +2217,7 @@
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4A68BB17E945C800FD6A73 /* MTBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBlurView.h; sourceTree = "<group>"; };
 		4C4A68BC17E945C800FD6A73 /* MTBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBlurView.m; sourceTree = "<group>"; };
+		4C4A7078197AD68E00AF98EC /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
 		4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMTDataStrutures.xcodeproj; path = ../libMTDataStrutures/libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
 		4C4C6F1E167642D9004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C4C6F1F167642D9004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
@@ -3206,6 +3207,7 @@
 				4C590B27191BC3A400C4E211 /* MTPageCaching.m */,
 				4C2DC48F19638AE5003A9FB0 /* MTMath.h */,
 				4C2DC49019638AE5003A9FB0 /* MTMath.m */,
+				4C4A7078197AD68E00AF98EC /* MADDataProtocol.h */,
 			);
 			name = Model;
 			path = Reports;

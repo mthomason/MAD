@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import "MTTableFormatter.h"
 #import "MTCacheProtocol.h"
+#import "MADDataProtocol.h"
 
 typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone   = 1 << 0,
@@ -30,6 +31,10 @@ extern NSString * const MTNullIdentifier;
 @end
 
 @interface MTReportFormatter : MTTableFormatter
+
+@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+
+- (void)initalizeStateMachine;
 
 - (id)initWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
 + (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;

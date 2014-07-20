@@ -687,7 +687,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [reportViewer setDisplayInactive];
         
         MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-        [reportDocument initalizeMainQuery];
+        //[reportDocument initalizeMainQuery];
         MTDatabase *database = [[reportDocument defaultQuery] database];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -846,7 +846,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                                    object: [weakdoc reportFormatter]];
         if ([blockViewer startedRefresh]) {
             [[weakdoc reportFormatter] setDidRefresh:YES];
+            
             [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:YES];
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
+                                                                                                                      dataTable: [weakdoc mainDataTable]];
+            
+            [reportViewer setPrintPageRendererReport:printPageRender];
+
         } else {
             [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:NO];
             

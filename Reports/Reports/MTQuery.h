@@ -137,9 +137,15 @@ extern NSString * const MTQueryKeyObject;
 extern NSString * const MTQueryKeyPredicateColumn;
 extern NSString * const MTQueryKeyPredicateValue;
 
-@class MTDatabase, MTDataTable;
+@class MTDatabase, MTDataTable, RptqQuery;
+
+
+
+#import "MAReportDocument.h"
 
 @interface MTQuery : NSObject
+
+@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
 
 @property (nonatomic, strong, readwrite) MTDatabase *database;
 
@@ -171,17 +177,17 @@ extern NSString * const MTQueryKeyPredicateValue;
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3
 
 - (id)initWithObject:(id)object;
-- (NSArray *)sortDescriptors;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 - (BOOL)returnsResults;
 
 - (BOOL)partOfTransactionSet;
 
-+ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid;
-+ (NSDictionary *)queryDefinationSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
-+ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset;
-+ (NSDictionary *)queryDefinationCacheDeleteAllFromTable:(NSString *)table;
++ (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid;
++ (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset;
++ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 

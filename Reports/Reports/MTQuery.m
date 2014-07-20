@@ -262,10 +262,6 @@ NSString * const MTQueryKeyPredicateValue = @"v";
     return @"";
 }
 
-- (NSArray *)sortDescriptors {
-    return [NSArray array];
-}
-
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
     return (index < [[self fieldKeys] count]) ? [[self fieldKeys] objectAtIndex:index] : nil;
 }
@@ -344,7 +340,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
     return [[(MTDataColumn *)[[self columns] objectForKey:columnHandle] columnType] integerValue];
 }
 
-+ (NSDictionary *)queryDefinationSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {
++ (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {
     NSNumber *keyColumnKeys = @(MTQueryCacheSelectLimitOffsetParamatersColumnKeys);
     NSNumber *keyTableName = @(MTQueryCacheSelectLimitOffsetParamatersTableNames);
     NSNumber *keySortDescriptors = @(MTQueryCacheSelectLimitOffsetParamatersSortDesc);
@@ -355,7 +351,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
               };
 }
 
-+ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid {
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid {
     NSMutableDictionary *queryDefination = [NSMutableDictionary dictionaryWithDictionary:queryDefinationSelect];
     NSNumber *limitw = @(limit);
     NSNumber *offsetw = @(offset);
@@ -370,13 +366,18 @@ NSString * const MTQueryKeyPredicateValue = @"v";
     }
     return  queryDefination;
 }
-+ (NSDictionary *)queryDefinationSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset {
-    return [self queryDefinationSelect:queryDefinationSelect withLimit:limit andOffset:offset dropRowid:NO];
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset {
+    return [self queryDefinitionSelect:queryDefinationSelect withLimit:limit andOffset:offset dropRowid:NO];
 }
 
-+ (NSDictionary *)queryDefinationCacheDeleteAllFromTable:(NSString *)table {
++ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table {
     NSNumber *tableNameKey = @(MTQueryCacheDeleteAllFromTableTableName);
     return @{tableNameKey : table};
+}
+
++ (NSDictionary *)queryDefinitionFull:(RptqQuery *)query {
+    NSNumber *parameterSchema = @(MTQueryCacheFullQuerySchema);
+    return @{parameterSchema : query};
 }
 
 @end

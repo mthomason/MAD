@@ -121,8 +121,8 @@
     
     NSNumber *objid = [NSNumber numberWithUnsignedInteger:self.tag];
     [encoder encodeObject:  objid                   forKey: @"objid"];
-    [encoder encodeObject:  [self sortDescriptors]  forKey:[MTDataTable keySortDescriptors]];
-    [encoder encodeObject:  [self url]              forKey:[MTDataTable keyUrl]];
+    [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
+    [encoder encodeObject:  [self url]              forKey: [MTDataTable keyUrl]];
     [encoder encodeObject:  [self name]             forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
     [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
@@ -264,16 +264,6 @@
     [self cachePlist:plist];
 }
 
-- (NSDictionary *)columnsPlist {
-    
-    NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
-    for (NSString *key in [self columnKeys]) {
-        MTDataColumn *dataColumn = [[self columns] objectForKey:key];
-        columnsPlist[key] = [dataColumn plist];
-    }
-    return columnsPlist;
-}
-
 - (id)plist {
     
     NSString *keyName = [MTDataTable keyName];
@@ -322,6 +312,16 @@
     NSUInteger rowCounter = [rowCounterObj integerValue];
     [self setRowCounter:rowCounter];
     
+}
+
+- (NSDictionary *)columnsPlist {
+    
+    NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
+    for (NSString *key in [self columnKeys]) {
+        MTDataColumn *dataColumn = [[self columns] objectForKey:key];
+        columnsPlist[key] = [dataColumn plist];
+    }
+    return columnsPlist;
 }
 
 - (void)addColumn:(MTDataColumn *)column {}

@@ -571,6 +571,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             }
         } else {
             int result = sqlite3_step(statement);
+            int errorPk = SQLITE_CONSTRAINT_PRIMARYKEY;
+            BOOL primaryKeyError = result & SQLITE_CONSTRAINT_PRIMARYKEY;
             NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s with result code: %d", (char *)sqlite3_errmsg(_database), result);
             NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
         }
@@ -730,7 +732,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
     [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
         for (MTDatabaseTable *table in tables) {
-            NSDictionary *queryDefination = [MTQuery queryDefinationCacheDeleteAllFromTable:table.name];
+            NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:table.name];
             MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
             [dropTable performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
                 NSAssert(success && error == nil, @"Error %@ at %s.", error, __PRETTY_FUNCTION__);

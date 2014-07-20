@@ -220,14 +220,15 @@
 }
 
 - (void)addColumn:(MTDataColumn *)column {
-    NSUInteger columnId = [[self columnKeys] count];
+    NSUInteger columnId = [[column identifier] hash];
+    BOOL createTable = [[self columnKeys] count] == 0;
     char buf[12];
     sprintf(buf, "c%lu", (unsigned long)(unsigned long)columnId);
     NSString *columnName = [NSString stringWithUTF8String:buf];
     [[self columns] setObject:column forKey:columnName];
     [[self columnKeys] addObject:columnName];
     
-    [self addColumn:column toTable:[self tableName] columnName:columnName createTable:columnId == 0 unique:NO];
+    [self addColumn:column toTable:[self tableName] columnName:columnName createTable:createTable unique:NO];
 }
 
 - (void)initalizeGroupKeys {
@@ -323,10 +324,12 @@
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+//    [[self sortDescriptors] setArray: sortDescriptors];
     [[self groupKeys] removeAllObjects];
+  //  [self initalizeGroupKeys];
     if ([[self columnKeys] count] > 0 && [[self columns] count] > 0) {
         
-        if ([sortDescriptors count] > 0 && self.sortDescriptorsSet == NO) {
+        if ([sortDescriptors count] > 0 /*&& self.sortDescriptorsSet == NO*/) {
             NSMutableArray *newSorts = [[NSMutableArray alloc] initWithCapacity:[sortDescriptors count]];
             
             for (NSSortDescriptor *sort in sortDescriptors) {
@@ -359,15 +362,15 @@
 
 - (void)removeAllObjects {
     
-    dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
+    //dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         [self reopenDbConnection];
         [self dropIndex];
         [self dropTable];
         [self vacuumCacheDb];
-        dispatch_semaphore_signal(semaphoreRemoveAll);
-    });
-    dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
+    //    dispatch_semaphore_signal(semaphoreRemoveAll);
+    //});
+    //dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
 
     [self setLastDataForCacheId:nil];
     [[self columnKeys] removeAllObjects];
@@ -410,7 +413,10 @@
 
 - (void)createIndex {
     
+    NSArray *sortDescriptors = [[self dataDelegate] sortDescriptors];
+    [[self sortDescriptors] setArray:sortDescriptors];
     [self sortUsingDescriptors:[self sortDescriptors]];
+    
     NSInteger sortDescCtr = [[self sortDescriptors] count];
     NSArray *sortDescriptorGroups = [self sortDescriptorIndexGroupsForSortDescriptors:[self sortDescriptors]];
     
@@ -418,7 +424,9 @@
     for (NSArray *sortDescriptors in sortDescriptorGroups) {
 
         NSString *groupName = [self indexNameForGroupLevel:sortDescCtr andIndex:groupCounter];
-        NSDictionary *parametersCreateIndex = [self createIndexParametersForIndexName:groupName tableName:[self tableName] andSortDescriptors:sortDescriptors];
+        NSDictionary *parametersCreateIndex = [self createIndexParametersForIndexName:groupName
+                                                                            tableName:[self tableName]
+                                                                   andSortDescriptors:sortDescriptors];
   
         MTQuery *queryCreateIndex = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheIndexCreateParameters
                                                                 object: parametersCreateIndex];
@@ -430,10 +438,7 @@
         dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
         groupCounter++;
     }
-    
-    
-    [[self groupKeys] removeAllObjects];
-    [self initalizeGroupKeys];
+
     
 }
 
@@ -490,7 +495,7 @@
 }
 
 - (void)deleteAll {
-    NSDictionary *queryDefination = [MTQuery queryDefinationCacheDeleteAllFromTable:[self tableName]];
+    NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:[self tableName]];
     MTQuery *queryDeleteAllFromTable = [[MTQuery alloc] initWithQueryType: MTQueryTypeCacheDeleteAllFromTable
                                                                    object: queryDefination];
     
@@ -516,11 +521,11 @@
 }
 
 - (NSDictionary *)queryDefinationSelect {
-    return [MTQuery queryDefinationSelect:[self columnKeys] tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
+    return [MTQuery queryDefinitionSelect:[self columnKeys] tableName:[self tableName] sortDescriptors:[self sortDescriptors]];
 }
 
 - (NSDictionary *)queryDefinationSelectWithLimit:(NSInteger)limit andOffset:(NSInteger)offset {
-    return [MTQuery queryDefinationSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
+    return [MTQuery queryDefinitionSelect:[self queryDefinationSelect] withLimit:limit andOffset:offset];
 }
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
@@ -788,8 +793,8 @@
 
 - (NSEnumerator *)enumeratorForAllObjectsSorted {
     
-    [[self groupKeys] removeAllObjects];
-    [self initalizeGroupKeys];
+    //[[self groupKeys] removeAllObjects];
+    //[self initalizeGroupKeys];
     
     MTQuery *query = [self queryForAllItemsAllRows];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory: [self urlFastCache]];
@@ -1034,6 +1039,13 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
                                                                                   columnKeys:columnKeys
                                                                                        query:query];
     return data;
+}
+
+- (id)debugQuickLookObject {
+    NSMutableString *description = [[NSMutableString alloc] initWithString:@"Table name: "];
+    [description appendString:[self tableName]];
+    [description appendFormat:@"\nColumn keys: %@", self.columnKeys];
+    return description;
 }
 
 @end

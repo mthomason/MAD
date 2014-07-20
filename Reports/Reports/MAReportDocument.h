@@ -15,6 +15,7 @@
 #import "MTDatabaseConnection.h"
 #import "MTReportFormatter.h"
 #import "MTCacheProtocol.h"
+#import "MADDataProtocol.h"
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
@@ -22,11 +23,13 @@ extern NSString * const MTReportGroupLevel;
 
 @class MTQuery, MTReportFormatter, MTQueryFull;
 
+
 @interface MAReportDocument : MADocument
-    <MTReportFormatterDataSource, MTCacheProtocol>
+    <MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
+@property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
 
 - (id)initWithFileURL:(NSURL *)url;
 
