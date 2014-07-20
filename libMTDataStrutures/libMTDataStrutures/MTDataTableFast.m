@@ -956,7 +956,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 - (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
     MTDataType aggregateResultType = mad_sqlite3_datatype_for_sqlite3_type(sqlite3_column_type(statement, columnIndex));
-    return [MTDatabaseSqlite3 object:statement forColumnNumber:columnIndex withType:aggregateResultType];
+    return [MTDatabaseSqlite3 valueForStatement:statement columnNumber:columnIndex];
 }
 
 - (id)currentObject:(sqlite3_stmt *)statement {
@@ -964,7 +964,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     int columnCounter = 0;
     for (NSString *key in [self columnKeys]) {
         MTDataColumn *dataColumn = [[self columns] objectForKey:key];
-        id columnValue = [MTDatabaseSqlite3 object:statement forColumnNumber:columnCounter withType:[[dataColumn columnType] integerValue]];
+        id columnValue = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:columnCounter];
         if (columnValue != nil) {
             [currentObject setValue:columnValue forKey:[dataColumn identifier]];
         }

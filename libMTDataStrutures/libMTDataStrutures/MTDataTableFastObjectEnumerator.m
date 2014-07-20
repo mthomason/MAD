@@ -156,7 +156,7 @@ void sqliteCallback(void *foo, const char* statement) {
             } else {
                 
                 MTDataType madDataType = [[dataColumn columnType] integerValue];
-                columnValue = [MTDatabaseSqlite3 object:_statement forColumnNumber:columnCounter withType:madDataType];
+                columnValue = [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
             }
             
             if (columnValue == nil) {

@@ -517,47 +517,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                     for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
                         
                         
-                        int affentyType = sqlite3_column_type(statement, colCtr);   //http://www.sqlite.org/c3ref/c_blob.html
-                        id value = nil;
-                        switch (affentyType) {
-                            case SQLITE_INTEGER: {
-                                sqlite3_int64 rint = sqlite3_column_int64(statement, colCtr);
-                                value = [NSNumber numberWithLongLong:rint];
-                                break;
-                            }
-                            case SQLITE_FLOAT: {
-                                double rint = sqlite3_column_double(statement, colCtr);
-                                value = [NSNumber numberWithDouble:rint];
-                                break;
-                            }
-                            case SQLITE_BLOB: {
-                                const void *blob = sqlite3_column_blob(statement, colCtr);
-                                if (blob != NULL) {
-                                    int numBytes = sqlite3_column_bytes16(statement, colCtr);
-                                    value = [NSData dataWithBytes:blob length:numBytes];
-                                }
-                                break;
-                            }
-                            case SQLITE_NULL: {
-                                value = [NSNull null];
-                                break;
-                            }
-                            case SQLITE3_TEXT: {
-                                
-                                const unsigned char *resultString = sqlite3_column_text(statement, colCtr);
-                                if (resultString != NULL) {
-                                    value = [NSString stringWithUTF8String:(char *) resultString];
-                                }
-                                break;
-                            }
-                            default:
-                                NSAssert(false, @"Unhandled case");
-                                break;
-                        }
-                        
-                        if (value == nil) {
-                            value = [NSNull null];
-                        }
+                        id value = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:colCtr];
                         NSString *fieldName = [query fieldKeys][colCtr];
                         [resultsForRow setObject:value forKey:fieldName];
                     }
@@ -605,6 +565,50 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     completion(success, error);
 }
 
++ (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber {
+    id value = nil;
+    int affentyType = sqlite3_column_type(statement, columnNumber);   //http://www.sqlite.org/c3ref/c_blob.html
+    switch (affentyType) {
+        case SQLITE_INTEGER: {
+            sqlite3_int64 rint = sqlite3_column_int64(statement, columnNumber);
+            value = [NSNumber numberWithLongLong:rint];
+            break;
+        }
+        case SQLITE_FLOAT: {
+            double rint = sqlite3_column_double(statement, columnNumber);
+            value = [NSNumber numberWithDouble:rint];
+            break;
+        }
+        case SQLITE_BLOB: {
+            const void *blob = sqlite3_column_blob(statement, columnNumber);
+            if (blob != NULL) {
+                int numBytes = sqlite3_column_bytes16(statement, columnNumber);
+                value = [NSData dataWithBytes:blob length:numBytes];
+            }
+            break;
+        }
+        case SQLITE_NULL: {
+            value = [NSNull null];
+            break;
+        }
+        case SQLITE3_TEXT: {
+            
+            const unsigned char *resultString = sqlite3_column_text(statement, columnNumber);
+            if (resultString != NULL) {
+                value = [NSString stringWithUTF8String:(char *) resultString];
+            }
+            break;
+        }
+        default:
+            NSAssert(false, @"Unhandled case");
+            break;
+    }
+    
+    if (value == nil) {
+        value = [NSNull null];
+    }
+    return value;
+}
 
 + (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type {
     id columnValue;

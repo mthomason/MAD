@@ -1220,20 +1220,14 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                             [self stopNetworkActivityIndicator];
                             [datatable endBulkInsert];
-                            
                         }
-                        
                     }
-                    
                 }
-                
-                
                 dbclose(dbconn);
                 
             }
         
         }
-        
 
         datatable = nil;
 
