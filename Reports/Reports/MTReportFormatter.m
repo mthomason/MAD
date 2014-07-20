@@ -76,7 +76,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 
 @property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
-@property (nonatomic, strong) NSMutableIndexSet *pageIndexesTemporary;
+@property (nonatomic, strong) NSMutableArray *pageIndexesTemporary;
+//@property (nonatomic, strong) NSMutableIndexSet *pageIndexesTemporary;
 
 @property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
 
@@ -179,7 +180,8 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
-    NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
+    //NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
+    NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
     [self setPageIndexesTemporary:temporaryDataForPage];
     
     if ([self layout]) {
@@ -262,10 +264,11 @@ NSString * const MTNullIdentifier = @"(null)";
     [self addDetailToReportLayout];
     [self addReportFooterToReportLayout];
     
-    NSArray *tlfp = [[NSArray alloc] initWithArray:[self pageLayoutTemporary]];
+    NSArray *tlfp = [NSArray arrayWithArray:[self pageLayoutTemporary]];
     [[self reportLayout] addObject:tlfp];
     
-    NSIndexSet *tdfp = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
+    //NSIndexSet *tdfp = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
+    NSArray *tdfp = [NSArray arrayWithArray:[self pageIndexesTemporary]];
     [[self reportIndexes] addObject:tdfp];
     
     [self endBulkInserts];
@@ -319,7 +322,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)cleanupTemporaryPageIndexes {
     [[self pageLayoutTemporary] removeAllObjects];
-    [[self pageIndexesTemporary] removeAllIndexes];
+    [[self pageIndexesTemporary] removeAllObjects];
+    //[[self pageIndexesTemporary] removeAllIndexes];
 }
 
 + (NSString *)KeyReportSectionType {
@@ -555,7 +559,8 @@ NSString * const MTNullIdentifier = @"(null)";
             NSArray *pageInfo = [self pageLayoutTemporary] != nil ? [NSArray arrayWithArray: [self pageLayoutTemporary]] : @[];
             [[self reportLayout] addObject:pageInfo];
             
-            NSIndexSet *rowids = [self pageIndexesTemporary] != nil ? [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]] : [NSIndexSet indexSet];
+            //NSIndexSet *rowids = [self pageIndexesTemporary] != nil ? [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]] : [NSIndexSet indexSet];
+            NSArray *rowids = [self pageIndexesTemporary] != nil ? [NSArray arrayWithArray: [self pageIndexesTemporary]] : [NSArray array];
             [[self reportIndexes] addObject:rowids];
             
             [self cleanupTemporaryPageIndexes];
@@ -640,7 +645,9 @@ NSString * const MTNullIdentifier = @"(null)";
     NSDictionary *detail = @{[MTReportFormatter KeyReportSectionType] : type,
                              MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: detail];
-    [[self pageIndexesTemporary] addIndex:[self.machineState.detailRowId integerValue]];
+
+    [[self pageIndexesTemporary] addObject:self.machineState.detailRowId];
+    //[[self pageIndexesTemporary] addIndex:[self.machineState.detailRowId integerValue]];
 }
 
 

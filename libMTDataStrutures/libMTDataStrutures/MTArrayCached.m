@@ -252,23 +252,24 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     dispatch_semaphore_wait(semaphoreQuery, DISPATCH_TIME_FOREVER);
 }
 
+- (NSData *)dataForObject:(id)object {
+    return [NSPropertyListSerialization dataWithPropertyList: object
+                                                      format: NSPropertyListBinaryFormat_v1_0
+                                                     options: 0
+                                                       error: nil];
+}
+
+- (id)objectForData:(NSData *)data {
+    return [NSPropertyListSerialization propertyListWithData: data
+                                                     options: NSPropertyListImmutable
+                                                      format: nil
+                                                       error: nil];
+}
+
 - (void)addObject:(id)object {
     @autoreleasepool {
         [self setLastObjectSelected:nil];
-        NSData *data = nil;
-        if ([object conformsToProtocol:@protocol(NSCoding)]) {
-            @try {
-                data = [NSKeyedArchiver archivedDataWithRootObject:object];
-            }
-            @catch (NSException *exception) {
-                NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
-                data = [NSKeyedArchiver archivedDataWithRootObject:v];
-            }
-            @finally { }
-        } else {
-            NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
-            data = [NSKeyedArchiver archivedDataWithRootObject:v];
-        }
+        NSData *data = [self dataForObject:object];
         sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
         sqlite3_bind_blob(_statementInsert, 2, [data bytes], (int)[data length], SQLITE_TRANSIENT);
         if (sqlite3_step(_statementInsert) == SQLITE_DONE) {
@@ -277,26 +278,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         }
     }
 }
-/*- (void)addObject:(id)object {
-    @autoreleasepool {
-        [self setLastObjectSelected:nil];
-        NSData *data = nil;
-        if ([object conformsToProtocol:@protocol(NSCoding)]) {
-            @try {
-                data = [NSKeyedArchiver archivedDataWithRootObject:object];
-            }
-            @catch (NSException *exception) {
-                NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
-                data = [NSKeyedArchiver archivedDataWithRootObject:v];
-            }
-            @finally { }
-        } else {
-            NSValue *v = [NSValue valueWithPointer:(__bridge const void *)(object)];
-            data = [NSKeyedArchiver archivedDataWithRootObject:v];
-        }
-        [self writeData:data];
-    }
-}*/
 
 - (void)writeData:(NSData *)data {
     sqlite3_bind_int(_statementInsert, 1, (int)self.numberOrRows);
@@ -338,7 +319,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
     id result = nil;
     NSData *queryResult = [self readDataAtIndex:index];
     if (queryResult != nil) {
-        result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+        result = [self objectForData:queryResult];
     }
     NSNumber *idx = @(index);
     MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
@@ -363,7 +344,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         if (sqlite3_step(_statementSelect) == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementSelect, 0)
                                                  length: sqlite3_column_bytes(_statementSelect, 0)];
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+            result = [self objectForData:queryResult];
             NSNumber *idx = @(index);
             MTPair *pair = [MTPair pairWithFormer:idx andLatter:result];
             self.lastObjectSelected = pair;
@@ -429,7 +410,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         while (sqlite3_step(_statementEnumer) == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
                                                  length: sqlite3_column_bytes(_statementEnumer, 0)];
-            id result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+            id result = [self objectForData:queryResult];
             [results addObject:result];
         }
     }
@@ -445,7 +426,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
         if (stepResult == SQLITE_ROW) {
             NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
                                                  length: sqlite3_column_bytes(_statementEnumer, 0)];
-            result = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+            result = [self objectForData:queryResult];
         } else if (stepResult == SQLITE_DONE) {
             sqlite3_reset(_statementEnumer);
             result = nil;
@@ -483,7 +464,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                 if (stepResult == SQLITE_ROW) {
                     NSData *queryResult = [NSData dataWithBytes: sqlite3_column_blob(_statementEnumer, 0)
                                                          length: sqlite3_column_bytes(_statementEnumer, 0)];
-                    id obj = [NSKeyedUnarchiver unarchiveObjectWithData:queryResult];
+                    id obj = [self objectForData:queryResult];
                     [[self fastEnumerationObjects] addObject:obj];
                     stackbuf[i] = obj;
                 } else if (stepResult == SQLITE_DONE) {

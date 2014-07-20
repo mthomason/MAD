@@ -22,6 +22,8 @@
 #import "MTLog.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTPair.h"
+#import "MTDatabaseConnectionSqlite3.h"
+
 
 @interface MTDataTableFast ()
 
@@ -206,8 +208,12 @@
 }
 
 - (void)reopenDbConnection {
-    MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
-    MTDatabaseCache *database = [MTDatabaseCache databaseFactory:connection];
+    //MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:[self urlFastCache]];
+    MTDatabaseConnection *connection = [[MTDatabaseConnectionSqlite3 alloc] initWithUrl:[self urlFastCache]];
+    MTDatabaseCache *database = [[MTDatabaseSqlite3 alloc] init];
+    [database setDatabaseConnection:connection];
+    [(MTDatabaseSqlite3 *)database openDatabaseWithFlags:SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_NOMUTEX];
+    //MTDatabaseCache *database = [MTDatabaseCache databaseFactory:connection];
     [self setDatabaseForInserts:database];
     MTDatabaseCache *database2 = [MTDatabaseCache databaseFactory:connection];
     [self setDatabaseForSelects:database2];
@@ -611,7 +617,7 @@
     BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
     
     for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
-        [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
+        [(MTDatabaseSqlite3 *)self.databaseForSelects bindStatement:&statement withBindings:dataBinding];
     }
 
     if (success) {
@@ -899,7 +905,7 @@
         BOOL success = sqlite3_prepare_v2(databaseHandle, queryString, -1, &statement, NULL) == SQLITE_OK;
         
         for (MTDatabaseDataBinding *dataBinding in [query binaryBindings]) {
-            [MTDatabaseSqlite3 bindStatement:&statement withBindings:dataBinding andDatabase:&databaseHandle];
+            [(MTDatabaseSqlite3 *)self.databaseForSelects bindStatement:&statement withBindings:dataBinding];
         }
         
         if (success && sqlite3_step(statement) == SQLITE_ROW) {

@@ -33,10 +33,10 @@
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
-+ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database;
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
 
 - (void)openDatabase;
+- (void)openDatabaseWithFlags:(int)flags;
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);

@@ -75,9 +75,9 @@
     NSMutableString *colmunNames = [[NSMutableString alloc] init];
     NSMutableString *values = [[NSMutableString alloc] init];
     
-    
     NSUInteger columnCounter = 0;
-    
+
+    char colCtrBuf[19];
     for (id object in [self row]) {
         
         NSString *fieldName = [self columnKeys][columnCounter];
@@ -97,13 +97,21 @@
                                                                                        value: object];
         [[self binaryBindings] addObject:databinding];
         
-        NSString *columnValue = [NSString stringWithFormat: @"?%u", columnCounter + 1];
+        snprintf(colCtrBuf, 19, "?%u", columnCounter + 1);
+        NSString *columnValue = [NSString stringWithUTF8String:colCtrBuf];
         [values appendString:columnValue];
         
         columnCounter++;
     }
-    
-    return [NSString stringWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%@)", [self tableName], colmunNames, values];
+
+    NSMutableString *result = [NSMutableString stringWithString:@"INSERT INTO main."];
+    [result appendString:self.tableName];
+    [result appendString:@" ("];
+    [result appendString:colmunNames];
+    [result appendString:@") VALUES ("];
+    [result appendString:values];
+    [result appendString:@")"];
+    return result;
 }
 
 - (BOOL)returnsResults {
