@@ -998,19 +998,6 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
     [(MTDatabaseSqlite3 *)[self databaseForInserts] endBulkInsert];
 }
 
-/*! Returns an array of NSURLs that represent all the cached files used by the class.
- 
- @brief All cahced files.
- @returns NSURLs
- 
- */
-
-- (NSArray *)cachedFiles {
-    NSArray *cachedFiles = @[self.databaseForInserts.databaseConnection.databaseUrl,
-                             self.urlFastCache];
-    return cachedFiles;
-}
-
 #pragma mark - Unused
 
 - (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {

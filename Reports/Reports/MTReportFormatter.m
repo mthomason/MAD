@@ -700,23 +700,4 @@ NSString * const MTNullIdentifier = @"(null)";
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
-/*! Returns an array of NSURLs that represent all the cached files used by the report formatter.
- 
- @brief All cahced files.
- @returns NSURLs
- 
- */
-
-/*
-- (NSArray *)cachedFiles {
-    NSArray *c1 = [self.reportIndexes cachedFiles];
-    NSArray *c2 = [self.reportLayout cachedFiles];
-    NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity: ([c1 count] + [c2 count]) ];
-    [result addObjectsFromArray:c1];
-    [result addObjectsFromArray:c2];
-    
-    return result;
-}
-*/
-
 @end
