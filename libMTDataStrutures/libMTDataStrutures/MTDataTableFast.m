@@ -580,6 +580,7 @@
 }
 
 - (NSArray *)whereClauseForGroupKeys:(NSArray *)groupKeys {
+    [self initalizeGroupKeys];
     NSMutableArray *whereClause = [[NSMutableArray alloc] initWithCapacity:[groupKeys count]];
     NSInteger groupLevel = 0;
     for (NSString *key in groupKeys) {
@@ -846,7 +847,7 @@
              };
 }
 
-- (NSDictionary *)paramatersAggregateByPageWithFieldKey:(NSString *)fieldKey andRowIds:(NSIndexSet *)rowids andFunctionType:(MTAggregateFunctionType)functionType {
+- (NSDictionary *)paramatersAggregateByPageWithFieldKey:(NSString *)fieldKey andRowIds:(NSArray *)rowids andFunctionType:(MTAggregateFunctionType)functionType {
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:[self paramatersAggregateWithFieldKey:fieldKey andFunctionType:functionType]];
     NSNumber *keyRowids = @(MTQueryCacheAggregateFunctionParamatersRowids);
     [parameters setObject:rowids forKey:keyRowids];
@@ -868,32 +869,37 @@
                      function:(MTAggregateFunctionType)function
                      fieldKey:(NSString *)fieldKey
                     groupKeys:(NSArray *)groupKeys
-                       rowids:(NSIndexSet *)rowids {
+                       rowids:(NSArray *)rowids {
     id result = nil;
   
     NSString *columnKey = [self columnKeyForColumnName:fieldKey];
     
     if (columnKey) {
-        NSDictionary *queryParameters;
+        NSMutableDictionary *queryParameters;
         
+        MTQueryType queryType = MTQueryTypeCacheAggregateFunction;
         switch (groupByType) {
             case MTAggregateGroupByTypePage:
-                queryParameters = [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function];
+                //queryType = MTQueryTypeCacheSelectRowIds;
+                queryParameters =[NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function]];
                 break;
                 
             case MTAggregateGroupByTypeReport:
-                queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
+                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function]];
                 break;
                 
             case MTAggregateGroupByTypeSection:
-                queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
+                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function]];
                 break;
                 
             default:
                 break;
         }
+        NSNumber *groupByTypeNumber = @(groupByType);
+        NSNumber *groupByTypeKey = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
+        [queryParameters setObject:groupByTypeNumber forKey:groupByTypeKey];
         
-        MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheAggregateFunction object:queryParameters];
+        MTQuery *query = [[MTQuery alloc] initWithQueryType:queryType object:queryParameters];
         sqlite3_stmt *statement = NULL;
         NSError *error = nil;
         NSString *sql = [query getSqlWithError:&error];
@@ -1006,7 +1012,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 
 #pragma mark - Unused
 
-- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)cacheIds {
+- (NSEnumerator *)enumeratorForRowIds:(NSArray *)cacheIds {  //Note, software currently usues NSArray for row ids
     
     NSNumber *keyRowIds = @(MTQuerySelectRowIds);
     NSNumber *keyTableN = @(MTQuerySelectTableName);

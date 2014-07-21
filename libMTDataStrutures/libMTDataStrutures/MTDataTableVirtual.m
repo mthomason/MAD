@@ -24,7 +24,7 @@
                      function:(MTAggregateFunctionType)function
                      fieldKey:(NSString *)fieldKey
                     groupKeys:(NSArray *)groupKeys
-                       rowids:(NSIndexSet *)rowids {
+                       rowids:(NSArray *)rowids {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }

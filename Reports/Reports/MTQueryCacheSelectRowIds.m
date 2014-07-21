@@ -11,7 +11,7 @@
 @interface MTQueryCacheSelectRowIds ()
 
 @property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSIndexSet *rowids;
+@property (nonatomic, strong) NSArray *rowids;
 @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end

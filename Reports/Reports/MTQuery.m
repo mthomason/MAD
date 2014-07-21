@@ -319,19 +319,22 @@ NSString * const MTQueryKeyPredicateValue = @"v";
     return sql;
 }
 
-- (NSString *)whereClauseWithRowIds:(NSIndexSet *)rowids {
+- (NSString *)whereClauseWithRowIds:(NSArray *)rowids {
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
-    NSUInteger rowid = [rowids firstIndex];
     BOOL firstTime = YES;
-    while (rowid != NSNotFound) {
-        if (firstTime == NO) {
-            [sql appendString: @" OR "];
-        } else {
-            [sql appendString: @" WHERE "];
+    if ([rowids count] > 0) {
+        for (NSNumber *rowido in rowids) {
+            NSUInteger rowid = [rowido integerValue];
+            if (firstTime == NO) {
+                [sql appendString: @" OR "];
+            } else {
+                [sql appendString: @" WHERE "];
+            }
+            [sql appendFormat:@"rowid = %d", rowid];
+            firstTime = NO;
         }
-        [sql appendFormat:@"rowid = %d", rowid];
-        rowid = [rowids indexGreaterThanIndex: rowid];
-        firstTime = NO;
+    } else {
+        [sql setString:@" WHERE rowid = -1 "];
     }
     return sql;
 }

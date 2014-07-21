@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString *columnName;
 @property (nonatomic, strong) NSString *columnKey;
 @property (nonatomic, strong) NSArray *whereClause;
-@property (nonatomic, strong) NSIndexSet *rowids;
+@property (nonatomic, strong) NSArray *rowids;
 @property (nonatomic, assign) MTAggregateGroupByType groupByType;
 @property (nonatomic, assign) MTAggregateFunctionType functionType;
 
@@ -30,7 +30,7 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
         NSNumber *keyRowIds = @(MTQueryCacheAggregateFunctionParamatersRowids);
-        NSIndexSet *rowids = [object objectForKey:keyRowIds];
+        NSArray *rowids = [object objectForKey:keyRowIds];
         [self setRowids:rowids];
        
         NSNumber *keyFieldDescriptors = @(MTQueryCacheAggregateFunctionParamatersFieldDescriptors);
@@ -66,7 +66,11 @@
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT %s(%@) FROM %@",
                             functionName([self functionType]), [self columnKey], [self tableName]];
 
-    [sql appendString:[self whereClauseWithParameters:[self whereClause]]];
+    if ([self groupByType] == MTAggregateGroupByTypePage) {
+        [sql appendString:[self whereClauseWithRowIds:[self rowids]]];
+    } else {
+        [sql appendString:[self whereClauseWithParameters:[self whereClause]]];
+    }
 
     return sql;
 }

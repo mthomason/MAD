@@ -436,7 +436,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return comparsonResult;
 }
 
-- (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex {
+- (NSArray *)rowidsForPage:(NSInteger)pageIndex {
     return _reportIndexes[pageIndex];
 }
 
@@ -513,6 +513,7 @@ NSString * const MTNullIdentifier = @"(null)";
     BOOL rowIdOnly = YES;
     BOOL calculatedRowId = NO;
 
+    id lastResultRow = nil;
     for (id resultRow in [[self datasource] enumeratorForReportData]) {
         @autoreleasepool {
             //Get row id
@@ -545,6 +546,19 @@ NSString * const MTNullIdentifier = @"(null)";
             firstRow = NO;
             self.machineState.rowCounter++;
             
+        }
+        lastResultRow = resultRow;
+    }
+    //Need to account for the last set of group footers.
+    if (lastResultRow) {
+        
+        NSArray *keyValuesForComparson = [self keyValuesForResultRow:lastResultRow];
+        for (NSInteger groupLevel = [keyValuesForComparson count] - 1; groupLevel >= 0; groupLevel--) {
+            @autoreleasepool {
+                RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+                [self addHeightFromGroupFooterWithQueryGroup: group];
+                [self addGroupFooterAtLevel:groupLevel];
+            }
         }
     }
 }

@@ -171,7 +171,7 @@ extern NSString * const MTQueryKeyPredicateValue;
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
-- (NSString *)whereClauseWithRowIds:(NSIndexSet *)rowids;
+- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3

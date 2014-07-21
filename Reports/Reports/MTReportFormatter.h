@@ -49,7 +49,7 @@ extern NSString * const MTNullIdentifier;
 - (NSArray *)layoutForPage:(NSUInteger)page;
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
-- (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
+- (NSArray *)rowidsForPage:(NSInteger)pageIndex;
 - (NSArray *)keysForCachedID:(NSNumber *)rowid;
 
 - (NSUInteger)numberOfPages;
