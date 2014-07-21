@@ -772,6 +772,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (IBAction)activity:(id)sender {
+    [self.pageSlider setEnabled:NO];
+    
     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
     [sharedController setDelegate:self];
 
@@ -784,31 +786,29 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
                                                                                          applicationActivities:applicationActivities];
+    
+    __weak MTReportViewerController *weakself = self;
     UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
         if (completed) {
+            [weakself.pageSlider setEnabled:YES];
             [UAAppReviewManager userDidSignificantEvent:YES];
         } else {
-            if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
-
-                MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-                /*
-                MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [reportDocument defaultQuery]
-                                                                                          layout: [reportDocument activeDocument]
-                                                                                         options: MTReportFormatterOptionsMargin];
-                
-                [reportFormatter setCachedDelegate:reportDocument];
-                [reportFormatter setOverrideIdentifier:@"madprinter"];
-                [reportFormatter setDatasource:reportDocument];
-                [self setPrintingReportFormatter:reportFormatter];
-                */
-                UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
-
-                
-                [sharedController setPrintPageRenderer:printPageRender];
-                [sharedController setDelegate:reportDocument] ;
-                [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+            if ([activityType length] > 0) {
+                if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
                     
-                }];
+                    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                    UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
+                    [sharedController setPrintPageRenderer:printPageRender];
+                    [sharedController setDelegate:reportDocument] ;
+                    __weak MTReportViewerController *weakself2 = weakself;
+                    [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+                        [weakself2.pageSlider setEnabled:YES];
+                    }];
+                } else {
+                    [weakself.pageSlider setEnabled:YES];
+                }
+            } else {
+                [weakself.pageSlider setEnabled:YES];
             }
         }
     };
