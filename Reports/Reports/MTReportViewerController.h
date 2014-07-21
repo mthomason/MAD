@@ -13,10 +13,11 @@
 #import "NSDate+Extras.h"
 #import "MUIViewControllerDelegate.h"
 #import "MTViewControllerAsyncProtocol.h"
+#import "MADActivityProtocol.h"
 
 @interface MTReportViewerController : UIPageViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
-        UIDocumentInteractionControllerDelegate>
+        UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;

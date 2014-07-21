@@ -21,7 +21,7 @@
 
 @interface  MTActivityItemProviderPdf ()
 
-@property (nonatomic, weak) UIActivityViewController *activityViewController;
+@property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
 
 @end
 

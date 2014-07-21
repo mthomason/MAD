@@ -99,6 +99,7 @@
 @property (nonatomic, strong) NSAttributedString *lineReturnString;
 
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
+@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 @end
 
@@ -396,7 +397,6 @@
     [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
     [toolbar setBackgroundColor:[UIColor tintColorWhiteAlpha]];
-    //[toolbar setBackgroundColor:[UIColor black]];
 }
 
 - (void)addSliderPagination {
@@ -780,6 +780,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
     NSArray *activityItems = @[activityItemProviderPdf];
+    [self setActivityItemProviderPdf:activityItemProviderPdf];
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     [printPreview setDelegate:self];
@@ -798,6 +799,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
                     
                     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                    [reportDocument setActivityDelegate:self];
                     UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
                     [sharedController setPrintPageRenderer:printPageRender];
                     [sharedController setDelegate:reportDocument] ;
@@ -1201,6 +1203,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
+}
+
+- (UIViewController *)activeViewController {
+    return self;
 }
 
 @end

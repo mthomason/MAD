@@ -16,6 +16,7 @@
 #import "MTReportFormatter.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"
+#import "MADActivityProtocol.h"
 
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;
@@ -33,6 +34,8 @@ extern NSString * const MTReportGroupLevel;
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
+
+@property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
 - (id)initWithFileURL:(NSURL *)url;
 
