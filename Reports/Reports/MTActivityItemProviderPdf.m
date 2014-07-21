@@ -48,13 +48,22 @@
 }
 
 - (id)item {
-    NSString *temporaryDirectoryPath = NSTemporaryDirectory();
-    NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
-    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-
-    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-    [reportDocument writeToPdf:temporaryFile withViewController:[self activityViewController]];
-    return temporaryFile;
+    NSLog(@"Activity type: %@", [self activityType]);
+    id item = nil;
+    if ([[self activityType] caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
+        item = [super item];
+    } else {
+        
+        NSString *temporaryDirectoryPath = NSTemporaryDirectory();
+        NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
+        item = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+        
+        MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+        [reportDocument writeToPdf:item withViewController:[self activityViewController]];
+    }
+    
+    
+    return item;
 }
 
 @end

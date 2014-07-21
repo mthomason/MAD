@@ -581,6 +581,8 @@
 		4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A68BC17E945C800FD6A73 /* MTBlurView.m */; };
 		4C4A7086197CA77000AF98EC /* MTReportFormatterPageDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */; };
 		4C4A7087197CA77000AF98EC /* MTReportFormatterPageDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */; };
+		4C4A708A197CC21100AF98EC /* MTActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A7089197CC21100AF98EC /* MTActivityIndicator.m */; };
+		4C4A708B197CC21100AF98EC /* MTActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A7089197CC21100AF98EC /* MTActivityIndicator.m */; };
 		4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */; };
 		4C4C6F21167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
 		4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
@@ -2222,6 +2224,8 @@
 		4C4A7078197AD68E00AF98EC /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
 		4C4A7084197CA77000AF98EC /* MTReportFormatterPageDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatterPageDefinition.h; sourceTree = "<group>"; };
 		4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatterPageDefinition.m; sourceTree = "<group>"; };
+		4C4A7088197CC21100AF98EC /* MTActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTActivityIndicator.h; sourceTree = "<group>"; };
+		4C4A7089197CC21100AF98EC /* MTActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTActivityIndicator.m; sourceTree = "<group>"; };
 		4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMTDataStrutures.xcodeproj; path = ../libMTDataStrutures/libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
 		4C4C6F1E167642D9004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C4C6F1F167642D9004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
@@ -3181,6 +3185,8 @@
 				4C4A68BC17E945C800FD6A73 /* MTBlurView.m */,
 				4CB3C2281922A43600F3213E /* MTSliderPageVertical.h */,
 				4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */,
+				4C4A7088197CC21100AF98EC /* MTActivityIndicator.h */,
+				4C4A7089197CC21100AF98EC /* MTActivityIndicator.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -6393,6 +6399,7 @@
 				4C23FB0B18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C16808F1907AB1F00980D8D /* MTQueryCacheBeginTransaction.m in Sources */,
 				4C174CDF18B13760007A88B3 /* MTApplicationInstance.m in Sources */,
+				4C4A708B197CC21100AF98EC /* MTActivityIndicator.m in Sources */,
 				4C122AEB16D0066B00B69763 /* MTConnectorView.m in Sources */,
 				4C6DF38416D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m in Sources */,
 				4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */,
@@ -6892,6 +6899,7 @@
 				4C12293016CE12DB00B69763 /* MTQueryBuilderAdvancedSchemaViewController.m in Sources */,
 				4C16808E1907AB1F00980D8D /* MTQueryCacheBeginTransaction.m in Sources */,
 				4C12293616CE239900B69763 /* MTSchemaFieldCell.m in Sources */,
+				4C4A708A197CC21100AF98EC /* MTActivityIndicator.m in Sources */,
 				4CABE47B1837DF7D007EDD9D /* RptqQueryPredicate.m in Sources */,
 				4C12293A16CE7DC600B69763 /* MTBarButtonItemTitle.m in Sources */,
 				4C23FBCA18FAE4F7009F234F /* MTPaperC1.m in Sources */,

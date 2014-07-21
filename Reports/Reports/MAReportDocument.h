@@ -25,7 +25,10 @@ extern NSString * const MTReportGroupLevel;
 
 
 @interface MAReportDocument : MADocument
-    <MTReportFormatterDataSource, MTCacheProtocol, MADDataProtocol>
+    <MTReportFormatterDataSource,
+        MTCacheProtocol,
+        MADDataProtocol,
+        UIPrintInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;

@@ -57,6 +57,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "NSURL+Document.h"
 
+#import "MTActivityIndicator.h"
+
 //Keys stored in the cache.  Short and unique.
 NSString * const MTReportSectionType = @"a";
 NSString * const MTReportGroupLevel = @"b";
@@ -76,7 +78,7 @@ NSString * const MTReportDetailRowId = @"d";
 @property (nonatomic, strong) MTQuery *mainQuery;
 @property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
 
-@property (nonatomic, weak) UILabel *statusLabel;
+@property (nonatomic, strong) MTActivityIndicator *statusLabel;
 
 @end
 
@@ -228,47 +230,16 @@ NSString * const MTReportDetailRowId = @"d";
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
     [self disableUserInteraction:window.view];
     
-    UIViewAutoresizing maskView = UIViewAutoresizingFlexibleLeftMargin |
-                                  UIViewAutoresizingFlexibleRightMargin |
-                                  UIViewAutoresizingFlexibleTopMargin |
-                                  UIViewAutoresizingFlexibleBottomMargin;
-    UIViewAutoresizing maskIndicatorView = UIViewAutoresizingFlexibleLeftMargin |
-                                           UIViewAutoresizingFlexibleRightMargin |
-                                           UIViewAutoresizingFlexibleTopMargin;
-    UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
-                                       UIViewAutoresizingFlexibleWidth;
     CGRect frame = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
-    
-    UIView *activtyView = [[UIView alloc] initWithFrame:frame];
-    
-    [activtyView.layer setCornerRadius:5.0000f];
-    UIColor *bgColor = [UIColor edaBlueLightBackground];
-    [activtyView setBackgroundColor:bgColor];
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    
-    [activtyView setAutoresizingMask:maskView];
-    [activityIndicator setAutoresizingMask:maskIndicatorView];
+    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:frame];
     
     
     activtyView.center = window.view.center;
-    [activtyView addSubview:activityIndicator];
-    CGPoint indicatorCenter = CGPointMake(activtyView.bounds.size.width / 2.0000f, activtyView.bounds.size.height / 2.0000f);
-    activityIndicator.center = indicatorCenter;
-    [activityIndicator startAnimating];
     
-    CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f);
-    UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
-    [status setTextColor:[UIColor lightTextColor]];
-    UIFont *font = [UIFont fontWithName:@"Helvetica-Light" size:11.0000f];
     
-    [status setFont:font];
-    [status setText:@"Formatting report."];
-    [status setAutoresizingMask:maskLabelView];
-    [status setTextAlignment:NSTextAlignmentCenter];
-    [activtyView addSubview:status];
-    [self setStatusLabel:status];
     
     [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activtyView waitUntilDone:YES];
+    [self setStatusLabel:activtyView];
     
     
     __weak MAReportDocument *weakself = self;
@@ -278,14 +249,14 @@ NSString * const MTReportDetailRowId = @"d";
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(dipatchQueue, ^{
         
+        
         NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
         CGRect letterRect = [MTPaper rectLetter];
         [[weakself mainDataTable] sortUsingDescriptors:[weakself sortDescriptors]];
-        
         MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
-                                                                  layout:weakself.document
+                                                                     layout:weakself.document
                                                                     options:MTReportFormatterOptionsMargin];
-        [rf setCachedDelegate:self];
+        [rf setCachedDelegate:weakself];
         [rf setOverrideIdentifier:@"madpreview"];
 
         [[NSNotificationCenter defaultCenter] addObserver: weakself
@@ -314,11 +285,9 @@ NSString * const MTReportDetailRowId = @"d";
             @autoreleasepool {
                 UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
                 [printPageRender drawPageAtIndex:i inRect:letterRect];
-                //if (i%1==0) {
                     NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
                     NSString *text = [NSString stringWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
-                    [status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
-                //}
+                    [activtyView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
             }
         }
         UIGraphicsEndPDFContext();
@@ -328,8 +297,6 @@ NSString * const MTReportDetailRowId = @"d";
     });
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
     
-    [activityIndicator stopAnimating];
-    [activityIndicator removeFromSuperview];
     [activtyView removeFromSuperview];
 
 }
@@ -340,7 +307,7 @@ NSString * const MTReportDetailRowId = @"d";
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-    [[self statusLabel] performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
+    [[self statusLabel].status performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
 }
 
 //Add a new connection to the report
@@ -594,7 +561,8 @@ NSString * const MTReportDetailRowId = @"d";
     [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
     BOOL contentChanged = [self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter] dataTable:[self mainDataTable]];
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]
+                                                                                                                  dataTable:[self mainDataTable]];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:[self urlThumbnail] atomically:YES];
@@ -630,5 +598,33 @@ NSString * const MTReportDetailRowId = @"d";
     
     return sortedSortDescriptorsGroup;
 }
+
+#pragma mark - UIPrintInteractionControllerDelegate
+
+//- (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)printInteractionController choosePaper:(NSArray *)paperList {}
+//- (CGFloat)printInteractionController:(UIPrintInteractionController *)printInteractionController cutLengthForPaper:(UIPrintPaper *)paper {}
+- (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
+- (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
+- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
+//- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController {}
+
+- (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
+                                                                              layout: [self activeDocument]
+                                                                             options: MTReportFormatterOptionsMargin];
+    
+    [reportFormatter setCachedDelegate:self];
+    [reportFormatter setOverrideIdentifier:@"madprinter"];
+    [reportFormatter setDatasource:self];
+    UIPrintPaper *printPaper = printInteractionController.printPaper;
+    [reportFormatter formatForSize:printPaper.paperSize];
+    
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
+                                                                                                              dataTable:[self mainDataTable]];
+    [printInteractionController setPrintPageRenderer:printPageRender];
+}
+- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {}
+
 
 @end

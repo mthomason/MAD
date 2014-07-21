@@ -40,7 +40,11 @@
 #import "MTNotificationDidReadRows.h"
 
 @interface MTReportViewerController ()
-    <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate, MTTabBarImageProtocol>
+    <UIPopoverControllerDelegate,
+        MTPrintingProtocol,
+        MTActivityReportPrintPreviewDelegate,
+        MTTabBarImageProtocol,
+        UIPrintInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -93,6 +97,8 @@
 @property (nonatomic, strong) UIProgressView *progressView;
 
 @property (nonatomic, strong) NSAttributedString *lineReturnString;
+
+@property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
 
 @end
 
@@ -690,7 +696,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [reportViewer setDisplayInactive];
         
         MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-        //[reportDocument initalizeMainQuery];
         MTDatabase *database = [[reportDocument defaultQuery] database];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -758,36 +763,63 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
-
-
-- (IBAction)activity:(id)sender {
-
+- (MTActivityItemProviderPdf *)activityItemProviderPdf {
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     MTActivityItemProviderPdf *activityItemProviderPdf = [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
+    return activityItemProviderPdf;
+}
+
+- (IBAction)activity:(id)sender {
+    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+    [sharedController setDelegate:self];
+
+    MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
     NSArray *activityItems = @[activityItemProviderPdf];
-    
-    // FIXME: Delete preview
-    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
-        if (completed) {
-            [UAAppReviewManager userDidSignificantEvent:YES];
-        }
-    };
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     [printPreview setDelegate:self];
-    
     NSArray *applicationActivities = @[printPreview];
+    
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
                                                                                          applicationActivities:applicationActivities];
-    [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
+    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
+        if (completed) {
+            [UAAppReviewManager userDidSignificantEvent:YES];
+        } else {
+            if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
 
+                MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [reportDocument defaultQuery]
+                                                                                          layout: [reportDocument activeDocument]
+                                                                                         options: MTReportFormatterOptionsMargin];
+                
+                [reportFormatter setCachedDelegate:reportDocument];
+                [reportFormatter setOverrideIdentifier:@"madprinter"];
+                [reportFormatter setDatasource:reportDocument];
+                [self setPrintingReportFormatter:reportFormatter];
+                
+                MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
+                                                                                                                          dataTable:[reportDocument mainDataTable]];
+
+                
+                [sharedController setPrintPageRenderer:printPageRender];
+                [sharedController setDelegate:self] ;
+                [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+                    
+                }];
+            }
+        }
+    };
+    [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
+    
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             [popoverController setDelegate:self];
-            [popoverController presentPopoverFromBarButtonItem:[self barButtonItemActivity] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [popoverController presentPopoverFromBarButtonItem: [self barButtonItemActivity]
+                                      permittedArrowDirections: UIPopoverArrowDirectionAny animated:YES];
             [self setPopoverControllerActivity:popoverController];
             [self disableTabBarItems];
         }
@@ -898,9 +930,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 // FIXME: This can't work... set cacheDelgate
 - (IBAction)print:(id)sender {
-    
+    /*
     UIPrintInteractionController *controller = [UIPrintInteractionController sharedPrintController];
     if (controller) {
+        [controller setDelegate:self];
         
         [[self barButtonItemPrint] setEnabled:NO];
         [[self barButtonItemRefresh] setEnabled:NO];
@@ -948,7 +981,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [controller presentAnimated:YES completionHandler:completionHandler];  // iPhone
         }
     }
-    
+    */
 }
 
 #pragma mark - UIPageViewControllerDataSrouce
@@ -1215,7 +1248,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self updatePageStatus];
 }
 
-#pragma mark = UIPopoverControllerDelegate
+#pragma mark - UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     return YES;
@@ -1224,5 +1257,42 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
 }
+
+#pragma mark - UIPrintInteractionControllerDelegate
+
+//- (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)printInteractionController choosePaper:(NSArray *)paperList {}
+//- (CGFloat)printInteractionController:(UIPrintInteractionController *)printInteractionController cutLengthForPaper:(UIPrintPaper *)paper {}
+- (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
+- (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
+- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
+//- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController {}
+
+- (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
+
+     UIPrintPaper *printPaper = printInteractionController.printPaper;
+     [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
+
+     /*
+    MAReportDocument *doc = [[AppDelegate app] activeDocument];
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [doc defaultQuery]
+                                                                              layout: [doc activeDocument]
+                                                                             options: MTReportFormatterOptionsMargin];
+    
+    [reportFormatter setCachedDelegate:doc];
+    [reportFormatter setOverrideIdentifier:@"madprinter"];
+    [reportFormatter setDatasource:doc];
+    UIPrintPaper *printPaper = printInteractionController.printPaper;
+    [reportFormatter formatForSize:printPaper.paperSize];
+    
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
+                                                                                                              dataTable:[doc mainDataTable]];
+    [printInteractionController setPrintPageRenderer:printPageRender];
+     */
+}
+- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
+    [self setPrintingReportFormatter:nil];
+}
+
 
 @end
