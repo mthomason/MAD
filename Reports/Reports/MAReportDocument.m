@@ -572,6 +572,7 @@ NSString * const MTReportDetailRowId = @"d";
                                                                      layout:weakself.document
                                                                     options:MTReportFormatterOptionsMargin];
         [rf setCachedDelegate:weakself];
+        [rf setDataDelegate:weakself];
         [rf setOverrideIdentifier:@"madpreview"];
         
         [[NSNotificationCenter defaultCenter] addObserver: weakself
@@ -642,6 +643,7 @@ NSString * const MTReportDetailRowId = @"d";
                                                object: self.printingReportFormatter];
     */
     UIPrintPaper *printPaper = printInteractionController.printPaper;
+    [self.printingReportFormatter setDataDelegate:self];
     [self.printingReportFormatter setLayoutSize:printPaper.paperSize];
     [self.printingReportFormatter setMarginUsingPrintableRect:printPaper.printableRect];
     [self.printingReportFormatter setDidRefresh:YES];   //Force formatting
