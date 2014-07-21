@@ -850,14 +850,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         if ([blockViewer startedRefresh]) {
             [[weakdoc reportFormatter] setDidRefresh:YES];
             
-            [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:YES];
+            [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:YES];
             MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
                                                                                                                       dataTable: [weakdoc mainDataTable]];
             
             [reportViewer setPrintPageRendererReport:printPageRender];
 
         } else {
-            [[weakdoc reportFormatter] formatForSize:viewBounds options:0 contentChanged:NO];
+            [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:NO];
             
             MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
                                                                                                                       dataTable: [weakdoc mainDataTable]];
@@ -909,6 +909,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         
         __weak MTReportViewerController *reportViewer = self;
         UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
+            
             [[reportViewer barButtonItemPrint] setEnabled:YES];
             [[reportViewer barButtonItemRefresh] setEnabled:YES];
             [[reportViewer barButtonItemSendToPdf] setEnabled:YES];
@@ -930,12 +931,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         controller.printInfo = printInfo;
         
         controller.showsPageRange = YES;
-
         
         MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] andLayout:[doc activeDocument]];
+        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] layout:[doc activeDocument] options:MTReportFormatterOptionsMargin];
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter dataTable:[doc mainDataTable]];
 
+
+        
         [controller setPrintPageRenderer:printPageRender];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

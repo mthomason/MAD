@@ -175,8 +175,9 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[self defaultQuery]
-                                                                           andLayout:[self activeDocument]];
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
+                                                                              layout: [self activeDocument]
+                                                                             options: MTReportFormatterOptionsNone];
     [reportFormatter setDataDelegate:self];
     [reportFormatter setCachedDelegate:self];
     [reportFormatter setDatasource:self];
@@ -282,7 +283,8 @@ NSString * const MTReportDetailRowId = @"d";
         [[weakself mainDataTable] sortUsingDescriptors:[weakself sortDescriptors]];
         
         MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
-                                                                  andLayout:weakself.document];
+                                                                  layout:weakself.document
+                                                                    options:MTReportFormatterOptionsMargin];
         [rf setCachedDelegate:self];
         [rf setOverrideIdentifier:@"madpreview"];
 
@@ -293,7 +295,7 @@ NSString * const MTReportDetailRowId = @"d";
 
     
         [rf setDatasource:weakself];
-        [rf reformatForSize:letterRect.size options:0];
+        [rf reformatForSize:letterRect.size];
 
         
         [[NSNotificationCenter defaultCenter] removeObserver: weakself

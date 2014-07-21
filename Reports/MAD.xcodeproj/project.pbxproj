@@ -579,6 +579,8 @@
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BD17E945C800FD6A73 /* MTBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A68BC17E945C800FD6A73 /* MTBlurView.m */; };
 		4C4A68BE17E945C800FD6A73 /* MTBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A68BC17E945C800FD6A73 /* MTBlurView.m */; };
+		4C4A7086197CA77000AF98EC /* MTReportFormatterPageDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */; };
+		4C4A7087197CA77000AF98EC /* MTReportFormatterPageDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */; };
 		4C4C6F1D16764276004A3B04 /* libMTDataStrutures.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6F12167635B9004A3B04 /* libMTDataStrutures.a */; };
 		4C4C6F21167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
 		4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1E167642D9004A3B04 /* MTEdge.h */; };
@@ -2218,6 +2220,8 @@
 		4C4A68BB17E945C800FD6A73 /* MTBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBlurView.h; sourceTree = "<group>"; };
 		4C4A68BC17E945C800FD6A73 /* MTBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBlurView.m; sourceTree = "<group>"; };
 		4C4A7078197AD68E00AF98EC /* MADDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataProtocol.h; sourceTree = "<group>"; };
+		4C4A7084197CA77000AF98EC /* MTReportFormatterPageDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportFormatterPageDefinition.h; sourceTree = "<group>"; };
+		4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportFormatterPageDefinition.m; sourceTree = "<group>"; };
 		4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libMTDataStrutures.xcodeproj; path = ../libMTDataStrutures/libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
 		4C4C6F1E167642D9004A3B04 /* MTEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTEdge.h; path = ../libMTDataStrutures/libMTDataStrutures/MTEdge.h; sourceTree = "<group>"; };
 		4C4C6F1F167642D9004A3B04 /* MTGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTGraph.h; path = ../libMTDataStrutures/libMTDataStrutures/MTGraph.h; sourceTree = "<group>"; };
@@ -3339,6 +3343,8 @@
 				4C95C42E18DB6B6D003DFB11 /* MTReportFormatter.m */,
 				4CAE370D1937634D0096F206 /* MTReportFormatterCache.h */,
 				4CAE370E1937634D0096F206 /* MTReportFormatterCache.m */,
+				4C4A7084197CA77000AF98EC /* MTReportFormatterPageDefinition.h */,
+				4C4A7085197CA77000AF98EC /* MTReportFormatterPageDefinition.m */,
 			);
 			name = Formatters;
 			sourceTree = "<group>";
@@ -6291,6 +6297,7 @@
 				4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */,
 				4CCD243E193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */,
 				4C40EBF4193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
+				4C4A7087197CA77000AF98EC /* MTReportFormatterPageDefinition.m in Sources */,
 				4CE17E2216501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4C7732A1190FFD6A005AE7C2 /* MysqlUpdate.m in Sources */,
 				4C9E446818D8AADE00F0F578 /* MTTableController.m in Sources */,
@@ -6789,6 +6796,7 @@
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
 				4CCD243D193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */,
 				4C40EBF3193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
+				4C4A7086197CA77000AF98EC /* MTReportFormatterPageDefinition.m in Sources */,
 				4C23FBD618FAE4F7009F234F /* MTPaperC7.m in Sources */,
 				4C7732A0190FFD6A005AE7C2 /* MysqlUpdate.m in Sources */,
 				4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */,

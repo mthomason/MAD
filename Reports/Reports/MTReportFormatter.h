@@ -14,13 +14,14 @@
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"
 
-typedef NS_OPTIONS(NSInteger, MTReportFormatterOptions) {
-    MTReportFormatterOptionsNone   = 1 << 0,
+typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
+    MTReportFormatterOptionsNone    = 0,
+    MTReportFormatterOptionsMargin  = 1 << 0,
 };
 
 extern NSString * const MTNullIdentifier;
 
-@class RptqDocumentSection, RptqDocument, MTArrayCached;
+@class RptqDocumentSection, RptqDocument, MTArrayCached, MTReportFormatterPageDefinition;
 
 @protocol MTReportFormatterDataSource <NSObject>
 
@@ -36,28 +37,29 @@ extern NSString * const MTNullIdentifier;
 
 - (void)initalizeStateMachine;
 
-- (id)initWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
-+ (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout;
+- (id)initWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options ;
++ (id)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options;
++ (NSValue *)KeyReportSectionType;
 
 - (void)formatForSize:(CGSize)printableSize;
-- (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
-- (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged;
-- (void)reformatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options;
+- (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged;
+- (void)reformatForSize:(CGSize)printableSize;
 
-- (NSUInteger)numberOfPages;
 - (NSEnumerator *)layoutEnumeratorForPage:(NSUInteger)pageIndex;
 - (NSArray *)layoutForPage:(NSUInteger)page;
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection;
-+ (NSValue *)KeyReportSectionType;
 - (NSIndexSet *)rowidsForPage:(NSInteger)pageIndex;
 - (NSArray *)keysForCachedID:(NSNumber *)rowid;
+
+- (NSUInteger)numberOfPages;
 - (NSUInteger)numberOfGroups;
 
 
 @property (nonatomic, weak) id <MTReportFormatterDataSource> datasource;
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 
+@property (nonatomic, strong, readonly) MTReportFormatterPageDefinition *page;
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 @property (nonatomic, strong, readonly) RptqDocument *layout;
 

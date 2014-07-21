@@ -45,17 +45,19 @@
 #import "NSData+Comparson.h"
 
 #import "MTNotificationDidFormatPage.h"
+#import "MTReportFormatterPageDefinition.h"
+#import "CGGeometry+Extras.h"
 
 NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatterState : NSObject
 
-@property (nonatomic, assign) NSUInteger groupCounter;
-@property (nonatomic, assign) NSUInteger pageCounter;
-@property (nonatomic, assign) NSUInteger rowCounter;
-@property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
-@property (nonatomic, strong) NSNumber *detailRowId;
-@property (nonatomic, strong) NSArray *sortDescriptors;
+    @property (nonatomic, assign) NSUInteger groupCounter;
+    @property (nonatomic, assign) NSUInteger pageCounter;
+    @property (nonatomic, assign) NSUInteger rowCounter;
+    @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
+    @property (nonatomic, strong) NSNumber *detailRowId;
+    @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end
 
@@ -64,26 +66,22 @@ NSString * const MTNullIdentifier = @"(null)";
 
 @interface MTReportFormatter ()
 
-@property (nonatomic, assign) CGSize layoutSize;
-@property (nonatomic, strong, readwrite) RptqDocument *layout;
+    @property (nonatomic, strong, readwrite) MTReportFormatterPageDefinition *page;
 
-@property (nonatomic, strong, readwrite) MTArrayCached *reportIndexes;
-@property (nonatomic, strong, readwrite) MTArrayCached *reportLayout;
+    @property (nonatomic, assign) MTReportFormatterOptions options;
+    @property (nonatomic, strong, readwrite) RptqDocument *layout;
+    @property (nonatomic, strong, readwrite) MTArrayCached *reportIndexes;
+    @property (nonatomic, strong, readwrite) MTArrayCached *reportLayout;
 
-@property (nonatomic, strong) MTReportFormatterState *machineState; //At some point add the ability to format one page at a time.
+    @property (nonatomic, strong) MTReportFormatterState *machineState; //At some point add the ability to format one page at a time.
 
-@property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
+    @property (nonatomic, strong) MTReportFormatterCache *reportFormatterCache;
 
+    @property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
+    @property (nonatomic, strong) NSMutableArray *pageIndexesTemporary;
 
-@property (nonatomic, strong) NSMutableArray *pageLayoutTemporary;
-@property (nonatomic, strong) NSMutableArray *pageIndexesTemporary;
-//@property (nonatomic, strong) NSMutableIndexSet *pageIndexesTemporary;
-
-@property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
-
-@property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
-
-
+    @property (nonatomic, strong) NSArray *lastResultRowComparsonValues;
+    @property (nonatomic, strong) NSDictionary *layoutHeightsBySectionKey;
 
 @end
 
@@ -109,12 +107,18 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)dealloc { }
 
-- (id)initWithQuery:(MTQueryFull *)query andLayout:(RptqDocument *)layout {
+- (id)initWithQuery:(MTQueryFull *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options  {
     self = [super initWithQuery:query];
     if (self) {
+        [self setOptions:options];
         [self setLayout:layout];
     }
     return self;
+}
+
++ (id)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options {
+    MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
+    return result;
 }
 
 - (NSArray *)layoutForPage:(NSUInteger)page {
@@ -122,29 +126,33 @@ NSString * const MTNullIdentifier = @"(null)";
     return (page < [[self reportLayout] count]) ? result : nil;
 }
 
-+ (id)reportFormatterWithQuery:(MTQuery *)query andLayout:(RptqDocument *)layout {
-    MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query andLayout:layout];
-    return result;
-}
-
 - (NSUInteger)layoutIdentifier {
-    return self.overrideIdentifier == nil ? [[[[[self layout] objectID] URIRepresentation] absoluteString] hash] : [self.overrideIdentifier hash];
+    NSUInteger layoutIdentifier;
+    if (self.overrideIdentifier == nil) {
+        NSManagedObjectID *objid = [[self layout] objectID];
+        NSURL *url = [objid URIRepresentation];
+        NSString *s = [url absoluteString];
+        layoutIdentifier = [s hash];
+    } else {
+        layoutIdentifier = [self.overrideIdentifier hash];
+    }
+    return layoutIdentifier;
 }
 
 - (NSString *)nameHorizontalReportLayoutCache {
-    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", sizeString];
 }
 - (NSString *)nameVirticalReportLayoutCache {
-    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lv", sizeString];
 }
 - (NSString *)nameHorizontalReportIndexes {
-    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "ih", sizeString];
 }
 - (NSString *)nameVirticalReportIndexes {
-    NSString *sizeString = NSStringFromCGSize(self.layoutSize);
+    NSString *sizeString = NSStringFromCGSize(self.page.layoutSize);
     return [NSString stringWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "iv", sizeString];
 }
 
@@ -170,6 +178,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)initalize {
     
+    MTReportFormatterPageDefinition *page = [MTReportFormatterPageDefinition new];
+    [self setPage:page];
+    
     MTReportFormatterState *machineState = [MTReportFormatterState new];
     [self setMachineState:machineState];
     [self initalizeStateMachine];
@@ -180,7 +191,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSMutableArray *temporaryLayoutForPage = [[NSMutableArray alloc] init];
     [self setPageLayoutTemporary:temporaryLayoutForPage];
     
-    //NSMutableIndexSet *temporaryDataForPage = [[NSMutableIndexSet alloc] init];
     NSMutableArray *temporaryDataForPage = [[NSMutableArray alloc] init];
     [self setPageIndexesTemporary:temporaryDataForPage];
     
@@ -215,42 +225,46 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)formatForSize:(CGSize)printableSize {
-    [self formatForSize:printableSize options:0];
+    [self formatForSize:printableSize contentChanged:YES];
 }
 
-- (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options {
-    [self formatForSize:printableSize options:options contentChanged:YES];
-
-}
-
-- (void)reformatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options {
+- (void)reformatForSize:(CGSize)printableSize {
     @synchronized(self) {
         [self format];
-        [self setLayoutSize:printableSize];
-        [self loadLayoutAndIndexesFromCacheWithOptions:options];
-        [self formatDocumentWithOptions:options];
+        [[self page] setLayoutSize:printableSize];
+        [self loadLayoutAndIndexesFromCache];
+        [self formatDocument];
     }
 }
 
-- (void)formatForSize:(CGSize)printableSize options:(MTReportFormatterOptions)options contentChanged:(BOOL)contextChanged {
+- (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
     @synchronized(self) {
-        [self setLayoutSize:printableSize];
-        [self loadLayoutAndIndexesFromCacheWithOptions:options];
+        [[self page] setLayoutSize:printableSize];
+        
+        [self loadLayoutAndIndexesFromCache];
         
         if ([self format]) {
             
             if (contextChanged) {
                 [self dropIndexes];
             }
-            [self formatDocumentWithOptions:options];
+            [self formatDocument];
         }
     }
 }
 
-- (void)formatDocumentWithOptions:(MTReportFormatterOptions)options {
+- (void)formatDocument {
 
     [self initalizeStateMachine];
+    UIEdgeInsets margin = (self.options & MTReportFormatterOptionsMargin) ?
+                            UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f),
+                                             CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f)) :
+                            UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
+    
+    [[self page] setMargins:margin];
+    
+    self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
     NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
     [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
@@ -267,7 +281,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSArray *tlfp = [NSArray arrayWithArray:[self pageLayoutTemporary]];
     [[self reportLayout] addObject:tlfp];
     
-    //NSIndexSet *tdfp = [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]];
     NSArray *tdfp = [NSArray arrayWithArray:[self pageIndexesTemporary]];
     [[self reportIndexes] addObject:tdfp];
     
@@ -277,7 +290,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     [[self reportFormatterCache] setLayout:[[self reportLayout] identifier]
                                 andIndexes:[[self reportIndexes] identifier]
-                                   forSize:self.layoutSize];
+                                   forSize:self.page.layoutSize];
     
 }
 
@@ -300,7 +313,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self reportIndexes] endBulkInserts];
 }
 
-- (void)loadLayoutAndIndexesFromCacheWithOptions:(MTReportFormatterOptions)options {
+- (void)loadLayoutAndIndexesFromCache {
     MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]
                                                         cachedDelegate:self.cachedDelegate];
     [self setReportIndexes:ixarray];
@@ -323,7 +336,6 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)cleanupTemporaryPageIndexes {
     [[self pageLayoutTemporary] removeAllObjects];
     [[self pageIndexesTemporary] removeAllObjects];
-    //[[self pageIndexesTemporary] removeAllIndexes];
 }
 
 + (NSString *)KeyReportSectionType {
@@ -485,6 +497,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     BOOL rowIdOnly = YES;
     BOOL calculatedRowId = NO;
+
     for (id resultRow in [[self datasource] enumeratorForReportData]) {
         @autoreleasepool {
             //Get row id
@@ -539,6 +552,9 @@ NSString * const MTNullIdentifier = @"(null)";
     return keyValues;
 }
 
+- (CGFloat)printableHeight {
+    return self.page.layoutSize.height - self.page.margins.top - self.page.margins.bottom;
+}
 // FIXME: Make sure paper rect is passed in to the software
 - (BOOL)addPageBreakToReportLayoutWithNextItemHeight:(CGFloat)nextItemHeight {
     
@@ -547,9 +563,7 @@ NSString * const MTNullIdentifier = @"(null)";
 //    @autoreleasepool {
         CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.hasPageFooterSection];
         
-        CGRect pageRect = CGRectMake(CGPointZero.x, CGPointZero.y, self.layoutSize.width, self.layoutSize.height);
-        
-        if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > pageRect.size.height) {
+        if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > [self printableHeight]) {
             
             newPageCreated = YES;
             CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + pageFooterSectionHeight;

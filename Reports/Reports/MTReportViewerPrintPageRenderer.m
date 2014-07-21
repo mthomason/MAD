@@ -58,6 +58,7 @@
 
 #import "MTReportFormatter.h"
 #import "MTArrayCached.h"
+#import "MTReportFormatterPageDefinition.h"
 
 @interface MTReportViewerPrintPageRenderer ()
 
@@ -280,15 +281,17 @@
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
     RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
     
+    
+    
     if (query) {
         NSUInteger numberOfGroups = [[self reportFormatter] numberOfGroups];
         NSMutableArray *groupLevelKeys = [[NSMutableArray alloc] initWithCapacity:numberOfGroups];
         NSUInteger numberOfPages = [[self reportFormatter] numberOfPages];
         
         if (pageIndex < numberOfPages) {
-            
-            CGFloat originY = pageRect.origin.y;
-            CGFloat originX = pageRect.origin.x;
+
+            CGFloat originY = pageRect.origin.y + self.reportFormatter.page.margins.top;
+            CGFloat originX = pageRect.origin.x + self.reportFormatter.page.margins.left;
             CGFloat sizeWidth = pageRect.size.width;
             
             NSInteger layoutSectionCounter = 0;
