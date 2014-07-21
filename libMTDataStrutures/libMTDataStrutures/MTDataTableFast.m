@@ -875,29 +875,30 @@
     NSString *columnKey = [self columnKeyForColumnName:fieldKey];
     
     if (columnKey) {
-        NSMutableDictionary *queryParameters;
+        NSDictionary *queryParameters;
         
         MTQueryType queryType = MTQueryTypeCacheAggregateFunction;
         switch (groupByType) {
-            case MTAggregateGroupByTypePage:
-                //queryType = MTQueryTypeCacheSelectRowIds;
-                queryParameters =[NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function]];
+            case MTAggregateGroupByTypePage: {
+                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByPageWithFieldKey:columnKey andRowIds:rowids andFunctionType:function]];
+                NSNumber *groupByTypeNumber = @(groupByType);
+                NSNumber *groupByTypeKey = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
+                [(NSMutableDictionary *)queryParameters setObject:groupByTypeNumber forKey:groupByTypeKey];
+
                 break;
-                
+            }
             case MTAggregateGroupByTypeReport:
-                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function]];
+                queryParameters = [self parametersAggregateByReportWithFieldKey:columnKey andFunctionType:function];
                 break;
                 
             case MTAggregateGroupByTypeSection:
-                queryParameters = [NSMutableDictionary dictionaryWithDictionary: [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function]];
+                //[self initalizeGroupKeys];
+                queryParameters = [self paramatersAggregateByGroupKeys:groupKeys andFieldKey:columnKey andFunctionType:function];
                 break;
                 
             default:
                 break;
         }
-        NSNumber *groupByTypeNumber = @(groupByType);
-        NSNumber *groupByTypeKey = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
-        [queryParameters setObject:groupByTypeNumber forKey:groupByTypeKey];
         
         MTQuery *query = [[MTQuery alloc] initWithQueryType:queryType object:queryParameters];
         sqlite3_stmt *statement = NULL;

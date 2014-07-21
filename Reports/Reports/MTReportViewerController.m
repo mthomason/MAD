@@ -892,6 +892,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [reportViewer setPrintPageRendererReport:printPageRender];
 
         } else {
+            [[weakdoc reportFormatter] setDidRefresh:YES];
             [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:NO];
             
             MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
