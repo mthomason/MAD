@@ -395,7 +395,8 @@
     UIImage *blank = [UIImage new];
     [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    [toolbar setBackgroundColor:[UIColor clearColor]];
+    [toolbar setBackgroundColor:[UIColor tintColorWhiteAlpha]];
+    //[toolbar setBackgroundColor:[UIColor black]];
 }
 
 - (void)addSliderPagination {

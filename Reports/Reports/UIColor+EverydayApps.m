@@ -30,6 +30,7 @@
 + (id)tintColorBlue { vendColor(13.0000f, 158.0000f, 215.0000f); }
 + (id)tintColorRed { vendColor(222.0000f, 36.0000f, 72.0000f); }
 + (id)tintColorWhite { return [UIColor whiteColor]; }
++ (id)tintColorWhiteAlpha { vendColorWithAlpha(255.0000f, 255.0000f, 255.0000f, 0.3333f); }
 + (id)tintColorGold { vendColor(164.0000f, 157.0000f, 26.0000f); }
 + (id)tintColorGold2 { vendColor(138.0000f, 131.0000f, 1.0000f); }
 
