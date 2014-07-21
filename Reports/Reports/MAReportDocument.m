@@ -80,6 +80,8 @@ NSString * const MTReportDetailRowId = @"d";
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 
+@property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
+
 @end
 
 @implementation MAReportDocument
@@ -599,6 +601,22 @@ NSString * const MTReportDetailRowId = @"d";
     return sortedSortDescriptorsGroup;
 }
 
+- (UIPrintPageRenderer *)printerPrintPageRender {
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
+                                                                              layout: [self activeDocument]
+                                                                             options: MTReportFormatterOptionsMargin];
+    
+    [reportFormatter setCachedDelegate:self];
+    [reportFormatter setOverrideIdentifier:@"madprinter"];
+    [reportFormatter setDatasource:self];
+    
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
+                                                                                                              dataTable:[self mainDataTable]];
+    [self setPrintingReportFormatter:reportFormatter];
+    return printPageRender;
+
+}
+
 #pragma mark - UIPrintInteractionControllerDelegate
 
 //- (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)printInteractionController choosePaper:(NSArray *)paperList {}
@@ -610,21 +628,15 @@ NSString * const MTReportDetailRowId = @"d";
 //- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController {}
 
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
-                                                                              layout: [self activeDocument]
-                                                                             options: MTReportFormatterOptionsMargin];
-    
-    [reportFormatter setCachedDelegate:self];
-    [reportFormatter setOverrideIdentifier:@"madprinter"];
-    [reportFormatter setDatasource:self];
     UIPrintPaper *printPaper = printInteractionController.printPaper;
-    [reportFormatter formatForSize:printPaper.paperSize];
+    [self.printingReportFormatter setLayoutSize:printPaper.paperSize];
+    [self.printingReportFormatter setMarginUsingPrintableRect:printPaper.printableRect];
+    [self.printingReportFormatter setDidRefresh:YES];   //Force formatting
+    [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
     
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
-                                                                                                              dataTable:[self mainDataTable]];
-    [printInteractionController setPrintPageRenderer:printPageRender];
 }
-- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {}
-
+- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
+    [self setPrintingReportFormatter:nil];
+}
 
 @end

@@ -55,6 +55,8 @@ extern NSString * const MTNullIdentifier;
 - (NSUInteger)numberOfPages;
 - (NSUInteger)numberOfGroups;
 
+- (void)setLayoutSize:(CGSize)layoutSize;
+- (void)setMarginUsingPrintableRect:(CGRect)printableRect;
 
 @property (nonatomic, weak) id <MTReportFormatterDataSource> datasource;
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;

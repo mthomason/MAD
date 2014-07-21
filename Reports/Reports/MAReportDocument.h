@@ -44,6 +44,8 @@ extern NSString * const MTReportGroupLevel;
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
 
+- (UIPrintPageRenderer *)printerPrintPageRender;
+
 - (RptqDocument *)activeDocument;
 
 + (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;

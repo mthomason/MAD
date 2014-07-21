@@ -791,6 +791,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
 
                 MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                /*
                 MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [reportDocument defaultQuery]
                                                                                           layout: [reportDocument activeDocument]
                                                                                          options: MTReportFormatterOptionsMargin];
@@ -799,13 +800,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 [reportFormatter setOverrideIdentifier:@"madprinter"];
                 [reportFormatter setDatasource:reportDocument];
                 [self setPrintingReportFormatter:reportFormatter];
-                
-                MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
-                                                                                                                          dataTable:[reportDocument mainDataTable]];
+                */
+                UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
 
                 
                 [sharedController setPrintPageRenderer:printPageRender];
-                [sharedController setDelegate:self] ;
+                [sharedController setDelegate:reportDocument] ;
                 [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                     
                 }];
@@ -926,62 +926,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
         });
     });
-}
-
-// FIXME: This can't work... set cacheDelgate
-- (IBAction)print:(id)sender {
-    /*
-    UIPrintInteractionController *controller = [UIPrintInteractionController sharedPrintController];
-    if (controller) {
-        [controller setDelegate:self];
-        
-        [[self barButtonItemPrint] setEnabled:NO];
-        [[self barButtonItemRefresh] setEnabled:NO];
-        [[self barButtonItemSendToPdf] setEnabled:NO];
-        [[self barButtonItemActivity] setEnabled:NO];
-        
-        __weak MTReportViewerController *reportViewer = self;
-        UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-            
-            [[reportViewer barButtonItemPrint] setEnabled:YES];
-            [[reportViewer barButtonItemRefresh] setEnabled:YES];
-            [[reportViewer barButtonItemSendToPdf] setEnabled:YES];
-            [[reportViewer barButtonItemActivity] setEnabled:YES];
-            if(!completed && error){
-                //MTLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
-            }
-        };
-        
-        // Obtain a printInfo so that we can set our printing defaults.
-        UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-        printInfo.outputType = UIPrintInfoOutputGeneral;
-        
-        
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        printInfo.jobName = [reportDocument name];
-        printInfo.duplex = UIPrintInfoDuplexLongEdge;
-        controller.printInfo = printInfo;
-        
-        controller.showsPageRange = YES;
-        
-        MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery] layout:[doc activeDocument] options:MTReportFormatterOptionsMargin];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter dataTable:[doc mainDataTable]];
-
-
-        
-        [controller setPrintPageRenderer:printPageRender];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [controller presentFromBarButtonItem:[self barButtonItemPrint]
-                                        animated:YES
-                               completionHandler:completionHandler];  // iPad
-        } else {
-            [controller presentAnimated:YES completionHandler:completionHandler];  // iPhone
-        }
-    }
-    */
 }
 
 #pragma mark - UIPageViewControllerDataSrouce
@@ -1257,42 +1201,5 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
 }
-
-#pragma mark - UIPrintInteractionControllerDelegate
-
-//- (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)printInteractionController choosePaper:(NSArray *)paperList {}
-//- (CGFloat)printInteractionController:(UIPrintInteractionController *)printInteractionController cutLengthForPaper:(UIPrintPaper *)paper {}
-- (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
-- (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
-- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
-- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
-//- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController {}
-
-- (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
-
-     UIPrintPaper *printPaper = printInteractionController.printPaper;
-     [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
-
-     /*
-    MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [doc defaultQuery]
-                                                                              layout: [doc activeDocument]
-                                                                             options: MTReportFormatterOptionsMargin];
-    
-    [reportFormatter setCachedDelegate:doc];
-    [reportFormatter setOverrideIdentifier:@"madprinter"];
-    [reportFormatter setDatasource:doc];
-    UIPrintPaper *printPaper = printInteractionController.printPaper;
-    [reportFormatter formatForSize:printPaper.paperSize];
-    
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
-                                                                                                              dataTable:[doc mainDataTable]];
-    [printInteractionController setPrintPageRenderer:printPageRender];
-     */
-}
-- (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
-    [self setPrintingReportFormatter:nil];
-}
-
 
 @end

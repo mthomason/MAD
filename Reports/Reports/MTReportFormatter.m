@@ -181,6 +181,14 @@ NSString * const MTNullIdentifier = @"(null)";
     MTReportFormatterPageDefinition *page = [MTReportFormatterPageDefinition new];
     [self setPage:page];
     
+    UIEdgeInsets margin = (self.options & MTReportFormatterOptionsMargin) ?
+                            UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f),
+                                             CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f)) :
+    UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
+    
+    [[self page] setMargins:margin];
+
+    
     MTReportFormatterState *machineState = [MTReportFormatterState new];
     [self setMachineState:machineState];
     [self initalizeStateMachine];
@@ -201,6 +209,14 @@ NSString * const MTNullIdentifier = @"(null)";
         [self setLayoutHeightsBySectionKey:nil];
     }
     
+}
+
+- (void)setMarginUsingPrintableRect:(CGRect)printableRect {
+    CGFloat top = printableRect.origin.y - CGPointZero.y;
+    CGFloat left = printableRect.origin.x - CGPointZero.x;
+    CGFloat bottom = self.page.layoutSize.height - printableRect.size.height - top;
+    CGFloat right = self.page.layoutSize.width - printableRect.size.width - left;
+    self.page.margins = UIEdgeInsetsMake(top, left, bottom, right);
 }
 
 #pragma mark - Reading cached data
@@ -237,6 +253,10 @@ NSString * const MTNullIdentifier = @"(null)";
     }
 }
 
+- (void)setLayoutSize:(CGSize)layoutSize {
+    [[self page] setLayoutSize:layoutSize];
+}
+
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
     @synchronized(self) {
@@ -257,12 +277,6 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)formatDocument {
 
     [self initalizeStateMachine];
-    UIEdgeInsets margin = (self.options & MTReportFormatterOptionsMargin) ?
-                            UIEdgeInsetsMake(CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f),
-                                             CGFloatPointsForInches(1.0000f/4.0000f), CGFloatPointsForInches(1.0000f/4.0000f)) :
-                            UIEdgeInsetsMake(CGSizeZero.height, CGSizeZero.height, CGSizeZero.height, CGSizeZero.height);
-    
-    [[self page] setMargins:margin];
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 

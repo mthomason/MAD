@@ -290,8 +290,8 @@
         
         if (pageIndex < numberOfPages) {
 
-            CGFloat originY = pageRect.origin.y + self.reportFormatter.page.margins.top;
-            CGFloat originX = pageRect.origin.x + self.reportFormatter.page.margins.left;
+            CGFloat originY = pageRect.origin.y;
+            CGFloat originX = pageRect.origin.x;
             CGFloat sizeWidth = pageRect.size.width;
             
             NSInteger layoutSectionCounter = 0;
