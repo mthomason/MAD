@@ -57,6 +57,7 @@ NSString * const MTNullIdentifier = @"(null)";
     @property (nonatomic, assign) NSUInteger rowCounter;
     @property (nonatomic, assign) CGFloat counterHeightUsedCurrentPage;
     @property (nonatomic, strong) NSNumber *detailRowId;
+    @property (nonatomic, strong) NSNumber *detailRowIdLast;
     @property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end
@@ -89,13 +90,13 @@ NSString * const MTNullIdentifier = @"(null)";
 @implementation MTReportFormatter
 
 - (void)initalizeStateMachine {
-    NSNumber *zero = @(0);
     NSArray *sortDescriptors = [NSArray arrayWithArray:[[self dataDelegate] sortDescriptors]];
 
     self.machineState.rowCounter = 0;
     self.machineState.groupCounter = 0;
     self.machineState.pageCounter = 0;
-    self.machineState.detailRowId = zero;
+    self.machineState.detailRowId = @(0);
+    self.machineState.detailRowIdLast = @(0);
     self.machineState.sortDescriptors = sortDescriptors;
     self.machineState.counterHeightUsedCurrentPage = CGSizeZero.height;
 }
@@ -521,6 +522,7 @@ NSString * const MTNullIdentifier = @"(null)";
                 }
                 calculatedRowId = YES;
             }
+            self.machineState.detailRowIdLast = self.machineState.detailRowId;
             self.machineState.detailRowId = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
             
             //Get row key values
@@ -664,7 +666,7 @@ NSString * const MTNullIdentifier = @"(null)";
     NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeGroupFooter),
                         MTReportGroupLevel : gl,
-                        MTReportDetailRowId : self.machineState.detailRowId};
+                        MTReportDetailRowId : self.machineState.detailRowIdLast};
     [[self pageLayoutTemporary] addObject: d];
 }
 

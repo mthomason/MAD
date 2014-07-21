@@ -522,10 +522,10 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             }
         } else {
             int result = sqlite3_step(statement);
-            int errorPk = SQLITE_CONSTRAINT_PRIMARYKEY;
-            BOOL primaryKeyError = result & SQLITE_CONSTRAINT_PRIMARYKEY;
-            NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s with result code: %d", (char *)sqlite3_errmsg(_database), result);
-            NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
+            //BOOL primaryKeyError = result == SQLITE_CONSTRAINT_PRIMARYKEY;
+            //BOOL duplicateColumn = result == 21;
+            NSAssert(result == 21 || result == SQLITE_CONSTRAINT_PRIMARYKEY || SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s with result code: %d", (char *)sqlite3_errmsg(_database), result);
+            NSAssert(success || result == 21 || result == SQLITE_CONSTRAINT_PRIMARYKEY, @"%s", (char *)sqlite3_errmsg(_database));
         }
         if ([query partOfTransactionSet] == NO) {
             success = SQLITE_OK == sqlite3_finalize(statement);
