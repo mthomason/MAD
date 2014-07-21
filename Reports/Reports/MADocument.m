@@ -173,6 +173,8 @@ NSString * MTDocumentTypenFileName              = @"typ";
 NSString * MTDocumentParentContextName          = @"moc";
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
+    MTLog(@"Autosaving document");
+    // FIXME: Use this as a chance to wrap a mad file up.
     id result = [super contentsForType:typeName error:outError];
     return result;
 }
