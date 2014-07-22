@@ -766,64 +766,6 @@
             </objects>
             <point key="canvasLocation" x="0.0" y="1651"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="MoL-ul-X9Y">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="z1J-T1-s6N" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="PCf-IB-eMv">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="dhH-xp-OVL" kind="relationship" relationship="rootViewController" id="Jca-qk-iRR"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2UM-EQ-2YB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2500" y="-2909"/>
-        </scene>
-        <!--Query Builder Visualization View Controller-->
-        <scene sceneID="b6e-0g-AW4">
-            <objects>
-                <viewController id="dhH-xp-OVL" customClass="MTQueryBuilderVisualizationViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="XKf-f1-lHU"/>
-                        <viewControllerLayoutGuide type="bottom" id="y7w-jz-7ND"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Y1B-BO-nrY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oAv-Jq-Qkx">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="oAv-Jq-Qkx" firstAttribute="leading" secondItem="Y1B-BO-nrY" secondAttribute="leading" id="AgS-r3-ONf"/>
-                            <constraint firstItem="oAv-Jq-Qkx" firstAttribute="top" secondItem="Y1B-BO-nrY" secondAttribute="top" id="NiC-pU-iuh"/>
-                            <constraint firstAttribute="bottom" secondItem="oAv-Jq-Qkx" secondAttribute="bottom" id="VGV-qt-b8G"/>
-                            <constraint firstAttribute="trailing" secondItem="oAv-Jq-Qkx" secondAttribute="trailing" id="u8V-9t-SmF"/>
-                        </constraints>
-                    </view>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="kAh-3y-gCc">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="7gQ-xC-DlZ">
-                            <connections>
-                                <segue destination="MFm-4g-AP5" kind="unwind" unwindAction="unwindToQueryBuilder:" id="xum-eQ-3qC"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="backgroundContainer" destination="oAv-Jq-Qkx" id="WCY-Pc-XG4"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9Zh-qt-c3W" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="MFm-4g-AP5" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="2872" y="-2909"/>
-        </scene>
         <!--Query Builder View Controller - MAD Query-->
         <scene sceneID="PdD-eD-j8w">
             <objects>
@@ -1192,8 +1134,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="G2O-Pv-hlp">
-                                                    <rect key="frame" x="104" y="7" width="186" height="31"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="G2O-Pv-hlp">
+                                                    <rect key="frame" x="104" y="7" width="186" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="186" id="nPl-Gw-aKo"/>
                                                     </constraints>
@@ -1204,8 +1146,8 @@
                                                         <outlet property="delegate" destination="OZq-ny-MYn" id="2b6-ZE-OLB"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Schema" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pFO-PU-tlN">
-                                                    <rect key="frame" x="30" y="12" width="66" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Schema" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pFO-PU-tlN">
+                                                    <rect key="frame" x="30" y="12" width="66" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2609,33 +2551,6 @@
             </objects>
             <point key="canvasLocation" x="3540" y="1225"/>
         </scene>
-        <!--View Controller Activity Spinner-->
-        <scene sceneID="iIb-uV-Wc5">
-            <objects>
-                <viewController storyboardIdentifier="MUIViewControllerActivitySpinner" id="WEl-kX-H48" customClass="MTViewControllerActivitySpinner" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="VlC-vU-Xtv"/>
-                        <viewControllerLayoutGuide type="bottom" id="Viy-eY-ZQY"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="bxI-Ff-OT9">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3bk-Lc-K5V">
-                                <rect key="frame" x="142" y="265" width="37" height="37"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <connections>
-                        <outlet property="activitySpinner" destination="3bk-Lc-K5V" id="6zh-xA-IG9"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sEv-Mm-CTH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-852" y="5420"/>
-        </scene>
         <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="lbx-ys-aJt">
             <objects>
@@ -3467,7 +3382,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kI8-o0-67o" customClass="MTStateButton">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kI8-o0-67o">
                                                     <rect key="frame" x="20" y="7" width="62" height="29"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="62" id="5Aw-12-Z4I"/>
@@ -5510,8 +5425,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="y1h-7Q-J1P">
-                                                    <rect key="frame" x="104" y="7" width="186" height="31"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Document" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="y1h-7Q-J1P">
+                                                    <rect key="frame" x="104" y="7" width="186" height="32"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="186" id="fd5-gh-ALF"/>
                                                     </constraints>
@@ -5522,8 +5437,8 @@
                                                         <outlet property="delegate" destination="c9T-2m-ezv" id="VI5-4i-fM2"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" misplaced="YES" text="Name" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="G5N-7y-USC">
-                                                    <rect key="frame" x="30" y="12" width="66" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" text="Name" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="G5N-7y-USC">
+                                                    <rect key="frame" x="30" y="12" width="66" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -5554,7 +5469,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="H3u-Ly-9ie">
-                                                    <rect key="frame" x="104" y="7" width="186" height="31"/>
+                                                    <rect key="frame" x="104" y="0.0" width="186" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="186" id="0ma-Fk-Jr7"/>
                                                     </constraints>
@@ -5565,8 +5480,8 @@
                                                         <outlet property="delegate" destination="c9T-2m-ezv" id="uCs-KZ-4VR"/>
                                                     </connections>
                                                 </textField>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="80" translatesAutoresizingMaskIntoConstraints="NO" id="34N-hB-yRT">
-                                                    <rect key="frame" x="30" y="4" width="80" height="40"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="66" translatesAutoresizingMaskIntoConstraints="NO" id="34N-hB-yRT">
+                                                    <rect key="frame" x="30" y="12" width="66" height="33"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Host">
                                                             <attributes>

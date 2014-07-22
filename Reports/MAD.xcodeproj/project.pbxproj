@@ -374,8 +374,6 @@
 		4C23FB1D18FADD67009F234F /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1A18FADD67009F234F /* MTLog.m */; };
 		4C23FB2218FADDAA009F234F /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1F18FADDAA009F234F /* MADUpgradeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB2318FADDAA009F234F /* MADUpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1F18FADDAA009F234F /* MADUpgradeViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FB2418FADDAA009F234F /* MTViewControllerActivitySpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2118FADDAA009F234F /* MTViewControllerActivitySpinner.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C23FB2518FADDAA009F234F /* MTViewControllerActivitySpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2118FADDAA009F234F /* MTViewControllerActivitySpinner.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB2818FADDE7009F234F /* MTQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MTQueryBuilderContainerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB2918FADDE7009F234F /* MTQueryBuilderContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2718FADDE7009F234F /* MTQueryBuilderContainerController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB2C18FADE46009F234F /* MADWatermarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB2B18FADE46009F234F /* MADWatermarkView.m */; };
@@ -1890,8 +1888,6 @@
 		4C23FB1B18FADD67009F234F /* MTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLog.h; path = Classes/MTLog.h; sourceTree = "<group>"; };
 		4C23FB1E18FADDAA009F234F /* MADUpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADUpgradeViewController.h; path = Classes/MADUpgradeViewController.h; sourceTree = SOURCE_ROOT; };
 		4C23FB1F18FADDAA009F234F /* MADUpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADUpgradeViewController.m; path = Classes/MADUpgradeViewController.m; sourceTree = SOURCE_ROOT; };
-		4C23FB2018FADDAA009F234F /* MTViewControllerActivitySpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTViewControllerActivitySpinner.h; path = Classes/MTViewControllerActivitySpinner.h; sourceTree = SOURCE_ROOT; };
-		4C23FB2118FADDAA009F234F /* MTViewControllerActivitySpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTViewControllerActivitySpinner.m; path = Classes/MTViewControllerActivitySpinner.m; sourceTree = SOURCE_ROOT; };
 		4C23FB2618FADDE7009F234F /* MTQueryBuilderContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTQueryBuilderContainerController.h; path = Classes/MTQueryBuilderContainerController.h; sourceTree = SOURCE_ROOT; };
 		4C23FB2718FADDE7009F234F /* MTQueryBuilderContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTQueryBuilderContainerController.m; path = Classes/MTQueryBuilderContainerController.m; sourceTree = SOURCE_ROOT; };
 		4C23FB2A18FADE46009F234F /* MADWatermarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADWatermarkView.h; path = Classes/MADWatermarkView.h; sourceTree = SOURCE_ROOT; };
@@ -5024,8 +5020,6 @@
 				4CF1329416CA1E4900FD0F0B /* Report Desinger */,
 				4C23FB1E18FADDAA009F234F /* MADUpgradeViewController.h */,
 				4C23FB1F18FADDAA009F234F /* MADUpgradeViewController.m */,
-				4C23FB2018FADDAA009F234F /* MTViewControllerActivitySpinner.h */,
-				4C23FB2118FADDAA009F234F /* MTViewControllerActivitySpinner.m */,
 				4C6362BC14E6278D005DBBFF /* MTNavigationController.h */,
 				4C6362BD14E6278D005DBBFF /* MTNavigationController.m */,
 				4CFC3DE216714A260016E1E8 /* MTShowSqlViewController.h */,
@@ -6325,7 +6319,6 @@
 				4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */,
 				4C8EC0AE167A953C00F37DA7 /* NSManagedObjectID+Extras.m in Sources */,
 				4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */,
-				4C23FB2518FADDAA009F234F /* MTViewControllerActivitySpinner.m in Sources */,
 				4CA16335167CAD6400540A14 /* RptqDocumentObjectLabel+Extras.m in Sources */,
 				4CABE4BC1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */,
 				4C77329B190FFD6A005AE7C2 /* MysqlRollbackException.m in Sources */,
@@ -6966,7 +6959,6 @@
 				4C23FADE18FADA40009F234F /* MTDataColumn.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,
 				4C5BED7418EB356A00BDDDB8 /* MTQueryMaxFieldLength.m in Sources */,
-				4C23FB2418FADDAA009F234F /* MTViewControllerActivitySpinner.m in Sources */,
 				4C2F6E78194C3609009D192B /* MTArrayDataSourceTableView.m in Sources */,
 				4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */,
 				4CABE4A71837DF80007EDD9D /* RptqDocumentObjectFormula.m in Sources */,

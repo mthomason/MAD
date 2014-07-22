@@ -1255,10 +1255,10 @@
             </objects>
             <point key="canvasLocation" x="490" y="4500"/>
         </scene>
-        <!--Navigation Controller Model Controllers-->
+        <!--Navigation Controller-->
         <scene sceneID="jwp-2p-7YR">
             <objects>
-                <navigationController definesPresentationContext="YES" id="1S4-ip-3dw" customClass="UINavigationControllerModelControllers" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="1S4-ip-3dw" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="c4W-iz-snk">
                         <autoresizingMask key="autoresizingMask"/>
@@ -1276,10 +1276,10 @@
             </objects>
             <point key="canvasLocation" x="4496" y="-5029"/>
         </scene>
-        <!--Navigation Controller Model Controllers-->
+        <!--Navigation Controller-->
         <scene sceneID="nBI-KK-h2i">
             <objects>
-                <navigationController definesPresentationContext="YES" id="2dC-f6-Bo7" customClass="UINavigationControllerModelControllers" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="2dC-f6-Bo7" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="X2q-it-mFU">
@@ -1340,10 +1340,10 @@
             </objects>
             <point key="canvasLocation" x="7737" y="-1467"/>
         </scene>
-        <!--Navigation Controller Model Controllers-->
+        <!--Navigation Controller-->
         <scene sceneID="xxn-aH-pNP">
             <objects>
-                <navigationController definesPresentationContext="YES" id="vFe-wK-P1j" customClass="UINavigationControllerModelControllers" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="vFe-wK-P1j" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="taD-86-klb">
                         <autoresizingMask key="autoresizingMask"/>
@@ -1550,10 +1550,10 @@
             </objects>
             <point key="canvasLocation" x="5443" y="-3578"/>
         </scene>
-        <!--Navigation Controller Model Controllers-->
+        <!--Navigation Controller-->
         <scene sceneID="UUd-TH-Ea7">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Lsp-Qu-tcg" customClass="UINavigationControllerModelControllers" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="Lsp-Qu-tcg" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="DAm-94-y8M">
                         <autoresizingMask key="autoresizingMask"/>
@@ -2472,37 +2472,6 @@
             </objects>
             <point key="canvasLocation" x="7737" y="33"/>
         </scene>
-        <!--View Controller Activity Spinner-->
-        <scene sceneID="1AD-7V-IxL">
-            <objects>
-                <viewController storyboardIdentifier="MUIViewControllerActivitySpinner" id="y9V-K5-2dN" customClass="MTViewControllerActivitySpinner" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="bV3-LZ-zB8"/>
-                        <viewControllerLayoutGuide type="bottom" id="yN0-JN-ylW"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="zNf-H1-lr1">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zeF-em-m45">
-                                <rect key="frame" x="142" y="291" width="37" height="37"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <connections>
-                        <outlet property="activitySpinner" destination="zeF-em-m45" id="zce-59-H9q"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PV3-YF-nSz" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2057" y="6580"/>
-        </scene>
         <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="O4k-yE-nsm">
             <objects>
@@ -2965,26 +2934,26 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="DhP-7F-njB">
-                                                    <rect key="frame" x="30" y="40" width="94" height="29"/>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="DhP-7F-njB">
+                                                    <rect key="frame" x="30" y="39" width="94" height="29"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="d7K-Xd-VM4" eventType="valueChanged" id="IpV-uQ-6p6"/>
                                                     </connections>
                                                 </stepper>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="gru-JS-OYX">
-                                                    <rect key="frame" x="190" y="40" width="94" height="29"/>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="gru-JS-OYX">
+                                                    <rect key="frame" x="190" y="39" width="94" height="29"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="d7K-Xd-VM4" eventType="valueChanged" id="wax-4F-n8b"/>
                                                     </connections>
                                                 </stepper>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JM6-nc-b6c">
-                                                    <rect key="frame" x="30" y="75" width="110" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JM6-nc-b6c">
+                                                    <rect key="frame" x="30" y="74" width="110" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgp-11-B3V">
-                                                    <rect key="frame" x="190" y="75" width="330" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgp-11-B3V">
+                                                    <rect key="frame" x="190" y="74" width="330" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3013,8 +2982,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="176"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="pcf-id-Uju">
-                                                    <rect key="frame" x="190" y="102" width="94" height="29"/>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="pcf-id-Uju">
+                                                    <rect key="frame" x="190" y="101" width="94" height="29"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="d7K-Xd-VM4" eventType="valueChanged" id="usS-D8-Wdl"/>
                                                     </connections>
@@ -3034,8 +3003,8 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="kkH-Vo-XKz">
-                                                    <rect key="frame" x="30" y="104" width="94" height="29"/>
+                                                <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-4096" maximumValue="4096" translatesAutoresizingMaskIntoConstraints="NO" id="kkH-Vo-XKz">
+                                                    <rect key="frame" x="30" y="103" width="94" height="29"/>
                                                     <connections>
                                                         <action selector="controlValueChanged:" destination="d7K-Xd-VM4" eventType="valueChanged" id="uy3-T7-qLm"/>
                                                     </connections>
@@ -3061,8 +3030,8 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Left" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RK1-gj-Jnd">
-                                                    <rect key="frame" x="30" y="141" width="110" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Left" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RK1-gj-Jnd">
+                                                    <rect key="frame" x="30" y="140" width="110" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="rFy-9o-HoK"/>
                                                     </constraints>
@@ -3070,8 +3039,8 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-ec-bHb">
-                                                    <rect key="frame" x="190" y="141" width="330" height="20"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52g-ec-bHb">
+                                                    <rect key="frame" x="190" y="140" width="330" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3332,7 +3301,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="puC-DP-vAw" customClass="MTStateButton">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="puC-DP-vAw">
                                                     <rect key="frame" x="20" y="7" width="62" height="29"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="62" id="K3p-PE-ID5"/>

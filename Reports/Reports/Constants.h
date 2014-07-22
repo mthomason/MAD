@@ -234,8 +234,6 @@ extern NSString * const PDF_PATH_EXTENSION;
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;
 
-extern NSString * const MUIViewControllerActivitySpinner;
-
 // MARK: Segue Identifiers
 extern NSString * const MTSegueOpenInViewer;
 extern NSString * const MNSIdentifierSegueShowLayoutSettings;

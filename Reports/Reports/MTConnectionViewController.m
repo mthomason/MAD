@@ -12,17 +12,16 @@
 
 #import "MTConnectionViewController.h"
 #import "MAReportDocument.h"
-#import "MTViewControllerActivitySpinner.h"
 #import "UIDevice+Hack.h"
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
 #import "NSError+Constructors.h"
 #import "NSError+UserInterface.h"
+#import "MTActivityIndicator.h"
 
 @interface MTConnectionViewController()
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
-@property (nonatomic, strong) MTViewControllerActivitySpinner *activitySpinnerViewController;
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
 
 @end
@@ -90,7 +89,7 @@
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    return [self activitySpinnerViewController];
+    return nil;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
@@ -106,6 +105,18 @@
 }
 
 - (IBAction)save:(id)sender {
+    
+    [self.textFieldHost resignFirstResponder];
+    [self.textFieldPort resignFirstResponder];
+    [self.textFieldDatabase resignFirstResponder];
+    [self.textFieldReportName resignFirstResponder];
+    
+    CGRect activtyViewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
+    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:activtyViewRect];
+    activtyView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activtyView.bounds.size.height / 2.0000f) +
+                                                        (activtyView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
+    [activtyView.status setText:@"Importing schema. Please wait."];
+    [[self view] addSubview:activtyView];
     
     [sender setEnabled:NO];
     [[[self navigationItem] backBarButtonItem] setEnabled:NO];
@@ -141,7 +152,7 @@
     [dbDetails setServer:                  blockServer];
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
-    
+
     [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success, NSError *error) {
         if (success) {
             [blockSender setEnabled:YES];
@@ -151,6 +162,7 @@
             [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
             [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
         }
+        [activtyView removeFromSuperview];
     }];
 }
 

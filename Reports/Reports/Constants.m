@@ -108,9 +108,6 @@ CGFloat const MNSTableViewCellInkNameHeightDefault = 0.0000f;
 CGFloat const MNSTableViewCellOverrideHeightDefault = 44.0000f;
 CGFloat const MNSTableViewCellQueryLinkHeightDefault = 50.0000f;
 
-
-NSString * const MUIViewControllerActivitySpinner                   = @"MUIViewControllerActivitySpinner";
-
 // MARK: Segue Identifiers
 NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
