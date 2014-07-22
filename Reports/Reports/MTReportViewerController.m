@@ -859,7 +859,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
-            //UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:activityViewController];
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             [popoverController setDelegate:self];
             [popoverController presentPopoverFromBarButtonItem: [self barButtonItemActivity]
