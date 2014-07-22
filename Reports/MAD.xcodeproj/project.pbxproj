@@ -293,6 +293,8 @@
 		4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */; };
 		4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
+		4C138D5D197E254000BABB0C /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
+		4C138D5E197E254000BABB0C /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C15EB8F192DF50600C412A4 /* MTQuerySelectItemsForGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C15EB8E192DF50600C412A4 /* MTQuerySelectItemsForGroup.m */; };
 		4C15EB90192DF50600C412A4 /* MTQuerySelectItemsForGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C15EB8E192DF50600C412A4 /* MTQuerySelectItemsForGroup.m */; };
 		4C168077190783FB00980D8D /* MTQueryCacheDeleteAllFromTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C168076190783FB00980D8D /* MTQueryCacheDeleteAllFromTable.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -713,8 +715,6 @@
 		4C5CD399181E3937005FC6DD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C752E0C16EA3A0C001FDAA3 /* README.md */; };
 		4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C5CD39C181EBCB6005FC6DD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
-		4C5CD3DB1821A0C8005FC6DD /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CD3D91821A0C8005FC6DD /* London.mad */; };
-		4C5CD3DC1821A0C8005FC6DD /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CD3DA1821A0C8005FC6DD /* Music.mad */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1789,6 +1789,8 @@
 		4C122AE916D0066B00B69763 /* MTConnectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTConnectorView.m; sourceTree = "<group>"; };
 		4C13391C17FE9018004F61CA /* UIImageDocumentBlankPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageDocumentBlankPad.png; path = Reports/UIImageDocumentBlankPad.png; sourceTree = "<group>"; };
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
+		4C138D5B197E254000BABB0C /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = "Resources/Sample Reports/London.mad"; sourceTree = "<group>"; };
+		4C138D5C197E254000BABB0C /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = Music.mad; path = "Resources/Sample Reports/Music.mad"; sourceTree = "<group>"; };
 		4C15EB8D192DF50600C412A4 /* MTQuerySelectItemsForGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySelectItemsForGroup.h; sourceTree = "<group>"; };
 		4C15EB8E192DF50600C412A4 /* MTQuerySelectItemsForGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQuerySelectItemsForGroup.m; sourceTree = "<group>"; };
 		4C168075190783FB00980D8D /* MTQueryCacheDeleteAllFromTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheDeleteAllFromTable.h; sourceTree = "<group>"; };
@@ -2297,8 +2299,6 @@
 		4C5CB7BC189E2A7D00BB5AF8 /* sybfront.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sybfront.h; sourceTree = "<group>"; };
 		4C5CB7BD189E2A7D00BB5AF8 /* tds_sysdep_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tds_sysdep_public.h; sourceTree = "<group>"; };
 		4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = ../../Compressor/library/libsybdb/libsybdb.a; sourceTree = "<group>"; };
-		4C5CD3D91821A0C8005FC6DD /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = London.mad; sourceTree = "<group>"; };
-		4C5CD3DA1821A0C8005FC6DD /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; path = Music.mad; sourceTree = "<group>"; };
 		4C5F02EA14BA480400C49BE9 /* MTSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSettingsViewController.h; sourceTree = "<group>"; };
 		4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSettingsViewController.m; sourceTree = "<group>"; };
 		4C6362BC14E6278D005DBBFF /* MTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationController.h; sourceTree = "<group>"; };
@@ -4159,8 +4159,8 @@
 		4C5CD3D81821A0AA005FC6DD /* SampleReports */ = {
 			isa = PBXGroup;
 			children = (
-				4C5CD3D91821A0C8005FC6DD /* London.mad */,
-				4C5CD3DA1821A0C8005FC6DD /* Music.mad */,
+				4C138D5B197E254000BABB0C /* London.mad */,
+				4C138D5C197E254000BABB0C /* Music.mad */,
 			);
 			name = SampleReports;
 			sourceTree = "<group>";
@@ -5916,6 +5916,7 @@
 				4CCD8D5A150385DA002B9E77 /* UIImagePatternBlueCrepe.png in Resources */,
 				4C4EBFAE17EDEA8D00D10622 /* carat.png in Resources */,
 				4CCD8D5B150385DA002B9E77 /* UIImagePatternBlueCrepe@2x.png in Resources */,
+				4C138D5D197E254000BABB0C /* London.mad in Resources */,
 				4C1BB6E41813D1520027C508 /* UIBarButtonItemPaintRoller@2x.png in Resources */,
 				4CCD8D5C150385DA002B9E77 /* UIImagePatternBlueSpecks.png in Resources */,
 				4CCD8D5D150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png in Resources */,
@@ -5978,7 +5979,6 @@
 				4CCD8D86150385DA002B9E77 /* UIImagePatternKraftWaffle.png in Resources */,
 				4C92957218C4E0770010AAEF /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */,
 				4CCD8D87150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png in Resources */,
-				4C5CD3DB1821A0C8005FC6DD /* London.mad in Resources */,
 				4CCD8D88150385DA002B9E77 /* UIImagePatternLeaf.png in Resources */,
 				4CCD8D89150385DA002B9E77 /* UIImagePatternLeaf@2x.png in Resources */,
 				4C92956618C4E0770010AAEF /* MTImageLaunchViewerPadLandscape.png in Resources */,
@@ -6052,7 +6052,6 @@
 				4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */,
 				4C4EBFAC17EDEA8D00D10622 /* carat-open.png in Resources */,
-				4C5CD3DC1821A0C8005FC6DD /* Music.mad in Resources */,
 				4C5CB7CF189E2A7D00BB5AF8 /* sybdb.h in Resources */,
 				4C94AA1217DCB3C9000F6FCF /* Images.xcassets in Resources */,
 				4C95CACA182CB36000160E01 /* zint.h in Resources */,
@@ -6092,6 +6091,7 @@
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4C80A5FA1831ED4200242703 /* MTBarcodeCodeOne.h in Resources */,
 				4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
+				4C138D5E197E254000BABB0C /* Music.mad in Resources */,
 				4C92956418C4E0770010AAEF /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4C77333519100098005AE7C2 /* mysql_version.h.in in Resources */,
 				4CFA64E017B92B7A0025BE1E /* MADIcon64.png in Resources */,
