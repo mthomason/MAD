@@ -44,7 +44,8 @@
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
         MTTabBarImageProtocol,
-        UIPrintInteractionControllerDelegate>
+        UIPrintInteractionControllerDelegate,
+        MTActivityItemProviderDelegate>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -100,6 +101,8 @@
 
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
 @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
+
+@property (nonatomic, assign) BOOL shouldShowPrintDialog;
 
 @end
 
@@ -772,13 +775,44 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return activityItemProviderPdf;
 }
 
+- (void)showPrintDialog {
+    if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakself = self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [[weakself popoverControllerActivity] dismissPopoverAnimated:YES];
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                        if (sharedController) {
+                            MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                            [reportDocument setActivityDelegate:weakself];
+                            UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
+                            [sharedController setPrintPageRenderer:printPageRender];
+                            [sharedController setDelegate:reportDocument] ;
+                            __weak MTReportViewerController *weakself2 = weakself;
+                            void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+                            ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+                                [weakself2.pageSlider setEnabled:YES];
+                                [weakself2 enableTabBarItems];
+                            };
+                            [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
+                                        completionHandler:completionHandler];
+                        }
+                    });
+                });
+            });
+        });
+    }
+}
+
 - (IBAction)activity:(id)sender {
     [self.pageSlider setEnabled:NO];
     
-    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
-    [sharedController setDelegate:self];
-
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
+    [activityItemProviderPdf setDelegate:self];
     NSArray *activityItems = @[activityItemProviderPdf];
     [self setActivityItemProviderPdf:activityItemProviderPdf];
     
@@ -790,6 +824,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                                                                          applicationActivities:applicationActivities];
     
     __weak MTReportViewerController *weakself = self;
+    
     UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
         if (completed) {
             [weakself.pageSlider setEnabled:YES];
@@ -797,28 +832,34 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         } else {
             if ([activityType length] > 0) {
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
-                    
-                    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-                    [reportDocument setActivityDelegate:self];
-                    UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
-                    [sharedController setPrintPageRenderer:printPageRender];
-                    [sharedController setDelegate:reportDocument] ;
-                    __weak MTReportViewerController *weakself2 = weakself;
-                    [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
-                        [weakself2.pageSlider setEnabled:YES];
-                    }];
-                } else {
-                    [weakself.pageSlider setEnabled:YES];
+                    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                    if (sharedController) {
+                        [sharedController setDelegate:self];
+                        MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                        [reportDocument setActivityDelegate:self];
+                        UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
+                        [sharedController setPrintPageRenderer:printPageRender];
+                        [sharedController setDelegate:reportDocument] ;
+                        __weak MTReportViewerController *weakself = self;
+                        if ([UIDevice isPad] == NO) {
+                            [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+                                [weakself.pageSlider setEnabled:YES];
+                            }];
+                        }
+                    }
                 }
+                [weakself.pageSlider setEnabled:YES];
             } else {
                 [weakself.pageSlider setEnabled:YES];
             }
         }
     };
+    
     [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
     
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
+            //UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:activityViewController];
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             [popoverController setDelegate:self];
             [popoverController presentPopoverFromBarButtonItem: [self barButtonItemActivity]
@@ -1204,6 +1245,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
+    
+    //@synchronized(self) {
+        /*if (self.shouldShowPrintDialog) {
+            [self displayPrintDialog];
+            self.shouldShowPrintDialog = NO;
+        }*/
+    //}
 }
 
 - (UIViewController *)activeViewController {

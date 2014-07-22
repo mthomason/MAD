@@ -220,16 +220,16 @@
 }
 
 - (NSString *)tableName {
-    char buf[18];
-    snprintf(buf, 18, "t%lu", (unsigned long)self.tag);
+    char buf[19];
+    snprintf(buf, 19, "t%lu", (unsigned long)self.tag);
     return [NSString stringWithUTF8String:buf];
 }
 
 - (void)addColumn:(MTDataColumn *)column {
     NSUInteger columnId = [[column identifier] hash];
     BOOL createTable = [[self columnKeys] count] == 0;
-    char buf[12];
-    sprintf(buf, "c%lu", (unsigned long)(unsigned long)columnId);
+    char buf[19];
+    snprintf(buf, 19, "c%lu", (unsigned long)columnId);
     NSString *columnName = [NSString stringWithUTF8String:buf];
     [[self columns] setObject:column forKey:columnName];
     [[self columnKeys] addObject:columnName];

@@ -18,6 +18,7 @@
 #import "MTQuery.h"
 #import "MTReportFormatter.h"
 #import "MTReportViewerPrintPageRenderer.h"
+#import "UIDevice+Hack.h"
 
 @interface  MTActivityItemProviderPdf ()
 
@@ -28,8 +29,10 @@
 @implementation MTActivityItemProviderPdf
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+    id result = [super activityViewController:activityViewController itemForActivityType:activityType];
     [self setActivityViewController:activityViewController];
-    return [super activityViewController:activityViewController itemForActivityType:activityType];
+    
+    return result;
 }
 
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController dataTypeIdentifierForActivityType:(NSString *)activityType {
@@ -48,12 +51,28 @@
 }
 
 - (id)item {
-    NSLog(@"Activity type: %@", [self activityType]);
+    //NSLog(@"Activity type: %@", [self activityType]);
+
     id item = nil;
-    if ([[self activityType] caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
-        item = [super item];
-    } else {
-        
+    if ([[self activityType] caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {    //Printer
+//        item = [super item];
+//        UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+//        MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+        //[self.activityViewController ]
+//        [sharedController setDelegate:reportDocument];
+//        UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
+ //       [sharedController setPrintPageRenderer:printPageRender];
+        //item = [sharedController printInfo];
+   //     item = printPageRender;
+    //    [sharedController setDelegate:reportDocument];
+        if ([UIDevice isPad]) {
+            [self.delegate showPrintDialog];
+           // [[self activityViewController] dismissViewControllerAnimated:YES completion:NULL];
+//            [[self activityViewController] dis];
+
+        }
+        item = nil;
+    } else {                                                                                    //Return URL to PDF printout.
         NSString *temporaryDirectoryPath = NSTemporaryDirectory();
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
         item = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
