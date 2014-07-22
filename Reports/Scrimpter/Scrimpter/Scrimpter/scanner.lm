@@ -1,0 +1,144 @@
+%{
+
+#import "MADSymbol.h"
+#import "MTAbstractSyntaxTree.h"
+
+#import "y.tab.h"
+
+extern int yylineno;
+void yyerror(char *s, ...);
+MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column);
+NSString *stripFirstAndLastFromString(NSString *s);
+
+/* handle locations */
+int yycolumn = 1;
+
+#define YY_USER_ACTION yylloc.filename = filename; \
+    yylloc.first_line = yylloc.last_line = yylineno; \
+    yylloc.first_column = yycolumn; \
+    yylloc.last_column = yycolumn+yyleng-1; \
+    yycolumn += yyleng;
+
+%}
+
+%%
+
+"+" |
+"-" |
+"*" |
+"/" |
+"|" |
+";" |
+"," |
+"." |
+"=" |
+"(" |
+")" |
+"{" |
+"}"         { return yytext[0]; }
+
+">"         { yylval.fn = SCComparesonGreaterThan; return COMPARESON; }
+"<"         { yylval.fn = SCComparesonLessThan; return COMPARESON; }
+"<>"        { yylval.fn = SCComparesonNotEqualTo; return COMPARESON; }
+"!="        { yylval.fn = SCComparesonNotEqualTo; return COMPARESON; }
+"=="        { yylval.fn = SCComparesonEqualTo; return COMPARESON; }
+">="        { yylval.fn = SCComparesonGreatThanOrEqualTo; return COMPARESON; }
+"<="        { yylval.fn = SCComparesonLessThanOrEqualTo; return COMPARESON; }
+
+"if"        { return IF; }
+"else"      { return ELSE; }
+"while"     { return WHILE; }
+"do"        { return DO; }
+"var"       { return VARABLE; }
+"let"       { return LET;}
+
+"true"      { yylval.b = true; return BOOLEAN; }
+"false"     { yylval.b = false; return BOOLEAN; }
+
+"return"    { return RETURN; }
+
+    /* numbers */
+[0-9]+\.[0-9]* {
+            yylval.d = atof(yytext);
+            return NUMBER;
+        }
+
+[0-9]+ {
+            yylval.d = atof(yytext);
+            return NUMBER;
+        }
+
+    /* strings */
+'(\\.|''|[^'\n])*'	|
+\"(\\.|\"\"|[^"\n])*\"  { char *strval = strdup(yytext);
+                            NSString *sv = stripFirstAndLastFromString([NSString stringWithUTF8String:strval]);
+                            yylval.strval = sv; free(strval); return STRING; }
+
+'(\\.|[^'\n])*$	        { char *f = "Unterminated string %s."; int l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
+\"(\\.|[^"\n])*$	{ char *f = "Unterminated string %s."; int l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
+
+[a-zA-Z]+ {
+            MADSymbolReference *sr = sc_symbolize(yytext, yylloc.filename, 0, yylloc.first_line, yylloc.first_column);
+            yylval.symref = sr;
+            return IDENTIFIER;
+        }
+
+"//".*
+[ \t]       { /* Ingnore white space */ }
+\n          { yycolumn = 1; }
+
+.           { yyerror("Mystery character '%c'\n", *yytext); return ERROR; };
+
+
+%%
+
+int yywrap()  {
+    return 1;
+}
+
+NSString *stripFirstAndLastFromString(NSString *s) {
+    NSString *result;
+    if (s.length >= 2) {
+        NSRange range = NSMakeRange(1, s.length-2);
+        result = [s substringWithRange:range];
+    } else {
+        result = @"";
+    }
+    return result;
+}
+
+void yyerror(char *s, ...)  {
+    va_list args;
+    va_start(args, s);
+    NSString *formatString = [NSString stringWithUTF8String:s];
+    NSString *errorMessage = [[NSString alloc] initWithFormat:formatString arguments:args];
+    if (Scrimpted) {
+        NSString *display = nil;
+        if (yylloc.first_line) {
+            char loc[40];
+            sprintf(loc, "(%d %d %d %d)", yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
+            display = [NSString stringWithFormat:@"%@ at location %s.", errorMessage, loc];
+        } else {
+            display = [NSString stringWithFormat: @"%@ at line %d.", errorMessage, yylineno];
+        }
+        NSError *err = [NSError errorWithDomain: @"Scrimpter"
+                                           code: 1
+                                       userInfo: @{ NSLocalizedDescriptionKey : display}];
+        Scrimpted(NO, nil, err);
+    }
+    va_end(args);
+}
+
+MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, NSInteger line, NSInteger column) {
+    MADSymbolReference *result = nil;
+    if (ScrimptSymbolReference) {
+        if (filename == NULL) {
+            filename = "embedded.scrimpt";
+        }
+        NSString *f = [NSString stringWithUTF8String:filename];
+        NSString *s = [NSString stringWithUTF8String:symbol];
+        result = ScrimptSymbolReference(s, f, flags, line, column);
+    }
+    return result;
+}
+

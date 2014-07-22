@@ -12,12 +12,16 @@
 #define Reports_MADocument_h
 
 #import <Foundation/Foundation.h>
+#import "MTCacheProtocol.h"
 
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @class MADocumentState;
 
 @interface MADocument : UIManagedDocument
+    <MTCacheProtocol>
+
+@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
 - (void)quickSave;
 - (void)saveContext;
@@ -31,7 +35,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 - (NSURL *)urlThumbnail;
 
-@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
+- (void)wrapFileOverwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion;
 
 @end
 

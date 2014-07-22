@@ -17,6 +17,8 @@
 #import "MTGraph.h"
 
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
@@ -60,28 +62,13 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"MTQueryFull expects NSDictionary with parameters.");
 
         NSDictionary *parameters = (NSDictionary *)object;
-        NSNumber *parameterName = @(MTQueryCacheFullReportName);
         NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
         RptqQuery *queryObject = [parameters objectForKey: parameterScheam];
-        NSString *name = [parameters objectForKey:parameterName];
-        
-        NSUInteger hash = [name hash];
-        NSNumber *typeKey = @(MTDataTableTypeOfTable);
-        NSNumber *type = @(MTDataTableTypePhysical);
-        NSNumber *objectIdKey = @(MTDataTableObjectId);
-        NSNumber *objectIdV =  @(hash);
-        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
-                                                                 typeKey : type,
-                                                                 objectIdKey : objectIdV}];
-        [self setDatatable:datatable];
-        RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
-        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-        MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-        [self setDatabase:db];
+  //      RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
+//        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
+  //      MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+  //      [self setDatabase:db];
         [self setQueryObject:queryObject];
-
-        NSMutableArray *sortDesc = [[NSMutableArray alloc] initWithArray:[self sortDescriptors]];
-        [datatable sortUsingDescriptors:sortDesc];
 
         
     }
@@ -98,7 +85,7 @@
     
     if ([[[self queryObject] hasQueryTables] count] > 0) {
         
-        [result appendString:[[self database] selectPart]];
+        [result appendString:[[[self dataDelegate] database] selectPart]];
         
         //Use a graph to represent the query: verticies are tables and edges are links.
         MTGraph *graph = [[MTGraph alloc] init];
@@ -106,7 +93,9 @@
         
         //Add a vertex to the graph for each table.
         for (RptqDatabaseSchemaTable *table in hasTables) {
-            [graph addVertexWithObject:[table objectID]];
+            @autoreleasepool {
+                [graph addVertexWithObject:[table objectID]];
+            }
         }
         
         //Create an edge in the graph for each query link.
@@ -172,7 +161,7 @@
         
         if ([result length] > 0) {
             [result appendString:[self sqlWhereClauseWithQuery:[self queryObject]]];
-            [result appendString:[[self database] sqlLimitClause]];
+            [result appendString:[[[self dataDelegate] database] sqlLimitClause]];
         }
         
     }
@@ -199,7 +188,7 @@
             
             RptqQueryField *leftField = [queryPredicate hasLeftField];
             
-            leftValue = [[self database] safeQueryField:leftField];
+            leftValue = [[[self dataDelegate] database] safeQueryField:leftField];
             
         } else if ([queryPredicate fieldleftpred] != nil) {
             
@@ -211,7 +200,7 @@
             
             RptqQueryField *rightField = [queryPredicate hasRightField];
             
-            rightValue = [[self database] safeQueryField:rightField];
+            rightValue = [[[self dataDelegate] database] safeQueryField:rightField];
             
         } else if ([queryPredicate fieldrightpred] != nil) {
             MTDataType dataType = [[[[queryPredicate hasLeftField] databaseSchemaField] dataType] integerValue];
@@ -378,9 +367,9 @@
             if (fieldCounter != 0)  [result appendString:@",\n"];
             
             NSString *tableName = [[queryField inQueryTable] queryAlias];
-            NSString *safeTableName = [[self database] safeIdentifier:tableName];
+            NSString *safeTableName = [[[self dataDelegate] database] safeIdentifier:tableName];
             NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
-            NSString *fieldName = [[self database] safeIdentifier: [field name]];
+            NSString *fieldName = [[[self dataDelegate] database] safeIdentifier: [field name]];
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
             [[self fields] setObject:field forKey:fieldAlias];
@@ -402,7 +391,7 @@
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
                 NSString *tableName = [table queryAlias];
-                NSString *safeTableName = [[self database] safeIdentifier:tableName];
+                NSString *safeTableName = [[[self dataDelegate] database] safeIdentifier:tableName];
                 NSString *tableAlias = [safeTableName stringByAppendingString:@"."];
                 
                 NSUInteger fieldCounter = 0;
@@ -410,7 +399,7 @@
                     RptqDatabaseSchemaField *field = [queryField databaseSchemaField];
                     if (fieldCounter != 0)  [result appendString:@",\n"];
                     NSString *fieldName = [field name];
-                    NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
+                    NSString *safeFieldName = [[[self dataDelegate] database] safeIdentifier:fieldName];
                     NSString *fieldAlias = [tableAlias stringByAppendingString:safeFieldName];
                     [result appendFormat: @"\t%@", fieldAlias];
                     fieldCounter++;
@@ -449,11 +438,11 @@
                         [result appendString:@"\t"];
                     }
                     NSString *ogTableName = [[table databaseSchemaTable] name];
-                    NSString *safeOgTableName = [[self database] safeIdentifier:ogTableName];
+                    NSString *safeOgTableName = [[[self dataDelegate] database] safeIdentifier:ogTableName];
                     [result appendString:safeOgTableName];
-                    [result appendString:[[self database] tableAliasConnector]];
+                    [result appendString:[[[self dataDelegate] database] tableAliasConnector]];
                     NSString *tableName = [table queryAlias];
-                    NSString *safeTableName = [[self database] safeIdentifier:tableName];
+                    NSString *safeTableName = [[[self dataDelegate] database] safeIdentifier:tableName];
                     [result appendString:safeTableName];
                 }
                 
@@ -467,7 +456,7 @@
                             [vertexTableDestination setSortVertexColor:MTColorGray];
                             
                             NSManagedObjectID *queryLinkID = [edge object];
-                            RptqQueryLinks *queryLink = [RptqQueryLinks getQueryLinkWithID:queryLinkID fromObjectContext:managedObjectContext];
+                            RptqQueryLinks *queryLink = (RptqQueryLinks *)[managedObjectContext objectRegisteredForID:queryLinkID];
                             
                             
                             if (queryLink) {
@@ -481,11 +470,11 @@
                                 RptqQueryField *rightField = [queryLink hasRightField];
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
                                 NSString *ogTableName = [[rightTable databaseSchemaTable] name];
-                                NSString *safeOgTableName = [[self database] safeIdentifier:ogTableName];
+                                NSString *safeOgTableName = [[[self dataDelegate] database] safeIdentifier:ogTableName];
                                 [result appendString:safeOgTableName];
-                                [result appendString:[[self database] tableAliasConnector]];
+                                [result appendString:[[[self dataDelegate] database] tableAliasConnector]];
                                 NSString *ogRightTable = [rightTable queryAlias];
-                                NSString *safeOgRightTable = [[self database] safeIdentifier:ogRightTable];
+                                NSString *safeOgRightTable = [[[self dataDelegate] database] safeIdentifier:ogRightTable];
                                 [result appendString:safeOgRightTable];
                                 [result appendString:@"\n\t"];
                                 for (NSUInteger i = 0; i <= [*linkDepth integerValue] + 1; i++) {
@@ -496,12 +485,12 @@
                                 
                                 RptqQueryField *leftField = [queryLink hasLeftField];
                                 if (leftField) {
-                                    NSString *s = [[self database] safeQueryField:leftField];
+                                    NSString *s = [[[self dataDelegate] database] safeQueryField:leftField];
                                     [result appendString: s];
                                 }
                                 [result appendString:@" = "];
                                 if (rightField) {
-                                    NSString *s = [[self database] safeQueryField:rightField];
+                                    NSString *s = [[[self dataDelegate] database] safeQueryField:rightField];
                                     [result appendString: s];
                                 }
                             }
@@ -543,41 +532,6 @@
         }
     }
     return result;
-}
-
-- (NSArray *)sortedHasQueryGroups {
-    NSSet *hasQueryGroups = [[self queryObject] hasQueryGroups];
-    
-    NSString *sortKey = NSStringFromSelector(@selector(weight));
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: sortKey ascending: YES];
-    return [hasQueryGroups sortedArrayUsingDescriptors:@[sortDescriptor]];
-}
-
-- (NSArray *)sortDescriptors {
-
-    NSArray *sortedHasQueryGroups = [self sortedHasQueryGroups];
-
-    NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
-    
-    for (RptqQueryGroup *queryGroup in sortedHasQueryGroups) {
-        
-        BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-        RptqQueryField *groupField = [queryGroup hasField];
-        
-        NSString *queryTable = [[groupField inQueryTable] queryAlias];
-        NSString *safeQueryTable = [[self database] safeIdentifier:queryTable];
-        NSString *fieldName = [[groupField databaseSchemaField] name];
-        NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
-        NSString *key = [NSString stringWithFormat:@"%@.%@", safeQueryTable, safeFieldName];
-        
-        SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                       ascending: sortAscending
-                                                                        selector: sel];
-        [sortedSortDescriptorsGroup addObject:sortDescriptor];
-    }
-    
-    return sortedSortDescriptorsGroup;
 }
 
 @end

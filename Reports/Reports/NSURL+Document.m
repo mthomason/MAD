@@ -12,6 +12,10 @@
 
 @implementation NSURL (Document)
 
+- (NSString *)filenameMinusExtention {
+    return [[self lastPathComponent] stringByDeletingPathExtension];
+}
+
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
     return [NSURL uniqueUrlInDirectory:[[MACloudManager sharedManager] documentsDirectoryURL]
                      withDesiredHandle:name

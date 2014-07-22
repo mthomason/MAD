@@ -9,14 +9,14 @@
 #ifndef Reports_MTDatabaseSqlite3_h
 #define Reports_MTDatabaseSqlite3_h
 
-#import "MTDatabase.h"
+#import "MTDatabaseCache.h"
 #import "libSqlite3_8.h"
 
 #import "MTDatabaseConnection.h"
 
 @class MTDatabaseDataBinding;
 
-@interface MTDatabaseSqlite3 : MTDatabase
+@interface MTDatabaseSqlite3 : MTDatabaseCache
 
 - (void *)databaseHandle;
 
@@ -33,16 +33,19 @@
 - (NSString *)safeQueryField:(RptqQueryField *)queryField;
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName;
 
-+ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database;
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding;
 
 - (void)openDatabase;
+- (void)openDatabaseWithFlags:(int)flags;
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 int compare_string_utf8_localized_desc_collation(void* data, int len1, const void* arg1, int len, const void* arg2);
 
 + (NSString *)nativeTypeForDataType:(MTDataType)dataType;
 + (NSString *)sortDescForColumnType:(MTDataType)columnType ascending:(BOOL)ascending;
+
++ (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber;
++ (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type;
 
 @end
 

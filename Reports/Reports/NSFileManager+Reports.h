@@ -13,7 +13,7 @@
 
 @interface NSFileManager (Reports)
 
-+ (NSArray *)schemaFilesOld;
+- (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl;
 
 @end
 

@@ -42,14 +42,18 @@
 }
 
 - (void)initalizeDisplayAttributesWithColor:(UIColor *)tintColor {
-    UIFont *font = [UIFont systemFontOfSize:9.0000f];
+    UIFont *font = [UIFont boldSystemFontOfSize:9.0000f];//[UIFont systemFontOfSize:9.0000f];
     NSShadow *shadow = [[NSShadow alloc] init];
-    [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
+    UIColor *shadowColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.75000f];
+    [shadow setShadowColor:shadowColor];
     [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
     [shadow setShadowBlurRadius:5.0000f];
     NSDictionary *attributes = @{
                                  NSForegroundColorAttributeName : tintColor,
                                  NSFontAttributeName : font,
+                                 NSStrokeWidthAttributeName : @(-1.0000f),
+                                
+                                 NSStrokeColorAttributeName : [UIColor lightTextColor],
                                  NSShadowAttributeName : shadow,
                                  };
     [self setStringAttributes:attributes];
@@ -66,8 +70,6 @@
     [self setNeedsDisplay];
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
 
     CGContextRef context = UIGraphicsGetCurrentContext();

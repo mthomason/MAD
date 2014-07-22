@@ -126,7 +126,10 @@
     NSString *tableName = [databaseSchemaTable name];
     NSNumber *dropIndex = [self dropIndex];
     NSInteger index = [dropIndex integerValue];
-    return [NSString stringWithFormat:@"%@_%ld", tableName, (long)index];
+    char buf[12];
+    sprintf(buf, "%ld", (long)index);
+    NSString *indexString = [NSString stringWithUTF8String:buf];
+    return [tableName stringByAppendingString:indexString];
 }
 
 + (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document {

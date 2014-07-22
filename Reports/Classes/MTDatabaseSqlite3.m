@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+//#ifndef MAD_MTDatabaseSqlite3_DEBUG
+//#define MAD_MTDatabaseSqlite3_DEBUG
+//#endif
+
 #import "MTDatabaseSqlite3.h"
 #import "MTDatabaseConnectionSqlite3.h"
 #import "MTDatabaseTable.h"
@@ -29,12 +33,15 @@
 
 #import "MTDatabaseDataBinding.h"
 
+NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
+
 @interface MTDatabaseSqlite3 ()
 
 @property (nonatomic, readwrite, assign) sqlite3 *database;
 @property (assign) sqlite3_stmt *bulkStatement;
 
 @property (nonatomic, assign) BOOL isOpen;
+@property (nonatomic, strong) NSCalendar *currentCalandar;
 
 @end
 
@@ -49,6 +56,8 @@
     if (self) {
         _database = NULL;
         _bulkStatement = NULL;
+        NSCalendar *currentCalandar = [NSCalendar currentCalendar];
+        [self setCurrentCalandar:currentCalandar];
     }
     return self;
 }
@@ -69,6 +78,10 @@
             sqlite3_create_collation(_database, "LSASC",
                                         SQLITE_UTF8, _database,
                                         compare_string_utf8_localized_asc_collation);
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+            sqlite3_trace(_database, sqliteLog, NULL);
+#endif
+
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
             NSString *message = [NSString stringWithUTF8String: errorMessage];
@@ -79,16 +92,16 @@
     }
 }
 
+#ifdef MAD_MTDatabaseSqlite3_DEBUG
+void sqliteLog(void *foo, const char* statement);
+void sqliteLog(void *foo, const char* statement) {
+    MTLogStatic(@"=> %s", statement);
+}
+#endif
 
 int compare_string_utf8_localized_asc_collation(void* data, int len1, const void* arg1, int len2, const void* arg2) {
     NSString *string1 = [[NSString alloc] initWithBytes:arg1 length:len1 encoding:NSUTF8StringEncoding];
     NSString *string2 = [[NSString alloc] initWithBytes:arg2 length:len2 encoding:NSUTF8StringEncoding];
-    if (string1 == nil) {
-       string1 = @"";
-    }
-    if (string2 == nil) {
-        string2 = @"";
-    }
     return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
@@ -97,7 +110,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         NSAssert(0, @"Error: failed to finalize bulk statement with message: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
     if (_database != NULL && sqlite3_close(_database) != SQLITE_OK) {   // close short circuts (skips) on null database
-        NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+        //NSAssert(0, @"Error: failed to close database with message '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
     }
 }
 
@@ -105,16 +118,29 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     [self openDatabase];
 }
 
+- (BOOL)tableExist:(NSString *)tablename {
+    BOOL exist = NO;
+	NSString *query = @"SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
+    sqlite3_stmt *statement = NULL;
+    const char *queryc = [query UTF8String];
+	if (sqlite3_prepare_v2(_database, queryc, -1, &statement, NULL) == SQLITE_OK) {
+        sqlite3_bind_text(statement, 1, [tablename UTF8String], (int)strlen([tablename UTF8String]), SQLITE_STATIC);
+		if (sqlite3_step(statement) == SQLITE_ROW) {
+            exist = sqlite3_column_int(statement, 0) == 1;
+        }
+    }
+    sqlite3_finalize(statement);
+    return exist;
+}
+
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
 	sqlite3_stmt *statement;
-	NSString *queryStart = @"SELECT \"tbl_name\" FROM \"main\".\"sqlite_master\" WHERE \"type\"='table';";
+	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
     const char *queryStartChar = [queryStart UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
 
-    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
-    
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
 		while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -139,8 +165,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 	NSString *queryStart = [NSString stringWithFormat: @"PRAGMA \"main\".table_info(\"%@\");", tableName];
     const char *queryStartChar = [queryStart UTF8String];
 	char *sql = sqlite3_mprintf((char *) queryStartChar);
-    
-    //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryStart);
     
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
         success = YES;
@@ -344,11 +368,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 }
 
 - (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding {
-    [MTDatabaseSqlite3 bindStatement:statement withBindings:databinding andDatabase:&_database];
-}
-
-+ (void)bindStatement:(sqlite3_stmt **)statement withBindings:(MTDatabaseDataBinding *)databinding andDatabase:(sqlite3 **)database {
-    
     int columnNumber = (int)[databinding fieldIndex] + 1;
     BOOL success = YES;
     if ([[databinding value] isEqual:[NSNull null]]) {
@@ -364,39 +383,41 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 } else if ([data isKindOfClass:[NSData class]]) {
                     success = SQLITE_OK == sqlite3_bind_blob(*statement, columnNumber, [data bytes], (int)[data length], SQLITE_TRANSIENT);
                 }
-                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
             }
             case MTDataTypeInteger: {
                 long long integerValue = [[databinding value] longLongValue];
                 success = SQLITE_OK == sqlite3_bind_int64(*statement, columnNumber, integerValue);
-                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
             }
             case MTDataTypeString: {
-                NSString *stringValue = [databinding value];
-                const char *cstr = [stringValue UTF8String];
-                int len = (int)strlen(cstr);
-                success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, cstr, len, SQLITE_TRANSIENT);
-                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
+                if ([[databinding value] isKindOfClass:[NSString class]]) {
+                    success = SQLITE_OK == sqlite3_bind_text(*statement, columnNumber, [[databinding value] UTF8String], (int)[[databinding value] lengthOfBytesUsingEncoding:NSUTF8StringEncoding], SQLITE_TRANSIENT);
+                } else if ([[databinding value] isKindOfClass:[NSDateComponents class]]) {
+                    NSDate *date = [[self currentCalandar] dateFromComponents:[databinding value]];
+                    success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, [date timeIntervalSince1970]);
+                } else {
+                    NSAssert(false, @"What else is there? %s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
+                }
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
             }
             case MTDataTypeFloat:
-            case MTDataTypeDouble: {
-                double doubeValue = [[databinding value] doubleValue];
-                success = SQLITE_OK == sqlite3_bind_double(*statement, columnNumber, doubeValue);
-                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
+            case MTDataTypeDouble:
+                sqlite3_bind_double(*statement, columnNumber, [[databinding value] doubleValue]);
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
                 break;
-            }
-            case MTDataTypeNull: {
-                success = SQLITE_OK == sqlite3_bind_null(*statement, columnNumber);
-                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*database));
-            }
+            case MTDataTypeNull:
+                sqlite3_bind_null(*statement, columnNumber);
+                NSAssert(success, @"%s: %s", __PRETTY_FUNCTION__, (char *)sqlite3_errmsg(*&_database));
             default:
                 NSAssert(false, @"This is going to end badly.  Only binding blobs right now.");
                 break;
         }
     }
+    
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
@@ -407,8 +428,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 
     if ([queryString length] > 0) {
 
-        //MTLog(@"%s, %@", __PRETTY_FUNCTION__, queryString);
-        
         sqlite3_stmt *statement = NULL;
         statement = [self statementForQuery:query andStatement:statement];
         
@@ -424,6 +443,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                     [self bindStatement:&statement withBindings:databinding];
                 }
             }
+        } else if ([query partOfTransactionSet]) {
+            if ([[query binaryBindings] count] > 0) {
+                for (MTDatabaseDataBinding *databinding in [query binaryBindings]) {
+                    [self bindStatement:&statement withBindings:databinding];
+                }
+            }
         }
         
         if ([query returnsResults]) {
@@ -432,14 +457,13 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 
                 int numberOfColumns = sqlite3_column_count(statement);
                 
-                [[query datatable] removeAllObjects];
+                MTDataTable *dataTable = [[self delegate] dataTableForQuery:query];
+                [dataTable removeAllObjects];
                 
                 NSUInteger rowCounter = 0;
                 
                 //NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
                 while (SQLITE_ROW == sqlite3_step(statement)) {
-                    
- 
                     
                     if (rowCounter == 0) {  //If first time around, calculate column information.
                         for (NSUInteger columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
@@ -470,12 +494,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                                 [dataColumn setPrimaryKey: (pPrimaryKey == NULL) ? NO : *pPrimaryKey];
                                 [dataColumn setAutoIncrement: (pAutoinc == NULL) ? NO : *pAutoinc];
                                 [dataColumn setNotNull: (pNotNull == NULL) ? NO : *pNotNull];
-                                [[query datatable] addColumn:dataColumn];
+                                [dataTable addColumn:dataColumn];
                                 dataColumn = nil;
                             }
                         }
                         
-                        [[query datatable] beginBulkInsert];
+                        [dataTable beginBulkInsert];
                     }
                     [self readRow:rowCounter];
                     
@@ -484,67 +508,29 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                     for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
                         
                         
-                        int affentyType = sqlite3_column_type(statement, colCtr);   //http://www.sqlite.org/c3ref/c_blob.html
-                        id value = nil;
-                        switch (affentyType) {
-                            case SQLITE_INTEGER: {
-                                sqlite3_int64 rint = sqlite3_column_int64(statement, colCtr);
-                                value = [NSNumber numberWithLongLong:rint];
-                                break;
-                            }
-                            case SQLITE_FLOAT: {
-                                double rint = sqlite3_column_double(statement, colCtr);
-                                value = [NSNumber numberWithDouble:rint];
-                                break;
-                            }
-                            case SQLITE_BLOB: {
-                                const void *blob = sqlite3_column_blob(statement, colCtr);
-                                if (blob != NULL) {
-                                    int numBytes = sqlite3_column_bytes16(statement, colCtr);
-                                    value = [NSData dataWithBytes:blob length:numBytes];
-                                }
-                                break;
-                            }
-                            case SQLITE_NULL: {
-                                value = [NSNull null];
-                                break;
-                            }
-                            case SQLITE3_TEXT: {
-                                
-                                const unsigned char *resultString = sqlite3_column_text(statement, colCtr);
-                                if (resultString != NULL) {
-                                    value = [NSString stringWithUTF8String:(char *) resultString];
-                                }
-                                break;
-                            }
-                            default:
-                                NSAssert(false, @"Unhandled case");
-                                break;
-                        }
-                        
-                        if (value == nil) {
-                            value = [NSNull null];
-                        }
+                        id value = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:colCtr];
                         NSString *fieldName = [query fieldKeys][colCtr];
                         [resultsForRow setObject:value forKey:fieldName];
                     }
                     
-                    [[query datatable] addRowWithDataForFieldKeys:resultsForRow];
+                    [dataTable addRowWithDataForFieldKeys:resultsForRow];
                     resultsForRow = nil;
                     rowCounter++;
                 }
-                [[query datatable] endBulkInsert];
+                [dataTable endBulkInsert];
                 
             }
         } else {
             int result = sqlite3_step(statement);
-            //MTLog(@"Sqlite message %s", (char *)sqlite3_errmsg(_database));
-            NSAssert(SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s", (char *)sqlite3_errmsg(_database));
-            NSAssert(success, @"%s", (char *)sqlite3_errmsg(_database));
+            //BOOL primaryKeyError = result == SQLITE_CONSTRAINT_PRIMARYKEY;
+            //BOOL duplicateColumn = result == 21;
+            NSAssert(result == 21 || result == SQLITE_CONSTRAINT_PRIMARYKEY || SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s with result code: %d", (char *)sqlite3_errmsg(_database), result);
+            NSAssert(success || result == 21 || result == SQLITE_CONSTRAINT_PRIMARYKEY, @"%s", (char *)sqlite3_errmsg(_database));
         }
         if ([query partOfTransactionSet] == NO) {
             success = SQLITE_OK == sqlite3_finalize(statement);
         } else {
+            sqlite3_reset(statement);
             _bulkStatement = statement;
         }
         
@@ -562,7 +548,6 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
         if (success == NO) {
             NSString *title = NSLocalizedString(@"Error", @"Error");
             error = [NSError errorWithDomain:@"MTDatabaseSqlite3" code:4784 title:title andMessage:message];
-            //NSLog(@"Sqlite3Error: %@\nQuery\n%@", error, queryString);
         }
         sqlite3_free(sql);
         
@@ -571,9 +556,119 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     completion(success, error);
 }
 
-//+ (id)currentObjectForStatement:(sqlite3_stmt *)statement and {
++ (id)valueForStatement:(sqlite3_stmt *)statement columnNumber:(int)columnNumber {
+    id value = nil;
+    int affentyType = sqlite3_column_type(statement, columnNumber);   //http://www.sqlite.org/c3ref/c_blob.html
+    switch (affentyType) {
+        case SQLITE_INTEGER: {
+            sqlite3_int64 rint = sqlite3_column_int64(statement, columnNumber);
+            value = [NSNumber numberWithLongLong:rint];
+            break;
+        }
+        case SQLITE_FLOAT: {
+            double rint = sqlite3_column_double(statement, columnNumber);
+            value = [NSNumber numberWithDouble:rint];
+            break;
+        }
+        case SQLITE_BLOB: {
+            const void *blob = sqlite3_column_blob(statement, columnNumber);
+            if (blob != NULL) {
+                int numBytes = sqlite3_column_bytes16(statement, columnNumber);
+                value = [NSData dataWithBytes:blob length:numBytes];
+            }
+            break;
+        }
+        case SQLITE_NULL: {
+            value = [NSNull null];
+            break;
+        }
+        case SQLITE3_TEXT: {
+            
+            const unsigned char *resultString = sqlite3_column_text(statement, columnNumber);
+            if (resultString != NULL) {
+                value = [NSString stringWithUTF8String:(char *) resultString];
+            }
+            break;
+        }
+        default:
+            NSAssert(false, @"Unhandled case");
+            break;
+    }
     
-//}
+    if (value == nil) {
+        value = [NSNull null];
+    }
+    return value;
+}
+
++ (id)object:(sqlite3_stmt *)statement forColumnNumber:(int)columnCounter withType:(MTDataType)type {
+    id columnValue;
+    switch (type) {
+        case MTDataTypeLong:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeLongLong:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeInt24:
+        case MTDataTypeInteger:
+            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            break;
+        case MTDataTypeShort:
+            columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
+            break;
+        case MTDataTypeImage:
+        case MTDataTypeBlob:
+            columnValue = [NSData dataWithBytes: sqlite3_column_blob(statement, columnCounter)
+                                         length: sqlite3_column_bytes(statement, columnCounter)];
+            break;
+        case MTDataTypeFloat:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeNumber:
+        case MTDataTypeDouble:
+        case MTDataTypeDecimal:
+            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            break;
+        case MTDataTypeBit:
+        case MTDataTypeVarChar:
+        case MTDataTypeString:
+        case MTDataTypeEnum:
+        case MTDataTypeYear:
+        case MTDataTypeSet: {
+            const unsigned char *text = sqlite3_column_text(statement, columnCounter);
+            if (text == NULL) {
+                columnValue = [NSNull null];
+            } else {
+                columnValue = [NSString stringWithUTF8String:(const char *) text];
+            }
+            break;
+        }
+        case MTDataTypeUnknown:
+        case MTDataTypeNull: {
+            columnValue = [NSNull null];
+            break;
+        }
+        case MTDataTypeTimeStamp:
+        case MTDataTypeTime:
+        case MTDataTypeDate:
+        case MTDataTypeDateTime:
+        case MTDataTypeGeometry:
+        default: {
+            //NSAssert(false, @"Type is not expected...  Should really be encapsulated in MTDatabaseSqlite3: %lu", (unsigned long)type);
+            if (sqlite3_column_type(statement, columnCounter) == SQLITE3_TEXT) {
+                const unsigned char *text = sqlite3_column_text(statement, columnCounter);
+                if (text == NULL) {
+                    columnValue = [NSNull null];
+                } else {
+                    columnValue = [NSString stringWithUTF8String:(const char *) text];
+                }
+            }
+            break;
+        }
+    }
+    return columnValue;
+}
 
 - (void)cleanupBulkInsert {
     BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);
@@ -609,7 +704,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 
 - (NSString *)safeIdentifier:(NSString *)fieldOrTableName {
     // FIXME: Use backticks `` to make more robust.
-    return [NSString stringWithFormat:@"\"%@\"", fieldOrTableName];
+    NSString *result = [MTDatabaseSqlite3SafeQuote stringByAppendingString:fieldOrTableName];
+    return [result stringByAppendingString:MTDatabaseSqlite3SafeQuote];
 }
 
 - (NSString *)safeQuerySchemaField:(RptqDatabaseSchemaField *)schemaField {
@@ -621,6 +717,82 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 
 - (NSString *)tableAliasConnector {
     return @" ";
+}
+
+- (void)beginBulkInsert {
+    int size_of_wal_log;
+    int number_of_checkpointed_frames;
+    int	wal = sqlite3_wal_checkpoint_v2(_database, NULL, SQLITE_CHECKPOINT_RESTART,
+                                   &size_of_wal_log, &number_of_checkpointed_frames);
+    NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
+    dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
+    [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        for (MTDatabaseTable *table in tables) {
+            NSDictionary *queryDefination = [MTQuery queryDefinitionCacheDeleteAllFromTable:table.name];
+            MTQuery *dropTable = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheDeleteAllFromTable object:queryDefination];
+            [dropTable performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+                NSAssert(success && error == nil, @"Error %@ at %s.", error, __PRETTY_FUNCTION__);
+            }];
+        }
+        dispatch_semaphore_signal(s0);
+    }];
+    dispatch_semaphore_wait(s0, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeOff object:@{}];
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        dispatch_semaphore_signal(s1);
+    }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeOverride object:@{}];
+    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
+    [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        dispatch_semaphore_signal(s2);
+    }];
+    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheBeginTransaction object:@{}];
+    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        dispatch_semaphore_signal(s3);
+    }];
+    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+}
+
+- (void)endBulkInsert {
+    
+    MTQuery *query = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheEndTransaction object:@{}];
+    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
+    [query performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        dispatch_semaphore_signal(s1);
+    }];
+    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
+    
+    MTQuery *querySyncMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheSyncModeDefault object:@{}];
+    dispatch_semaphore_t s2 = dispatch_semaphore_create(0);
+    [querySyncMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        dispatch_semaphore_signal(s2);
+    }];
+    dispatch_semaphore_wait(s2, DISPATCH_TIME_FOREVER);
+    
+    /*
+    dispatch_semaphore_t s3 = dispatch_semaphore_create(0);
+    MTQuery *queryJournalMode = [[MTQuery alloc] initWithQueryType:MTQueryTypeCacheJournalModeDefault object:@{}];
+    [queryJournalMode performQueryWithDatabase:self completion:^(BOOL success, NSError *error) {
+        //NSAssert(success, @"%s: %@", __PRETTY_FUNCTION__, error);
+        dispatch_semaphore_signal(s3);
+    }];
+    dispatch_semaphore_wait(s3, DISPATCH_TIME_FOREVER);
+    
+    */
+    
+    [self cleanupBulkInsert];
 }
 
 @end

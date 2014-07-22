@@ -16,8 +16,11 @@
 #import "MTQuery.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
+#import "MTDataTable.h"
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
+
+@property (nonatomic, strong) MTDataTable *dataTableSampleData;
 
 @end
 
@@ -42,14 +45,30 @@
     [[self navigationController] popViewControllerAnimated:YES];
     
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
-    
+    MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:[schemaField objectID]];
+    [self setDataTableSampleData:dataTable];
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
-            [[self delegate] barcodeMaxicodeDidChooseSampleData:[querySampleDataField datatable]];
+            MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
+            [self setDataTableSampleData:dt];
+            NSArray *allObjects = [[self dataTableSampleData] allObjects];
+            [[self delegate] barcodeMaxicodeDidChooseSampleData:allObjects];
             [[self tableView] reloadData];
         }
     }];
+}
+
++ (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
+    NSUInteger hash = [[[objectID URIRepresentation] absoluteString] hash];
+    
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(hash);
+    return [MTDataTable dataTableFactory:@{
+                                           typeKey : type,
+                                           objectIdKey : objectIdV}];
 }
 
 #pragma mark - Table view delegate

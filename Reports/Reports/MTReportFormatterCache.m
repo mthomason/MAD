@@ -34,20 +34,18 @@
     return self;
 }
 
-- (void)setLayout:(NSArray *)layout andIndexes:(NSArray *)indexes forSize:(CGSize)size {
+- (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    NSArray *l = [NSArray arrayWithArray:layout];
-    NSArray *i = [NSArray arrayWithArray:indexes];
-    [[self layout] setObject:l forKey:key];
-    [[self indexes] setObject:i forKey:key];
+    [[self layout] setObject:layout forKey:key];
+    [[self indexes] setObject:indexes forKey:key];
 }
 
-- (NSArray *)layoutForSize:(CGSize)size {
+- (id)layoutForSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
     return [[self layout] objectForKey:key];
 }
 
-- (NSArray *)indexesForSize:(CGSize)size {
+- (id)indexesForSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
     return [[self indexes] objectForKey:key];
 }

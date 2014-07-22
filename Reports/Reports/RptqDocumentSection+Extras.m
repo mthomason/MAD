@@ -100,10 +100,6 @@
 }
 
 - (NSString *)sectionKey {
-    return [self secKey];
-}
-
-- (NSString *)secKey {
     return [self keyForIdentifier];
 }
 
@@ -132,7 +128,13 @@
 }
 
 - (NSString *)keyForIdentifier {
-    return [[[self objectID] URIRepresentation] absoluteString];
+    char buf[18];
+    snprintf(buf, 18, "s%lu", (unsigned long)[[self objectID] hash]);
+    return [NSString stringWithUTF8String:buf];
+    
+    //NSManagedObjectID *objectID = [[self objectID] hash];
+    //NSURL *url = [objectID URIRepresentation];
+    //return [url absoluteString];
 }
 
 - (NSUInteger)nextDropIndexForSection {
@@ -225,34 +227,13 @@
 }
 
 + (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
-    RptqDocumentSection *resultSection = nil;
-    RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
-    NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
-    NSArray *groupsSorted = [RptqDocumentSection queryGroupsSortedByWeight:groupsUnsorted];
-    if (groupLevel < [groupsSorted count]) {
-        RptqQueryGroup *group = [groupsSorted objectAtIndex:groupLevel];
-        resultSection = [RptqDocumentSection headerSectionInSections:[group hasSection]];
-    }
-    return resultSection;
-}
-
-+ (NSArray *)queryGroupsSortedByWeight:(NSSet *)queryGroupsUnsorted {
-    NSString *sortKey = NSStringFromSelector(@selector(weight));
-    NSSortDescriptor *sortedWeightAscending = [NSSortDescriptor sortDescriptorWithKey:sortKey ascending:YES];
-    NSArray *sortDescriptors = @[sortedWeightAscending];
-    return [queryGroupsUnsorted sortedArrayUsingDescriptors:sortDescriptors];
+    RptqQueryGroup *group = [query queryGroupForIndex:groupLevel];
+    return [RptqDocumentSection headerSectionInSections:[group hasSection]];
 }
 
 + (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
-    RptqDocumentSection *resultSection = nil;
-    RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
-    NSSet *groupsUnsorted = [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] hasQueryGroups];
-    NSArray *groupsSorted = [RptqDocumentSection queryGroupsSortedByWeight:groupsUnsorted];
-    if (groupLevel < [groupsSorted count]) {
-        RptqQueryGroup *group = [groupsSorted objectAtIndex:groupLevel];
-        resultSection = [RptqDocumentSection footerSectionInSections:[group hasSection]];
-    }
-    return resultSection;
+    RptqQueryGroup *group =  [query queryGroupForIndex:groupLevel];
+    return [RptqDocumentSection footerSectionInSections:[group hasSection]];
 }
 
 + (RptqDocumentSection *)getDocumentSectionForDocument:(RptqDocument *)document {
@@ -263,7 +244,7 @@
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
                                          forQuery:(RptqQuery *)query {
     
-    NSInteger numberOfGroups = [[query hasQueryGroups] count];//[RptqQueryGroup numberOfGroupsForQuery:query];
+    NSInteger numberOfGroups = [[query hasQueryGroups] count];
     RptqDocumentSection *resultSection = nil;
     if (row < (numberOfGroups * 2) + 5) {
         
@@ -293,11 +274,7 @@
             
             case MNSDocumentSectionTypeGroupHeader: {
                 NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
-                NSSet *groupsUnsorted = [query hasQueryGroups];
-                NSString *weight = NSStringFromSelector(@selector(weight));
-                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-                NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
-                RptqQueryGroup *group = sortedArray[groupNumber];
+                RptqQueryGroup *group = [query queryGroupForIndex:groupNumber];
                 resultSection = [RptqDocumentSection headerSectionInSections:[group hasSection]];
                 break;
             }
@@ -306,12 +283,7 @@
                 NSInteger body          = 2 + numberOfGroups;
                 NSInteger indentLevel   = body - (row - body);
                 NSInteger groupNumber   = indentLevel - 2;
-                NSSet *groupsUnsorted   = [query hasQueryGroups];
-                NSString *weight = NSStringFromSelector(@selector(weight));
-                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-                NSArray *sortedArray = [groupsUnsorted sortedArrayUsingDescriptors:@[sortDescriptor]];
-                RptqQueryGroup *group = sortedArray[groupNumber];
-                
+                RptqQueryGroup *group = [query queryGroupForIndex:groupNumber];
                 resultSection = [RptqDocumentSection footerSectionInSections:[group hasSection]];
                 break;
             }

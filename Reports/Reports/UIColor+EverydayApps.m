@@ -15,6 +15,7 @@
 + (id)edaBlueLight                      {vendColor(185.0000f, 224.0000f, 247.0000f);}
 + (id)edaBlueDarkSelection              {vendColorWithAlpha(2.0000f, 108.0000f, 182.0000f, 0.5000f);}
 + (id)edaBlueLightSelection             {vendColorWithAlpha(185.0000f, 224.0000f, 247.0000f, 0.5000f);}
++ (id)edaBlueLightBackground            {vendColorWithAlpha(2.0000f, 108.0000f, 182.0000f, 0.8900f);}
 + (id)edaBlackFiftyPercent              {vendColor(147.0000f, 149.0000f, 152.0000f);}
 + (id)edaBlackTwentyFivePercent         {vendColor(199.0000f, 200.0000f, 202.0000f);}
 + (id)edaOrange                         {vendColor(246.0000f, 160.0000f, 26.0000f);}
@@ -29,6 +30,7 @@
 + (id)tintColorBlue { vendColor(13.0000f, 158.0000f, 215.0000f); }
 + (id)tintColorRed { vendColor(222.0000f, 36.0000f, 72.0000f); }
 + (id)tintColorWhite { return [UIColor whiteColor]; }
++ (id)tintColorWhiteAlpha { vendColorWithAlpha(255.0000f, 255.0000f, 255.0000f, 0.3333f); }
 + (id)tintColorGold { vendColor(164.0000f, 157.0000f, 26.0000f); }
 + (id)tintColorGold2 { vendColor(138.0000f, 131.0000f, 1.0000f); }
 

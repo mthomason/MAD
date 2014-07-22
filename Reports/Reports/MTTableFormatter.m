@@ -35,20 +35,9 @@
 
 - (BOOL)format {
     
-    BOOL updatedData = NO;
     
-    if ([super format]) {
-        
-        MTQuery *madQuery = [self query];
-        NSArray *sortDescriptors = [madQuery sortDescriptors];
-        [self setSortDescriptorsByGroupSorted:sortDescriptors];
-        
-        [[[self query] datatable] sortUsingDescriptors:sortDescriptors];
-
-        updatedData = YES;
-    }
-
-    return updatedData;
+    
+    return [super format];
 }
 
 @end

@@ -21,6 +21,8 @@
 #import "MTQuery.h"
 #import "NSError+UserInterface.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+#import "MTDataTable.h"
+#import "UIDevice+Hack.h"
 
 @interface MTViewControllerValueBasedOnField ()
     <UITextFieldDelegate>
@@ -32,6 +34,9 @@
 @property (nonatomic, strong) MTCellEnterText *tableViewCellEnterText;
 @property (nonatomic, strong) NSArray *pickerData;
 @property (nonatomic, strong) NSDateFormatter *longStyleDateFormatter;
+
+@property (nonatomic, strong) MTQuery *querySampleDataField;
+@property (nonatomic, strong) MTDataTable *dataTable;
 
 @end
 
@@ -51,54 +56,22 @@
     return self;
 }
 
-#pragma mark - Actions
-
-- (IBAction)done:(id)sender {
-    [[self enterStringDelegate] enterStringDidFinishWithString:[[self textField] text]];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
 }
 
-- (void)keyboardDidHide:(id)sender {
-    [self done:sender];
-}
-
-#pragma mark - View lifecycle
-
-- (void)loadPickerView {
-    //__weak MTViewControllerValueBasedOnField *weakself = self;
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
-    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
-                                                                fromObjectContext: objectContext];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
-    
-    __weak MTViewControllerValueBasedOnField *weakself2 = self;
-    [querySampleDataField performQuery:^(BOOL success, NSError *error) {
-        if (success) {
-            
-            //__weak MTViewControllerValueBasedOnField *weakself3 = weakself2;
-            
-            [weakself2 setPickerData:[querySampleDataField datatable]];
-            [[weakself2 pickerView] reloadAllComponents];
-            
-            [[weakself2 pickerView] setNeedsDisplay];
-            [[weakself2 pickerView] selectRow:0 inComponent:0 animated:NO];
-            
-            
-        } else {
-            [error presentErrorToUser];
-        }
-    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
-    [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
-    [[self textField] setText:[self pickerView: [self pickerView]
-                                   titleForRow: 0
-                                  forComponent: 0]];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver: self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    [defaultCenter addObserver: self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
     
     [self loadPickerView];
     
@@ -107,6 +80,99 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver: self];
+}
+
+#pragma mark - Actions
+
+- (IBAction)done:(id)sender {
+    [[self enterStringDelegate] enterStringDidFinishWithString:[[self textField] text]];
+}
+
+- (void)keyboardDidHide:(id)sender {
+    if ([UIDevice isPad]) {
+        [self done:sender];
+    }
+}
+
+- (void)keyboardDidShow:(NSNotification *)sender {
+    if ([UIDevice isPad] == NO) {
+
+        NSDictionary *userInfo = [sender userInfo];
+        //NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
+        NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
+        NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
+        NSTimeInterval duration = [keyboardAnimationDurationUserInfoKey longLongValue];
+        NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
+        //CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
+        CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];
+        CGFloat pickerViewFrameY = keyboardFrameEnd.origin.y - self.pickerView.frame.size.height;
+        CGRect pickerViewFrameEnd = CGRectMake(keyboardFrameEnd.origin.x, pickerViewFrameY, self.pickerView.frame.size.width, self.pickerView.frame.size.height);
+        __weak MTViewControllerValueBasedOnField *weakself = self;
+        UIViewAnimationOptions options;
+        switch ([keyboardAnimationCurveUserInfoKey integerValue]) {
+            case UIViewAnimationCurveEaseInOut:
+                options = UIViewAnimationOptionCurveEaseInOut;
+                break;
+            case UIViewAnimationCurveEaseIn:
+                options = UIViewAnimationOptionCurveEaseIn;
+                break;
+            case UIViewAnimationCurveEaseOut:
+                options = UIViewAnimationOptionCurveEaseOut;
+                break;
+            case UIViewAnimationCurveLinear:
+                options = UIViewAnimationOptionCurveLinear;
+                break;
+            default:
+                options = UIViewAnimationOptionCurveLinear;
+                break;
+        }
+        [UIView animateWithDuration:duration delay:0.0 options:options animations:^{
+            [[weakself pickerView] setFrame:pickerViewFrameEnd];
+        } completion:^(BOOL finished) {
+            
+        }];
+
+        
+    }
+}
+
+#pragma mark - View lifecycle
+
+- (void)loadPickerView {
+
+    MTApplicationInstance *applicationInstance = [AppDelegate app];
+    MAReportDocument *reportDocument = [applicationInstance activeDocument];
+    NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
+    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
+                                                                fromObjectContext: objectContext];
+    
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
+
+    [self setQuerySampleDataField:querySampleDataField];
+    
+    __weak MTViewControllerValueBasedOnField *weakself2 = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        [querySampleDataField performQuery:^(BOOL success, NSError *error) {
+            if (success) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
+                    [weakself2 setDataTable:dt];
+                    NSArray *allObjects = [[weakself2 dataTable] allObjects];
+                    [weakself2 setPickerData:allObjects];
+                    [[weakself2 pickerView] reloadAllComponents];
+                    
+                    [[weakself2 pickerView] setNeedsDisplay];
+                    
+                    [[weakself2 pickerView] selectRow:0 inComponent:0 animated:NO];
+                    [weakself2 pickerView:[weakself2 pickerView] didSelectRow:0 inComponent:0];
+                });
+                
+                
+            } else {
+                [error presentErrorToUser];
+            }
+        }];
+    });
 }
 
 - (CGSize)preferredContentSize {
@@ -174,7 +240,6 @@
     MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
     
     [[result textField] setReturnKeyType:UIReturnKeyDone];
-    //[[result textField] addTarget:self action:@selector(didEndEditing:) forControlEvents:UIControlEventEditingDidEnd];
     [[result textField] setDelegate:self];
     
     [self setTextField:[result textField]];

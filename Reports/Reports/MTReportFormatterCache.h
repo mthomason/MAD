@@ -10,9 +10,9 @@
 
 @interface MTReportFormatterCache : NSObject
 
-- (void)setLayout:(NSArray *)layout andIndexes:(NSArray *)indexes forSize:(CGSize)size;
-- (NSArray *)layoutForSize:(CGSize)size;
-- (NSArray *)indexesForSize:(CGSize)size;
+- (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size;
+- (id)layoutForSize:(CGSize)size;
+- (id)indexesForSize:(CGSize)size;
 - (void)dumpCache;
 
 @end

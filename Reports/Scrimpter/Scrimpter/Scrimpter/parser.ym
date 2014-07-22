@@ -1,0 +1,299 @@
+%{
+    
+    #import <Foundation/Foundation.h>
+    #import "MTPair.h"
+    #import "MADSymbol.h"
+    #import "MADSymbolReference.h"
+    #import "MTAbstractSyntaxTree.h"
+    #import "MTAstNodeFunctionCallEmbeddedUniaryMinus.h"
+    #import "MADValue.h"
+    
+    //#define YYDEBUG 1
+
+    int yylex(void);
+    void yyerror(char *s, ...);
+    void sc_return(MTAbstractSyntaxTree *result);
+    double sc_control_if(bool expression, double list);
+
+    MADSymbol *sc_symbol_for_key(NSString *symbol);
+
+    MTAbstractSyntaxTree *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue);
+    MTAbstractSyntaxTree *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue);
+    MTAbstractSyntaxTree *nodeForNumber(double n);
+    MTAbstractSyntaxTree *nodeForSymbolReference(MADSymbolReference *symbolReference);
+    MTAbstractSyntaxTree *nodeForAssigningValueToSymbol(MADSymbol *symbol, MTAbstractSyntaxTree *value);
+    MTAbstractSyntaxTree *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value);
+    MTAbstractSyntaxTree *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue);
+
+    MTAstNodeFunctionCallEmbeddedUniaryMinus *nodeForUniaryMinus(MTAbstractSyntaxTree *value);
+
+    MTAbstractSyntaxTree *nodeForExpression(MTAbstractSyntaxTree *expression);
+    MTAbstractSyntaxTree *nodeForStatement(MTAbstractSyntaxTree *statement);
+    MTAbstractSyntaxTree *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAbstractSyntaxTree *list);
+    MTAbstractSyntaxTree *nodeForExpressionAndList(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *list);
+    
+    MTAbstractSyntaxTree *nodeForString(NSString *s);
+    MTAbstractSyntaxTree *nodeForBool(bool b);
+    
+    MTAbstractSyntaxTree *nodeForFunction(MTAbstractSyntaxTree *expression, NSString *functionIdentifier, MTAbstractSyntaxTree *expressionList);
+
+    MTAbstractSyntaxTree *nodeForResult(MTAbstractSyntaxTree *expression);
+
+    //int yydebug = 1;
+
+%}
+
+%code requires {
+    char *filename;
+    
+    typedef struct YYLTYPE {
+        int first_line;
+        int first_column;
+        int last_line;
+        int last_column;
+        char *filename;
+    } YYLTYPE;
+    # define YYLTYPE_IS_DECLARED 1
+    
+    # define YYLLOC_DEFAULT(Current, Rhs, N) \
+    do	\
+        if (N) { \
+            (Current).first_line   = YYRHSLOC (Rhs, 1).first_line; \
+            (Current).first_column = YYRHSLOC (Rhs, 1).first_column; \
+            (Current).last_line    = YYRHSLOC (Rhs, N).last_line; \
+            (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
+            (Current).filename     = YYRHSLOC (Rhs, 1).filename; \
+        } else {    /* empty RHS */ \
+            (Current).first_line   = (Current).last_line   = YYRHSLOC (Rhs, 0).last_line; \
+            (Current).first_column = (Current).last_column = YYRHSLOC (Rhs, 0).last_column;	\
+            (Current).filename  = NULL; \
+        } \
+    while (0)
+    
+    #define YY_LOCATION_PRINT(File, Loc) \
+                fprintf (File, "%d.%d-%d.%d", (Loc).first_line, (Loc).first_column, (Loc).last_line, (Loc).last_column)
+}
+
+
+%union {
+    __unsafe_unretained MTAbstractSyntaxTree    *ast;
+    NSInteger                                   fn;
+    double                                      d;
+    __unsafe_unretained NSNumber                *number;
+    bool                                        b;
+    __unsafe_unretained MADSymbol               *sym;
+    __unsafe_unretained MADSymbolReference      *symref;
+    __unsafe_unretained id                      value;
+    __unsafe_unretained NSString                *identifier;
+    __unsafe_unretained NSString                *strval;
+    __unsafe_unretained NSString                *fuctname;
+}
+
+%locations
+
+%token <fn> COMPARESON
+%token END_OF_LINE
+%token END_OF_FILE
+%token ERROR
+%token RETURN
+%token VARABLE
+%token <b> BOOLEAN
+%token <fuctname> FUNCT
+%token <strval> STRING
+
+%token IF ELSE WHILE DO LET
+
+%token <d> NUMBER
+%token <symref> IDENTIFIER
+
+%type <ast> list
+%type <ast> stmt
+
+%type <ast> exp explist
+%type <ast> expstr
+%type <ast> expnum
+%type <ast> expbool
+
+%type <ast> factor
+%type <ast> term
+
+%start scrimpt
+
+%%
+
+scrimpt:                                        { sc_return(nil); YYACCEPT; }
+    | list                                      { sc_return($1); YYACCEPT; }
+;
+
+list: stmt list                                 { $$ = nodeForStatementAndList(nodeForStatement($1), $2); }
+    | stmt                                      { $$ = nodeForStatement($1); }
+;
+
+stmt: IF exp '{' list '}'                       { $$ = nodeForIfThenStatement($2, $4, nil); }
+    | IF exp '{' list '}' ELSE '{' list '}'     { $$ = nodeForIfThenStatement($2, $4, $8); }
+    | WHILE exp DO list                         { while ($2) { $$ = $4; } }
+    | exp                                       { $$ = nodeForExpression($1); }
+    | VARABLE IDENTIFIER '=' exp ';'            { $$ = nodeForAssigningValueToSymbolReference($2, $4); }
+    | IDENTIFIER '=' exp ';'                    { $$ = nodeForAssigningValueToSymbolReference($1, $3); }
+    | RETURN exp ';'                            { $$ = nodeForResult($2); }
+    | ';'                                       { $$ = nil; }
+;
+
+exp : expnum                                    { $$ = $1; }
+    | expbool                                   { $$ = $1; }
+    | ERROR                                     { YYABORT; }
+    | '(' exp ')'                               { $$ = nodeForExpression($2); }
+    | exp COMPARESON exp                        { $$ = nodeForComparsonOfValues($2, $1, $3); }
+    | exp '.' IDENTIFIER '(' ')'                { $$ = nodeForFunction($1, [$3 symbol], nil); }
+    | exp '.' IDENTIFIER '(' explist ')'        { $$ = nodeForFunction($1, [$3 symbol], $5); }
+;
+
+explist: exp
+    | exp ',' explist                           { $$ = nodeForExpressionAndList(nodeForExpression($1), $3); }
+
+expbool: BOOLEAN                                { $$ = nodeForBool($1); }
+;
+
+    //expstr: STRING                                  { $$ = nodeForString($1); }
+    //;
+
+expnum : '(' expnum ')'                         { $$ = nodeForExpression($2); }
+    | factor                                    { $$ = nodeForExpression($1); }
+    | expnum COMPARESON factor                  { $$ = nodeForComparsonOfValues($2, $1, $3); }
+    | expnum '+' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticAdd, $1, $3); }
+    | expnum '-' factor                         { $$ = nodeForArithmeticOfValues(SCArithmeticSubtract, $1, $3); }
+;
+
+factor : term                                   { $$ = nodeForExpression($1); }
+    | factor '*' term                           { $$ = nodeForArithmeticOfValues(SCArithmeticMultiply, $1, $3); }
+    | factor '/' term                           { $$ = nodeForArithmeticOfValues(SCArithmeticDivide, $1, $3); }
+;
+
+term : NUMBER                                   { $$ = nodeForNumber($1); }
+    | STRING                                    { $$ = nodeForString($1); }
+    | IDENTIFIER                                { $$ = nodeForSymbolReference($1); }
+    | '|' term                                  { $$ = nodeForUniaryMinus($2); }
+    | '-' term                                  { $$ = nodeForUniaryMinus($2); }
+    | '(' expnum ')'                            { $$ = nodeForExpression($2); }
+;
+
+%%
+
+MTAbstractSyntaxTree *nodeForFunction(MTAbstractSyntaxTree *expression, NSString *functionIdentifier, MTAbstractSyntaxTree *expressionList) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithExpression:expression functionName:functionIdentifier andExpressionList:expressionList];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForResult(MTAbstractSyntaxTree *expression) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithResult:expression];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForStatement(MTAbstractSyntaxTree *statement) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithStatement:statement];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForExpression(MTAbstractSyntaxTree *expression) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithExpression:expression];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForIfThenStatement(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *ifValue, MTAbstractSyntaxTree *thenValue) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initConditionalWithIfList:ifValue thenList:thenValue andCondition:expression];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForAssigningValueToSymbolReference(MADSymbolReference *symbolReference, MTAbstractSyntaxTree *value) {
+    MADSymbol *sy = sc_symbol_for_key(symbolReference.symbol);
+    return nodeForAssigningValueToSymbol(sy, value);
+}
+
+MTAbstractSyntaxTree *nodeForAssigningValueToSymbol(MADSymbol *symbol, MTAbstractSyntaxTree *value) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithSymbol:symbol andValue: value];
+    return result;
+}
+
+MTAbstractSyntaxTree *nodeForSymbolReference(MADSymbolReference *symbolReference) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithSymbolReference:symbolReference];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForNumber(double n) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithNumber:n];
+    return result;
+}
+
+MTAbstractSyntaxTree *nodeForBool(bool b) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithBool:b];
+    return result;
+}
+
+MTAbstractSyntaxTree *nodeForString(NSString *s) {
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithString:s];
+    return result;
+}
+
+MTAstNodeFunctionCallEmbeddedUniaryMinus *nodeForUniaryMinus(MTAbstractSyntaxTree *value) {
+    MTAstNodeFunctionCallEmbeddedUniaryMinus *node = [[MTAstNodeFunctionCallEmbeddedUniaryMinus alloc] initWithValueForUniaryMinus:value];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForArithmeticOfValues(SCArithmetic arithmeticType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
+    MTPair *values = [MTPair pairWithLeft:leftValue andRight:rightValue];
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithArithmeticProcedure:arithmeticType withValues:values];
+    return result;
+}
+
+MTAbstractSyntaxTree *nodeForComparsonOfValues(NSInteger comparsonType, MTAbstractSyntaxTree *leftValue, MTAbstractSyntaxTree *rightValue) {
+    MTPair *values = [MTPair pairWithLeft:leftValue andRight:rightValue];
+    MTAbstractSyntaxTree *result = [[MTAbstractSyntaxTree alloc] initWithComparson:comparsonType ofValues:values];
+    return result;
+}
+
+MTAbstractSyntaxTree *nodeForStatementAndList(MTAbstractSyntaxTree *statement, MTAbstractSyntaxTree *list) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithStatement:statement andList:list];
+    return node;
+}
+
+MTAbstractSyntaxTree *nodeForExpressionAndList(MTAbstractSyntaxTree *expression, MTAbstractSyntaxTree *list) {
+    MTAbstractSyntaxTree *node = [[MTAbstractSyntaxTree alloc] initWithExpression:expression andList:list];
+    return node;
+}
+
+void sc_return(MTAbstractSyntaxTree *value) {
+    if (Scrimpted) {
+        id result;
+        if (value == nil) {
+            result = nil;
+        } else {
+            MADValue *mv = [value evaluate];
+            if (mv) {
+                result = [mv value];
+            } else {
+                result = nil;
+            }
+        }
+        Scrimpted(YES, result, nil);
+    }
+}
+
+void
+lyyerror(YYLTYPE t, char *s, ...) {
+    va_list ap;
+    va_start(ap, s);
+    if (yylloc.first_line) {
+        fprintf(stderr, "%d.%d-%d.%d: error: ", t.first_line, t.first_column, t.last_line, t.last_column);
+    }
+    vfprintf(stderr, s, ap);
+    fprintf(stderr, "\n");
+    va_end(ap);
+}
+
+MADSymbol *sc_symbol_for_key(NSString *symbol) {
+    MADSymbol *result = nil;
+    if (ScrimptSymbol) {
+        result = ScrimptSymbol(symbol);
+    }
+    return result;
+}

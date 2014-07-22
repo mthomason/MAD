@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) NSString *tableName;
 @property (nonatomic, strong) NSString *columnName;
-@property (nonatomic, assign) MTDataType columnType;
+@property (nonatomic, strong) MTDataColumn *column;
 @property (nonatomic, assign) BOOL createTable;
 
 @property (nonatomic, assign) BOOL uniqueColumnHack;
@@ -49,6 +49,8 @@
         NSNumber *keyMTQueryCacheAddColumnCreateTable = @(MTQueryCacheAddColumnCreateTable);
 
         MTDataColumn *column = [object objectForKey:keyMTQueryCacheAddColumnDataColumn];
+        [self setColumn:column];
+        
         NSString *tableName = [object objectForKey:keyMTQueryCacheAddColumnTableName];
         NSURL *url = [object objectForKey:keyMTQueryCacheAddColumnUrl];
         NSString *columnName = [object objectForKey:keyMTQueryCacheAddColumnColumnName];
@@ -73,8 +75,6 @@
         }
         [self setQueryObject:object];
         
-        MTDataType type = [[column columnType] integerValue];
-        [self setColumnType:type];
 
     }
     return self;
@@ -86,16 +86,20 @@
     NSString *tableName = [self tableName];
     NSString *columnName = [self columnName];
     
-    NSString *columnAffinity = [[self database] nativeTypeForDataType:[self columnType]];
+    NSString *columnAffinity = [[self database] nativeTypeForDataType:[[[self column] columnType] integerValue]];
+
 
     NSString *columnDefination = [NSString stringWithFormat:@"%@ %@", columnName, columnAffinity];
     
     
     NSString *unique = self.uniqueColumnHack ? @"UNIQUE" : @"";
+    if ([[self column] isPrimaryKey]) {
+        unique = @"PRIMARY KEY";
+    }
     NSString *sql = [self createTable] ?
     
     [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS main.%@ (%@ %@);", tableName, columnDefination, unique] :
-                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@", tableName, columnDefination];
+                    [NSString stringWithFormat:@"ALTER TABLE main.%@ ADD COLUMN %@;", tableName, columnDefination];
     
     return sql;
 }

@@ -12,20 +12,12 @@
 
 @implementation NSFileManager (Reports)
 
-+ (NSArray *)schemaFilesOld {
-    NSString *dataFile = [[NSFileManager applicationDocumentsDirectory] stringByAppendingPathComponent:@"Data"];
-    NSArray *results = nil;
-    BOOL directoryExist = [[NSFileManager defaultManager] fileExistsAtPath:dataFile];
-    if (directoryExist) {   //User documetns/Data
-        results = [NSFileManager contentsOfDocumentsDataDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocumentArchive];
-    } else {
-        results = @[];
-    }
-    return results;
-}
-
-+ (NSSet *)pdfFiles {
-    return [NSFileManager contentsOfDocumentsDirectoryWithPathExtension:PDF_PATH_EXTENSION];
+- (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
+    NSString *destinationName = [[[madUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+    NSURL *destinationDirectoryUrl = [self localTemporaryDirectory];
+    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
+    [directories lastObject];
+    return [destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES];
 }
 
 @end

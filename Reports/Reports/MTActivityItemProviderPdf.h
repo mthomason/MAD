@@ -11,7 +11,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MTActivityItemProviderDelegate <NSObject>
+
+- (void)showPrintDialog;
+
+@end
+
 @interface MTActivityItemProviderPdf : UIActivityItemProvider
+
+@property (nonatomic, weak) id <MTActivityItemProviderDelegate> delegate;
+
+@property (nonatomic, weak, readonly) UIActivityViewController *activityViewController;
 
 @end
 

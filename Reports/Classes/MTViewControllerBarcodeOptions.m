@@ -27,9 +27,13 @@
 #import "MTQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaField.h"
 #import "AppDelegate.h"
+#import "MTDataTable.h"
+#import <CoreData/CoreData.h>
 
 @interface MTViewControllerBarcodeOptions ()
+    <MTDatabaseProtocol>
 
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
 @property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
@@ -44,6 +48,8 @@
 @property (nonatomic, assign) BOOL selectingField2;
 
 @property (nonatomic, assign) BOOL selecting2dComponentType;
+
+@property (nonatomic, strong) MTDataTable *sampleDataTable;
 
 @end
 
@@ -349,18 +355,36 @@
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderNone forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
+                if (accessory == UITableViewCellAccessoryCheckmark) {
+                    NSIndexPath *row1 = [NSIndexPath indexPathForRow:1 inSection:indexPath.section];
+                    NSIndexPath *row2 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
+                    [[tableView cellForRowAtIndexPath:row1] setAccessoryType:UITableViewCellAccessoryNone];
+                    [[tableView cellForRowAtIndexPath:row2] setAccessoryType:UITableViewCellAccessoryNone];
+                }
                 break;
             }
             case 1: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorder forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBox ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
+                if (accessory == UITableViewCellAccessoryCheckmark) {
+                    NSIndexPath *row0 = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+                    NSIndexPath *row2 = [NSIndexPath indexPathForRow:2 inSection:indexPath.section];
+                    [[tableView cellForRowAtIndexPath:row0] setAccessoryType:UITableViewCellAccessoryNone];
+                    [[tableView cellForRowAtIndexPath:row2] setAccessoryType:UITableViewCellAccessoryNone];
+                }
                 break;
             }
             case 2: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderOption2 forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleBind ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
                 [cell setAccessoryType:accessory];
+                if (accessory == UITableViewCellAccessoryCheckmark) {
+                    NSIndexPath *row0 = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+                    NSIndexPath *row1 = [NSIndexPath indexPathForRow:1 inSection:indexPath.section];
+                    [[tableView cellForRowAtIndexPath:row0] setAccessoryType:UITableViewCellAccessoryNone];
+                    [[tableView cellForRowAtIndexPath:row1] setAccessoryType:UITableViewCellAccessoryNone];
+                }
                 break;
             }
             case 3: {
@@ -698,17 +722,27 @@
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:[field databaseSchemaField]];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
+            MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
+            [self setSampleDataTable:dt];
             NSAssert(([self selectingField1] == NO && [self selectingField2] == NO) == NO, @"Must be setting one or the other.");
             NSAssert(([self selectingField1] == YES && [self selectingField2] == YES) == NO, @"Can't be setting both at the same time, now can we?");
             if ([self selectingField1]) {
-                [self setSampleBarcodeData:[querySampleDataField datatable]];
+                NSArray *allObjects = [[self sampleDataTable] allObjects];
+                [self setSampleBarcodeData:allObjects];
             } else if ([self selectingField2]) {
-                [self setSampleBarcodeData2dComponent:[querySampleDataField datatable]];
+                NSArray *allObjects = [[self sampleDataTable] allObjects];
+                [self setSampleBarcodeData2dComponent:allObjects];
             }
             [[self tableView] reloadData];
 
         }
     }];
+}
+
+#pragma mark - MTDatabaseProtocol
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [self sampleDataTable];
 }
 
 #pragma mark - MTTableViewControllerBarcodeExtraAztecDelegate

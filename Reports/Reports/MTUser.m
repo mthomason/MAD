@@ -28,7 +28,8 @@
 }
 
 - (NSArray *)hasMadDocuments {
-    NSSet *madFiles = [NSFileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSSet *madFiles = [fileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
     SEL selectorPath = @selector(path);
     SEL selectorSort = @selector(localizedStandardCompare:);
     NSString *key = NSStringFromSelector(selectorPath);

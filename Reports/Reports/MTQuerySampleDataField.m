@@ -20,6 +20,9 @@
 #import "MTDatabaseConnection.h"
 
 @interface MTQuerySampleDataField ()
+<MTDatabaseProtocol>
+
+@property (nonatomic, strong) MTDataTable *datatable;
 
 @end
 
@@ -32,21 +35,12 @@
         
         NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]], @"MTQuerySampleDataField expects RptqDatabaseSchemaField.");
         
-
-        NSManagedObjectID *objectId = [object objectID];
-        NSUInteger hash = [[[objectId URIRepresentation] absoluteString] hash];
-        
-        NSNumber *typeKey = @(MTDataTableTypeOfTable);
-        NSNumber *type = @(MTDataTableTypeVirtual);
-        NSNumber *objectIdKey = @(MTDataTableObjectId);
-        NSNumber *objectIdV =  @(hash);
-        MTDataTable *datatable = [MTDataTable dataTableFactory:@{
-                                                                 typeKey : type,
-                                                                 objectIdKey : objectIdV}];
-        [self setDatatable:datatable];
         RptqUserCredentals *userCredentals = [[[(RptqDatabaseSchemaField *)object inTable] inDatabase] ownedByUser];
         MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
+        [db setDelegate:self];
+        MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[[[object objectID] URIRepresentation] absoluteString]];
+        [self setDatatable:dataTable];
         [self setDatabase:db];
         [self setQueryObject:object];
         
@@ -60,6 +54,10 @@
     NSString *key = [[self database] fieldAliasForField:[self queryObject]];
     [[self fieldKeys] addObject:key];
     return [[self database] sqlSampleDataForField:[self queryObject]];
+}
+
+- (MTDataTable *)dataTableForQuery:(MTQuery *)query {
+    return [self datatable];
 }
 
 @end

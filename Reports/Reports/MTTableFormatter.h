@@ -6,17 +6,19 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTTableFormatter_h
+#define MAD_MTTableFormatter_h
+
 #import <Foundation/Foundation.h>
 #import "MTDataFormatter.h"
 
 @interface MTTableFormatter : MTDataFormatter
 
-@property (nonatomic, strong, readwrite) NSArray *sortDescriptorsByGroupSorted;
 @property (nonatomic, assign) BOOL didRefresh;
-
-// FIXME: Make initWithQuery andLayout... passlayout to 
 
 - (id)initWithQuery:(MTQuery *)query;
 + (id)reportFormatterWithQuery:(MTQuery *)query;
 
 @end
+
+#endif

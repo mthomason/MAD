@@ -27,7 +27,7 @@
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    return @"END TRANSACTION";
+    return @"END TRANSACTION;";
 }
 
 - (BOOL)returnsResults {

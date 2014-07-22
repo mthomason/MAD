@@ -34,9 +34,18 @@
 #import "UIPageViewController+Extras.h"
 #import "UIViewController+ui.h"
 #import "UIViewController+tabBarItem.h"
+#import "MTDataTable.h"
+
+#import "MTNotificationDidFormatPage.h"
+#import "MTNotificationDidReadRows.h"
 
 @interface MTReportViewerController ()
-    <UIPopoverControllerDelegate, MTPrintingProtocol, MTActivityReportPrintPreviewDelegate, MTTabBarImageProtocol>
+    <UIPopoverControllerDelegate,
+        MTPrintingProtocol,
+        MTActivityReportPrintPreviewDelegate,
+        MTTabBarImageProtocol,
+        UIPrintInteractionControllerDelegate,
+        MTActivityItemProviderDelegate>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -87,6 +96,13 @@
 @property (nonatomic, strong) NSAttributedString *statusMessage3;
 
 @property (nonatomic, strong) UIProgressView *progressView;
+
+@property (nonatomic, strong) NSAttributedString *lineReturnString;
+
+@property (nonatomic, strong) MTReportFormatter *printingReportFormatter;
+@property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
+
+@property (nonatomic, assign) BOOL shouldShowPrintDialog;
 
 @end
 
@@ -145,6 +161,8 @@
 }
 
 - (void)initalize {
+    NSAttributedString *lineReturnString = [[NSAttributedString alloc] initWithString:@"\n"];
+    [self setLineReturnString:lineReturnString];
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
     [self initalizeStatusMessages];
@@ -205,7 +223,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self setEdgesForExtendedLayout: UIRectEdgeNone];
     [self setTitle:@"MAD Viewer"];
     
@@ -235,13 +252,17 @@
     
     UIViewController *blankPage = [[UIViewController alloc] init];
     NSArray *blankPageArray = @[blankPage];
-    [self setViewControllers:blankPageArray direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) { }];
+
+    [self setViewControllers: blankPageArray
+                   direction: UIPageViewControllerNavigationDirectionForward
+                    animated: NO
+                  completion: ^(BOOL finished) { }];
     
     [self addPageSliderToView];
     
-    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray:[self toolbarItems]];
-    [toolbarItems insertObject:[self barButtonLabelStatus] atIndex:1];
-    [self setToolbarItems:toolbarItems animated:NO];
+    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray: [self toolbarItems]];
+    [toolbarItems insertObject: [self barButtonLabelStatus] atIndex: 1];
+    [self setToolbarItems: toolbarItems animated: NO];
     
     [self setTintColorForToolbar:[[self navigationController] toolbar]];
     [self setTintColorForSidebar:[self toolbarSideRight]];
@@ -251,8 +272,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [[[self navigationController] toolbar] setNeedsLayout];
+}
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     [reportDocument initalizeMainQuery];
     
@@ -266,15 +292,12 @@
     }
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     
     if ([self printPageRendererReport] == nil) {
         __block MAReportDocument *doc = [[AppDelegate app] activeDocument];
         [doc activeDocument];    // Initalizes the report formatter, if not already done... Important!
-        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[doc reportFormatter]];
+        MTReportViewerPrintPageRenderer *prtingPageRendererReport = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [doc reportFormatter]
+                                                                                                                           dataTable: [doc mainDataTable]];
         [self setPrintPageRendererReport: prtingPageRendererReport];
     }
 }
@@ -376,7 +399,7 @@
     UIImage *blank = [UIImage new];
     [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    [toolbar setBackgroundColor:[UIColor clearColor]];
+    [toolbar setBackgroundColor:[UIColor tintColorWhiteAlpha]];
 }
 
 - (void)addSliderPagination {
@@ -448,6 +471,9 @@
     [[[self navigationController] toolbar] setNeedsLayout];
     [[self view] bringSubviewToFront:[self toolbarSideRight]];
     [self addSliderPagination];
+    
+    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
+    [[self labelStatus] setBounds:bounds];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -490,8 +516,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (MTReportViewerReportPageViewController *)currentPageviewController {
-    NSInteger pageIndex = [self currentPageIndex];
-    return [self pageViewControllerAtIndex:pageIndex];
+    return [self pageViewControllerAtIndex:[self currentPageIndex]];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -568,30 +593,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
-    [reportViewerController setDisplayActive];
-    MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    [[doc reportFormatter] formatForSize:frame.size options:0 contentChanged:NO];
-    
-    NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
-    [reportViewerController setNumberOfPages:numberOfPages];
-    [self setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
-    
-    NSInteger pageNumber = [reportViewerController currentPageIndex] + 1;
-    MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
-                                                                                                                 ofPages:numberOfPages];
-    [[pageOne view] setFrame:frame];
-    
-    [pageOne setDelegate:reportViewerController];
-    
-    NSArray *viewControllers = @[pageOne];
-    [reportViewerController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-        if (finished) {
-            [[pageOne view] setNeedsDisplay];
-        }
-    }];
-    
-    [[reportViewerController barButtonItemDone] setEnabled:YES];
-    
+    if (self.isRefreshing == NO && self.startedRefresh == NO) {
+        [reportViewerController setDisplayActive];
+        [reportViewerController reload:reportViewerController withSize:frame.size];
+    }
 }
 
 - (void)drawPage:(NSUInteger)pageIndex inRect:(CGRect)printableRect {
@@ -606,11 +611,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     
-        // FIXME: Delete preview
-        NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
-        NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-        NSError *error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    // FIXME: Delete preview
+    NSURL *temporaryDirectory = [NSURL fileURLWithPath: NSTemporaryDirectory()];
+    NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
+    [self redrawReportViewer:self withFrame:self.view.frame];
 }
 
 #pragma mark - Actions
@@ -694,13 +700,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [reportViewer setDisplayInactive];
         
         MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-        [reportDocument initalizeMainQuery];
         MTDatabase *database = [[reportDocument defaultQuery] database];
-        [[NSNotificationCenter defaultCenter] addObserver: reportViewer
-                          selector: @selector(reportDocumentDidReadRows:)
-                              name: @"MTNotificationDidReadRows"
-                            object: database];
+        
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver: reportViewer
+                               selector: @selector(reportDocumentDidReadRows:)
+                                   name: MTNotificationDidReadRowsName
+                                 object: database];
 
+        
         __weak MTReportViewerController *weakReportViewer = reportViewer;
 
         __weak MAReportDocument *weakReportDocument = reportDocument;
@@ -710,7 +718,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
             __block MTReportViewerController *reportViewer2 = weakReportViewer;
             __weak MTDatabase *weakDatabase2 = weakDatabase;
-            [reportDocument refresh:^(BOOL success, NSError *error) {
+            [weakReportDocument refresh:^(BOOL success, NSError *error) {
                 __weak MTDatabase *weakDatabase3 = weakDatabase2;
                 __block MTReportViewerController *reportViewer3 = reportViewer2;
                 if (!success) {
@@ -724,9 +732,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     __weak MTDatabase *weakDatabase4 = weakDatabase3;
                     __block MTReportViewerController *reportViewer4 = reportViewer3;
                     dispatch_sync(dispatch_get_main_queue(), ^{
-                        [[NSNotificationCenter defaultCenter] removeObserver: reportViewer4
-                                                                        name: @"MTNotificationDidReadRows"
-                                                                      object: weakDatabase4];
+                        
+                        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+                        [defaultCenter removeObserver: reportViewer4
+                                                 name: MTNotificationDidReadRowsName
+                                               object: weakDatabase4];
                         [MTReportViewerController finishedRefreshWithReportViewer:reportViewer4];
                         reportViewer4 = nil;
                     });
@@ -745,40 +755,114 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [viewer updateLateRefreshedLabel:viewer];
 }
 
+- (void)reportFormatterDidFormatPage:(NSNotification *)sender {
+    NSDictionary *parameters = [sender userInfo];
+    NSNumber *pageNumber = [parameters objectForKey:MTDatabaseNumberOfPagesFormattedKey];
+    [self updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
+}
+
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];
-    NSNumber *rowNumber = [parameters objectForKey:@"MTDatabaseNumberOfRowsReadKey"];
+    NSNumber *rowNumber = [parameters objectForKey:MTDatabaseNumberOfRowsReadKey];
     [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
-
-
-- (IBAction)activity:(id)sender {
-
+- (MTActivityItemProviderPdf *)activityItemProviderPdf {
     NSString *temporaryDirectoryPath = NSTemporaryDirectory();
     NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
     NSURL *urlEmpty = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     MTActivityItemProviderPdf *activityItemProviderPdf = [[MTActivityItemProviderPdf alloc] initWithPlaceholderItem:urlEmpty];
-    NSArray *activityItems = @[activityItemProviderPdf];
+    return activityItemProviderPdf;
+}
+
+- (void)showPrintDialog {
+    if ([NSThread isMainThread] == NO) {
+        __weak MTReportViewerController *weakself = self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [[weakself popoverControllerActivity] dismissPopoverAnimated:YES];
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        
+                        UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                        if (sharedController) {
+                            MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                            [reportDocument setActivityDelegate:weakself];
+                            UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
+                            [sharedController setPrintPageRenderer:printPageRender];
+                            [sharedController setDelegate:reportDocument] ;
+                            __weak MTReportViewerController *weakself2 = weakself;
+                            void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
+                            ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+                                [weakself2.pageSlider setEnabled:YES];
+                                [weakself2 enableTabBarItems];
+                            };
+                            [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
+                                        completionHandler:completionHandler];
+                        }
+                    });
+                });
+            });
+        });
+    }
+}
+
+- (IBAction)activity:(id)sender {
+    [self.pageSlider setEnabled:NO];
     
-    // FIXME: Delete preview
-    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
-        if (completed) {
-            [UAAppReviewManager userDidSignificantEvent:YES];
-        }
-    };
+    MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
+    [activityItemProviderPdf setDelegate:self];
+    NSArray *activityItems = @[activityItemProviderPdf];
+    [self setActivityItemProviderPdf:activityItemProviderPdf];
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
     [printPreview setDelegate:self];
     NSArray *applicationActivities = @[printPreview];
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:applicationActivities];
+    
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
+                                                                                         applicationActivities:applicationActivities];
+    
+    __weak MTReportViewerController *weakself = self;
+    
+    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
+        if (completed) {
+            [weakself.pageSlider setEnabled:YES];
+            [UAAppReviewManager userDidSignificantEvent:YES];
+        } else {
+            if ([activityType length] > 0) {
+                if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
+                    UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
+                    if (sharedController) {
+                        [sharedController setDelegate:self];
+                        MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
+                        [reportDocument setActivityDelegate:self];
+                        UIPrintPageRenderer *printPageRender = [reportDocument printerPrintPageRender];
+                        [sharedController setPrintPageRenderer:printPageRender];
+                        [sharedController setDelegate:reportDocument] ;
+                        __weak MTReportViewerController *weakself = self;
+                        if ([UIDevice isPad] == NO) {
+                            [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
+                                [weakself.pageSlider setEnabled:YES];
+                            }];
+                        }
+                    }
+                }
+                [weakself.pageSlider setEnabled:YES];
+            } else {
+                [weakself.pageSlider setEnabled:YES];
+            }
+        }
+    };
+    
     [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
-
+    
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             [popoverController setDelegate:self];
-            [popoverController presentPopoverFromBarButtonItem:[self barButtonItemActivity] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [popoverController presentPopoverFromBarButtonItem: [self barButtonItemActivity]
+                                      permittedArrowDirections: UIPopoverArrowDirectionAny animated:YES];
             [self setPopoverControllerActivity:popoverController];
             [self disableTabBarItems];
         }
@@ -795,9 +879,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return [self navigationController];
 }
 
-- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller withCompletionHandler:(void (^)(BOOL))completionHandler {
+- (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
+                  withCompletionHandler:(void (^)(BOOL))completionHandler {
     
-
     if ([UIDevice isPad] == NO) {
         [self dismissViewControllerAnimated:YES completion:^{
             completionHandler(YES);
@@ -820,165 +904,72 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)reload:(MTReportViewerController *)reportViewer {
-    
+    [reportViewer reload:reportViewer withSize:[[reportViewer view] bounds].size];
+}
+
+- (void)reload:(MTReportViewerController *)reportViewer withSize:(CGSize)viewBounds {
     [reportViewer setDisplayInactive];
     
     __weak MTReportViewerController *blockViewer = reportViewer;
-    CGSize viewBounds = [[reportViewer view] bounds].size;
     
     MAReportDocument *doc = [[AppDelegate app] activeDocument];
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
-                                                                           andLayout:[doc activeDocument]];
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
-    [self setPrintPageRendererReport:printPageRender];
-    [doc setReportFormatter:reportFormatter];
-
+    [doc prepareForQuery];
     __weak MAReportDocument *weakdoc = doc;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
-        [[weakdoc reportFormatter] setDidRefresh:[blockViewer startedRefresh]];
-        [[weakdoc reportFormatter] formatForSize:viewBounds];
-        
+        [[NSNotificationCenter defaultCenter] addObserver: blockViewer
+                                                 selector: @selector(reportFormatterDidFormatPage:)
+                                                     name: MTNotificationDidFormatPagesName
+                                                   object: [weakdoc reportFormatter]];
+        if ([blockViewer startedRefresh]) {
+            [[weakdoc reportFormatter] setDidRefresh:YES];
+            
+            [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:YES];
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
+                                                                                                                      dataTable: [weakdoc mainDataTable]];
+            
+            [reportViewer setPrintPageRendererReport:printPageRender];
+
+        } else {
+            [[weakdoc reportFormatter] setDidRefresh:YES];
+            [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:NO];
+            
+            MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
+                                                                                                                      dataTable: [weakdoc mainDataTable]];
+            [reportViewer setPrintPageRendererReport:printPageRender];
+            
+        }
+        [[NSNotificationCenter defaultCenter] removeObserver: blockViewer
+                                                        name: MTNotificationDidFormatPagesName
+                                                      object: [weakdoc reportFormatter]];
         __weak MAReportDocument *doc2 = weakdoc;
         __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [blockViewer2 setDisplayActive];
-            
             NSUInteger numberOfPages = [[doc reportFormatter] numberOfPages];
             [blockViewer2 setNumberOfPages:numberOfPages];
-            NSInteger maxValue = numberOfPages > 0 ? (numberOfPages - 1) : 0;
-            [blockViewer2 setMaxNumberOfPages:maxValue];
-
-            NSInteger pageNumber = [blockViewer2 currentPageIndex] + 1;
-            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber:pageNumber
-                                                                                                                         ofPages:numberOfPages];
+            [blockViewer2 setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+            [blockViewer2 setDisplayActive];
+            
+            MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithPageNumber: ([blockViewer2 currentPageIndex] + 1)
+                                                                                                                         ofPages: numberOfPages];
             [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
             
             [pageOne setDelegate:reportViewer];
             
             NSArray *viewControllers = @[pageOne];
-            [blockViewer2 setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {}];
+            [blockViewer2 setViewControllers: viewControllers direction:UIPageViewControllerNavigationDirectionForward
+                                    animated: NO completion: nil];
             [blockViewer2 setIsRefreshing:NO];
             [blockViewer2 setStartedRefresh:NO];
             [[doc2 reportFormatter] setDidRefresh:NO];
             [[blockViewer2 barButtonItemDone] setEnabled:YES];
-           
+            
             [blockViewer2 updateRecordsReadStatus];
             
         });
     });
-}
-
-- (void)sendToPdfWithCompletionHandler:(void (^)(BOOL))completionHandler {
-
-    [[self barButtonItemDone] setEnabled:NO];
-    [[self barButtonItemSendToPdf] setEnabled:NO];
-    [[self barButtonItemActivity] setEnabled:NO];
-    [[self barButtonItemRefresh] setEnabled:NO];
-    [[self barButtonItemPrint] setEnabled:NO];
-    [self setUpdatingOfTimerIsPaused:YES];
-    [[self labelDateLastRefreshed] setText:NSLocalizedString(@"Exporting data.", @"Exporting data.")];
-    [[self labelDateLastRefreshed] setNeedsDisplay];
-    
-    for (UITabBarItem *i in [[[self tabBarController] tabBar] items]) {
-        [i setEnabled:NO];
-    }
-    __weak MTReportViewerController *blockself = self;
-    
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queuePriorityBackground, ^{
-        
-        NSString *temporaryDirectoryPath = NSTemporaryDirectory();
-        NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
-        NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
-
-        MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
-                                                                               andLayout:[doc activeDocument]];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
-
-        [printPageRender writeToPdf:temporaryFile];
-        
-        __weak MTReportViewerController *blockself2 = blockself;
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockself2 setUpdatingOfTimerIsPaused:NO];
-            [blockself2 updateLateRefreshedLabel:blockself2];
-            [[blockself2 barButtonItemRefresh] setEnabled:YES];
-            [[blockself2 barButtonItemDone] setEnabled:YES];
-            [[blockself2 barButtonItemPrint] setEnabled:YES];
-            [[blockself2 barButtonItemSendToPdf] setEnabled:YES];
-            [[blockself2 barButtonItemActivity] setEnabled:YES];
-            
-            for (UITabBarItem *i in [[[blockself2 tabBarController] tabBar] items]) {
-                [i setEnabled:YES];
-            }
-            UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:temporaryFile];
-            
-            [c setDelegate:blockself2];
-            [c presentPreviewAnimated:YES];
-        });
-        
-    });
-
-}
-
-- (IBAction)sendToPdf:(id)sender {
-    [self sendToPdfWithCompletionHandler:^(BOOL success){ }];
-}
-
-- (IBAction)print:(id)sender {
-    
-    UIPrintInteractionController *controller = [UIPrintInteractionController sharedPrintController];
-    if (controller) {
-        
-        [[self barButtonItemPrint] setEnabled:NO];
-        [[self barButtonItemRefresh] setEnabled:NO];
-        [[self barButtonItemSendToPdf] setEnabled:NO];
-        [[self barButtonItemActivity] setEnabled:NO];
-        
-        __weak MTReportViewerController *reportViewer = self;
-        UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-            [[reportViewer barButtonItemPrint] setEnabled:YES];
-            [[reportViewer barButtonItemRefresh] setEnabled:YES];
-            [[reportViewer barButtonItemSendToPdf] setEnabled:YES];
-            [[reportViewer barButtonItemActivity] setEnabled:YES];
-            if(!completed && error){
-                //MTLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
-            }
-        };
-        
-        // Obtain a printInfo so that we can set our printing defaults.
-        UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-        printInfo.outputType = UIPrintInfoOutputGeneral;
-        
-        
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        printInfo.jobName = [reportDocument name];
-        printInfo.duplex = UIPrintInfoDuplexLongEdge;
-        controller.printInfo = printInfo;
-        
-        controller.showsPageRange = YES;
-
-        
-        MAReportDocument *doc = [[AppDelegate app] activeDocument];
-        MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery:[doc defaultQuery]
-                                                                               andLayout:[doc activeDocument]];
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter];
-
-        [controller setPrintPageRenderer:printPageRender];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [controller presentFromBarButtonItem:[self barButtonItemPrint]
-                                        animated:YES
-                               completionHandler:completionHandler];  // iPad
-        } else {
-            [controller presentAnimated:YES completionHandler:completionHandler];  // iPhone
-        }
-    }
-    
 }
 
 #pragma mark - UIPageViewControllerDataSrouce
@@ -1106,32 +1097,25 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 }
 
-- (void)updateStatusLabel:(NSAttributedString *)timeMessage recordsReadMessage:(NSAttributedString *)recordsReadMessage andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
+- (void)updateStatusLabel:(NSAttributedString *)timeMessage
+       recordsReadMessage:(NSAttributedString *)recordsReadMessage
+  andNumberOfPagesMessage:(NSAttributedString *)numberOfPagesMessage {
     
     NSMutableAttributedString *status = [[NSMutableAttributedString alloc] initWithAttributedString:timeMessage];
-    
-    NSAttributedString *newlineString = [[NSAttributedString alloc] initWithString:@"\n"];
 
-    
     if ([[recordsReadMessage string] length] > 0) {
-        [status appendAttributedString:newlineString];
+        [status appendAttributedString:self.lineReturnString];
         [status appendAttributedString:recordsReadMessage];
     }
 
     if ([[numberOfPagesMessage string] length] > 0) {
-        [status appendAttributedString:newlineString];
+        [status appendAttributedString:self.lineReturnString];
         [status appendAttributedString:numberOfPagesMessage];
     }
     
     NSRange range = NSMakeRange(0, [status length]);
     [status addAttributes:[self attributesStatusLabelCentered] range:range];
-
-    //NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin);
-    //CGSize labelSize = [status boundingRectWithSize:CGSizeMake(300.0000f, 88.0000f) options:drawingOptions context:nil].size;
-    //CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, labelSize.width, 44.0000f);
     
-    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
-    [[self labelStatus] setBounds:bounds];
     [[self labelStatus] setAttributedText:status];
 }
 
@@ -1207,7 +1191,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     } else {
         MTApplicationInstance *app = [AppDelegate app];
         MAReportDocument *doc = [app activeDocument];
-        NSNumber *numberOfResults = @([[doc reportFormatter] numberOfResults]);
+        NSNumber *numberOfResults = @([[doc mainDataTable] numberOfRows]);
         [self updateRecordsReadStatusWithNumberOfRecordsRead:numberOfResults];
     }
 }
@@ -1215,6 +1199,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Read %@ records.", @"Read %@ records.");
+    NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
+    [self updateStatusWithRecordsRead:readRecords];
+}
+
+- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
+    NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
+    NSString *formatString = NSLocalizedString(@"Formatting page %@.", @"Formatting page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
     [self updateStatusWithRecordsRead:readRecords];
 }
@@ -1245,7 +1236,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self updatePageStatus];
 }
 
-#pragma mark = UIPopoverControllerDelegate
+#pragma mark - UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
     return YES;
@@ -1253,6 +1244,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
+    
+    //@synchronized(self) {
+        /*if (self.shouldShowPrintDialog) {
+            [self displayPrintDialog];
+            self.shouldShowPrintDialog = NO;
+        }*/
+    //}
+}
+
+- (UIViewController *)activeViewController {
+    return self;
 }
 
 @end

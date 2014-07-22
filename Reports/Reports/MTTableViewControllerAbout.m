@@ -19,12 +19,15 @@
 #import "NSError+UserInterface.h"
 
 #import "UIColor+EverydayApps.h"
+#import <CoreText/CoreText.h>
 
 @interface MTTableViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
 
+@property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 @property (nonatomic, weak) IBOutlet UILabel *labelVersion;
 @property (nonatomic, weak) IBOutlet UILabel *labelBuild;
+@property (nonatomic, weak) IBOutlet UILabel *labelTrademark;
 
 @end
 
@@ -55,9 +58,24 @@
     NSString *buildText = [NSString stringWithFormat:buildTextKey, MTGlobalBundleRev];
     [[self labelVersion] setText:versionText];
     [[self labelBuild] setText:buildText];
-    
-
+    [[self labelTrademark] setNumberOfLines:0];
+    [[self labelTrademark] setLineBreakMode:NSLineBreakByWordWrapping];
+    [[self labelTrademark] setAttributedText:[self trademarkStatement]];
+    [[self labelTrademark] sizeToFit];
     //[[[self navigationController] toolbar] setBarTintColor:[UIColor tintColorBlue]];
+}
+
+- (NSAttributedString *)trademarkStatement {
+    NSNumber *superscript = @(1);
+    UIFont *font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+    NSDictionary *attributes = @{(__bridge NSString *)kCTSuperscriptAttributeName : superscript, NSFontAttributeName : font};
+    NSAttributedString *r = [[NSAttributedString alloc] initWithString:@"®" attributes:attributes];
+    NSAttributedString *mad = [[NSAttributedString alloc] initWithString:@"MAD" attributes:nil];
+    NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString:mad];
+    [tm appendAttributedString:r];
+    NSAttributedString *statement = [[NSAttributedString alloc] initWithString:@" is a registered trademark of Everyday Apps LLC." attributes:nil];
+    [tm appendAttributedString:statement];
+    return tm;
 }
 
 - (IBAction)cancel:(id)sender {

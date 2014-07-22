@@ -54,7 +54,6 @@
 - (NSString *)getSqlWithError:(NSError **)error {
 
     NSMutableString *sql = [NSMutableString stringWithString:@"SELECT "];
-    
     NSUInteger columnCounter = 0;
     
     for (NSString *key in [self columnKeys]) {

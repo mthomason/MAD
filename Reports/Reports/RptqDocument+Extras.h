@@ -13,9 +13,11 @@
 #import "RptqDocument.h"
 #import "MTProtocolCompare.h"
 
-@class NSManagedObjectContext, MTDatabase;
+@class NSManagedObjectContext, MTDatabase, RptqQuery;
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
+
+- (RptqQuery *)defaultQuery;
 
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;

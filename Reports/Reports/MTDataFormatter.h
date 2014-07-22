@@ -17,10 +17,7 @@
 @property (nonatomic, strong) MTQuery *query;
 @property (nonatomic, assign) BOOL didRefresh;
 
- - (id)initWithQuery:(MTQuery *)query;
-
+- (id)initWithQuery:(MTQuery *)query;
 - (BOOL)format;
-- (NSDictionary *)dataForRow:(NSUInteger)row;
-- (NSUInteger)numberOfResults;
 
 @end

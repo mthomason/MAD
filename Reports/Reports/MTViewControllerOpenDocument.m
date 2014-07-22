@@ -917,11 +917,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
     NSError *error = nil;
-    NSString *filehandle = [[documentUrl lastPathComponent] stringByDeletingPathExtension];
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-    for (NSURL *cachedFile in [MAReportDocument cachedFilesForDocumentWithHandle:filehandle]) {
+    NSURL *cachedDirectory = [defaultManager cachedDirectoryForFileUrl:documentUrl];
+    for (NSURL *cachedFile in [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error]) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }
+    [defaultManager removeItemAtURL:cachedDirectory error:&error];
 }
 
 #pragma mark - MFMailComposeViewController delegate protocol
@@ -974,23 +975,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 NSURL *newUrl = [[urlToRename URLByDeletingLastPathComponent] URLByAppendingPathComponent:filenameWithExtention isDirectory:NO];
                 NSError *error = nil;
                 [[NSFileManager defaultManager] moveItemAtURL:urlToRename toURL:newUrl error:&error];
-                if (error != nil) {
-                    [error presentErrorToUser];
-                    
-                } else {
-                    
-                    NSFileManager *fileManager = [[NSFileManager alloc] init];
-                    [fileManager setDelegate:self];
-                    
-                    NSURL *thumbnailUrlOld = [MAReportDocument thumbnailUrlForMadUrl:urlToRename];
-                    NSURL *thumbnailUrlNew = [MAReportDocument thumbnailUrlForMadUrl:newUrl];
-                    [fileManager moveItemAtURL:thumbnailUrlOld toURL:thumbnailUrlNew error:&error];
-                    
-                    thumbnailUrlOld = [MAReportDocument thumbnailWithBorderUrlForMadUrl:urlToRename];
-                    thumbnailUrlNew = [MAReportDocument thumbnailWithBorderUrlForMadUrl:newUrl];
-                    [fileManager moveItemAtURL:thumbnailUrlOld toURL:thumbnailUrlNew error:&error];
-                    [self reloadData];
-                }
+                [self removeCachedFileForDocumentUrl:urlToRename];
+                [self reloadData];
+                [error presentErrorToUser];
             }
         }
     }
@@ -1223,8 +1210,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                 if (data) {
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         
-                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with the Mad Viewer available on iOS.",
-                                                                                                                 @"The attached document can be opened with the Mad Viewer available on iOS.")];
+                        NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
+                                                                                                                 @"The attached document can be opened with MAD Viewer.")];
                         
                         NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
                         [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];

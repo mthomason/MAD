@@ -11,12 +11,13 @@
 #endif
 
 #import "MTDataTableFastObjectEnumerator.h"
-#import "MTDatabase.h"
+#import "MTDatabaseCache.h"
 #import "MTDatabaseConnection.h"
 #import "MTDataColumn.h"
 #import "libSqlite3_8.h"
 #import "MTQuery.h"
 #import "MTLog.h"
+#import "MTDatabaseSqlite3.h"
 
 @interface MTDataTableFastObjectEnumerator ()
 
@@ -25,7 +26,8 @@
 @property (nonatomic, strong) NSArray *columnKeys;
 @property (assign) BOOL empty;
 
-@property (nonatomic, strong) MTDatabase *databaseForQuery;
+@property (nonatomic, strong) MTDatabaseCache *databaseForQuery;
+@property (nonatomic, strong) NSMutableArray *fastEnumerationObjects;
 
 @end
 
@@ -39,8 +41,11 @@
 - (id)initWithDatabaseConnection:(MTDatabaseConnection *)databaseConnection columns:(NSDictionary *)columns columnKeys:(NSArray *)columnKeys query:(MTQuery *)query {
     self = [super init];
     if (self) {
+        
+        NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
+        [self setFastEnumerationObjects:fastEnumerationObjects];
 
-        MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
+        MTDatabaseCache *database = [MTDatabaseCache databaseFactory:databaseConnection];
         [self setDatabaseForQuery:database];
 
         NSUInteger numberOfColumns = [columnKeys count];
@@ -89,6 +94,52 @@ void sqliteCallback(void *foo, const char* statement) {
     return success ? [self currentObject] : nil;
 }
 
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained *)stackbuf
+                                    count:(NSUInteger)len {
+    
+    NSUInteger i = 0;
+    int stepResult;
+    
+    if(state->state == 0) {
+        state->state = 1;
+        state->mutationsPtr = &state->extra[0];
+        sqlite3_reset(_statement);
+    }
+    
+    if (state->state != 2) {
+        state->itemsPtr = stackbuf;
+        
+        [[self fastEnumerationObjects] removeAllObjects];
+        
+        for (i = 0; i<len; i++) {
+            @autoreleasepool {
+                stepResult = sqlite3_step(_statement);
+                if (stepResult == SQLITE_ROW) {
+                    id co = [self currentObject];
+                    if (co) {
+                        stackbuf[i] = co;
+                        [[self fastEnumerationObjects] addObject:co];
+                    } else {
+                        stackbuf[i] = nil;
+                    }
+                } else if (stepResult == SQLITE_DONE) {
+                    sqlite3_reset(_statement);
+                    stackbuf[i] = nil;
+                    state->state = 2;
+                    break;
+                } else {
+                    sqlite3_reset(_statement);
+                    stackbuf[i] = nil;
+                    state->state = 2;
+                    break;
+                }
+            }
+        }
+    }
+    return i;
+}
+
 - (id)currentObject {
     NSMutableDictionary *currentObject = [self singleColumnNoWrapper] ? nil : [[NSMutableDictionary alloc] initWithCapacity:[[self columns] count]];
     int columnCounter = 0;
@@ -96,7 +147,6 @@ void sqliteCallback(void *foo, const char* statement) {
     for (id key in [self columnKeys]) {
         
         @autoreleasepool {
-            
             
             MTDataColumn *dataColumn = [self columns][key];
             
@@ -106,51 +156,7 @@ void sqliteCallback(void *foo, const char* statement) {
             } else {
                 
                 MTDataType madDataType = [[dataColumn columnType] integerValue];
-                switch (madDataType) {
-                    case MTDataTypeInteger:
-                        columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeBlob: {
-                        const void *blob = sqlite3_column_blob(_statement, columnCounter);
-                        if (blob == NULL) {
-                            columnValue = nil;
-                        } else {
-                            int bytes = sqlite3_column_bytes(_statement, columnCounter);
-                            columnValue = [NSData dataWithBytes: blob
-                                                         length: bytes];
-                        }
-                        break;
-                    }
-                    case MTDataTypeFloat:
-                        columnValue = [NSNumber numberWithFloat:sqlite3_column_double(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeDouble:
-                        columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeDecimal:
-                        columnValue = [NSNumber numberWithDouble:sqlite3_column_double(_statement, columnCounter)];
-                        break;
-                    case MTDataTypeString: {
-                        const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
-                        if (text == NULL) {
-                            columnValue = [NSNull null];
-                        } else {
-                            columnValue = [NSString stringWithUTF8String:(const char *) text];
-                        }
-                        break;
-                    }
-                    default: {
-                        if (sqlite3_column_type(_statement, columnCounter) == SQLITE3_TEXT) {
-                            const unsigned char *text = sqlite3_column_text(_statement, columnCounter);
-                            if (text == NULL) {
-                                columnValue = [NSNull null];
-                            } else {
-                                columnValue = [NSString stringWithUTF8String:(const char *) text];
-                            }
-                        }
-                        break;
-                    }
-                }
+                columnValue = [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
             }
             
             if (columnValue == nil) {
@@ -165,9 +171,8 @@ void sqliteCallback(void *foo, const char* statement) {
     }
     if (self.addRowId && self.singleColumnNoWrapper == NO && sqlite3_column_count(_statement) >= columnCounter) {
         NSNumber *rowid = @(sqlite3_column_int(_statement, columnCounter));
-        [currentObject setValue:@(sqlite3_column_int(_statement, columnCounter)) forKey:@"ROWID"];
+        [currentObject setValue:rowid forKey:@"ROWID"];
     }
-    //NSLog(@"FEnum: %@", columnValue);
     return self.singleColumnNoWrapper ? columnValue : currentObject;
 }
 

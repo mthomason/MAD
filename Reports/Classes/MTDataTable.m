@@ -23,11 +23,6 @@
 
 @implementation MTDataTable
 
-- (NSEnumerator *)enumeratorForRowIds:(NSIndexSet *)rowids {
-    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
-    return nil;
-}
-
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
@@ -51,6 +46,17 @@
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
+}
+
++ (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
+    NSUInteger hash = [identifier hash];
+    NSNumber *typeKey = @(MTDataTableTypeOfTable);
+    NSNumber *type = @(MTDataTableTypeVirtual);
+    NSNumber *objectIdKey = @(MTDataTableObjectId);
+    NSNumber *objectIdV =  @(hash);
+    return [MTDataTable dataTableFactory:@{
+                                           typeKey : type,
+                                           objectIdKey : objectIdV}];
 }
 
 + (id)dataTableFactory:(NSDictionary *)parameters {
@@ -113,13 +119,15 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     
-    [encoder encodeObject:  [self sortDescriptors]  forKey:[MTDataTable keySortDescriptors]];
-    [encoder encodeObject:  [self url]              forKey:[MTDataTable keyUrl]];
+    NSNumber *objid = [NSNumber numberWithUnsignedInteger:self.tag];
+    [encoder encodeObject:  objid                   forKey: @"objid"];
+    [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
+    [encoder encodeObject:  [self url]              forKey: [MTDataTable keyUrl]];
     [encoder encodeObject:  [self name]             forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
     [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
     [encoder encodeInteger: [self rowCounter]       forKey: [MTDataTable keyRowCounter]];
-
+    
 }
 
 + (NSString *)keyUrl {
@@ -144,9 +152,9 @@
         NSMutableArray *sortDescriptors = [decoder decodeObjectForKey:[MTDataTable keySortDescriptors]];
         [self setSortDescriptors:sortDescriptors];
 
-        NSURL *url = [decoder decodeObjectForKey:[MTDataTable keyUrl]];
-        [self setUrl:url];
-                
+        NSNumber *objid = [decoder decodeObjectForKey:@"objid"];
+        self.tag = [objid unsignedIntegerValue];
+        
    }
     return self;
 }
@@ -154,20 +162,23 @@
 - (id)init {
     self = [super init];
     if (self) {
-        [self initalizeWithObjectId:0];
+        [self initalizeWithObjectId:0 fromCache:NO];
     }
     return self;
 }
 
 - (id)initWithId:(NSUInteger)objectId {
+    return [self initWithId:objectId fromCache:YES];
+}
+- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     self = [super init];
     if (self) {
-        [self initalizeWithObjectId:objectId];
+        [self initalizeWithObjectId:objectId fromCache:fromCache];
     }
     return self;
 }
 
-- (void)initalizeWithObjectId:(NSUInteger)objectId {
+- (void)initalizeWithObjectId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     NSString *name = @"";
     [self setName:name];
     
@@ -182,17 +193,17 @@
     
     [self setRowCounter:0];
     
-    [self setObjectId:objectId];
-    
-    [self loadFromCache];
-    
+    [self setTag:objectId];
+
+    //if (fromCache) {
+    //    [self loadFromCache];
+    //}
 }
 
-- (void)setObjectId:(NSUInteger)objectId {
-    NSString *filename = [NSFileManager filenameId:objectId extention:@"mdcache"];
-    NSURL *cacheDirectory = [NSFileManager cacheDirectory];
-    NSURL *fileUrl = [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
-    [self setUrl:fileUrl];
+- (NSURL *)url {
+    NSString *filename = [NSFileManager filenameId:self.tag extention:@"mdcache"];
+    NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager cacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
+    return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 - (void)loadFromCache {
@@ -253,16 +264,6 @@
     [self cachePlist:plist];
 }
 
-- (NSDictionary *)columnsPlist {
-    
-    NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
-    for (NSString *key in [[self columns] keyEnumerator]) {
-        MTDataColumn *dataColumn = [[self columns] objectForKey:key];
-        columnsPlist[key] = [dataColumn plist];
-    }
-    return columnsPlist;
-}
-
 - (id)plist {
     
     NSString *keyName = [MTDataTable keyName];
@@ -272,7 +273,7 @@
     NSNumber *rowCounter = @([self rowCounter]);
     
     NSArray *columnKeys = [[NSArray alloc] initWithArray:[self columnKeys]];
-    NSDictionary *columnsPlist = [self columnsPlist];
+    NSDictionary *columnsPlist = [NSDictionary dictionaryWithDictionary:[self columnsPlist]];
     
     return @{
              keyName        : [self name],
@@ -300,21 +301,27 @@
     [self setSortDescriptors:sortDescriptors];
     
     NSDictionary *columnsPlist = [[NSDictionary alloc] initWithDictionary:[plist objectForKey: [MTDataTable keyColumns]]];
-    
-    NSUInteger count = [columnsPlist count];
-    NSMutableDictionary *columns = [[NSMutableDictionary alloc] initWithCapacity:count];
-    for (NSString *key in [columnsPlist keyEnumerator]) {
-        @autoreleasepool {
+
+    for (NSString *key in [self columnKeys]) {
             NSDictionary *columnPlist = [[NSDictionary alloc] initWithDictionary:columnsPlist[key]];
             MTDataColumn *column = [[MTDataColumn alloc] initWithPlist: columnPlist];
-            columns[key] = column;
-        }
+            [self columns][key] = column;
     }
-    [self setColumns: columns];
     
-    NSUInteger rowCounter = [[plist objectForKey: [MTDataTable keyRowCounter]] integerValue];
+    NSNumber *rowCounterObj = [plist objectForKey: [MTDataTable keyRowCounter]];
+    NSUInteger rowCounter = [rowCounterObj integerValue];
     [self setRowCounter:rowCounter];
     
+}
+
+- (NSDictionary *)columnsPlist {
+    
+    NSMutableDictionary *columnsPlist = [[NSMutableDictionary alloc] initWithCapacity:[self numberOfColumns]];
+    for (NSString *key in [self columnKeys]) {
+        MTDataColumn *dataColumn = [[self columns] objectForKey:key];
+        columnsPlist[key] = [dataColumn plist];
+    }
+    return columnsPlist;
 }
 
 - (void)addColumn:(MTDataColumn *)column {}
@@ -389,6 +396,17 @@
 + (NSString *)keySortDescriptors {
     SEL selSortDescriptors = @selector(sortDescriptors);
     return NSStringFromSelector(selSortDescriptors);
+}
+
+/*! Returns an array of NSURLs that represent all the cached files used by the class.
+ 
+ @brief All cahced files.
+ @returns NSURLs
+ 
+ */
+
+- (NSArray *)cachedFiles {
+    
 }
 
 @end

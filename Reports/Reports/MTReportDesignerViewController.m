@@ -73,10 +73,10 @@
 #import "UIViewController+ui.h"
 #import "UIViewController+tabBarItem.h"
 
-NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
-NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
-NSString * const MTSegueChooseWhitespaceSaveIdentifer = @"MTSegueChooseWhitespaceSaveIdentifer";
-NSString * const MTSegueChooseImageSaveIdentifer = @"MTSegueChooseImageSaveIdentifer";
+NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
+NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
+NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
+NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
 
 const CGFloat MTReportDesignerRulerHeight           = 16.0000f;
 const CGFloat MTReportDesignerSectionLabelHeight    = 20.0000f;
@@ -200,7 +200,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
-@property (nonatomic, strong) RptqDocumentObjectLabelDataField *dataFieldToEdit;
 
 @property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
 
@@ -234,18 +233,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             }];
         }
     } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
+        [self tableViewControllerChooseFieldDidFinish:[action sourceViewController] withField:[[action sourceViewController] queryField]];
         
-        MTQueryBuilderChooseFieldViewController *dynamicFieldController = [action sourceViewController];
-        RptqQueryField *queryField = [dynamicFieldController queryField];
-        
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-        NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
-        [[documentObject isLabelDataField] setReferencesQueryField:queryField];
-        [managedObjectContext save:nil];
-        
+
     } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueEditFieldCancel"]) {
         
     } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcodeCancel"]) {
@@ -847,7 +837,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     [self setViewDidAppearDesignerScrollViewConstraints:viewDidAppearDesignerScrollViewConstraints];
     [self setViewDidAppearDesignerContentViewConstraints:viewDidAppearDesignerContentViewConstraints];
-    
+
+    [self designerScrollViewWillAppear];
+    [self enableTabBarItems];
+}
+
+- (void)designerScrollViewWillAppear {
     [[self designerScrollView] setScrollEnabled:YES];
     [[self designerScrollView] setMaximumZoomScale:4.0000f];
     [[self designerScrollView] setMinimumZoomScale:1.0000f];
@@ -856,7 +851,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self designerScrollView] setBackgroundColor:[MTReportDesignerViewController designerBackgroundColor]];
     [[self designerScrollView] setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
     [[self designerScrollView] flashScrollIndicators];
-    [self enableTabBarItems];
 }
 
 + (UIColor *)designerBackgroundColor {
@@ -2056,8 +2050,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             }
         }
         
-        NSAssert(quickHashWorks, @"Maybe not such a good idea.");
-        if (quickHashWorks == NO) {     // FIXME: This case should be unneeded now.
+        //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
+        if (quickHashWorks == NO) {     //Case when views are off screen.
             
             MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
@@ -2090,6 +2084,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return [[self sectionControlViews] objectForKey:[documentSection sectionKey]];
 }
 
+#pragma mark - Actions
+
 - (IBAction)done:(id)sender {
     
     NSError *error = nil;
@@ -2106,7 +2102,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
 }
 
-- (IBAction)showObjects:(id)sender {
+- (IBAction)add:(id)sender {
     [self setDisplayActive];
     if (![self dismissAllPopovers]) {
         [self performSegueWithIdentifier:@"showObjects" sender:sender];
@@ -2114,6 +2110,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [self deselectAllElementsAnimated:YES];
     }
 }
+
+#pragma mark - Helpers
 
 - (CGFloat)heightTopBars {
     CGFloat height = self.navigationController.navigationBar.bounds.size.height;
@@ -2128,9 +2126,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     CGRect visibleRect;
     visibleRect.origin = scrollView.contentOffset;
     visibleRect.size = scrollView.bounds.size;
-    //if (visibleRect.origin.y < CGPointZero.y) {
-    //    visibleRect.size.height += fabsf(visibleRect.origin.y);
-    //}
     return [MTReportDesignerViewController adjustRect:visibleRect forZoomScale:scrollView.zoomScale];
 }
 
@@ -2353,14 +2348,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     break;
                 case MTDocumentObjectTypeLabelDynamic: {
 
-                    [self setDataFieldToEdit:[objectToEdit isLabelDataField]];
                     [self setEditDynamicField:YES];
                     
+                    [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
                     if ([UIDevice isPad]) {
                         
                         CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
-                        NSManagedObjectID *objectId = [objectToEdit objectID];
-                        UIView *viewToEdit = [self viewForObjectID:objectId];
+                        UIView *viewToEdit = [self viewForObjectID:[objectToEdit objectID]];
                         
                         if (viewToEdit != nil) {
                             
@@ -2380,11 +2374,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                             [self setDisplayInactive];
                             [self setPopoverControllerEditDataLabel: popoverController];
                         } else {
-                            [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
                             [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
                         }
                     } else {
-                        [self setObjectIdEditDynamicLabel:[objectToEdit objectID]];
                         [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
 
                     }
@@ -2457,21 +2449,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
-    
-    NSManagedObjectContext *managedObjectContext = [field managedObjectContext];
-    [[self dataFieldToEdit] setReferencesQueryField:field];
-/*
-    if ([self dataFieldToEdit] && [self editDynamicField]) {
-        [[self dataFieldToEdit] setReferencesQueryField:field];
-    } else {
-
-        NSManagedObjectID *objectId = [self objectIdEditDynamicLabel];
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
-        [[documentObject isLabelDataField] setReferencesQueryField:field];
-
-    }
-    */
-    [managedObjectContext save:nil];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[[field managedObjectContext] objectWithID:[self objectIdEditDynamicLabel]];
+    [[documentObject isLabelDataField] setReferencesQueryField:field];
+    [[field managedObjectContext] save:nil];
 }
 
 #pragma mark -

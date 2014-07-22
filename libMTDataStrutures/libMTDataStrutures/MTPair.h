@@ -17,7 +17,12 @@
 
 - (id)init;
 - (id)initWithFormer:(id)former andLatter:(id)latter;
-
 + (id)pairWithFormer:(id)former andLatter:(id)latter;
+
+- (id)initWithLeft:(id)left andRight:(id)right;
++ (id)pairWithLeft:(id)left andRight:(id)right;
+
+- (id)left;
+- (id)right;
 
 @end

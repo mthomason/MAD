@@ -16,7 +16,7 @@
 @interface MTVertex()
 
 @property (nonatomic, strong) NSMutableArray *edges;     // MARK: The edges this node has
-@property (nonatomic, strong) NSNumber *uniqueIdForStructure;
+@property (nonatomic, strong, readwrite) NSNumber *uniqueIdForStructure;
 
 @end
 

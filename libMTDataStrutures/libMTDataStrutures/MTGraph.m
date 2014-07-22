@@ -25,6 +25,10 @@
 
 @implementation MTGraph
 
+- (void)dealloc {
+    [_vertices removeAllObjects];
+}
+
 #pragma mark - NSObject Overrides
 
 - (id)init {

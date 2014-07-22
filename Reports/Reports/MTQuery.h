@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheAggregateFunctionParamaters) {
     MTQueryCacheAggregateFunctionParamatersRowids,
     MTQueryCacheAggregateFunctionParamatersAggregateFunctionType,
     MTQueryCacheAggregateFunctionParamatersFieldKey,
-    MTQueryCacheAggregateFunctionParamatersWhere,
+    MTQueryCacheAggregateFunctionParamatersPredicates,
     MTQueryCacheAggregateFunctionParamatersFieldDescriptors,
     
 };
@@ -61,7 +61,8 @@ typedef NS_ENUM(NSUInteger, MTQueryCacheSelectLimitOffsetParamaters) {
     MTQueryCacheSelectLimitOffsetParamatersColumnKeys,
     MTQueryCacheSelectLimitOffsetParamatersColumns,
     MTQueryCacheSelectLimitOffsetParamatersSortDesc,
-    MTQueryCacheSelectLimitOffsetParamatersWhere
+    MTQueryCacheSelectLimitOffsetParamatersWhere,
+    MTQueryCacheSelectLimitOffsetParamatersDropRowid
 };
 
 typedef NS_ENUM(NSUInteger, MTQueryCacheFullParameters) {
@@ -133,15 +134,26 @@ typedef NS_ENUM(NSUInteger, MTQuerySelectParameters) {
 extern NSString * const MTQueryKeyType;
 extern NSString * const MTQueryKeyObject;
 
-@class MTDatabase, MTDataTable;
+extern NSString * const MTQueryKeyPredicateColumn;
+extern NSString * const MTQueryKeyPredicateValue;
+
+@class MTDatabase, MTDataTable, RptqQuery;
+
+
+
+#import "MAReportDocument.h"
 
 @interface MTQuery : NSObject
 
+@property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
+
 @property (nonatomic, strong, readwrite) MTDatabase *database;
-@property (nonatomic, strong, readwrite) MTDataTable *datatable;
+
 @property (nonatomic, strong) id queryObject;
 @property (nonatomic, strong) NSMutableDictionary *fields;
 @property (nonatomic, strong) NSMutableArray *fieldKeys;
+
+@property (nonatomic, assign, readonly) MTQueryType type;
 
 @property (nonatomic, strong) NSMutableArray *binaryBindings; // Used by database to bind NSData to insert statements
 
@@ -159,20 +171,23 @@ extern NSString * const MTQueryKeyObject;
 
 @interface MTQuery (Private)    //Intended for use by MTQuery subclasses only
 
-
-- (NSString *)whereClauseWithRowIds:(NSIndexSet *)rowids;
+- (NSString *)whereClauseWithRowIds:(NSArray *)rowids;
 - (NSString *)whereClauseWithParameters:(NSArray *)whereClause;             //For "cache" sqltie3
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3
 
 - (id)initWithObject:(id)object;
-- (NSArray *)sortedHasQueryGroups;
-- (NSArray *)sortDescriptors;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 - (BOOL)returnsResults;
 
 - (BOOL)partOfTransactionSet;
+
++ (NSDictionary *)queryDefinitionFull:(RptqQuery *)query;
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset dropRowid:(BOOL)droprowid;
++ (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors;
++ (NSDictionary *)queryDefinitionSelect:(NSDictionary *)queryDefinationSelect withLimit:(NSInteger)limit andOffset:(NSInteger)offset;
++ (NSDictionary *)queryDefinitionCacheDeleteAllFromTable:(NSString *)table;
 
 @end
 

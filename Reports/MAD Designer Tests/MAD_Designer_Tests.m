@@ -29,8 +29,8 @@
     [super tearDown];
 }
 
+/*
 - (void)testQueryGroupEnumerator {
-    /*
     NSURL *databaseUrl = [NSURL URLWithString:@""];
     NSArray *columns = @[@"c1", @"c2", @"c3", @"c4", @"c5", @"c6", @"c7"];
     
@@ -62,7 +62,7 @@
     [enumerator setAddRowId:NO];
     [enumerator setSingleColumnNoWrapper:YES];
     XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
-     */
 }
+ */
 
 @end
