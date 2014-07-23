@@ -19,8 +19,6 @@ typedef NS_ENUM(NSUInteger, MTReportState) {
 
 extern NSString * const MTBundleIdMadDesigner;
 extern NSString * const MTBundleIdMadViewer;
-extern NSString * const MTBundleIdDesigner;
-extern NSString * const MTBundleIdViewer;
 
 extern NSString * const MTGlobalBundleVersion;
 extern NSString * const MTGlobalBundleShortVersion;

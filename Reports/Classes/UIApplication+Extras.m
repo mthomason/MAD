@@ -27,11 +27,11 @@
 }
 
 + (BOOL)isMadDesigner {
-    return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdDesigner];
+    return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadDesigner];
 }
 
 + (BOOL)isMadViewer {
-    return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdViewer];
+    return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadViewer];
 }
 
 @end
