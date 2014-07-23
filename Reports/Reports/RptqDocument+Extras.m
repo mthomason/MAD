@@ -86,7 +86,7 @@
 
 #pragma mark - Static
 
-+ (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (RptqDocument *)documentFactoryWithManagedObjectContext:(NSManagedObjectContext *)objectContext {
     
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
@@ -254,11 +254,11 @@
             __block NSUInteger tableCounter = 0;
             NSUInteger numberOfTables = [tables count];
             
-            for (MTDatabaseTable *databaseTable in tables) {
+            for (MTDatabaseTable *table in tables) {
                 
                 RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: weakself.managedObjectContext
-                                                                                                                        andTable: databaseTable];
-                RptqDatabase *currentDatabase = [weakself databaseWithConnectionID:connectionId];
+                                                                                                                        andTable: table];
+                RptqDatabase *currentDatabase = [weakself databaseWithConnectionID: connectionId];
                 if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
                 
                 NSError *error = nil;
@@ -267,10 +267,10 @@
                 NSString *tableName = [rptqTable name];
                 
                 [weakDatabase getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
+
                     if (success) {
-                        
-                        RptqDatabase *currentDatabase = [weakself databaseWithConnectionID:connectionId];;
-                        RptqDatabaseSchemaTable *rptqTableOrigional = [currentDatabase getTableWithName: [databaseTable name]];
+                        RptqDatabase *currentDatabase = [weakself databaseWithConnectionID:connectionId];
+                        RptqDatabaseSchemaTable *rptqTableOrigional = [currentDatabase getTableWithName: [table name]];
                         
                         for (MTDatabaseField *field in fields) {
                             

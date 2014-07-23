@@ -19,7 +19,7 @@
 
 - (RptqQuery *)defaultQuery;
 
-+ (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (RptqDocument *)documentFactoryWithManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 - (void)addDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion;

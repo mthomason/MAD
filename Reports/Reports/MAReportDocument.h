@@ -38,26 +38,18 @@ extern NSString * const MTReportGroupLevel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
 - (id)initWithFileURL:(NSURL *)url;
-
-- (void)addDatasourceToReport: (MTDatabase *)database
-                   completion: (void (^)(BOOL success, NSError *error))completion;
-
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
-
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
+- (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
-
 - (RptqDocument *)activeDocument;
-
 - (void)open:(void (^)(id, BOOL))completionHandler;
+
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
-
-- (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion;
-
 - (NSURL *)cachedDataUrl;
 
 - (void)initalizeMainQuery;

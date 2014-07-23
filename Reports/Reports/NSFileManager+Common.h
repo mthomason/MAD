@@ -34,6 +34,7 @@
 - (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl;
 - (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl;
 - (NSData *)dataForUrl:(NSURL *)url;
+- (void)closeAndDelete:(UIManagedDocument *)url completion:(void (^)(BOOL success))completion;
 
 @end
 

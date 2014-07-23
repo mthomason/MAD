@@ -192,12 +192,23 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion {
-    RptqDocument *rptqDocument = [self activeDocument];
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     
     if (database) {
-        [self addDatabase:database toDocument:rptqDocument completion:^(BOOL success, NSError *error) {
-            completion(success, error);
+        RptqDocument *document = [self activeDocument];
+        [document addDatabase:database completion:^(BOOL successAddingDatasource, NSError *error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (successAddingDatasource) {
+                    [self closeDocument:^(BOOL success, NSError *error) {
+                        completion(success, error);
+                    }];
+                } else {
+                    [self closeAndDeleteDocument:^(BOOL success, NSError *error) {
+                        completion(success, error);
+                    }];
+                }
+            });
         }];
     } else {
         NSString *title = NSLocalizedString(@"Error", @"Error");
@@ -231,7 +242,7 @@ NSString * const MTReportDetailRowId = @"d";
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
         RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
         if (document == nil) {
-            document = [RptqDocument createMainDocumentForManagedObjectContext:managedObjectContext];
+            document = [RptqDocument documentFactoryWithManagedObjectContext:managedObjectContext];
         }
         [self setDocument:document];
         
@@ -336,16 +347,6 @@ NSString * const MTReportDetailRowId = @"d";
     [[self statusLabel].status performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
 }
 
-//Add a new connection to the report
-- (void)addDatasourceToReport: (MTDatabase *)database
-                   completion: (void (^)(BOOL success, NSError *error))completion {
-
-    RptqDocument *document = [self activeDocument];
-    [document addDatabase:database completion:^(BOOL success, NSError *error) {
-        completion(success, error);
-    }];
-}
-
 - (NSString *)fileNameMinusExtention {
     return [[self fileURL] filenameMinusExtention];
 }
@@ -425,23 +426,6 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (NSString *)fileType {
     return [MAReportDocument fileType];
-}
-
-- (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
-    [document addDatabase:database completion:^(BOOL successAddingDatasource, NSError *error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (successAddingDatasource) {
-                [self closeDocument:^(BOOL success, NSError *error) {
-                    completion(success, error);
-                }];
-            } else {
-                [self closeAndDeleteDocument:^(BOOL success, NSError *error) {
-                    completion(success, error);
-                }];
-            }
-        });
-    }];
 }
 
 - (void)closeDocument:(void(^)(BOOL success, NSError *error))completion {

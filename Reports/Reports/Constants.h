@@ -9,6 +9,8 @@
 #ifndef Reports_Constants_h
 #define Reports_Constants_h
 
+typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
+
 #pragma mark - Layout
 
 // MARK: Margin
