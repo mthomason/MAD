@@ -56,9 +56,7 @@ extern NSString * const MTReportGroupLevel;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 
-+ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention
-             andConnection:(MTDatabaseConnection *)databaseConnection
-                completion:(void(^)(BOOL success, NSError *error))completion;
+- (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion;
 
 - (NSURL *)cachedDataUrl;
 

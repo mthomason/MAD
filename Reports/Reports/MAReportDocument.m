@@ -94,42 +94,6 @@ NSString * const MTReportDetailRowId = @"d";
     return MTPersistentStoreAliasMad;
 }
 
-+ (void)initalSaveUsingUrl:(NSURL *)url andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
-    
-    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
-                                                     object: databaseConnection];
-    __weak MTDatabaseConnection *weakDatabaseConnection = databaseConnection;
-    
-    [queryTest performQuery:^(BOOL success, NSError *error) {
-        
-        if (!success) {
-            completion(NO, error);
-        } else {
-            
-            MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
-            [report open:^(id doc, BOOL success) {
-                if (success) {
-                    
-                    RptqDocument *rptqDocument = [doc activeDocument];
-                    MTDatabase *database = [MTDatabase databaseFactory:weakDatabaseConnection];
-                    
-                    if (database) {
-                        [doc addDatabase:database toDocument:rptqDocument completion:^(BOOL success, NSError *error) {
-                            completion(success, error);
-                        }];
-                    }
-                    
-                } else {
-                    NSError *error = [MAReportDocument errorFailedToCreateReport];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        completion(NO, error);
-                    });
-                }
-            }];
-        }
-    }];
-}
-
 + (NSError *)errorConnectionProblem {
     NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
     NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
@@ -164,6 +128,46 @@ NSString * const MTReportDetailRowId = @"d";
     return [self thumbnailUrlForMadUrl:madUrl];
 }
 
++ (NSURL *)madFileCheck:(NSURL *)url {
+    NSURL *urlToOpen = nil;
+    if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *destinationUrl = [fileManager archiveUrlForMadUrl:url];
+        [fileManager deleteCoreDataFilesAtDirectory:destinationUrl];
+        urlToOpen = [fileManager unpackMadFile:url toDestinationUrl:destinationUrl];
+    } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
+        urlToOpen = url;
+    } else {
+        urlToOpen = url;
+    }
+    return urlToOpen;
+}
+
+#pragma mark - NSObject
+
+- (id)initWithFileURL:(NSURL *)url {
+    
+    self = [super initWithFileURL:[MAReportDocument madFileCheck:url]];
+    if (self) {
+        
+        NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
+        [self setReportQueries:reportQueries];
+        [self setDidRefresh:NO];
+        
+        NSString *name = [self fileNameMinusExtention];
+        [self initalizeMainDataTableWithName:name];
+        
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[_mainQuery database] setDelegate:nil];
+}
+
+#pragma mark - Methods
+
 - (void)open:(void (^)(id, BOOL))completionHandler {
     NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
     NSNumber *inferMappingModelAutomaticallyOption = @(YES);
@@ -187,42 +191,20 @@ NSString * const MTReportDetailRowId = @"d";
     }
 }
 
-#pragma mark - NSObject
-
-+ (NSURL *)madFileCheck:(NSURL *)url {
-    NSURL *urlToOpen = nil;
-    if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *destinationUrl = [fileManager archiveUrlForMadUrl:url];
-        [fileManager deleteCoreDataFilesAtDirectory:destinationUrl];
-        urlToOpen = [fileManager unpackMadFile:url toDestinationUrl:destinationUrl];
-    } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
-        urlToOpen = url;
+- (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion {
+    RptqDocument *rptqDocument = [self activeDocument];
+    MTDatabase *database = [MTDatabase databaseFactory:connection];
+    
+    if (database) {
+        [self addDatabase:database toDocument:rptqDocument completion:^(BOOL success, NSError *error) {
+            completion(success, error);
+        }];
     } else {
-        urlToOpen = url;
+        NSString *title = NSLocalizedString(@"Error", @"Error");
+        NSString *message = NSLocalizedString(@"Failed to attach database.", @"Failed to attach database.");
+        NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
+        completion(NO, error);
     }
-    return urlToOpen;
-}
-
-- (id)initWithFileURL:(NSURL *)url {
-    
-    self = [super initWithFileURL:[MAReportDocument madFileCheck:url]];
-    if (self) {
-        
-        NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
-        [self setReportQueries:reportQueries];
-        [self setDidRefresh:NO];
-        
-        NSString *name = [self fileNameMinusExtention];
-        [self initalizeMainDataTableWithName:name];
-        
-    }
-    
-    return self;
-}
-
-- (void)dealloc {
-    [[_mainQuery database] setDelegate:nil];
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {

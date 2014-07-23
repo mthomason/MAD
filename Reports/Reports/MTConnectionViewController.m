@@ -18,6 +18,7 @@
 #import "NSError+Constructors.h"
 #import "NSError+UserInterface.h"
 #import "MTActivityIndicator.h"
+#import "MTQuery.h"
 
 @interface MTConnectionViewController()
 
@@ -145,7 +146,7 @@
     
     __weak id blockSender = sender;
     
-    NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
+    NSURL *url = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
 
     MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]];
@@ -153,16 +154,46 @@
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
 
-    [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success, NSError *error) {
-        if (success) {
-            [blockSender setEnabled:YES];
-            [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
+                                                     object: dbDetails];
+    __weak MTDatabaseConnection *weakDatabaseConnection = dbDetails;
+    
+    [queryTest performQuery:^(BOOL success, NSError *error) {
+        
+        if (!success) {
+            //completion(NO, error);
         } else {
-            [blockSender setEnabled:YES];
-            [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
-            [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+            
+            MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
+            [report open:^(id doc, BOOL success) {
+                if (success) {
+                    
+                    [doc addDatabaseConnection:weakDatabaseConnection completion:^(BOOL success, NSError *error) {
+                        if (success) {
+                            [blockSender setEnabled:YES];
+                            [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                        } else {
+                            [blockSender setEnabled:YES];
+                            [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+                            [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
+                        }
+                        [activtyView removeFromSuperview];
+                    }];
+                    
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [blockSender setEnabled:YES];
+                        [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+                        [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
+                        [activtyView removeFromSuperview];
+                        NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
+                        NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
+                        NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
+                        [error presentErrorToUser];
+                    });
+                }
+            }];
         }
-        [activtyView removeFromSuperview];
     }];
 }
 
