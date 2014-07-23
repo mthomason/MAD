@@ -64,7 +64,7 @@
 
 #pragma mark - Static
 
-+ (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (RptqDatabaseSchemaField *)databaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field {
     
     NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabaseSchemaField class])

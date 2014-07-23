@@ -12,6 +12,7 @@
 
 #import "RptqDatabase+Extras.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @implementation RptqDatabase (Extras)
 
@@ -62,6 +63,19 @@
 }
 
 #pragma mark - Static
+
+- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name {
+    
+    RptqDatabaseSchemaTable *result = nil;
+    for (RptqDatabaseSchemaTable *table in [self hasTables]) {
+        if ([[table name] isEqualToString:name]) {
+            result = table;
+            break;
+        }
+    }
+    return result;
+}
+
 
 + (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
                          withConnecitonId:(NSNumber *)connectionId {

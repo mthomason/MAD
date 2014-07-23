@@ -72,7 +72,7 @@
 
 #pragma mark - Static
 
-+ (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
++ (RptqDatabaseSchemaTable *)databaseSchemaTableFactoryWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                                label:(NSString *)label
                                          labelPlural:(NSString *)labelPlural
                                                 name:(NSString *)name
@@ -89,7 +89,7 @@
     return rptqTable;
 }
 
-+ (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (RptqDatabaseSchemaTable *)databaseSchemaTableFactoryWithManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andTable:(MTDatabaseTable *)table {
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];

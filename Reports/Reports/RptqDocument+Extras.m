@@ -174,23 +174,32 @@
     return [documents lastObject];
 }
 
-+ (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
-         completion: (void (^)(BOOL success, NSError *error))completion {
+- (RptqDatabase *)databaseWithConnectionID:(NSNumber *)connectionId {
+    RptqDatabase *currentDatabase = nil;
+    NSInteger connectionVal = [connectionId integerValue];
+    for (RptqDatabase *db in [self hasDatabaseSchemas]) {
+        if ([[db identifier] integerValue] == connectionVal) {
+            currentDatabase = db;
+            break;
+        }
+    }
+    return currentDatabase;
+}
+
+- (void)addDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion {
     
-    __weak RptqDocument *rptqDocument = document;
-    __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
-    
-    NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
-    __weak RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: managedObjectContext
+    NSNumber *connectionId = @([[self hasDatabaseSchemas] count] + 1);
+    RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: self.managedObjectContext
                                                                              driverType: [database identifier]
                                                                            connectionId: connectionId];
-    __weak RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: managedObjectContext];
+
+    RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: self.managedObjectContext];
     [userCredentals setDatabase_driver_type: [database identifier]];
     
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
         
         MTDatabaseConnection *connectionSettings = [database databaseConnection];
-
+        
         if (connectionSettings != nil) {
             [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
             [userCredentals setMysql_host:      [connectionSettings server]];
@@ -199,10 +208,10 @@
             [userCredentals setMysql_username:  [connectionSettings username]];
             [userCredentals setMysql_password:  [connectionSettings password]];
         }
-
+        
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
         MTDatabaseConnection *connectionSettings = [database databaseConnection];
-
+        
         if (connectionSettings != nil) {
             [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
             [userCredentals setTds_server:      [connectionSettings server]];
@@ -212,9 +221,9 @@
             [userCredentals setTds_database:    [connectionSettings database]];
             [userCredentals setTds_port:      @([connectionSettings port])];
         }
-
+        
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
-
+        
         MTDatabaseConnection *connectionSettings = [database databaseConnection];
         if (connectionSettings != nil) {
             // FIXME: Storing Sqlite3 database url in mysql holder.
@@ -227,55 +236,56 @@
     }
     
     [rptqDatabase setOwnedByUser: userCredentals];
-
+    
     NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
-    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: managedObjectContext];
+    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: self.managedObjectContext];
     [rptqDatabase addHasQueriesObject:newQuery];
     
-    NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
-    [rptqDocument setHasDatabaseSchemas: databaseSchemas];
+    NSSet *databaseSchemas = [[self hasDatabaseSchemas] setByAddingObject: rptqDatabase];
+    [self setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
-    __weak NSNumber *weakConnectionId = connectionId;
+    __weak RptqDocument *weakself = self;
+
     [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
+
         if (success) {
+            
             __block NSUInteger tableCounter = 0;
             NSUInteger numberOfTables = [tables count];
-
-            for (MTDatabaseTable *databaseTable in tables) {
             
-                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: managedObjectContext
-                                                                                                           andTable: databaseTable];
-                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                     withConnecitonId: weakConnectionId];
-
+            for (MTDatabaseTable *databaseTable in tables) {
+                
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: weakself.managedObjectContext
+                                                                                                                        andTable: databaseTable];
+                RptqDatabase *currentDatabase = [weakself databaseWithConnectionID:connectionId];
                 if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+                
                 NSError *error = nil;
                 [[currentDatabase managedObjectContext] save:&error];
                 
                 NSString *tableName = [rptqTable name];
                 
-                NSNumber *weakConnectionId2 = connectionId;
                 [weakDatabase getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
                     if (success) {
-                        for (MTDatabaseField *objField in fields) {
-                            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                                 withConnecitonId: weakConnectionId2];
+                        
+                        RptqDatabase *currentDatabase = [weakself databaseWithConnectionID:connectionId];;
+                        RptqDatabaseSchemaTable *rptqTableOrigional = [currentDatabase getTableWithName: [databaseTable name]];
+                        
+                        for (MTDatabaseField *field in fields) {
                             
-                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
-                                                                                          andTableName: [databaseTable name]];
-                            
-                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
-                                                                                                                       andField: objField];
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: weakself.managedObjectContext
+                                                                                                                                     andField: field];
                             
                             NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
                             [fieldSet addObject:schemaField];
                             [rptqTableOrigional setHasFields:fieldSet];
-
-                            NSError *saveError = nil;
-                            [[schemaField managedObjectContext] save:&saveError];
-                            NSAssert(saveError == nil, @"%@", saveError);
+                            
                         }
+                        NSError *saveError = nil;
+                        [[rptqTableOrigional managedObjectContext] save:&saveError];
+                        NSAssert(saveError == nil, @"%@", saveError);
+
                         if (tableCounter == numberOfTables - 1) {
                             completion(YES, nil);
                         }
@@ -286,15 +296,11 @@
                 }];
                 
             }
-
+            
         } else {
             completion(success, error);
         }
-        
-        
-        
     }];
-    
 }
 
 #pragma mark - MTProtocolCompare

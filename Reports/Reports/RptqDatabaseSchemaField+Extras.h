@@ -17,7 +17,7 @@
 
 @interface RptqDatabaseSchemaField (Extras) <MTProtocolCompare, MTProtocolLog>
 
-+ (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (RptqDatabaseSchemaField *)databaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field;
 + (MTDatabaseField *)databaseFieldForSchemaField:(RptqDatabaseSchemaField *)schemaField;
 + (id)getFieldForObjectID:(NSManagedObjectID *)objectID
