@@ -11,9 +11,9 @@
 echo "Updating version/build number from git..."
 plist=${PROJECT_DIR}/${INFOPLIST_FILE}
 
-versionnum=$( git describe | awk '{split($0,a,"-"); print a[1]}' )
+versionnum=$( git describe --abbrev=0 --tags | awk '{split($0,a,"-"); print a[1]}' )
 versionnum=${versionnum#"v"}
-currentvnum=$( git describe | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
+currentvnum=$( git describe --abbrev=0 --tags | awk '{split($0,a,"-"); print a[1] "." a[2]}' )
 currentvnum=${currentvnum#"v"}
 buildnum=$( git rev-list HEAD --count )
 
