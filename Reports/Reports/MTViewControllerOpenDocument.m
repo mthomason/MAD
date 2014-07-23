@@ -295,7 +295,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             }
         }
         
-    } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
+    } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {  //Should only run in MAD Viewer, because forces early formatting
 
         BOOL foundUrl = NO;
         if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
@@ -311,12 +311,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if (foundUrl) {
             MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
             [viewControllerReportViewer setViewControllerDelegate:self];
+            [viewControllerReportViewer setAsyncDelegate:self];
             [self setReportViewer:viewControllerReportViewer];
             
-            __weak MTViewControllerOpenDocument *weakself = self;
+            __weak MTReportViewerController *weakreportviewer = viewControllerReportViewer;
             [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                 if (success) {
-                    [[weakself reportViewer] reload];
+//                    [[[AppDelegate app] activeDocument] activeDocument];    //Force early formatting
+                    [weakreportviewer reload];
                 }
             }];
             

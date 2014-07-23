@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -591,24 +591,6 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="xKW-ao-6Re" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
-                        <barButtonItem style="plain" id="9ID-gN-COP">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="YQT-I2-1eW">
-                                <rect key="frame" x="16" y="6" width="200" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
-                                <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="lq7-UU-wSf">
-                                        <rect key="frame" x="0.0" y="3" width="200" height="34"/>
-                                        <color key="minimumTrackTintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
-                                    </slider>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="lq7-UU-wSf" firstAttribute="centerX" secondItem="YQT-I2-1eW" secondAttribute="centerX" id="2qn-7U-XRE"/>
-                                    <constraint firstItem="lq7-UU-wSf" firstAttribute="top" secondItem="YQT-I2-1eW" secondAttribute="top" constant="3" id="752-Vq-6Hi"/>
-                                    <constraint firstItem="lq7-UU-wSf" firstAttribute="leading" secondItem="YQT-I2-1eW" secondAttribute="leading" constant="2" id="otO-AO-ArV"/>
-                                </constraints>
-                            </view>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="eeG-Zx-OZJ"/>
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="oRz-l3-jqR"/>
                         <barButtonItem systemItem="action" id="8as-OV-SYL">
@@ -634,9 +616,6 @@
                         <outlet property="barButtonItemActivity" destination="8as-OV-SYL" id="2Om-sh-szO"/>
                         <outlet property="barButtonItemDone" destination="YTp-ll-dNI" id="Saa-m9-qmO"/>
                         <outlet property="barButtonItemRefresh" destination="pfN-Fy-9qt" id="fM8-Sy-0oZ"/>
-                        <outlet property="barButtonItemSliderView" destination="9ID-gN-COP" id="fR3-L6-G64"/>
-                        <outlet property="sliderPagination" destination="lq7-UU-wSf" id="Ndq-IK-7Ut"/>
-                        <outlet property="sliderView" destination="YQT-I2-1eW" id="hPV-MX-jrL"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ioc-r9-bZl" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -286,9 +286,9 @@
         __weak MTReportViewerController *viewController = self;
         [[self asyncDelegate] displayContentController:viewController];
     } else {
-        if ([MTApplicationInstance isMadDesigner]) {
+        //if ([MTApplicationInstance isMadDesigner]) {
             [self reload:self];
-        }
+        //}
     }
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
@@ -918,6 +918,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(queuePriorityBackground, ^{
+        
+        
+        
         [[NSNotificationCenter defaultCenter] addObserver: blockViewer
                                                  selector: @selector(reportFormatterDidFormatPage:)
                                                      name: MTNotificationDidFormatPagesName
@@ -932,7 +935,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [reportViewer setPrintPageRendererReport:printPageRender];
 
         } else {
-            [[weakdoc reportFormatter] setDidRefresh:YES];
+            //[[weakdoc reportFormatter] setDidRefresh:YES];
             [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:NO];
             
             MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
