@@ -24,7 +24,6 @@
 #import "RptqQuery.h"
 
 #import "MTViewControllerOpenDocument.h"
-#import "UIManagedDocument+FileOperations.h"
 #import "UIApplication+Extras.h"
 #import "evp.h"
 #import "VerifyStoreReceipt.h"

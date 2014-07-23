@@ -51,7 +51,7 @@ extern NSString * const MTReportGroupLevel;
 
 - (RptqDocument *)activeDocument;
 
-+ (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler;
+- (void)open:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;

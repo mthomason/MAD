@@ -17,7 +17,6 @@
 #import "MTLog.h"
 #import "MTPaper.h"
 
-#import "UIManagedDocument+FileOperations.h"
 #import "UIColor+EverydayApps.h"
 #import "NSURL+Document.h"
 #import "UIDevice+Hack.h"
@@ -48,8 +47,6 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 @property (nonatomic, strong) NSFileWrapper *fileWrapper;
 @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 @property (nonatomic, strong) UIImage *thumbnail;
-
-//@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
 @end
 

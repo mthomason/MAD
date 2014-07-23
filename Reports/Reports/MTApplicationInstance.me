@@ -36,9 +36,9 @@ NSString *const MTApplicationIdMadViewer                            = @"66600375
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"6.0.3";
-NSString * const MTGlobalBundleShortVersion                         = @"6.0.3";
-NSString * const MTGlobalBundleRev                                  = @"1322";
+NSString * const MTGlobalBundleVersion                              = @"6.0.4";
+NSString * const MTGlobalBundleShortVersion                         = @"6.0.4";
+NSString * const MTGlobalBundleRev                                  = @"1323";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -163,12 +163,14 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
     __block __weak MTApplicationInstance *weakSelf = self;
-     MAReportDocument *document = [MAReportDocument openManagedDocumentAtUrl:url withCompletionHandler:^(id managedDocument, BOOL success) {
-         if (success) [weakSelf setReportState:MTReportStateOpen];
-         completionHandler(success);
-     }];
+    
+    MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
+    [report open:^(id doc, BOOL success) {
+        if (success) [weakSelf setReportState:MTReportStateOpen];
+        completionHandler(success);
+    }];
     [self setCurrentDocument:url];
-    [[self documents] setObject:document forKey:url];
+    [[self documents] setObject:report forKey:url];
 
 }
 
