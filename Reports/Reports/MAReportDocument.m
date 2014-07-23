@@ -288,7 +288,7 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterFactoryWithQuery: [self defaultQuery]
                                                                               layout: [self activeDocument]
                                                                              options: MTReportFormatterOptionsNone];
     [reportFormatter setDataDelegate:self];
@@ -363,21 +363,26 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
-    NSString *name = [self fileNameMinusExtention];
-    [self initalizeMainDataTableWithName:name];
-    [self initalizeMainQuery];
-    [self initalizeReportFormatter];
-    MTQuery *fullQuery = [self defaultQuery];
-    [[fullQuery database] setDelegate:self];
-    __weak MAReportDocument *weakself = self;
-    
-    @autoreleasepool {
-        [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
-            [[weakself mainDataTable] cache];
-            [weakself setDidRefresh:success];
-            completion(success, error);
-        }];
-    }
+    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(bgQueue, ^{
+        NSString *name = [self fileNameMinusExtention];
+        [self initalizeMainDataTableWithName:name];
+        [self initalizeMainQuery];
+        [self initalizeReportFormatter];
+        MTQuery *fullQuery = [self defaultQuery];
+        [[fullQuery database] setDelegate:self];
+        __weak MAReportDocument *weakself = self;
+        
+        @autoreleasepool {
+            [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
+                [[weakself mainDataTable] cache];
+                [weakself setDidRefresh:success];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    completion(success, error);
+                });
+            }];
+        }
+    });
 }
 
 - (NSURL *)mcacheUrl {
@@ -466,6 +471,10 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (NSArray *)sortDescriptors {
     
+    if (self.mainDatabase == nil) {
+        [self initalizeMainDatabase];
+    }
+    
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
     RptqQuery *rquery = [[database hasQueries] anyObject];
 
@@ -495,7 +504,7 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (UIPrintPageRenderer *)printerPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterFactoryWithQuery: [self defaultQuery]
                                                                               layout: [self activeDocument]
                                                                              options: MTReportFormatterOptionsMargin];
     
@@ -535,7 +544,7 @@ NSString * const MTReportDetailRowId = @"d";
         NSDictionary *options = @{(NSString *)kCGPDFContextCreator :  @"MAD® Designer"};
         CGRect letterRect = [MTPaper rectLetter];
         [[weakself mainDataTable] sortUsingDescriptors:[weakself sortDescriptors]];
-        MTReportFormatter *rf = [MTReportFormatter reportFormatterWithQuery:weakself.mainQuery
+        MTReportFormatter *rf = [MTReportFormatter reportFormatterFactoryWithQuery:weakself.mainQuery
                                                                      layout:weakself.document
                                                                     options:MTReportFormatterOptionsMargin];
         [rf setCachedDelegate:weakself];
@@ -596,7 +605,7 @@ NSString * const MTReportDetailRowId = @"d";
     [self.printingReportFormatter setLayoutSize:printPaper.paperSize];
     [self.printingReportFormatter setMarginUsingPrintableRect:printPaper.printableRect];
     [self.printingReportFormatter setDidRefresh:YES];   //Force formatting
-    [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
+    [self.printingReportFormatter reformatForSize:printPaper.paperSize];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
     [self setPrintingReportFormatter:nil];

@@ -685,12 +685,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (IBAction)refresh:(id)sender {
     
-    __block MTReportViewerController *reportViewer;
-    if ([sender isKindOfClass:[MTReportViewerController class]]) {
-        reportViewer = sender;
-    } else {
-        reportViewer = self;
-    }
+    __block MTReportViewerController *reportViewer =
+        [sender isKindOfClass:[MTReportViewerController class]] ? sender : self;
     
     [[reportViewer barButtonItemDone] setEnabled:NO];
 
@@ -707,52 +703,27 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                selector: @selector(reportDocumentDidReadRows:)
                                    name: MTNotificationDidReadRowsName
                                  object: database];
-
         
-        __weak MTReportViewerController *weakReportViewer = reportViewer;
+        
+        __weak MTReportViewerController *weakself = reportViewer;
+        [reportDocument refresh:^(BOOL success, NSError *error) {
 
-        __weak MAReportDocument *weakReportDocument = reportDocument;
-        __weak MTDatabase *weakDatabase = database;
-        dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_async(queuePriorityBackground, ^{
-
-            __block MTReportViewerController *reportViewer2 = weakReportViewer;
-            __weak MTDatabase *weakDatabase2 = weakDatabase;
-            [weakReportDocument refresh:^(BOOL success, NSError *error) {
-                __weak MTDatabase *weakDatabase3 = weakDatabase2;
-                __block MTReportViewerController *reportViewer3 = reportViewer2;
-                if (!success) {
-                    [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
-                } else {
-                    NSDate *lastD = [NSDate date];
-                    [reportViewer3 setLastCacheDate:lastD];
-                }
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                    
-                    __weak MTDatabase *weakDatabase4 = weakDatabase3;
-                    __block MTReportViewerController *reportViewer4 = reportViewer3;
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        
-                        NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-                        [defaultCenter removeObserver: reportViewer4
-                                                 name: MTNotificationDidReadRowsName
-                                               object: weakDatabase4];
-                        [MTReportViewerController finishedRefreshWithReportViewer:reportViewer4];
-                        reportViewer4 = nil;
-                    });
-                    reportViewer3 = nil;
-                });
-            }];
-            reportViewer2 = nil;
-        });
+            if (!success) {
+                [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
+            } else {
+                NSDate *lastD = [NSDate date];
+                [weakself setLastCacheDate:lastD];
+            }
+            
+            [notificationCenter removeObserver: weakself
+                                          name: MTNotificationDidReadRowsName
+                                        object: database];
+            [weakself setDisplayActive];
+            [weakself reload:weakself];
+            [weakself timerDealloc];
+            [weakself updateLateRefreshedLabel:weakself];
+        }];
     }
-}
-
-+ (void)finishedRefreshWithReportViewer:(MTReportViewerController *)viewer {
-    [viewer setDisplayActive];
-    [viewer reload:viewer];
-    [viewer timerDealloc];
-    [viewer updateLateRefreshedLabel:viewer];
 }
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {

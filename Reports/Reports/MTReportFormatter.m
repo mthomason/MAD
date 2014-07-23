@@ -117,7 +117,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
-+ (id)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options {
++ (id)reportFormatterFactoryWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
     return result;
 }
@@ -233,6 +233,9 @@ NSString * const MTNullIdentifier = @"(null)";
     
     NSAssert([self datasource] != nil, @"We need a datatable way before here");
     
+    //Force reformat when didRefrsh
+    // or indexes or layout are zero
+    // or datasource cahce is missing
     if ([self didRefresh] ||
         [self cachedIndexesExist] == NO ||
         [[self datasource] cacheExist] == NO) {
@@ -245,35 +248,43 @@ NSString * const MTNullIdentifier = @"(null)";
     [self formatForSize:printableSize contentChanged:YES];
 }
 
-- (void)reformatForSize:(CGSize)printableSize {
-    @synchronized(self) {
-        [self format];
-        [[self page] setLayoutSize:printableSize];
-        [self loadLayoutAndIndexesFromCache];
-        [self formatDocument];
-    }
-}
-
 - (void)setLayoutSize:(CGSize)layoutSize {
     [[self page] setLayoutSize:layoutSize];
 }
 
+- (void)reformatForSize:(CGSize)printableSize {
+    [self formatForSize:printableSize contentChanged:NO];
+}
+
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
-    @synchronized(self) {
-        [[self page] setLayoutSize:printableSize];
-        
-        [self loadLayoutAndIndexesFromCache];
-        
-        if ([self format]) {
-            
-            if (contextChanged) {
-                [self dropIndexes];
+    if (contextChanged == NO || [self format]) {
+        @synchronized(self) {
+            [self setLayoutSize:printableSize];
+            [self loadLayoutAndIndexesFromCache];
+            if ([self format]) {
+                
+                if (contextChanged) {
+                    [self dropIndexes];
+                }
+                [self formatDocument];
             }
-            [self formatDocument];
         }
+    } else {
+        [self reformatForSize:printableSize];
     }
 }
+
+- (void)loadLayoutAndIndexesFromCache {
+    MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]
+                                                        cachedDelegate:self.cachedDelegate];
+    [self setReportIndexes:ixarray];
+    MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]
+                                                        cachedDelegate:self.cachedDelegate];
+    [self setReportLayout:lyarray];
+    [self cleanupTemporaryReportIndexes];
+}
+
 
 - (void)formatDocument {
 
@@ -326,16 +337,6 @@ NSString * const MTNullIdentifier = @"(null)";
 - (void)endBulkInserts {
     [[self reportLayout] endBulkInserts];
     [[self reportIndexes] endBulkInserts];
-}
-
-- (void)loadLayoutAndIndexesFromCache {
-    MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]
-                                                        cachedDelegate:self.cachedDelegate];
-    [self setReportIndexes:ixarray];
-    MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]
-                                                        cachedDelegate:self.cachedDelegate];
-    [self setReportLayout:lyarray];
-    [self cleanupTemporaryReportIndexes];
 }
 
 - (void)initReportLayoutContainers {
