@@ -34,4 +34,24 @@
     return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadViewer];
 }
 
+- (void)startNetworkActivityIndicator {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setNetworkActivityIndicatorVisible:YES];
+        });
+    } else {
+        [self setNetworkActivityIndicatorVisible:YES];
+    }
+}
+
+- (void)stopNetworkActivityIndicator {
+    if ([NSThread isMainThread] == NO) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self setNetworkActivityIndicatorVisible:NO];
+        });
+    } else {
+        [self setNetworkActivityIndicatorVisible:NO];
+    }
+}
+
 @end

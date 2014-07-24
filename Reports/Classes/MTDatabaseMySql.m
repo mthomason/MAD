@@ -87,14 +87,14 @@
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
-    __weak MTDatabaseMySql *weakself = self;
+    //__weak MTDatabaseMySql *weakself = self;
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        [weakself connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             MysqlConnection *conn = dbconn;
             if (conn && error == nil) {
                 @autoreleasepool {
                     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                    [myFetch setDelegate:weakself];
+                    [myFetch setDelegate:self];
                     [myFetch performQuery: query
                              onConnection: conn];
                     completion(YES, nil);
@@ -102,7 +102,7 @@
                 
             } else {
                 SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                [weakself performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
+                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                 completion(NO, error);
             }
         }];
@@ -114,7 +114,7 @@
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
     __weak MTDatabaseMySql *weakself = self;
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        [weakself connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             
             MysqlConnection *conn = dbconn;
             BOOL successConnection = conn != nil;
@@ -135,7 +135,7 @@
                 completion(successConnection, error, results);
             } else {
                 SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                [weakself performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
+                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
                 completion(NO, error, nil);
             }
         }];
@@ -148,14 +148,14 @@
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
     __weak MTDatabaseMySql *weakself = self;
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        [weakself connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             MysqlConnection *conn = dbconn;
             BOOL successConnection = conn != nil;
             NSMutableDictionary *resultsDictionary = nil;
             
             if (successConnection) {
                 
-                NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [weakself safeIdentifier:tableName]];
+                NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
                 MysqlFetch *myFetch = [[MysqlFetch alloc] init];
                 MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
                 MTDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn];
@@ -164,13 +164,13 @@
 
                 for (NSInteger i=0; i<[dataTable numberOfRows]; i++) {
                     NSString *name = [dataTable objectAtRow:i column:0];
-                    NSString *safeId = [weakself safeIdentifierForTable:tableName andField:name];
+                    NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
                     MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
                     [resultsDictionary setObject:field forKey:safeId];
                 }
                 
                 MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
-                NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [weakself safeIdentifier:tableName]];
+                NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
                 MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
                 MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn];
                 

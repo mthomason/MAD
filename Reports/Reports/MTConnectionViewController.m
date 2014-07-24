@@ -17,6 +17,7 @@
 #import "NSURL+Document.h"
 #import "NSError+Constructors.h"
 #import "NSError+UserInterface.h"
+#import "UIApplication+Extras.h"
 #import "MTActivityIndicator.h"
 #import "MTQuery.h"
 
@@ -204,7 +205,7 @@
 
                                         }
                                         [weakActivityView3 removeFromSuperview];
-                                        [app setNetworkActivityIndicatorVisible:NO];
+                                        [[UIApplication sharedApplication] stopNetworkActivityIndicator];
                                     }];
                 } else {
                     [blockSender setEnabled:YES];
@@ -216,7 +217,7 @@
                     NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
                     [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
                     UIApplication *app = [UIApplication sharedApplication];
-                    [app setNetworkActivityIndicatorVisible:NO];
+                    [app stopNetworkActivityIndicator];
                 }
             }];
         } else {
@@ -226,7 +227,7 @@
             [activityView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
             [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
             UIApplication *app = [UIApplication sharedApplication];
-            [app setNetworkActivityIndicatorVisible:NO];
+            [app stopNetworkActivityIndicator];
         }
     }];
     

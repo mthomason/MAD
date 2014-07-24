@@ -17,6 +17,9 @@
 + (BOOL)isMadDesigner;
 + (BOOL)isMadViewer;
 
+- (void)startNetworkActivityIndicator;
+- (void)stopNetworkActivityIndicator;
+
 @end
 
 #endif

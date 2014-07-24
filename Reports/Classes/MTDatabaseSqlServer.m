@@ -27,6 +27,8 @@
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
 
+#import "UIApplication+Extras.h"
+
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
 NSString * const MTDatabaseConnectionDatabase   = @"MTDatabaseConnectionDatabase";
@@ -351,12 +353,12 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 
                 if (error == nil) {
                     
-                    [self startNetworkActivityIndicator];
+                    [[UIApplication sharedApplication] startNetworkActivityIndicator];
                     
                     dbcmd(dbconn, [sql cStringUsingEncoding:NSUTF8StringEncoding]);
                     success = dbsqlexec(dbconn);
                     
-                    [self stopNetworkActivityIndicator];
+                    [[UIApplication sharedApplication] stopNetworkActivityIndicator];
                     
                     if (success != SUCCEED) {
                         
@@ -516,7 +518,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                             
                             [datatable beginBulkInsert];
-                            [self startNetworkActivityIndicator];
+                            [[UIApplication sharedApplication] startNetworkActivityIndicator];
                             
                             while (dbresults(dbconn) != NO_MORE_RESULTS) {
                                 
@@ -1208,7 +1210,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 }
                                 
                             }
-                            [self stopNetworkActivityIndicator];
+                            [[UIApplication sharedApplication] stopNetworkActivityIndicator];
                             [datatable endBulkInsert];
                         }
                     }
@@ -1286,29 +1288,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
     return result;
 }
 
-- (void)startNetworkActivityIndicator {
-    if ([NSThread isMainThread] == NO) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        });
-    } else {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    }
-}
-
-- (void)stopNetworkActivityIndicator {
-    if ([NSThread isMainThread] == NO) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        });
-    } else {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    }
-}
-
 - (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error {
 
-    [self startNetworkActivityIndicator];
+    [[UIApplication sharedApplication] startNetworkActivityIndicator];
     
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;
@@ -1367,7 +1349,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         dbloginfree(login);
     }
     
-    [self stopNetworkActivityIndicator];
+    [[UIApplication sharedApplication] stopNetworkActivityIndicator];
     
     return dbconn;
 }
