@@ -41,13 +41,19 @@ extern NSString * const MTReportGroupLevel;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
-- (void)addDatabaseConnection:(MTDatabaseConnection *)connection
-                       status:(void (^)(NSString *readStatus))status
-                   completion:(void(^)(BOOL success, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
 - (RptqDocument *)activeDocument;
+
 - (void)open:(void (^)(id, BOOL))completionHandler;
++ (void)report:(MAReportDocument *)report open:(void (^)(id, BOOL))completion;
+
+- (void)addDatabaseConnection:(MTDatabaseConnection *)connection
+                       status:(void (^)(NSString *readStatus))status
+                   completion:(void(^)(BOOL success, NSError *error))completion;
++ (void)report:(MAReportDocument *)report addDatabaseConnection:(MTDatabaseConnection *)connection
+        status:(void (^)(NSString *readStatus))status
+    completion:(void(^)(BOOL success, NSError *error))completion;
 
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;

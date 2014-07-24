@@ -163,62 +163,64 @@
 
     self.activityIndicator.status.text = @"Query Test";
     
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    
+    [queryTest performQuery:^(BOOL success, NSError *error) {
+        if (success) {
+            self.activityIndicator.status.text = @"Query Test Succeded";
+            MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
+            __weak MTActivityIndicator *weakActivityView2 = weakActivityView;
+            __weak MTDatabaseConnection *weakDatabaseConnection2 = weakDatabaseConnection;
+            __weak id weaksender2 = blockSender;
+            __weak MTConnectionViewController *weakself2 = blockSelf;
+            [MAReportDocument report:report open:^(id doc, BOOL success) {
+                if (success) {
+                    __weak MTActivityIndicator *weakActivityView3 = weakActivityView2;
+                    __weak id weaksender3 = weaksender2;
+                    __weak MTConnectionViewController *weakself3 = weakself2;
 
-        [queryTest performQuery:^(BOOL success, NSError *error) {
-            if (success) {
-                self.activityIndicator.status.text = @"Query Test Succeded";
-                MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
-                __weak MTActivityIndicator *weakActivityView2 = weakActivityView;
-                [report open:^(id doc, BOOL success) {
-                    if (success) {
-                        __weak MTActivityIndicator *weakActivityView3 = weakActivityView2;
-                        [doc addDatabaseConnection:weakDatabaseConnection
-                                            status:^(NSString *readStatus) {
-                                                //dispatch_sync(dispatch_get_main_queue(), ^{
-                                                    NSString *status = [NSString stringWithString:readStatus];
-                                                    weakActivityView3.status.text = status;
-                                                    //[weakActivityView3.status performSelectorOnMainThread:@selector(setText:) withObject:status waitUntilDone:YES];
-                                                //});
-                                            }
-                                        completion:^(BOOL success, NSError *error) {
-                                            //dispatch_sync(dispatch_get_main_queue(), ^{
-                                                if (success) {
-                                                    [blockSender setEnabled:YES];
-                                                    [[blockSelf delegate] viewControllerDidFinish: blockSelf];
-                                                } else {
-                                                    [blockSender setEnabled:YES];
-                                                    [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
-                                                    [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
-                                                }
-                                                [activityView removeFromSuperview];
-                                            //});
-                                        }];
-                    } else {
-                        //dispatch_sync(dispatch_get_main_queue(), ^{
-                            [blockSender setEnabled:YES];
-                            [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
-                            [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
-                            [activityView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
-                            NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
-                            NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
-                            NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
-                            [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
-                        //});
-                    }
-                }];
-            } else {
-                //dispatch_sync(dispatch_get_main_queue(), ^{
+                    [MAReportDocument report:doc addDatabaseConnection:weakDatabaseConnection2
+                                      status:^(NSString *readStatus) {
+                                            NSString *status = [NSString stringWithString:readStatus];
+                                            weakActivityView3.status.text = status;
+                                        }
+                                    completion:^(BOOL success, NSError *error) {
+                                        UIApplication *app = [UIApplication sharedApplication];
+                                        if (success) {
+                                            [weaksender3 setEnabled:YES];
+                                            [[weakself3 delegate] viewControllerDidFinish: blockSelf];
+                                        } else {
+                                            [weaksender3 setEnabled:YES];
+                                            [[[weakself3 navigationItem] backBarButtonItem] setEnabled:YES];
+                                            [[weakself3 navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
+
+                                        }
+                                        [weakActivityView3 removeFromSuperview];
+                                        [app setNetworkActivityIndicatorVisible:NO];
+                                    }];
+                } else {
                     [blockSender setEnabled:YES];
                     [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
                     [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
                     [activityView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+                    NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
+                    NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
+                    NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
                     [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
-                //});
-            }
-        }];
-    //});
-
+                    UIApplication *app = [UIApplication sharedApplication];
+                    [app setNetworkActivityIndicatorVisible:NO];
+                }
+            }];
+        } else {
+            [blockSender setEnabled:YES];
+            [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+            [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
+            [activityView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+            [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
+            UIApplication *app = [UIApplication sharedApplication];
+            [app setNetworkActivityIndicatorVisible:NO];
+        }
+    }];
+    
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }

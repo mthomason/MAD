@@ -169,49 +169,59 @@ NSString * const MTReportDetailRowId = @"d";
 #pragma mark - Methods
 
 - (void)open:(void (^)(id, BOOL))completionHandler {
+    [MAReportDocument report:self open:completionHandler];
+}
+
++ (void)report:(MAReportDocument *)report open:(void (^)(id, BOOL))completion {
     NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
     NSNumber *inferMappingModelAutomaticallyOption = @(YES);
     NSDictionary *options = @{
                               NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
                               NSInferMappingModelAutomaticallyOption :inferMappingModelAutomaticallyOption,
                               };
-    [self setPersistentStoreOptions: options];
+    [report setPersistentStoreOptions: options];
     
-    __weak MAReportDocument *weakself = self;
+    __weak MAReportDocument *weakself = report;
     MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-        completionHandler(weakself, success);
+        completion(weakself, success);
     };
     
-    NSString *path = [self.fileURL path];
+    NSString *path = [report.fileURL path];
     BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:path];
     if (fileExist) {
-        [self openWithCompletionHandler:handlerOpen];
+        [report openWithCompletionHandler:handlerOpen];
     } else {
-        [self saveToURL:self.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
+        [report saveToURL:report.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
     }
 }
 
 - (void)addDatabaseConnection:(MTDatabaseConnection *)connection
                        status:(void (^)(NSString *readStatus))status
                    completion:(void(^)(BOOL success, NSError *error))completion {
+    [MAReportDocument report:self addDatabaseConnection:connection status:status completion:completion];
+}
+
++ (void)report:(MAReportDocument *)report addDatabaseConnection:(MTDatabaseConnection *)connection
+        status:(void (^)(NSString *readStatus))status
+    completion:(void(^)(BOOL success, NSError *error))completion {
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     
     if (database) {
-        RptqDocument *document = [self activeDocument];
+        RptqDocument *document = [report activeDocument];
+        __weak MAReportDocument *weakself = report;
         [document addDatabase:database status:^(NSString *readStatus) {
             status(readStatus);
         } completion:^(BOOL successAddingDatasource, NSError *error) {
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                if (successAddingDatasource) {
-                    [self closeDocument:^(BOOL success, NSError *error) {
-                        completion(success, error);
-                    }];
-                } else {
-                    [self closeAndDeleteDocument:^(BOOL success, NSError *error) {
-                        completion(success, error);
-                    }];
-                }
-            //});
+            
+            if (successAddingDatasource) {
+                [weakself closeDocument:^(BOOL success, NSError *error) {
+                    completion(success, error);
+                }];
+            } else {
+                [weakself closeAndDeleteDocument:^(BOOL success, NSError *error) {
+                    completion(success, error);
+                }];
+            }
         }];
     } else {
         NSString *title = NSLocalizedString(@"Error", @"Error");
@@ -259,7 +269,27 @@ NSString * const MTReportDetailRowId = @"d";
     }
     return [self document];
 }
-
+/*
++ (RptqDocument *)reportActiveDocument:(MAReportDocument *)report {
+    if ([report document] == nil) {
+        NSManagedObjectContext *managedObjectContext = [report managedObjectContext];
+        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        if (document == nil) {
+            document = [RptqDocument documentFactoryWithManagedObjectContext:managedObjectContext];
+        }
+        [report setDocument:document];
+        
+        if (report.reportFormatter == nil) {
+            [report initalizeReportFormatter];
+        }
+        
+        if (report.mainDatabase == nil) {
+            [report initalizeMainDatabase];
+        }
+    }
+    return [report document];
+}
+*/
 - (MTDatabase *)database {
     return [self mainDatabase];
 }
