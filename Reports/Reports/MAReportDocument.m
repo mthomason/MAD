@@ -191,14 +191,17 @@ NSString * const MTReportDetailRowId = @"d";
     }
 }
 
-- (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion {
+- (void)addDatabaseConnection:(MTDatabaseConnection *)connection
+                       status:(void (^)(NSString *readStatus))status
+                   completion:(void(^)(BOOL success, NSError *error))completion {
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     
     if (database) {
         RptqDocument *document = [self activeDocument];
-        [document addDatabase:database completion:^(BOOL successAddingDatasource, NSError *error) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
+        [document addDatabase:database status:^(NSString *readStatus) {
+            status(readStatus);
+        } completion:^(BOOL successAddingDatasource, NSError *error) {
+            //dispatch_async(dispatch_get_main_queue(), ^{
                 if (successAddingDatasource) {
                     [self closeDocument:^(BOOL success, NSError *error) {
                         completion(success, error);
@@ -208,7 +211,7 @@ NSString * const MTReportDetailRowId = @"d";
                         completion(success, error);
                     }];
                 }
-            });
+            //});
         }];
     } else {
         NSString *title = NSLocalizedString(@"Error", @"Error");
@@ -526,11 +529,11 @@ NSString * const MTReportDetailRowId = @"d";
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
     [self disableUserInteraction:window.view];
 
-    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:[self statusViewRect]];
-    activtyView.center = window.view.center;
+    MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:[self statusViewRect]];
+    activityView.center = window.view.center;
     
-    [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activtyView waitUntilDone:YES];
-    [self setStatusLabel:activtyView];
+    [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activityView waitUntilDone:YES];
+    [self setStatusLabel:activityView];
     
     
     __weak MAReportDocument *weakself = self;
@@ -579,7 +582,7 @@ NSString * const MTReportDetailRowId = @"d";
                 [printPageRender drawPageAtIndex:i inRect:letterRect];
                 NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
                 NSString *text = [NSString stringWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
-                [activtyView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
+                [activityView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
             }
         }
         UIGraphicsEndPDFContext();
@@ -588,7 +591,7 @@ NSString * const MTReportDetailRowId = @"d";
         
     });
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    [activtyView removeFromSuperview];
+    [activityView removeFromSuperview];
     
 }
 

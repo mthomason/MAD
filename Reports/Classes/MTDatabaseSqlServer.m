@@ -43,81 +43,71 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
-    __block MTDatabaseSqlServer *blockSelf = self;
-    
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    
-    dispatch_async(queuePriorityBackground, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
+    MTDatabaseConnection *databaseConnection = [self databaseConnection];
+    [self connectWithCredentals:databaseConnection completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
+        
+        if (success) {
             
-            MTDatabaseConnection *databaseConnection = [blockSelf databaseConnection];
-            [blockSelf connectWithCredentals:databaseConnection completion:^(MTDatabaseProcessSqlServer *process, BOOL success, NSError *connectionError) {
+            id results = nil;
+            NSError *error = nil;
+            DBPROCESS *dbconn = [process process];
+            if (dbconn) {
                 
-                if (success) {
-
-                    id results = nil;
-                    NSError *error = nil;
-                    DBPROCESS *dbconn = [process process];
-                    if (dbconn) {
-                        
-                        dbcmd(dbconn, "SELECT name FROM sys.tables");
-                        
-                        RETCODE success = dbsqlexec(dbconn);
-                        
-                        if (success != SUCCEED) {
-                            
-                            NSString *message = @"Sql Syntax Error";
-                            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                            error = [NSError errorWithDomain:@"MTDatabaseTds" code:3 userInfo:errorInfo];
-                            
-                        }
-                        
-                        NSInteger numberOfColumns = dbnumcols(dbconn);
-                        
-                        results = [[NSMutableArray alloc] initWithCapacity: numberOfColumns];
-                        
-                        while (dbresults(dbconn) != NO_MORE_RESULTS) {
-                            
-                            //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
-                            DBINT columnLength      = dbcollen(dbconn, 1);
-                            char *sybVarCharBind;
-                            DBINT sybVarCharBindNull;
-                            
-                            sybVarCharBind = malloc( sizeof(char) * ( columnLength + 1 ) );
-                            dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
-                            dbnullbind(dbconn, 1, &sybVarCharBindNull);
-                            
-                            while (dbnextrow(dbconn) != NO_MORE_ROWS) {
-                                
-                                if (sybVarCharBindNull != -1) {
-                                    if (sybVarCharBind != nil) {
-                                        NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
-                                                                                       encoding: NSStringEncodingConversionAllowLossy];
-                                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                                        [results addObject:table];
-                                    }
-                                }
-                            }
-                            free(sybVarCharBind);
-                        }
-                        
-                        dbclose(dbconn);
-                    } else {
-                        NSString *message = @"No Connection";
-                        NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-                        error = [NSError errorWithDomain:@"MTDatabaseTds" code:24 userInfo:errorInfo];
-                    }
+                dbcmd(dbconn, "SELECT name FROM sys.tables");
+                
+                RETCODE success = dbsqlexec(dbconn);
+                
+                if (success != SUCCEED) {
                     
+                    NSString *message = @"Sql Syntax Error";
+                    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                    error = [NSError errorWithDomain:@"MTDatabaseTds" code:3 userInfo:errorInfo];
                     
-                    completion(error == nil, error, results);
-                } else {
-                    completion(NO, connectionError, nil);
                 }
-
-            }];
-            blockSelf = nil;
-        });
-    });
+                
+                NSInteger numberOfColumns = dbnumcols(dbconn);
+                
+                results = [[NSMutableArray alloc] initWithCapacity: numberOfColumns];
+                
+                while (dbresults(dbconn) != NO_MORE_RESULTS) {
+                    
+                    //DBINT columnNumberBytes = dbdatlen(dbconn, 1);
+                    DBINT columnLength      = dbcollen(dbconn, 1);
+                    char *sybVarCharBind;
+                    DBINT sybVarCharBindNull;
+                    
+                    sybVarCharBind = malloc( sizeof(char) * ( columnLength + 1 ) );
+                    dbbind(dbconn, 1, NTBSTRINGBIND, columnLength, (BYTE *)sybVarCharBind);
+                    dbnullbind(dbconn, 1, &sybVarCharBindNull);
+                    
+                    while (dbnextrow(dbconn) != NO_MORE_ROWS) {
+                        
+                        if (sybVarCharBindNull != -1) {
+                            if (sybVarCharBind != nil) {
+                                NSString *tableName = [[NSString alloc] initWithCString: sybVarCharBind
+                                                                               encoding: NSStringEncodingConversionAllowLossy];
+                                MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                                [results addObject:table];
+                            }
+                        }
+                    }
+                    free(sybVarCharBind);
+                }
+                
+                dbclose(dbconn);
+            } else {
+                NSString *message = @"No Connection";
+                NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+                error = [NSError errorWithDomain:@"MTDatabaseTds" code:24 userInfo:errorInfo];
+            }
+            
+            
+            completion(error == nil, error, results);
+        } else {
+            completion(NO, connectionError, nil);
+        }
+        
+    }];
 }
 
 - (void)getFieldsForTableName: (NSString *)tableName

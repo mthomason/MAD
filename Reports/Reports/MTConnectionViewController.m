@@ -24,6 +24,7 @@
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
+@property (nonatomic, strong) MTActivityIndicator *activityIndicator;
 
 @end
 
@@ -112,12 +113,13 @@
     [self.textFieldDatabase resignFirstResponder];
     [self.textFieldReportName resignFirstResponder];
     
-    CGRect activtyViewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
-    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:activtyViewRect];
-    activtyView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activtyView.bounds.size.height / 2.0000f) +
-                                                        (activtyView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
-    [activtyView.status setText:@"Importing schema. Please wait."];
-    [[self view] addSubview:activtyView];
+    CGRect activityViewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
+    MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:activityViewRect];
+    activityView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activityView.bounds.size.height / 2.0000f) +
+                                                        (activityView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
+    [activityView.status setText:@"Importing schema. Please wait."];
+    [[self view] addSubview:activityView];
+    [self setActivityIndicator:activityView];
     
     [sender setEnabled:NO];
     [[[self navigationItem] backBarButtonItem] setEnabled:NO];
@@ -157,44 +159,66 @@
     MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
                                                      object: dbDetails];
     __weak MTDatabaseConnection *weakDatabaseConnection = dbDetails;
+    __weak MTActivityIndicator *weakActivityView = activityView;
+
+    self.activityIndicator.status.text = @"Query Test";
     
-    [queryTest performQuery:^(BOOL success, NSError *error) {
-        
-        if (!success) {
-            //completion(NO, error);
-        } else {
-            
-            MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
-            [report open:^(id doc, BOOL success) {
-                if (success) {
-                    
-                    [doc addDatabaseConnection:weakDatabaseConnection completion:^(BOOL success, NSError *error) {
-                        if (success) {
-                            [blockSender setEnabled:YES];
-                            [[blockSelf delegate] viewControllerDidFinish: blockSelf];
-                        } else {
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+
+        [queryTest performQuery:^(BOOL success, NSError *error) {
+            if (success) {
+                self.activityIndicator.status.text = @"Query Test Succeded";
+                MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
+                __weak MTActivityIndicator *weakActivityView2 = weakActivityView;
+                [report open:^(id doc, BOOL success) {
+                    if (success) {
+                        __weak MTActivityIndicator *weakActivityView3 = weakActivityView2;
+                        [doc addDatabaseConnection:weakDatabaseConnection
+                                            status:^(NSString *readStatus) {
+                                                //dispatch_sync(dispatch_get_main_queue(), ^{
+                                                    NSString *status = [NSString stringWithString:readStatus];
+                                                    weakActivityView3.status.text = status;
+                                                    //[weakActivityView3.status performSelectorOnMainThread:@selector(setText:) withObject:status waitUntilDone:YES];
+                                                //});
+                                            }
+                                        completion:^(BOOL success, NSError *error) {
+                                            //dispatch_sync(dispatch_get_main_queue(), ^{
+                                                if (success) {
+                                                    [blockSender setEnabled:YES];
+                                                    [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                                                } else {
+                                                    [blockSender setEnabled:YES];
+                                                    [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+                                                    [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
+                                                }
+                                                [activityView removeFromSuperview];
+                                            //});
+                                        }];
+                    } else {
+                        //dispatch_sync(dispatch_get_main_queue(), ^{
                             [blockSender setEnabled:YES];
                             [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
                             [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
-                        }
-                        [activtyView removeFromSuperview];
-                    }];
-                    
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [blockSender setEnabled:YES];
-                        [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
-                        [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
-                        [activtyView removeFromSuperview];
-                        NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
-                        NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
-                        NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
-                        [error presentErrorToUser];
-                    });
-                }
-            }];
-        }
-    }];
+                            [activityView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+                            NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
+                            NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
+                            NSError *error = [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
+                            [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
+                        //});
+                    }
+                }];
+            } else {
+                //dispatch_sync(dispatch_get_main_queue(), ^{
+                    [blockSender setEnabled:YES];
+                    [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+                    [[blockSelf navigationItem] setRightBarButtonItem:[blockSelf holderButton] animated:YES];
+                    [activityView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+                    [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
+                //});
+            }
+        }];
+    //});
+
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }

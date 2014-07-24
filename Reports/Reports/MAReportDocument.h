@@ -41,7 +41,9 @@ extern NSString * const MTReportGroupLevel;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
-- (void)addDatabaseConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion;
+- (void)addDatabaseConnection:(MTDatabaseConnection *)connection
+                       status:(void (^)(NSString *readStatus))status
+                   completion:(void(^)(BOOL success, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
 - (RptqDocument *)activeDocument;
