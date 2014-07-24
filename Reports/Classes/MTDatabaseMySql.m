@@ -112,7 +112,6 @@
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
-    __weak MTDatabaseMySql *weakself = self;
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             
@@ -146,7 +145,6 @@
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
-    __weak MTDatabaseMySql *weakself = self;
     [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
         [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
             MysqlConnection *conn = dbconn;

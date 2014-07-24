@@ -252,16 +252,16 @@
     NSString *statusQueryingTables = NSLocalizedString(@"Querying tables.", @"Querying tables.");
     status(statusQueryingTables);
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         __weak MTDatabase *weakDatabase2 = weakDatabase;
         __weak RptqDocument *weakself2 = weakself;
         
         [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
             
-            __weak MTDatabase *weakDatabase3 = weakDatabase2;
-            __weak RptqDocument *weakself3 = weakself2;
+            //__weak MTDatabase *weakDatabase3 = weakDatabase2;
+            //__weak RptqDocument *weakself3 = weakself2;
             
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 if (success) {
                     
                     __block NSUInteger tableCounter = 0;
@@ -271,27 +271,29 @@
                         
                         @autoreleasepool {
                             
-                            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: weakself3.managedObjectContext
+                            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: weakself2.managedObjectContext
                                                                                                                                     andTable: table];
-                            RptqDatabase *currentDatabase = [weakself3 databaseWithConnectionID: connectionId];
+                            RptqDatabase *currentDatabase = [weakself2 databaseWithConnectionID: connectionId];
                             if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
                             
-                            NSError *error = nil;
-                            [weakself3.managedObjectContext save:&error];
+//                            NSError *error = nil;
+                            [weakself2.managedObjectContext performSelectorOnMainThread:@selector(save:) withObject:nil waitUntilDone:YES];
                             
                             NSString *tableName = [rptqTable name];
                             
                             NSString *fieldsForTable = NSLocalizedString(@"Querying fields for %@.", @"Querying fields for %@.");
                             NSString *statusQueryingFieldsForTable = [NSString stringWithFormat:fieldsForTable, tableName];
-                            status(statusQueryingFieldsForTable);
+                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                status(statusQueryingFieldsForTable);
+                            });
                             
                             __weak RptqDatabaseSchemaTable *weaktable = rptqTable;
-                            __weak MTDatabase *weakDatabase4 = weakDatabase3;
-                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                __weak RptqDatabaseSchemaTable *weaktable2 = weaktable;
+                            __weak MTDatabase *weakDatabase4 = weakDatabase2;
+                            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//                                __weak RptqDatabaseSchemaTable *weaktable2 = weaktable;
                                 [weakDatabase4 getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
-                                    __weak RptqDatabaseSchemaTable *weaktable3 = weaktable2;
-                                    dispatch_sync(dispatch_get_main_queue(), ^{
+                                    __weak RptqDatabaseSchemaTable *weaktable3 = weaktable;
+                                    //dispatch_sync(dispatch_get_main_queue(), ^{
                                         if (success) {
                                             
                                             for (MTDatabaseField *field in fields) {
@@ -310,20 +312,25 @@
                                                 }
                                             }
                                             
-                                            NSError *saveError = nil;
-                                            [weaktable3.managedObjectContext save:&saveError];
-                                            NSAssert(saveError == nil, @"%@", saveError);
+  //                                          NSError *saveError = nil;
+                                            [weaktable3.managedObjectContext performSelectorOnMainThread:@selector(save:) withObject:nil waitUntilDone:YES];
+//                                            [weaktable3.managedObjectContext save:&saveError];
+                                         //   NSAssert(saveError == nil, @"%@", saveError);
                                             
                                             if (tableCounter == numberOfTables - 1) {
-                                                completion(YES, nil);
+                                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                                    completion(YES, nil);
+                                                });
                                             }
                                             tableCounter++;
                                         } else {
-                                            completion(NO, error);
+                                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                                completion(NO, error);
+                                            });
                                         }
-                                    });
+                                    //});
                                 }];
-                            });
+                            //});
                         }
                     }
                     
@@ -333,7 +340,7 @@
             });
 
         }];
-    });
+   // });
 }
 
 #pragma mark - MTProtocolCompare
