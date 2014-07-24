@@ -38,7 +38,7 @@
         activityIndicator.center = indicatorCenter;
         [activityIndicator startAnimating];
         
-        CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 44.0000f, frame.size.width, 44.0000f);
+        CGRect labelFrame = CGRectMake(CGPointZero.x, frame.size.height - 66.0000f, frame.size.width, 66.0000f);
         UILabel *status = [[UILabel alloc] initWithFrame:labelFrame];
         [status setTextColor:[UIColor lightTextColor]];
         UIFont *font = [UIFont fontWithName:@"Helvetica-Light" size:11.0000f];

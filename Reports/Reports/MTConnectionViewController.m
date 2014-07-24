@@ -115,11 +115,17 @@
     
     CGRect activityViewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
     MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:activityViewRect];
-    [activityView.status setNumberOfLines:2];
-    UIFont *font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    [activityView.status setNumberOfLines:3];
+    
+    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
     [activityView.status setFont:font];
-    activityView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activityView.bounds.size.height / 2.0000f) +
-                                                        (activityView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
+    if ([UIDevice isPad]) {
+        activityView.center = self.view.center;
+    } else {
+        activityView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activityView.bounds.size.height / 2.0000f) +
+                                          (activityView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
+    }
+
     [activityView.status setText:@"Importing schema. Please wait."];
     [[self view] addSubview:activityView];
     [self setActivityIndicator:activityView];
