@@ -71,7 +71,7 @@
             MTDatabaseConnection *connection = [MTDatabaseConnection databaseConnectionFactory:url];
             MTDatabase *db = [MTDatabase databaseFactory:connection];
             NSAssert([db isKindOfClass:[MTDatabaseSqlite3 class]], @"Only allow Sqlite3. Fix this sometime.");
-            [self setDatabase:db];
+            [self setDatabase:(MTDatabaseCache *)db];
         }
         [self setQueryObject:object];
         

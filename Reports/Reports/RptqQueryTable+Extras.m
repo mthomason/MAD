@@ -15,6 +15,7 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
 #import "RptqQueryField+Extras.h"
 #import "RptqDatabaseSchemaTable.h"
@@ -87,8 +88,8 @@
 
 + (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable inDocument:(RptqDocument *)document {
 
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     
     NSSet *queryTables = [query hasQueryTables];
     NSInteger dupeCtr = 0;
@@ -134,8 +135,8 @@
 
 + (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document {
     NSUInteger result = 0;
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     result = [[query hasQueryTables] count];
     return result;
 }

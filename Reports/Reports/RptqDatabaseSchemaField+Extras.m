@@ -10,9 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDatabaseSchemaField+Extras.h"
 #import "MTDatabaseField.h"
 #import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 
 @implementation RptqDatabaseSchemaField (Extras)
 

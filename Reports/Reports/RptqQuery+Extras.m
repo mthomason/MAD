@@ -10,9 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqQuery+Extras.h"
-
 #import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 #import "MTGraph.h"
 #import "MTPair.h"
 #import "RptqQueryGroup.h"
@@ -27,10 +30,6 @@
 @implementation RptqQuery (Extras)
 
 #pragma mark - Overrides
-
-+ (RptqQuery *)RptqQueryForDocument:(RptqDocument *)document {
-    return [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
-}
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];

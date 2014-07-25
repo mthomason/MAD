@@ -42,7 +42,13 @@
 #import "UIDevice+Hack.h"
 #import "SectionEnumerator.h"
 #import "MTFont.h"
+
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+
 #import "RptqQuery.h"
 #import "RptqQueryField.h"
 
@@ -1114,8 +1120,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                        forSectionAtRow: selectedSectionNumber
                             inDocument: document];
     
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: selectedSectionNumber
                                                                                 forQuery: query];
     
@@ -1131,8 +1137,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
     
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                 forQuery: query];
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
@@ -1154,8 +1160,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     RptqDocumentSection *documentSection = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                         forQuery: query];
     
@@ -3261,8 +3267,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 MTApplicationInstance *applicationInstance = [AppDelegate app];
                 MAReportDocument *reportDocument = [applicationInstance activeDocument];
                 RptqDocument *document = [reportDocument activeDocument];
-                RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                RptqQuery *query = [[database hasQueries] anyObject];
+                RptqDatabase *database = [document defaultDatabase];
+                RptqQuery *query = [database defaultQuery];
                 RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedSectionControlPanel]
                                                                                     forQuery: query];
                 

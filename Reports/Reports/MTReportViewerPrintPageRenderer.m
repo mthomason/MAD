@@ -24,6 +24,8 @@
 #import "RptqDocumentObject+Extras.h"
 
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+
 #import "RptqQueryField.h"
 #import "RptqUserCredentals.h"
 
@@ -275,7 +277,7 @@
 
     NSUInteger rowIndex = 0;
     
-    RptqDatabase *databaseSchemas = [[[[self reportFormatter] layout] hasDatabaseSchemas] anyObject];
+    RptqDatabase *databaseSchemas = [[[self reportFormatter] layout] defaultDatabase];
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];

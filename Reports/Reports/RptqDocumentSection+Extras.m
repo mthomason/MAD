@@ -18,6 +18,8 @@
 #import "MAReportDocument.h"
 
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+
 #import "RptqDatabaseSchemaTable.h"
 
 #import "RptqQuery.h"
@@ -237,8 +239,10 @@
 }
 
 + (RptqDocumentSection *)getDocumentSectionForDocument:(RptqDocument *)document {
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     return [RptqDocumentSection getDocumentSectionForRow:0
-                                                forQuery:[RptqQuery RptqQueryForDocument:document]];
+                                                forQuery:query];
 }
 
 + (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
@@ -563,13 +567,15 @@
             break;
             
         case MNSDocumentSectionTypeGroupHeader: {
-            RptqQuery *query = [RptqQuery RptqQueryForDocument:document];
+            RptqDatabase *database = [document defaultDatabase];
+            RptqQuery *query = [database defaultQuery];
             documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel: level
                                                                         forQuery: query];
             break;
         }
         case MNSDocumentSectionTypeGroupFooter: {
-            RptqQuery *query = [RptqQuery RptqQueryForDocument:document];
+            RptqDatabase *database = [document defaultDatabase];
+            RptqQuery *query = [database defaultQuery];
             documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel: level
                                                                         forQuery: query];
             break;

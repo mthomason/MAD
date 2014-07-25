@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
                                                 driverType:(NSString *)driverIdentifier
                                               connectionId:(NSNumber *)connectionId;
 - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
+- (RptqQuery *)defaultQuery;
 
 @end
 

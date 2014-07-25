@@ -80,8 +80,12 @@
     }
 }
 
+- (RptqDatabase *)defaultDatabase {
+    return [[self hasDatabaseSchemas] anyObject];
+}
+
 - (RptqQuery *)defaultQuery {
-    return [[[[self hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+    return [[self defaultDatabase] defaultQuery];
 }
 
 #pragma mark - Static
@@ -186,16 +190,18 @@
     return currentDatabase;
 }
 
+
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *readStatus))status
          completion:(void (^)(BOOL success, NSError *error))completion {
+    __weak RptqDocument *rptqDocument = self;
+    __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
     
-    NSNumber *connectionId = @([[self hasDatabaseSchemas] count] + 1);
-    RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: self.managedObjectContext
-                                                                             driverType: [database identifier]
-                                                                           connectionId: connectionId];
-
-    RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: self.managedObjectContext];
+    NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
+    __weak RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: managedObjectContext
+                                                                                    driverType: [database identifier]
+                                                                                  connectionId: connectionId];
+    __weak RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: managedObjectContext];
     [userCredentals setDatabase_driver_type: [database identifier]];
     
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
@@ -240,7 +246,128 @@
     [rptqDatabase setOwnedByUser: userCredentals];
     
     NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
-    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: self.managedObjectContext];
+    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: managedObjectContext];
+    [rptqDatabase addHasQueriesObject:newQuery];
+    
+    NSSet *databaseSchemas = [[rptqDocument hasDatabaseSchemas] setByAddingObject: rptqDatabase];
+    [rptqDocument setHasDatabaseSchemas: databaseSchemas];
+    
+    __weak MTDatabase *weakDatabase = database;
+    __weak NSNumber *weakConnectionId = connectionId;
+    [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        if (success) {
+            __block NSUInteger tableCounter = 0;
+            NSUInteger numberOfTables = [tables count];
+            
+            for (MTDatabaseTable *databaseTable in tables) {
+                
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext:managedObjectContext andTable:databaseTable];
+                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                     withConnecitonId: weakConnectionId];
+                
+                if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+                NSError *error = nil;
+                [[currentDatabase managedObjectContext] save:&error];
+                
+                NSString *tableName = [rptqTable name];
+                
+                NSNumber *weakConnectionId2 = connectionId;
+                [weakDatabase getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
+                    if (success) {
+                        for (MTDatabaseField *objField in fields) {
+                            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
+                                                                                 withConnecitonId: weakConnectionId2];
+                            
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
+                                                                                                          andTableName: [databaseTable name]];
+                            
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext:managedObjectContext andField:objField];
+                            
+                            NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
+                            [fieldSet addObject:schemaField];
+                            [rptqTableOrigional setHasFields:fieldSet];
+                            
+                            NSError *saveError = nil;
+                            [[schemaField managedObjectContext] save:&saveError];
+                            NSAssert(saveError == nil, @"%@", saveError);
+                        }
+                        if (tableCounter == numberOfTables - 1) {
+                            completion(YES, nil);
+                        }
+                        tableCounter++;
+                    } else {
+                        completion(NO, error);
+                    }
+                }];
+                
+            }
+            
+        } else {
+            completion(success, error);
+        }
+        
+        
+        
+    }];
+    
+}
+/*- (void)addDatabase:(MTDatabase *)database
+             status:(void (^)(NSString *readStatus))status
+         completion:(void (^)(BOOL success, NSError *error))completion {
+    
+    __weak NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    
+    NSNumber *connectionId = @([[self hasDatabaseSchemas] count] + 1);
+    RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: managedObjectContext
+                                                                             driverType: [database identifier]
+                                                                           connectionId: connectionId];
+    
+    RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: managedObjectContext];
+    [userCredentals setDatabase_driver_type: [database identifier]];
+    
+    if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
+        
+        MTDatabaseConnection *connectionSettings = [database databaseConnection];
+        
+        if (connectionSettings != nil) {
+            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
+            [userCredentals setMysql_host:      [connectionSettings server]];
+            [userCredentals setMysql_database:  [connectionSettings database]];
+            [userCredentals setMysql_port:    @([connectionSettings port])];
+            [userCredentals setMysql_username:  [connectionSettings username]];
+            [userCredentals setMysql_password:  [connectionSettings password]];
+        }
+        
+    } else if ([[database identifier] isEqualToString:[MTDatabaseSqlServer identifier]]) {
+        MTDatabaseConnection *connectionSettings = [database databaseConnection];
+        
+        if (connectionSettings != nil) {
+            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMicrosoftSqlServer)];
+            [userCredentals setTds_server:      [connectionSettings server]];
+            [userCredentals setTds_host:        [connectionSettings server]];
+            [userCredentals setTds_username:    [connectionSettings username]];
+            [userCredentals setTds_password:    [connectionSettings password]];
+            [userCredentals setTds_database:    [connectionSettings database]];
+            [userCredentals setTds_port:      @([connectionSettings port])];
+        }
+        
+    } else if ([[database identifier] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
+        
+        MTDatabaseConnection *connectionSettings = [database databaseConnection];
+        if (connectionSettings != nil) {
+            // FIXME: Storing Sqlite3 database url in mysql holder.
+            NSString *path = [[connectionSettings databaseUrl] path];
+            NSString *filename = [path lastPathComponent];
+            [userCredentals setMysql_database:      filename];
+            [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeSqlite3)];
+        }
+        
+    }
+    
+    [rptqDatabase setOwnedByUser: userCredentals];
+    
+    NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
+    RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId inManagedObjectContext: managedObjectContext];
     [rptqDatabase addHasQueriesObject:newQuery];
     
     NSSet *databaseSchemas = [[self hasDatabaseSchemas] setByAddingObject: rptqDatabase];
@@ -248,100 +375,168 @@
     
     __weak MTDatabase *weakDatabase = database;
     __weak RptqDocument *weakself = self;
-
+    
     NSString *statusQueryingTables = NSLocalizedString(@"Querying tables.", @"Querying tables.");
     status(statusQueryingTables);
     
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        __weak MTDatabase *weakDatabase2 = weakDatabase;
-        __weak RptqDocument *weakself2 = weakself;
-        
-        [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
+    __weak NSNumber *weakConnectionId = connectionId;
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        if (success) {
+            __block NSUInteger tableCounter = 0;
+            NSUInteger numberOfTables = [tables count];
             
-            //__weak MTDatabase *weakDatabase3 = weakDatabase2;
-            //__weak RptqDocument *weakself3 = weakself2;
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                if (success) {
-                    
-                    __block NSUInteger tableCounter = 0;
-                    NSUInteger numberOfTables = [tables count];
-                    
-                    for (MTDatabaseTable *table in tables) {
-                        
-                        @autoreleasepool {
+            for (MTDatabaseTable *databaseTable in tables) {
+                
+                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: managedObjectContext
+                                                                                                                        andTable: databaseTable];
+                RptqDatabase *currentDatabase = [weakself databaseWithConnectionID: weakConnectionId];
+                
+                if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+                NSError *error = nil;
+                [[currentDatabase managedObjectContext] save:&error];
+                
+                
+                __weak NSString *tableName = [rptqTable name];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *fieldsForTable = NSLocalizedString(@"Querying fields for %@.", @"Querying fields for %@.");
+                    NSString *statusQueryingFieldsForTable = [NSString stringWithFormat:fieldsForTable, tableName];
+                    status(statusQueryingFieldsForTable);
+               });
+                
+
+                NSNumber *weakConnectionId2 = connectionId;
+                [weakDatabase getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
+                    if (success) {
+                        for (MTDatabaseField *objField in fields) {
+                            RptqDatabase *currentDatabase = [weakself databaseWithConnectionID: weakConnectionId2];
                             
-                            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: weakself2.managedObjectContext
-                                                                                                                                    andTable: table];
-                            RptqDatabase *currentDatabase = [weakself2 databaseWithConnectionID: connectionId];
-                            if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
+                                                                                                          andTableName: [databaseTable name]];
                             
-//                            NSError *error = nil;
-                            [weakself2.managedObjectContext performSelectorOnMainThread:@selector(save:) withObject:nil waitUntilDone:YES];
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext:managedObjectContext andField:objField];
                             
-                            NSString *tableName = [rptqTable name];
+                            NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
+                            [fieldSet addObject:schemaField];
+                            [rptqTableOrigional setHasFields:fieldSet];
                             
-                            NSString *fieldsForTable = NSLocalizedString(@"Querying fields for %@.", @"Querying fields for %@.");
-                            NSString *statusQueryingFieldsForTable = [NSString stringWithFormat:fieldsForTable, tableName];
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                status(statusQueryingFieldsForTable);
-                            });
-                            
-                            __weak RptqDatabaseSchemaTable *weaktable = rptqTable;
-                            __weak MTDatabase *weakDatabase4 = weakDatabase2;
-                            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-//                                __weak RptqDatabaseSchemaTable *weaktable2 = weaktable;
-                                [weakDatabase4 getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
-                                    __weak RptqDatabaseSchemaTable *weaktable3 = weaktable;
-                                    //dispatch_sync(dispatch_get_main_queue(), ^{
-                                        if (success) {
-                                            
-                                            for (MTDatabaseField *field in fields) {
-                                                @autoreleasepool {
-                                                    
-                                                    NSString *addingField = NSLocalizedString(@"Adding %1@ from %2@.", @"Adding %1@ from %2@.");
-                                                    NSString *statusAddingField = [NSString stringWithFormat:addingField, tableName, [field name]];
-                                                    status(statusAddingField);
-                                                    
-                                                    RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: weaktable3.managedObjectContext
-                                                                                                                                                             andField: field];
-                                                    
-                                                    NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[weaktable3 hasFields]];
-                                                    [fieldSet addObject:schemaField];
-                                                    [weaktable3 setHasFields:fieldSet];
-                                                }
-                                            }
-                                            
-  //                                          NSError *saveError = nil;
-                                            [weaktable3.managedObjectContext performSelectorOnMainThread:@selector(save:) withObject:nil waitUntilDone:YES];
-//                                            [weaktable3.managedObjectContext save:&saveError];
-                                         //   NSAssert(saveError == nil, @"%@", saveError);
-                                            
-                                            if (tableCounter == numberOfTables - 1) {
-                                                dispatch_sync(dispatch_get_main_queue(), ^{
-                                                    completion(YES, nil);
-                                                });
-                                            }
-                                            tableCounter++;
-                                        } else {
-                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                completion(NO, error);
-                                            });
-                                        }
-                                    //});
-                                }];
+                            //dispatch_sync(dispatch_get_main_queue(), ^{
+                                NSError *saveError = nil;
+                                [[schemaField managedObjectContext] save:&saveError];
+                                NSAssert(saveError == nil, @"%@", saveError);
+                                NSString *addingField = NSLocalizedString(@"Adding %1@ from %2@.", @"Adding %1@ from %2@.");
+                                NSString *statusAddingField = [NSString stringWithFormat:addingField, tableName, [schemaField name]];
+                                status(statusAddingField);
+
                             //});
                         }
+                        if (tableCounter == numberOfTables - 1) {
+                            //dispatch_sync(dispatch_get_main_queue(), ^{
+                                completion(YES, nil);
+                            //});
+                        }
+                        tableCounter++;
+                    } else {
+                        //dispatch_sync(dispatch_get_main_queue(), ^{
+                            completion(NO, error);
+                        //});
                     }
+                }];
+                
+            }
+            
+        } else {
+            completion(success, error);
+        }
+    }];
+}*/
+    //});
+ 
+    /*
+    [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        
+        __weak RptqDocument *weakself3 = weakself2;
+        
+        if (success) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                __block NSUInteger tableCounter = 0;
+                NSUInteger numberOfTables = [tables count];
+                
+                for (MTDatabaseTable *table in tables) {
                     
-                } else {
-                    completion(success, error);
+                    @autoreleasepool {
+                        
+                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryWithManagedObjectContext: weakself3.managedObjectContext
+                                                                                                                                andTable: table];
+                        RptqDatabase *currentDatabase = [weakself3 databaseWithConnectionID: connectionId];
+                        if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
+                        
+                        
+                        NSString *tableName = [rptqTable name];
+                        
+                        NSString *fieldsForTable = NSLocalizedString(@"Querying fields for %@.", @"Querying fields for %@.");
+                        NSString *statusQueryingFieldsForTable = [NSString stringWithFormat:fieldsForTable, tableName];
+                        
+                        dispatch_sync(dispatch_get_main_queue(), ^{
+                            NSError *error = nil;
+                            [currentDatabase.managedObjectContext save:&error];
+                            status(statusQueryingFieldsForTable);
+                        });
+                        
+                        __weak RptqDatabase *weakdatabase = currentDatabase;
+                        __weak RptqDatabaseSchemaTable *weaktable = rptqTable;
+                        [weakDatabase2 getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
+                            if (success) {
+                                
+                                for (MTDatabaseField *field in fields) {
+                                    @autoreleasepool {
+                                        
+                                        NSString *addingField = NSLocalizedString(@"Adding %1@ from %2@.", @"Adding %1@ from %2@.");
+                                        NSString *statusAddingField = [NSString stringWithFormat:addingField, tableName, [field name]];
+                                        RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: weaktable.managedObjectContext
+                                                                                                                                                 andField: field];
+                                        
+                                        NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[weaktable hasFields]];
+                                        [fieldSet addObject:schemaField];
+                                        [weaktable setHasFields:fieldSet];
+                                        
+                                        dispatch_sync(dispatch_get_main_queue(), ^{
+                                            status(statusAddingField);
+                                        });
+                                        
+                                    }
+                                }
+                                
+                                if (tableCounter == numberOfTables - 1) {
+                                    dispatch_sync(dispatch_get_main_queue(), ^{
+                                        NSError *error = nil;
+                                        [weakdatabase.managedObjectContext save:&error];
+                                        completion(YES, nil);
+                                    });
+                                }
+                                tableCounter++;
+                            } else {
+                                dispatch_sync(dispatch_get_main_queue(), ^{
+                                    completion(NO, error);
+                                });
+                            }
+                        }];
+                        
+                        //dispatch_sync(dispatch_get_main_queue(), ^{
+                        //    NSError *error = nil;
+                        //    [weaktable.managedObjectContext save:&error];
+                        //    completion(NO, error);
+                        //});
+
+                    }
                 }
             });
-
-        }];
-   // });
-}
+        } else {
+            completion(success, error);
+        }
+    }];
+     */
 
 #pragma mark - MTProtocolCompare
 

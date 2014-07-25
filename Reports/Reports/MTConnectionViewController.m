@@ -171,12 +171,12 @@
     __weak MTDatabaseConnection *weakDatabaseConnection = dbDetails;
     __weak MTActivityIndicator *weakActivityView = activityView;
 
-    self.activityIndicator.status.text = @"Query Test";
+    self.activityIndicator.status.text = @"Testing database connection.";
     
     
     [queryTest performQuery:^(BOOL success, NSError *error) {
         if (success) {
-            self.activityIndicator.status.text = @"Query Test Succeded";
+            self.activityIndicator.status.text = @"Database connection test was successful.";
             MAReportDocument *report = [[MAReportDocument alloc] initWithFileURL:url];
             __weak MTActivityIndicator *weakActivityView2 = weakActivityView;
             __weak MTDatabaseConnection *weakDatabaseConnection2 = weakDatabaseConnection;

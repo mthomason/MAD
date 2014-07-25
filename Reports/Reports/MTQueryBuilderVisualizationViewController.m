@@ -16,7 +16,9 @@
 #import "MTShowSqlViewController.h"
 
 #import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
@@ -738,8 +740,8 @@ typedef void(^MTBlockResultVoid)(void);
         [[self controllersForObjectIdsLink] removeAllObjects];
         
         RptqDocument *document = [documentReport activeDocument];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
+        RptqDatabase *database = [document defaultDatabase];
+        RptqQuery *query = [database defaultQuery];
         [self displayQuery:query animated:animated];
     }
     
@@ -900,8 +902,8 @@ typedef void(^MTBlockResultVoid)(void);
     NSMutableSet *orphanedQueryTables = [[NSMutableSet alloc] init];
     
     RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     
     for (RptqQueryTable *table in [query hasQueryTables]) {
         BOOL orphaned = YES;

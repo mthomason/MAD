@@ -18,6 +18,8 @@
 #import "RptqQueryGroup.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDatabase+Extras.h"
 
 @interface SectionEnumerator ()
 
@@ -30,8 +32,8 @@
 - (id)initWithDocument:(RptqDocument *)document {
     self = [super init];
     if (self) {
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
+        RptqDatabase *database = [[self document] defaultDatabase];
+        RptqQuery *query = [database defaultQuery];
         [self setCurrent: 0];
         [self setTotal: [[query hasQueryGroups] count]];
         [self setDocument:document];
@@ -44,8 +46,8 @@
 }
 
 - (NSArray *)allObjects {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [[self document] defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     
     NSInteger current = [self current];
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:([self total] - current)];
@@ -60,8 +62,8 @@
 }
 
 - (id)nextObject {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [[self document] defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
 
     NSInteger current = [self current];
     id result = [RptqDocumentSection getDocumentSectionForRow: current forQuery: query];

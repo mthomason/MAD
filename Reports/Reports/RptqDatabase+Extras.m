@@ -62,6 +62,10 @@
     }
 }
 
+- (RptqQuery *)defaultQuery {
+    return [[self hasQueries] anyObject];
+}
+
 #pragma mark - Static
 
 - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name {

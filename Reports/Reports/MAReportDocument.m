@@ -14,6 +14,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MAReportDocument.h"
 #import <UIKit/UIKit.h>
+#import "MTQuery.h"
+#import "MTReportFormatter.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTDatabaseTable.h"
@@ -22,24 +24,34 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSFileManager+Common.h"
 #import "NSFileManager+Reports.h"
 
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+
+#import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
+
+#import "RptqQueryCache.h"
 #import "RptqQueryCache+Extras.h"
+
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
+
 #import "RptqQueryGroup.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
+
 #import "RptqQueryField.h"
 
 #import "MTLog.h"
-#import "MTQuery.h"
-#import "MTReportFormatter.h"
 #import "MTAlertView.h"
 #import "UIDevice+Hack.h"
 
@@ -269,35 +281,15 @@ NSString * const MTReportDetailRowId = @"d";
     }
     return [self document];
 }
-/*
-+ (RptqDocument *)reportActiveDocument:(MAReportDocument *)report {
-    if ([report document] == nil) {
-        NSManagedObjectContext *managedObjectContext = [report managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
-        if (document == nil) {
-            document = [RptqDocument documentFactoryWithManagedObjectContext:managedObjectContext];
-        }
-        [report setDocument:document];
-        
-        if (report.reportFormatter == nil) {
-            [report initalizeReportFormatter];
-        }
-        
-        if (report.mainDatabase == nil) {
-            [report initalizeMainDatabase];
-        }
-    }
-    return [report document];
-}
-*/
+
 - (MTDatabase *)database {
     return [self mainDatabase];
 }
 
 - (void)initalizeMainQuery {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+    RptqDatabase *database = [[self document] defaultDatabase];
     if (database) {
-        RptqQuery *rquery = [[database hasQueries] anyObject];
+        RptqQuery *rquery = [database defaultQuery];
         
         NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
         MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:parameters];
@@ -331,9 +323,9 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)initalizeMainDatabase {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *queryObject = [[database hasQueries] anyObject];
-    RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
+    RptqDatabase *database = [self.document defaultDatabase];
+    RptqQuery *rquery = [database defaultQuery];
+    RptqUserCredentals *userCredentals = [[rquery inDatabase] ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
     [db setDelegate:self];
@@ -508,8 +500,9 @@ NSString * const MTReportDetailRowId = @"d";
         [self initalizeMainDatabase];
     }
     
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
+    RptqDatabase *database = [self.document defaultDatabase];
+    RptqQuery *rquery = [database defaultQuery];
+
 
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     

@@ -43,6 +43,7 @@
 #import "RptqDocumentObject.h"
 
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
@@ -478,8 +479,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqQueryField *queryField = [RptqQueryField getQueryFieldForObjectID:queryFieldId fromObjectContext:managedObjectContext];
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     [query addHasQueryGroupsObject: queryGroup];
     [reportDocument saveContext];
     [reportDocument quickSave];
@@ -504,8 +505,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
 
     NSDictionary *oldLayout = [self datamodel];
     NSArray *oldLayoutSectionTypes = [oldLayout objectForKey:MTTableSectionSectionsKey];
@@ -1267,8 +1268,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             
             
             RptqDocument *document = [reportDocument activeDocument];
-            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqQuery *query = [[database hasQueries] anyObject];
+            RptqDatabase *database = [document defaultDatabase];
+            RptqQuery *query = [database defaultQuery];
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
@@ -1544,8 +1545,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
     NSManagedObjectID *deleatedTableObjectId = [table objectID];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     [query removeHasQueryTablesObject:table];
     numberOfTables--;
     

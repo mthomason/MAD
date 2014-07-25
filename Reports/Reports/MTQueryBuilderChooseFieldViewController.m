@@ -15,12 +15,13 @@
 #import "MTApplicationInstance.h"
 #import "RptqFieldSelectorManager.h"
 #import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"
 #import "RptqDatabaseSchemaField.h"
-
 #import "RptqDatabaseSchemaField+Extras.h"
 
 #pragma mark -
@@ -83,8 +84,8 @@
 
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
     NSSet *queryTables = [query hasQueryTables];
 
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];
