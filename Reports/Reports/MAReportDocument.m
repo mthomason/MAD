@@ -243,7 +243,9 @@ NSString * const MTReportDetailRowId = @"d";
                    completion: (void (^)(BOOL success, NSError *error))completion {
 
     RptqDocument *document = [self activeDocument];
-    [document addDatabase:database completion:^(BOOL success, NSError *error) {
+    [document addDatabase:database status:^(NSString *readStatus) {
+        
+    } completion:^(BOOL success, NSError *error) {
         completion(success, error);
     }];
 }
@@ -433,7 +435,9 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
-    [document addDatabase:database completion:^(BOOL successAddingDatasource, NSError *error) {
+    [document addDatabase:database status:^(NSString *readStatus) {
+        
+    } completion:^(BOOL successAddingDatasource, NSError *error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (successAddingDatasource) {

@@ -178,14 +178,9 @@
     return [documents lastObject];
 }
 
-/*- (void)addDatabase:(MTDatabase *)database
+- (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *readStatus))status
          completion:(void (^)(BOOL success, NSError *error))completion {
-    
-}*/
-
-- (void)addDatabase: (MTDatabase *)database
-         completion: (void (^)(BOOL success, NSError *error))completion {
     
     __weak RptqDocument *rptqDocument = self;
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
