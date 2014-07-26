@@ -517,8 +517,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 
 - (void)deleteDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
-    NSIndexPath *cellPath = [[self collectionView] indexPathForCell:cell];
-    [self deleteDocumentAtIndexPath:cellPath];
+    NSIndexPath *index = [[self collectionView] indexPathForCell:cell];
+    NSError *error = nil;
+    [self deleteDocumentAtIndexPath:index error:&error];
+    [[self collectionView] deleteItemsAtIndexPaths:@[index]];
 }
 
 - (void)viewControllerDidFinish:(id)sender {
@@ -887,31 +889,41 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         
         NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
-        for (NSIndexPath *indexPath in itemsToDelete) {
-            [self deleteDocumentAtIndexPath:indexPath];
-            [indexSet addIndex:[indexPath item]];
+        for (NSIndexPath *index in itemsToDelete) {
+            [indexSet addIndex:[index item]];
+
+            NSError *error = nil;
+            NSURL *documentUrl = [self documentForIndexPath:index];
+            [self removeCachedFileForDocumentUrl:documentUrl];
+            [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:&error];
+            if (error == nil) {
+                if ([index item] < [[self dataSource] count]) {
+                    [[self dataSource] removeItemAtIndex:[index item]];
+                }
+            } else {
+                [error presentErrorToUser];
+            }
         }
-        [[self dataSource] removeItemsAtIndexes:indexSet];
         [[self collectionView] deleteItemsAtIndexPaths:itemsToDelete];
     }
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
     return [[self dataSource] itemAtIndexPath:indexPath];
+
 }
 
-- (void)deleteDocumentAtIndexPath:(NSIndexPath *)index {
-    NSError *error = nil;
+- (void)deleteDocumentAtIndexPath:(NSIndexPath *)index error:(NSError **)error {
+    *error = nil;
     NSURL *documentUrl = [self documentForIndexPath:index];
     [self removeCachedFileForDocumentUrl:documentUrl];
-    [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:&error];
-    if (!error) {
+    [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:error];
+    if (*error == nil) {
         if ([index item] < [[self dataSource] count]) {
             [[self dataSource] removeItemAtIndex:[index item]];
-            [[self collectionView] deleteItemsAtIndexPaths:@[index]];
         }
     } else {
-        [error presentErrorToUser];
+        [*error presentErrorToUser];
     }
 }
 
