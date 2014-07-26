@@ -639,7 +639,7 @@
             //NSAssert(false, @"Error: %s", __PRETTY_FUNCTION__);
         }
     } else {
-        NSAssert(false, @"Error");
+     //   NSAssert(false, @"Error");
     }
 }
 
