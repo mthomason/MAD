@@ -14,6 +14,7 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
 
 @implementation RptqQueryPredicate (Extras)
@@ -126,7 +127,9 @@
 + (void)addPredicate:(RptqQueryPredicate *)predicate toDocument:(RptqDocument *)document {
 
     NSSet *predicates = [NSSet setWithObject: predicate];
-    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryPredicate:predicates];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
+    [query addHasQueryPredicate:predicates];
 
 }
 

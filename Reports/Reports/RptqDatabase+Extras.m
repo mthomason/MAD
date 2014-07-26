@@ -10,8 +10,11 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
 
 @implementation RptqDatabase (Extras)
 
@@ -59,6 +62,22 @@
         default:
             break;
     }
+}
+
+- (RptqQuery *)defaultQuery {
+    return [[self hasQueries] anyObject];
+}
+
+- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name {
+    
+    RptqDatabaseSchemaTable *result = nil;
+    for (RptqDatabaseSchemaTable *table in [self hasTables]) {
+        if ([[table name] isEqualToString:name]) {
+            result = table;
+            break;
+        }
+    }
+    return result;
 }
 
 #pragma mark - Static

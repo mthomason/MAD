@@ -80,8 +80,12 @@
     }
 }
 
+- (RptqDatabase *)defaultDatabase {
+    return [[self hasDatabaseSchemas] anyObject];
+}
+
 - (RptqQuery *)defaultQuery {
-    return [[[[self hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+    return [[self defaultDatabase] defaultQuery];
 }
 
 #pragma mark - Static
@@ -173,6 +177,12 @@
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
     return [documents lastObject];
 }
+
+/*- (void)addDatabase:(MTDatabase *)database
+             status:(void (^)(NSString *readStatus))status
+         completion:(void (^)(BOOL success, NSError *error))completion {
+    
+}*/
 
 + (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
          completion: (void (^)(BOOL success, NSError *error))completion {

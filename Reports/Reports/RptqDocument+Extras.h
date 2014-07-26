@@ -18,6 +18,7 @@
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
 - (RptqQuery *)defaultQuery;
+- (RptqDatabase *)defaultDatabase;
 
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;

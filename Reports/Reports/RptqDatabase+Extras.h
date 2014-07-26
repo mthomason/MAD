@@ -39,6 +39,8 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
 + (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                 driverType:(NSString *)driverIdentifier
                                               connectionId:(NSNumber *)connectionId;
+- (RptqQuery *)defaultQuery;
+- (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
 
 @end
 
