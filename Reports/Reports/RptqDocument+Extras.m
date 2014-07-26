@@ -184,10 +184,10 @@
     
 }*/
 
-+ (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
+- (void)addDatabase: (MTDatabase *)database
          completion: (void (^)(BOOL success, NSError *error))completion {
     
-    __weak RptqDocument *rptqDocument = document;
+    __weak RptqDocument *rptqDocument = self;
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
     
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);

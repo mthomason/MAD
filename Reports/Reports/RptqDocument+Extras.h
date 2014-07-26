@@ -23,7 +23,7 @@
 + (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 + (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
-+ (void)addDatabase: (MTDatabase *)database toDocument:(RptqDocument *)document
+- (void)addDatabase: (MTDatabase *)database
          completion: (void (^)(BOOL success, NSError *error))completion;
 
 @end
