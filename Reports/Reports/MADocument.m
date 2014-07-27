@@ -30,8 +30,6 @@
 
 #import "MACloudManager.h"
 
-typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
-
 NSString * const MTDocumentInfoKeyThumbnail = @"thumbnail";
 NSString * const MTDocumentInfoKeyThumbnailStandard = @"thumbnail.png";
 NSString * const MTDocumentInfoKeyThumbnailRetna = @"thumbnail@2x.png";
@@ -479,46 +477,6 @@ NSString * MTDocumentParentContextName          = @"moc";
     BOOL properTypeToWrap = [[fileUrl pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive];
     if (properTypeToWrap) {
     
-        if ([documentReport documentState] != UIDocumentStateClosed) {
-            __weak MAReportDocument *blockReport = documentReport;
-            [documentReport closeWithCompletionHandler:^(BOOL success) {
-                [blockReport performAsynchronousFileAccessUsingBlock:asyncBlock];
-            }];
-        } else {
-            [documentReport performAsynchronousFileAccessUsingBlock:asyncBlock];
-        }
-    }
-}
-
-+ (void)deleteFromDiskQuick:(MAReportDocument *)documentReport completion:(void (^)(BOOL success))completion {
-    
-    NSURL *url = [documentReport fileURL];
-    __weak NSURL *blockFileUrl = url;
-    
-    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-
-        NSArray *propertyKeys = @[NSURLIsDirectoryKey];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl includingPropertiesForKeys:propertyKeys options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
-            NSAssert(error == nil, @"%@", error);
-            return YES;
-        }];
-        for (NSURL *blockFileUrl in enumerator) {
-            NSError *error = nil;
-            [fileManager removeItemAtURL:blockFileUrl error:&error];
-            NSAssert(error == nil, @"%@", error);
-        }
-        NSError *deleteError = nil;
-        [fileManager removeItemAtURL:blockFileUrl error:&deleteError];
-        NSAssert(deleteError == nil, @"%@", deleteError);
-        
-        completion(YES);
-    };
-    
-    NSString *pathExtension = [url pathExtension];
-    BOOL properTypeToWrap = [pathExtension isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive];
-    if (properTypeToWrap) {
-        
         if ([documentReport documentState] != UIDocumentStateClosed) {
             __weak MAReportDocument *blockReport = documentReport;
             [documentReport closeWithCompletionHandler:^(BOOL success) {

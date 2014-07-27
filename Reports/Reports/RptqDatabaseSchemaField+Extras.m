@@ -23,18 +23,11 @@
     [super awakeFromInsert];
 
     // MARK: Auto increment row counter
-    NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
-    [request setFetchLimit:1];
+    request.resultType = NSCountResultType;
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    NSUInteger identifier = 0;
-    if (error == nil) {
-        RptqDatabaseSchemaField *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
-    }
+    NSUInteger identifier = [[fetchResults firstObject] unsignedIntegerValue] + 1;
     [self setIdentifier:@(identifier)];
 }
 

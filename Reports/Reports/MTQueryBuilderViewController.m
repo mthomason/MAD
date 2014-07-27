@@ -43,6 +43,7 @@
 #import "RptqDocumentObject.h"
 
 #import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
 
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
@@ -381,8 +382,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    
-    [RptqQueryPredicate addPredicate:predicate toDocument:[reportDocument activeDocument]];
+    [[reportDocument activeDocument] addPredicate:predicate];
     [reportDocument saveContext];
     [reportDocument quickSave];
 }
@@ -450,7 +450,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
-    [RptqQueryLinks insertQueryLink:link intoDocument:document];
+    [document addQueryLink:link];
     [reportDocument saveContext];
     NSInteger suspectedSection = 2;
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
@@ -474,7 +474,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     RptqDocument *document = [reportDocument activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    RptqQueryField *queryField = [RptqQueryField getQueryFieldForObjectID:queryFieldId fromObjectContext:managedObjectContext];
+    RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID:queryFieldId managedObjectContext:managedObjectContext];
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
@@ -1339,7 +1339,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     
     RptqDocument *document = [reportDocument activeDocument];
-    NSInteger numberOfTablesInQuery = [RptqQueryTable countOfTablesInQueryForDocument:document];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
+    NSInteger numberOfTablesInQuery = [query numberOfTables];
     NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables:numberOfTablesInQuery]];
     return result;
 }
@@ -1537,13 +1539,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     NSIndexSet *deleteSections = nil;
     RptqDocument *document = [reportDocument activeDocument];
-    NSInteger numberOfTables = [RptqQueryTable countOfTablesInQueryForDocument:document];
+    RptqDatabase *database = [document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
+    NSInteger numberOfTables = [query numberOfTables];
     NSDictionary *oldTableLayout = [[NSDictionary alloc] initWithDictionary:[self datamodelForNumberOfTables: numberOfTables]];
     
     RptqQueryTable *table = [[self fetchedResultsControllerTables] objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
     NSManagedObjectID *deleatedTableObjectId = [table objectID];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
     [query removeHasQueryTablesObject:table];
     numberOfTables--;
     

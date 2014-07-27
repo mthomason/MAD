@@ -241,7 +241,7 @@
         NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
         NSString *frontName = @"";
         for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
             frontName = [documentObject fontname];
             break;
         }

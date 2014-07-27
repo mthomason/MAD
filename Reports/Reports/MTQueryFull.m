@@ -386,7 +386,7 @@
         for (MTPair *pair in tables) {
             MTVertex *queryTable = [pair former];
             NSManagedObjectID *objectID = [queryTable object];
-            RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
+            RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID managedObjectContext:managedObjectContext];
             if (table != nil) {
                 if (tableCounter != 0) [result appendString:@",\n"];
                 
@@ -420,7 +420,7 @@
         if (vertexTable) {
             
             NSManagedObjectID *objectID = [vertexTable object];
-            RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:objectID fromObjectContext:managedObjectContext];
+            RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID managedObjectContext:managedObjectContext];
             
             if ([vertexTable sortVertexColor] == MTColorWhite || [vertexTable sortVertexColor] == MTColorGray) {
                 

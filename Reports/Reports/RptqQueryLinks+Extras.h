@@ -55,11 +55,10 @@ extern NSString * const MTLinkSqlFullOuterJoin;
 
 @interface RptqQueryLinks (Extras) <MTProtocolCompare, MTProtocolLog>
 
-+ (id)createQueryLinkWithLeftField:(RptqQueryField *)fieldLeft
-                        rightField:(RptqQueryField *)fieldRight
-                       andJoinType:(MNSLinkType)joinType;
++ (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
+                                   rightField:(RptqQueryField *)fieldRight
+                                     joinType:(MNSLinkType)joinType;
 
-+ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoDocument:(RptqDocument *)document;
 + (NSArray *)queriesForDocument:(RptqDocument *)document;
 
 - (NSString *)linkDescription;

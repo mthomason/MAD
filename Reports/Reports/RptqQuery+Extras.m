@@ -120,9 +120,11 @@
             counter++;
         }
         [[self managedObjectContext] save:nil];
-        
     }
+}
 
+- (NSUInteger)numberOfTables {
+    return [[self hasQueryTables] count];
 }
 
 #pragma mark - MTProtocolCompare

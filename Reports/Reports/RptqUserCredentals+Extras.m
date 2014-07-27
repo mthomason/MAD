@@ -105,7 +105,7 @@
 
 #pragma mark - Static
 
-+ (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName:NSStringFromClass([RptqUserCredentals class]) inManagedObjectContext: objectContext];
     RptqUserCredentals *userCredentals = [[RptqUserCredentals alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
     return userCredentals;

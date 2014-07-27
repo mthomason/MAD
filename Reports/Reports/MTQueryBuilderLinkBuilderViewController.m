@@ -95,7 +95,7 @@
 
 - (IBAction)save:(id)sender {
     if ([self firstField] && [self secondField]) {
-        RptqQueryLinks *queryLink = [RptqQueryLinks createQueryLinkWithLeftField:[self firstField] rightField:[self secondField] andJoinType:[self linkType]];
+        RptqQueryLinks *queryLink = [RptqQueryLinks queryLinkFactoryWithLeftField:[self firstField] rightField:[self secondField] joinType:[self linkType]];
         [[self delegate] viewControllerSchemaAddLinkDidAdd:queryLink];
     } else {
         [self cancel:sender];

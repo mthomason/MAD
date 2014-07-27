@@ -14,15 +14,15 @@
 #import "MTProtocolCompare.h"
 #import "RptqDocumentSection+Extras.h"
 
-@class NSManagedObjectContext, MTDatabase, RptqQuery;
+@class NSManagedObjectContext, MTDatabase, RptqQuery, RptqQueryPredicate, RptqQueryLinks;
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
++ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext;
++ (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
+
 - (RptqQuery *)defaultQuery;
 - (RptqDatabase *)defaultDatabase;
-
-+ (RptqDocument *)documentFactory:(NSManagedObjectContext *)objectContext;
-+ (RptqDocument *)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
 - (NSDictionary *)layoutHeightsBySectionKey;
@@ -33,6 +33,11 @@
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *readStatus))status
          completion:(void (^)(BOOL success, NSError *error))completion;
+
+- (void)addQueryLink:(RptqQueryLinks *)queryLink;
+- (void)addPredicate:(RptqQueryPredicate *)predicate;
+- (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination;
+- (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
 
 @end
 

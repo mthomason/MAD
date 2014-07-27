@@ -14,7 +14,7 @@
 
 @interface RptqUserCredentals (Extras) <MTProtocolCompare>
 
-+ (RptqUserCredentals *)createNewUserCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (instancetype)userCredentalsFactory:(NSManagedObjectContext *)objectContext;
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
 - (NSString *)databaseSchemaName;

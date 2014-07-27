@@ -21,6 +21,9 @@
 #define FALSE 0
 #define TRUE  1
 
+typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
+
+
 struct MTMargin {
     CGFloat left;
     CGFloat right;

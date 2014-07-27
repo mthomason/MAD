@@ -110,9 +110,9 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     return [queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
-+ (id)createQueryLinkWithLeftField:(RptqQueryField *)fieldLeft
-                         rightField:(RptqQueryField *)fieldRight
-                           andJoinType:(MNSLinkType)joinType {
++ (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
+                                   rightField:(RptqQueryField *)fieldRight
+                                     joinType:(MNSLinkType)joinType {
     
     NSManagedObjectContext *managedObjectContext = [fieldLeft managedObjectContext];
     NSEntityDescription *rqtEd = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryLinks class]) inManagedObjectContext:managedObjectContext];
@@ -131,11 +131,6 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     [queryLinks setJointypeenum:    [NSNumber numberWithInteger: joinType]];
 
     return queryLinks;
-}
-
-+ (void)insertQueryLink:(RptqQueryLinks *)queryLink intoDocument:(RptqDocument *)document {
-    NSSet *linkSet = [NSSet setWithObject: queryLink];
-    [[[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject] addHasQueryLinks: linkSet];
 }
 
 - (NSString *)linkDescription {

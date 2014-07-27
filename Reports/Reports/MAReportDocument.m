@@ -86,6 +86,67 @@ NSString * const MTReportDetailRowId = @"d";
 
 @implementation MAReportDocument
 
+- (void)dealloc {
+    [[_mainQuery database] setDelegate:nil];
+}
+
+- (id)initWithFileURL:(NSURL *)url {
+    self = [super initWithFileURL:[MAReportDocument madFileCheck:url]];
+    if (self) {
+        
+        NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
+        [self setReportQueries:reportQueries];
+        [self setDidRefresh:NO];
+        
+        NSString *name = [self fileNameMinusExtention];
+        [self initalizeMainDataTableWithName:name];
+        
+    }
+    return self;
+}
+
+
++ (NSURL *)madFileCheck:(NSURL *)url {
+    NSURL *urlToOpen = nil;
+    if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *destinationUrl = [fileManager archiveUrlForMadUrl:url];
+        [fileManager deleteCoreDataFilesAtDirectory:destinationUrl];
+        urlToOpen = [fileManager unpackMadFile:url toDestinationUrl:destinationUrl];
+    } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
+        urlToOpen = url;
+    } else {
+        urlToOpen = url;
+    }
+    return urlToOpen;
+}
+
++ (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
+    MAReportDocument *managedDocumentAtUrl = managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:url];
+    
+    NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
+    NSNumber *inferMappingModelAutomaticallyOption = @(YES);
+    NSDictionary *options = @{
+                              NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+                              NSInferMappingModelAutomaticallyOption :inferMappingModelAutomaticallyOption,
+                              };
+    [managedDocumentAtUrl setPersistentStoreOptions: options];
+    
+    __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
+    MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
+        completionHandler(weakdoc, success);
+    };
+    
+    BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[managedDocumentAtUrl.fileURL path]];
+    if (fileExist) {
+        [weakdoc openWithCompletionHandler:handlerOpen];
+    } else {
+        [weakdoc saveToURL:managedDocumentAtUrl.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
+    }
+    
+    return managedDocumentAtUrl;
+}
+
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
     switch (query.type) {
         case MTQueryTypeFull:
@@ -96,25 +157,6 @@ NSString * const MTReportDetailRowId = @"d";
             return nil;
             break;
     }
-}
-
-- (void)dealloc {
-    [[_mainQuery database] setDelegate:nil];
-}
-
-- (id)initWithFileURL:(NSURL *)url {
-    self = [super initWithFileURL:url];
-    if (self) {
-
-        NSMutableDictionary *reportQueries = [[NSMutableDictionary alloc] init];
-        [self setReportQueries:reportQueries];
-        [self setDidRefresh:NO];
-        
-        NSString *name = [self fileNameMinusExtention];
-        [self initalizeMainDataTableWithName:name];
-        
-    }
-    return self;
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
@@ -339,48 +381,6 @@ NSString * const MTReportDetailRowId = @"d";
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
     return [self thumbnailUrlForMadUrl:madUrl];
-}
-
-+ (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
-    MAReportDocument *managedDocumentAtUrl = nil;
-    NSURL *urlToOpen = nil;
-    if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        
-        NSURL *destinationUrl = [fileManager archiveUrlForMadUrl:url];
-        [fileManager deleteCoreDataFilesAtDirectory:destinationUrl];
-        urlToOpen = [fileManager unpackMadFile:url toDestinationUrl:destinationUrl];
-        
-    } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
-        urlToOpen = url;
-    }
-    
-    if (urlToOpen != nil) {
-        managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:urlToOpen];
-        NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
-        NSNumber *inferMappingModelAutomaticallyOption = @(YES);
-        NSDictionary *options = @{
-                                  NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                                  NSInferMappingModelAutomaticallyOption :inferMappingModelAutomaticallyOption,
-                                  };
-        [managedDocumentAtUrl setPersistentStoreOptions: options];
-        
-        __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
-        MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-            completionHandler(weakdoc, success);
-        };
-
-        BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
-        if (fileExist) {
-            [weakdoc openWithCompletionHandler:handlerOpen];
-        } else {
-            [weakdoc saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
-        }
-        
-        options = nil;
-
-    }
-    return managedDocumentAtUrl;
 }
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
@@ -609,55 +609,18 @@ NSString * const MTReportDetailRowId = @"d";
 
 #pragma mark - UIPrintInteractionControllerDelegate
 
-//- (UIPrintPaper *)printInteractionController:(UIPrintInteractionController *)printInteractionController choosePaper:(NSArray *)paperList {}
-//- (CGFloat)printInteractionController:(UIPrintInteractionController *)printInteractionController cutLengthForPaper:(UIPrintPaper *)paper {}
 - (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
 - (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
 - (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
 - (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
-//- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController {}
 
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
-    /*
-    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:[self statusViewRect]];
-    //UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-    //UIViewController *parentViewController = [window ];
-    UIViewController *parentViewController = [[self activityDelegate] activeViewController];
-    UIViewController *vc2 = [[parentViewController navigationController] topViewController];
-    activtyView.center = vc2.view.center;
-    [vc2.view performSelectorOnMainThread:@selector(addSubview:) withObject:activtyView waitUntilDone:YES];
-    [self setStatusLabel:activtyView];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(reportFormatterDidFormatPage:)
-                                                 name: MTNotificationDidFormatPagesName
-                                               object: self.printingReportFormatter];
-    */
     UIPrintPaper *printPaper = printInteractionController.printPaper;
     [self.printingReportFormatter setDataDelegate:self];
     [self.printingReportFormatter setLayoutSize:printPaper.paperSize];
     [self.printingReportFormatter setMarginUsingPrintableRect:printPaper.printableRect];
     [self.printingReportFormatter setDidRefresh:YES];   //Force formatting
-    /*
-    __weak MAReportDocument *weakself = self;
-    dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(dipatchQueue, ^{
-        */
-        [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
-        
-        /*
-        dispatch_semaphore_signal(s1);
-        
-    });
-    dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    [activtyView removeFromSuperview];
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: MTNotificationDidFormatPagesName
-                                                  object: self.printingReportFormatter];
-
-    [activtyView performSelectorOnMainThread:@selector(removeFromSuperview) withObject:activtyView waitUntilDone:YES];
-         */
+    [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
     [self setPrintingReportFormatter:nil];

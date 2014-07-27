@@ -52,24 +52,23 @@
     
 }
 
-+ (id)getQueryTableForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectID];
-    return result;
++ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqQueryTable *)[managedObjectContext objectRegisteredForID:objectID];
 }
 
 
-+ (RptqQueryTable *)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table {
++ (instancetype)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table {
      RptqDatabase *database = [table inDatabase];
      RptqDocument *document = [database ownedByQueryAsStaticResource];
      RptqQuery *query = [[database hasQueries] anyObject];
      NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
      
-     RptqQueryTable *newQueryTable = [RptqQueryTable createNewQueryTableForTable:table inDocument:document];
+     RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable:table document:document];
      
      NSMutableSet *newQueryFields = [[NSMutableSet alloc] initWithCapacity:[[table hasFields] count]];
      for (RptqDatabaseSchemaField *field in [table hasFields]) {
          @autoreleasepool {
-             RptqQueryField *newQueryField = [RptqQueryField createNewQueryFieldForManagedObjectContext:[table managedObjectContext]];
+             RptqQueryField *newQueryField = [RptqQueryField queryFieldFactory:[table managedObjectContext]];
              [newQueryField setInQueryTable:newQueryTable];
              [newQueryField setDatabaseSchemaField:field];
              [newQueryTable setInQuery:query];
@@ -86,7 +85,7 @@
  }
  
 
-+ (RptqQueryTable *)createNewQueryTableForTable:(RptqDatabaseSchemaTable *)databaseSchemaTable inDocument:(RptqDocument *)document {
++ (RptqQueryTable *)queryTableFactoryForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable document:(RptqDocument *)document {
 
     RptqDatabase *database = [document defaultDatabase];
     RptqQuery *query = [database defaultQuery];
@@ -131,14 +130,6 @@
     sprintf(buf, "%ld", (long)index);
     NSString *indexString = [NSString stringWithUTF8String:buf];
     return [tableName stringByAppendingString:indexString];
-}
-
-+ (NSUInteger)countOfTablesInQueryForDocument:(RptqDocument *)document {
-    NSUInteger result = 0;
-    RptqDatabase *database = [document defaultDatabase];
-    RptqQuery *query = [database defaultQuery];
-    result = [[query hasQueryTables] count];
-    return result;
 }
 
 - (BOOL)isEqualTo:(id)sender {

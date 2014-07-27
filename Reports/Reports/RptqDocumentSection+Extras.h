@@ -38,11 +38,9 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 - (CGFloat)layoutHeightCalculated;
 - (NSString *)localizedDisplayName;
 - (NSString *)sectionKey;
-
 - (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
 - (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
-- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject
-                     withDropPoint:(CGPoint)origin;
+- (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject withDropPoint:(CGPoint)origin;
 - (void)setInterfaceHeight:(CGFloat)height;
 - (MNSDocumentSectionType)getDocumentSectionType;
 - (NSUInteger)nextDropIndexForSection;

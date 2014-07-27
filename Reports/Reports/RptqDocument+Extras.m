@@ -10,14 +10,16 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "RptqDocument+Extras.h"
-#import "MTDatabaseSqlite3.h"
 #import <CoreData/CoreData.h>
+
+#import "RptqDocument+Extras.h"
+#import "MTDatabaseMySql.h"
+#import "MTDatabaseSqlServer.h"
+#import "MTDatabaseSqlite3.h"
+#import "MTBarcode.h"
 #import "Constants.h"
 #import "RptqQuery.h"
 #import "RptqDocumentSection+Extras.h"
-#import "MTDatabaseMySql.h"
-#import "MTDatabaseSqlServer.h"
 
 #import "RptqDocumentSectionRows.h"
 #import "RptqDatabase.h"
@@ -31,6 +33,23 @@
 
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
+
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+
+#import "RptqDocumentObject.h"
+#import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentObjectChart.h"
+#import "RptqDocumentObjectFormula.h"
+#import "RptqDocumentObjectFormula+Extras.h"
+#import "RptqDocumentObjectGroupKey.h"
+#import "RptqDocumentObjectImage.h"
+#import "RptqDocumentObjectLabel.h"
+#import "RptqDocumentObjectLabelDataField.h"
+#import "RptqDocumentObjectLabelLink.h"
 
 #import "SectionEnumerator.h"
 
@@ -137,7 +156,7 @@
 
 #pragma mark - Static
 
-+ (RptqDocument *)documentFactory:(NSManagedObjectContext *)objectContext {
++ (instancetype)documentFactory:(NSManagedObjectContext *)objectContext {
     
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
@@ -215,7 +234,7 @@
     return document;
 }
 
-+ (RptqDocument *)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (instancetype)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     Class docClass = [RptqDocument class];
     NSString *entityName = NSStringFromClass(docClass);
     NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
@@ -302,7 +321,7 @@
     __weak RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: managedObjectContext
                                                                              driverType: [database identifier]
                                                                            connectionId: connectionId];
-    __weak RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: managedObjectContext];
+    __weak RptqUserCredentals *userCredentals = [RptqUserCredentals userCredentalsFactory: managedObjectContext];
     [userCredentals setDatabase_driver_type: [database identifier]];
     
     if ([[database identifier] isEqualToString:[MTDatabaseMySql identifier]]) {
@@ -416,6 +435,199 @@
             [weakDatabase2 closeProcess:weakdbconnection];
         }];
     }];
+}
+
+- (void)addQueryLink:(RptqQueryLinks *)queryLink {
+    NSSet *linkSet = [NSSet setWithObject: queryLink];
+    [[[self defaultDatabase] defaultQuery] addHasQueryLinks: linkSet];
+}
+
+- (void)addPredicate:(RptqQueryPredicate *)predicate {
+    
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    NSSet *predicates = [NSSet setWithObject: predicate];
+    [query addHasQueryPredicate:predicates];
+    
+}
+
+- (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination {
+    NSManagedObjectContext *mangedObjectContext = [self managedObjectContext];
+    
+    MTDocumentObjectType objectType = [[defination objectForKey:MTDocumentObjectDefinationType] integerValue];
+    
+    NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
+                                                                       inManagedObjectContext: mangedObjectContext];
+    
+    RptqDocumentObject *documentObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
+                                                     insertIntoManagedObjectContext: mangedObjectContext];
+    [documentObject setOrigin:CGPointZero];
+    [documentObject setSizewidth: @(75.0000f)];
+    [documentObject setSizeheight: @(22.0000f)];
+    
+    NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
+    
+    switch (objectType) {
+        case MTDocumentObjectTypeLabelDynamic: {
+            
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabelDataField class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+            
+            NSManagedObjectID *fieldObjectId = [defination objectForKey: MTDocumentObjectDefinationObject];
+            RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
+                                                     managedObjectContext: mangedObjectContext];
+            
+            
+            RptqDocumentObjectLabelDataField *reportObject = [[RptqDocumentObjectLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                                       insertIntoManagedObjectContext: mangedObjectContext];
+            
+            [documentObject setIsLabelDataField: reportObject];
+            [[documentObject isLabelDataField] setReferencesQueryField: field];
+            
+            [reportObject setReferencesQueryField: field];
+            
+            [documentObject setType: @(MTDocumentObjectTypeLabelDynamic)];
+            
+            break;
+        }
+        case MTDocumentObjectTypeLabelStatic: {
+            
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectLabel class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+            
+            NSString *labelText = [defination objectForKey:MTDocumentObjectDefinationObject];
+            
+            RptqDocumentObjectLabel *reportObject = [[RptqDocumentObjectLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                     insertIntoManagedObjectContext: mangedObjectContext];
+            
+            [documentObject setIsLabel: reportObject];
+            [[documentObject isLabel] setText: labelText];
+            
+            [documentObject setType: @(MTDocumentObjectTypeLabelStatic)];
+            
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+            
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectAggregate class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+            
+            NSDictionary *aggregateOptions = [defination objectForKey:MTDocumentObjectDefinationObject];
+            
+            RptqDocumentObjectAggregate *reportObject = [[RptqDocumentObjectAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                             insertIntoManagedObjectContext: [self managedObjectContext]];
+            
+            NSNumber *groupTypeContainer = [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotType];
+            NSNumber *functionInputType = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateFunctionInputType];
+            
+            MTAggregateFunctionInputType functionType = [functionInputType integerValue];
+            [reportObject setGroupNumber:   [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregatePivotNumber]];
+            [reportObject setGroupType:     groupTypeContainer];
+            [reportObject setFunction:      [aggregateOptions objectForKey: MTDocumentObjectDefinationAggregateType]];
+            
+            NSManagedObjectID *objectId = [aggregateOptions objectForKey:MTDocumentObjectDefinationAggregateObjectId];
+            
+            switch (functionType) {
+                case MTAggregateFunctionInputTypeField: {
+                    RptqQueryField *field = [RptqQueryField queryFieldForObjectID:objectId managedObjectContext:mangedObjectContext];
+                    [reportObject setAggregateField:field];
+                    [reportObject setAggregateFunction:nil];
+                    break;
+                }
+                case MTAggregateFunctionInputTypeFormula: {
+                    RptqDocumentObjectFormula *formula =  [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:mangedObjectContext];
+                    [reportObject setAggregateField:nil];
+                    [reportObject setAggregateFunction:formula];
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+            [documentObject setIsAggregate: reportObject];
+            [documentObject setType: @(MTDocumentObjectTypeAggregate)];
+            
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
+            
+            entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectImage class])
+                                                                 inManagedObjectContext: mangedObjectContext];
+            
+            UIImage *image = [defination objectForKey:MTDocumentObjectDefinationObject];
+            
+            RptqDocumentObjectImage *reportObject = [[RptqDocumentObjectImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
+                                                                     insertIntoManagedObjectContext: mangedObjectContext];
+            [reportObject setImage:image];
+            [documentObject setIsImage: reportObject];
+            [documentObject setSizeheight:@([image size].height)];
+            [documentObject setSizewidth:@([image size].width)];
+            [documentObject setType: @(MTDocumentObjectTypeImage)];
+            
+            break;
+        }
+        case MTDocumentObjectTypeWhtiespace: {
+            
+            [documentObject setType: @(MTDocumentObjectTypeWhtiespace)];
+            
+            break;
+        }
+        case MTDocumentObjectTypeBarcode: {
+            
+            MTBarcode *barcode = [defination objectForKey:MTDocumentObjectDefinationObject];
+            NSManagedObjectID *field1ObjectId = [defination objectForKey:MTDocumentObjectDefinationField1];
+            NSManagedObjectID *field2ObjectId = [defination objectForKey:MTDocumentObjectDefinationField2];
+            RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID:field1ObjectId managedObjectContext:mangedObjectContext];
+            RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID:field2ObjectId managedObjectContext:mangedObjectContext];
+            RptqDocumentObjectBarcode *reportObject = [RptqDocumentObjectBarcode barcodeWithMtBarcode:barcode queryFieldOne:field1 queryFieldTwo:field2];
+            
+            [documentObject setIsBarcode: reportObject];
+            [documentObject setType: @(MTDocumentObjectTypeBarcode)];
+            
+            break;
+        }
+        default:
+            break;
+    }
+    
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[[self hasDetailSection] hasRows] objectAtIndex:0] hasObjects]];
+    [hasObjects insertObject:documentObject atIndex:0];
+    [[[[self hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
+    return documentObject;
+}
+
+- (void)removeDocumentObject:(RptqDocumentObject *)documentObject {
+    MTDocumentObjectType objectType = [[documentObject type] integerValue];
+    NSManagedObjectContext *managedObjectContext = [documentObject managedObjectContext];
+    
+    switch (objectType) {
+        case MTDocumentObjectTypeLabelDynamic: {
+            [managedObjectContext deleteObject:[documentObject isLabelDataField]];
+            break;
+        }
+        case MTDocumentObjectTypeLabelStatic: {
+            [managedObjectContext deleteObject:[documentObject isLabel]];
+            break;
+        }
+        case MTDocumentObjectTypeAggregate: {
+            [managedObjectContext deleteObject:[documentObject isAggregate]];
+            break;
+        }
+        case MTDocumentObjectTypeImage: {
+            [managedObjectContext deleteObject:[documentObject isImage]];
+            break;
+        }
+        case MTDocumentObjectTypeWhtiespace: {
+            break;
+        }
+        case MTDocumentObjectTypeBarcode: {
+            [managedObjectContext deleteObject:[documentObject isBarcode]];
+            break;
+        }
+        default:
+            break;
+    }
+    [managedObjectContext deleteObject: documentObject];
+    [managedObjectContext save:nil];
 }
 
 #pragma mark - MTProtocolCompare

@@ -2184,7 +2184,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
     [[documentObject type] integerValue];
     
     MTDocumentObjectType objectType = [[documentObject type] integerValue];
@@ -2199,8 +2199,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             MTApplicationInstance *applicationInstance = [AppDelegate app];
             MAReportDocument *reportDocument = [applicationInstance activeDocument];
             NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-            RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext];
-            [RptqDocumentObject removeDocumentObject:documentObject];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            [[reportDocument activeDocument] removeDocumentObject:documentObject];
         }
     }];
 }
@@ -2219,7 +2219,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:elementViewId managedObjectContext:managedObjectContext];
     
     RptqDocumentSection *section = [[documentObject inSectionRow] inSection];
     UICollectionView *svSection = [self getSectionViewForDocumentSection:section];
@@ -2936,8 +2936,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     [detailSection performBatchUpdates:^{
         
-        RptqDocumentObject *documentObject = [RptqDocumentObject addDocumentObject:documentObjectDefination
-                                                                        toDocument:document];
+        RptqDocumentObject *documentObject = [document addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
         
         [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
@@ -2971,7 +2970,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:elementViewId fromObjectContext:managedObjectContext];
+    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:elementViewId managedObjectContext:managedObjectContext];
     
     RptqDocumentSectionRows *sectionRow = [documentObject inSectionRow];
     RptqDocumentSection *section = [sectionRow inSection];
@@ -3178,7 +3177,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 MTApplicationInstance *app = [AppDelegate app];
                 MAReportDocument *reportDocument = [app activeDocument];
                 NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-                RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID:[(MTElementView *)[gestureRecognizer view] objectIdTag] fromObjectContext:managedObjectContext];
+                RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:[(MTElementView *)[gestureRecognizer view] objectIdTag] managedObjectContext:managedObjectContext];
                 CGFloat sizeWidth = nearbyintf(_currentScaleSize.width * [[documentObject sizewidth] floatValue]);
                 CGFloat sizeHeight = nearbyintf(_currentScaleSize.height * [[documentObject sizeheight] floatValue]);
                 MTElementView *elementView = (MTElementView *)[gestureRecognizer view];
@@ -3356,7 +3355,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     
                     [weakGestureRecognizerView removeFromSuperview];
                     
-                    RptqDocumentObject *documentObject = [RptqDocumentObject getElementForObjectID: objectId fromObjectContext: managedObjectContext];
+                    RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId managedObjectContext: managedObjectContext];
 
                     
                     NSIndexPath *indexPathInsert = [documentSection addDocumentObject:documentObject withDropPoint:frame.origin];

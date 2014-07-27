@@ -123,7 +123,7 @@
     
     id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqQueryTable *table = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:[self cachedTableObjectId] managedObjectContext:managedObjectContext];
     UILabel *titleLabel = [[self titleView] label];
     [titleLabel setText:[table alias]];
     [titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
@@ -148,7 +148,7 @@
     id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
-    RptqQueryField *field = [RptqQueryField getQueryFieldForObjectID:fieldObjectId fromObjectContext:managedObjectContext];
+    RptqQueryField *field = [RptqQueryField queryFieldForObjectID:fieldObjectId managedObjectContext:managedObjectContext];
     UILabel *detailLabel = [result detailLabel];
     [detailLabel setText:[[field databaseSchemaField] name]];
     [detailLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]];
@@ -165,7 +165,7 @@
     
     id activeDocument = [[AppDelegate app] activeDocument];
     NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[self cachedTableObjectId] fromObjectContext:managedObjectContext];
+    RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:[self cachedTableObjectId] managedObjectContext:managedObjectContext];
     
     if (queryTable != nil) {
         [[self hasFieldsObjectIds] removeAllObjects];

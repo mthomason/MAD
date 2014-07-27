@@ -51,7 +51,7 @@
 
 - (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
     
-    CGSize viewSize = [[RptqDocumentObject getElementForObjectID:objectId fromObjectContext:managedObjectContext] size];
+    CGSize viewSize = [[RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext] size];
     self = [super initWithFrame: CGRectMake(CGPointZero.x, CGPointZero.y, viewSize.width, viewSize.height)];
 
     if (self) {

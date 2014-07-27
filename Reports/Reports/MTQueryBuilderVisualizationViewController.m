@@ -647,7 +647,7 @@ typedef void(^MTBlockResultVoid)(void);
         MTQueryBuilderAdvancedSchemaViewController *controller = (MTQueryBuilderAdvancedSchemaViewController *)sender;
 
         MAReportDocument *reportDocument = [AppDelegate activeReportDocument];
-        RptqQueryTable *queryTable = [RptqQueryTable getQueryTableForObjectID:[controller tableObjectId] fromObjectContext:[reportDocument managedObjectContext]];
+        RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:[controller tableObjectId] managedObjectContext:[reportDocument managedObjectContext]];
         for (RptqQueryLinks *queryLink in [[queryTable inQuery] hasQueryLinks]) {
             RptqQueryTable *leftTable = [[queryLink hasLeftField] inQueryTable];
             RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];

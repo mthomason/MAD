@@ -20,6 +20,7 @@
 - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
 - (NSArray *)sortedQueryGroups;
 - (void)deleteQueryGroupAtIndex:(NSInteger)index;
+- (NSUInteger)numberOfTables;
 
 @end
 

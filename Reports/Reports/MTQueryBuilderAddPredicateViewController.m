@@ -104,15 +104,15 @@
     
     if ([self leftValue] == nil) {
         if ([self rightValue] == nil) {
-            queryPredicate = [RptqQueryPredicate createPredicateWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate createPredicateWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
         }
     } else {
         if ([self rightValue] == nil) {
-            queryPredicate = [RptqQueryPredicate createPredicateWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate createPredicateWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
         }
     }
     [[self delegate] uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];

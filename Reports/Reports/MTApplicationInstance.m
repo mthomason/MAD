@@ -28,17 +28,18 @@
 #import "MTUser.h"
 #import "MADocumentState.h"
 
+#import "NSFileManager+Common.h"
 #import "NSParagraphStyle+CommonStyles.h"
 
-NSString *const MTApplicationIdMadDesigner                          = @"666001433";
-NSString *const MTApplicationIdMadViewer                            = @"666003759";
+NSString * const MTApplicationIdMadDesigner                          = @"666001433";
+NSString * const MTApplicationIdMadViewer                            = @"666003759";
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"6.0.10";
-NSString * const MTGlobalBundleShortVersion                         = @"6.0.10";
-NSString * const MTGlobalBundleRev                                  = @"1329";
+NSString * const MTGlobalBundleVersion                              = @"6.0.12";
+NSString * const MTGlobalBundleShortVersion                         = @"6.0.12";
+NSString * const MTGlobalBundleRev                                  = @"1331";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -198,7 +199,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                         [blockActiveDocument2 wrapFileOverwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
                             
                             __weak MTApplicationInstance *blockself4 = blockself3;
-                            [MADocument deleteFromDiskQuick:blockActiveDocument2 completion:^(BOOL success) {
+                            [[NSFileManager defaultManager] closeAndDelete:blockActiveDocument2 completion:^(BOOL success) {
                                 
                                 if (success) {
                                     

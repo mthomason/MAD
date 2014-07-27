@@ -61,7 +61,7 @@
     }
 }
 
-+ (RptqQueryField *)createNewQueryFieldForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext {
     NSString *entityName = NSStringFromClass([RptqQueryField class]);
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
     RptqQueryField *queryField = [[RptqQueryField alloc] initWithEntity:entityDescription insertIntoManagedObjectContext: managedObjectContext];
@@ -76,9 +76,8 @@
     return [[self toStringHumanReadable] lowercaseString];
 }
 
-+ (id)getQueryFieldForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
-    return result;
++ (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectId managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqQueryField *)[managedObjectContext objectRegisteredForID:objectId];
 }
 
 #pragma mark - MTProtocolLog
