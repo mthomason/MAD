@@ -14,6 +14,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MAReportDocument.h"
 #import <UIKit/UIKit.h>
+#import "MTQuery.h"
+#import "MTReportFormatter.h"
 #import "MTDatabaseSqlite3.h"
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTDatabaseTable.h"
@@ -22,24 +24,35 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSFileManager+Common.h"
 #import "NSFileManager+Reports.h"
 
+#import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaTable+Extras.h"
-#import "RptqDatabaseSchemaField+Extras.h"
+
+#import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+
+#import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
+
+#import "RptqQueryCache.h"
 #import "RptqQueryCache+Extras.h"
+
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
+
 #import "RptqQueryGroup.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
+
 #import "RptqQueryField.h"
 
 #import "MTLog.h"
-#import "MTQuery.h"
-#import "MTReportFormatter.h"
 #import "MTAlertView.h"
 #import "UIDevice+Hack.h"
 
@@ -195,9 +208,9 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)initalizeMainQuery {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
+    RptqDatabase *database = [[self document] defaultDatabase];
     if (database) {
-        RptqQuery *rquery = [[database hasQueries] anyObject];
+        RptqQuery *rquery = [database defaultQuery];
         
         NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
         MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:parameters];
@@ -231,9 +244,9 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)initalizeMainDatabase {
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *queryObject = [[database hasQueries] anyObject];
-    RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
+    RptqDatabase *database = [self.document defaultDatabase];
+    RptqQuery *query = [database defaultQuery];
+    RptqUserCredentals *userCredentals = [[query inDatabase] ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
     [db setDelegate:self];
@@ -296,21 +309,26 @@ NSString * const MTReportDetailRowId = @"d";
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
-    NSString *name = [self fileNameMinusExtention];
-    [self initalizeMainDataTableWithName:name];
-    [self initalizeMainQuery];
-    [self initalizeReportFormatter];
-    MTQuery *fullQuery = [self defaultQuery];
-    [[fullQuery database] setDelegate:self];
-    __weak MAReportDocument *weakself = self;
-    
-    @autoreleasepool {
-        [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
-            [[weakself mainDataTable] cache];
-            [weakself setDidRefresh:success];
-            completion(success, error);
-        }];
-    }
+    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(bgQueue, ^{
+        NSString *name = [self fileNameMinusExtention];
+        [self initalizeMainDataTableWithName:name];
+        [self initalizeMainQuery];
+        [self initalizeReportFormatter];
+        MTQuery *fullQuery = [self defaultQuery];
+        [[fullQuery database] setDelegate:self];
+        __weak MAReportDocument *weakself = self;
+        
+        @autoreleasepool {
+            [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
+                [[weakself mainDataTable] cache];
+                [weakself setDidRefresh:success];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    completion(success, error);
+                });
+            }];
+        }
+    });
 }
 
 - (NSURL *)mcacheUrl {
@@ -490,8 +508,12 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (NSArray *)sortDescriptors {
     
-    RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *rquery = [[database hasQueries] anyObject];
+    if (self.mainDatabase == nil) {
+        [self initalizeMainDatabase];
+    }
+    
+    RptqDatabase *database = [self.document defaultDatabase];
+    RptqQuery *rquery = [database defaultQuery];
 
     NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
     
@@ -541,12 +563,11 @@ NSString * const MTReportDetailRowId = @"d";
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window {
     [self disableUserInteraction:window.view];
 
-    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:[self statusViewRect]];
-    activtyView.center = window.view.center;
+    MTActivityIndicator *activityView = [[MTActivityIndicator alloc] initWithFrame:[self statusViewRect]];
+    activityView.center = window.view.center;
     
-    [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activtyView waitUntilDone:YES];
-    [self setStatusLabel:activtyView];
-    
+    [window.view performSelectorOnMainThread:@selector(addSubview:) withObject:activityView waitUntilDone:YES];
+    [self setStatusLabel:activityView];
     
     __weak MAReportDocument *weakself = self;
     
@@ -594,7 +615,7 @@ NSString * const MTReportDetailRowId = @"d";
                 [printPageRender drawPageAtIndex:i inRect:letterRect];
                 NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
                 NSString *text = [NSString stringWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
-                [activtyView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
+                [activityView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];
             }
         }
         UIGraphicsEndPDFContext();
@@ -603,7 +624,7 @@ NSString * const MTReportDetailRowId = @"d";
         
     });
     dispatch_semaphore_wait(s1, DISPATCH_TIME_FOREVER);
-    [activtyView removeFromSuperview];
+    [activityView removeFromSuperview];
     
 }
 

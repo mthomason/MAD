@@ -243,37 +243,30 @@ NSString * const MTNullIdentifier = @"(null)";
     return updatedData;
 }
 
-- (void)formatForSize:(CGSize)printableSize {
-    [self formatForSize:printableSize contentChanged:YES];
-}
-
-- (void)reformatForSize:(CGSize)printableSize {
-    @synchronized(self) {
-        [self format];
-        [[self page] setLayoutSize:printableSize];
-        [self loadLayoutAndIndexesFromCache];
-        [self formatDocument];
-    }
-}
-
 - (void)setLayoutSize:(CGSize)layoutSize {
     [[self page] setLayoutSize:layoutSize];
 }
 
+- (void)reformatForSize:(CGSize)printableSize {
+    [self formatForSize:printableSize contentChanged:NO];
+}
+
 - (void)formatForSize:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
 
-    @synchronized(self) {
-        [[self page] setLayoutSize:printableSize];
-        
-        [self loadLayoutAndIndexesFromCache];
-        
-        if ([self format]) {
-            
-            if (contextChanged) {
-                [self dropIndexes];
+    if (contextChanged == NO || [self format]) {
+        @synchronized(self) {
+            [self setLayoutSize:printableSize];
+            [self loadLayoutAndIndexesFromCache];
+            if ([self format]) {
+                
+                if (contextChanged) {
+                    [self dropIndexes];
+                }
+                [self formatDocument];
             }
-            [self formatDocument];
         }
+    } else {
+        [self reformatForSize:printableSize];
     }
 }
 
