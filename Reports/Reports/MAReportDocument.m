@@ -413,7 +413,7 @@ NSString * const MTReportDetailRowId = @"d";
             completion(NO, error);
         } else {
             
-            [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(id managedDocument, BOOL success) {
+            [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(MAReportDocument *managedDocument, BOOL success) {
                 
                 if (success) {
                     
@@ -421,8 +421,22 @@ NSString * const MTReportDetailRowId = @"d";
                     MTDatabase *database = [MTDatabase databaseFactory:weakDatabaseConnection];
                     
                     if (database) {
-                        [managedDocument addDatabase:database toDocument:rptqDocument completion:^(BOOL success, NSError *error) {
-                            completion(success, error);
+                        
+                        [rptqDocument addDatabase:database status:^(NSString *readStatus) {
+                            [managedDocument.statusLabel.status setText:readStatus];
+                        } completion:^(BOOL successAddingDatasource, NSError *error) {
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if (successAddingDatasource) {
+                                    [managedDocument closeDocument:^(BOOL success, NSError *error) {
+                                        completion(success, error);
+                                    }];
+                                } else {
+                                    [managedDocument closeAndDeleteDocument:^(BOOL success, NSError *error) {
+                                        completion(success, error);
+                                    }];
+                                }
+                            });
                         }];
                     }
                     
@@ -435,26 +449,6 @@ NSString * const MTReportDetailRowId = @"d";
             }];
 
         }
-    }];
-
-}
-
-- (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
-    [document addDatabase:database status:^(NSString *readStatus) {
-        [self.statusLabel.status setText:readStatus];
-    } completion:^(BOOL successAddingDatasource, NSError *error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (successAddingDatasource) {
-                [self closeDocument:^(BOOL success, NSError *error) {
-                    completion(success, error);
-                }];
-            } else {
-                [self closeAndDeleteDocument:^(BOOL success, NSError *error) {
-                    completion(success, error);
-                }];
-            }
-        });
     }];
 }
 

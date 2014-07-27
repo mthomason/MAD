@@ -243,6 +243,10 @@ NSString * const MTNullIdentifier = @"(null)";
     return updatedData;
 }
 
+- (void)formatForSize:(CGSize)printableSize {
+    [self formatForSize:printableSize contentChanged:YES];
+}
+
 - (void)setLayoutSize:(CGSize)layoutSize {
     [[self page] setLayoutSize:layoutSize];
 }

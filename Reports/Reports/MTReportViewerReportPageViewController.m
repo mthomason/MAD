@@ -83,7 +83,8 @@
         if ([self displayDebuggingInfo]) {
             [self addTimerView];
             [self updateLateRefreshedLabel:self];
-            [self displayPageCounterIndicatorWithPageNumber:[self pageNumber] ofTotalPages:[self numberOfPages]];
+            [self displayPageCounterIndicatorWithPageNumber: self.pageNumber
+                                               ofTotalPages: self.numberOfPages];
         }
     } else {
         [self setShowPageNumberDisplay:YES];
@@ -103,7 +104,7 @@
 }
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
-    [[self delegate] drawPage:[self pageNumber] - 1
+    [[self delegate] drawPage:self.pageNumber - 1
                        inRect:rect];
 }
 
@@ -213,7 +214,8 @@
     }
 }
 
-- (UIView *)displayPageCounterIndicatorWithPageNumber:(NSUInteger)pageNumber ofTotalPages:(NSUInteger)numberOfPages {
+- (UIView *)displayPageCounterIndicatorWithPageNumber: (NSUInteger)pageNumber
+                                         ofTotalPages: (NSUInteger)numberOfPages {
     CGFloat w = 99.0000f;
     CGFloat h = 33.0000f;
     CGFloat y = CGPointZero.y + 10.0000f;
@@ -237,9 +239,12 @@
     [self setPageNumberView:numberView];
     
     __weak MTReportViewerReportPageViewController *weakSelf = self;
-    [UIView animateWithDuration:0.3000f delay:0.0000f options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:0.3000f delay:0.0000f
+                        options:UIViewAnimationOptionCurveEaseIn animations:^{
+
         [[weakSelf pageNumberView] setAlpha:1.0000f];
-    } completion:^(BOOL finished) {
+
+                        } completion:^(BOOL finished) {
         
         if (finished) {
             __weak MTReportViewerReportPageViewController *weakSelf2 = weakSelf;
