@@ -192,9 +192,8 @@
 
 #pragma mark - Static
 
-+ (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
-    return result;
++ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objectId inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqDocumentSection *)[managedObjectContext objectRegisteredForID:objectId];
 }
 
 + (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
@@ -228,25 +227,18 @@
     return result;
 }
 
-+ (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
++ (instancetype)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
     RptqQueryGroup *group = [query queryGroupForIndex:groupLevel];
     return [RptqDocumentSection headerSectionInSections:[group hasSection]];
 }
 
-+ (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query {
++ (instancetype)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
     RptqQueryGroup *group =  [query queryGroupForIndex:groupLevel];
     return [RptqDocumentSection footerSectionInSections:[group hasSection]];
 }
 
-+ (RptqDocumentSection *)getDocumentSectionForDocument:(RptqDocument *)document {
-    RptqDatabase *database = [document defaultDatabase];
-    RptqQuery *query = [database defaultQuery];
-    return [RptqDocumentSection getDocumentSectionForRow:0
-                                                forQuery:query];
-}
-
-+ (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row
-                                         forQuery:(RptqQuery *)query {
++ (instancetype)documentSectionForRow:(NSInteger)row
+                                         query:(RptqQuery *)query {
     
     NSInteger numberOfGroups = [[query hasQueryGroups] count];
     RptqDocumentSection *resultSection = nil;
@@ -323,34 +315,11 @@
     return resultSection;
 }
 
-- (CGFloat)layoutHeightCalculated {
-    return [RptqDocumentSection layoutHeightForSection:self];
-}
-
-+ (NSDictionary *)layoutHeightsBySectionKey:(RptqDocument *)document {
-    NSMutableDictionary *dictionary = [NSMutableDictionary new];
-    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
-    for (RptqDocumentSection *sec in enumerator) {
-        @autoreleasepool {
-            [sec fireFault];
-            NSString *sectionKey = [sec sectionKey];
-            CGFloat layoutHight = [RptqDocumentSection layoutHeightForSection:sec];
-            dictionary[sectionKey] = @(layoutHight);
-        }
-    }
-    return dictionary;
-}
-
-- (void)fireFault {
-    NSString *marginLeftMethod = NSStringFromSelector(@selector(marginLeft));
-    [self valueForKey:marginLeftMethod];
-}
-
 // This is the layout height for page rendering... the designer section height is stored in the db
-+ (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section {
+- (CGFloat)layoutHeightCalculated {
     CGFloat resultHeight = CGSizeZero.height;
-    if ([[section visibility] boolValue]) {
-        for (RptqDocumentSectionRows *row in [section hasRows]) {
+    if ([[self visibility] boolValue]) {
+        for (RptqDocumentSectionRows *row in [self hasRows]) {
             for (RptqDocumentObject *element in [row hasObjects]) {
                 
                 CGFloat originPointX        = [[element dropPointX] floatValue];
@@ -367,69 +336,6 @@
         }
     }
     return resultHeight;
-}
-
-+ (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
-    [section setHeight: @(height)];
-    
-}
-
-+ (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
-    [section setLayoutHeight: @(height)];
-    
-}
-
-+ (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
-    [section setVisibility: [NSNumber numberWithBool:isVisible]];
-    
-}
-
-+ (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document {
-    
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: sectionRow forQuery: query];
-    
-    if ([[section numberOfRows] integerValue] == numberOfRows) {
-        
-        //No change
-
-    } else if (numberOfRows > [[section numberOfRows] integerValue]) {
-
-        //Add row
-        NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
-        RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                                inManagedObjectContext: managedObjectContext];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
-        [newRowToAppend setInSection:section];
-        [hasRows addObject:newRowToAppend];
-        [section setHasRows:hasRows];
-        
-    } else if (numberOfRows < [[section numberOfRows] integerValue]) {
-
-        //Remove row
-        RptqDocumentSectionRows *rowToDelete = [[section hasRows] lastObject];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
-        [[hasRows lastObject] setInSection:nil];
-        [hasRows removeObjectAtIndex:[hasRows count] - 1];
-        [section setHasRows:hasRows];
-        [rowToDelete setInSection:nil];
-
-    }
-    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
-    
 }
 
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
@@ -540,51 +446,6 @@
     }
     return result;
 }
-
-+ (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)typeDocumentSection andLevel:(NSUInteger)level {
-    
-    RptqDocumentSection *documentSection = nil;
-    switch (typeDocumentSection) {
-            
-        case MNSDocumentSectionTypeBody:
-            documentSection = [document hasDetailSection];
-            break;
-            
-        case MNSDocumentSectionTypePageHeader:
-            documentSection = [document hasPageHeaderSection];
-            break;
-            
-        case MNSDocumentSectionTypePageFooter:
-            documentSection = [document hasPageFooterSection];
-            break;
-            
-        case MNSDocumentSectionTypeReportHeader:
-            documentSection = [document hasReportHeaderSection];
-            break;
-            
-        case MNSDocumentSectionTypeReportFooter:
-            documentSection = [document hasReportFooterSection];
-            break;
-            
-        case MNSDocumentSectionTypeGroupHeader: {
-            RptqQuery *query = [RptqQuery RptqQueryForDocument:document];
-            documentSection = [RptqDocumentSection getDocumentGroupHeaderAtLevel: level
-                                                                        forQuery: query];
-            break;
-        }
-        case MNSDocumentSectionTypeGroupFooter: {
-            RptqQuery *query = [RptqQuery RptqQueryForDocument:document];
-            documentSection = [RptqDocumentSection getDocumentGroupFooterAtLevel: level
-                                                                        forQuery: query];
-            break;
-        }
-        default:
-            NSAssert(false, @"Unknown type");
-            break;
-    }
-    return documentSection;
-}
-
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {

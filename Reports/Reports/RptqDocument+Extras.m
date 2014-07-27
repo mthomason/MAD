@@ -32,6 +32,8 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
+#import "SectionEnumerator.h"
+
 @implementation RptqDocument (Extras)
 
 #pragma mark - Overrides
@@ -88,9 +90,54 @@
     return [[self defaultDatabase] defaultQuery];
 }
 
+- (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level {
+    
+    RptqDocumentSection *documentSection = nil;
+    switch (type) {
+            
+        case MNSDocumentSectionTypeBody:
+            documentSection = [self hasDetailSection];
+            break;
+            
+        case MNSDocumentSectionTypePageHeader:
+            documentSection = [self hasPageHeaderSection];
+            break;
+            
+        case MNSDocumentSectionTypePageFooter:
+            documentSection = [self hasPageFooterSection];
+            break;
+            
+        case MNSDocumentSectionTypeReportHeader:
+            documentSection = [self hasReportHeaderSection];
+            break;
+            
+        case MNSDocumentSectionTypeReportFooter:
+            documentSection = [self hasReportFooterSection];
+            break;
+            
+        case MNSDocumentSectionTypeGroupHeader: {
+            RptqQuery *query = [[self defaultDatabase] defaultQuery];
+            documentSection = [RptqDocumentSection groupHeaderForLevel: level
+                                                                 query: query];
+            break;
+        }
+        case MNSDocumentSectionTypeGroupFooter: {
+            RptqQuery *query = [[self defaultDatabase] defaultQuery];
+            documentSection = [RptqDocumentSection groupFooterForLevel: level
+                                                                 query: query];
+            break;
+        }
+        default:
+            NSAssert(false, @"Unknown type");
+            break;
+    }
+    return documentSection;
+}
+
+
 #pragma mark - Static
 
-+ (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (RptqDocument *)documentFactory:(NSManagedObjectContext *)objectContext {
     
     NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
@@ -168,7 +215,7 @@
     return document;
 }
 
-+ (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (RptqDocument *)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     Class docClass = [RptqDocument class];
     NSString *entityName = NSStringFromClass(docClass);
     NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: entityName];
@@ -176,6 +223,72 @@
     NSError *error = nil;
     NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
     return [documents lastObject];
+}
+
+- (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    [section setLayoutHeight: @(height)];
+}
+
+- (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    
+    if ([[section numberOfRows] integerValue] == numberOfRows) {
+        
+        //No change
+        
+    } else if (numberOfRows > [[section numberOfRows] integerValue]) {
+        
+        //Add row
+        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+        RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
+                                                                                inManagedObjectContext: managedObjectContext];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [newRowToAppend setInSection:section];
+        [hasRows addObject:newRowToAppend];
+        [section setHasRows:hasRows];
+        
+    } else if (numberOfRows < [[section numberOfRows] integerValue]) {
+        
+        //Remove row
+        RptqDocumentSectionRows *rowToDelete = [[section hasRows] lastObject];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        [[hasRows lastObject] setInSection:nil];
+        [hasRows removeObjectAtIndex:[hasRows count] - 1];
+        [section setHasRows:hasRows];
+        [rowToDelete setInSection:nil];
+        
+    }
+    [section setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
+}
+
+- (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    [section setLayoutHeight: @(height)];
+}
+
+- (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    NSNumber *visibility = [NSNumber numberWithBool:isVisible];
+    [section setVisibility: visibility];
+}
+
+- (NSDictionary *)layoutHeightsBySectionKey {
+    NSMutableDictionary *dictionary = [NSMutableDictionary new];
+    SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:self];
+    NSString *marginLeftMethod = NSStringFromSelector(@selector(marginLeft));
+    for (RptqDocumentSection *sec in enumerator) {
+        @autoreleasepool {
+            [sec valueForKey:marginLeftMethod]; //Fire fault
+            NSString *sectionKey = [sec sectionKey];
+            dictionary[sectionKey] = @([sec layoutHeightCalculated]);
+        }
+    }
+    return dictionary;
 }
 
 - (void)addDatabase:(MTDatabase *)database
@@ -186,7 +299,7 @@
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
     
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
-    __weak RptqDatabase *rptqDatabase = [RptqDatabase createNewDatabaseForManagedObjectContext: managedObjectContext
+    __weak RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: managedObjectContext
                                                                              driverType: [database identifier]
                                                                            connectionId: connectionId];
     __weak RptqUserCredentals *userCredentals = [RptqUserCredentals createNewUserCredentalsForManagedObjectContext: managedObjectContext];
@@ -250,28 +363,32 @@
         __weak MTDatabase *weakDatabase2 = weakDatabase;
         
         [weakDatabase getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *tables) {
+            
             if (success) {
+            
                 __block NSUInteger tableCounter = 0;
                 NSUInteger numberOfTables = [tables count];
                 
                 for (MTDatabaseTable *databaseTable in tables) {
                     
                     @autoreleasepool {
-                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: weakManagedObjectContext andTable: databaseTable];
+                        
+                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: weakManagedObjectContext andTable: databaseTable];
                         [weakRptqDatabase addHasTablesObject: rptqTable];
+                        
                         NSError *error = nil;
                         [[weakRptqDatabase managedObjectContext] save:&error];
+                        
                         __weak NSManagedObjectContext *weakManagedObjectContext2 = weakManagedObjectContext;
                         __weak NSString *weakTableName = [databaseTable name];
-                        //__weak RptqDatabase *weakRptqDatabase2 = weakRptqDatabase;
                         __weak RptqDatabaseSchemaTable *weakRptqTable = rptqTable;
                         
                         [weakDatabase2 getFieldsForTableName:weakTableName connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *fields) {
                             if (success) {
                                 for (MTDatabaseField *objField in fields) {
                                     @autoreleasepool {
-                                        ///RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: weakRptqDatabase2 andTableName: weakTableName];
-                                        RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: weakManagedObjectContext2 andField: objField];
+
+                                        RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: weakManagedObjectContext2 andField: objField];
                                         
                                         NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[weakRptqTable hasFields]];
                                         [fieldSet addObject:schemaField];

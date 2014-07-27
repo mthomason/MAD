@@ -42,7 +42,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
 @interface RptqDocumentObject (Extras) <MTProtocolCompare, MTProtocolLog, RptqDocumentObjectFactory>
 
 + (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
-+ (RptqDocumentObject *)documentObjectForObject:(NSManagedObject *)managedObject;
++ (instancetype)documentObjectForObject:(NSManagedObject *)managedObject;
 
 - (MTDocumentObjectType)getType;
 - (CGSize)size;

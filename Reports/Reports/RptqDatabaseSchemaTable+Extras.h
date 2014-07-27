@@ -17,19 +17,17 @@
 
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolCompare, MTProtocolLog>
 
-+ (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                               label:(NSString *)label
-                                         labelPlural:(NSString *)labelPlural
-                                                name:(NSString *)name
-                                        andQueryable:(BOOL)queryable;
++ (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                            label:(NSString *)label
+                                                      labelPlural:(NSString *)labelPlural
+                                                             name:(NSString *)name
+                                                     andQueryable:(BOOL)queryable;
 
-+ (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                            andTable:(MTDatabaseTable *)table;
++ (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                         andTable:(MTDatabaseTable *)table;
 
-+ (RptqDatabaseSchemaTable *)getTableForDatabase:(RptqDatabase *)database
++ (instancetype)databaseSchemaTableForDatabase:(RptqDatabase *)database
                                   andTableName:(NSString *)name;
-
-+ (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

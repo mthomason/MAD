@@ -303,8 +303,7 @@
                 NSInteger groupLevel = [[pageSection objectForKey:MTReportGroupLevel] integerValue];
                 
                 MNSDocumentSectionType typeDocumentSection = [[pageSection objectForKey: [MTReportFormatter KeyReportSectionType]] integerValue];
-                RptqDocumentSection *documentSection = [RptqDocumentSection RptqDocumentSectionForDocument:[[self reportFormatter] layout]
-                                                                                                   andType:typeDocumentSection andLevel:groupLevel];
+                RptqDocumentSection *documentSection = [[[self reportFormatter] layout] documentSectionForType:typeDocumentSection andLevel:groupLevel];
                 BOOL sectionIsVisible = [[documentSection visibility] boolValue];
                 
                 CGFloat sizeHeight = sectionIsVisible ? [[self reportFormatter] heightForSection:documentSection] : CGSizeZero.height;

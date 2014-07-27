@@ -33,12 +33,12 @@ typedef NS_ENUM(NSUInteger, MNSDatabaseType) {
 
 @interface RptqDatabase (Extras) <MTProtocolCompare>
 
-+ (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
-                         withConnecitonId:(NSNumber *)connectionId;
++ (RptqDatabase *)databaseForDocument:(RptqDocument *)document
+                      andConnecitonId:(NSNumber *)connectionId;
 
-+ (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                                driverType:(NSString *)driverIdentifier
-                                              connectionId:(NSNumber *)connectionId;
++ (RptqDatabase *)databaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                              driverType:(NSString *)driverIdentifier
+                                            connectionId:(NSNumber *)connectionId;
 - (RptqQuery *)defaultQuery;
 - (RptqDatabaseSchemaTable *)getTableWithName:(NSString *)name;
 

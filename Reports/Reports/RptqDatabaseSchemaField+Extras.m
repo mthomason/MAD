@@ -21,7 +21,7 @@
 
 - (void)awakeFromInsert {
     [super awakeFromInsert];
-    
+
     // MARK: Auto increment row counter
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaField class])];
@@ -36,7 +36,6 @@
         identifier = [[lastObject identifier] integerValue] + 1;
     }
     [self setIdentifier:@(identifier)];
-    
 }
 
 - (void)awakeFromFetch {
@@ -65,8 +64,8 @@
 
 #pragma mark - Static
 
-+ (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                            andField:(MTDatabaseField *)field {
++ (instancetype)databaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                  andField:(MTDatabaseField *)field {
     
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
     NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName
@@ -85,21 +84,20 @@
 
 }
 
-+ (MTDatabaseField *)databaseFieldForSchemaField:(RptqDatabaseSchemaField *)schemaField {
-
+- (MTDatabaseField *)databaseFieldWrapper {
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
-    [result setLabel:[schemaField label]];
-    [result setName:[schemaField name]];
-    [result setFieldType:(MTDataType)[[schemaField dataType] integerValue]];
-    [result setFieldTypeNative:[[schemaField dataTypeNative] integerValue]];
-    [result setDecimals:[[schemaField decimals] integerValue]];
-    [result setPrimaryKey:[[schemaField primaryKey] boolValue]];
+    [result setLabel:[self label]];
+    [result setName:[self name]];
+    [result setFieldType:(MTDataType)[[self dataType] integerValue]];
+    [result setFieldTypeNative:[[self dataTypeNative] integerValue]];
+    [result setDecimals:[[self decimals] integerValue]];
+    [result setPrimaryKey:[[self primaryKey] boolValue]];
     return result;
 }
 
-+ (id)getFieldForObjectID:(NSManagedObjectID *)objectID fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectID];
-    return result;
++ (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
+       andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    return (RptqDatabaseSchemaField *)[managedObjectContext objectRegisteredForID:objectID];
 }
 
 - (NSString *)display {

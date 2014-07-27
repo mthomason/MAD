@@ -58,7 +58,7 @@
         
         for (RptqDatabaseSchemaField *field in fields) {
             
-            MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
+            MTDatabaseField *dbField = [field databaseFieldWrapper];
             RptqDatabaseSchemaTable *table = [field inTable];
             [tables addObject:table];
 

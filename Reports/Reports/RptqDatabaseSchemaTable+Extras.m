@@ -72,11 +72,11 @@
 
 #pragma mark - Static
 
-+ (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-                                               label:(NSString *)label
-                                         labelPlural:(NSString *)labelPlural
-                                                name:(NSString *)name
-                                         andQueryable:(BOOL)queryable {
++ (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                            label:(NSString *)label
+                                                      labelPlural:(NSString *)labelPlural
+                                                             name:(NSString *)name
+                                                     andQueryable:(BOOL)queryable {
 
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: managedObjectContext];
@@ -89,8 +89,8 @@
     return rptqTable;
 }
 
-+ (RptqDatabaseSchemaTable *)createNewTableForManagedObjectContext:(NSManagedObjectContext *)objectContext
-                                            andTable:(MTDatabaseTable *)table {
++ (instancetype)databaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+                                                         andTable:(MTDatabaseTable *)table {
     NSString *entityName = NSStringFromClass([RptqDatabaseSchemaTable class]);
     NSEntityDescription *tableEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
     RptqDatabaseSchemaTable *rptqTable = [[RptqDatabaseSchemaTable alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
@@ -101,7 +101,7 @@
     return rptqTable;
 }
 
-+ (RptqDatabaseSchemaTable *)getTableForDatabase:(RptqDatabase *)database
++ (instancetype)databaseSchemaTableForDatabase:(RptqDatabase *)database
                                   andTableName:(NSString *)name {
 
     NSSet *tables = [database hasTables];
@@ -112,11 +112,6 @@
             break;
         }
     }
-    return result;
-}
-
-+ (id)getTableForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
     return result;
 }
 

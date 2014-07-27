@@ -143,8 +143,8 @@
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
-    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField getFieldForObjectID: [self schemaFieldObjectId]
-                                                                fromObjectContext: objectContext];
+    RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField managedObjectForObjectID: [self schemaFieldObjectId]
+                                                               andManagedObjectContext: objectContext];
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
 

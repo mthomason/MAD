@@ -584,7 +584,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     return result;
 }
 
-+ (RptqDocumentObject *)documentObjectForObject:(NSManagedObject *)managedObject {
++ (instancetype)documentObjectForObject:(NSManagedObject *)managedObject {
     RptqDocumentObject *result = nil;
 
     if ([managedObject isKindOfClass:[RptqDocumentObject class]]) {

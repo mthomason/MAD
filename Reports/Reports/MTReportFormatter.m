@@ -17,6 +17,8 @@
 #import "SectionEnumerator.h"
 
 #import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+
 #import "RptqDatabase.h"
 #import "RptqQueryGroup.h"
 #import "RptqQuery.h"
@@ -204,7 +206,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [self setPageIndexesTemporary:temporaryDataForPage];
     
     if ([self layout]) {
-        NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
+        NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
         [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     } else {
         [self setLayoutHeightsBySectionKey:nil];
@@ -281,7 +283,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     self.machineState.counterHeightUsedCurrentPage += self.page.margins.top;
 
-    NSDictionary *layoutHeightsBySectionKeys = [RptqDocumentSection layoutHeightsBySectionKey:[self layout]];
+    NSDictionary *layoutHeightsBySectionKeys = [self.layout layoutHeightsBySectionKey];
     [self setLayoutHeightsBySectionKey:layoutHeightsBySectionKeys];
     
     [self cleanupTemporaryReportIndexes];

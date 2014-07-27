@@ -82,8 +82,8 @@
 
 #pragma mark - Static
 
-+ (RptqDatabase *)getDatabaseFromDocument:(RptqDocument *)document
-                         withConnecitonId:(NSNumber *)connectionId {
++ (RptqDatabase *)databaseForDocument:(RptqDocument *)document
+                         andConnecitonId:(NSNumber *)connectionId {
     
     RptqDatabase *currentDatabase = nil;
     for (RptqDatabase *db in [document hasDatabaseSchemas]) {
@@ -96,7 +96,7 @@
     return currentDatabase;
 }
 
-+ (RptqDatabase *)createNewDatabaseForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (RptqDatabase *)databaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                                 driverType:(NSString *)driverIdentifier
                                               connectionId:(NSNumber *)connectionId {
 

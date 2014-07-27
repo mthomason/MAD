@@ -131,9 +131,9 @@ NSString * const MTReportDetailRowId = @"d";
 - (RptqDocument *)activeDocument {
     if ([self document] == nil) {
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-        RptqDocument *document = [RptqDocument getMainDocumentForManagedObjectContext: managedObjectContext];
+        RptqDocument *document = [RptqDocument documentForManagedObjectContext: managedObjectContext];
         if (document == nil) {
-            document = [RptqDocument createMainDocumentForManagedObjectContext:managedObjectContext];
+            document = [RptqDocument documentFactory:managedObjectContext];
         }
         [self setDocument:document];
         

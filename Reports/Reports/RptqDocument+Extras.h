@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import "RptqDocument.h"
 #import "MTProtocolCompare.h"
+#import "RptqDocumentSection+Extras.h"
 
 @class NSManagedObjectContext, MTDatabase, RptqQuery;
 
@@ -20,9 +21,15 @@
 - (RptqQuery *)defaultQuery;
 - (RptqDatabase *)defaultDatabase;
 
-+ (RptqDocument *)createMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
-+ (RptqDocument *)getMainDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
++ (RptqDocument *)documentFactory:(NSManagedObjectContext *)objectContext;
++ (RptqDocument *)documentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
 
+- (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
+- (NSDictionary *)layoutHeightsBySectionKey;
+
+- (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
+- (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
+- (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *readStatus))status
          completion:(void (^)(BOOL success, NSError *error))completion;

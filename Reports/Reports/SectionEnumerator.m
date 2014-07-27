@@ -51,8 +51,8 @@
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:([self total] - current)];
     for (; [self current]<[self total]; self.current++) {
         @autoreleasepool {
-            RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: current
-                                                                                forQuery: query];
+            RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: current
+                                                                                query: query];
             [result addObject:section];
         }
     }
@@ -64,7 +64,7 @@
     RptqQuery *query = [[database hasQueries] anyObject];
 
     NSInteger current = [self current];
-    id result = [RptqDocumentSection getDocumentSectionForRow: current forQuery: query];
+    id result = [RptqDocumentSection documentSectionForRow: current query: query];
     current++;
     [self setCurrent:current];
     return result;

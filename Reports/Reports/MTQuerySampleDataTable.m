@@ -61,7 +61,7 @@
 
     if ([[self fieldKeys] count] <= 0) {
         for (RptqDatabaseSchemaField *field in [table hasFields]) {
-            MTDatabaseField *dbField = [RptqDatabaseSchemaField databaseFieldForSchemaField:field];
+            MTDatabaseField *dbField = [field databaseFieldWrapper];
             NSString *fieldAlias = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
             [[self fields] setObject:dbField forKey:fieldAlias];
             [[self fieldKeys] addObject:fieldAlias];

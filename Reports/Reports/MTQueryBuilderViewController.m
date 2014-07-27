@@ -336,8 +336,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         [tvc setDelegate:self];
                         
                         RptqQuery *query = [AppDelegate activeRptqQuery];
-                        RptqDocumentSection *section = [RptqDocumentSection getDocumentSectionForRow: [self lastSelectedRowNumber]
-                                                                                             forQuery: query];
+                        RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: [self lastSelectedRowNumber]
+                                                                                             query: query];
                         [tvc setInitalStepperValue:([[section height] floatValue])];
                         [tvc setInitalSwitchValue:[[section visibility] boolValue]];
                         [tvc setInitalNumberOfRows:[[section numberOfRows] integerValue]];
@@ -394,8 +394,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MTApplicationInstance *applicationInstance = [AppDelegate app];
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
     RptqDocument *document = [reportDocument activeDocument];
-    [RptqDocumentSection setHeight:height forSectionAtRow:[self lastSelectedRowNumber]
-                        inDocument:document];
+    [document setHeight:height forSectionAtRow:self.lastSelectedRowNumber];
     [reportDocument saveContext];
     
 }
@@ -406,8 +405,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
-    [RptqDocumentSection setVisibility:isVisible forSectionAtRow:[self lastSelectedRowNumber]
-                            inDocument:document];
+    [document setVisibility:isVisible
+            forSectionAtRow:self.lastSelectedRowNumber];
     [reportDocument saveContext];
     
 }
@@ -418,8 +417,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MAReportDocument *reportDocument = [applicationInstance activeDocument];
 
     RptqDocument *document = [reportDocument activeDocument];
-    [RptqDocumentSection setNumberOfRows:numberOfRows forSectionAtRow:[self lastSelectedRowNumber]
-                              inDocument:document];
+    [document setNumberOfRows:numberOfRows forSectionAtRow:self.lastSelectedRowNumber];
     [reportDocument saveContext];
 }
 

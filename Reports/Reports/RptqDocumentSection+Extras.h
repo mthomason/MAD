@@ -29,28 +29,13 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 
 @property (nonatomic, retain, readonly) NSString *sectionKey;
 
-+ (id)getDocumentSectionForObjectID:(NSManagedObjectID *)objid fromObjectContext:(NSManagedObjectContext *)moc;
-+ (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
-+ (RptqDocumentSection *)getDocumentSectionForRow:(NSInteger)row forQuery:(RptqQuery *)query;
-+ (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
-+ (NSInteger)getDocumentSectionIndentLevelForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
-+ (NSInteger)getRowForSection:(RptqDocumentSection *)section;
++ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid inManagedObjectContext:(NSManagedObjectContext *)moc;
 
-+ (RptqDocumentSection *)getDocumentGroupHeaderAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
-+ (RptqDocumentSection *)getDocumentGroupFooterAtLevel:(NSUInteger)groupLevel forQuery:(RptqQuery *)query;
++ (instancetype)documentSectionForRow:(NSInteger)row query:(RptqQuery *)query;
++ (instancetype)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
++ (instancetype)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
 
-// (RptqDocumentSection *)
-
-+ (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document;
-+ (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document;
-+ (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow inDocument:(RptqDocument *)document;
-
-+ (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)type;
-+ (RptqDocumentSection *)RptqDocumentSectionForDocument:(RptqDocument *)document andType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
-
-+ (NSDictionary *)layoutHeightsBySectionKey:(RptqDocument *)document;
-+ (CGFloat)layoutHeightForSection:(RptqDocumentSection *)section;
-
+- (CGFloat)layoutHeightCalculated;
 - (NSString *)localizedDisplayName;
 - (NSString *)sectionKey;
 
