@@ -133,6 +133,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return exist;
 }
 
+- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    [self getTables:^(BOOL success, NSError *error, NSArray *tables) {
+        completion(success, error, tables);
+    }];
+}
+
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     BOOL success = NO;
@@ -155,6 +161,13 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 	sqlite3_finalize(statement);
 	sqlite3_free(sql);
     completion(success, nil, result);
+}
+
+- (void)getFieldsForTableName: (NSString *)tableName connection:(id)process
+                   completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+    [self getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
+        completion(success, error, fields);
+    }];
 }
 
 - (void)getFieldsForTableName: (NSString *)tableName

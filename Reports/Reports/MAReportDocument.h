@@ -39,9 +39,6 @@ extern NSString * const MTReportGroupLevel;
 
 - (id)initWithFileURL:(NSURL *)url;
 
-- (void)addDatasourceToReport: (MTDatabase *)database
-                   completion: (void (^)(BOOL success, NSError *error))completion;
-
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 
 - (void)regenThumbnail;

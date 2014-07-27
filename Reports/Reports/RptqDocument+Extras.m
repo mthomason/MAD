@@ -241,65 +241,64 @@
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
-    __weak NSNumber *weakConnectionId = connectionId;
-    [weakDatabase getTables:^(BOOL success, NSError *error, NSArray *tables) {
-        if (success) {
-            __block NSUInteger tableCounter = 0;
-            NSUInteger numberOfTables = [tables count];
-
-            for (MTDatabaseTable *databaseTable in tables) {
-            
-                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: managedObjectContext
-                                                                                                           andTable: databaseTable];
-                RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                     withConnecitonId: weakConnectionId];
-
-                if (currentDatabase) [currentDatabase addHasTablesObject: rptqTable];
-                NSError *error = nil;
-                [[currentDatabase managedObjectContext] save:&error];
-                
-                NSString *tableName = [rptqTable name];
-                
-                NSNumber *weakConnectionId2 = connectionId;
-                [weakDatabase getFieldsForTableName:tableName completion:^(BOOL success, NSError *error, NSArray *fields) {
-                    if (success) {
-                        for (MTDatabaseField *objField in fields) {
-                            RptqDatabase *currentDatabase = [RptqDatabase getDatabaseFromDocument: rptqDocument
-                                                                                 withConnecitonId: weakConnectionId2];
-                            
-                            RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: currentDatabase
-                                                                                          andTableName: [databaseTable name]];
-                            
-                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: managedObjectContext
-                                                                                                                       andField: objField];
-                            
-                            NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTableOrigional hasFields]];
-                            [fieldSet addObject:schemaField];
-                            [rptqTableOrigional setHasFields:fieldSet];
-
-                            NSError *saveError = nil;
-                            [[schemaField managedObjectContext] save:&saveError];
-                            NSAssert(saveError == nil, @"%@", saveError);
-                        }
-                        if (tableCounter == numberOfTables - 1) {
-                            completion(YES, nil);
-                        }
-                        tableCounter++;
-                    } else {
-                        completion(NO, error);
-                    }
-                }];
-                
-            }
-
-        } else {
-            completion(success, error);
-        }
-        
-        
-        
-    }];
+    __weak NSManagedObjectContext *weakManagedObjectContext = managedObjectContext;
+    __weak RptqDatabase *weakRptqDatabase = rptqDatabase;
     
+    [database connectWithCredentals:[database databaseConnection] completion:^(id dbconnection, BOOL success, NSError *connectionError) {
+        
+        __weak id weakdbconnection = dbconnection;
+        __weak MTDatabase *weakDatabase2 = weakDatabase;
+        
+        [weakDatabase getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *tables) {
+            if (success) {
+                __block NSUInteger tableCounter = 0;
+                NSUInteger numberOfTables = [tables count];
+                
+                for (MTDatabaseTable *databaseTable in tables) {
+                    
+                    @autoreleasepool {
+                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable createNewTableForManagedObjectContext: weakManagedObjectContext andTable: databaseTable];
+                        [weakRptqDatabase addHasTablesObject: rptqTable];
+                        NSError *error = nil;
+                        [[weakRptqDatabase managedObjectContext] save:&error];
+                        __weak NSManagedObjectContext *weakManagedObjectContext2 = weakManagedObjectContext;
+                        __weak NSString *weakTableName = [databaseTable name];
+                        //__weak RptqDatabase *weakRptqDatabase2 = weakRptqDatabase;
+                        __weak RptqDatabaseSchemaTable *weakRptqTable = rptqTable;
+                        
+                        [weakDatabase2 getFieldsForTableName:weakTableName connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *fields) {
+                            if (success) {
+                                for (MTDatabaseField *objField in fields) {
+                                    @autoreleasepool {
+                                        ///RptqDatabaseSchemaTable *rptqTableOrigional = [RptqDatabaseSchemaTable getTableForDatabase: weakRptqDatabase2 andTableName: weakTableName];
+                                        RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField createNewFieldForManagedObjectContext: weakManagedObjectContext2 andField: objField];
+                                        
+                                        NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[weakRptqTable hasFields]];
+                                        [fieldSet addObject:schemaField];
+                                        [weakRptqTable setHasFields:fieldSet];
+                                        
+                                        NSError *saveError = nil;
+                                        [[schemaField managedObjectContext] save:&saveError];
+                                        NSAssert(saveError == nil, @"%@", saveError);
+                                        status([NSString stringWithFormat:@"Whatup count %d", tableCounter]);
+                                    }
+                                }
+                                if (tableCounter == numberOfTables - 1) {
+                                    completion(YES, nil);
+                                }
+                                tableCounter++;
+                            } else {
+                                completion(NO, error);
+                            }
+                        }];
+                    }
+                }
+            } else {
+                completion(success, error);
+            }
+            [weakDatabase2 closeProcess:weakdbconnection];
+        }];
+    }];
 }
 
 #pragma mark - MTProtocolCompare

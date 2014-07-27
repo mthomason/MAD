@@ -68,7 +68,8 @@
 + (RptqDatabaseSchemaField *)createNewFieldForManagedObjectContext:(NSManagedObjectContext *)objectContext
                                             andField:(MTDatabaseField *)field {
     
-    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqDatabaseSchemaField class])
+    NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
+    NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName
                                                    inManagedObjectContext: objectContext];
 
     RptqDatabaseSchemaField *rptqField = [[RptqDatabaseSchemaField alloc] initWithEntity: fieldEntity

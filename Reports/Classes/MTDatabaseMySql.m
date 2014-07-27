@@ -108,40 +108,96 @@
     }];
 }
 
+- (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+
+    MysqlConnection *conn = dbconn;
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+    MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual onConnection:conn];
+    NSInteger resultsCount = [dataTable count];
+    NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+    for (NSInteger i=0; i<[dataTable count]; i++) {
+        @autoreleasepool {
+            NSString *tableName = [dataTable objectAtRow:i column:0];
+            MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+            [results addObject:table];
+        }
+    }
+    completion(YES, nil, results);
+}
+
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray *tables))completion {
     
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
-    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+    
+    [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+        
+        MysqlConnection *conn = dbconn;
+        BOOL successConnection = conn != nil;
+        if (successConnection) {
             
-            MysqlConnection *conn = dbconn;
-            BOOL successConnection = conn != nil;
-            if (successConnection) {
-                
-                MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
-                MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual onConnection:conn];
-                NSInteger resultsCount = [dataTable count];
-                NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
-                for (NSInteger i=0; i<[dataTable count]; i++) {
-                    @autoreleasepool {
-                        NSString *tableName = [dataTable objectAtRow:i column:0];
-                        MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
-                        [results addObject:table];
-                    }
+            MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+            MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v999"];
+            MTDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual onConnection:conn];
+            NSInteger resultsCount = [dataTable count];
+            NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity: resultsCount];
+            for (NSInteger i=0; i<[dataTable count]; i++) {
+                @autoreleasepool {
+                    NSString *tableName = [dataTable objectAtRow:i column:0];
+                    MTDatabaseTable *table = [[MTDatabaseTable alloc] initWithTableName:tableName];
+                    [results addObject:table];
                 }
-                completion(successConnection, error, results);
-            } else {
-                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
-                completion(NO, error, nil);
             }
-        }];
+            completion(successConnection, error, results);
+        } else {
+            SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
+            [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
+            completion(NO, error, nil);
+        }
     }];
 }
 
-- (void)getFieldsForTableName: (NSString *)tableName
+- (void)getFieldsForTableName: (NSString *)tableName connection:(id)dbconn
                completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
+    
+    MysqlConnection *conn = dbconn;
+    BOOL successConnection = conn != nil;
+    NSMutableDictionary *resultsDictionary = nil;
+    
+    NSString *command = [NSString stringWithFormat:@"SHOW COLUMNS FROM %@;", [self safeIdentifier:tableName]];
+    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+    MTDataTable *dataTableVirtual = [MTDataTable newDataTableForIdentifier:@"v9998"];
+    MTDataTable *dataTable = [myFetch fetchWithCommand:command dataTable:&dataTableVirtual onConnection:conn];
+    NSInteger resultsCount = [dataTable count];
+    resultsDictionary = [[NSMutableDictionary alloc] initWithCapacity:resultsCount];
+    
+    for (NSInteger i=0; i<[dataTable numberOfRows]; i++) {
+        NSString *name = [dataTable objectAtRow:i column:0];
+        NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
+        MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
+        [resultsDictionary setObject:field forKey:safeId];
+    }
+    
+    MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
+    NSString *command2 = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT 0;", [self safeIdentifier:tableName]];
+    MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
+    MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn];
+    
+    for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
+        MTDatabaseField *databaseField = [resultsDictionary objectForKey:[dataColumn fieldName]];
+        NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
+        [databaseField setFieldTypeNative:nativeColumnType];
+        MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];
+        [databaseField setFieldType:fieldType];
+        [databaseField setWidth:[[dataColumn dataLength] integerValue]];
+        [databaseField setDecimals:[[dataColumn dataPercision] integerValue]];
+        [databaseField setPrimaryKey:[dataColumn isPrimaryKey]];
+    }
+    completion(successConnection, nil, [resultsDictionary allValues]);
+}
+
+- (void)getFieldsForTableName: (NSString *)tableName
+                   completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion {
     
     
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
@@ -192,9 +248,13 @@
                     completion(successConnection, error, [resultsDictionary allValues]);
                 });
             });
-
+            
         }];
-     }];
+    }];
+}
+
+- (void)closeProcess:(id)process {
+    mysql_close(((MysqlConnection *)process).connection);
 }
 
 + (MTDataType)dataTypeForNativeType:(NSInteger)nativeType {

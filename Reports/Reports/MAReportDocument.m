@@ -238,18 +238,6 @@ NSString * const MTReportDetailRowId = @"d";
     [[self statusLabel].status performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
 }
 
-//Add a new connection to the report
-- (void)addDatasourceToReport: (MTDatabase *)database
-                   completion: (void (^)(BOOL success, NSError *error))completion {
-
-    RptqDocument *document = [self activeDocument];
-    [document addDatabase:database status:^(NSString *readStatus) {
-        
-    } completion:^(BOOL success, NSError *error) {
-        completion(success, error);
-    }];
-}
-
 - (NSString *)fileNameMinusExtention {
     return [[self fileURL] filenameMinusExtention];
 }
@@ -377,17 +365,16 @@ NSString * const MTReportDetailRowId = @"d";
                                   };
         [managedDocumentAtUrl setPersistentStoreOptions: options];
         
-        __weak MAReportDocument *blockManagedDocumentAtUrl = managedDocumentAtUrl;
+        __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
         MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-            MAReportDocument *strongManagedDocUrl = blockManagedDocumentAtUrl;
-            completionHandler(strongManagedDocUrl, success);
+            completionHandler(weakdoc, success);
         };
 
         BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[urlToOpen path]];
         if (fileExist) {
-            [blockManagedDocumentAtUrl openWithCompletionHandler:handlerOpen];
+            [weakdoc openWithCompletionHandler:handlerOpen];
         } else {
-            [blockManagedDocumentAtUrl saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
+            [weakdoc saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
         }
         
         options = nil;
@@ -436,7 +423,7 @@ NSString * const MTReportDetailRowId = @"d";
 
 - (void)addDatabase:(MTDatabase *)database toDocument:(RptqDocument *)document completion:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [document addDatabase:database status:^(NSString *readStatus) {
-        
+        [self.statusLabel.status setText:readStatus];
     } completion:^(BOOL successAddingDatasource, NSError *error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
