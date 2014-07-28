@@ -32,6 +32,7 @@
 + (NSString *)identifier;
 
 - (NSString *)connectionString;
+- (void)testConnection:(void(^)(BOOL success, NSError *error))completion;
 
 @end
 

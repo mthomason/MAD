@@ -393,20 +393,19 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 
 + (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
     
-    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
-                                                     object: databaseConnection];
     __weak MTDatabaseConnection *weakDatabaseConnection = databaseConnection;
 
-    [queryTest performQuery:^(BOOL success, NSError *error) {
-        
+    [databaseConnection testConnection:^(BOOL success, NSError *error) {
         if (!success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            if ([NSThread isMainThread]) {
                 completion(NO, error);
-            });
+            } else {
+                dispatch_sync(dispatch_get_main_queue(), ^{ completion(NO, error); });
+            }
         } else {
             
-            
             MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+            
             __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
             [managedDocumentAtUrl open:^(BOOL success) {
                 
@@ -422,6 +421,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
                         } completion:^(BOOL successAddingDatasource, NSError *error) {
                             
                             dispatch_async(dispatch_get_main_queue(), ^{
+                                
                                 if (successAddingDatasource) {
                                     [weakdoc close:^(BOOL success, NSError *error) {
                                         completion(success, error);
@@ -431,6 +431,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
                                         completion(success, error);
                                     }];
                                 }
+                                
                             });
                         }];
                     }
@@ -444,6 +445,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
             }];
         }
     }];
+    
 }
 
 - (void)close:(void(^)(BOOL success, NSError *error))completion {

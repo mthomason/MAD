@@ -18,6 +18,7 @@
 #import "MTDatabaseConnectionSqlServer.h"
 
 #import "NSFileManager+Common.h"
+#import "MTQuery.h"
 
 @implementation MTDatabaseConnection
 
@@ -127,6 +128,14 @@
 
 - (NSString *)connectionString {
     return [NSString stringWithFormat:@"(%@)[%@:%ld]%@", self.databaseTypeIdentifier, self.server,  (long)self.port, self.database];
+}
+
+- (void)testConnection:(void(^)(BOOL success, NSError *error))completion {
+    MTQuery *queryTest = [[MTQuery alloc] initWithQueryType: MTQueryTypeConnectionTest
+                                                     object: self];
+    [queryTest performQuery:^(BOOL success, NSError *error) {
+        completion(success, error);
+    }];
 }
 
 @end
