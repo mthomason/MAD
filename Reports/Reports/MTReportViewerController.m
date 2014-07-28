@@ -1214,13 +1214,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self enableTabBarItems];
-    
-    //@synchronized(self) {
-        /*if (self.shouldShowPrintDialog) {
-            [self displayPrintDialog];
-            self.shouldShowPrintDialog = NO;
-        }*/
-    //}
 }
 
 - (UIViewController *)activeViewController {
