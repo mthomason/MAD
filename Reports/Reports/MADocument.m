@@ -419,7 +419,7 @@ NSString * MTDocumentParentContextName          = @"moc";
             NSError *error = nil;
             [fileManager removeItemAtURL:file error:&error];
         }
-        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&deleteError];
+        [fileManager removeItemAtURL:fileURL error:&deleteError];
         NSAssert(deleteError == nil, @"%@", deleteError);
         completion(YES);
     };
