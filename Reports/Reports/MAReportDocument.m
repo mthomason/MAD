@@ -120,6 +120,19 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     return self;
 }
 
+- (void)addConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion {
+    RptqDocument *rptqDocument = [self activeDocument];
+    MTDatabase *database = [MTDatabase databaseFactory:connection];
+    if (database) {
+        [rptqDocument addDatabase:database status:^(NSString *readStatus) {
+            [self.statusLabel.status setText:readStatus];
+        } completion:^(BOOL success, NSError *error) {
+            completion(success, error);
+        }];
+    } else {
+        completion(NO, nil);
+    }
+}
 
 + (NSURL *)madFileCheck:(NSURL *)url {
     NSURL *urlToOpen = nil;
@@ -389,63 +402,6 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
     return [self thumbnailUrlForMadUrl:madUrl];
-}
-
-+ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention andConnection:(MTDatabaseConnection *)databaseConnection completion:(void(^)(BOOL success, NSError *error))completion {
-    
-    __weak MTDatabaseConnection *weakDatabaseConnection = databaseConnection;
-
-    [databaseConnection testConnection:^(BOOL success, NSError *error) {
-        if (!success) {
-            if ([NSThread isMainThread]) {
-                completion(NO, error);
-            } else {
-                dispatch_sync(dispatch_get_main_queue(), ^{ completion(NO, error); });
-            }
-        } else {
-            
-            MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
-            
-            __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
-            [managedDocumentAtUrl open:^(BOOL success) {
-                
-                if (success) {
-                    
-                    RptqDocument *rptqDocument = [weakdoc activeDocument];
-                    MTDatabase *database = [MTDatabase databaseFactory:weakDatabaseConnection];
-                    
-                    if (database) {
-                        
-                        [rptqDocument addDatabase:database status:^(NSString *readStatus) {
-                            [weakdoc.statusLabel.status setText:readStatus];
-                        } completion:^(BOOL successAddingDatasource, NSError *error) {
-                            
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                
-                                if (successAddingDatasource) {
-                                    [weakdoc close:^(BOOL success, NSError *error) {
-                                        completion(success, error);
-                                    }];
-                                } else {
-                                    [weakdoc closeAndDelete:^(BOOL success, NSError *error) {
-                                        completion(success, error);
-                                    }];
-                                }
-                                
-                            });
-                        }];
-                    }
-                    
-                } else {
-                    NSError *error = [MAReportDocument errorFailedToCreateReport];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        completion(NO, error);
-                    });
-                }
-            }];
-        }
-    }];
-    
 }
 
 - (void)close:(void(^)(BOOL success, NSError *error))completion {

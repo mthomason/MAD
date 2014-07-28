@@ -40,11 +40,15 @@ extern NSString * const MADMimeType;
 
 - (id)initWithFileURL:(NSURL *)url;
 
+
 - (void)open:(void (^)(BOOL))completion;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
-
+- (void)addConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion;
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
+
+- (void)close:(void(^)(BOOL success, NSError *error))completion;
+- (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
 
@@ -52,10 +56,6 @@ extern NSString * const MADMimeType;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
-
-+ (void)initalSaveUsingUrl:(NSURL *)applicationFileUrlWithExtention
-             andConnection:(MTDatabaseConnection *)databaseConnection
-                completion:(void(^)(BOOL success, NSError *error))completion;
 
 - (NSURL *)cachedDataUrl;
 

@@ -316,6 +316,7 @@
     
     __weak RptqDocument *rptqDocument = self;
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
+    //[[rptqDocument managedObjectContext] persistentStoreCoordinator]
     
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
     __weak RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: managedObjectContext
@@ -373,7 +374,7 @@
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
-    __weak NSManagedObjectContext *weakManagedObjectContext = managedObjectContext;
+    //__weak NSManagedObjectContext *weakManagedObjectContext = managedObjectContext;
     __weak RptqDatabase *weakRptqDatabase = rptqDatabase;
     
     [database connectWithCredentals:[database databaseConnection] completion:^(id dbconnection, BOOL success, NSError *connectionError) {
@@ -381,59 +382,49 @@
         __weak id weakdbconnection = dbconnection;
         __weak MTDatabase *weakDatabase2 = weakDatabase;
         
-        [weakDatabase getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *tables) {
+
+        __block NSMutableDictionary *tablesAndFields = [[NSMutableDictionary alloc] init];
+        __block NSMutableArray *tables = [NSMutableArray array];
+        __block BOOL gotit = YES;
+        __block NSError *gotitError = nil;
+        [weakDatabase getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
             
             if (success) {
-            
-                __block NSUInteger tableCounter = 0;
-                NSUInteger numberOfTables = [tables count];
-                
+                [tables setArray:resultTables];
                 for (MTDatabaseTable *databaseTable in tables) {
-                    
                     @autoreleasepool {
                         
-                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: weakManagedObjectContext andTable: databaseTable];
-                        [weakRptqDatabase addHasTablesObject: rptqTable];
-                        
-                        NSError *error = nil;
-                        [[weakRptqDatabase managedObjectContext] save:&error];
-                        
-                        __weak NSManagedObjectContext *weakManagedObjectContext2 = weakManagedObjectContext;
-                        __weak NSString *weakTableName = [databaseTable name];
-                        __weak RptqDatabaseSchemaTable *weakRptqTable = rptqTable;
-                        
-                        [weakDatabase2 getFieldsForTableName:weakTableName connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *fields) {
-                            if (success) {
-                                for (MTDatabaseField *objField in fields) {
-                                    @autoreleasepool {
-
-                                        RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: weakManagedObjectContext2 andField: objField];
-                                        
-                                        NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[weakRptqTable hasFields]];
-                                        [fieldSet addObject:schemaField];
-                                        [weakRptqTable setHasFields:fieldSet];
-                                        
-                                        NSError *saveError = nil;
-                                        [[schemaField managedObjectContext] save:&saveError];
-                                        NSAssert(saveError == nil, @"%@", saveError);
-                                        status([NSString stringWithFormat:@"Whatup count %d", tableCounter]);
-                                    }
-                                }
-                                if (tableCounter == numberOfTables - 1) {
-                                    completion(YES, nil);
-                                }
-                                tableCounter++;
-                            } else {
-                                completion(NO, error);
-                            }
+                        __block NSMutableArray *fields = [[NSMutableArray alloc] init];
+                        [weakDatabase2 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
+                            [fields setArray:results];
+                            gotit = success; gotitError = error;
                         }];
+                        [tablesAndFields setObject:fields forKey:[databaseTable name]];
                     }
                 }
-            } else {
-                completion(success, error);
             }
-            [weakDatabase2 closeProcess:weakdbconnection];
+            gotit = success; gotitError = error;
         }];
+        
+        for (MTDatabaseTable *table in tables) {
+            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
+            [weakRptqDatabase addHasTablesObject: rptqTable];
+            NSArray *fields = [tablesAndFields objectForKey:[table name]];
+            for (MTDatabaseField *field in fields) {
+                RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
+                
+                NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTable hasFields]];
+                [fieldSet addObject:schemaField];
+                [rptqTable setHasFields:fieldSet];
+            }
+        }
+        
+        NSError *saveError = nil;
+        [managedObjectContext save:&saveError];
+        NSAssert(saveError == nil, @"%@", saveError);
+        [weakDatabase2 closeProcess:weakdbconnection];
+        completion(gotit, gotitError);
+        
     }];
 }
 

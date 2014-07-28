@@ -153,19 +153,58 @@
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
     
-    [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention
-                           andConnection:dbDetails
-                              completion:^(BOOL success, NSError *error) {
+    [dbDetails testConnection:^(BOOL success, NSError *error) {
         if (success) {
-            [blockSender setEnabled:YES];
-            [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+            
+
+                MAReportDocument *doc = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+                __weak MAReportDocument *weakdoc = doc;
+                __weak MTDatabaseConnection *weakConnection = dbDetails;
+                [doc open:^(BOOL success) {
+                    
+                    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                    if (success) {
+                        [weakdoc addConnection:weakConnection completion:^(BOOL success, NSError *error) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                
+                                if (success) {
+                                    [weakdoc close:^(BOOL success, NSError *error) {
+                                        [blockSender setEnabled:YES];
+                                        [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                                    }];
+                                } else {
+                                    [weakdoc closeAndDelete:^(BOOL success, NSError *error) {
+                                        [blockSender setEnabled:YES];
+                                        [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+                                        [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                    }];
+                                }
+                                [activtyView removeFromSuperview];
+                                
+                            });
+                        }];
+                        
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [blockSender setEnabled:YES];
+                            [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                            [activtyView removeFromSuperview];
+                        });
+                    }
+                    //});
+
+                }];
+
+            
         } else {
             [blockSender setEnabled:YES];
             [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
             [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+//            [error presentErrorToUser];
+            [activtyView removeFromSuperview];
         }
-        [activtyView removeFromSuperview];
     }];
+    
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
