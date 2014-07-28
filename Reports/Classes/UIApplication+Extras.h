@@ -17,6 +17,8 @@
 + (BOOL)isMadDesigner;
 + (BOOL)isMadViewer;
 
+- (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible;
+
 @end
 
 #endif

@@ -338,7 +338,9 @@ const NSUInteger tagAlertViewAquire         = 666;
             
         case tagAlertViewSave: {
             if (canceled == NO) {
-                [self saveUsername:[self saveUsername] andPassword:[self savePassword] forKey:[self saveKey]];
+                [self saveUsername:[self saveUsername]
+                       andPassword:[self savePassword]
+                            forKey:[self saveKey]];
             }
             NSString *u = [[NSString alloc] initWithString:[self saveUsername]];
             NSString *p = [[NSString alloc] initWithString:[self savePassword]];

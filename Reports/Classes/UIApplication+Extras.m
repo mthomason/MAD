@@ -34,4 +34,28 @@
     return [[MTApplicationInstance bundleId] isEqualToString:MTBundleIdMadViewer];
 }
 
+- (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible {
+    static NSInteger setVisibleCounter = 0;
+    if (networkActivityIndicatorVisible)
+        setVisibleCounter++;
+    else
+        setVisibleCounter--;
+    
+    if (setVisibleCounter == 0) {
+        networkActivityIndicatorVisible = NO;
+    }
+    if ([NSThread isMainThread] == NO) {
+        __weak UIApplication *weakself = self;
+        if (weakself.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [weakself setNetworkActivityIndicatorVisible:networkActivityIndicatorVisible];
+            });
+        }
+    } else {
+        if (self.isNetworkActivityIndicatorVisible != networkActivityIndicatorVisible) {
+            [self setNetworkActivityIndicatorVisible:networkActivityIndicatorVisible];
+        }
+    }
+}
+
 @end
