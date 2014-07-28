@@ -213,7 +213,8 @@ NSString * MTDocumentParentContextName          = @"moc";
 }
 
 - (NSString *)name {
-    return [[[self fileURL] lastPathComponent] stringByDeletingPathExtension];
+    NSString *lastPathComponent = [[self fileURL] lastPathComponent];
+    return [lastPathComponent stringByDeletingPathExtension];
 }
 
 + (NSString *)thumbnailSaveName {

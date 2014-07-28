@@ -374,7 +374,7 @@
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
-    //__weak NSManagedObjectContext *weakManagedObjectContext = managedObjectContext;
+    __weak NSManagedObjectContext *weakManagedObjectContext = managedObjectContext;
     __weak RptqDatabase *weakRptqDatabase = rptqDatabase;
     
     [database connectWithCredentals:[database databaseConnection] completion:^(id dbconnection, BOOL success, NSError *connectionError) {
@@ -431,12 +431,15 @@
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                 dispatch_sync(queueMain, ^{
+                    //if (weakManagedObjectContext == nil) {
+                    //    weakManagedObjectContext = [rptqDocument managedObjectContext];
+                    //}
                     for (MTDatabaseTable *table in tables) {
-                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
+                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: [rptqDocument managedObjectContext] andTable: table];
                         [weakRptqDatabase addHasTablesObject: rptqTable];
                         NSArray *fields = [tablesAndFields objectForKey:[table name]];
                         for (MTDatabaseField *field in fields) {
-                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: [rptqDocument managedObjectContext] andField: field];
                             
                             NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTable hasFields]];
                             [fieldSet addObject:schemaField];
@@ -445,7 +448,7 @@
                     }
                     
                     NSError *saveError = nil;
-                    [managedObjectContext save:&saveError];
+                    [weakManagedObjectContext save:&saveError];
                     NSAssert(saveError == nil, @"%@", saveError);
                     [weakDatabase2 closeProcess:weakdbconnection];
                     completion(gotit, gotitError);

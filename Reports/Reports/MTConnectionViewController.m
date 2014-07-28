@@ -127,6 +127,9 @@
     [[self view] addSubview:activtyView];
     
     [sender setEnabled:NO];
+    
+    [[[self navigationItem] leftBarButtonItem] setEnabled:NO];
+    [[self navigationItem] setHidesBackButton:YES animated:YES];
     [[[self navigationItem] backBarButtonItem] setEnabled:NO];
     
     [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
@@ -186,11 +189,18 @@
                                     [weakdoc close:^(BOOL success, NSError *error) {
                                         [blockSender setEnabled:YES];
                                         [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                                        
+                                        UILocalNotification *notification = [[UILocalNotification alloc] init];
+                                        NSString *body = [NSString stringWithFormat:@"Your report %@ is ready.", [weakdoc name]];
+                                        [notification setAlertBody:body];
+                                        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
                                     }];
                                 } else {
                                     [weakdoc closeAndDelete:^(BOOL success, NSError *error) {
                                         [blockSender setEnabled:YES];
                                         [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
+                                        [[[blockSelf navigationItem] leftBarButtonItem] setEnabled:YES];
+                                        [[blockSelf navigationItem] setHidesBackButton:NO animated:YES];
                                         [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
                                     }];
                                 }
