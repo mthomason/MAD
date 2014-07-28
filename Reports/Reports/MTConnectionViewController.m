@@ -152,7 +152,7 @@
     [dbDetails setServer:                  blockServer];
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
-
+    
     [MAReportDocument initalSaveUsingUrl:applicationFileUrlWithExtention andConnection:dbDetails completion:^(BOOL success, NSError *error) {
         if (success) {
             [blockSender setEnabled:YES];

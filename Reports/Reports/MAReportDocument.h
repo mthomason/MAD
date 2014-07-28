@@ -39,6 +39,7 @@ extern NSString * const MTReportGroupLevel;
 
 - (id)initWithFileURL:(NSURL *)url;
 
+- (void)open:(void (^)(BOOL))completion;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 
 - (void)regenThumbnail;
@@ -47,9 +48,6 @@ extern NSString * const MTReportGroupLevel;
 - (UIPrintPageRenderer *)printerPrintPageRender;
 
 - (RptqDocument *)activeDocument;
-
-+ (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url
-                         withCompletionHandler:(void (^)(id, BOOL))completionHandler;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;

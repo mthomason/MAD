@@ -134,30 +134,18 @@ NSString * const MTReportDetailRowId = @"d";
     return urlToOpen;
 }
 
-+ (MAReportDocument *)openManagedDocumentAtUrl:(NSURL *)url withCompletionHandler:(void (^)(id, BOOL))completionHandler {
-    MAReportDocument *managedDocumentAtUrl = managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:url];
-    
+- (void)open:(void (^)(BOOL))completion {
     NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
     NSNumber *inferMappingModelAutomaticallyOption = @(YES);
     NSDictionary *options = @{
                               NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                              NSInferMappingModelAutomaticallyOption :inferMappingModelAutomaticallyOption,
+                                    NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
                               };
-    [managedDocumentAtUrl setPersistentStoreOptions: options];
+    [self setPersistentStoreOptions: options];
     
-    __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
-    MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) {
-        completionHandler(weakdoc, success);
-    };
-    
-    BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[managedDocumentAtUrl.fileURL path]];
-    if (fileExist) {
-        [weakdoc openWithCompletionHandler:handlerOpen];
-    } else {
-        [weakdoc saveToURL:managedDocumentAtUrl.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
-    }
-    
-    return managedDocumentAtUrl;
+    MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) { completion(success); };
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.fileURL path]]) [self openWithCompletionHandler:handlerOpen];
+    else [self saveToURL:self.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:handlerOpen];
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
@@ -410,29 +398,34 @@ NSString * const MTReportDetailRowId = @"d";
     [queryTest performQuery:^(BOOL success, NSError *error) {
         
         if (!success) {
-            completion(NO, error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(NO, error);
+            });
         } else {
             
-            [MAReportDocument openManagedDocumentAtUrl:applicationFileUrlWithExtention withCompletionHandler:^(MAReportDocument *managedDocument, BOOL success) {
+            
+            MAReportDocument *managedDocumentAtUrl = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+            __weak MAReportDocument *weakdoc = managedDocumentAtUrl;
+            [managedDocumentAtUrl open:^(BOOL success) {
                 
                 if (success) {
                     
-                    RptqDocument *rptqDocument = [managedDocument activeDocument];
+                    RptqDocument *rptqDocument = [weakdoc activeDocument];
                     MTDatabase *database = [MTDatabase databaseFactory:weakDatabaseConnection];
                     
                     if (database) {
                         
                         [rptqDocument addDatabase:database status:^(NSString *readStatus) {
-                            [managedDocument.statusLabel.status setText:readStatus];
+                            [weakdoc.statusLabel.status setText:readStatus];
                         } completion:^(BOOL successAddingDatasource, NSError *error) {
                             
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 if (successAddingDatasource) {
-                                    [managedDocument closeDocument:^(BOOL success, NSError *error) {
+                                    [weakdoc close:^(BOOL success, NSError *error) {
                                         completion(success, error);
                                     }];
                                 } else {
-                                    [managedDocument closeAndDeleteDocument:^(BOOL success, NSError *error) {
+                                    [weakdoc closeAndDelete:^(BOOL success, NSError *error) {
                                         completion(success, error);
                                     }];
                                 }
@@ -447,12 +440,11 @@ NSString * const MTReportDetailRowId = @"d";
                     });
                 }
             }];
-
         }
     }];
 }
 
-- (void)closeDocument:(void(^)(BOOL success, NSError *error))completion {
+- (void)close:(void(^)(BOOL success, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL success) {
         if (success) {
             [[self documentStatus] setSuspended:YES];
@@ -466,7 +458,7 @@ NSString * const MTReportDetailRowId = @"d";
     }];
 }
 
-- (void)closeAndDeleteDocument:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
+- (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
         if (successClosingReport) {
             [self deleteFromDiskCompletion:^(BOOL successDeletingFromDisk) { }];
