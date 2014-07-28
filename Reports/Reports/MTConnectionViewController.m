@@ -18,6 +18,7 @@
 #import "NSError+Constructors.h"
 #import "NSError+UserInterface.h"
 #import "MTActivityIndicator.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MTConnectionViewController()
 
@@ -112,6 +113,13 @@
     [self.textFieldReportName resignFirstResponder];
     
     CGRect activtyViewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
+    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    [progressView setFrame:CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, self.tableView.frame.size.width, progressView.frame.size.height)];
+    [progressView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    UIColor *tintColor = [UIColor tintColorAnalogous4];
+    [progressView setTintColor:tintColor];
+    [[self tableView] addSubview:progressView];
+    
     MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:activtyViewRect];
     activtyView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activtyView.bounds.size.height / 2.0000f) +
                                                         (activtyView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
@@ -153,6 +161,7 @@
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
     
+    __weak MTActivityIndicator *weakActivtyView = activtyView;
     [dbDetails testConnection:^(BOOL success, NSError *error) {
         if (success) {
             
@@ -162,9 +171,15 @@
                 __weak MTDatabaseConnection *weakConnection = dbDetails;
                 [doc open:^(BOOL success) {
                     
+                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+                    
+
                     //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                     if (success) {
-                        [weakdoc addConnection:weakConnection completion:^(BOOL success, NSError *error) {
+                        [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
+                            [weakActivtyView.status setText:readStatus];
+                            progressView.progress = progress;
+                        } completion:^(BOOL success, NSError *error) {
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 
                                 if (success) {
@@ -180,15 +195,20 @@
                                     }];
                                 }
                                 [activtyView removeFromSuperview];
-                                
+                                [progressView removeFromSuperview];
                             });
                         }];
+                        
+                        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                        
+
                         
                     } else {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [blockSender setEnabled:YES];
                             [[blockSelf delegate] viewControllerDidFinish: blockSelf];
                             [activtyView removeFromSuperview];
+                            [progressView removeFromSuperview];
                         });
                     }
                     //});

@@ -16,14 +16,14 @@
     if (self) {
 
         UIViewAutoresizing maskView = UIViewAutoresizingFlexibleLeftMargin |
-        UIViewAutoresizingFlexibleRightMargin |
-        UIViewAutoresizingFlexibleTopMargin |
-        UIViewAutoresizingFlexibleBottomMargin;
+                                      UIViewAutoresizingFlexibleRightMargin |
+                                      UIViewAutoresizingFlexibleTopMargin |
+                                      UIViewAutoresizingFlexibleBottomMargin;
         UIViewAutoresizing maskIndicatorView = UIViewAutoresizingFlexibleLeftMargin |
-        UIViewAutoresizingFlexibleRightMargin |
-        UIViewAutoresizingFlexibleTopMargin;
+                                               UIViewAutoresizingFlexibleRightMargin |
+                                               UIViewAutoresizingFlexibleTopMargin;
         UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
-        UIViewAutoresizingFlexibleWidth;
+                                           UIViewAutoresizingFlexibleWidth;
         [self.layer setCornerRadius:5.0000f];
         UIColor *bgColor = [UIColor edaBlueLightBackground];
         [self setBackgroundColor:bgColor];

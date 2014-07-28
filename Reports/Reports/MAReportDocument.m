@@ -120,12 +120,14 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     return self;
 }
 
-- (void)addConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion {
+- (void)addConnection:(MTDatabaseConnection *)connection
+               status:(void (^)(NSString *status, CGFloat progress))status
+           completion:(void(^)(BOOL success, NSError *error))completion {
     RptqDocument *rptqDocument = [self activeDocument];
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     if (database) {
-        [rptqDocument addDatabase:database status:^(NSString *readStatus) {
-            [self.statusLabel.status setText:readStatus];
+        [rptqDocument addDatabase:database status:^(NSString *message, CGFloat progress) {
+            status(message, progress);
         } completion:^(BOOL success, NSError *error) {
             completion(success, error);
         }];

@@ -31,7 +31,7 @@
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
 - (void)addDatabase:(MTDatabase *)database
-             status:(void (^)(NSString *readStatus))status
+             status:(void (^)(NSString *status, CGFloat progress))status
          completion:(void (^)(BOOL success, NSError *error))completion;
 
 - (void)addQueryLink:(RptqQueryLinks *)queryLink;

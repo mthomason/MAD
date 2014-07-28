@@ -53,6 +53,8 @@
 
 #import "SectionEnumerator.h"
 
+#import "UIApplication+Extras.h"
+
 @implementation RptqDocument (Extras)
 
 #pragma mark - Overrides
@@ -311,13 +313,11 @@
 }
 
 - (void)addDatabase:(MTDatabase *)database
-             status:(void (^)(NSString *readStatus))status
+             status:(void (^)(NSString *status, CGFloat progress))status
          completion:(void (^)(BOOL success, NSError *error))completion {
     
     __weak RptqDocument *rptqDocument = self;
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
-    //[[rptqDocument managedObjectContext] persistentStoreCoordinator]
-    
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
     __weak RptqDatabase *rptqDatabase = [RptqDatabase databaseFactoryForManagedObjectContext: managedObjectContext
                                                                              driverType: [database identifier]
@@ -387,43 +387,76 @@
         __block NSMutableArray *tables = [NSMutableArray array];
         __block BOOL gotit = YES;
         __block NSError *gotitError = nil;
-        [weakDatabase getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
-            
-            if (success) {
-                [tables setArray:resultTables];
-                for (MTDatabaseTable *databaseTable in tables) {
-                    @autoreleasepool {
-                        
-                        __block NSMutableArray *fields = [[NSMutableArray alloc] init];
-                        [weakDatabase2 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
-                            [fields setArray:results];
-                            gotit = success; gotitError = error;
-                        }];
-                        [tablesAndFields setObject:fields forKey:[databaseTable name]];
+        
+        dispatch_queue_t queueTables = dispatch_queue_create("com.everydayapps.mad.queue.tables", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queueFields = dispatch_queue_create("com.everydayapps.mad.queue.fields", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_t queueMain = dispatch_get_main_queue();
+        dispatch_set_target_queue(queueTables, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+        dispatch_set_target_queue(queueFields, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+
+        dispatch_semaphore_t semaphoreTables = dispatch_semaphore_create(0);
+        dispatch_semaphore_t semaphoreFields = dispatch_semaphore_create(0);
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        
+        dispatch_async(queueTables, ^{
+            [weakDatabase getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
+                
+                if (success) {
+                    [tables setArray:resultTables];
+                    NSInteger counter = 0, numberOfTables = [tables count];
+                    
+                    for (MTDatabaseTable *databaseTable in tables) {
+                        @autoreleasepool {
+                            NSString *name = [databaseTable name];
+                            __weak NSString *weakname = name;
+                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                dispatch_sync(queueMain, ^{
+                                    status(weakname, (CGFloat)(counter + 1) / numberOfTables);
+                                });
+                            });
+                            __block NSMutableArray *fields = [[NSMutableArray alloc] init];
+                            [weakDatabase2 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
+                                [fields setArray:results];
+                                gotit = success; gotitError = error;
+                            }];
+                            [tablesAndFields setObject:fields forKey:[databaseTable name]];
+                        }
+                        counter++;
                     }
                 }
-            }
-            gotit = success; gotitError = error;
-        }];
+                gotit = success; gotitError = error;
+            }];
+            //dispatch_semaphore_signal(semaphoreTables);
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                dispatch_sync(queueMain, ^{
+                    for (MTDatabaseTable *table in tables) {
+                        RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
+                        [weakRptqDatabase addHasTablesObject: rptqTable];
+                        NSArray *fields = [tablesAndFields objectForKey:[table name]];
+                        for (MTDatabaseField *field in fields) {
+                            RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
+                            
+                            NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTable hasFields]];
+                            [fieldSet addObject:schemaField];
+                            [rptqTable setHasFields:fieldSet];
+                        }
+                    }
+                    
+                    NSError *saveError = nil;
+                    [managedObjectContext save:&saveError];
+                    NSAssert(saveError == nil, @"%@", saveError);
+                    [weakDatabase2 closeProcess:weakdbconnection];
+                    completion(gotit, gotitError);
+                });
+            });
+        });
+//        dispatch_semaphore_wait(semaphoreTables, DISPATCH_TIME_FOREVER);
         
-        for (MTDatabaseTable *table in tables) {
-            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext andTable: table];
-            [weakRptqDatabase addHasTablesObject: rptqTable];
-            NSArray *fields = [tablesAndFields objectForKey:[table name]];
-            for (MTDatabaseField *field in fields) {
-                RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext andField: field];
-                
-                NSMutableOrderedSet *fieldSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:[rptqTable hasFields]];
-                [fieldSet addObject:schemaField];
-                [rptqTable setHasFields:fieldSet];
-            }
-        }
+//        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        NSError *saveError = nil;
-        [managedObjectContext save:&saveError];
-        NSAssert(saveError == nil, @"%@", saveError);
-        [weakDatabase2 closeProcess:weakdbconnection];
-        completion(gotit, gotitError);
+
         
     }];
 }

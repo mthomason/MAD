@@ -43,7 +43,9 @@ extern NSString * const MADMimeType;
 
 - (void)open:(void (^)(BOOL))completion;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
-- (void)addConnection:(MTDatabaseConnection *)connection completion:(void(^)(BOOL success, NSError *error))completion;
+- (void)addConnection:(MTDatabaseConnection *)connection
+               status:(void (^)(NSString *status, CGFloat progress))status
+           completion:(void(^)(BOOL success, NSError *error))completion;
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
 

@@ -524,10 +524,8 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                 
                 if (error == nil) {
 
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisibleThreadSafe:YES];
                     dbcmd(dbconn, [sql cStringUsingEncoding:NSUTF8StringEncoding]);
                     success = dbsqlexec(dbconn);
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisibleThreadSafe:NO];
                     
                     if (success != SUCCEED) {
                         
@@ -687,7 +685,6 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                             }
                             
                             [datatable beginBulkInsert];
-                            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisibleThreadSafe:YES];
                             
                             while (dbresults(dbconn) != NO_MORE_RESULTS) {
                                 
@@ -1379,7 +1376,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 }
                                 
                             }
-                            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisibleThreadSafe:NO];
+
                             [datatable endBulkInsert];
                         }
                     }
@@ -1459,8 +1456,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error {
 
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisibleThreadSafe:YES];
-    
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;
     *error = nil;
@@ -1518,8 +1513,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         dbloginfree(login);
     }
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisibleThreadSafe:NO];
-
     return dbconn;
 }
 
