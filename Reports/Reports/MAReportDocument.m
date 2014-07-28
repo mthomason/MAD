@@ -77,6 +77,8 @@ NSString * const MTReportSectionType = @"a";
 NSString * const MTReportGroupLevel = @"b";
 NSString * const MTReportDetailRowId = @"d";
 
+NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
+
 @interface MAReportDocument ()
     <MTDatabaseProtocol>
 
