@@ -38,6 +38,8 @@
 
 #import "UIColor+EverydayApps.h"
 
+const NSInteger MATagNewDocument = 3838;
+
 @interface AppDelegate()
 
 @property (nonatomic, strong) MTApplicationInstance *applicationInstance;
@@ -58,12 +60,12 @@ void uncaughtExceptionHandler(NSException *exception) {
     return [(AppDelegate *)[[UIApplication sharedApplication] delegate] applicationInstance];
 }
 
-+ (UIWindow *)window {
-    return [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-}
-
 + (MAReportDocument *)activeReportDocument {
     return [[AppDelegate app] activeDocument];
+}
+
++ (UIWindow *)window {
+    return [[[UIApplication sharedApplication] windows] objectAtIndex:0];
 }
 
 + (RptqQuery *)activeRptqQuery {
@@ -76,6 +78,12 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
+}
+
+#pragma mark - Application Lifecycle
+
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -98,6 +106,9 @@ void uncaughtExceptionHandler(NSException *exception) {
     return YES;
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application { }
+
+
 - (void)applicationWillResignActive:(UIApplication *)application { }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application { }
@@ -106,14 +117,10 @@ void uncaughtExceptionHandler(NSException *exception) {
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application { }
-
 - (void)applicationWillTerminate:(UIApplication *)application {
     MAReportDocument *documentReport = [[self applicationInstance] activeDocument];
     [documentReport quickSave];
 }
-
-const NSInteger MATagNewDocument = 3838;
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 

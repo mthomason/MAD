@@ -463,7 +463,10 @@ NSString * MTDocumentParentContextName          = @"moc";
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
         NSError *deleteError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl includingPropertiesForKeys:@[NSURLIsDirectoryKey] options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl
+                                              includingPropertiesForKeys:@[NSURLIsDirectoryKey]
+                                                                 options:-1
+                                                            errorHandler:^BOOL(NSURL *url, NSError *error) {
             return YES;
         }];
         for (NSURL *blockFileUrl in enumerator) {
