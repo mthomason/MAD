@@ -126,7 +126,8 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     RptqDocument *rptqDocument = [self activeDocument];
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     if (database) {
-        [rptqDocument addDatabase:database status:^(NSString *message, CGFloat progress) {
+        [self setMainDatabase:database];
+        [rptqDocument addDatabase:self.mainDatabase status:^(NSString *message, CGFloat progress) {
             status(message, progress);
         } completion:^(BOOL success, NSError *error) {
             completion(success, error);

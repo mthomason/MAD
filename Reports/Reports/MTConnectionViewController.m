@@ -24,6 +24,7 @@
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
+@property (nonatomic, strong) MAReportDocument *docToSave;
 
 @end
 
@@ -165,76 +166,109 @@
     [dbDetails setPort:                    blockPort];
     
     __weak MTActivityIndicator *weakActivtyView = activtyView;
+    
+    __block UIBackgroundTaskIdentifier bgTask = [self requestBackgroundTask];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     [dbDetails testConnection:^(BOOL success, NSError *error) {
         if (success) {
             
-
-                MAReportDocument *doc = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
-                __weak MAReportDocument *weakdoc = doc;
-                __weak MTDatabaseConnection *weakConnection = dbDetails;
-                [doc open:^(BOOL success) {
-                    
-                    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-                    
-
-                    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    if (success) {
-                        [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
-                            [weakActivtyView.status setText:readStatus];
-                            progressView.progress = progress;
-                        } completion:^(BOOL success, NSError *error) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
+            MAReportDocument *doc = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+            [self setDocToSave:doc];
+            __weak __block MAReportDocument *weakdoc1 = doc;
+            __weak MTDatabaseConnection *weakConnection = dbDetails;
+            [weakdoc1 open:^(BOOL success) {
+                
+                NSString *name = [NSString stringWithString:[doc name]];
+                if (success) {
+                    __weak __block MAReportDocument *weakdoc = weakdoc1;
+                    [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
+                        [weakActivtyView.status setText:readStatus];
+                        progressView.progress = progress;
+                    } completion:^(BOOL success, NSError *error) {
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                            dispatch_sync(dispatch_get_main_queue(), ^{
                                 
                                 if (success) {
-                                    [weakdoc close:^(BOOL success, NSError *error) {
+                                    
+                                    [self.docToSave close:^(BOOL success, NSError *error) {
+                                        
                                         [blockSender setEnabled:YES];
                                         [[blockSelf delegate] viewControllerDidFinish: blockSelf];
                                         
                                         UILocalNotification *notification = [[UILocalNotification alloc] init];
-                                        NSString *body = [NSString stringWithFormat:@"Your report %@ is ready.", [weakdoc name]];
+                                        NSString *reportIsReady = NSLocalizedString(@"Your report '%@' is ready.", @"Your report '%@' is ready.");
+                                        NSString *body = [NSString stringWithFormat:reportIsReady, name];
                                         [notification setAlertBody:body];
                                         [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                            UIApplication *app = [UIApplication sharedApplication];
+                                            NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
+                                            NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
+                                            [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
+                                        });
+                                        
                                     }];
                                 } else {
-                                    [weakdoc closeAndDelete:^(BOOL success, NSError *error) {
+                                    [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
                                         [blockSender setEnabled:YES];
                                         [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
                                         [[[blockSelf navigationItem] leftBarButtonItem] setEnabled:YES];
                                         [[blockSelf navigationItem] setHidesBackButton:NO animated:YES];
                                         [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                        if (error != nil) {
+                                            UILocalNotification *notification = [[UILocalNotification alloc] init];
+                                            NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
+                                            NSString *body = [NSString stringWithFormat:localizedErrorString, error.localizedDescription];
+                                            [notification setAlertBody:body];
+                                            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                        }
+                                        
+                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                            UIApplication *app = [UIApplication sharedApplication];
+                                            NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
+                                            NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
+                                            [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
+                                        });
+                                        
                                     }];
                                 }
                                 [activtyView removeFromSuperview];
                                 [progressView removeFromSuperview];
+                                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                             });
-                        }];
-                        
-                        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                        
-
-                        
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [blockSender setEnabled:YES];
-                            [[blockSelf delegate] viewControllerDidFinish: blockSelf];
-                            [activtyView removeFromSuperview];
-                            [progressView removeFromSuperview];
                         });
-                    }
-                    //});
-
-                }];
-
-            
+                        
+                    }];
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [blockSender setEnabled:YES];
+                        [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                        [activtyView removeFromSuperview];
+                        [progressView removeFromSuperview];
+                    });
+                }
+            }];
         } else {
             [blockSender setEnabled:YES];
             [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
             [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
-//            [error presentErrorToUser];
             [activtyView removeFromSuperview];
         }
     }];
-    
+}
+
+- (UIBackgroundTaskIdentifier)requestBackgroundTask {
+    UIApplication *app = [UIApplication sharedApplication];
+    __block UIBackgroundTaskIdentifier bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+        [app endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+    return bgTask;
+}
+
+- (void)handoffBackground:(NSNumber *)bgTask {
+    [[UIApplication sharedApplication] endBackgroundTask:[bgTask unsignedIntegerValue]];
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }
