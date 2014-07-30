@@ -18,16 +18,19 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 
+NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt = @"Select a database type.";
+NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supported Databases";
+
 @implementation MTDatabaseDriverSelectorViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     if ([UIDevice isPad] == NO) {
-        [[self navigationItem] setPrompt: NSLocalizedString(@"Choose a datasource.", @"Choose a datasource.")];
+        self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt, MTDatabaseDriverSelectorViewControllerDefaultPrompt);
     }
 
-    [self setTitle: NSLocalizedString(@"Type", @"Type")];
+    self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle, MTDatabaseDriverSelectorViewControllerDefaultTitle);
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
 }
 
