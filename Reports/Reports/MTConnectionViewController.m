@@ -20,6 +20,9 @@
 #import "MTActivityIndicator.h"
 #import "UIColor+EverydayApps.h"
 
+NSString * const MTConnectionViewControllerDefaultPrompt = @"Set connection settings.";
+NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
+
 @interface MTConnectionViewController()
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
@@ -40,22 +43,22 @@
     [super viewDidLoad];
     [self setActivitySpinnerVisable:NO];
     if ([UIDevice isPad] == NO) {
-        [[self navigationItem] setPrompt: NSLocalizedString(@"Set connection settings.", @"Set connection settings.")];
+        self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
     }
-    [self setTitle: NSLocalizedString(@"Connection Settings", @"Connection Settings")];
+    self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];
     
     [[self navigationItem] setHidesBackButton:NO];
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
 }
 
 #pragma mark - Actions
 
 - (void)cancel:(id)sender {
-    //if ([UIDevice isPad]) {
-        [[self delegate] viewControllerDidCancel:self];
-    //}
+    [[self delegate] viewControllerDidCancel:self];
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -106,34 +109,42 @@
     return nil;
 }
 
+- (void)disableTextFields {
+    self.textFieldHost.enabled = NO;
+    self.textFieldPort.enabled = NO;
+    self.textFieldDatabase.enabled = NO;
+    self.textFieldReportName.enabled = NO;
+}
+
+- (void)enableTextFields {
+    self.textFieldHost.enabled = YES;
+    self.textFieldPort.enabled = YES;
+    self.textFieldDatabase.enabled = YES;
+    self.textFieldReportName.enabled = YES;
+}
+
+
 - (IBAction)save:(id)sender {
     
     [self.textFieldHost resignFirstResponder];
     [self.textFieldPort resignFirstResponder];
     [self.textFieldDatabase resignFirstResponder];
     [self.textFieldReportName resignFirstResponder];
+
+    [self disableTextFields];
     
-    CGRect activtyViewRect = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 200.0000f);
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     [progressView setFrame:CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, self.tableView.frame.size.width, progressView.frame.size.height)];
     [progressView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    UIColor *tintColor = [UIColor tintColorAnalogous4];
-    [progressView setTintColor:tintColor];
+    progressView.progressTintColor = [UIColor tintColorAnalogous4];
+    progressView.trackTintColor = [UIColor grayColor];
     [[self tableView] addSubview:progressView];
     
-    MTActivityIndicator *activtyView = [[MTActivityIndicator alloc] initWithFrame:activtyViewRect];
-    activtyView.center = CGPointMake(self.view.center.x, self.view.bounds.origin.y + (activtyView.bounds.size.height / 2.0000f) +
-                                                        (activtyView.bounds.size.width - self.view.bounds.size.width) / 2.0000f + 64.0000f);
-    [activtyView.status setText:@"Importing schema. Please wait."];
-    [[self view] addSubview:activtyView];
+    self.navigationItem.prompt = @"Importing schema.";
     
     [sender setEnabled:NO];
     
-    [[[self navigationItem] leftBarButtonItem] setEnabled:NO];
-    [[self navigationItem] setHidesBackButton:YES animated:YES];
-    [[[self navigationItem] backBarButtonItem] setEnabled:NO];
-    
-    [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
+    [self disableNavigation];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
@@ -165,7 +176,6 @@
     [dbDetails setDatabase:                blockDatabase];
     [dbDetails setPort:                    blockPort];
     
-    __weak MTActivityIndicator *weakActivtyView = activtyView;
     
     __block UIBackgroundTaskIdentifier bgTask = [self requestBackgroundTask];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -183,7 +193,7 @@
                 if (success) {
                     __weak __block MAReportDocument *weakdoc = weakdoc1;
                     [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
-                        [weakActivtyView.status setText:readStatus];
+                        self.navigationItem.prompt = readStatus;
                         progressView.progress = progress;
                     } completion:^(BOOL success, NSError *error) {
                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -201,6 +211,10 @@
                                         NSString *body = [NSString stringWithFormat:reportIsReady, name];
                                         [notification setAlertBody:body];
                                         [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                        
+                                        [self enableTextFields];
+                                        self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+
                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                                             UIApplication *app = [UIApplication sharedApplication];
                                             NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
@@ -212,10 +226,8 @@
                                 } else {
                                     [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
                                         [blockSender setEnabled:YES];
-                                        [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
-                                        [[[blockSelf navigationItem] leftBarButtonItem] setEnabled:YES];
-                                        [[blockSelf navigationItem] setHidesBackButton:NO animated:YES];
-                                        [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+                                        [self enableNavigation];
+                                        
                                         if (error != nil) {
                                             UILocalNotification *notification = [[UILocalNotification alloc] init];
                                             NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
@@ -223,6 +235,9 @@
                                             [notification setAlertBody:body];
                                             [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
                                         }
+                                        
+                                        [self enableTextFields];
+                                        self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
                                         
                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                                             UIApplication *app = [UIApplication sharedApplication];
@@ -233,7 +248,6 @@
                                         
                                     }];
                                 }
-                                [activtyView removeFromSuperview];
                                 [progressView removeFromSuperview];
                                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                             });
@@ -243,19 +257,32 @@
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [blockSender setEnabled:YES];
+                        [blockSelf enableNavigation];
                         [[blockSelf delegate] viewControllerDidFinish: blockSelf];
-                        [activtyView removeFromSuperview];
                         [progressView removeFromSuperview];
                     });
                 }
             }];
         } else {
             [blockSender setEnabled:YES];
-            [[[blockSelf navigationItem] backBarButtonItem] setEnabled:YES];
-            [[blockSelf navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
-            [activtyView removeFromSuperview];
+            [blockSelf enableNavigation];
+            [progressView removeFromSuperview];
         }
     }];
+}
+
+- (void)disableNavigation {
+    [[[self navigationItem] leftBarButtonItem] setEnabled:NO];
+    [[self navigationItem] setHidesBackButton:YES animated:YES];
+    [[[self navigationItem] backBarButtonItem] setEnabled:NO];
+    [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
+}
+
+- (void)enableNavigation {
+    [[[self navigationItem] backBarButtonItem] setEnabled:YES];
+    [[[self navigationItem] leftBarButtonItem] setEnabled:YES];
+    [[self navigationItem] setHidesBackButton:NO animated:YES];
+    [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
 }
 
 - (UIBackgroundTaskIdentifier)requestBackgroundTask {
@@ -296,13 +323,7 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath: indexPath animated: YES];
-}
-
-- (void)viewDidUnload {
-    [self setTableViewCellDocumentName:nil];
-    [self setTableViewCells:nil];
-    [super viewDidUnload];
+    [tableView deselectRowAtIndexPath: indexPath animated: NO];
 }
 
 @end
