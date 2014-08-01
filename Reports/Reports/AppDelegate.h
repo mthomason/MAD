@@ -22,10 +22,6 @@
 + (MTApplicationInstance *)app;
 + (UIWindow *)window;
 
-+ (MAReportDocument *)activeReportDocument;
-+ (RptqQuery *)activeRptqQuery;
-
-
 @property (nonatomic, strong) UIWindow *window;
 
 - (UIFont *)mainFont;

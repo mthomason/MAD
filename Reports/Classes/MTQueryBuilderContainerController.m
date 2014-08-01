@@ -109,24 +109,30 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([self popover] != nil) {
-        if ([[self popover] isPopoverVisible]) {
-            [[self popover] dismissPopoverAnimated:YES];
+    if (sender == self) {
+        [[segue destinationViewController] setDocument:self.document];
+        [[segue destinationViewController] reloadDocument:self.document animated:YES];
+    } else {
+        if ([self popover] != nil) {
+            if ([[self popover] isPopoverVisible]) {
+                [[self popover] dismissPopoverAnimated:YES];
+            }
+        }
+        Class popoverSegueClass = [UIStoryboardPopoverSegue class];
+        if ([segue isKindOfClass:popoverSegueClass]) {
+            [[(UIStoryboardPopoverSegue *)segue popoverController] setDelegate:self];
+            [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
+            [self disableTabBarItems];
+        }
+        if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
+            if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
+                [[segue destinationViewController] setDelegate: self];
+            } else if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
+                [(MTReportDesignerViewController *)[[segue destinationViewController] topViewController] setDelegate:self];
+            }
         }
     }
-    Class popoverSegueClass = [UIStoryboardPopoverSegue class];
-    if ([segue isKindOfClass:popoverSegueClass]) {
-        [[(UIStoryboardPopoverSegue *)segue popoverController] setDelegate:self];
-        [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
-        [self disableTabBarItems];
-    }
-    if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
-            [[segue destinationViewController] setDelegate: self];
-        } else if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            [(MTReportDesignerViewController *)[[segue destinationViewController] topViewController] setDelegate:self];
-        }
-    }
+
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -180,10 +186,9 @@
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
-    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-    [[reportDocument managedObjectContext] save:&error];
+    [self.document.managedObjectContext save:&error];
     if (error != nil) {
-        [[reportDocument managedObjectContext] save:&error];
+        [self.document.managedObjectContext save:&error];
     }
     [[self delegate] viewControllerDidFinish:self animated:YES];
 }

@@ -70,8 +70,9 @@
 
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables:[NSArray array]];
-                [dvc setDelegate: self];
+                dvc.excludeTables = [NSArray array];
+                dvc.delegate = self;
+                dvc.document = self.document;
             }
 
         }
@@ -82,13 +83,15 @@
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables:[NSArray array]];
-                [dvc setDelegate: self];
+                dvc.excludeTables = [NSArray array];
+                dvc.delegate = self;
+                dvc.document = self.document;
             }
         } else if ([[segue destinationViewController] isKindOfClass: [MTViewControllerValueBasedOnField class]]) {
             MTViewControllerValueBasedOnField *tvcEnterString = [segue destinationViewController];
-            [tvcEnterString setEnterStringDelegate: self];
-            [tvcEnterString setSchemaFieldObjectId:[[[self fieldLeft] databaseSchemaField] objectID]];
+            tvcEnterString.enterStringDelegate = self;
+            tvcEnterString.document = self.document;
+            tvcEnterString.schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID;
         }
     }
 }
@@ -99,20 +102,29 @@
     
     RptqQueryPredicate *queryPredicate = nil;
     
-    id activeDocument = [[AppDelegate app] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    
     if ([self leftValue] == nil) {
         if ([self rightValue] == nil) {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightField: self.fieldRight
+                                                       forManagedObjectContext: self.document.managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:[self fieldLeft] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightValue: self.rightValue
+                                                       forManagedObjectContext: self.document.managedObjectContext];
         }
     } else {
         if ([self rightValue] == nil) {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightField:[self fieldRight] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightField: self.fieldRight
+                                                       forManagedObjectContext: self.document.managedObjectContext];
         } else {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue:[self leftValue] comparsonOperator:[self predicateOperator] andRightValue:[self rightValue] forManagedObjectContext: managedObjectContext];
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
+                                                             comparsonOperator: self.predicateOperator
+                                                                 andRightValue: self.rightValue
+                                                       forManagedObjectContext: self.document.managedObjectContext];
         }
     }
     [[self delegate] uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];

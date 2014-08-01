@@ -22,7 +22,8 @@
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddLinkJoinTypeDelegate> delegate;
+@property (nonatomic, weak) id <MTQueryBuilderAddLinkJoinTypeDelegate> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
 @end
 

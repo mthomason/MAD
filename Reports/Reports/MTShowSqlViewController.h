@@ -11,9 +11,12 @@
 
 #import "MUIViewControllerDelegate.h"
 
+@class  MTQuery;
+
 @interface MTShowSqlViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) MTQuery *query;
 @property (nonatomic, weak) IBOutlet UITextView *textView;
 
 - (IBAction)done:(id)sender;

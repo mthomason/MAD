@@ -11,6 +11,7 @@
 #endif
 
 #import <MessageUI/MessageUI.h>
+#import "MADocumentState.h"
 #import "MTViewControllerOpenDocument.h"
 #import "MTApplicationInstance.h"
 #import "UAAppReviewManager.h"
@@ -35,11 +36,13 @@
 #import "MTArrayDataSource.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
-NSString * const MTSegueShowOpenDocument = @"openDocument";
+NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
 @interface MTViewControllerOpenDocument()
-    <UIAlertViewDelegate, NSFileManagerDelegate, UIPopoverControllerDelegate,
+    <UIAlertViewDelegate,
+        NSFileManagerDelegate,
+        UIPopoverControllerDelegate,
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
@@ -78,11 +81,24 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
-@property (nonatomic, assign) BOOL cellsHidden;
+@property (nonatomic, assign, getter = isSavingActivityIndicatorVisible) BOOL savingActivityIndicatorVisible;
+
+@property (nonatomic, strong) NSMutableDictionary *documents;   //MAReportDocument stored by their NSURLS
+@property (nonatomic, strong) NSURL *openUrl;           //To support opening multiple documents
+                                                                //change this url to the url of the open
+                                                                //document.  This url will be key for the
+                                                                //documents array.
+@property (nonatomic, assign) MTReportState reportState;
+
+
 
 @end
 
 @implementation MTViewControllerOpenDocument
+
+- (MAReportDocument *)document {
+    return [self currentDocument];
+}
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     
@@ -132,6 +148,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)initialize {
     
+    NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
+    [self setDocuments:documents];
+    
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
     [self setBarButtonItemEditDone:barButtonItemEditDone];
     
@@ -155,7 +174,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     UIColor *bgColor = [UIColor lightGrayColor];
     [[self collectionView] setBackgroundColor:bgColor];
     
-    [self setCellsHidden:NO];
+    [self setSavingActivityIndicatorVisible:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 
@@ -233,180 +252,195 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     } completion:NULL];
 }
 
+- (void)prepareForSegueAddDocument:(UIStoryboardSegue *)segue {
+    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = [segue destinationViewController];
+        if ([navControl topViewController]) {
+            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
+                [[self openDocumentPopoverController] setDelegate:self];
+            }
+            [(MTDatabaseDriverSelectorViewController *)[navControl topViewController] setDelegate:self];
+        }
+    }
+    [[segue destinationViewController] setDelegate:self];
+}
+
+- (void)prepareForSegueDetails:(UIStoryboardSegue *)segue {
+    UINavigationController *navigationController = [segue destinationViewController];
+    MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
+    [aboutViewController setDelegate:self];
+    
+    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = [segue destinationViewController];
+        if ([navControl topViewController]) {
+            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                [self setAboutPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
+            }
+        }
+    }
+    
+    if ([UIDevice isPad]) {
+        if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
+            if ([MTApplicationInstance isMadViewer]) {
+                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
+            } else {
+                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(540.0000f, 556.0000f)];
+            }
+        } else {
+            [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(320.0000f, 320.0000f)];
+        }
+    }
+}
+
+- (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
+    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = [segue destinationViewController];
+        id tvc = [navControl topViewController];
+        [tvc setDelegate:self];
+    }
+    [[segue destinationViewController] setDelegate:self];
+    
+    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = [segue destinationViewController];
+        if ([navControl topViewController]) {
+            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                [self setLicensingPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
+            }
+        }
+    }
+}
+
+- (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
+    BOOL foundUrl = NO;
+    if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+        NSURL *url = [self urlForDocumentCell:sender];
+        [self setUrlBeingOpended:url];
+        foundUrl = YES;
+    } else if ([sender isKindOfClass:[NSURL class]]) {
+        NSURL *url = sender;
+        [self setUrlBeingOpended:url];
+        foundUrl = YES;
+    }
+    
+    if (foundUrl) {
+        MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
+        [viewControllerReportViewer setViewControllerDelegate:self];
+        [self setReportViewer:viewControllerReportViewer];
+        
+        __weak MTViewControllerOpenDocument *weakself = self;
+        
+        
+        
+        [self openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
+            if (success) {
+                [[weakself reportViewer] reload];
+            }
+        }];
+        
+    } else {
+        NSAssert(foundUrl == NO, @"No URL to open.");
+    }
+}
+
+- (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
+    BOOL foundUrl = NO;
+    if (sender == self) {
+        foundUrl = YES;
+    } else if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+        
+        NSURL *url = [self urlForDocumentCell:sender];
+        if (url != nil) {
+            [self setUrlBeingOpended:url];
+            foundUrl = YES;
+        }
+        
+    } else if ([sender isKindOfClass:[NSURL class]])  {
+        NSURL *url = sender;
+        if (url != nil) {
+            [self setUrlBeingOpended:url];
+            foundUrl = YES;
+        }
+    }
+    
+    if (foundUrl) {
+        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]] || [[segue destinationViewController] isKindOfClass: [UITabBarController class]]) {
+            
+            if ([UIDevice isPad]) {
+                UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+                [[tabBarController view] setTintColor:[UIColor tintColorRed]];
+                
+                UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
+                MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
+                queryBuilderContainerController.delegate = self;
+                
+                UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
+                MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
+                reportDesignerViewController.delegate = self;
+                
+                UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
+                MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
+                reportViewerViewController.viewControllerDelegate = self ;
+                
+                MAReportDocument *document = [self currentDocument];
+                queryBuilderContainerController.document = document;
+                reportDesignerViewController.document = document;
+                reportViewerViewController.document = document;
+
+            } else {
+                
+                UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+                [[tabBarController view] setTintColor:[UIColor greenColor]];
+                [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
+                
+                UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
+                MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
+                
+                UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
+                MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
+                reportDesignerViewController.delegate = self;
+                
+                UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
+                MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
+                reportViewerViewController.viewControllerDelegate = self;
+                MAReportDocument *document = [self currentDocument];
+                queryBuilderViewController.document = document;
+                reportDesignerViewController.document = document;
+                reportViewerViewController.document = document;
+                [queryBuilderViewController reloadDocument:document animated:YES];
+
+            }
+            
+        } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
+            
+        } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
+            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+            MAReportDocument *document = [self currentDocument];
+            queryBuilderViewController.document = document;
+            [queryBuilderViewController reloadDocument:document animated:YES];
+        }
+    }
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
 
     [self dismissAllPopovers];
     
     if ([[segue identifier] isEqualToString:MTSegueShowAddDocument]) {
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
-            if ([navControl topViewController]) {
-                if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                    [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
-                    [[self openDocumentPopoverController] setDelegate:self];
-                }
-                [(MTDatabaseDriverSelectorViewController *)[navControl topViewController] setDelegate:self];
-            }
-        }
-        [[segue destinationViewController] setDelegate:self];
+        [self prepareForSegueAddDocument:segue];
         
     } else if ([[segue identifier] isEqualToString:@"MTSegueDetails"] || [[segue identifier] isEqualToString:@"MTSegueAbout"]) {
-        UINavigationController *navigationController = [segue destinationViewController];
-        MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
-        [aboutViewController setDelegate:self];
-
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
-            if ([navControl topViewController]) {
-                if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                    [self setAboutPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
-                }
-            }
-        }
-        
-        if ([UIDevice isPad]) {
-            if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
-                if ([MTApplicationInstance isMadViewer]) {
-                    [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
-                } else {
-                    [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(540.0000f, 556.0000f)];
-                }
-            } else {
-                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(320.0000f, 320.0000f)];
-            }
-        }
+        [self prepareForSegueDetails:segue];
         
     } else if ([[segue identifier] isEqualToString:MTSegueLicensing]) {
+        [self prepareForSegueLicensing:segue];
 
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
-            id tvc = [navControl topViewController];
-            [tvc setDelegate:self];
-        }
-        [[segue destinationViewController] setDelegate:self];
-        
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
-            if ([navControl topViewController]) {
-                if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                    [self setLicensingPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
-                }
-            }
-        }
-        
     } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
-
-        BOOL foundUrl = NO;
-        if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
-            NSURL *url = [self urlForDocumentCell:sender];
-            [self setUrlBeingOpended:url];
-            foundUrl = YES;
-        } else if ([sender isKindOfClass:[NSURL class]]) {
-            NSURL *url = sender;
-            [self setUrlBeingOpended:url];
-            foundUrl = YES;
-        }
-
-        if (foundUrl) {
-            MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
-            [viewControllerReportViewer setViewControllerDelegate:self];
-            [self setReportViewer:viewControllerReportViewer];
-            
-            __weak MTViewControllerOpenDocument *weakself = self;
-            [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
-                if (success) {
-                    [[weakself reportViewer] reload];
-                }
-            }];
-            
-        } else {
-            NSAssert(foundUrl == NO, @"No URL to open.");
-        }
+        [self prepareForSegueOpenInViewer:segue sender:sender];
         
     } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
-        BOOL foundUrl = NO;
-        if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
-
-            NSURL *url = [self urlForDocumentCell:sender];
-            if (url != nil) {
-                foundUrl = YES;
-            }
-            [self setUrlBeingOpended:url];
-            
-        } else if ([sender isKindOfClass:[NSURL class]])  {
-            NSURL *url = sender;
-            if (url != nil) {
-                [self setUrlBeingOpended:url];
-                foundUrl = YES;
-            }
-        }
-        if (foundUrl) {
-            if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]] || [[segue destinationViewController] isKindOfClass: [UITabBarController class]]) {
-
-                if ([UIDevice isPad]) {
-                    UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
-                    [[tabBarController view] setTintColor:[UIColor tintColorRed]];
-
-                    UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
-                    __weak MTQueryBuilderContainerController *queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
-                    [queryBuilderViewController setDelegate:self];
-
-                    UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
-                    MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
-                    [reportDesignerViewController setDelegate:self];
-
-                    UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
-                    MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
-                    [reportViewerViewController setViewControllerDelegate:self];
-                    
-                    MTApplicationInstance *appInstance = [AppDelegate app];
-                    [appInstance openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            [[queryBuilderViewController queryBuilderController] reloadActiveDocumentAnimated:YES];
-                            [[queryBuilderViewController queryBuilderControllerAdvanced] reloadActiveDocumentAnimatedAnimated:YES];
-                        }
-                    }];
-
-                    
-                } else {
-                    
-                    UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
-                    [[tabBarController view] setTintColor:[UIColor greenColor]];
-                    [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
-
-                    //[[tabBarController view] setBackgroundColor:[UIColor greenColor]];
-                    
-                    UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
-                    __weak MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
-                    
-                    UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
-                    MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
-                    [reportDesignerViewController setDelegate:self];
-                    
-                    UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
-                    MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
-                    [reportViewerViewController setViewControllerDelegate:self];
-
-                    [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            [queryBuilderViewController reloadActiveDocumentAnimated:YES];
-                        }
-                    }];
-                }
-                
-            } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
-
-            } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
-                
-                __weak MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
-                [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
-                    if (success) {
-                        [queryBuilderViewController reloadActiveDocumentAnimated:YES];
-                    }
-                }];
-            }
-        }
+        [self prepareForSegueShowOpenDocument:segue sender:sender];
     }
 }
 
@@ -477,38 +511,47 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     __weak MTQueryBuilderViewController *standard = nil;
 
     if ([MTApplicationInstance isMadDesigner]) {
+        
         if ([contentController isKindOfClass:[UINavigationController class]]) {
+        
             UINavigationController *childNavigationController = (UINavigationController *)contentController;
             if ([[childNavigationController topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
                 standard = (MTQueryBuilderViewController *)[(UINavigationController *)childNavigationController topViewController];
                 [self setBothContentControllersDisplayed:NO];
             }
+            
         } else if ([contentController isKindOfClass:[MTQueryBuilderVisualizationViewController class]]) {
+
             advanced = (MTQueryBuilderVisualizationViewController *)contentController;
             [self setBothContentControllersDisplayed:NO];
+
         } else if ([contentController isKindOfClass:[MTQueryBuilderViewController class]]) {
+
             standard = (MTQueryBuilderViewController *)contentController;
             [self setBothContentControllersDisplayed:YES];
+
         }
         
-        
-        
         if ([self bothContentControllersDisplayed] && standard != nil && standard != nil) {
-            
-            
-            [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
+            [self openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
                 if (success) {
-                    [standard reloadActiveDocumentAnimated:YES];
-                    [advanced reloadActiveDocumentAnimatedAnimated:YES];
+                    MAReportDocument *document = [self currentDocument];
+                    standard.document = document;
+                    advanced.document = document;
+                    [standard reloadDocument:document animated:YES];
+                    [advanced reloadDocument:document animated:YES];
                 }
             }];
             
         }
     } else if ([MTApplicationInstance isMadViewer]) {
+ 
         __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
-
-        [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
-            if (success) [viewController reload:viewController];
+        [self openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
+            if (success) {
+                viewController.document = [self currentDocument];
+                [viewController reload:viewController];
+            }
         }];
 
     }
@@ -592,11 +635,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
     __weak MTQueryBuilderViewController *weakTvc = tvc;
-    [[AppDelegate app] openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
+    [self openReport:[self urlBeingOpended] withCompletionHandler:^(BOOL success) {
         if (success) {
+            __weak MTViewControllerOpenDocument *weakself = self;
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    [weakTvc reloadActiveDocumentAnimated:YES];
+                    [weakTvc reloadDocument:weakself.document animated:YES];
                 });
             });
         }
@@ -690,7 +734,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([weakself isEditing]) {
             [cell startWobble];
         }
-        if ([[cell contentView] alpha] < 0.99999f && [weakself cellsHidden] == NO) {
+        if ([[cell contentView] alpha] < 0.99999f && [weakself isSavingActivityIndicatorVisible] == NO) {
             __weak UIView *blockView = [cell contentView];
             __weak UIActivityIndicatorView *activityIndicatorView;
             for (UIView *subview in [[cell contentView] subviews]) {
@@ -725,7 +769,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)reloadData {
-    [self updateDataSource];
+    [[self dataSource] updateWithItems: [[[AppDelegate app] user] hasMadDocuments]];
     [[self collectionView] reloadData];
 }
 
@@ -1184,6 +1228,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [cell performSelectionAnimations];
     
     NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
+    [self setUrlBeingOpended:fileUrl];
     NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
@@ -1191,6 +1236,17 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         image = [MTTableViewCellDocument defaultThumbnail];
     }
     [[cell imagePreview] setImage:image];
+    
+    __weak MTViewControllerOpenDocument *weakself = self;
+    [self openReport:fileUrl withCompletionHandler:^(BOOL success) {
+        if (success) {
+            [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
+                                          sender:weakself];
+        }
+    }];
+    
+
+    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1247,10 +1303,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 #pragma mark - Misc
 
-- (void)updateDataSource {
-    [[self dataSource] updateWithItems: [[[AppDelegate app] user] hasMadDocuments]];
-}
-
 - (BOOL)dismissAllPopovers {
     BOOL result = NO;
     if ([UIDevice isPad]) {
@@ -1288,17 +1340,92 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self displaySavingReportActivityIndicator];
     
     __weak MTViewControllerOpenDocument *blockSelf = self;
-    [[AppDelegate app] closeReportWithCompletionHandler:^(BOOL success) {
-        [[blockSelf collectionView] setUserInteractionEnabled: YES];
-        [blockSelf setCellsHidden:NO];
-        [[blockSelf collectionView] reloadData];
+    __weak MAReportDocument *activeDocument = [self currentDocument];
+    if (activeDocument) {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            
+            __weak MAReportDocument *blockActiveDocument = activeDocument;
+            __weak MTViewControllerOpenDocument *blockSelf2 = blockSelf;
+            
+            if ([blockActiveDocument documentState] != UIDocumentStateClosed) {
+                [blockActiveDocument regenThumbnail];
+                
+                [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
+                    
+                    if (success) {
+                        
+                        [[blockActiveDocument documentStatus] setSuspended:YES];
+                        
+                        __weak MAReportDocument *blockActiveDocument2 = blockActiveDocument;
+                        __weak MTViewControllerOpenDocument *blockself3 = blockSelf2;
+                        
+                        [blockActiveDocument2 wrapFileOverwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
+                            
+                            __weak MTViewControllerOpenDocument *blockself4 = blockself3;
+                            [[NSFileManager defaultManager] closeAndDelete:blockActiveDocument2 completion:^(BOOL success) {
+                                
+                                if (success) {
+                                    
+                                    [self setReportState:MTReportStateClosed];
+                                    NSString *key = [self keyForUrl:self.openUrl];
+                                    [[self documents] removeObjectForKey:key];
+                                    
+                                    dispatch_sync(dispatch_get_main_queue(), ^{
+                                        [blockself4 reenable];
+                                    });
+                                    
+                                }
+                                
+                            }];
+                            
+                        }];
+                    };
+                }];
+            } else {
+                [blockSelf2 reenable];
+            }
+        });
+        
+    } else {
+        [self reenable];
+    }
+}
+
+- (NSString *)keyForUrl:(NSURL *)url {
+    return url.absoluteString;
+}
+
+- (MAReportDocument *)currentDocument {
+    MAReportDocument *result = nil;
+    if ([self reportState] == MTReportStateOpen) {
+        NSDictionary *documents = [self documents];
+        NSString *key = [self keyForUrl:[self openUrl]];
+        result = [documents objectForKey:key];
+    }
+    return result;
+}
+
+- (void)reenable {
+    [[self collectionView] setUserInteractionEnabled: YES];
+    [self setSavingActivityIndicatorVisible:NO];
+    [[self collectionView] reloadData];
+}
+
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
+    MAReportDocument *document = [[MAReportDocument alloc] initWithFileURL:url];
+    [document open:^(BOOL success) {
+        if (success) [self setReportState:MTReportStateOpen];
+        completionHandler(success);
     }];
-    
+    [self setOpenUrl:url];
+    NSString *key = [self keyForUrl:url];
+    [[self documents] setObject:document forKey:key];
 }
 
 - (void)displaySavingReportActivityIndicator {
     NSInteger numberOfCells = [[self collectionView] numberOfItemsInSection:0];
-    [self setCellsHidden:YES];
+    [self setSavingActivityIndicatorVisible:YES];
     for (NSInteger i=0; i<numberOfCells; i++) {
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
         if (cell != nil) {

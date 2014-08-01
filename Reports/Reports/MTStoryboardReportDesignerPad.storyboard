@@ -4026,7 +4026,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REi-jA-lJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="JKq-sU-kX9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5578" y="-326"/>
+            <point key="canvasLocation" x="5663" y="-466"/>
         </scene>
         <!--Aggregate Functions View Controller - Aggregate Functions-->
         <scene sceneID="eU5-mo-pmJ">
@@ -4448,7 +4448,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJg-HL-DUK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="meJ-vl-8fu" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6166" y="284"/>
+            <point key="canvasLocation" x="6166" y="426"/>
         </scene>
         <!--Document Object New Aggregate View Controller - New Aggregate Function-->
         <scene sceneID="swE-Dw-Ge0">
@@ -4540,7 +4540,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="aNn-Gg-71l" kind="push" id="oHO-Hg-9X5"/>
+                                            <segue destination="aNn-Gg-71l" kind="push" identifier="MADSegueAggregateFunctionField" id="oHO-Hg-9X5"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="yGo-6M-DRO" detailTextLabel="Mys-v6-GLc" style="IBUITableViewCellStyleValue1" id="q7h-No-dLV">
@@ -4618,7 +4618,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYQ-m9-KBd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Otc-ZF-Iy5" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5546" y="724"/>
+            <point key="canvasLocation" x="5696" y="426"/>
         </scene>
         <!--Group By View Controller - Group By-->
         <scene sceneID="S0o-o3-0nb">
@@ -4675,7 +4675,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z4D-IC-2YP" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Qoz-jO-Zgp" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6182" y="1498"/>
+            <point key="canvasLocation" x="6166" y="860"/>
         </scene>
         <!--View Controller Value Based On Field-->
         <scene sceneID="4vJ-Rd-b6y">
@@ -5068,7 +5068,6 @@
                                 <connections>
                                     <outlet property="imagePreview" destination="IDP-Ob-Mrd" id="7Zz-cE-gaQ"/>
                                     <outlet property="labelTitle" destination="W2j-8j-Cpg" id="ugV-XC-9If"/>
-                                    <segue destination="NEH-Kw-MQz" kind="modal" identifier="openDocument" modalTransitionStyle="crossDissolve" id="2iZ-mo-r9x"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -5124,6 +5123,7 @@
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
                         <outlet property="collectionViewFlowLayout" destination="DM4-DJ-I6a" id="uth-rM-LWr"/>
+                        <segue destination="NEH-Kw-MQz" kind="modal" identifier="MADSegueOpenDocument" id="Oc4-uK-0Zg"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L3j-aM-cxU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5670,7 +5670,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nhm-xk-wA7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="mgB-kl-SOM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5578" y="-884"/>
+            <point key="canvasLocation" x="5663" y="-884"/>
         </scene>
         <!--Query Builder Advanced Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
@@ -5997,7 +5997,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xfp-zU-5YG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="3g8-ia-cMh" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6182" y="-884"/>
+            <point key="canvasLocation" x="6166" y="-6"/>
         </scene>
         <!--View Controller Barcode Options - Barcode Designer-->
         <scene sceneID="TAy-rr-Zqg">

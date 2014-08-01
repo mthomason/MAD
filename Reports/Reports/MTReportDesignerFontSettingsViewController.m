@@ -300,11 +300,9 @@
         NSInteger numberBold = 0, numberItalic = 0, numberStrike = 0, numberUnderline = 0;
         NSInteger numberNotBold = 0, numberNotItalic = 0, numberNotStrike = 0, numberNotUnderline = 0;
         
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
+                                                                          managedObjectContext:self.document.managedObjectContext];
 
             if (documentObject != nil) {
 
@@ -611,14 +609,12 @@
     [[self labelFontName] setText:[font name]];
     [[self labelFontName] setAttributedText:[self boldSystemString:[font name] ofSize:[[[self labelFontName] font] pointSize]]];
 
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                      managedObjectContext: self.document.managedObjectContext];
         [documentObject setFontname:[font name]];
     }
-    [reportDocument saveContext];
+    [self.document saveContext];
 
 }
 
@@ -640,16 +636,13 @@
     }
     [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
         BOOL boldOn = [self controlStateBold] == MTControlStateOn ? YES : NO;
         [documentObject setBold:@(boldOn)];
     }
-    [reportDocument saveContext];
+    [self.document saveContext];
 }
 
 - (IBAction)toggleItalic:(id)sender {
@@ -669,15 +662,13 @@
     }
     [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
         BOOL italicOn = [self controlStateItalic] == MTControlStateOn ? YES : NO;
         [documentObject setItalic:@(italicOn)];
     }
-    [reportDocument saveContext];
+    [self.document saveContext];
 }
 
 - (IBAction)toggleStrikeThrough:(id)sender {
@@ -697,17 +688,13 @@
     }
     [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
     
-    
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
         BOOL strikeOn = [self controlStateStrike] == MTControlStateOn ? YES : NO;
         [documentObject setStrike:@(strikeOn)];
     }
-    [reportDocument saveContext];
+    [self.document saveContext];
 }
 
 - (IBAction)toggleUnderline:(id)sender {
@@ -727,16 +714,13 @@
     }
     [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-
-    NSManagedObjectContext *managedObjectContext = [[reportDocument activeDocument] managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
         BOOL underlineOn = [self controlStateUnderline] == MTControlStateOn ? YES : NO;
         [documentObject setUnderline:@(underlineOn)];
     }
-    [reportDocument saveContext];
+    [self.document saveContext];
 }
 
 - (void)emptySelector:(id)whofuckingCares {
@@ -745,15 +729,12 @@
 
 - (IBAction)controlValueChanged:(id)sender {
     
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *activeDocument = [applicationInstance activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    
     if ([sender isEqual:[self stepperFontSize]]) {
         NSNumber *value = @([[self stepperFontSize] value]);
         [[self labelFontSize] setAttributedText: [self fontSizeStringForSizeInPoints:[value floatValue]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setFontsize:value];
             [documentObject saveContext];
         }
@@ -764,7 +745,8 @@
         NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
         [[self labelSizeHeight] setAttributedText:displayHeight];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setSizeheight:value];
             [documentObject saveContext];
         }
@@ -775,7 +757,8 @@
         NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
         [[self labelSizeWidth] setAttributedText:displayWidth];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setSizewidth:value];
             [documentObject saveContext];
         }
@@ -785,7 +768,8 @@
         NSNumber *value = @(horizontalAlignment);
         [[self segmentedControlHorizontalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setHorizontalAlignment:value];
             [documentObject saveContext];
         }
@@ -795,7 +779,8 @@
         NSNumber *value = @(verticalAlignment);
         [[self segmentedControlVerticalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setVerticalAlignment:value];
             [documentObject saveContext];
         }
@@ -804,7 +789,8 @@
         NSNumber *value = @([[self stepperPaddingBottom] value]);
         [[self labelPaddingBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelPaddingBottom] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setPaddingBottom:value];
             [documentObject saveContext];
         }
@@ -813,7 +799,8 @@
         NSNumber *value = @([[self stepperPaddingLeft] value]);
         [[self labelPaddingLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelPaddingLeft] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setPaddingLeft:value];
             [documentObject saveContext];
         }
@@ -822,7 +809,8 @@
         NSNumber *value = @([[self stepperPaddingRight] value]);
         [[self labelPaddingRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelPaddingRight] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setPaddingRight:value];
             [documentObject saveContext];
         }
@@ -831,7 +819,8 @@
         NSNumber *value = @([[self stepperPaddingTop] value]);
         [[self labelPaddingTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelPaddingTop] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setPaddingTop:value];
             [documentObject saveContext];
         }
@@ -840,7 +829,8 @@
         NSNumber *value = @([[self stepperMarginBottom] value]);
         [[self labelMarginBottom] setAttributedText:[self marginBottomForValue:value andFontSize:[[[self labelMarginBottom] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setMarginBottom:value];
             [documentObject saveContext];
         }
@@ -849,7 +839,8 @@
         NSNumber *value = @([[self stepperMarginTop] value]);
         [[self labelMarginTop] setAttributedText:[self marginTopForValue:value andFontSize:[[[self labelMarginTop] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setMarginTop:value];
             [documentObject saveContext];
         }
@@ -858,7 +849,8 @@
         NSNumber *value = @([[self stepperMarginLeft] value]);
         [[self labelMarginLeft] setAttributedText:[self marginLeftForValue:value andFontSize:[[[self labelMarginLeft] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setMarginLeft:value];
             [documentObject saveContext];
         }
@@ -867,12 +859,13 @@
         NSNumber *value = @([[self stepperMarginRight] value]);
         [[self labelMarginRight] setAttributedText:[self marginRightForValue:value andFontSize:[[[self labelMarginRight] font] pointSize]]];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setMarginRight:value];
             [documentObject saveContext];
         }
     }
-    [activeDocument saveContext];
+    [self.document saveContext];
 }
 
 #pragma mark -

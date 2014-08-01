@@ -40,9 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSManagedObjectContext *managedObjectContext = [[[AppDelegate app] activeDocument] managedObjectContext];
-
-    NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:managedObjectContext];
+    NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:self.document.managedObjectContext];
     RptqUserCredentals *userCredentals = connections[0];
     NSString *databaseDriverType = [userCredentals database_driver_type];
 
@@ -177,7 +175,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    id activeDocument = [[AppDelegate app] activeDocument];
     MNSLinkType linktype = NSNotFound;
     
     if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeInnerJoin]]) {
@@ -208,7 +205,8 @@
     }
     if ((NSInteger)linktype != NSNotFound) {
         [self checkLinkType:linktype];
-        [[self delegate] viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype from:activeDocument];
+        [[self delegate] viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype
+                                                                     from: self.document];
     }
 
 }

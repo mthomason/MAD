@@ -16,7 +16,7 @@
 @class MTQueryBuilderAddTableViewController, RptqDatabaseSchemaTable;
 
 @protocol MTQueryBuilderAddTableDelegate
-- (void)viewControllerSchemaAddTableDidSelectTable:(RptqDatabaseSchemaTable *)controller;
+- (void)viewControllerSchemaAddTableDidSelectTable:(NSManagedObjectID *)objectId;
 @end
 
 @interface MTQueryBuilderAddTableViewController : UITableViewControllerCoreDataResults

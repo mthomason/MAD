@@ -85,7 +85,8 @@
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables:[NSArray array]];
-                [dvc setDelegate: self];
+                dvc.delegate = self;
+                dvc.document = self.document;
             }
         }
     }

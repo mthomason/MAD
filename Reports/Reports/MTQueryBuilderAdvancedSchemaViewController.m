@@ -99,13 +99,17 @@
     [super viewDidLoad];
     [[self schemaTableViewController] setDataSource:self];
     [[self schemaTableViewController] setDelegate:self];
-    [[self schemaTableViewController] reloadData];
     [[[self containerView] layer] setCornerRadius: 25.0000f];
     [[self containerView] setClipsToBounds: YES];
+    [[self schemaTableViewController] reloadData];
     [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];
     [[[self view] layer] setShadowOpacity:1.0000f];
     [[[self view] layer] setShadowRadius:5.0000f];
     [[[self view] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -114,16 +118,15 @@
 }
 
 - (NSManagedObjectID *)tableObjectId {
-    return [self cachedTableObjectId];
+    return self.cachedTableObjectId;
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
     [[self view] setObjectIdTag:tableObjectId];
     [self setCachedTableObjectId:tableObjectId];
     
-    id activeDocument = [[AppDelegate app] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:[self cachedTableObjectId] managedObjectContext:managedObjectContext];
+    RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
+                                              managedObjectContext: self.document.managedObjectContext];
     UILabel *titleLabel = [[self titleView] label];
     [titleLabel setText:[table alias]];
     [titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
@@ -145,10 +148,9 @@
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
     
-    id activeDocument = [[AppDelegate app] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
     NSManagedObjectID *fieldObjectId = [[self hasFieldsObjectIds] objectAtIndex:[indexPath row]];
-    RptqQueryField *field = [RptqQueryField queryFieldForObjectID:fieldObjectId managedObjectContext:managedObjectContext];
+    RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
+                                             managedObjectContext: self.document.managedObjectContext];
     UILabel *detailLabel = [result detailLabel];
     [detailLabel setText:[[field databaseSchemaField] name]];
     [detailLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]];
@@ -162,16 +164,16 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     NSUInteger result = 0;
-    
-    id activeDocument = [[AppDelegate app] activeDocument];
-    NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
-    RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:[self cachedTableObjectId] managedObjectContext:managedObjectContext];
+    RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
+                                                   managedObjectContext: self.document.managedObjectContext];
     
     if (queryTable != nil) {
         [[self hasFieldsObjectIds] removeAllObjects];
         
-        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
-        NSArray *fields = [[NSArray alloc] initWithArray: [[queryTable hasQueryFields] sortedArrayUsingDescriptors:@[namesAccending]]];
+        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
+                                                                       ascending: YES];
+        NSArray *fields = [[NSArray alloc] initWithArray: [[queryTable hasQueryFields]
+                                                           sortedArrayUsingDescriptors:@[namesAccending]]];
         for (RptqQueryField *field in fields) {
             [[self hasFieldsObjectIds] addObject:[field objectID]];
         }

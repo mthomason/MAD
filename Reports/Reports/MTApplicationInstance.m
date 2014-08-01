@@ -37,9 +37,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"6.0.40";
-NSString * const MTGlobalBundleShortVersion                         = @"6.0.40";
-NSString * const MTGlobalBundleRev                                  = @"1359";
+NSString * const MTGlobalBundleVersion                              = @"6.0.43";
+NSString * const MTGlobalBundleShortVersion                         = @"6.0.43";
+NSString * const MTGlobalBundleRev                                  = @"1362";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -132,102 +132,19 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 	[UAAppReviewManager setCancelButtonTitle:   buttonTitleNever];
 	[UAAppReviewManager setRateButtonTitle:     buttonTitleRate];
 	[UAAppReviewManager setRemindButtonTitle:   buttonTitleLater];
-    
-	// This overrides the default value of 30, but it doesn't matter here because of Debug mode enabled
 	[UAAppReviewManager setDaysUntilPrompt:28];
-    
-	// This overrides the default value of 1, but it doesn't matter here because of Debug mode enabled
 	[UAAppReviewManager setDaysBeforeReminding:13];
-    
-	// This means that the popup won't show if you have already rated any version of the app, but it doesn't matter here because of Debug mode enabled
 	[UAAppReviewManager setShouldPromptIfRated:NO];
-    
-	// This overrides the default value of 20, but it doesn't matter here because of Debug mode enabled
 	[UAAppReviewManager setSignificantEventsUntilPrompt:20];
-    
 	[UAAppReviewManager setUseMainAppBundleForLocalizations:YES];
-    
     [UAAppReviewManager setAffiliateCode:@""];                      // FIXME: Add this affiliate code.
 	[UAAppReviewManager setAffiliateCampaignCode:@""];              // FIXME: Add this affiliate code.
-
-    
-	// UAAppReviewManager is block based, so setup some blocks on events
 	[UAAppReviewManager setOnDeclineToRate:^() {}];
 	[UAAppReviewManager setOnDidDisplayAlert:^() {}];
 	[UAAppReviewManager setOnDidOptToRate:^() {}];
 	[UAAppReviewManager setOnDidOptToRemindLater:^() {}];
 	[UAAppReviewManager setKey:@"kSettingsSignificantEventTally" forUAAppReviewManagerKeyType:UAAppReviewManagerKeySignificantEventCount];
     
-}
-
-#pragma mark - Open and close mad document
-
-- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
-    __block __weak MTApplicationInstance *weakSelf = self;
-    MAReportDocument *document = [[MAReportDocument alloc] initWithFileURL:url];
-    [document open:^(BOOL success) {
-        if (success) [weakSelf setReportState:MTReportStateOpen];
-        completionHandler(success);
-    }];
-    [self setCurrentDocument:url];
-    [[self documents] setObject:document forKey:url];
-
-}
-
-- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler {
-    
-    __weak MAReportDocument *activeDocument = [self activeDocument];
-    if (activeDocument) {
-        __weak MTApplicationInstance *blockSelf = self;
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            
-            __weak MAReportDocument *blockActiveDocument = activeDocument;
-            __weak MTApplicationInstance *blockSelf2 = blockSelf;
-
-            if ([blockActiveDocument documentState] != UIDocumentStateClosed) {
-                [blockActiveDocument regenThumbnail];
-
-                [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
-                    
-                    if (success) {
-                        
-                        [[blockActiveDocument documentStatus] setSuspended:YES];
-                        
-                        __weak MAReportDocument *blockActiveDocument2 = blockActiveDocument;
-                        __weak MTApplicationInstance *blockself3 = blockSelf2;
-                        
-                        [blockActiveDocument2 wrapFileOverwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
-                            
-                            __weak MTApplicationInstance *blockself4 = blockself3;
-                            [[NSFileManager defaultManager] closeAndDelete:blockActiveDocument2 completion:^(BOOL success) {
-                                
-                                if (success) {
-                                    
-                                    [blockself4 setReportState:MTReportStateClosed];
-                                    [[blockself4 documents] removeObjectForKey:[blockself4 currentDocument]];
-                                    
-                                    dispatch_sync(dispatch_get_main_queue(), ^{
-                                        completionHandler(success);
-                                    });
-                                    
-                                }
-                                
-                            }];
-                            
-                        }];
-                    };
-                }];
-            } else {
-                completionHandler(NO);
-            }
-        });
-
-    } else {
-        completionHandler(YES);
-    }
- 
-
 }
 
 #pragma mark - App settings
@@ -280,7 +197,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
-- (MAReportDocument *)activeDocument {
+- (MAReportDocument *)currentdocappinst {
     MAReportDocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
         NSDictionary *documents = [self documents];

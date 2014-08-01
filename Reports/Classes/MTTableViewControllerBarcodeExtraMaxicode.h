@@ -21,6 +21,7 @@
 @interface MTTableViewControllerBarcodeExtraMaxicode : UITableViewController
     <MTQueryBuilderChooseFieldDelegate>
 
-@property (nonatomic, assign) id <MTTableViewControllerBarcodeExtraMaxicodeDelegate> delegate;
+@property (nonatomic, weak) id <MTTableViewControllerBarcodeExtraMaxicodeDelegate> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
 @end

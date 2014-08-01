@@ -12,7 +12,7 @@
 
 #import "MTGroupByViewController.h"
 #import "AppDelegate.h"
-#import "MTApplicationInstance.h"
+#import "MAReportDocument.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
 #import "NSError+UserInterface.h"
@@ -37,11 +37,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
         [request setSortDescriptors: @[sortDescriptor]];
         
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        id activeDocument = [applicationInstance activeDocument];
-        NSManagedObjectContext *managedObjectContext = [activeDocument managedObjectContext];
         NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                              managedObjectContext: managedObjectContext
+                                                                              managedObjectContext: self.document.managedObjectContext
                                                                                 sectionNameKeyPath: nil
                                                                                          cacheName: nil];
         [frc setDelegate:self];

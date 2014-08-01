@@ -42,36 +42,10 @@
 
 @implementation MTReportDesignerToolBoxViewController
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        [self initialize];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initialize];
-    }
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        [self initialize];
-    }
-    return self;
-}
-
 - (void)initialize {
-    
     [self initalizeFontListSettingsTableViewController];
     [self initalizeFontSettingsTableViewController];
     [self initalizeSegmentedControl];
-
 }
 
 - (void)initalizeFontSettingsTableViewController {
@@ -79,16 +53,17 @@
     MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
     [[reportDesignerFontSettingsViewController tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    reportDesignerFontSettingsViewController.document = self.document;
+    [reportDesignerFontSettingsViewController setSelectedDocumentObjects:self.selectedObjectIds];
     [self setTableViewControllerTextLayoutSettings:reportDesignerFontSettingsViewController];
-    
 }
 
 - (void)initalizeFontListSettingsTableViewController {
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
     MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
+    reportDesignerFontSelectorViewController.document = self.document;
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
-
 }
 
 - (void)initalizeSegmentedControl {
@@ -104,15 +79,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[self contentView] addSubview:[[self tableViewControllerTextLayoutSettings] view]];
+    [self initialize];
+    [self.contentView addSubview:self.tableViewControllerTextLayoutSettings.view];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    UITableView *tableView = [[self tableViewControllerTextLayoutSettings] tableView];
-    [tableView setBounds: [[self contentView] bounds]];
-    [tableView setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
+    self.tableViewControllerTextLayoutSettings.tableView.bounds = self.contentView.bounds;
+    self.tableViewControllerTextLayoutSettings.tableView.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
 }
 
 - (CGFloat)contentHeight {
@@ -147,26 +122,28 @@
     [[[[self navigationBar] items] lastObject] setTitle:@""];
     if ([sender selectedSegmentIndex] == 0) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
-    
+        [newViewController setDocument: self.document];
         [newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 1) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
-    
+        [newViewController setDocument: self.document];
         [newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 2) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
+        [(MTReportDesignerDocumentObjectFormat *)newViewController setDocument: self.document];
 
     } else if ([sender selectedSegmentIndex] == 3) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerGrouping"];
+        [newViewController setDocument: self.document];
     
     }
     
     [newViewController setSelectedDocumentObjects:[self selectedObjectIds]];
     
-    [[newViewController tableView] setBounds: [[self contentView] bounds]];
-    [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [[self contentView] bounds].size.width, [[self contentView] bounds].size.height)];
+    [[newViewController tableView] setBounds: [self.contentView bounds]];
+    [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [self.contentView bounds].size.width, [self.contentView bounds].size.height)];
 
     __weak MTReportDesignerToolBoxViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f animations:^{
@@ -205,10 +182,10 @@
     if ([item isEqual:[self navigationItemFontSelector]]) {
         shouldPopItem = YES;
         
-        CGRect offScreen = CGRectMake([[[self tableViewControllerFontSelector] tableView] frame].origin.x + [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y,
-                                      [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
+        CGRect offScreen = CGRectMake([self.tableViewControllerFontSelector.tableView frame].origin.x + [self.tableViewControllerFontSelector.tableView frame].size.width, [self.tableViewControllerFontSelector.tableView frame].origin.y,
+                                      [self.tableViewControllerFontSelector.tableView frame].size.width, [self.tableViewControllerFontSelector.tableView frame].size.height);
         
-        [[[self tableViewControllerFontSelector] tableView] setFrame: [[self contentView] bounds]];
+        [self.tableViewControllerFontSelector.tableView setFrame: [self.contentView bounds]];
         
         __weak MTReportDesignerToolBoxViewController *weakSelf = self;
         [UIView animateWithDuration:0.3000f animations:^{
@@ -232,29 +209,25 @@
     if ([item isEqual:[self navigationItemFontSelector]]) {
     
         shouldPushItem = YES;
-        
-        
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        RptqDocument *document = [reportDocument activeDocument];
+        RptqDocument *document = [self.document activeDocumentModel];
         NSManagedObjectContext *managedObjectContext = [document managedObjectContext];
         NSString *frontName = @"";
         for (NSManagedObjectID *objectId in [self selectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
+                                                                          managedObjectContext:managedObjectContext];
             frontName = [documentObject fontname];
             break;
         }
-        [[self tableViewControllerFontSelector] setSelectedFont:[MTFont fontWithFamilyName:frontName]];
+        [self.tableViewControllerFontSelector setSelectedFont:[MTFont fontWithFamilyName:frontName]];
         
-        [[[self tableViewControllerFontSelector] tableView] setFrame: [[self contentView] bounds]];
-        [[[self tableViewControllerFontSelector] tableView] setBounds: [[self contentView] bounds]];
+        [self.tableViewControllerFontSelector.tableView setFrame: [self.contentView bounds]];
+        [self.tableViewControllerFontSelector.tableView setBounds: [self.contentView bounds]];
 
-        CGRect newRect = [[[self tableViewControllerFontSelector] tableView] frame];
-        CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [[self contentView] bounds].size.width, [[[self tableViewControllerFontSelector] tableView] frame].origin.y, [[[self tableViewControllerFontSelector] tableView] frame].size.width, [[[self tableViewControllerFontSelector] tableView] frame].size.height);
+        CGRect newRect = [self.tableViewControllerFontSelector.tableView frame];
+        CGRect newRectOffscreen = CGRectMake(CGPointZero.x + [self.contentView bounds].size.width, [self.tableViewControllerFontSelector.tableView frame].origin.y, [self.tableViewControllerFontSelector.tableView frame].size.width, [self.tableViewControllerFontSelector.tableView frame].size.height);
         
-        [[[self tableViewControllerFontSelector] tableView] setFrame: newRectOffscreen];
-        [[self contentView] addSubview:[[self tableViewControllerFontSelector] tableView]];        
+        [self.tableViewControllerFontSelector.tableView setFrame: newRectOffscreen];
+        [self.contentView addSubview:self.tableViewControllerFontSelector.tableView];        
         
         __weak MTReportDesignerToolBoxViewController *weakSelf = self;
         [UIView animateWithDuration:0.3000f animations:^{

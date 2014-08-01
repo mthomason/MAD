@@ -23,10 +23,11 @@ extern NSString * const NSFetchedResultsCachePredicates;
 @interface MTQueryBuilderViewController : UITableViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
+
 @property BOOL debug;
 
 - (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
-- (void)reloadActiveDocumentAnimated:(BOOL)animated;
 
 - (IBAction)edit:(id)sender;
 

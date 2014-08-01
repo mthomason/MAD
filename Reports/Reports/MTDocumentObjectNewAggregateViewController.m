@@ -29,6 +29,7 @@ NSString * const MTSegueAggregateFunctionMinimum    = @"MTSegueAggregateFunction
 NSString * const MTSegueAggregateFunctionSum        = @"MTSegueAggregateFunctionSum";
 NSString * const MTSegueAggregateGroupTypeSave      = @"MTSegueAggregateGroupTypeSave";
 NSString * const MTSegueAggregateFieldSave          = @"MTSegueAggregateFieldSave";
+NSString * const MADSegueAggregateFunctionField     = @"MADSegueAggregateFunctionField";
 NSString * const MTIdentifierSegueDocumentObjectEditAggregate = @"MTIdentifierSegueDocumentObjectEditAggregate";
 NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocumentObjectNewAggregateViewControllerIdentifier";
 NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
@@ -195,19 +196,24 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    //FIXME... set document for all needed view controllers
     
     if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
 
     } else if ([[segue identifier] isEqualToString:@"MTSegueAggregateFunctionChooser"]) {
     
         MTAggregateFunctionsViewController *functionChooser = [segue destinationViewController];
-        [functionChooser setSelectedFunctionType:[self aggregateFunctionType]];
+        [functionChooser setSelectedFunctionType: self.aggregateFunctionType];
 
     } else if ([[segue identifier] isEqualToString:@"MTSegueGroupByPush"]) {
 
         MTGroupByViewController *groupChooser = [segue destinationViewController];
-        [groupChooser selectGroupType:[self aggregateGroupByType] withSectionNumber:[self groupTypeSectionNumber]];
+        groupChooser.document = self.document;
+        [groupChooser selectGroupType: self.aggregateGroupByType
+                    withSectionNumber: self.groupTypeSectionNumber];
         
+    } else if ([[segue identifier] isEqualToString:@"MADSegueAggregateFunctionField"]) {
+        [segue.destinationViewController setDocument:self.document];
     }
 
 }

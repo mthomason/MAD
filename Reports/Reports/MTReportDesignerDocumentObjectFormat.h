@@ -11,7 +11,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class MAReportDocument;
+
 @interface MTReportDesignerDocumentObjectFormat : UITableViewController
+
+@property (nonatomic, weak) MAReportDocument *document;
 
 @end
 

@@ -14,6 +14,8 @@
 #import "MTReportViewerReportPageView.h"
 #import "UIColor+EverydayApps.h"
 
+@class MAReportDocument;
+
 @interface MTReportViewerReportPageViewController : UIViewController
     <MTPrintingProtocol>
 
@@ -22,7 +24,7 @@
 @property (nonatomic, assign, readonly) NSUInteger pageNumber;
 @property (nonatomic, strong) NSDate *lastCacheDate;
 
-- (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
+- (id)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
 
 @end
 

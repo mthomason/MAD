@@ -1618,7 +1618,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nci-gr-x4y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2979" y="-173"/>
+            <point key="canvasLocation" x="2941" y="-101"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hWE-8O-gLX">
@@ -4611,7 +4611,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Ibv-MJ-tzZ" kind="push" id="lKB-1q-Zra"/>
+                                            <segue destination="Ibv-MJ-tzZ" kind="push" identifier="MADSegueAggregateFunctionField" id="lKB-1q-Zra"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="br6-el-gnb" detailTextLabel="CDj-F5-Wl2" style="IBUITableViewCellStyleValue1" id="Hy0-qg-iQg">
@@ -5716,7 +5716,6 @@
                                 <connections>
                                     <outlet property="imagePreview" destination="0YV-JU-3qm" id="ibt-ot-oFF"/>
                                     <outlet property="labelTitle" destination="Xld-Tx-Hvx" id="jir-Ra-YyW"/>
-                                    <segue destination="wbd-ks-ygF" kind="modal" identifier="openDocument" id="otF-6e-WRS"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -5766,6 +5765,7 @@
                         <outlet property="barButtonItemInformation" destination="QdH-8u-UcV" id="IJk-FO-fE8"/>
                         <outlet property="barButtonItemTrash" destination="HJd-Zb-f53" id="p19-Xf-I4v"/>
                         <outlet property="collectionViewFlowLayout" destination="WHw-lv-Vkd" id="nl2-ee-AvB"/>
+                        <segue destination="wbd-ks-ygF" kind="modal" identifier="MADSegueOpenDocument" id="We9-rY-4ES"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OgQ-be-sJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -11275,10 +11275,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="3KQ-0K-U1O"/>
+        <segue reference="Twf-og-SpO"/>
+        <segue reference="VR5-fd-wm2"/>
         <segue reference="pfP-rZ-fVf"/>
         <segue reference="FvY-6k-f7g"/>
-        <segue reference="pCi-yT-77G"/>
-        <segue reference="PPx-4T-brk"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
 </document>

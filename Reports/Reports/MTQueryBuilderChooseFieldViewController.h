@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 
-@class MTQueryBuilderChooseFieldViewController, RptqQueryField;
+@class MTQueryBuilderChooseFieldViewController, RptqQueryField, MAReportDocument;
 
 @protocol MTQueryBuilderChooseFieldDelegate
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field;
@@ -24,7 +24,9 @@
         UITableViewDelegate,
         SectionHeaderViewDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderChooseFieldDelegate> delegate;
+@property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
+
 @property (nonatomic, weak) IBOutlet UITableViewCell *fieldCells;
 
 @property (nonatomic, strong) RptqQueryField *queryField;

@@ -80,9 +80,7 @@
     [[self tableView] setSectionHeaderHeight: HEADER_HEIGHT];
 
     _openSectionIndex = NSNotFound;
-
-    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-    RptqDocument *document = [reportDocument activeDocument];
+    RptqDocument *document = [self.document activeDocumentModel];
     RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
     RptqQuery *query = [[database hasQueries] anyObject];
     NSSet *queryTables = [query hasQueryTables];

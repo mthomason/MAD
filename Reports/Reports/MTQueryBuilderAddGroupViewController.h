@@ -26,7 +26,8 @@
         MTQueryBuilderSortTypeDelegate,
         MTQueryBuilderChooseFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddGroupDelegate> delegate;
+@property (nonatomic, weak) id <MTQueryBuilderAddGroupDelegate> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellField;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellSort;

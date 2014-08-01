@@ -416,7 +416,8 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         [self setPreviewViewController:pvc];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
         MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[segue destinationViewController] topViewController];
-        [ovc setDelegate:self];
+        ovc.delegate = self;
+        ovc.document = self.document;
         [self setOptionsViewController:ovc];
     }
 }

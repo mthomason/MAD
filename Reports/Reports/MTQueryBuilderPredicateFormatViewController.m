@@ -36,12 +36,14 @@
     if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
             MTQueryBuilderAddPredicateViewController *tvcSC = [segue destinationViewController];
-            [tvcSC setDelegate:self];
+            tvcSC.document = self.document;
+            tvcSC.delegate = self;
         }
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
             MTQueryBuilderAddPredicateViewController *tvcSC = [segue destinationViewController];
-            [tvcSC setDelegate:self];
+            tvcSC.document = self.document;
+            tvcSC.delegate = self;
         }
     }
 }

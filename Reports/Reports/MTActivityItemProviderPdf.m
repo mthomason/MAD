@@ -57,8 +57,7 @@
         NSURL *temporaryDirectory = [NSURL fileURLWithPath: temporaryDirectoryPath];
         item = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
         
-        MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-        [reportDocument writeToPdf:item withViewController:[self activityViewController]];
+        [self.document writeToPdf:item withViewController:self.activityViewController];
     }
     return item;
 }

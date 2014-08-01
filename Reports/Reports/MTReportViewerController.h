@@ -15,14 +15,16 @@
 #import "MTViewControllerAsyncProtocol.h"
 #import "MADActivityProtocol.h"
 
+@class MAReportDocument;
+
 @interface MTReportViewerController : UIPageViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
 @property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
-- (IBAction)print:(id)sender;
 - (void)reload:(MTReportViewerController *)reportViewer;
 - (void)reload;
 

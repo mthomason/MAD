@@ -60,9 +60,8 @@
 
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
             MTQueryBuilderAddLinkJoinTypeViewController *vcFf = [segue destinationViewController];
-            if (vcFf) {
-                [vcFf setDelegate: self];
-            }
+            vcFf.delegate = self;
+            vcFf.document = self.document;
         }
     } else {
         
@@ -71,9 +70,11 @@
             [self setCurrentlyEditingPart: MNSLinkLeft];
             
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
+            
             if (dvc != nil) {
                 [dvc setExcludeTables: ([[self secondTable] alias] ? [NSArray arrayWithObject:[[self secondTable] alias]] : [NSArray array])];
-                [dvc setDelegate: self];
+                dvc.delegate = self;
+                dvc.document = self.document;
             }
 
         } else if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldTwo"]) {
@@ -83,9 +84,9 @@
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
                 [dvc setExcludeTables: ([[self firstTable] alias] ? [NSArray arrayWithObject:[[self firstTable] alias]] : [NSArray array])];
-                [dvc setDelegate: self];
+                dvc.delegate = self;
+                dvc.document = self.document;
             }
-
         }
     }
 }

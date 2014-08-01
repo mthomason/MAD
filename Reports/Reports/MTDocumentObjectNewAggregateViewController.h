@@ -18,7 +18,7 @@ extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;
 extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
 
-@class RptqQueryField, RptqDocumentObjectAggregate;
+@class MAReportDocument, RptqQueryField, RptqDocumentObjectAggregate;
 
 @protocol MTViewControllerAggregateDelegate
 - (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
@@ -32,6 +32,7 @@ extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
     <UITableViewDelegate>
 
 @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggrageFunction;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellAggregateInput;

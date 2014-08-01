@@ -93,16 +93,11 @@
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
     
     BOOL numericTypeInSet = NO;
-
-    
-    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-
-    NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
-
     NSMutableSet *keepers = [[NSMutableSet alloc] init];
     for (NSManagedObjectID *objectId in objectIds) {
 
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:managedObjectContext];
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                      managedObjectContext: self.document.managedObjectContext];
         MTDataType dataType = [[[[[documentObject isLabelDataField] referencesQueryField] databaseSchemaField] dataType] integerValue];
         BOOL isNumeric = [MTDatabaseField isNumeric:dataType];
         if (isNumeric) {
@@ -133,11 +128,10 @@
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
         
-        MAReportDocument *activeDocument = [[AppDelegate app] activeDocument];
-
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:[activeDocument managedObjectContext]];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];
             if (isCurrency) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
@@ -148,8 +142,8 @@
         
         if ([[self userSelectedObjectIds] count] == 1) {
             NSManagedObjectID *objectId = [[self userSelectedObjectIds] anyObject];
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
-                                                                         managedObjectContext:[activeDocument managedObjectContext]];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
             [[self labelNumberOfDecimals] setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
             [[self stepperNumberOfDecimals] setValue:numberOfDec];
@@ -159,7 +153,8 @@
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
             for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-                RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:[activeDocument managedObjectContext]];
+                RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                              managedObjectContext: self.document.managedObjectContext];
                 NSInteger currentInteger = [[documentObject formatNumericDecimals] integerValue];
                 if (counter > 0) {
                     if (lastInteger == currentInteger && allTheSame) {
@@ -190,9 +185,6 @@
 
 - (IBAction)controlValueChanged:(id)sender {
     
-    
-    MAReportDocument *activeDocument = [[AppDelegate app] activeDocument];
-
     SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
     
@@ -202,7 +194,8 @@
         [[self labelNumberOfDecimals] setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
         
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:[activeDocument managedObjectContext]];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
+                                                                          managedObjectContext: self.document.managedObjectContext];
             [documentObject setFormatNumericDecimals:valueThatChanged];
             [[documentObject managedObjectContext] save:nil];
         }
@@ -251,10 +244,9 @@
     
     if ([indexPath row] == 1 && [indexPath section] == 0) {
         
-        MAReportDocument *activeDocument = [[AppDelegate app] activeDocument];
-
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:[activeDocument managedObjectContext]];
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
+                                                                          managedObjectContext:self.document.managedObjectContext];
             BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];
             BOOL isCurrencyNow = !isCurrency;
             [documentObject setFormatNumericCurrency:@(isCurrencyNow)];

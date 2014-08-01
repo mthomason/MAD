@@ -14,7 +14,7 @@
 #import "Constants.h"
 #import "MUIViewControllerDelegate.h"
 
-@class NSManagedObjectID, RptqQueryField;
+@class MAReportDocument, NSManagedObjectID, RptqQueryField;
 
 extern NSInteger const MTViewTagAggregateFunctions;
 extern NSInteger const MTViewTagGroupByOptions;
@@ -35,8 +35,8 @@ extern NSInteger const MTViewTagFieldOrFormulaSelector;
 
 @interface MTReportDesignerObjectSelectorViewController : UICollectionViewController
 
-
-@property (nonatomic, weak) IBOutlet id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
+@property (nonatomic, weak) id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
 @end
 

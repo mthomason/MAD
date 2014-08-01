@@ -21,7 +21,8 @@
 @interface MTQueryBuilderPredicateFormatViewController : UITableViewController
     <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
 
-@property (nonatomic, weak) IBOutlet id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) MAReportDocument *document;
 
 - (IBAction)done:(id)sender;
 

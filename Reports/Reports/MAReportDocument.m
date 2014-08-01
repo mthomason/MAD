@@ -83,15 +83,15 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     <MTDatabaseProtocol>
 
 @property (nonatomic, strong) NSManagedObjectModel *mom;
+
 @property (nonatomic, strong) RptqDocument *document;
+@property (nonatomic, strong) MTDatabase *mainDatabase;
+@property (nonatomic, strong) MTQuery *mainQuery;
+@property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
 
 @property (nonatomic, strong) NSMutableDictionary *reportQueries;
 
 @property (nonatomic, assign) BOOL didRefresh;
-
-@property (nonatomic, strong) MTDatabase *mainDatabase;
-@property (nonatomic, strong) MTQuery *mainQuery;
-@property (nonatomic, strong, readwrite) MTDataTable *mainDataTable;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 
@@ -123,7 +123,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 - (void)addConnection:(MTDatabaseConnection *)connection
                status:(void (^)(NSString *status, CGFloat progress))status
            completion:(void(^)(BOOL success, NSError *error))completion {
-    RptqDocument *rptqDocument = [self activeDocument];
+    RptqDocument *rptqDocument = [self activeDocumentModel];
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     if (database) {
         [self setMainDatabase:database];
@@ -189,7 +189,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     return MTPersistentStoreAliasMad;
 }
 
-- (RptqDocument *)activeDocument {
+- (RptqDocument *)activeDocumentModel {
     if ([self document] == nil) {
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
         RptqDocument *document = [RptqDocument documentForManagedObjectContext: managedObjectContext];
@@ -241,7 +241,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 
 - (void)initalizeReportFormatter {
     MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
-                                                                              layout: [self activeDocument]
+                                                                              layout: [self activeDocumentModel]
                                                                              options: MTReportFormatterOptionsNone];
     [reportFormatter setDataDelegate:self];
     [reportFormatter setCachedDelegate:self];
@@ -445,7 +445,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 
 - (void)regenThumbnail {
     [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
-    BOOL contentChanged = [self activeDocument] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
+    BOOL contentChanged = [self activeDocumentModel] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]
                                                                                                                   dataTable:[self mainDataTable]];
@@ -491,7 +491,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 
 - (UIPrintPageRenderer *)printerPrintPageRender {
     MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
-                                                                              layout: [self activeDocument]
+                                                                              layout: [self activeDocumentModel]
                                                                              options: MTReportFormatterOptionsMargin];
     
     [reportFormatter setCachedDelegate:self];

@@ -30,6 +30,8 @@
 
 @property (nonatomic, assign) BOOL displayDebuggingInfo;
 
+@property (nonatomic, weak) MAReportDocument *document;
+
 @end
 
 @implementation MTReportViewerReportPageViewController
@@ -46,9 +48,10 @@
     _delegate = nil;
 }
 
-- (id)initWithPageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
+- (id)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
+        [self setDocument:document];
         [self setShowPageNumberDisplay:YES];
         [self setPageNumber:pageNumber];
         [self setNumberOfPages:numberOfPages];
@@ -153,9 +156,7 @@
 - (void)updateLateRefreshedLabel:(id)sender {
     if ([self lastCacheDate] == nil) {
         
-        MTApplicationInstance *applicationInstance = [AppDelegate app];
-        MAReportDocument *reportDocument = [applicationInstance activeDocument];
-        NSURL *cachedDataUrl = [reportDocument cachedDataUrl];
+        NSURL *cachedDataUrl = [self.document cachedDataUrl];
         NSString *cachedDataPath = [cachedDataUrl path];
         NSError *error = nil;
         NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:cachedDataPath error:&error];

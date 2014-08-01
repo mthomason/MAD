@@ -11,9 +11,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class MAReportDocument;
+
 @interface MTQueryBuilderVisualizationViewController : UIViewController
 
-- (void)reloadActiveDocumentAnimatedAnimated:(BOOL)animated;
+@property (nonatomic, weak) MAReportDocument *document;
+
+- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
 - (void)redraw;
 
 @end

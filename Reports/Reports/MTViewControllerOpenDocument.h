@@ -11,9 +11,6 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const MTSegueShowAddDocument;
-extern NSString * const MTSegueShowOpenDocument;
-
 @class MTCollectionViewCellDocument;
 
 @interface MTViewControllerOpenDocument : UICollectionViewController

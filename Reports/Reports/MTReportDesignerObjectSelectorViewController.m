@@ -110,6 +110,9 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         id destinationViewController = [segue destinationViewController];
         [destinationViewController setDelegate: self];
     }
+    if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
+        [segue.destinationViewController setDocument:self.document];
+    }
 }
 
 #pragma mark - Actions

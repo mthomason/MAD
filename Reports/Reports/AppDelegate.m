@@ -60,20 +60,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     return [(AppDelegate *)[[UIApplication sharedApplication] delegate] applicationInstance];
 }
 
-+ (MAReportDocument *)activeReportDocument {
-    return [[AppDelegate app] activeDocument];
-}
-
 + (UIWindow *)window {
     return [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-}
-
-+ (RptqQuery *)activeRptqQuery {
-    RptqDocument *document = [[AppDelegate activeReportDocument] activeDocument];
-    NSSet *databaseSchemas = [document hasDatabaseSchemas];
-    RptqDatabase *databaseSchema = [databaseSchemas anyObject];
-    NSSet *queries = [databaseSchema hasQueries];
-    return [queries anyObject];
 }
 
 - (void)dealloc {
@@ -118,7 +106,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MAReportDocument *documentReport = [[self applicationInstance] activeDocument];
+    MAReportDocument *documentReport = [[self applicationInstance] currentdocappinst];
     [documentReport quickSave];
 }
 

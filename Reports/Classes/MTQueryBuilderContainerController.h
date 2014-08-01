@@ -13,13 +13,16 @@
 #import "MTViewControllerAsyncProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
-@class MTQueryBuilderViewController, MTQueryBuilderVisualizationViewController;
+@class MTQueryBuilderViewController,
+        MTQueryBuilderVisualizationViewController,
+        MAReportDocument;
 
 @interface MTQueryBuilderContainerController : UIViewController
     <MTViewControllerProtocol>
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) id <MTViewControllerAsyncProtocol> delegateContentController;
+@property (nonatomic, weak) MAReportDocument *document;
 
 - (MTQueryBuilderViewController *)queryBuilderController;
 - (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced;

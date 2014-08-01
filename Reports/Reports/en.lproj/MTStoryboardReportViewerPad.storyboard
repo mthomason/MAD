@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="88I-WU-sVr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="88I-WU-sVr">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -416,7 +416,6 @@
                                 <connections>
                                     <outlet property="imagePreview" destination="HNH-M2-uDW" id="tyR-bt-EAy"/>
                                     <outlet property="labelTitle" destination="XUQ-km-vNt" id="EYy-dy-IKa"/>
-                                    <segue destination="qLC-6t-AOi" kind="modal" identifier="MTSegueOpenInViewer" id="8gM-qz-JcF"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -458,6 +457,7 @@
                         <outlet property="barButtonItemInformation" destination="DMh-hJ-DcE" id="wJ9-3h-1TY"/>
                         <outlet property="barButtonItemTrash" destination="ScK-gu-VRc" id="Re9-Kn-7h6"/>
                         <outlet property="collectionViewFlowLayout" destination="y1h-7i-2rO" id="tBe-zD-WG8"/>
+                        <segue destination="iqv-wN-FBP" kind="modal" identifier="MADSegueOpenDocument" id="5zc-Pg-Qwq"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UFa-6V-Q2c" userLabel="First Responder" sceneMemberID="firstResponder"/>

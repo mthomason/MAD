@@ -140,11 +140,8 @@
 
 - (void)loadPickerView {
 
-    MTApplicationInstance *applicationInstance = [AppDelegate app];
-    MAReportDocument *reportDocument = [applicationInstance activeDocument];
-    NSManagedObjectContext *objectContext = [[reportDocument activeDocument] managedObjectContext];
     RptqDatabaseSchemaField *field = [RptqDatabaseSchemaField managedObjectForObjectID: [self schemaFieldObjectId]
-                                                               andManagedObjectContext: objectContext];
+                                                               andManagedObjectContext: self.document.managedObjectContext];
     
     MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:field];
 

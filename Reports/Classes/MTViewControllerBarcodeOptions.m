@@ -11,6 +11,7 @@
 #endif
 
 #import "MTViewControllerBarcodeOptions.h"
+#import <CoreData/CoreData.h>
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMicroQrCode.h"
@@ -30,7 +31,7 @@
 #import "RptqDatabaseSchemaField.h"
 #import "AppDelegate.h"
 #import "MTDataTable.h"
-#import <CoreData/CoreData.h>
+#import "MTQueryBuilderChooseFieldViewController.h"
 
 @interface MTViewControllerBarcodeOptions ()
     <MTDatabaseProtocol>
@@ -126,11 +127,13 @@
 
         [self setSelectingField1:YES];
         [[segue destinationViewController] setDelegate:self];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
         
         [self setSelectingField2:YES];
         [[segue destinationViewController] setDelegate:self];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
         
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
         
@@ -163,6 +166,7 @@
         [[segue destinationViewController] setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
         [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDocument:self.document];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
         [[segue destinationViewController] setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"]) {
@@ -710,7 +714,8 @@
 
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
+- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller
+                                      withField:(RptqQueryField *)field {
 
     [[self navigationController] popViewControllerAnimated:YES];
     if  ([self selectingField1]) {

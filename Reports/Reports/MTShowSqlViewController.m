@@ -29,11 +29,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    MAReportDocument *reportDocument = [[AppDelegate app] activeDocument];
-    MTQuery *query = [reportDocument defaultQuery];
-    
     NSError *error = nil;
-    NSString *sqlStatement = [query getSqlOnlyActiveFields:NO error:&error];
+    NSString *sqlStatement = [self.query getSqlOnlyActiveFields:NO error:&error];
     if (error) {
         sqlStatement = [error localizedDescription];
     }

@@ -54,7 +54,7 @@ extern NSString * const MADMimeType;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
 
-- (RptqDocument *)activeDocument;
+- (RptqDocument *)activeDocumentModel;
 + (NSString *)fileType;
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
