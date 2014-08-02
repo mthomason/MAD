@@ -1217,8 +1217,20 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
+    [self setUrlBeingOpended:fileUrl];
+    
     if ([self isEditing] == NO) {
         [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        
+        __weak MTViewControllerOpenDocument *weakself = self;
+        [self openReport:fileUrl withCompletionHandler:^(BOOL success) {
+            if (success) {
+                [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
+                                              sender:weakself];
+            }
+        }];
+
     } else {
         [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
     }
@@ -1227,8 +1239,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
-    NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
-    [self setUrlBeingOpended:fileUrl];
     NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
@@ -1236,17 +1246,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         image = [MTTableViewCellDocument defaultThumbnail];
     }
     [[cell imagePreview] setImage:image];
-    
-    __weak MTViewControllerOpenDocument *weakself = self;
-    [self openReport:fileUrl withCompletionHandler:^(BOOL success) {
-        if (success) {
-            [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
-                                          sender:weakself];
-        }
-    }];
-    
-
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
