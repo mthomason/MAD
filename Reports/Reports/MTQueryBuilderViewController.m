@@ -172,6 +172,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
     [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
     [self setToolbarItems:toolbarButtons animated:NO];
+    
+    [self reloadDocument:self.document animated:YES];
 
 }
 

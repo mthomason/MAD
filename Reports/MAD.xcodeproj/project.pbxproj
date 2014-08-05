@@ -2671,7 +2671,6 @@
 		4CA57A5A179FD46200B58871 /* DesignerSectionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerSectionLabel.m; sourceTree = "<group>"; };
 		4CA60E11197044CD00714AFF /* MTNotificationDidFormatPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNotificationDidFormatPage.h; sourceTree = "<group>"; };
 		4CA60E12197044CD00714AFF /* MTNotificationDidFormatPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNotificationDidFormatPage.m; sourceTree = "<group>"; };
-		4CA96E8D17BD94460076F66A /* MTViewControllerAsyncProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewControllerAsyncProtocol.h; sourceTree = "<group>"; };
 		4CAB178C150F87A600BA0A9B /* RptqQueryLinks+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryLinks+Extras.h"; sourceTree = "<group>"; };
 		4CAB178D150F87A600BA0A9B /* RptqQueryLinks+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQueryLinks+Extras.m"; sourceTree = "<group>"; };
 		4CAB178F150FE38400BA0A9B /* MTRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTRulerView.h; sourceTree = "<group>"; };
@@ -4178,7 +4177,6 @@
 				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
 				4C6DF38216D43C1C00BDC0C1 /* MTCollectionViewCellDocument.m */,
 				4C5625D617565EF300433E88 /* MTDocumentCellProtocol.h */,
-				4CA96E8D17BD94460076F66A /* MTViewControllerAsyncProtocol.h */,
 			);
 			name = "Open Document";
 			sourceTree = "<group>";

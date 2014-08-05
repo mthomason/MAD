@@ -63,10 +63,6 @@
     [super viewDidLoad];
     
     [self setIsEditing:NO];
-
-    NSArray *childViewControllers = [self childViewControllers];
-    [[self delegateContentController] displayContentController: [childViewControllers objectAtIndex:0]];
-    [[self delegateContentController] displayContentController: [childViewControllers objectAtIndex:1]];
     
     [[self view] removeConstraints:[self bogusConstraints]];
     

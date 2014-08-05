@@ -12,7 +12,6 @@
 #import <UIKit/UIKit.h>
 #import "NSDate+Extras.h"
 #import "MUIViewControllerDelegate.h"
-#import "MTViewControllerAsyncProtocol.h"
 #import "MADActivityProtocol.h"
 
 @class MAReportDocument;
@@ -21,7 +20,6 @@
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
-@property (nonatomic, assign) id <MTViewControllerAsyncProtocol> asyncDelegate;
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
 @property (nonatomic, weak) MAReportDocument *document;
 

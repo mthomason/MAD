@@ -67,7 +67,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         UITextFieldDelegate,
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
-        MTViewControllerAsyncProtocol,
         UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTArrayDataSource *dataSource;
@@ -318,13 +317,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSURL *url = nil;
+    /*NSURL *url = nil;
     if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
         url = [self urlForDocumentCell:sender];
     } else if ([sender isKindOfClass:[NSURL class]]) {
         url = sender;
-    }
+    }*/
     
+    
+    MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
+    viewControllerReportViewer.viewControllerDelegate = self;
+    viewControllerReportViewer.document = [self currentDocument];
+    /*
     if (url != nil) {
         MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
         [viewControllerReportViewer setViewControllerDelegate:self];
@@ -336,7 +340,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
     } else {
         NSAssert(url != nil, @"No URL to open.");
-    }
+    }*/
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -383,7 +387,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             queryBuilderViewController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
-            [queryBuilderViewController reloadDocument:document animated:YES];
+//            [queryBuilderViewController reloadDocument:document animated:YES];
 
         }
         
@@ -412,9 +416,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self prepareForSegueLicensing:segue];
 
     } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
+        [[self currentDocument] activeDocumentModel];
         [self prepareForSegueOpenInViewer:segue sender:sender];
         
     } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
+        [[self currentDocument] activeDocumentModel];
         [self prepareForSegueShowOpenDocument:segue sender:sender];
     }
 }
@@ -478,61 +484,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 
 #pragma mark - Delegates
-
-- (void)displayContentController:(UIViewController *)contentController {
-    //If designer application, then load designer query builder.
-    //  If viewer, load, well, the viewer.
-    __weak MTQueryBuilderVisualizationViewController *advanced = nil;
-    __weak MTQueryBuilderViewController *standard = nil;
-
-    if ([MTApplicationInstance isMadDesigner]) {
-        
-        if ([contentController isKindOfClass:[UINavigationController class]]) {
-        
-            UINavigationController *childNavigationController = (UINavigationController *)contentController;
-            if ([[childNavigationController topViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
-                standard = (MTQueryBuilderViewController *)[(UINavigationController *)childNavigationController topViewController];
-                [self setBothContentControllersDisplayed:NO];
-            }
-            
-        } else if ([contentController isKindOfClass:[MTQueryBuilderVisualizationViewController class]]) {
-
-            advanced = (MTQueryBuilderVisualizationViewController *)contentController;
-            [self setBothContentControllersDisplayed:NO];
-
-        } else if ([contentController isKindOfClass:[MTQueryBuilderViewController class]]) {
-
-            standard = (MTQueryBuilderViewController *)contentController;
-            [self setBothContentControllersDisplayed:YES];
-
-        }
-        
-        if ([self bothContentControllersDisplayed] && standard != nil && standard != nil) {
-            [self openReport:self.openFiles.openUrl withCompletionHandler:^(BOOL success) {
-                if (success) {
-                    MAReportDocument *document = [self currentDocument];
-                    standard.document = document;
-                    advanced.document = document;
-                    [standard reloadDocument:document animated:YES];
-                    [advanced reloadDocument:document animated:YES];
-                }
-            }];
-            
-        }
-    } else if ([MTApplicationInstance isMadViewer]) {
- 
-        __weak MTReportViewerController *viewController = (MTReportViewerController *)contentController;
-        [self openReport:self.openFiles.openUrl withCompletionHandler:^(BOOL success) {
-            if (success) {
-                viewController.document = [self currentDocument];
-                [viewController reload:viewController];
-            }
-        }];
-
-    }
-}
-
-
 
 - (void)deleteDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
     NSIndexPath *index = [[self collectionView] indexPathForCell:cell];
@@ -608,7 +559,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
-- (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
+/*- (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
     __weak MTQueryBuilderViewController *weakTvc = tvc;
     [self openReport:self.openFiles.openUrl withCompletionHandler:^(BOOL success) {
         if (success) {
@@ -620,7 +571,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             });
         }
     }];
-}
+}*/
 
 #pragma mark - Static functions
 
@@ -1196,8 +1147,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         __weak MTViewControllerOpenDocument *weakself = self;
         [self openReport:fileUrl withCompletionHandler:^(BOOL success) {
             if (success) {
-                [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
-                                              sender:weakself];
+                if ([MTApplicationInstance isMadDesigner]) {
+                    [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
+                                                  sender:weakself];
+                } else if ([MTApplicationInstance isMadViewer]) {
+                    [weakself performSegueWithIdentifier:MTSegueOpenInViewer
+                                                  sender:weakself];
+                }
             }
         }];
 
@@ -1364,9 +1320,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (MAReportDocument *)currentDocument {
     MAReportDocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
-        NSDictionary *documents = self.openFiles.openFiles;
         NSString *key = [self keyForUrl:self.openFiles.openUrl];
-        result = [documents objectForKey:key];
+        result = [self.openFiles.openFiles objectForKey:key];
     }
     return result;
 }
@@ -1380,12 +1335,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
     self.openFiles.openUrl = url;
     MAReportDocument *document = [[MAReportDocument alloc] initWithFileURL:url];
+    NSString *key = [self keyForUrl:url];
+    [self.openFiles.openFiles setObject:document forKey:key];
     [document open:^(BOOL success) {
         if (success) [self setReportState:MTReportStateOpen];
         completionHandler(success);
     }];
-    NSString *key = [self keyForUrl:url];
-    [self.openFiles.openFiles setObject:document forKey:key];
 }
 
 - (void)displaySavingReportActivityIndicator {

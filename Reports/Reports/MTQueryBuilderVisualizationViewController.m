@@ -62,8 +62,6 @@ typedef void(^MTBlockResultVoid)(void);
         MTQueryBuilderAdvancedSchemaDelegate,
         MTViewControllerProtocol>
 
-    @property (nonatomic, assign) BOOL uidynamicsSetup;
-
     @property (nonatomic, strong) IBOutlet UIToolbar *toolbarBottom;
     @property (nonatomic, strong) IBOutlet UIView *backgroundContainer;
 
@@ -110,8 +108,6 @@ typedef void(^MTBlockResultVoid)(void);
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
-        [self setUidynamicsSetup:NO];
         
         NSMutableArray *viewControllers = [[NSMutableArray alloc] init];
         [self setViewControllers:viewControllers];
@@ -196,43 +192,34 @@ typedef void(^MTBlockResultVoid)(void);
     NSMutableArray *toolbarButtons = [[[self toolbarBottom] items] mutableCopy];
     [toolbarButtons removeObject:[self barButtonItemShowSQL]];
     [[self toolbarBottom] setItems:toolbarButtons animated:NO];
+    UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
+    NSArray *emptyArray = @[];
+    UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:emptyArray];
+    [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
+    [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
+    [collisionBehavior setCollisionDelegate:self];
+    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
+    [gravity setMagnitude:0.2000f];
+    CGVector gravityDirection = CGVectorMake(1, 0);
+    [gravity setGravityDirection:gravityDirection];
+    UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
+    [dynamicItemBehavior setAllowsRotation:NO];
+    [dynamicItemBehavior setElasticity:0.1000f];
+    [dynamicItemBehavior setResistance:0.9000f];
+    [self setDynamicItemBehavior: dynamicItemBehavior];
+    [animator addBehavior:dynamicItemBehavior];
+    [animator addBehavior:collisionBehavior];
+    [animator addBehavior:gravity];
+    [self setDynamicAnimator:animator];
+    [self setGravityBeahvior:gravity];
+    [self setCollisionBehavior:collisionBehavior];
+    
+    [self reloadDocument:self.document animated:YES];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    if ([self uidynamicsSetup] == NO) {
-        
-        [self setUidynamicsSetup:YES];
-
-        UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:[self contentView]];
-        
-        UICollisionBehavior *collisionBehavior = [[UICollisionBehavior alloc] initWithItems:@[]];
-        [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
-        [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
-        [collisionBehavior setCollisionDelegate:self];
-        UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
-        [gravity setMagnitude:0.2000f];
-        CGVector gravityDirection = CGVectorMake(1, 0);
-        [gravity setGravityDirection:gravityDirection];
-        UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
-        [dynamicItemBehavior setAllowsRotation:NO];
-        [dynamicItemBehavior setElasticity:0.1000f];
-        [dynamicItemBehavior setResistance:0.9000f];
-        [self setDynamicItemBehavior: dynamicItemBehavior];
-        [animator addBehavior:dynamicItemBehavior];
-        
-        
-        
-        [animator addBehavior:collisionBehavior];
-        [animator addBehavior:gravity];
-        [self setDynamicAnimator:animator];
-        [self setGravityBeahvior:gravity];
-        [self setCollisionBehavior:collisionBehavior];
-
-    }
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -9,6 +9,7 @@
         <scene sceneID="82T-pz-3Jv">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="qLC-6t-AOi" customClass="MTNavigationController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Ldv-tz-kea"/>
                     <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="onV-Nd-aPl">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
@@ -35,24 +36,6 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="Juv-tI-xhU" customClass="MTReportViewerController" sceneMemberID="viewController">
                     <toolbarItems>
-                        <barButtonItem style="plain" id="DCj-Xd-kyx">
-                            <view key="customView" opaque="NO" contentMode="scaleToFill" id="Mhq-Nd-uTb">
-                                <rect key="frame" x="16" y="6" width="200" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES"/>
-                                <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="OjK-xy-8qd">
-                                        <rect key="frame" x="0.0" y="3" width="200" height="34"/>
-                                        <color key="minimumTrackTintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
-                                    </slider>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="OjK-xy-8qd" firstAttribute="leading" secondItem="Mhq-Nd-uTb" secondAttribute="leading" constant="2" id="3bO-hI-aRu"/>
-                                    <constraint firstItem="OjK-xy-8qd" firstAttribute="top" secondItem="Mhq-Nd-uTb" secondAttribute="top" constant="3" id="gda-cE-iF8"/>
-                                    <constraint firstAttribute="centerX" secondItem="OjK-xy-8qd" secondAttribute="centerX" id="xJd-C5-JiO"/>
-                                </constraints>
-                            </view>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Jhr-rH-4JW"/>
                         <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="aHE-k8-itw"/>
                         <barButtonItem systemItem="action" id="kCp-A3-gcW">
@@ -79,9 +62,6 @@
                         <outlet property="barButtonItemActivity" destination="kCp-A3-gcW" id="JrW-CR-pYH"/>
                         <outlet property="barButtonItemDone" destination="6OM-G9-12T" id="WBN-0F-ESW"/>
                         <outlet property="barButtonItemRefresh" destination="xzp-cJ-Mou" id="b1Q-GH-zlr"/>
-                        <outlet property="barButtonItemSliderView" destination="DCj-Xd-kyx" id="NOk-lv-bO6"/>
-                        <outlet property="sliderPagination" destination="OjK-xy-8qd" id="BY7-Vi-4Fx"/>
-                        <outlet property="sliderView" destination="Mhq-Nd-uTb" id="T1q-7u-Goh"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dGT-Dq-fc5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -287,6 +267,7 @@
         <!--Navigation Controller-->
         <scene sceneID="mxx-NU-VRR">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mvm-Rf-nPw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="iqv-wN-FBP" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -300,7 +281,6 @@
                         <segue destination="6V5-0U-97X" kind="relationship" relationship="rootViewController" id="RLg-3A-2Ha"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Mvm-Rf-nPw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="463" y="255"/>
         </scene>
@@ -457,7 +437,7 @@
                         <outlet property="barButtonItemInformation" destination="DMh-hJ-DcE" id="wJ9-3h-1TY"/>
                         <outlet property="barButtonItemTrash" destination="ScK-gu-VRc" id="Re9-Kn-7h6"/>
                         <outlet property="collectionViewFlowLayout" destination="y1h-7i-2rO" id="tBe-zD-WG8"/>
-                        <segue destination="iqv-wN-FBP" kind="modal" identifier="MADSegueOpenDocument" id="5zc-Pg-Qwq"/>
+                        <segue destination="qLC-6t-AOi" kind="modal" identifier="MTSegueOpenInViewer" modalPresentationStyle="pageSheet" id="bxL-KW-UEq"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UFa-6V-Q2c" userLabel="First Responder" sceneMemberID="firstResponder"/>

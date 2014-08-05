@@ -111,7 +111,6 @@
 #pragma mark - Dealloc
 
 - (void)dealloc {
-    _asyncDelegate = nil;
     [self timerDealloc];
 }
 
@@ -280,14 +279,7 @@
     [super viewDidAppear:animated];
     
     [self.document initalizeMainQuery];
-    if ([self asyncDelegate]) {
-        __weak MTReportViewerController *viewController = self;
-        [[self asyncDelegate] displayContentController:viewController];
-    } else {
-        if ([MTApplicationInstance isMadDesigner]) {
-            [self reload:self];
-        }
-    }
+    [self reload:self];
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
     

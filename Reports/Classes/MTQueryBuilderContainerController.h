@@ -10,7 +10,6 @@
 #define Reports_MTQueryBuilderContainerController_h
 
 #import <UIKit/UIKit.h>
-#import "MTViewControllerAsyncProtocol.h"
 #import "MUIViewControllerDelegate.h"
 
 @class MTQueryBuilderViewController,
@@ -21,7 +20,6 @@
     <MTViewControllerProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) id <MTViewControllerAsyncProtocol> delegateContentController;
 @property (nonatomic, weak) MAReportDocument *document;
 
 - (MTQueryBuilderViewController *)queryBuilderController;
