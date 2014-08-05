@@ -105,7 +105,7 @@
     MADValue *result;
     MADValue *baseWrapper = [[self leftNode] evaluate];
     double base = [baseWrapper doubleValue];
-    double r;
+    double r = 0;
     if (base != NAN) {
 
         switch ((SCFunctionTypeNumber)[self function]) {

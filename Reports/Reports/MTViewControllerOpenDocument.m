@@ -985,7 +985,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)deleteDocumentAtIndexPath:(NSIndexPath *)index error:(NSError **)error {
-    *error = nil;
     NSURL *documentUrl = [self documentForIndexPath:index];
     [self removeCachedFileForDocumentUrl:documentUrl];
     [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:error];

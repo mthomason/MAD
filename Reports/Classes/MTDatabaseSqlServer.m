@@ -1458,7 +1458,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;
-    *error = nil;
+    //*error = nil;
     
     
     LOGINREC *login;
