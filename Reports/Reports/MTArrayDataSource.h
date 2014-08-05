@@ -31,6 +31,7 @@ typedef void (^MTCellConfigureBlock)(id cell, id item);
 - (id)itemAtIndex:(NSUInteger)index;
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)removeObjectsInArray:(NSArray *)array;
 - (void)removeItemAtIndexPath:(NSIndexPath *)indexPath;
 - (void)removeItemAtIndex:(NSUInteger)index;
 - (void)removeItemsAtIndexes:(NSIndexSet *)indexes;

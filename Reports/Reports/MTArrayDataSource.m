@@ -56,6 +56,10 @@
     return self.items[index];
 }
 
+- (void)removeObjectsInArray:(NSArray *)array {
+    [self.items removeObjectsInArray:array];
+}
+
 - (void)updateWithItems:(NSArray *)items {
     NSMutableArray *itemsm = [NSMutableArray arrayWithArray:items];
     [self setItems:itemsm];
