@@ -260,7 +260,7 @@
     [self addPageSliderToView];
     
     NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithArray: [self toolbarItems]];
-    [toolbarItems insertObject: [self barButtonLabelStatus] atIndex: 1];
+    [toolbarItems insertObject: [self barButtonLabelStatus] atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
     
     [self setTintColorForToolbar:[[self navigationController] toolbar]];
