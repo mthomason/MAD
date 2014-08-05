@@ -22,6 +22,7 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 #import "UIViewController+ui.h"
+#import "MTShowSqlViewController.h"
 
 @interface MTQueryBuilderContainerController ()
     <UIPopoverControllerDelegate>
@@ -105,7 +106,22 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if (sender == self) {
+
+    if ([segue.identifier isEqualToString:MNSSegueShowSql]) {
+        if ([UIDevice isPad]) {
+            //[self setShowSqlIsVisable:YES];
+            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
+            [popoverController setDelegate:self];
+            [self setPopover:popoverController];
+            UINavigationController *navController = (UINavigationController *)popoverController.contentViewController;
+            MTShowSqlViewController *showSqlViewController = (MTShowSqlViewController *)navController.topViewController;
+            showSqlViewController.query = self.document.defaultQuery;
+            [self disableTabBarItems];
+        } else {
+            [[segue destinationViewController] setDelegate: self];
+        }
+        
+    } else if (sender == self) {
         [[segue destinationViewController] setDocument:self.document];
         [[segue destinationViewController] reloadDocument:self.document animated:YES];
     } else {

@@ -23,6 +23,14 @@
 
 @implementation MTDataTable
 
+- (id)resultsForAggregateType:(MTAggregateGroupByType)groupByType
+                     function:(MTAggregateFunctionType)function
+                     fieldKey:(NSString *)fieldKey
+                    groupKeys:(NSArray *)groupKeys
+                       rowids:(NSArray *)rowids {
+    return nil;
+}
+
 - (NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
@@ -46,6 +54,11 @@
 - (NSDictionary *)dataForCacheId:(NSNumber *)cacheId {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
+}
+
+- (NSEnumerator *)enumeratorForKeyObjectsSorted {
+    NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;    
 }
 
 + (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier {
@@ -396,17 +409,6 @@
 + (NSString *)keySortDescriptors {
     SEL selSortDescriptors = @selector(sortDescriptors);
     return NSStringFromSelector(selSortDescriptors);
-}
-
-/*! Returns an array of NSURLs that represent all the cached files used by the class.
- 
- @brief All cahced files.
- @returns NSURLs
- 
- */
-
-- (NSArray *)cachedFiles {
-    
 }
 
 @end

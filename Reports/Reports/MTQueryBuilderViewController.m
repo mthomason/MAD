@@ -494,9 +494,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         }
     }
     
-    NSUInteger sectionPosition = [self sectionPositionForTableSectionType: MTQuerySectionsTables];
-    NSIndexPath *insertedRowIndexPath = [NSIndexPath indexPathForRow:indexCounter inSection:sectionPosition];
-    
     NSDictionary *newLayout = [self datamodel];
     NSArray *newLayoutSectionTypes = [newLayout objectForKey:MTTableSectionSectionsKey];
 

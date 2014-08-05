@@ -714,6 +714,8 @@
 		4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
 		4C5CD39C181EBCB6005FC6DD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C611981199130700090ECC4 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
+		4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
 		4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
@@ -2998,6 +3000,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C611982199130810090ECC4 /* libSystem.dylib in Frameworks */,
+				4C611981199130700090ECC4 /* libc++.dylib in Frameworks */,
 				4CC7F6B31962A2F500A84FC0 /* libScrimpter.a in Frameworks */,
 				4CDA77691825FFCD00E462F6 /* libBarcodes.a in Frameworks */,
 				4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */,

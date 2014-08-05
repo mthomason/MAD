@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 
 - (void)getFieldsForTableName: (NSString *)tableName
-                     completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
+                   completion: (void (^)(BOOL success, NSError *error, NSArray *fields))completion;
 
 
 - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion;

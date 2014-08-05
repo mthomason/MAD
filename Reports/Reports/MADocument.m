@@ -184,32 +184,35 @@ NSString * MTDocumentParentContextName          = @"moc";
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
     MTLog(@"UIManagedDocument error: %@", [error localizedDescription]);
-    NSArray *errors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
-    if (errors != nil && errors.count > 0) {
-        for (NSError *error in errors) {
-            MTLog(@"  Error: %@", error.userInfo);
+    
+    if (false) {
+        NSArray *errors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+        if (errors != nil && errors.count > 0) {
+            for (NSError *error in errors) {
+                NSLog(@"  Error: %@", error.userInfo);
+            }
         }
-    } else {
-        BOOL showError = NO;
-        switch ([error code]) {
-            case 260:
-                showError = YES;
-                break;
-            default:
-                break;
-        }
-        if (showError) {
-            [NSThread completeOnMainThread:^(BOOL success, id obj) {
-                NSString *errorDesc = @"Failed to open document. Document incomplete, missing, or corrupt.";
-                NSString *localizedErrorDesc = NSLocalizedString(errorDesc, errorDesc);
-                NSError *err = [NSError errorWithDomain: @"MADocument"
-                                                     code: 260
-                                                 userInfo: @{ NSLocalizedDescriptionKey : localizedErrorDesc}];
-                [err presentErrorToUser];
-            } withObject:error andSuccess:YES];
-        }
-        MTLog(@"  %@", error.userInfo);
     }
+    
+    BOOL showError = NO;
+    switch ([error code]) {
+        case 260:
+            showError = YES;
+            break;
+        default:
+            break;
+    }
+    if (showError) {
+        [NSThread completeOnMainThread:^(BOOL success, id obj) {
+            NSString *errorDesc = @"Failed to open document. Document incomplete, missing, or corrupt.";
+            NSString *localizedErrorDesc = NSLocalizedString(errorDesc, errorDesc);
+            NSError *err = [NSError errorWithDomain: @"MADocument"
+                                               code: 260
+                                           userInfo: @{ NSLocalizedDescriptionKey : localizedErrorDesc}];
+            [err presentErrorToUser];
+        } withObject:error andSuccess:YES];
+    }
+    MTLog(@"  %@", error.userInfo);
 }
 
 - (NSString *)name {

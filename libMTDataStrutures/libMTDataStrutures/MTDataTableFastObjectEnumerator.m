@@ -154,8 +154,6 @@ void sqliteCallback(void *foo, const char* statement) {
             if (sqlite3DataType == SQLITE_NULL) {
                 columnValue = [NSNull null];
             } else {
-                
-                MTDataType madDataType = [[dataColumn columnType] integerValue];
                 columnValue = [MTDatabaseSqlite3 valueForStatement:_statement columnNumber:columnCounter];
             }
             

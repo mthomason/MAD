@@ -578,8 +578,9 @@
         }
         
     } else if (section == [self tableViewSection2dComponent]) {
-#warning not implemented
-        
+
+        // FIXME: Not implemented
+
         switch (row) {
             case 0: {
                 BOOL wasEnabled = [[[self delegate] barcodeToDisplay] has2dComponentEnabled];

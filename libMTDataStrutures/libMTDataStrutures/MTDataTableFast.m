@@ -562,14 +562,12 @@
         const char *sqlc = [sql UTF8String];
         char *queryString = sqlite3_mprintf((char *) sqlc);
         BOOL success = sqlite3_prepare_v2([[self databaseForSelects] databaseHandle], queryString, -1, &statement, NULL) == SQLITE_OK;
+
+        NSAssert(success, @"%s", sqlite3_errmsg([[self databaseForSelects] databaseHandle]));
         if (success) {
             success = sqlite3_step(statement) == SQLITE_ROW;
             result = [self currentObject:statement];
             self.lastDataForCacheId = [MTPair pairWithFormer:cacheId andLatter:result];
-        } else {
-            const char *errorMessage = sqlite3_errmsg([[self databaseForSelects] databaseHandle]);
-            NSString *message = [NSString stringWithUTF8String: errorMessage];
-            MTLog(@"%@", message);
         }
         
         sqlite3_finalize(statement);
@@ -968,7 +966,7 @@ MTDataType mad_sqlite3_datatype_for_sqlite3_type(int sqlite3type) {
 }
 
 - (id)objectOfUnknownType:(sqlite3_stmt *)statement forColumnNumber:(int)columnIndex {
-    MTDataType aggregateResultType = mad_sqlite3_datatype_for_sqlite3_type(sqlite3_column_type(statement, columnIndex));
+    //MTDataType aggregateResultType = mad_sqlite3_datatype_for_sqlite3_type(sqlite3_column_type(statement, columnIndex));
     return [MTDatabaseSqlite3 valueForStatement:statement columnNumber:columnIndex];
 }
 

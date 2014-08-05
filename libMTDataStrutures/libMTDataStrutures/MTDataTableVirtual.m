@@ -284,15 +284,4 @@
 - (void)beginBulkInsert {}
 - (void)endBulkInsert {}
 
-/*! Returns an array of NSURLs that represent all the cached files used by the class.
- 
- @brief All cahced files.
- @returns NSURLs
- 
- */
-
-- (NSArray *)cachedFiles {
-    return @[];
-}
-
 @end

@@ -235,4 +235,16 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     [[MTNotificationDidReadRows sharedObject] database:self readRow:row];
 }
 
+- (void)closeProcess:(id)process {}
+
+- (void)getTablesFromConnection:(id)process completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:383414 userInfo:@{}];
+    completion(NO, error, nil);
+}
+
+- (void)getFieldsForTableName:(NSString *)tableName connection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:382428 userInfo:@{}];
+    completion(NO, error, nil);
+}
+
 @end
