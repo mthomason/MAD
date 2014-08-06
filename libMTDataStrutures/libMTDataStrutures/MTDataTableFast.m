@@ -367,17 +367,12 @@
 }
 
 - (void)removeAllObjects {
-    
-    //dispatch_semaphore_t semaphoreRemoveAll = dispatch_semaphore_create(0);
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
-        [self reopenDbConnection];
-        [self dropIndex];
-        [self dropTable];
-        [self vacuumCacheDb];
-    //    dispatch_semaphore_signal(semaphoreRemoveAll);
-    //});
-    //dispatch_semaphore_wait(semaphoreRemoveAll, DISPATCH_TIME_FOREVER);
 
+    [self reopenDbConnection];
+    [self dropIndex];
+    [self dropTable];
+    [self vacuumCacheDb];
+    
     [self setLastDataForCacheId:nil];
     [[self columnKeys] removeAllObjects];
     [[self columns] removeAllObjects];
