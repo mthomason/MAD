@@ -522,7 +522,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     
     dispatch_semaphore_t s1 = dispatch_semaphore_create(0);
     
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(dipatchQueue, ^{
         
         

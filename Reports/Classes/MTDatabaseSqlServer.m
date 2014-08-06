@@ -497,7 +497,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
     
     dispatch_semaphore_t semaphoreRunQuery = dispatch_semaphore_create(0);
     
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         
         NSError *error = nil;

@@ -58,4 +58,16 @@
     }
 }
 
+- (UIBackgroundTaskIdentifier)requestBackgroundTask {
+    __block UIBackgroundTaskIdentifier bgTask = [self beginBackgroundTaskWithExpirationHandler:^{
+        [self endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+    return bgTask;
+}
+
+- (void)handoffBackground:(NSNumber *)bgTask {
+    [self endBackgroundTask:[bgTask unsignedIntegerValue]];
+}
+
 @end

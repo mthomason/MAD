@@ -19,6 +19,7 @@
 #import "NSError+UserInterface.h"
 #import "MTActivityIndicator.h"
 #import "UIColor+EverydayApps.h"
+#import "UIApplication+Extras.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Set connection settings.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
@@ -177,7 +178,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     [dbDetails setPort:                    blockPort];
     
     
-    __block UIBackgroundTaskIdentifier bgTask = [self requestBackgroundTask];
+    __block UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] requestBackgroundTask];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     [dbDetails testConnection:^(BOOL success, NSError *error) {
@@ -207,7 +208,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                         [[blockSelf delegate] viewControllerDidFinish: blockSelf];
                                         
                                         UILocalNotification *notification = [[UILocalNotification alloc] init];
-                                        NSString *reportIsReady = NSLocalizedString(@"Your report '%@' is ready.", @"Your report '%@' is ready.");
+                                        NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'", @"Created report '%@.'");
                                         NSString *body = [NSString stringWithFormat:reportIsReady, name];
                                         [notification setAlertBody:body];
                                         [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
@@ -219,7 +220,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                             UIApplication *app = [UIApplication sharedApplication];
                                             NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
                                             NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
-                                            [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
+                                            [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
                                         });
                                         
                                     }];
@@ -243,7 +244,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                             UIApplication *app = [UIApplication sharedApplication];
                                             NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
                                             NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
-                                            [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
+                                            
+                                            [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
                                         });
                                         
                                     }];
@@ -283,19 +285,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     [[[self navigationItem] leftBarButtonItem] setEnabled:YES];
     [[self navigationItem] setHidesBackButton:NO animated:YES];
     [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
-}
-
-- (UIBackgroundTaskIdentifier)requestBackgroundTask {
-    UIApplication *app = [UIApplication sharedApplication];
-    __block UIBackgroundTaskIdentifier bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
-        [app endBackgroundTask:bgTask];
-        bgTask = UIBackgroundTaskInvalid;
-    }];
-    return bgTask;
-}
-
-- (void)handoffBackground:(NSNumber *)bgTask {
-    [[UIApplication sharedApplication] endBackgroundTask:[bgTask unsignedIntegerValue]];
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }

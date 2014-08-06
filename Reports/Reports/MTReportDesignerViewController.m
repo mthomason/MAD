@@ -1689,7 +1689,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
                          animations: ^{
-                             [MTReportDesignerViewController setConstraintsForToolboxVisibleOnDesigner:weakSelf];
+                             [weakSelf setConstraintsForToolboxVisible];
                              
                              UIEdgeInsets insets = [weakSelf edgeInsetsWithoutToolbar];
                              [[weakSelf designerScrollView] setContentInset: insets];
@@ -1697,7 +1697,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                              [[weakSelf view] layoutIfNeeded];
                          } completion: ^(BOOL finished) {
                              if (finished) {
-                                 [MTReportDesignerViewController adjustContextOffsetForToolboxInDesigner:weakSelf withToolboxType:toolboxType];
+                                 [weakSelf adjustContextOffsetForToolboxWithToolboxType:toolboxType];
                              }
                          }];
     }
@@ -1715,7 +1715,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         __weak MTReportDesignerViewController *weakSelf = self;
         
         MTBlockCompletionNoReturn animations = ^{
-            [MTReportDesignerViewController setConstraintsForToolboxHiddenOnDesigner:weakSelf];
+            [weakSelf setConstraintsForToolboxHidden];
             UIEdgeInsets insets = [weakSelf edgeInsetsWithToolbar];
             [[weakSelf designerScrollView] setContentInset: insets];
             [[weakSelf view] layoutIfNeeded];
@@ -1758,33 +1758,32 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [UIDevice isPad] ? [self presentToolboxPopoverControllers] : [self presentToolboxViewOfType:tooboxType];
 }
 
-+ (void)adjustContextOffsetForToolboxInDesigner:(MTReportDesignerViewController *)reportDesigner  withToolboxType:(MTToolboxType)toolboxType {
+- (void)adjustContextOffsetForToolboxWithToolboxType:(MTToolboxType)toolboxType {
     if (toolboxType == MTToolboxTypeSection) {
-        [reportDesigner adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:reportDesigner];
+        [self adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:self];
     } else if (toolboxType == MTToolboxTypeElement) {
-        [reportDesigner adjustContentOffsetForSelectedElementsInDesigner:reportDesigner];
+        [self adjustContentOffsetForSelectedElements];
     }
 }
 
-- (void)adjustContentOffsetForSelectedElementsInDesigner:(MTReportDesignerViewController *)reportDesigner {
-    CGRect rectToShow = [reportDesigner rectForSelectedElements];
-    [MTReportDesignerViewController positionDesigner:reportDesigner forRectOfInterest:rectToShow];
+- (void)adjustContentOffsetForSelectedElements {
+    CGRect rectToShow = [self rectForSelectedElements];
+    [self positionForRectOfInterest:rectToShow];
 }
 
 - (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MTReportDesignerViewController *)reportDesigner {
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: [reportDesigner lastSelectedSectionControlPanel]
                                                                                 query: [[self.document activeDocumentModel] defaultQuery]];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
-    [MTReportDesignerViewController positionDesigner:reportDesigner forRectOfInterest:selectedSectionView.frame];
+    [self positionForRectOfInterest:selectedSectionView.frame];
 }
 
-+ (void)positionDesigner:(MTReportDesignerViewController *)reportDesigner forRectOfInterest:(CGRect)rectOfInterest {
+- (void)positionForRectOfInterest:(CGRect)rectOfInterest {
     
-    //rectOfInterest = [MTReportDesignerViewController adjustRect:rectOfInterest forZoomScale:reportDesigner.designerScrollView.zoomScale];
-    CGRect visableRect = [MTReportDesignerViewController visableRect:reportDesigner.designerScrollView];
-    CGRect bounds = [reportDesigner.designerScrollView convertRect: reportDesigner.designerScrollView.bounds
-                                                       toView: reportDesigner.view];
-    CGFloat adjustment = [reportDesigner heightScrollViewAdjustment];
+    CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
+    CGRect bounds = [self.designerScrollView convertRect: self.designerScrollView.bounds
+                                                       toView: self.view];
+    CGFloat adjustment = [self heightScrollViewAdjustment];
     if (CGRectIntersectsRect(visableRect, rectOfInterest) == NO) {
         
         CGPoint contentOffset;
@@ -1796,8 +1795,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         } else {
             contentOffset = [MTReportDesignerViewController contectOffsetBottomOfRect:rectOfInterest inRect:visableRect];
         }
-        contentOffset = CGPointMake(contentOffset.x, contentOffset.y * reportDesigner.designerScrollView.zoomScale);
-        [[reportDesigner designerScrollView] setContentOffset:contentOffset animated:YES];
+        contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.designerScrollView.zoomScale);
+        [[self designerScrollView] setContentOffset:contentOffset animated:YES];
     }
 }
 
@@ -1811,16 +1810,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return CGPointMake(CGPointZero.x, yOffset);
 }
 
-+ (void)setConstraintsForToolboxVisibleOnDesigner:(MTReportDesignerViewController *)reportDesigner {
-    [[reportDesigner view] removeConstraints:[reportDesigner layoutConstraintsToolboxHidden]];
-    [[reportDesigner view] addConstraints:[reportDesigner layoutConstraintsToolboxVisiable]];
-    [[reportDesigner toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
+- (void)setConstraintsForToolboxVisible {
+    [[self view] removeConstraints:[self layoutConstraintsToolboxHidden]];
+    [[self view] addConstraints:[self layoutConstraintsToolboxVisiable]];
+    [[self toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
 }
 
-+ (void)setConstraintsForToolboxHiddenOnDesigner:(MTReportDesignerViewController *)reportDesigner {
-    [[reportDesigner view] removeConstraints:[reportDesigner layoutConstraintsToolboxVisiable]];
-    [[reportDesigner view] addConstraints:[reportDesigner layoutConstraintsToolboxHidden]];
-    [[reportDesigner toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
+- (void)setConstraintsForToolboxHidden {
+    [[self view] removeConstraints:[self layoutConstraintsToolboxVisiable]];
+    [[self view] addConstraints:[self layoutConstraintsToolboxHidden]];
+    [[self toolbarBottomHeightConstraint] setConstant:CGSizeZero.height];
 }
 
 - (void)removeItemsFromToolbars {
@@ -2368,8 +2367,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     break;
                 }
                 case MTDocumentObjectTypeWhtiespace:
-                    
-                    
                     break;
                 default:
                     break;

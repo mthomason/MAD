@@ -19,6 +19,9 @@
 
 - (void)setNetworkActivityIndicatorVisibleThreadSafe:(BOOL)networkActivityIndicatorVisible;
 
+- (UIBackgroundTaskIdentifier)requestBackgroundTask;
+- (void)handoffBackground:(NSNumber *)bgTask;
+
 @end
 
 #endif

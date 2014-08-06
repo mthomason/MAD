@@ -14,6 +14,7 @@
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "UIApplication+Extras.h"
 #import "MAReportDocument.h"
 #import "MTActivityItemProviderPdf.h"
 #import "UAAppReviewManager.h"
@@ -103,7 +104,7 @@
 @property (nonatomic, strong) MTActivityItemProviderPdf *activityItemProviderPdf;
 
 @property (nonatomic, assign) BOOL shouldShowPrintDialog;
-
+@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
 @end
 
 @implementation MTReportViewerController
@@ -222,6 +223,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+    
     [self setEdgesForExtendedLayout: UIRectEdgeNone];
     [self setTitle:@"MAD Viewer"];
     
@@ -232,17 +236,21 @@
     [labelMadDesigner setAttributedText:attributedString];
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
+    
     _timerLabelTimeSinceRefreh = nil;
     
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
-    _lastCacheDate = nil;
-    [[self labelDateLastRefreshed] setText:@""];
-    [self setPageIsAnimating:NO];
     
+    _lastCacheDate = nil;
+    
+    [[self labelDateLastRefreshed] setText:@""];
+
+    [self setPageIsAnimating:NO];
     [self setStartedRefresh:NO];
     
     [[self view] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    
     [self setDataSource:self];
     [self setDelegate:self];
     
@@ -279,7 +287,7 @@
     [super viewDidAppear:animated];
     
     [self.document initalizeMainQuery];
-    [self reload:self];
+    [self reload];
     [self addSliderPagination];
     [self updateLateRefreshedLabel:self];
     
@@ -410,8 +418,8 @@
         [self setCurrentPageIndex:sliderIndex];
         [self updatePageStatus];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                                                                PageNumber: [self currentPageIndex] + 1
-                                                                                                                   ofPages: [self numberOfPages]];
+                                                                                                                PageNumber: self.currentPageIndex + 1
+                                                                                                                   ofPages: self.numberOfPages];
         [[pageOne view] setFrame:[[self view] bounds]];
         [pageOne setDelegate:self];
         
@@ -584,7 +592,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
     if (self.isRefreshing == NO && self.startedRefresh == NO) {
         [reportViewerController setDisplayActive];
-        [reportViewerController reload:reportViewerController withSize:frame.size];
+        [reportViewerController reloadWithSize:frame.size];
     }
 }
 
@@ -673,28 +681,26 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (IBAction)refresh:(id)sender {
+    self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
+    __weak __block MTReportViewerController *weakself = self;
     
-    __block MTReportViewerController *reportViewer =
-        [sender isKindOfClass:[MTReportViewerController class]] ? sender : self;
-    
-    [[reportViewer barButtonItemDone] setEnabled:NO];
+    [[weakself barButtonItemDone] setEnabled:NO];
 
-    if ([reportViewer isRefreshing] == NO) {
-        [reportViewer setStartedRefresh:YES];
-        [reportViewer setIsRefreshing:YES];
-        [reportViewer setDisplayInactive];
+    if ([weakself isRefreshing] == NO) {
+        [weakself setStartedRefresh:YES];
+        [weakself setIsRefreshing:YES];
+        [weakself setDisplayInactive];
         
         MTDatabase *database = [[self.document defaultQuery] database];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver: reportViewer
+        [notificationCenter addObserver: weakself
                                selector: @selector(reportDocumentDidReadRows:)
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
         
-        __weak MTReportViewerController *weakself = reportViewer;
-        [self.document refresh:^(BOOL success, NSError *error) {
+        [weakself.document refresh:^(BOOL success, NSError *error) {
 
             if (!success) {
                 [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
@@ -707,7 +713,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                           name: MTNotificationDidReadRowsName
                                         object: database];
             [weakself setDisplayActive];
-            [weakself reload:weakself];
+            [weakself reload];
             [weakself timerDealloc];
             [weakself updateLateRefreshedLabel:weakself];
         }];
@@ -738,11 +744,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)showPrintDialog {
     if ([NSThread isMainThread] == NO) {
         __weak MTReportViewerController *weakself = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [[weakself popoverControllerActivity] dismissPopoverAnimated:YES];
                 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         
                         UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
@@ -852,27 +858,29 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)reload {
     __weak MTReportViewerController *blockself = self;
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [blockself reload:blockself];
+            [blockself reloadWithSize:blockself.view.bounds.size];
         });
     });
 }
 
-- (void)reload:(MTReportViewerController *)reportViewer {
-    [reportViewer reload:reportViewer withSize:[[reportViewer view] bounds].size];
-}
-
-- (void)reload:(MTReportViewerController *)reportViewer withSize:(CGSize)viewBounds {
-    [reportViewer setDisplayInactive];
+- (void)reloadWithSize:(CGSize)viewBounds {
     
-    __weak MTReportViewerController *blockViewer = reportViewer;
+    if (self.backgroundTaskIdRefresh == UIBackgroundTaskInvalid) {
+        self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
+    }
+    
+    [self setDisplayInactive];
+    
+    __weak MTReportViewerController *blockViewer = self;
     
     [self.document prepareForQuery];
+    
     __weak MAReportDocument *weakdoc = self.document;
 
-    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         
         [blockViewer watchFormatter: weakdoc.reportFormatter];
@@ -883,7 +891,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         
         MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
                                                                                                                   dataTable: [weakdoc mainDataTable]];
-        [reportViewer setPrintPageRendererReport:printPageRender];
+        [blockViewer setPrintPageRendererReport:printPageRender];
 
         [self ignoreFormatter: weakdoc.reportFormatter];
 
@@ -911,6 +919,18 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [blockViewer2 updateRecordsReadStatus];
             
             [[doc2 reportFormatter] setDidRefresh:NO];
+            
+            if (blockViewer2.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
+                NSNumber *bgtask = @(blockViewer2.backgroundTaskIdRefresh);
+                [[UIApplication sharedApplication] handoffBackground:bgtask];
+                blockViewer2.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+                
+                UILocalNotification *notification = [[UILocalNotification alloc] init];
+                NSString *refreshCompleted = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
+                [notification setAlertBody:refreshCompleted];
+                [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+
+            }
             
         });
     });

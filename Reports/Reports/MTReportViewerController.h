@@ -23,7 +23,6 @@
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
 @property (nonatomic, weak) MAReportDocument *document;
 
-- (void)reload:(MTReportViewerController *)reportViewer;
 - (void)reload;
 
 @end
