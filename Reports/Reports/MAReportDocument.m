@@ -71,6 +71,7 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSURL+Document.h"
 
 #import "MTActivityIndicator.h"
+#import "MTReportFormatterPageDefinition.h"
 
 //Keys stored in the cache.  Short and unique.
 NSString * const MTReportSectionType = @"a";
@@ -535,6 +536,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
         [rf setCachedDelegate:weakself];
         [rf setDataDelegate:weakself];
         [rf setOverrideIdentifier:@"madpreview"];
+        [rf setDidRefresh:YES];
         
         [[NSNotificationCenter defaultCenter] addObserver: weakself
                                                  selector: @selector(reportFormatterDidFormatPage:)
@@ -542,8 +544,13 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
                                                    object: rf];
         
         
+        [rf setLayoutSize:letterRect.size];
+        CGFloat halfInch = 72.0000f / 2.0000f;
+        UIEdgeInsets border = UIEdgeInsetsMake(halfInch, halfInch, halfInch, halfInch);
+        CGRect trimBoxRect = UIEdgeInsetsInsetRect(letterRect, border);
+        [rf setMarginUsingPrintableRect:trimBoxRect];
         [rf setDatasource:weakself];
-        [rf reformatForSize:letterRect.size];
+        [rf formatForSize:letterRect.size contentChanged:NO];
         
         
         [[NSNotificationCenter defaultCenter] removeObserver: weakself
@@ -555,13 +562,13 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
         NSUInteger numberOfPages = [rf numberOfPages];
         UIGraphicsBeginPDFContextToFile([filepath path], letterRect, options);
         
-        
-        NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect:letterRect]};
+        NSValue *trimBox = [NSValue valueWithCGRect:trimBoxRect];
+        NSDictionary *boxInfo = @{(__bridge NSString *)kCGPDFContextTrimBox: trimBox};
         NSString *numberOfPagesString = [NSNumberFormatter localizedStringFromNumber:@(numberOfPages) numberStyle:NSNumberFormatterDecimalStyle];
         for (NSUInteger i=0; i<numberOfPages; i++) {
             @autoreleasepool {
                 UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-                [printPageRender drawPageAtIndex:i inRect:letterRect];
+                [printPageRender drawPageAtIndex:i inRect:trimBoxRect];
                 NSString *iString = [NSNumberFormatter localizedStringFromNumber:@(i) numberStyle:NSNumberFormatterDecimalStyle];
                 NSString *text = [NSString stringWithFormat:@"Drawing page %@ of %@.", iString, numberOfPagesString];
                 [activityView.status performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:NO];

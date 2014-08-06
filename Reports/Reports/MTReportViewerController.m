@@ -105,6 +105,10 @@
 
 @property (nonatomic, assign) BOOL shouldShowPrintDialog;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdRefresh;
+
+@property (nonatomic, assign) BOOL didRefreshBeforeReaload;
+@property (nonatomic, assign) BOOL activityExporting;
+
 @end
 
 @implementation MTReportViewerController
@@ -161,8 +165,11 @@
 }
 
 - (void)initalize {
+    
+    self.activityExporting = NO;
+    self.didRefreshBeforeReaload = NO;
     NSAttributedString *lineReturnString = [[NSAttributedString alloc] initWithString:@"\n"];
-    [self setLineReturnString:lineReturnString];
+    self.lineReturnString = lineReturnString;
     [self initializeVerticalSlider];
     [self initalizeLabelStatus];
     [self initalizeStatusMessages];
@@ -503,13 +510,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 
-    MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-    UIView *displayView = [pageViewController view];
-
-    [self setFrameBeforeRotation: [displayView frame]];
-
-    [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
-    [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
+    if (self.activityExporting == NO) {
+        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+        UIView *displayView = [pageViewController view];
+        
+        [self setFrameBeforeRotation: [displayView frame]];
+        
+        [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
+        [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
+    }
 }
 
 - (MTReportViewerReportPageViewController *)currentPageviewController {
@@ -518,63 +527,69 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    
-    MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-    UIView *displayView = [pageViewController view];
-    [displayView setNeedsDisplay];
 
-    CGRect oldBounds = displayView.bounds;
-    [self redrawReportViewer:self withFrame:oldBounds];
-
-    pageViewController = [self currentPageviewController];
-    displayView = [pageViewController view];
-    
-    [self setFrameAfterRotation: oldBounds];
-    [UIView setAnimationsEnabled:NO];
-    [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
-    
-    CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x, self.frameBeforeRotation.origin.y, self.frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
-    [self.snapshotAfterRotation setFrame:framePreservingHeight];
-    
-    UIImage *imageBeforeRotation = [[self snapshotBeforeRotation] image];
-    imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-
-    UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
-    imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-
-    [UIView setAnimationsEnabled:YES];
-    
-    if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
-        [self.snapshotAfterRotation setAlpha:0.0000f];
-        [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
-        [self.snapshotAfterRotation setAlpha:1.0000f];
-    } else {
-        [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
-        [[self snapshotBeforeRotation] setAlpha:0.0000f];
+    if (self.activityExporting == NO) {
+        
+        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+        UIView *displayView = [pageViewController view];
+        [displayView setNeedsDisplay];
+        
+        CGRect oldBounds = displayView.bounds;
+        [self redrawWithFrame:oldBounds];
+        
+        pageViewController = [self currentPageviewController];
+        displayView = [pageViewController view];
+        
+        [self setFrameAfterRotation: oldBounds];
+        [UIView setAnimationsEnabled:NO];
+        [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
+        
+        
+        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x, self.frameBeforeRotation.origin.y, self.frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+        [self.snapshotAfterRotation setFrame:framePreservingHeight];
+        
+        UIImage *imageBeforeRotation = [[self snapshotBeforeRotation] image];
+        imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        
+        UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
+        imageAfterRotation = [imageAfterRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        
+        [UIView setAnimationsEnabled:YES];
+        
+        if ([imageAfterRotation size].height < [imageBeforeRotation size].height) {
+            [self.snapshotAfterRotation setAlpha:0.0000f];
+            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+            [self.snapshotAfterRotation setAlpha:1.0000f];
+        } else {
+            [displayView insertSubview:self.snapshotAfterRotation aboveSubview:[self snapshotBeforeRotation]];
+            [[self snapshotBeforeRotation] setAlpha:0.0000f];
+        }
+        
+        [[self snapshotAfterRotation] setFrame:self.frameAfterRotation];
+        framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
+        [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
+        
+        [(MTReportViewerReportPageView *)displayView setDrawBlankPage:YES];
+        [displayView setNeedsDisplay];
     }
-    
-    [[self snapshotAfterRotation] setFrame:self.frameAfterRotation];
-    framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
-    [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
-    
-    [(MTReportViewerReportPageView *)displayView setDrawBlankPage:YES];
-    [displayView setNeedsDisplay];
 }
 
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
     [[[self navigationItem] titleView] sizeToFit];
-
-    MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-    UIView *displayView = [pageViewController view];
-    
-    [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
-    [displayView setNeedsDisplay];
-
-    [[self snapshotBeforeRotation] removeFromSuperview];
-    [[self snapshotAfterRotation] removeFromSuperview];
-
+    if (self.activityExporting == NO) {
+        
+        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
+        UIView *displayView = [pageViewController view];
+        
+        [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+        [displayView setNeedsDisplay];
+        
+        [[self snapshotBeforeRotation] removeFromSuperview];
+        [[self snapshotAfterRotation] removeFromSuperview];
+    }
 }
 
 - (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
@@ -589,10 +604,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return result;
 }
 
-- (void)redrawReportViewer:(MTReportViewerController *)reportViewerController withFrame:(CGRect)frame {
-    if (self.isRefreshing == NO && self.startedRefresh == NO) {
-        [reportViewerController setDisplayActive];
-        [reportViewerController reloadWithSize:frame.size];
+- (BOOL)shouldReprocess {
+    return self.isRefreshing == NO && self.startedRefresh == NO && self.activityExporting == NO;
+}
+
+- (void)redrawWithFrame:(CGRect)frame {
+    if ([self shouldReprocess]) {
+        [self setDisplayActive];
+        [self reloadWithSize:frame.size];
     }
 }
 
@@ -613,7 +632,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     NSURL *temporaryFile = [temporaryDirectory URLByAppendingPathComponent:@"preview.pdf"];
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:temporaryFile error:&error];
-    [self redrawReportViewer:self withFrame:self.view.frame];
+    [self redrawWithFrame:self.view.frame];
 }
 
 #pragma mark - Actions
@@ -681,6 +700,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (IBAction)refresh:(id)sender {
+    self.didRefreshBeforeReaload = YES;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
     __weak __block MTReportViewerController *weakself = self;
     
@@ -774,7 +794,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (IBAction)activity:(id)sender {
-    [self.pageSlider setEnabled:NO];
+    self.activityExporting = YES;
+    self.pageSlider.enabled = NO;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
     [activityItemProviderPdf setDelegate:self];
@@ -782,17 +803,18 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self setActivityItemProviderPdf:activityItemProviderPdf];
     
     MTActivityReportPrintPreview *printPreview = [[MTActivityReportPrintPreview alloc] init];
-    [printPreview setDelegate:self];
+    printPreview.delegate = self;
+
     NSArray *applicationActivities = @[printPreview];
-    
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
                                                                                          applicationActivities:applicationActivities];
     
-    __weak MTReportViewerController *weakself = self;
+    __weak __block MTReportViewerController *weakself = self;
     
     UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
         if (completed) {
             [weakself.pageSlider setEnabled:YES];
+            weakself.activityExporting = NO;
             [UAAppReviewManager userDidSignificantEvent:YES];
         } else {
             if ([activityType length] > 0) {
@@ -806,14 +828,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         __weak MTReportViewerController *weakself = self;
                         if ([UIDevice isPad] == NO) {
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
-                                [weakself.pageSlider setEnabled:YES];
+                                weakself.pageSlider.enabled = YES;
+                                weakself.activityExporting = NO;
                             }];
                         }
                     }
                 }
-                [weakself.pageSlider setEnabled:YES];
+                weakself.pageSlider.enabled = YES;
+                weakself.activityExporting = NO;
             } else {
-                [weakself.pageSlider setEnabled:YES];
+                weakself.pageSlider.enabled = YES;
+                weakself.activityExporting = NO;
             }
         }
     };
@@ -823,9 +848,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-            [popoverController setDelegate:self];
-            [popoverController presentPopoverFromBarButtonItem: [self barButtonItemActivity]
-                                      permittedArrowDirections: UIPopoverArrowDirectionAny animated:YES];
+            popoverController.delegate = self;
+            [popoverController presentPopoverFromBarButtonItem: self.barButtonItemActivity
+                                      permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                      animated: YES];
             [self setPopoverControllerActivity:popoverController];
             [self disableTabBarItems];
         }
@@ -921,15 +947,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [[doc2 reportFormatter] setDidRefresh:NO];
             
             if (blockViewer2.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
-                NSNumber *bgtask = @(blockViewer2.backgroundTaskIdRefresh);
-                [[UIApplication sharedApplication] handoffBackground:bgtask];
-                blockViewer2.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
                 
                 UILocalNotification *notification = [[UILocalNotification alloc] init];
-                NSString *refreshCompleted = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
-                [notification setAlertBody:refreshCompleted];
-                [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-
+                if (blockViewer2.didRefreshBeforeReaload) {
+                    notification.alertBody = NSLocalizedString(@"Refresh completed.", @"Refresh completed.");
+                    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                    blockViewer2.didRefreshBeforeReaload = NO;
+                }
+                
+                NSNumber *bgtask = @(blockViewer2.backgroundTaskIdRefresh);
+                blockViewer2.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
+                [[UIApplication sharedApplication] handoffBackground:bgtask];
             }
             
         });
