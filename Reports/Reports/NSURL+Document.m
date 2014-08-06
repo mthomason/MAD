@@ -41,4 +41,8 @@
     
 }
 
+- (NSString *)key {
+    return self.absoluteString;
+}
+
 @end

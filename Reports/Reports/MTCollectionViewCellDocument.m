@@ -20,13 +20,22 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 #import "MAReportDocument.h"
 
 @interface MTCollectionViewCellDocument ()
+
 @property (nonatomic, strong) UIColor *bgColor;
+@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
+
 @end
 
 @implementation MTCollectionViewCellDocument
 
 - (void)awakeFromNib {
     CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    [self setParagraphStyle:paragraphStyle];
     
     [[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
     [[[self imagePreview] layer] setShadowRadius:2.0000f];
@@ -59,7 +68,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 
 - (void)loadPreviewImageForUrl:(NSURL *)url {
     __weak MTCollectionViewCellDocument *weakself = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:url];
             NSString *path = [thumbnailUrl path];
@@ -77,10 +86,8 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 
 - (void)setText:(NSString *)text {
     
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+
+    
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     NSInteger length = [[attributedString string] length];
     CGFloat size = [UIDevice isPad] ? 22.0000f : 12.0000f;
@@ -88,7 +95,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     NSRange range = NSMakeRange(0, length);
     [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [attributedString addAttribute:NSFontAttributeName value:fonta range:range];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:self.paragraphStyle range:range];
     [[self labelTitle] setAttributedText:attributedString];
 }
 
