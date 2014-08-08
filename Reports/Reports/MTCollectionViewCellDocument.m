@@ -115,11 +115,17 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
         }
         
         [self setSelectedBackgroundView:selectedBackground];
+        
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [activityView stopAnimating];
+        [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+        [activityView setCenter:[[self contentView] center]];
+        [[self contentView] addSubview:activityView];
+        [self setActivityIndicator:activityView];
+        
     }
     return self;
 }
-
-
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     return action == @selector(email:) || action == @selector(delete:) || action == @selector(rename:) || action == @selector(duplicate:);

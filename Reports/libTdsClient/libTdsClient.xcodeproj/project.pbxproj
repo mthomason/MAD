@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		4C1CDB841774E53500CFD2C8 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */; };
 		4C1CDB851774E53500CFD2C8 /* MTTdsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CDB831774E53500CFD2C8 /* MTTdsClient.m */; };
-		4C5CB730189E173600BB5AF8 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB72D189E173600BB5AF8 /* libsybdb.a */; };
-		4C5CB731189E173600BB5AF8 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB72D189E173600BB5AF8 /* libsybdb.a */; };
+		4C323B811992B68E004A7762 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB72D189E173600BB5AF8 /* libsybdb.a */; };
+		4C323B821992B68F004A7762 /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB72D189E173600BB5AF8 /* libsybdb.a */; };
 		4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA0A1760EF8B00FFA4F4 /* Foundation.framework */; };
 		4CEBFA1A1760EF8B00FFA4F4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA191760EF8B00FFA4F4 /* SenTestingKit.framework */; };
 		4CEBFA1C1760EF8B00FFA4F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEBFA1B1760EF8B00FFA4F4 /* UIKit.framework */; };
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C5CB730189E173600BB5AF8 /* libsybdb.a in Frameworks */,
+				4C323B821992B68F004A7762 /* libsybdb.a in Frameworks */,
 				4CEBFA0B1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,9 +84,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CEBFA1A1760EF8B00FFA4F4 /* SenTestingKit.framework in Frameworks */,
+				4C323B811992B68E004A7762 /* libsybdb.a in Frameworks */,
 				4CEBFA1C1760EF8B00FFA4F4 /* UIKit.framework in Frameworks */,
 				4CEBFA1D1760EF8B00FFA4F4 /* Foundation.framework in Frameworks */,
-				4C5CB731189E173600BB5AF8 /* libsybdb.a in Frameworks */,
 				4CEBFA201760EF8B00FFA4F4 /* liblibTdsClient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -32,7 +32,7 @@
 
 - (NSString *)activityViewController:(UIActivityViewController *)activityViewController dataTypeIdentifierForActivityType:(NSString *)activityType {
     [self setActivityViewController:activityViewController];
-    return [super activityViewController:activityViewController dataTypeIdentifierForActivityType:activityType];
+    return activityType == nil ? @"" : [super activityViewController:activityViewController dataTypeIdentifierForActivityType:activityType];
 }
 
 - (UIImage *)activityViewController:(UIActivityViewController *)activityViewController thumbnailImageForActivityType:(NSString *)activityType suggestedSize:(CGSize)size {

@@ -624,7 +624,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                      char *columnName        = dbcolname(dbconn, columnOffsetCtr);
                                      DBCOL *ci = malloc(sizeof(DBCOL));
                                      dbcolinfo(dbconn, CI_REGULAR, columnOffsetCtr, 0, ci);
-                                     NSLog(@"\n%@\n%@\n%@", [NSString stringWithCString:ci->ActualName encoding:NSStringEncodingConversionAllowLossy],
+                                     //NSLog(@"\n%@\n%@\n%@", [NSString stringWithCString:ci->ActualName encoding:NSStringEncodingConversionAllowLossy],
                                      [NSString stringWithCString:ci->TableName encoding:NSStringEncodingConversionAllowLossy],
                                      [NSString stringWithCString:ci->Name encoding:NSStringEncodingConversionAllowLossy]);
                                      */

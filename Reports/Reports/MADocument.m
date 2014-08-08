@@ -189,7 +189,7 @@ NSString * MTDocumentParentContextName          = @"moc";
         NSArray *errors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
         if (errors != nil && errors.count > 0) {
             for (NSError *error in errors) {
-                NSLog(@"  Error: %@", error.userInfo);
+                MTLog(@"  Error: %@", error.userInfo);
             }
         }
     }

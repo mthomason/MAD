@@ -707,8 +707,6 @@
 		4C5CB7D4189E2A7D00BB5AF8 /* sybfront.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7BC189E2A7D00BB5AF8 /* sybfront.h */; };
 		4C5CB7D5189E2A7D00BB5AF8 /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7BD189E2A7D00BB5AF8 /* tds_sysdep_public.h */; };
 		4C5CB7D6189E2A7D00BB5AF8 /* tds_sysdep_public.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7BD189E2A7D00BB5AF8 /* tds_sysdep_public.h */; };
-		4C5CB7D7189E2A7D00BB5AF8 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */; };
-		4C5CB7D8189E2A7D00BB5AF8 /* libsybdb.a in Resources */ = {isa = PBXBuildFile; fileRef = 4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */; };
 		4C5CD398181E3937005FC6DD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C752E0C16EA3A0C001FDAA3 /* README.md */; };
 		4C5CD399181E3937005FC6DD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C752E0C16EA3A0C001FDAA3 /* README.md */; };
 		4C5CD39A181EADD7005FC6DD /* UIColor+EverydayApps.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB625114E395E400A5389E /* UIColor+EverydayApps.m */; };
@@ -1098,7 +1096,6 @@
 		4C92954D18C4CE360010AAEF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76AF18257E4A00E462F6 /* libz.dylib */; };
 		4C92954E18C4CE410010AAEF /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3218938266006B301A /* libc++.dylib */; };
 		4C92954F18C4CE4A0010AAEF /* libSystem.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA54D3D18938801006B301A /* libSystem.dylib */; };
-		4C92955518C4CEF40010AAEF /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5CB7BF189E2A7D00BB5AF8 /* libsybdb.a */; };
 		4C92955618C4CF000010AAEF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2318B5F3E800750B6B /* libcrypto.a */; };
 		4C92955718C4CF040010AAEF /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C434B2418B5F3E800750B6B /* libssl.a */; };
 		4C92956418C4E0770010AAEF /* MTImageLaunchDesignerPadLandscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92955818C4E0760010AAEF /* MTImageLaunchDesignerPadLandscape.png */; };
@@ -3110,7 +3107,6 @@
 				4C92954418C4CD840010AAEF /* QuartzCore.framework in Frameworks */,
 				4C92954318C4CD740010AAEF /* libxml2.dylib in Frameworks */,
 				4C92954218C4CD6B0010AAEF /* Security.framework in Frameworks */,
-				4C92955518C4CEF40010AAEF /* libsybdb.a in Frameworks */,
 				4C92954118C4CD570010AAEF /* SystemConfiguration.framework in Frameworks */,
 				4C92954018C4CD4F0010AAEF /* MobileCoreServices.framework in Frameworks */,
 				4C92953F18C4CD3F0010AAEF /* CFNetwork.framework in Frameworks */,
@@ -5317,7 +5313,7 @@
 			name = MySqlClientTest;
 			productName = MySqlClientTest;
 			productReference = 4C1B7A54163E0D9400E331AA /* MySqlClientTest.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		4C25803C192D090F00BE74EB /* MAD Designer Tests */ = {
 			isa = PBXNativeTarget;
@@ -5378,7 +5374,7 @@
 		4C384E1B14B29789007B4F48 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0510;
+				LastTestingUpgradeCheck = 0600;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
@@ -5673,7 +5669,6 @@
 				4C0E780E163B5AEC003B951E /* UIImagePatternHomemadePaper.png in Resources */,
 				4C0E780F163B5AEC003B951E /* UIImagePatternHomemadePaper@2x.png in Resources */,
 				4C0E7810163B5AEC003B951E /* UIImagePatternKraftPaper.png in Resources */,
-				4C5CB7D8189E2A7D00BB5AF8 /* libsybdb.a in Resources */,
 				4C0E7811163B5AEC003B951E /* UIImagePatternKraftPaper@2x.png in Resources */,
 				4C0E7812163B5AEC003B951E /* UIImagePatternKraftPaper2.png in Resources */,
 				4C0E7813163B5AEC003B951E /* UIImagePatternKraftPaper2@2x.png in Resources */,
@@ -6056,7 +6051,6 @@
 				4C80A5F5183185B000242703 /* MTBarcodeMicroQrCode.h in Resources */,
 				4C1BB6E31813D1520027C508 /* UIBarButtonItemPaintRoller.png in Resources */,
 				4C5CB7C1189E2A7D00BB5AF8 /* bkpublic.h in Resources */,
-				4C5CB7D7189E2A7D00BB5AF8 /* libsybdb.a in Resources */,
 				4C1BB6E71813D1C70027C508 /* UIBarButtonItemDatabase.png in Resources */,
 				4CFD36591836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */,
 				4C4C6F21167642D9004A3B04 /* MTEdge.h in Resources */,
@@ -6127,7 +6121,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Custom Script Start\"\n\n$( sh ${PROJECT_DIR}/buildcounter.sh )\n\npushd $SRCROOT\ncd ../Compressor\n\necho \"\"\necho $( pwd )\necho \"\"\n\nif [ -e \"library/libmysqlclient/libmysqlclient.a\" ]\nthen\n    echo \"Found MySQL Connector.\"\nelse\n    echo \"Installing MySQL Connector.\"\n    $( sh ./compressor.sh --mysql )\nfi\n\nif [ -e \"library/libpng/libpng.a\" ]\nthen\n    echo \"Found libpng!\"\nelse\n    echo \"Installing libpng.\"\n    $( sh ./compressor.sh --libpng )\nfi\n\nif [ -e \"library/libsybdb/libsybdb.a\" ]\nthen\n    echo \"Found libsybdb!\"\nelse\n    echo \"Installing libsybdb.\"\n    $( sh ./compressor.sh --freetds )\nfi\n\nif [ -e \"library/openssl/libcrypto.a\" ]\nthen\n    echo \"Found libcrypto!\"\nelse\n    echo \"Installing openssl.\"\n    $( sh ./compressor.sh --openssl )\nfi\n\npopd\n\necho \"Custom Script End\"\n";
+			shellScript = "echo \"Custom Script Start\"\n\n#$( sh ${PROJECT_DIR}/buildcounter.sh )\n\npushd $SRCROOT\ncd ../Compressor\n\necho \"\"\necho $( pwd )\necho \"\"\n\nif [ -e \"library/libmysqlclient/libmysqlclient.a\" ]\nthen\n    echo \"Found MySQL Connector.\"\nelse\n    echo \"Installing MySQL Connector.\"\n    $( sh ./compressor.sh --mysql )\nfi\n\nif [ -e \"library/libpng/libpng.a\" ]\nthen\n    echo \"Found libpng!\"\nelse\n    echo \"Installing libpng.\"\n    $( sh ./compressor.sh --libpng )\nfi\n\nif [ -e \"library/libsybdb/libsybdb.a\" ]\nthen\n    echo \"Found libsybdb!\"\nelse\n    echo \"Installing libsybdb.\"\n    $( sh ./compressor.sh --freetds )\nfi\n\nif [ -e \"library/openssl/libcrypto.a\" ]\nthen\n    echo \"Found libcrypto!\"\nelse\n    echo \"Installing openssl.\"\n    $( sh ./compressor.sh --openssl )\nfi\n\npopd\n\necho \"Custom Script End\"\n";
 		};
 		4C1B7A52163E0D9400E331AA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6153,7 +6147,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Custom Script Start\"\n\n$( sh ${PROJECT_DIR}/buildcounter.sh )\n\necho \"Custom Script End\"\n";
+			shellScript = "echo \"Custom Script Start\"\n\n#$( sh ${PROJECT_DIR}/buildcounter.sh )\n\necho \"Custom Script End\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -7346,8 +7340,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MAD Viewer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -7375,8 +7370,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "MAD Viewer";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "34AD4B59-DC8F-45FD-B2F8-CE3A0C163A8B";
+				PROVISIONING_PROFILE = "5C5FDDF5-C73B-4176-A6DA-E92017B632C3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5C5FDDF5-C73B-4176-A6DA-E92017B632C3";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -7389,8 +7384,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MAD Viewer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -7418,8 +7414,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "MAD Viewer";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1F852B9A-4B9C-439C-B45F-E08F25DCF9D9";
+				PROVISIONING_PROFILE = "7019972F-DCB4-4433-9890-79699F0713CA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7019972F-DCB4-4433-9890-79699F0713CA";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -7622,7 +7618,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -7641,6 +7637,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -7684,6 +7681,7 @@
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
+				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

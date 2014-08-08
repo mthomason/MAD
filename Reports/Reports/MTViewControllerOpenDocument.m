@@ -663,21 +663,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([weakself isEditing]) {
             [cell startWobble];
         }
-        if ([[cell contentView] alpha] < 0.99999f && [weakself isSavingActivityIndicatorVisible] == NO) {
-            __weak UIView *blockView = [cell contentView];
-            __weak UIActivityIndicatorView *activityIndicatorView;
-            for (UIView *subview in [[cell contentView] subviews]) {
-                if ([subview isKindOfClass:[UIActivityIndicatorView class]]) {
-                    activityIndicatorView = (UIActivityIndicatorView *)subview;
-                    break;
-                }
+        if ([weakself isSavingActivityIndicatorVisible] == NO) {
+            [cell.activityIndicator stopAnimating];
+        }
+        if (weakself.isSavingActivityIndicatorVisible) {
+            NSIndexPath *path = [[weakself collectionView] indexPathForCell:cell];
+            NSURL *url = [self documentForIndexPath:path];
+            NSComparisonResult comparionResult = [[self.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
+            if (comparionResult == NSOrderedSame) {
+                [cell.activityIndicator startAnimating];
             }
-            [UIView animateWithDuration:1.0000f animations:^{
-                [blockView setAlpha:1.0000f];
-                [activityIndicatorView setAlpha:0.0000f];
-            } completion:^(BOOL finished) {
-                [activityIndicatorView removeFromSuperview];
-            }];
         }
         
     };
@@ -995,11 +990,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:path];
             if (cell != nil) {
                 [cell performDeselectionAnimations];
-                UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                [activityView startAnimating];
-                [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
-                [activityView setCenter:[[cell contentView] center]];
-                [[cell contentView] addSubview:activityView];
+                [[cell activityIndicator] startAnimating];
             }
         }
     }
@@ -1190,7 +1181,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         for (NSURL *url in urlsToDelete) {
             NSError *error = nil;
             [self removeCachedFileForDocumentUrl:url];
-            NSLog(@"Deleting %@", url.lastPathComponent);
+            MTLog(@"Deleting %@", url.lastPathComponent);
             [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
             [error presentErrorToUser];
         }

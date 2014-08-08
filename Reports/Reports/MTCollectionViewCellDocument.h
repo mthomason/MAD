@@ -18,6 +18,7 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
 
