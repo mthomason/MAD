@@ -785,7 +785,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self alertView:[self renameAlertView] clickedButtonAtIndex:1];
+    [self alertView:self.renameAlertView clickedButtonAtIndex:1];
     [[self renameAlertView] dismissWithClickedButtonIndex:1 animated:YES];
     return YES;
 }
@@ -977,7 +977,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)reenable {
     [[self collectionView] setUserInteractionEnabled: YES];
-    [self setSavingActivityIndicatorVisible:NO];
+    self.savingActivityIndicatorVisible = NO;
+    for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[[self collectionView] cellForItemAtIndexPath:path];
+        [cell.activityIndicator stopAnimating];
+    }
     [[self collectionView] reloadData];
 }
 
