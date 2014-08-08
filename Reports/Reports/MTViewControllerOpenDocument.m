@@ -667,12 +667,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [cell.activityIndicator stopAnimating];
         }
         if (weakself.isSavingActivityIndicatorVisible) {
-            NSIndexPath *path = [[weakself collectionView] indexPathForCell:cell];
-            NSURL *url = [self documentForIndexPath:path];
             NSComparisonResult comparionResult = [[self.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
             if (comparionResult == NSOrderedSame) {
                 [cell.activityIndicator startAnimating];
+            } else {
+                [cell.activityIndicator stopAnimating];
             }
+        } else {
+            [cell.activityIndicator stopAnimating];
         }
         
     };

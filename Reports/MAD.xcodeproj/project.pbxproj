@@ -6148,7 +6148,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Custom Script Start\"\n\n#$( sh ${PROJECT_DIR}/buildcounter.sh )\n\necho \"Custom Script End\"\n";
+			shellScript = "echo \"Custom Script Start\"\n\n$( sh ${PROJECT_DIR}/buildcounter.sh )\n\necho \"Custom Script End\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
