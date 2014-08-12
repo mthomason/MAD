@@ -101,7 +101,7 @@
 				<key>public.filename-extension</key>
 				<string>mad</string>
 				<key>public.mime-type</key>
-				<string>producitivy/mad</string>
+				<string>application/vnd.everydayapps.mad</string>
 			</dict>
 		</dict>
 	</array>
