@@ -37,9 +37,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.5";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.5";
-NSString * const MTGlobalBundleRev                                  = @"1380";
+NSString * const MTGlobalBundleVersion                              = @"7.0.6";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.6";
+NSString * const MTGlobalBundleRev                                  = @"1381";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -202,7 +202,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     if ([self reportState] == MTReportStateOpen) {
         NSDictionary *documents = [self documents];
         NSURL *currentUrl = [self currentDocument];
-        result = [documents objectForKey:currentUrl];
+        result = documents[currentUrl];
     }
     return result;
 }
@@ -272,8 +272,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     NSRange secondRange;
     
     if ([components count] == 2) {
-        firstRange = [title rangeOfString:[components objectAtIndex:0]];
-        secondRange = [title rangeOfString:[components objectAtIndex:1]];
+        firstRange = [title rangeOfString:components[0]];
+        secondRange = [title rangeOfString:components[1]];
     } else {
         firstRange = range; secondRange = range;
     }
@@ -471,18 +471,18 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 
                 
                 NSDictionary *rootPlistSettings = [NSDictionary dictionaryWithContentsOfFile:pathRootPlist];
-                NSArray *preferences = [rootPlistSettings objectForKey:@"PreferenceSpecifiers"];
+                NSArray *preferences = rootPlistSettings[@"PreferenceSpecifiers"];
                 NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
                 
                 for (NSDictionary *prefSpecification in preferences)  {
-                    NSString *key = [prefSpecification objectForKey:@"Key"];
+                    NSString *key = prefSpecification[@"Key"];
                     if (key) {
                         
                         id currentObject = [standardUserDefaults objectForKey:key];
                         if (currentObject == nil) {
                             
-                            id objectToSet = [prefSpecification objectForKey:@"DefaultValue"];
-                            [defaultsToRegister setObject:objectToSet forKey:key];
+                            id objectToSet = prefSpecification[@"DefaultValue"];
+                            defaultsToRegister[key] = objectToSet;
                         }
                     }
                 }

@@ -48,11 +48,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[MNSSortTypeReuseIds objectAtIndex:MNSSortOrderAccending]]) {
+    if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSSortTypeReuseIds[MNSSortOrderAccending]]) {
         [[self delegate] uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderAccending];
         [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryCheckmark];
         [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryNone];
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[MNSSortTypeReuseIds objectAtIndex:MNSSortOrderDecending]]) {
+    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSSortTypeReuseIds[MNSSortOrderDecending]]) {
         [[self delegate] uITableViewControllerSortTypeDidSelectSortType: MNSSortOrderDecending];
         [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryNone];
         [[self tableViewCellDecending] setAccessoryType:UITableViewCellAccessoryCheckmark];

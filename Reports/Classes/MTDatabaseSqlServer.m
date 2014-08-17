@@ -629,11 +629,11 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                      [NSString stringWithCString:ci->Name encoding:NSStringEncodingConversionAllowLossy]);
                                      */
                                     
-                                    NSString *fieldKey = [[query fieldKeys] objectAtIndex:columnCtr];
+                                    NSString *fieldKey = [query fieldKeys][columnCtr];
                                     
-                                    NSNumber *columnNumber = [[NSNumber alloc] initWithInt:columnCtr];
+                                    NSNumber *columnNumber = @(columnCtr);
                                     
-                                    NSNumber *columnTypeNumber = [[NSNumber alloc] initWithInt:columnType];
+                                    NSNumber *columnTypeNumber = @(columnType);
                                     
                                     //NSCharacterSet *whitespaceAndNewlineCharacterSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
                                     //NSString *cname = [[columns objectAtIndex:columnCtr] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet];
@@ -641,13 +641,13 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     NSString *columnNameString = fieldKey; // [[[fieldSelectComponents lastObject] stringByTrimmingCharactersInSet:whitespaceAndNewlineCharacterSet] retain];
                                     //NSString *columnNameString = [[NSString alloc] initWithCString:columnName encoding:NSStringEncodingConversionAllowLossy];
                                     
-                                    NSNumber *columnDataLen = [[NSNumber alloc] initWithInt:columnNumberBytes];
+                                    NSNumber *columnDataLen = @(columnNumberBytes);
                                     NSNumber *columTypeKey = @(columnType);
-                                    NSInteger columnIndexOfType = [[counters objectForKey:columTypeKey] integerValue];
+                                    NSInteger columnIndexOfType = [counters[columTypeKey] integerValue];
                                     
-                                    NSNumber *columnIndexOfTypeNumber = [[NSNumber alloc] initWithInteger:columnIndexOfType];
-                                    NSNumber *columnLen = [[NSNumber alloc] initWithInteger: columnLength];
-                                    NSNumber *columPercision = [[NSNumber alloc] initWithInteger: -1];
+                                    NSNumber *columnIndexOfTypeNumber = @(columnIndexOfType);
+                                    NSNumber *columnLen = @(columnLength);
+                                    NSNumber *columPercision = @-1;
                                     
                                     NSDictionary *dictionary = @{
                                                                  MTDatabaseColumnTypeId : columnTypeNumber,          //Type
@@ -679,7 +679,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     columnIndexOfType++;
                                     
                                     NSNumber *n = @(columnIndexOfType);
-                                    [counters setObject:n forKey:columTypeKey];
+                                    counters[columTypeKey] = n;
                                     
                                 }
                             }
@@ -811,13 +811,13 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 
                                 for (NSDictionary *columnMetaData in colmunHolder) {
                                     
-                                    int columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] intValue];
-                                    int columnLength = [[columnMetaData objectForKey:MTDatabaseColumnLenId] intValue];
+                                    int columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue];
+                                    int columnLength = [columnMetaData[MTDatabaseColumnLenId] intValue];
                                     //int columnDataLength = [[columnMetaData objectForKey:MTDatabaseColumnDataLenId] intValue];
-                                    int columnIndexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] intValue];
+                                    int columnIndexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
                                     int columnOffsetNumber = columnNumber + 1;
                                     
-                                    switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
+                                    switch ([columnMetaData[MTDatabaseColumnTypeId] integerValue]) {
                                             
                                         case SYBCHAR:
                                         {
@@ -983,7 +983,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                 /* dbnextrow will be called once per row in the query before returning NO_MORE_ROWS */
                                 NSMutableArray *columnPercision = [[NSMutableArray alloc] initWithCapacity:[colmunHolder count]];
                                 for (NSInteger i = 0; i<[colmunHolder count]; i++) {
-                                    NSNumber *negOne = [[NSNumber alloc] initWithInteger:-1];
+                                    NSNumber *negOne = @-1;
                                     [columnPercision addObject: negOne];
                                 }
                                 
@@ -997,13 +997,13 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                     NSInteger columnCounter = 0;
                                     for (NSDictionary *columnMetaData in colmunHolder) {
                                         
-                                        int indexOfType = [[columnMetaData objectForKey:MTDatabaseColumnIndexOfType] intValue];
+                                        int indexOfType = [columnMetaData[MTDatabaseColumnIndexOfType] intValue];
                                         
-                                        NSString *fieldName = [columnMetaData objectForKey:MTDatabaseColumnNameId];
+                                        NSString *fieldName = columnMetaData[MTDatabaseColumnNameId];
                                         
-                                        NSInteger columnNumber = [[columnMetaData objectForKey:MTDatabaseColumnNumberId] intValue];
+                                        NSInteger columnNumber = [columnMetaData[MTDatabaseColumnNumberId] intValue];
                                         
-                                        switch ([[columnMetaData objectForKey:MTDatabaseColumnTypeId] integerValue]) {
+                                        switch ([columnMetaData[MTDatabaseColumnTypeId] integerValue]) {
                                                 
                                             case SYBDECIMAL:
                                             case SYBNUMERIC: {
@@ -1013,7 +1013,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSString *objectStr = [[NSString alloc] initWithCString: sybNumericBindChar[indexOfType]
                                                                                                    encoding: NSStringEncodingConversionAllowLossy];
                                                     
-                                                    NSInteger cp = [[columnPercision objectAtIndex:columnCounter] integerValue];;
+                                                    NSInteger cp = [columnPercision[columnCounter] integerValue];;
                                                     
                                                     NSString *decimalSeperatorSqlServer2 = nil;
                                                     if (cp == -1 && tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved == NO) {
@@ -1022,7 +1022,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                         NSString *seperator = [objectStr stringByTrimmingCharactersInSet:characterSet];
                                                         switch ([seperator length]) {
                                                             case 0: {
-                                                                NSNumber *zero = [[NSNumber alloc] initWithInteger:0];
+                                                                NSNumber *zero = @0;
                                                                 [columnPercision setObject:zero atIndexedSubscript:columnCounter];
                                                                 
                                                                 //  Integer case... no seperator yet.
@@ -1032,7 +1032,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                             }
                                                             case 1:
                                                             default: {
-                                                                NSNumber *one = [[NSNumber alloc] initWithInteger:1];
+                                                                NSNumber *one = @1;
                                                                 [columnPercision setObject:one atIndexedSubscript:columnCounter];
                                                                 
                                                                 //Multiple decimal seperators?  This is going to end badly, lol.
@@ -1086,7 +1086,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             }
                                             case SYBFLT8: {
                                                 if (sybFlt8BindNull[indexOfType] != -1) {
-                                                    NSNumber *object = [[NSNumber alloc] initWithDouble:sybFlt8Bind[indexOfType]];
+                                                    NSNumber *object = @(sybFlt8Bind[indexOfType]);
                                                     resultsForRow[fieldName] = object;
                                                 }
                                                 break;
@@ -1111,7 +1111,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     if (sybVarChar != nil) {
                                                         NSString *object = [[NSString alloc] initWithCString: sybVarChar
                                                                                                     encoding: NSStringEncodingConversionAllowLossy];
-                                                        [resultsForRow setObject:object forKey:fieldName];
+                                                        resultsForRow[fieldName] = object;
                                                     }
                                                 }
                                                 break;
@@ -1122,7 +1122,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     if (sybnVarChar != nil) {
                                                         NSString *object = [[NSString alloc] initWithCString: sybnVarChar
                                                                                                     encoding: NSStringEncodingConversionAllowLossy];
-                                                        [resultsForRow setObject:object forKey:fieldName];
+                                                        resultsForRow[fieldName] = object;
                                                     }
                                                 }
                                                 break;
@@ -1134,7 +1134,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     if (sybText != nil) {
                                                         NSString *object = [[NSString alloc] initWithCString: sybText
                                                                                                     encoding: NSStringEncodingConversionAllowLossy];
-                                                        [resultsForRow setObject:object forKey:fieldName];
+                                                        resultsForRow[fieldName] = object;
                                                     }
                                                 }
                                                 break;
@@ -1145,7 +1145,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     if (sybnTest != nil) {
                                                         NSString *object = [[NSString alloc] initWithCString: sybnTest
                                                                                                     encoding: NSStringEncodingConversionAllowLossy];
-                                                        [resultsForRow setObject:object forKey:fieldName];
+                                                        resultsForRow[fieldName] = object;
                                                     }
                                                 }
                                                 break;
@@ -1154,39 +1154,39 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             case SYBINTN: {
                                                 if (sybIntnBindNull[indexOfType] != -1) {
                                                     long long integer = sybIntnBind[indexOfType];
-                                                    NSNumber *object = [[NSNumber alloc] initWithInteger:(NSInteger)integer];
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    NSNumber *object = @((NSInteger)integer);
+                                                    resultsForRow[fieldName] = object;
                                                 }
                                                 break;
                                             }
                                             case SYBINT1: {
                                                 if (sybInt1BindNull[indexOfType] != -1) {
                                                     int integer = sybInt1Bind[indexOfType];
-                                                    NSNumber *object = [[NSNumber alloc] initWithInt:integer];
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    NSNumber *object = @(integer);
+                                                    resultsForRow[fieldName] = object;
                                                 }
                                                 break;
                                             }
                                             case SYBINT2: {
                                                 if (sybInt2BindNull[indexOfType] != -1) {
                                                     int integer = sybInt2Bind[indexOfType];
-                                                    NSNumber *object = [[NSNumber alloc] initWithInt:integer];
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    NSNumber *object = @(integer);
+                                                    resultsForRow[fieldName] = object;
                                                 }
                                                 break;
                                             }
                                             case SYBINT4: {
                                                 if (sybInt4BindNull[indexOfType] != -1) {
                                                     int integer = sybInt4Bind[indexOfType];
-                                                    NSNumber *object = [[NSNumber alloc] initWithInt:integer];
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    NSNumber *object = @(integer);
+                                                    resultsForRow[fieldName] = object;
                                                 }
                                                 break;
                                             }
                                             case SYBINT8: {
                                                 if (sybInt8BindNull[indexOfType] != -1) {
-                                                    NSNumber *object = [[NSNumber alloc] initWithLongLong:sybInt8Bind[indexOfType]];
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    NSNumber *object = @(sybInt8Bind[indexOfType]);
+                                                    resultsForRow[fieldName] = object;
                                                 }
                                                 break;
                                             }
@@ -1216,7 +1216,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     
                                                     NSDate *newDate = [gregorian dateFromComponents:offsetCompsWithMinutes];
                                                     
-                                                    [resultsForRow setObject:newDate forKey:fieldName];
+                                                    resultsForRow[fieldName] = newDate;
                                                 }
                                                 break;
                                             }
@@ -1236,9 +1236,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     [comps setSecond:     dateinfo.datesecond];
                                                     [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
                                                     NSDate *date = [gregorian dateFromComponents:comps];
-                                                    [resultsForRow setObject:date forKey:fieldName];
+                                                    resultsForRow[fieldName] = date;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
@@ -1260,20 +1260,20 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSCalendar *gregorian = [[NSCalendar alloc]
                                                                              initWithCalendarIdentifier:NSGregorianCalendar];
                                                     NSDate *date = [gregorian dateFromComponents:comps];
-                                                    [resultsForRow setObject:date forKey:fieldName];
+                                                    resultsForRow[fieldName] = date;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
                                                 
                                             case SYBBIT: {
                                                 if (sybBitBindNull[indexOfType] != -1) {
-                                                    NSNumber *object = [[NSNumber alloc] initWithBool:(BOOL)sybBitBind[indexOfType]];
+                                                    NSNumber *object = @((BOOL)sybBitBind[indexOfType]);
                                                     //NSLog(@"%@\t\t(SYBBIT):\t\t%@", [[fieldName substringWithRange:NSMakeRange(0, MIN([fieldName length], 9))] stringByPaddingToLength:9 withString:@" " startingAtIndex:0], object);
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    resultsForRow[fieldName] = object;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
@@ -1281,9 +1281,9 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                             case SYBBITN: {
                                                 if (sybBitNBindNull[indexOfType] != -1) {
                                                     NSNumber *object = [[NSNumber alloc] initWithInt:(BOOL)sybBitNBind[indexOfType]];
-                                                    [resultsForRow setObject:object forKey:fieldName];
+                                                    resultsForRow[fieldName] = object;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
@@ -1292,54 +1292,54 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                 if (sybImageBindNull[indexOfType] != -1) {
                                                     
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
                                             case SYBMONEY: {
                                                 if (sybMoneyBindNull[indexOfType] != -1) {
                                                     double money = sybMoneyBind[indexOfType];
-                                                    NSNumber *moneyNumber = [[NSNumber alloc] initWithDouble:money];
-                                                    [resultsForRow setObject:moneyNumber forKey:fieldName];
+                                                    NSNumber *moneyNumber = @(money);
+                                                    resultsForRow[fieldName] = moneyNumber;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
                                             case SYBMONEYN: {
                                                 if (sybMoneyNBindNull[indexOfType] != -1) {
                                                     double money = sybMoneyNBind[indexOfType];
-                                                    NSNumber *moneyNumber = [[NSNumber alloc] initWithDouble:money];
-                                                    [resultsForRow setObject:moneyNumber forKey:fieldName];
+                                                    NSNumber *moneyNumber = @(money);
+                                                    resultsForRow[fieldName] = moneyNumber;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
                                             case SYBBINARY: {
                                                 if (sybBinaryBindNull[indexOfType] != -1) {
                                                     NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
-                                                    [resultsForRow setObject:notSupported forKey:fieldName];
+                                                    resultsForRow[fieldName] = notSupported;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
                                             case SYBVOID: {
                                                 if (sybVoidBindNull[indexOfType] != -1) {
                                                     NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
-                                                    [resultsForRow setObject:notSupported forKey:fieldName];
+                                                    resultsForRow[fieldName] = notSupported;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
                                             case SYBVARBINARY: {
                                                 if (sybVarBinaryBindNull[indexOfType] != -1) {
                                                     NSString *notSupported = NSLocalizedString(@"Binary and time stamps are not yet supported.", @"Binary and time stamps are not yet supported.");
-                                                    [resultsForRow setObject:notSupported forKey:fieldName];
+                                                    resultsForRow[fieldName] = notSupported;
                                                 } else {
-                                                    [resultsForRow setObject:NSLocalizedString(@"NULL", @"NULL") forKey:fieldName];
+                                                    resultsForRow[fieldName] = NSLocalizedString(@"NULL", @"NULL");
                                                 }
                                                 break;
                                             }
@@ -1399,7 +1399,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
-    NSNumber *counter = [counters objectForKey:@(type)];
+    NSNumber *counter = counters[@(type)];
     NSInteger resultCountForType;
     if (counter) {
         resultCountForType = [counter integerValue];
@@ -1423,8 +1423,8 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         char *osstr = (oserrstr != NULL ? oserrstr : "");
         char *dbstr = (dberrstr != NULL ? dberrstr : "");
         
-        NSString *systemMessage = [NSString stringWithCString:osstr encoding:NSUTF8StringEncoding];
-        NSString *dbMessage = [NSString stringWithCString:dbstr encoding:NSUTF8StringEncoding];
+        NSString *systemMessage = @(osstr);
+        NSString *dbMessage = @(dbstr);
         NSString *errorMessage = [NSString stringWithFormat:@"System says: \"(%d)%@.\"\nDatabase says: \"(%d)%@.\"", oserr, systemMessage, dberr, dbMessage];
         
         //Don't want to lookup

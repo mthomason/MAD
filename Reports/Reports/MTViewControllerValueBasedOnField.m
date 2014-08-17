@@ -194,7 +194,7 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     NSString *result = nil;
     if (row < [[self pickerData] count]) {
-        NSDictionary *pickerData = [[self pickerData] objectAtIndex:row];
+        NSDictionary *pickerData = [self pickerData][row];
         id resultObject = [[pickerData allValues] lastObject];
         if ([resultObject isKindOfClass:[NSDateComponents class]]) {
             NSDateComponents *resultDate = resultObject;

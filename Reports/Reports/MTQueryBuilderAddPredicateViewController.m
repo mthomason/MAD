@@ -70,7 +70,7 @@
 
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                dvc.excludeTables = [NSArray array];
+                dvc.excludeTables = @[];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }
@@ -83,7 +83,7 @@
         if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                dvc.excludeTables = [NSArray array];
+                dvc.excludeTables = @[];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }
@@ -170,22 +170,22 @@
     [self setPredicateOperator: operatorType];
     switch (operatorType) {
         case MNSPredicateOperatorEqual:
-            label = [MNSPredicateOperatorNames objectAtIndex: MNSPredicateOperatorEqual];
+            label = MNSPredicateOperatorNames[MNSPredicateOperatorEqual];
             break;
         case MNSPredicateOperatorNotEqual:
-            label = [MNSPredicateOperatorNames objectAtIndex: MNSPredicateOperatorNotEqual];
+            label = MNSPredicateOperatorNames[MNSPredicateOperatorNotEqual];
             break;
         case MNSPredicateOperatorGreaterThan:
-            label = [MNSPredicateOperatorNames objectAtIndex: MNSPredicateOperatorGreaterThan];
+            label = MNSPredicateOperatorNames[MNSPredicateOperatorGreaterThan];
             break;
         case MNSPredicateOperatorGreaterThanOrEqualTo:
-            label = [MNSPredicateOperatorNames objectAtIndex: MNSPredicateOperatorGreaterThanOrEqualTo];
+            label = MNSPredicateOperatorNames[MNSPredicateOperatorGreaterThanOrEqualTo];
             break;
         case MNSPredicateOperatorLessThanOrEqualTo:
-            label = [MNSPredicateOperatorNames objectAtIndex: MNSPredicateOperatorLessThanOrEqualTo];
+            label = MNSPredicateOperatorNames[MNSPredicateOperatorLessThanOrEqualTo];
             break;
         case MNSPredicateOperatorLessThan:
-            label = [MNSPredicateOperatorNames objectAtIndex: MNSPredicateOperatorLessThan];
+            label = MNSPredicateOperatorNames[MNSPredicateOperatorLessThan];
             break;
         default:
             label = NSLocalizedString(@"Default", @"Default");

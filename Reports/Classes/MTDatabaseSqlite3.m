@@ -84,7 +84,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
 
         } else {
             const char *errorMessage = sqlite3_errmsg(_database);
-            NSString *message = [NSString stringWithUTF8String: errorMessage];
+            NSString *message = @(errorMessage);
             NSString *title = NSLocalizedString(@"Connect Failed", @"Connect Failed");
             error = [NSError errorWithDomain:@"MTSqlite3" code:4832 title:title andMessage:message];
         }
@@ -152,7 +152,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 		while (sqlite3_step(statement) == SQLITE_ROW) {
             
             const unsigned char *resultString = sqlite3_column_text(statement, 0);
-            NSString *tableName = [NSString stringWithUTF8String:(char *)resultString];
+            NSString *tableName = @((char *)resultString);
             
             MTDatabaseTable *databaseTable = [[MTDatabaseTable alloc] initWithTableName: tableName];
             [result addObject:databaseTable];
@@ -186,8 +186,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             const unsigned char *resultName = sqlite3_column_text(statement, 1);
             const unsigned char *resultType = sqlite3_column_text(statement, 2);
             BOOL isPk = sqlite3_column_int(statement, 5) > 0;
-            NSString *fieldName = [NSString stringWithUTF8String:(char *)resultName];
-            NSString *fieldType = [NSString stringWithUTF8String:(char *)resultType];
+            NSString *fieldName = @((char *)resultName);
+            NSString *fieldType = @((char *)resultType);
             MTDataType dataType = [MTDatabaseSqlite3 dataTypeForNativeType: fieldType];
             
             MTDatabaseField *databaseField = [[MTDatabaseField alloc] initWithName: fieldName];
@@ -523,7 +523,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                         
                         id value = [MTDatabaseSqlite3 valueForStatement:statement columnNumber:colCtr];
                         NSString *fieldName = [query fieldKeys][colCtr];
-                        [resultsForRow setObject:value forKey:fieldName];
+                        resultsForRow[fieldName] = value;
                     }
                     
                     [dataTable addRowWithDataForFieldKeys:resultsForRow];
@@ -575,12 +575,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     switch (affentyType) {
         case SQLITE_INTEGER: {
             sqlite3_int64 rint = sqlite3_column_int64(statement, columnNumber);
-            value = [NSNumber numberWithLongLong:rint];
+            value = @(rint);
             break;
         }
         case SQLITE_FLOAT: {
             double rint = sqlite3_column_double(statement, columnNumber);
-            value = [NSNumber numberWithDouble:rint];
+            value = @(rint);
             break;
         }
         case SQLITE_BLOB: {
@@ -599,7 +599,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             
             const unsigned char *resultString = sqlite3_column_text(statement, columnNumber);
             if (resultString != NULL) {
-                value = [NSString stringWithUTF8String:(char *) resultString];
+                value = @((char *) resultString);
             }
             break;
         }
@@ -618,14 +618,14 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     id columnValue;
     switch (type) {
         case MTDataTypeLong:
-            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            columnValue = @(sqlite3_column_int64(statement, columnCounter));
             break;
         case MTDataTypeLongLong:
-            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            columnValue = @(sqlite3_column_int64(statement, columnCounter));
             break;
         case MTDataTypeInt24:
         case MTDataTypeInteger:
-            columnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, columnCounter)];
+            columnValue = @(sqlite3_column_int64(statement, columnCounter));
             break;
         case MTDataTypeShort:
             columnValue = [NSNumber numberWithShort:sqlite3_column_int(statement, columnCounter)];
@@ -636,12 +636,12 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                                          length: sqlite3_column_bytes(statement, columnCounter)];
             break;
         case MTDataTypeFloat:
-            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            columnValue = @(sqlite3_column_double(statement, columnCounter));
             break;
         case MTDataTypeNumber:
         case MTDataTypeDouble:
         case MTDataTypeDecimal:
-            columnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, columnCounter)];
+            columnValue = @(sqlite3_column_double(statement, columnCounter));
             break;
         case MTDataTypeBit:
         case MTDataTypeVarChar:
@@ -653,7 +653,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
             if (text == NULL) {
                 columnValue = [NSNull null];
             } else {
-                columnValue = [NSString stringWithUTF8String:(const char *) text];
+                columnValue = @((const char *) text);
             }
             break;
         }
@@ -674,7 +674,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 if (text == NULL) {
                     columnValue = [NSNull null];
                 } else {
-                    columnValue = [NSString stringWithUTF8String:(const char *) text];
+                    columnValue = @((const char *) text);
                 }
             }
             break;

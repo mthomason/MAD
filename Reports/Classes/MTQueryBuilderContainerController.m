@@ -180,11 +180,11 @@
 }
 
 - (id)leftViewController {
-    return [[self childViewControllers] objectAtIndex:0];
+    return [self childViewControllers][0];
 }
 
 - (id)rightViewController {
-    return [[self childViewControllers] objectAtIndex:1];
+    return [self childViewControllers][1];
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
@@ -225,7 +225,7 @@
                                                                                            action: toggleEditModeQueryDesigner];
             
             
-            [tbItems replaceObjectAtIndex:buttonIndex withObject: barButtonItem];
+            tbItems[buttonIndex] = barButtonItem;
             [[[self navigationController] toolbar] setItems: tbItems animated:YES];
             [self setBarButtonItemEdit:barButtonItem];
         }

@@ -263,7 +263,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
 }
 
 - (NSString *)fieldKeyForIndex:(NSUInteger)index {
-    return (index < [[self fieldKeys] count]) ? [[self fieldKeys] objectAtIndex:index] : nil;
+    return (index < [[self fieldKeys] count]) ? [self fieldKeys][index] : nil;
 }
 
 #pragma mark - Helper functions for the query cache
@@ -275,8 +275,8 @@ NSString * const MTQueryKeyPredicateValue = @"v";
         NSUInteger counter = 0, counterBinings = 0;
         for (NSDictionary *condition in whereClause) {
             [sql appendString: (counter == 0) ? @" WHERE " : @" AND "];
-            NSString *columnHandle = [condition objectForKey:@"c"];
-            NSString *columnValue = [condition objectForKey:@"v"];
+            NSString *columnHandle = condition[@"c"];
+            NSString *columnValue = condition[@"v"];
             
             
             MTDatabaseDataBinding *databinding;
@@ -308,7 +308,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
             if (sortCounter != 0) [sql appendString:@", "];
             MTDataColumn *dataColumn = nil;
             if ([self columns]) {
-                dataColumn = [[self columns] objectForKey:[sortDescriptor key]];
+                dataColumn = [self columns][[sortDescriptor key]];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
             NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
@@ -340,7 +340,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
 }
 
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle {
-    return [[(MTDataColumn *)[[self columns] objectForKey:columnHandle] columnType] integerValue];
+    return [[(MTDataColumn *)[self columns][columnHandle] columnType] integerValue];
 }
 
 + (NSDictionary *)queryDefinitionSelect:(NSArray *)columnKeys tableName:(NSString *)tableName sortDescriptors:(NSArray *)sortDescriptors {
@@ -360,12 +360,12 @@ NSString * const MTQueryKeyPredicateValue = @"v";
     NSNumber *offsetw = @(offset);
     NSNumber *keyLimit = @(MTQueryCacheSelectLimitOffsetParamatersLimit);
     NSNumber *keyOffset = @(MTQueryCacheSelectLimitOffsetParamatersOffset);
-    [queryDefination setObject:limitw forKey:keyLimit];
-    [queryDefination setObject:offsetw forKey:keyOffset];
+    queryDefination[keyLimit] = limitw;
+    queryDefination[keyOffset] = offsetw;
     if (droprowid) {
         NSNumber *keyDropRow = @(MTQueryCacheSelectLimitOffsetParamatersDropRowid);
         NSNumber *dropRowidObj = @YES;
-        [queryDefination setObject:dropRowidObj forKey:keyDropRow];
+        queryDefination[keyDropRow] = dropRowidObj;
     }
     return  queryDefination;
 }

@@ -23,7 +23,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
     NSString *cancelButtonTitle = NSLocalizedString(@"Dismiss", @"Cancel button title");
     NSString *localizedDescription = [self localizedDescription];
     NSString *localizedFailureReason = [self localizedFailureReason];
-    NSError *underlyingError = [[self userInfo] objectForKey:NSUnderlyingErrorKey];
+    NSError *underlyingError = [self userInfo][NSUnderlyingErrorKey];
     NSString *underlyingLocalizedDescription = [underlyingError localizedDescription];
     NSString *underlyingLocalizedFailureReason = [underlyingError localizedFailureReason];
     if (underlyingLocalizedDescription != nil) {

@@ -23,7 +23,7 @@
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
                                                                      ascending: NO];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryField class])];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];

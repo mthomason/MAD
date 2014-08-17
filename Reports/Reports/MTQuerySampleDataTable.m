@@ -63,7 +63,7 @@
         for (RptqDatabaseSchemaField *field in [table hasFields]) {
             MTDatabaseField *dbField = [field databaseFieldWrapper];
             NSString *fieldAlias = [[self database] fieldAliasForField:field withSafeTableName:safeTableName];
-            [[self fields] setObject:dbField forKey:fieldAlias];
+            [self fields][fieldAlias] = dbField;
             [[self fieldKeys] addObject:fieldAlias];
         }
     }
@@ -80,9 +80,9 @@
                 NSString *okey = [[queryMaxFieldLenght database] fieldAliasForField:field withSafeTableName:safeTableName];
                 NSString *ckey = [[queryMaxFieldLenght database] fieldAliasForField:field];
                 NSDictionary *widthsByField = [[self dataTableMaxFieldLength] objectAtRow:0];
-                NSNumber *widthByField = [widthsByField objectForKey:ckey];
+                NSNumber *widthByField = widthsByField[ckey];
                 NSInteger maxSize = ((NSNull *)widthByField == [NSNull null]) ? 0 : [widthByField integerValue];
-                MTDatabaseField *f = [[self fields] objectForKey:okey];
+                MTDatabaseField *f = [self fields][okey];
                 f.calculatedWidth = maxSize;
             }];
         }

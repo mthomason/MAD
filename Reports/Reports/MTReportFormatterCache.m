@@ -36,18 +36,18 @@
 
 - (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    [[self layout] setObject:layout forKey:key];
-    [[self indexes] setObject:indexes forKey:key];
+    [self layout][key] = layout;
+    [self indexes][key] = indexes;
 }
 
 - (id)layoutForSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    return [[self layout] objectForKey:key];
+    return [self layout][key];
 }
 
 - (id)indexesForSize:(CGSize)size {
     NSString *key = NSStringFromCGSize(size);
-    return [[self indexes] objectForKey:key];
+    return [self indexes][key];
 }
 
 - (void)dumpCache {

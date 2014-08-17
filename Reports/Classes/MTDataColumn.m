@@ -128,22 +128,22 @@
     self = [super init];
     if(self) {
         
-        NSString *fieldName = [plist objectForKey: [MTDataColumn keyFieldName]];
-        NSString *identifier = [plist objectForKey: [MTDataColumn keyIdentifier]];
+        NSString *fieldName = plist[[MTDataColumn keyFieldName]];
+        NSString *identifier = plist[[MTDataColumn keyIdentifier]];
         
-        NSArray *columnImmutable = [plist objectForKey: [MTDataColumn keyColumn]];
+        NSArray *columnImmutable = plist[[MTDataColumn keyColumn]];
         NSMutableArray *column = [[NSMutableArray alloc] initWithArray: columnImmutable];
         
-        id defaultValue = [plist objectForKey: [MTDataColumn keyDefaultValue]];
-        NSString *caption = [plist objectForKey: [MTDataColumn keyCaption]];
-        NSNumber *columnType = [plist objectForKey: [MTDataColumn keyColumnType]];
-        NSNumber *nativeColumnType = [plist objectForKey: [MTDataColumn keyNativeColumnType]];
-        NSNumber *dataLength = [plist objectForKey: [MTDataColumn keyDataLength]];
-        NSNumber *dataPercision = [plist objectForKey: [MTDataColumn keyDataPercision]];
+        id defaultValue = plist[[MTDataColumn keyDefaultValue]];
+        NSString *caption = plist[[MTDataColumn keyCaption]];
+        NSNumber *columnType = plist[[MTDataColumn keyColumnType]];
+        NSNumber *nativeColumnType = plist[[MTDataColumn keyNativeColumnType]];
+        NSNumber *dataLength = plist[[MTDataColumn keyDataLength]];
+        NSNumber *dataPercision = plist[[MTDataColumn keyDataPercision]];
         
-        BOOL isPrimaryKey = [[plist objectForKey: [MTDataColumn keyIsPrimaryKey]] boolValue];
-        BOOL isNotNull = [[plist objectForKey: [MTDataColumn keyIsNotNull]] boolValue];
-        BOOL isAutoIncrement = [[plist objectForKey: [MTDataColumn keyIsAutoIncrement]] boolValue];
+        BOOL isPrimaryKey = [plist[[MTDataColumn keyIsPrimaryKey]] boolValue];
+        BOOL isNotNull = [plist[[MTDataColumn keyIsNotNull]] boolValue];
+        BOOL isAutoIncrement = [plist[[MTDataColumn keyIsAutoIncrement]] boolValue];
         
         [self setFieldName:fieldName];
         [self setIdentifier: identifier];
@@ -165,7 +165,7 @@
 
 - (id)objectAtIndex:(NSInteger)index {
     NSAssert(index < [[self column] count], @"Column doesn't exit!");
-    return [[self column] objectAtIndex:index];
+    return [self column][index];
 }
 
 - (void)addObject:(id)object {
@@ -203,18 +203,18 @@
         defaultValue = @"~MTNull~";
     }
     
-    [plist setObject: [self fieldName]          forKey: keyFieldName];
-    [plist setObject: [self identifier]         forKey: keyIdentifier];
-    [plist setObject: [self column]             forKey: keyColumn];
-    [plist setObject: defaultValue              forKey: keyDefaultValue];
-    [plist setObject: [self caption]            forKey: keyCaption];
-    [plist setObject: [self columnType]         forKey: keyColumnType];
-    [plist setObject: [self nativeColumnType]   forKey: keyNativeColumnType];
-    [plist setObject: [self dataLength]         forKey: keyDataLength];
-    [plist setObject: [self dataPercision]      forKey: keyDataPercision];
-    [plist setObject: primaryKey                forKey: keyIsPrimaryKey];
-    [plist setObject: notNull                   forKey: keyIsNotNull];
-    [plist setObject: autoIncrement             forKey: keyIsAutoIncrement];
+    plist[keyFieldName] = [self fieldName];
+    plist[keyIdentifier] = [self identifier];
+    plist[keyColumn] = [self column];
+    plist[keyDefaultValue] = defaultValue;
+    plist[keyCaption] = [self caption];
+    plist[keyColumnType] = [self columnType];
+    plist[keyNativeColumnType] = [self nativeColumnType];
+    plist[keyDataLength] = [self dataLength];
+    plist[keyDataPercision] = [self dataPercision];
+    plist[keyIsPrimaryKey] = primaryKey;
+    plist[keyIsNotNull] = notNull;
+    plist[keyIsAutoIncrement] = autoIncrement;
 
     return plist;
 }

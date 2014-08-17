@@ -25,16 +25,16 @@
     if (self) {
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        self.rowids = [object objectForKey:@(MTQuerySelectRowIds)];
+        self.rowids = object[@(MTQuerySelectRowIds)];
         
-        NSString *tableName = [object objectForKey:@(MTQuerySelectTableName)];
+        NSString *tableName = object[@(MTQuerySelectTableName)];
         [self setTableName:tableName];
         
-        NSArray *sortDescriptors = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectSortDescriptors)]];
+        NSArray *sortDescriptors = [NSArray arrayWithArray:object[@(MTQuerySelectSortDescriptors)]];
         [self setSortDescriptors:sortDescriptors];
         
         NSNumber *keyColumns = @(MTQuerySelectColumns);
-        NSDictionary *columns = [object objectForKey:keyColumns];
+        NSDictionary *columns = object[keyColumns];
         [self setColumns:columns];
     }
     return self;

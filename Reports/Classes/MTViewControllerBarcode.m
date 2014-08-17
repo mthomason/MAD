@@ -240,7 +240,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
  
     [self setCachedData2dComponent:sampleData];
     if ([sampleData count] > 0) {
-        [[self barcode] setPrimaryData: [sampleData objectAtIndex:0]];
+        [[self barcode] setPrimaryData: sampleData[0]];
     }
     [self updateBarcode];
 
@@ -253,7 +253,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 - (void)setSampleData:(NSArray *)sampleData {
     [self setCachedData:sampleData];
     if ([sampleData count] > 0) {
-        [self setBarcodeInput:[sampleData objectAtIndex:0]];
+        [self setBarcodeInput:sampleData[0]];
     }
     [self updateBarcode];
 }

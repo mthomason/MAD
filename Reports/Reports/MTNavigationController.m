@@ -25,7 +25,7 @@
     [[self navigationBar] setTranslucent:YES];
     
     NSMutableDictionary *titleTextAttributes = [[[self navigationBar] titleTextAttributes] mutableCopy];
-    [titleTextAttributes setObject:whiteColor forKey:NSForegroundColorAttributeName];
+    titleTextAttributes[NSForegroundColorAttributeName] = whiteColor;
     [[self navigationBar] setTitleTextAttributes:titleTextAttributes];
 }
 

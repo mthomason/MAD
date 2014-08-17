@@ -51,7 +51,7 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentSection class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -132,7 +132,7 @@
 - (NSString *)keyForIdentifier {
     char buf[18];
     snprintf(buf, 18, "s%lu", (unsigned long)[[self objectID] hash]);
-    return [NSString stringWithUTF8String:buf];
+    return @(buf);
     
     //NSManagedObjectID *objectID = [[self objectID] hash];
     //NSURL *url = [objectID URIRepresentation];
@@ -143,7 +143,7 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObject class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex))
                                                                      ascending: NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -166,7 +166,7 @@
     [documentObject setDropPoint:origin];
     
     NSUInteger sectionZero = 0;
-    RptqDocumentSectionRows *sectionRow = [[self hasRows] objectAtIndex: sectionZero];
+    RptqDocumentSectionRows *sectionRow = [self hasRows][sectionZero];
     NSUInteger lastIndex = [[sectionRow hasObjects] count];
     NSIndexPath *indexInsert = [NSIndexPath indexPathForItem:lastIndex inSection:sectionZero];
     

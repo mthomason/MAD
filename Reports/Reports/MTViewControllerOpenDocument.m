@@ -351,15 +351,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
             [[tabBarController view] setTintColor:[UIColor tintColorRed]];
             
-            UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
+            UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
             MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
             queryBuilderContainerController.delegate = self;
             
-            UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
+            UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
             MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
             reportDesignerViewController.delegate = self;
             
-            UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
+            UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
             MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self ;
             
@@ -374,14 +374,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [[tabBarController view] setTintColor:[UIColor greenColor]];
             [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
             
-            UINavigationController *navController = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:0];
+            UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
             MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
             
-            UINavigationController *navController2 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:1];
+            UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
             MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
             reportDesignerViewController.delegate = self;
             
-            UINavigationController *navController3 = (UINavigationController *)[[tabBarController viewControllers] objectAtIndex:2];
+            UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
             MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self;
             MAReportDocument *document = [self currentDocument];
@@ -1102,7 +1102,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (IBAction)about:(id)sender {
-    NSString *applicationName = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleNameKey];
+    NSString *applicationName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleNameKey];
     NSString *title = [NSString stringWithFormat:NSLocalizedString(@"About %@", @"About Mad Designer"),  applicationName];
     NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.",
                                           @"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.");
@@ -1360,7 +1360,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MAReportDocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
         NSString *key = [self.openFiles.openUrl key];
-        result = [self.openFiles.openFiles objectForKey:key];
+        result = (self.openFiles.openFiles)[key];
     }
     return result;
 }
@@ -1369,7 +1369,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     self.openFiles.openUrl = url;
     MAReportDocument *document = [[MAReportDocument alloc] initWithFileURL:url];
     NSString *key = [url key];
-    [self.openFiles.openFiles setObject:document forKey:key];
+    (self.openFiles.openFiles)[key] = document;
     [document open:^(BOOL success) {
         if (success) [self setReportState:MTReportStateOpen];
         completionHandler(success);

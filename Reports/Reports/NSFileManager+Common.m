@@ -88,7 +88,7 @@
     NSURL *appSupportDirectory = nil;
     NSURL *appSupportDirectoryForApp = nil;
     if ([possibleUrls count] >= 1) {
-        appSupportDirectory = [possibleUrls objectAtIndex:0];
+        appSupportDirectory = possibleUrls[0];
         
         BOOL isDirectory;
         BOOL fileExist = [self fileExistsAtPath:[appSupportDirectory path] isDirectory:&isDirectory];
@@ -113,7 +113,7 @@
     NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *result = nil;
     if ([documentsDirectories count] >= 1) {
-        result = [documentsDirectories objectAtIndex: 0];
+        result = documentsDirectories[0];
     }
 	return result;
 }

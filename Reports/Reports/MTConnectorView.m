@@ -108,7 +108,7 @@
         }
     }
 
-    NSNumber *topLeftToBottomRightWrapper = [[NSNumber alloc] initWithBool:topLeftToBottomRight];
+    NSNumber *topLeftToBottomRightWrapper = @(topLeftToBottomRight);
     [self setTopLeftToBottomRight:topLeftToBottomRightWrapper];
     
     [self setNeedsDisplay];

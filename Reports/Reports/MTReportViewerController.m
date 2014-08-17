@@ -602,7 +602,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     NSInteger numberOfViewControllers = [viewControllers count];
     MTReportViewerReportPageViewController *result = nil;
     if (index < numberOfViewControllers) {
-        result = [viewControllers objectAtIndex:index];
+        result = viewControllers[index];
     } else {
         result = [viewControllers lastObject];
     }
@@ -747,13 +747,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];
-    NSNumber *pageNumber = [parameters objectForKey:MTDatabaseNumberOfPagesFormattedKey];
+    NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
     [self updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
 }
 
 - (void)reportDocumentDidReadRows:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];
-    NSNumber *rowNumber = [parameters objectForKey:MTDatabaseNumberOfRowsReadKey];
+    NSNumber *rowNumber = parameters[MTDatabaseNumberOfRowsReadKey];
     [self updateRecordsReadStatusWithNumberOfRecordsRead:rowNumber];
 }
 
@@ -1046,7 +1046,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     if (completed || finished) {
         [(MTReportViewerController *)pageViewController setPageIsAnimating:NO];
         if ([[(MTReportViewerController *)pageViewController viewControllers] count] > 0) {
-            MTReportViewerReportPageViewController *viewController = [[pageViewController viewControllers] objectAtIndex:0];
+            MTReportViewerReportPageViewController *viewController = [pageViewController viewControllers][0];
             [(MTReportViewerController *)pageViewController setCurrentPageIndex:[viewController pageNumber] - 1];
             [(MTReportViewerController *)pageViewController updatePageStatus];
             [[(MTReportViewerController *)pageViewController sliderPagination] setValue:[(MTReportViewerController *)pageViewController currentPageIndex] animated:YES];

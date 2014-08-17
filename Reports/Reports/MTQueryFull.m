@@ -65,7 +65,7 @@
 
         NSDictionary *parameters = (NSDictionary *)object;
         NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
-        RptqQuery *queryObject = [parameters objectForKey: parameterScheam];
+        RptqQuery *queryObject = parameters[parameterScheam];
         [self setQueryObject:queryObject];
 
         
@@ -135,7 +135,7 @@
                 
                 [result appendString:MTSqlFrom];
                 
-                NSNumber *linkDepth = [[NSNumber alloc] initWithInteger:0];
+                NSNumber *linkDepth = @0;
                 NSMutableArray *vertexArray = [[NSMutableArray alloc] initWithCapacity:[topologicalSortArray count]];
                 
                 for (MTPair *pair in topologicalSortArray) {
@@ -370,7 +370,7 @@
             NSString *fieldName = [[[self dataDelegate] database] safeIdentifier: [field name]];
             NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
             [result appendFormat: @"\t%@", fieldAlias];
-            [[self fields] setObject:field forKey:fieldAlias];
+            [self fields][fieldAlias] = field;
             [[self fieldKeys] addObject:fieldAlias];
             fieldCounter++;
         }

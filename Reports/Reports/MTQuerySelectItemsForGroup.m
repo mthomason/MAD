@@ -28,23 +28,23 @@
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSString *tableName = [NSString stringWithString:[object objectForKey:@(MTQuerySelectTableName)]];
+        NSString *tableName = [NSString stringWithString:object[@(MTQuerySelectTableName)]];
         [self setTableName:tableName];
         
-        NSArray *sortDescriptors = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectSortDescriptors)]];
+        NSArray *sortDescriptors = [NSArray arrayWithArray:object[@(MTQuerySelectSortDescriptors)]];
         [self setSortDescriptors:sortDescriptors];
         
-        NSMutableArray *columnKeys = [NSMutableArray arrayWithArray:[object objectForKey:@(MTQuerySelectFieldKeys)]];
+        NSMutableArray *columnKeys = [NSMutableArray arrayWithArray:object[@(MTQuerySelectFieldKeys)]];
         [columnKeys addObject:@"ROWID"];
         [self setColumnKeys:columnKeys];
         
-        NSArray *whereClause = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectPredicates)]];
+        NSArray *whereClause = [NSArray arrayWithArray:object[@(MTQuerySelectPredicates)]];
         [self setWhereClause:whereClause];
         
-        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:[object objectForKey:@(MTQuerySelectFieldDescriptors)]];
+        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
         MTDataColumn *rowid = [[MTDataColumn alloc] initWithIdentifier:@"ROWID"];
         [rowid setColumnType:@(MTDataTypeInteger)];
-        [columns setObject:rowid forKey:@"ROWID"];
+        columns[@"ROWID"] = rowid;
         [self setColumns:columns];
   
     }

@@ -75,7 +75,7 @@
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             
             if (dvc != nil) {
-                [dvc setExcludeTables: ([[self secondTable] alias] ? [NSArray arrayWithObject:[[self secondTable] alias]] : [NSArray array])];
+                [dvc setExcludeTables: ([[self secondTable] alias] ? @[[[self secondTable] alias]] : @[])];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }
@@ -86,7 +86,7 @@
             
             MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
             if (dvc != nil) {
-                [dvc setExcludeTables: ([[self firstTable] alias] ? [NSArray arrayWithObject:[[self firstTable] alias]] : [NSArray array])];
+                [dvc setExcludeTables: ([[self firstTable] alias] ? @[[[self firstTable] alias]] : @[])];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }

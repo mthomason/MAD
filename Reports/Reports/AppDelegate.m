@@ -61,7 +61,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (UIWindow *)window {
-    return [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    return [[UIApplication sharedApplication] windows][0];
 }
 
 - (void)dealloc {

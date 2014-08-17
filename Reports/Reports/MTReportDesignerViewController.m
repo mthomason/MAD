@@ -328,13 +328,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             RptqQueryField *queryField1 = [barcodeViewController queryField1];
             if (queryField1 != nil) {
                 NSManagedObjectID *objectId = [queryField1 objectID];
-                [defination setObject:objectId forKey:MTDocumentObjectDefinationField1];
+                defination[MTDocumentObjectDefinationField1] = objectId;
             }
             
             RptqQueryField *queryField2 = [barcodeViewController queryField2];
             if (queryField2 != nil) {
                 NSManagedObjectID *objectId = [queryField2 objectID];
-                [defination setObject:objectId forKey:MTDocumentObjectDefinationField2];
+                defination[MTDocumentObjectDefinationField2] = objectId;
             }
             [self insertDocumentObjectWithDefination:defination];
             
@@ -694,41 +694,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [navigationBar setTintColor:[UIColor tintColorWhite]];
 }
 
-+ (MTDocumentSectionView *)collectionViewWithObjectID:(RptqDocumentSection *)section layoutDelegate:(id)layoutDelegate {
-    MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
-    [backgroundView setNumberOfRowsInBackground:section.numberOfRows.integerValue];
-    [backgroundView setBackgroundColor:[UIColor clearColor]];
 
-    MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
-    [flowLayoutDesignerSection setDelegate:layoutDelegate];
-    MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
-    [collectionView setObjectIdTag: section.objectID];
-    
-    NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
-    collectionView.tag = section.identifier.integerValue;
-    NSString *documentElementReuseIdentifier = [MTReportDesignerViewController reuseIdentifierSection:collectionView.tag];
-    [collectionView registerClass: [MTCollectionViewCellElement class]
-       forCellWithReuseIdentifier: documentElementReuseIdentifier];
-    [collectionView registerClass: [MTCollectionReuseableViewDefault class]
-       forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
-              withReuseIdentifier: supplmentaryViewReuseIdHeader];
-    [collectionView registerClass: [MTCollectionReuseableViewDefault class]
-       forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
-              withReuseIdentifier: supplmentaryViewReuseIdHeader];
-    
-    UIColor *bgcolor = [MTReportDesignerViewController sectionBackgroundColor:section.visibility.boolValue];
-    collectionView.backgroundColor = bgcolor;
-    collectionView.clipsToBounds = YES;
-    collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    collectionView.allowsSelection = YES;
-    collectionView.allowsMultipleSelection = YES;
-    collectionView.backgroundView = backgroundView;
-    collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    collectionView.layer.borderColor = [[MTReportDesignerViewController borderColor] CGColor];
-    collectionView.layer.borderWidth = 1.0000f / [[UIScreen mainScreen] scale];
-
-    return collectionView;
-}
 + (NSString *)reuseIdentifierSection:(NSInteger)sectionNumber {
     return [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%ld", (long)sectionNumber];
 }
@@ -792,7 +758,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             NSInteger reportSectionId = [[reportSection identifier] integerValue];
             NSString *documentElementReuseIdentifier = [MTReportDesignerViewController reuseIdentifierSection:reportSectionId];
-            [[self collectionViewReuseIdentifiers] setObject:documentElementReuseIdentifier forKey:[reportSection identifier]];
+            [self collectionViewReuseIdentifiers][[reportSection identifier]] = documentElementReuseIdentifier;
             
             
             [collectionView setDelegate:self];
@@ -826,7 +792,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             sectionHeights += reportSectionHeight;
             
             NSString *lastKey = [reportSectionKeyTracker lastObject];
-            id constraintItem =  sectionCounter == 0 ? self.rulerView : [[self sectionViews] objectForKey:lastKey];
+            id constraintItem =  sectionCounter == 0 ? self.rulerView : [self sectionViews][lastKey];
             
             [collectionView setShowsVerticalScrollIndicator:YES];
 
@@ -943,7 +909,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[layoutConstraint firstItem] isKindOfClass:[MTDocumentSectionView class]]) {
             NSManagedObjectID *objectId = [[layoutConstraint firstItem] objectIdTag];
             NSString *key =[[NSString alloc] initWithString: [[objectId URIRepresentation] absoluteString]];
-            [[self layoutConstraintsReportSectionHeight] setObject:layoutConstraint forKey:key];
+            [self layoutConstraintsReportSectionHeight][key] = layoutConstraint;
         }
     }
     
@@ -978,13 +944,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)designerScrollViewWillAppear {
-    [self.designerScrollView setScrollEnabled:YES];
-    [self.designerScrollView setMaximumZoomScale:4.0000f];
-    [self.designerScrollView setMinimumZoomScale:1.0000f];
-    [self.designerScrollView setDelegate:self];
-    [self.designerScrollView setUserInteractionEnabled:YES];
-    [self.designerScrollView setBackgroundColor:[MTReportDesignerViewController designerBackgroundColor]];
-    [self.designerScrollView setIndicatorStyle:UIScrollViewIndicatorStyleBlack];
+    self.designerScrollView.scrollEnabled = YES;
+    self.designerScrollView.maximumZoomScale = 4.0000f;
+    self.designerScrollView.minimumZoomScale = 1.0000f;
+    self.designerScrollView.delegate = self;
+    self.designerScrollView.userInteractionEnabled = YES;
+    self.designerScrollView.backgroundColor = [MTReportDesignerViewController designerBackgroundColor];
+    self.designerScrollView.indicatorStyle = UIScrollViewIndicatorStyleBlack;
     [self.designerScrollView flashScrollIndicators];
 }
 
@@ -1086,7 +1052,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         CGFloat height = [[reportSection height] floatValue];
         NSString *key = [reportSection sectionKey];
-        NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:key];
+        NSLayoutConstraint *layoutConstraint = [self layoutConstraintsReportSectionHeight][key];
         [layoutConstraint setConstant:height];
         designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
         designerContentViewSize.height += [[reportSection height] floatValue];
@@ -1102,7 +1068,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [[viewController view] setFrame:[[navigationController view] frame]];
+    viewController.view.frame = navigationController.view.frame;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -1268,7 +1234,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     CGFloat h = [[documentSectionView collectionViewLayout] collectionViewContentSize].height;
     [documentSection setInterfaceHeight: h];    // WTF: Why is this called twice
-    UICollectionView *collectionView = [[self sectionViews] objectForKey:[documentSection sectionKey]];
+    UICollectionView *collectionView = [self sectionViews][[documentSection sectionKey]];
     UIView *backgroundView = [collectionView backgroundView];
     [backgroundView setNeedsDisplay];
     [[documentSectionView collectionViewLayout] invalidateLayout];
@@ -1319,7 +1285,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
     }
     [documentSection setNumberOfRows: [NSNumber numberWithInteger:numberOfRows]];
-    UICollectionView *collectionView = [[self sectionViews] objectForKey:[documentSection sectionKey]];
+    UICollectionView *collectionView = [self sectionViews][[documentSection sectionKey]];
     MTReportDesignerSectionBackgroundView *backgroundView = (MTReportDesignerSectionBackgroundView *)collectionView.backgroundView;
     [backgroundView setNumberOfRowsInBackground:numberOfRows];
 
@@ -1356,7 +1322,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSManagedObjectContext *managedObjectContect = [self.document managedObjectContext];
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:objectId inManagedObjectContext:managedObjectContect];
 
-    NSLayoutConstraint *layoutConstraint = [[self layoutConstraintsReportSectionHeight] objectForKey:[objectIdUrl absoluteString]];
+    NSLayoutConstraint *layoutConstraint = [self layoutConstraintsReportSectionHeight][[objectIdUrl absoluteString]];
     [layoutConstraint setConstant:documentSection.height.floatValue];
     [self.view setNeedsUpdateConstraints];
 }
@@ -1373,7 +1339,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - Core Data Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
-    NSArray *updatedObjects = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
+    NSArray *updatedObjects = [notification userInfo][NSUpdatedObjectsKey];
 
     for (id updatedObject in updatedObjects) {
         
@@ -1422,7 +1388,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
 
-    NSArray *managedObjectsUpdated = [[notification userInfo] objectForKey: NSUpdatedObjectsKey];
+    NSArray *managedObjectsUpdated = [notification userInfo][NSUpdatedObjectsKey];
     
     for (NSManagedObject *managedObject in managedObjectsUpdated) {
         
@@ -1981,12 +1947,12 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     // FIXME: Add ability to edit image fields.  84848422
     
-    BOOL editedImageExist = [info objectForKey:UIImagePickerControllerEditedImage] != nil;
+    BOOL editedImageExist = info[UIImagePickerControllerEditedImage] != nil;
     UIImage *selectedImage = nil;
     if (editedImageExist) {
-        selectedImage = [info objectForKey:UIImagePickerControllerEditedImage];
+        selectedImage = info[UIImagePickerControllerEditedImage];
     } else {
-        selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        selectedImage = info[UIImagePickerControllerOriginalImage];
     }
     
     
@@ -2068,7 +2034,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)applyBorderToView:(UIView *)view {
     NSNumber *key = @([view tag]);
-    [[self borderAppliedToView] setObject:@YES forKey:key];
+    [self borderAppliedToView][key] = @YES;
     UIColor *tintColor = [UIColor tintColorAnalogous4];
     [[view layer] setBorderColor:[tintColor CGColor]];
     [[view layer] setBorderWidth:1.0000f / [[UIScreen mainScreen] scale]];
@@ -2078,7 +2044,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     BOOL result;
     if ([self isBorderAppliedToView:view]) {
         NSNumber *key = @([view tag]);
-        [[self borderAppliedToView] setObject:@NO forKey:key];
+        [self borderAppliedToView][key] = @NO;
         result = YES;
     
         [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
@@ -2091,7 +2057,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (BOOL)isBorderAppliedToView:(UIView *)view {
     NSNumber *key = @([view tag]);
-    BOOL borderApplied = [[[self borderAppliedToView] objectForKey:key] boolValue];
+    BOOL borderApplied = [[self borderAppliedToView][key] boolValue];
     return borderApplied;
 }
 
@@ -2192,11 +2158,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (UICollectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return [[self sectionViews] objectForKey:[documentSection sectionKey]];
+    return [self sectionViews][[documentSection sectionKey]];
 }
 
 - (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return [[self sectionControlViews] objectForKey:[documentSection sectionKey]];
+    return [self sectionControlViews][[documentSection sectionKey]];
 }
 
 #pragma mark - Actions
@@ -2334,7 +2300,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         if (found) {
 
             
-            RptqDocumentObject *objectToEdit = [hasObjects objectAtIndex:deleteIndex];
+            RptqDocumentObject *objectToEdit = hasObjects[deleteIndex];
             
             switch ([[objectToEdit type] integerValue]) {
 
@@ -2585,10 +2551,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                             inManagedObjectContext: self.document.managedObjectContext];
     
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
     CGSize result;
     if ([objects count] > row) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        RptqDocumentObject *documentObject = objects[row];
         result = [documentObject size];
     } else {
         result = CGSizeZero;
@@ -2605,15 +2571,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
                                                                             inManagedObjectContext:self.document.managedObjectContext];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
-    NSString *resuseId = [[self collectionViewReuseIdentifiers] objectForKey:[documentSection identifier]];
+    NSOrderedSet *objects = [[documentSection hasRows][[indexPath section]] hasObjects];
+    NSString *resuseId = [self collectionViewReuseIdentifiers][[documentSection identifier]];
     
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
     [cell setDelegate:self];
     if ([objects count] > [indexPath row]) {
         
-        RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
+        RptqDocumentObject *documentObject = objects[[indexPath row]];
     
         CGSize documentObjectSize = [documentObject size];
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
@@ -2680,7 +2646,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                     inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
     return [objects count];
 }
 
@@ -2720,7 +2686,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
                                                                     inManagedObjectContext:self.document.managedObjectContext];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
     return [objects count];
 }
 
@@ -2745,10 +2711,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
                                                                     inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][[indexPath section]] hasObjects];
     
     if ([objects count] > row) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        RptqDocumentObject *documentObject = objects[row];
         
         if (action == @selector(delete:)) {
             [self delete:documentObject];
@@ -2900,7 +2866,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     MTCollectionViewLayoutLiquidAttributes *result = [MTCollectionViewLayoutLiquidAttributes layoutAttributesForCellWithIndexPath:indexPath];
     
     if ([objects count] > [indexPath item]) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath item]];
+        RptqDocumentObject *documentObject = objects[[indexPath item]];
         [result setDropPoint: CGPointMake([[documentObject dropPointX] floatValue], [[documentObject dropPointY] floatValue])];
         CGSize documentObjectSize = documentObject.size;
         [result setFrame:CGRectMake(result.dropPoint.x, result.dropPoint.y, documentObjectSize.width, documentObjectSize.height)];
@@ -2924,10 +2890,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
                                                                             inManagedObjectContext:self.document.managedObjectContext];
     
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:[indexPath section]] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][[indexPath section]] hasObjects];
     NSUInteger dropIndex = 0;
     if ([objects count] > [indexPath row]) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:[indexPath row]];
+        RptqDocumentObject *documentObject = objects[[indexPath row]];
         NSUInteger dropIndex = [documentSection nextDropIndexForSection];
         [documentObject setDropIndex:@(dropIndex)];
         NSError *error = nil;
@@ -2948,10 +2914,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                             inManagedObjectContext: self.document.managedObjectContext];
     
     
-    NSOrderedSet *objects = [[[documentSection hasRows] objectAtIndex:section] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
     
     if ([objects count] > row) {
-        RptqDocumentObject *documentObject = [objects objectAtIndex:row];
+        RptqDocumentObject *documentObject = objects[row];
         if (CGPointEqualToPoint(dropPoint, [documentObject dropPoint]) == NO) {
             [documentObject setDropPoint:dropPoint];
             [self.document.managedObjectContext save:nil];
@@ -3040,7 +3006,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [self.document.managedObjectContext save:&error];
         
         NSIndexPath *deletePath = [NSIndexPath indexPathForItem: deleteIndex inSection: 0];
-        [weakSectionCollectionView deleteItemsAtIndexPaths: [NSArray arrayWithObject:deletePath]];
+        [weakSectionCollectionView deleteItemsAtIndexPaths: @[deletePath]];
         
     } completion:^(BOOL finished) {
         if (finished) {
@@ -3649,6 +3615,42 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSDictionary *textAttribues = @{NSForegroundColorAttributeName : whiteColor};
     [navigationController.navigationBar setTitleTextAttributes:textAttribues];
     return navigationController;
+}
+
++ (MTDocumentSectionView *)collectionViewWithObjectID:(RptqDocumentSection *)section layoutDelegate:(id)layoutDelegate {
+    MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
+    [backgroundView setNumberOfRowsInBackground:section.numberOfRows.integerValue];
+    [backgroundView setBackgroundColor:[UIColor clearColor]];
+    
+    MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
+    [flowLayoutDesignerSection setDelegate:layoutDelegate];
+    MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
+    [collectionView setObjectIdTag: section.objectID];
+    
+    NSString *supplmentaryViewReuseIdHeader = [MTCollectionReuseableViewDefault reuseIdentifier];
+    collectionView.tag = section.identifier.integerValue;
+    NSString *documentElementReuseIdentifier = [MTReportDesignerViewController reuseIdentifierSection:collectionView.tag];
+    [collectionView registerClass: [MTCollectionViewCellElement class]
+       forCellWithReuseIdentifier: documentElementReuseIdentifier];
+    [collectionView registerClass: [MTCollectionReuseableViewDefault class]
+       forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+              withReuseIdentifier: supplmentaryViewReuseIdHeader];
+    [collectionView registerClass: [MTCollectionReuseableViewDefault class]
+       forSupplementaryViewOfKind: UICollectionElementKindSectionFooter
+              withReuseIdentifier: supplmentaryViewReuseIdHeader];
+    
+    UIColor *bgcolor = [MTReportDesignerViewController sectionBackgroundColor:section.visibility.boolValue];
+    collectionView.backgroundColor = bgcolor;
+    collectionView.clipsToBounds = YES;
+    collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    collectionView.allowsSelection = YES;
+    collectionView.allowsMultipleSelection = YES;
+    collectionView.backgroundView = backgroundView;
+    collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    collectionView.layer.borderColor = [[MTReportDesignerViewController borderColor] CGColor];
+    collectionView.layer.borderWidth = 1.0000f / [[UIScreen mainScreen] scale];
+    
+    return collectionView;
 }
 
 @end

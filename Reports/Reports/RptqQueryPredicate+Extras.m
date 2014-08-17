@@ -28,7 +28,7 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryPredicate class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -133,11 +133,11 @@
 }
 
 - (NSString *)symbolForDisplay {
-    return [MNSPredicateOperatorSymbolsDisplay objectAtIndex:[[self comparson] integerValue]];
+    return MNSPredicateOperatorSymbolsDisplay[[[self comparson] integerValue]];
 }
 
 - (NSString *)symbolForComparson {
-    return [MNSPredicateOperatorSymbols objectAtIndex:[[self comparson] integerValue]];
+    return MNSPredicateOperatorSymbols[[[self comparson] integerValue]];
 }
 
 #pragma mark - MTProtocolCompare

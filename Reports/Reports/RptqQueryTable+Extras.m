@@ -32,7 +32,7 @@
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
                                                                      ascending: NO];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryTable class])];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -128,7 +128,7 @@
     NSInteger index = [dropIndex integerValue];
     char buf[12];
     sprintf(buf, "%ld", (long)index);
-    NSString *indexString = [NSString stringWithUTF8String:buf];
+    NSString *indexString = @(buf);
     return [tableName stringByAppendingString:indexString];
 }
 

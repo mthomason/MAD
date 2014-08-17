@@ -21,7 +21,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-        version = [infoDict objectForKey:@"CFBundleVersion"];
+        version = infoDict[@"CFBundleVersion"];
     });
     return version;
 }

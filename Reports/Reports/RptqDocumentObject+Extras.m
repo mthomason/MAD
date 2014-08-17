@@ -78,7 +78,7 @@ static NSNumberFormatter *currencyNumberFormatter;
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(identifier))
                                                                      ascending: NO];
     
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];

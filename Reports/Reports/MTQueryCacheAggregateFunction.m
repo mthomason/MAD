@@ -32,31 +32,31 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
         NSNumber *keyRowIds = @(MTQueryCacheAggregateFunctionParamatersRowids);
-        NSArray *rowids = [object objectForKey:keyRowIds];
+        NSArray *rowids = object[keyRowIds];
         [self setRowids:rowids];
        
         NSNumber *keyFieldDescriptors = @(MTQueryCacheAggregateFunctionParamatersFieldDescriptors);
-        NSDictionary *fieldDescriptors = [NSDictionary dictionaryWithDictionary:[object objectForKey:keyFieldDescriptors]];
+        NSDictionary *fieldDescriptors = [NSDictionary dictionaryWithDictionary:object[keyFieldDescriptors]];
         [self setColumns:fieldDescriptors];
         
         NSNumber *keyTableName = @(MTQueryCacheAggregateFunctionParamatersTableName);
-        NSString *tableName = [NSString stringWithString:[object objectForKey:keyTableName]];
+        NSString *tableName = [NSString stringWithString:object[keyTableName]];
         [self setTableName:tableName];
         
         NSNumber *keyGroupByType = @(MTQueryCacheAggregateFunctionParamatersGroupByType);
-        NSNumber *groupBy = [object objectForKey:keyGroupByType];
+        NSNumber *groupBy = object[keyGroupByType];
         [self setGroupByType:[groupBy integerValue]];
         
         NSNumber *keyAggregateFunctionType = @(MTQueryCacheAggregateFunctionParamatersAggregateFunctionType);
-        NSNumber *functionType = [object objectForKey:keyAggregateFunctionType];
+        NSNumber *functionType = object[keyAggregateFunctionType];
         [self setFunctionType:[functionType integerValue]];
         
         NSNumber *keyParametersFieldKey = @(MTQueryCacheAggregateFunctionParamatersFieldKey);
-        NSString *columnKey = [NSString stringWithString:[object objectForKey:keyParametersFieldKey]];
+        NSString *columnKey = [NSString stringWithString:object[keyParametersFieldKey]];
         [self setColumnKey:columnKey];
         
         NSNumber *keyWhere = @(MTQueryCacheAggregateFunctionParamatersPredicates);
-        NSArray *whereClause = [NSArray arrayWithArray:[object objectForKey:keyWhere]];
+        NSArray *whereClause = [NSArray arrayWithArray:object[keyWhere]];
         [self setWhereClause:whereClause];
         
     }

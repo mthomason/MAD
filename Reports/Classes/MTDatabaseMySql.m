@@ -193,7 +193,7 @@
             NSString *name = [dataTable objectAtRow:i column:0];
             NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
             MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
-            [resultsDictionary setObject:field forKey:safeId];
+            resultsDictionary[safeId] = field;
         }
         
         MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
@@ -202,7 +202,7 @@
         MTDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2 dataTable:&dataTableVirtual2 onConnection:conn error:&errorColumnMetaData];
         if (errorColumnMetaData == nil) {
             for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
-                MTDatabaseField *databaseField = [resultsDictionary objectForKey:[dataColumn fieldName]];
+                MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                 NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
                 [databaseField setFieldTypeNative:nativeColumnType];
                 MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];
@@ -250,7 +250,7 @@
                             NSString *name = [dataTable objectAtRow:i column:0];
                             NSString *safeId = [self safeIdentifierForTable:tableName andField:name];
                             MTDatabaseField *field = [[MTDatabaseField alloc] initWithName:name];
-                            [resultsDictionary setObject:field forKey:safeId];
+                            resultsDictionary[safeId] = field;
                         }
                         
                         MTDataTable *dataTableVirtual2 = [MTDataTable newDataTableForIdentifier:@"v9997"];
@@ -262,7 +262,7 @@
                                                                        error: &errorColumnMetaData];
                         if (errorColumnMetaData == nil) {
                             for (MTDataColumn *dataColumn in [dataTable2 columnsEnumerator]) {
-                                MTDatabaseField *databaseField = [resultsDictionary objectForKey:[dataColumn fieldName]];
+                                MTDatabaseField *databaseField = resultsDictionary[[dataColumn fieldName]];
                                 NSInteger nativeColumnType = [[dataColumn nativeColumnType] integerValue];
                                 [databaseField setFieldTypeNative:nativeColumnType];
                                 MTDataType fieldType = [MTDatabaseMySql dataTypeForNativeType: nativeColumnType];

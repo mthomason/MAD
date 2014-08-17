@@ -32,11 +32,11 @@
 }
 
 - (NSArray *)objectsForPage:(NSUInteger)index {
-    return [[self pageCache] objectForKey:[self keyForPage:index]];
+    return [self pageCache][[self keyForPage:index]];
 }
 
 - (void)cacheObjects:(NSArray *)objects forPage:(NSUInteger)index {
-    [[self pageCache] setObject:objects forKey:[self keyForPage:index]];
+    [self pageCache][[self keyForPage:index]] = objects;
     if ([[self pageCache] count] > CACHE_SIZE) {
         [self trimCache:index];
     }

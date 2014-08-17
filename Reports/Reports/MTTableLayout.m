@@ -257,7 +257,7 @@ typedef struct _ColumnWidth {
 
 - (ColumnWidth)columnAttributesAtIndex:(NSUInteger)column {
     ColumnWidth cw;
-    [[[self columnWidth] objectAtIndex:column] getValue:&cw];
+    [[self columnWidth][column] getValue:&cw];
     return cw;
 }
 

@@ -216,7 +216,7 @@
     
     NSDictionary *rowData = [[self datatable] objectAtRow:row];
     NSString *fieldKey = [[self query] fieldKeyForIndex:column];
-    id fieldValue = [rowData objectForKey:fieldKey];
+    id fieldValue = rowData[fieldKey];
     NSString *fieldString = [NSString stringWithFormat:@"%@", fieldValue];
     [[cell label] setText:fieldString];
     return cell;
@@ -244,7 +244,7 @@
     
     NSUInteger column =  section;
     NSString *fieldKey = [[self query] fieldKeyForIndex:column];
-    MTDatabaseField *field = [[[self query] fields] objectForKey:fieldKey];
+    MTDatabaseField *field = [[self query] fields][fieldKey];
     NSInteger maxNumberOfCharacters = [field calculatedWidth];
     if (maxNumberOfCharacters <= 0) {
         maxNumberOfCharacters = 4;

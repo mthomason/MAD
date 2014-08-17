@@ -263,11 +263,11 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
 								}
 							}
                             
-							NSNumber *num = [[NSNumber alloc] initWithUnsignedInteger:quantity];
+							NSNumber *num = @(quantity);
                             if (attr_type == INAPP_QUANTITY) {
-                                [item setObject:num forKey:MTStoreKitIdentifierReceiptQuantity];
+                                item[MTStoreKitIdentifierReceiptQuantity] = num;
                             } else if (attr_type == INAPP_WEBORDER) {
-                                [item setObject:num forKey:MTStoreKitIdentifierReceiptWebOrderLineItemID];
+                                item[MTStoreKitIdentifierReceiptWebOrderLineItemID] = num;
                             }
 						}
 					}
@@ -302,7 +302,7 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
 								NSString *string = [[NSString alloc] initWithBytes:str_p
 																			length:(NSUInteger)str_length
 																		  encoding:NSUTF8StringEncoding];
-								[item setObject:string forKey:key];
+								item[key] = string;
 							}
 						}
 						if (str_type == V_ASN1_IA5STRING) {
@@ -325,7 +325,7 @@ NSArray *parseInAppPurchasesData(NSData *inappData) {
 								NSString *string = [[NSString alloc] initWithBytes:str_p
 																			length:(NSUInteger)str_length
 																		  encoding:NSASCIIStringEncoding];
-								[item setObject:string forKey:key];
+								item[key] = string;
 							}
 						}
 					}
@@ -481,7 +481,7 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
 							break;
 					}
 					if (key) {
-                        [info setObject:data forKey:key];
+                        info[key] = data;
                     }
 				}
                 
@@ -508,7 +508,7 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
                             NSString *string = [[NSString alloc] initWithBytes:str_p
 																		length:(NSUInteger)str_length
                                                                       encoding:NSUTF8StringEncoding];
-                            [info setObject:string forKey:key];
+                            info[key] = string;
 						}
 					}
 				}
@@ -520,7 +520,7 @@ NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath) {
                     if (current) {
                         info[MTStoreKitIdentifierReceiptInApp] = [current arrayByAddingObjectsFromArray:inApp];
                     } else {
-                        [info setObject:inApp forKey:MTStoreKitIdentifierReceiptInApp];
+                        info[MTStoreKitIdentifierReceiptInApp] = inApp;
                     }
 				}
 			}
@@ -550,7 +550,7 @@ NSArray *obtainInAppPurchases(NSString *receiptPath) {
 		return nil;
     }
     
-	NSArray *purchases = [receipt objectForKey:MTStoreKitIdentifierReceiptInApp];
+	NSArray *purchases = receipt[MTStoreKitIdentifierReceiptInApp];
 	if(!purchases || ![purchases isKindOfClass:[NSArray class]]) {
 		return nil;
     }
@@ -584,15 +584,15 @@ BOOL verifyReceiptAtPath(NSString *receiptPath) {
         
         NSMutableData *input = [NSMutableData data];
         [input appendBytes:uuidBytes length:sizeof(uuidBytes)];
-        [input appendData:[receipt objectForKey:MTStoreKitIdentifierReceiptOpaqueValue]];
-        [input appendData:[receipt objectForKey:MTStoreKitIdentifierReceiptBidData]];
+        [input appendData:receipt[MTStoreKitIdentifierReceiptOpaqueValue]];
+        [input appendData:receipt[MTStoreKitIdentifierReceiptBidData]];
         
         NSMutableData *hash = [NSMutableData dataWithLength:SHA_DIGEST_LENGTH];
         SHA1([input bytes], [input length], [hash mutableBytes]);
         
-        if ([bundleIdentifier isEqualToString:[receipt objectForKey:MTStoreKitIdentifierReceiptBid]] &&
-            [bundleVersion isEqualToString:[receipt objectForKey:MTStoreKitIdentifierReceiptVersion]] &&
-            [hash isEqualToData:[receipt objectForKey:MTStoreKitIdentifierReceiptHash]]) {
+        if ([bundleIdentifier isEqualToString:receipt[MTStoreKitIdentifierReceiptBid]] &&
+            [bundleVersion isEqualToString:receipt[MTStoreKitIdentifierReceiptVersion]] &&
+            [hash isEqualToData:receipt[MTStoreKitIdentifierReceiptHash]]) {
             validReceipt = YES;
         } else {
             

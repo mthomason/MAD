@@ -30,7 +30,7 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentObjectFormula class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -84,7 +84,7 @@
     RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                                  insertIntoManagedObjectContext: [document managedObjectContext]];
 
-    NSString *formulaText = [documentObjectDefination objectForKey:MTDocumentObjectDefinationObject];
+    NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
     
     RptqDocumentObjectFormula *reportObject = [[RptqDocumentObjectFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                                insertIntoManagedObjectContext: [document managedObjectContext]];
@@ -95,9 +95,9 @@
     
     [dataObject setType: @(MTDocumentObjectTypeFormula)];
     
-    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[[document hasDetailSection] hasRows] objectAtIndex:0] hasObjects]];
+    NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[document hasDetailSection] hasRows][0] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
-    [[[[document hasDetailSection] hasRows] objectAtIndex:0] setHasObjects:hasObjects];
+    [[[document hasDetailSection] hasRows][0] setHasObjects:hasObjects];
     
     return dataObject;
 }

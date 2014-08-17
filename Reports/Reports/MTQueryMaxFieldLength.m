@@ -69,7 +69,7 @@
             NSString *fieldAliasSafe = [[self database] fieldAliasForField:field];
 
             NSString *safeFieldName = [[self database] safeQuerySchemaField:field];
-            [[self fields] setObject:dbField forKey:fieldAliasSafe];
+            [self fields][fieldAliasSafe] = dbField;
             [[self fieldKeys] addObject:fieldAliasSafe];
             
             [selectFields appendFormat: @" %@( %@(%@) ) %@ %@,",

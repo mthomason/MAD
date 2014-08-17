@@ -174,12 +174,12 @@
             }
         }
     
-        [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:[[itemAttributesBySection objectAtIndex:0] lastObject]];
+        [self repositionLayouts:itemAttributesBySection[0] forLayout:[itemAttributesBySection[0] lastObject]];
         
 
-        for (id ly in [itemAttributesBySection objectAtIndex:0]) {
+        for (id ly in itemAttributesBySection[0]) {
             @autoreleasepool {
-                [self repositionLayouts:[itemAttributesBySection objectAtIndex:0] forLayout:ly];
+                [self repositionLayouts:itemAttributesBySection[0] forLayout:ly];
             }
         }
 
@@ -293,7 +293,7 @@
                     positionCounter++;
                 }
                 
-                [layoutToChange setFrame: [[availablePositionsOrdered objectAtIndex:indexOfNearestPosition] CGRectValue]];
+                [layoutToChange setFrame: [availablePositionsOrdered[indexOfNearestPosition] CGRectValue]];
                 [layoutToChange setDropIndex: [[self delegate] collectionView: [self collectionView]
                                                                        layout: self
                                             updateDropIndexForItemAtIndexPath: [layoutToChange indexPath]]];
@@ -311,7 +311,7 @@
                 if (ctr < [layoutToRepositionLocked count] - 1) {
                     NSRange range = NSMakeRange(ctr, [layoutToRepositionLocked count] - ctr);
                     NSArray *lb = [[NSArray alloc] initWithArray:[layoutToRepositionLocked subarrayWithRange:range]];
-                    [self repositionLayouts:lb forLayout:[layoutToRepositionLocked objectAtIndex:ctr - 1]];
+                    [self repositionLayouts:lb forLayout:layoutToRepositionLocked[ctr - 1]];
                 }
             }
             ctr++;

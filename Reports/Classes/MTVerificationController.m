@@ -156,7 +156,7 @@ static MTVerificationController *singleton;
     SecTrustResultType trust_result;
     if ((noErr == SecTrustEvaluate(trust, &trust_result)) && (trust_result == kSecTrustResultUnspecified)) {
         NSDictionary *trust_info = (__bridge_transfer NSDictionary *)SecTrustCopyInfo(trust);
-        id hasEV = [trust_info objectForKey:(__bridge NSString *)kSecTrustInfoExtendedValidationKey];
+        id hasEV = trust_info[(__bridge NSString *)kSecTrustInfoExtendedValidationKey];
         trusted =  [hasEV isKindOfClass:[NSValue class]] && [hasEV boolValue];
     }
     
@@ -346,7 +346,7 @@ BOOL checkReceiptSecurity(NSString *purchase_info_string, NSString *signature_st
     certificate_data = [NSData dataWithBytes:iTS_intermediate_der length:iTS_intermediate_der_len];
     require(intermediate = SecCertificateCreateWithData(NULL, (__bridge CFDataRef) certificate_data), outLabel);
     
-    anchors = [NSArray arrayWithObject:(__bridge id)intermediate];
+    anchors = @[(__bridge id)intermediate];
     require(anchors, outLabel);
     
     require_noerr(SecTrustCreateWithCertificates(leaf, policy, &trust), outLabel);

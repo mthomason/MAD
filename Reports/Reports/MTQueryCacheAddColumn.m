@@ -47,14 +47,14 @@
         NSNumber *keyMTQueryCacheAddColumnColumnName = @(MTQueryCacheAddColumnColumnName);
         NSNumber *keyMTQueryCacheAddColumnCreateTable = @(MTQueryCacheAddColumnCreateTable);
 
-        MTDataColumn *column = [object objectForKey:keyMTQueryCacheAddColumnDataColumn];
+        MTDataColumn *column = object[keyMTQueryCacheAddColumnDataColumn];
         [self setColumn:column];
         
-        NSString *tableName = [object objectForKey:keyMTQueryCacheAddColumnTableName];
-        NSURL *url = [object objectForKey:keyMTQueryCacheAddColumnUrl];
-        NSString *columnName = [object objectForKey:keyMTQueryCacheAddColumnColumnName];
-        NSNumber *createTable = [object objectForKey:keyMTQueryCacheAddColumnCreateTable];
-        NSNumber *uniqueObj = [object objectForKey:@(MTQueryCacheAddColumnUnique)];
+        NSString *tableName = object[keyMTQueryCacheAddColumnTableName];
+        NSURL *url = object[keyMTQueryCacheAddColumnUrl];
+        NSString *columnName = object[keyMTQueryCacheAddColumnColumnName];
+        NSNumber *createTable = object[keyMTQueryCacheAddColumnCreateTable];
+        NSNumber *uniqueObj = object[@(MTQueryCacheAddColumnUnique)];
         BOOL uniqueValue = NO;
         if (uniqueObj != nil) {
             uniqueValue = [uniqueObj boolValue];

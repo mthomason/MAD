@@ -195,7 +195,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self fetchedResultsControllerGroups] sections] objectAtIndex:section];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[self fetchedResultsControllerGroups] sections][section];
     return [sectionInfo numberOfObjects] + 2;
 }
 
@@ -240,7 +240,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self fetchedResultsControllerGroups] sections] objectAtIndex:section];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[self fetchedResultsControllerGroups] sections][section];
     return [sectionInfo name];
 }
 

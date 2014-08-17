@@ -315,7 +315,7 @@
     }];
     NSArray *productArray = [products filteredArrayUsingPredicate:predicate];
     if ([productArray count] > 0) {
-        SKProduct *product = [productArray objectAtIndex:0];
+        SKProduct *product = productArray[0];
         [[MTStoreKitController sharedObject] purchaseProductWithIdentifier:product
                                                                 completion:[self standardCompletion]];
     } else {

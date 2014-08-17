@@ -220,7 +220,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                                             UIApplication *app = [UIApplication sharedApplication];
                                             NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
-                                            NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
+                                            NSNumber *bgTaskWrapper = @(bgTask);
                                             [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
                                         });
                                     }];
@@ -243,7 +243,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
                                             UIApplication *app = [UIApplication sharedApplication];
                                             NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
-                                            NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
+                                            NSNumber *bgTaskWrapper = @(bgTask);
                                             
                                             [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
                                         });

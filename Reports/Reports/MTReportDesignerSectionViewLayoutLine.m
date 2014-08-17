@@ -129,37 +129,37 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *rectsForSection = [[self itemAttributesBySection] objectAtIndex:[indexPath section]];
-    UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:[indexPath item]];
+    NSArray *rectsForSection = [self itemAttributesBySection][[indexPath section]];
+    UICollectionViewLayoutAttributes *layoutAttributes = rectsForSection[[indexPath item]];
 
     return layoutAttributes;
 
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewLayoutAttributes *layoutAttributes = [[self decorationAttributesBySection] objectAtIndex:[indexPath section]];
+    UICollectionViewLayoutAttributes *layoutAttributes = [self decorationAttributesBySection][[indexPath section]];
     [layoutAttributes setFrame:CGRectMake(layoutAttributes.frame.origin.x, layoutAttributes.frame.origin.y, self.collectionView.contentSize.width, layoutAttributes.frame.size.height)];
     return  layoutAttributes;
 
 }
 
 - (UICollectionViewLayoutAttributes *)invalidatedLayoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *rectsForSection = [[self invalidatedLayoutArray] objectAtIndex:[indexPath section]];
-    UICollectionViewLayoutAttributes *layoutAttributes = [rectsForSection objectAtIndex:[indexPath item]];
+    NSArray *rectsForSection = [self invalidatedLayoutArray][[indexPath section]];
+    UICollectionViewLayoutAttributes *layoutAttributes = rectsForSection[[indexPath item]];
 
     return layoutAttributes;
 
 }
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewLayoutAttributes *layoutAttributes = [[[[self itemAttributesBySection] objectAtIndex:indexPath.section] objectAtIndex:indexPath.item] copy];
+    UICollectionViewLayoutAttributes *layoutAttributes = [[self itemAttributesBySection][indexPath.section][indexPath.item] copy];
     return layoutAttributes;
 
 }
 
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)indexPath {
     [super layoutAttributesForItemAtIndexPath:indexPath];
-    UICollectionViewLayoutAttributes *layoutAttributes = [[[self invalidatedLayoutArray] objectAtIndex:indexPath.section] objectAtIndex: indexPath.item];
+    UICollectionViewLayoutAttributes *layoutAttributes = [self invalidatedLayoutArray][indexPath.section][indexPath.item];
     return layoutAttributes;
 
 }

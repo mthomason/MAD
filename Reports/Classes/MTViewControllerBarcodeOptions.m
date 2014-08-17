@@ -270,7 +270,7 @@
                     [self setSampleBarcodeIndex:0];
                 }
                 
-                NSDictionary *sampleItem = [[self sampleBarcodeData] objectAtIndex:[self sampleBarcodeIndex]];
+                NSDictionary *sampleItem = [self sampleBarcodeData][[self sampleBarcodeIndex]];
                 NSString *sampleText = [NSString stringWithFormat:@"%@", [[sampleItem allValues] lastObject]];
                 [[self delegate] setInput:sampleText];
                 
@@ -440,7 +440,7 @@
             }
             case 2: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentDatasource forIndexPath:indexPath];
-                NSDictionary *sampleItem = [[self sampleBarcodeData2dComponent] objectAtIndex:[self sampleBarcodeData2dComponentIndex]];
+                NSDictionary *sampleItem = [self sampleBarcodeData2dComponent][[self sampleBarcodeData2dComponentIndex]];
                 NSString *sampleText = [NSString stringWithFormat:@"%@", [[sampleItem allValues] lastObject]];
                 [[self delegate] barcode2dComponentsetSampleData:@[sampleText]];
 
@@ -806,7 +806,7 @@
 - (void)barcodeMaxicodeDidChooseSampleData:(NSArray *)sampleData {
     [self setSampleBarcodeDataMaxicode:sampleData];
     if ([sampleData count] > 0) {
-        id result = [[[sampleData objectAtIndex:0] allObjects] lastObject];
+        id result = [[sampleData[0] allObjects] lastObject];
         [[self delegate] barcodeMaxicodeDidSetPrimaryData:result];
     } else {
         [[self delegate] barcodeMaxicodeDidSetPrimaryData:nil];

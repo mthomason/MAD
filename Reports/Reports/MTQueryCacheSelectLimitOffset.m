@@ -33,28 +33,28 @@
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
 
-        NSNumber *limitO = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersLimit)];
+        NSNumber *limitO = object[@(MTQueryCacheSelectLimitOffsetParamatersLimit)];
         self.limit = limitO ? [limitO integerValue] : NSNotFound;
 
-        NSNumber *offsetO = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersOffset)];
+        NSNumber *offsetO = object[@(MTQueryCacheSelectLimitOffsetParamatersOffset)];
         self.offset = offsetO ? [offsetO integerValue] : NSNotFound;
         
-        NSString *tableName = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersTableNames)];
+        NSString *tableName = object[@(MTQueryCacheSelectLimitOffsetParamatersTableNames)];
         [self setTableName:tableName];
         
-        NSArray *columnKeys = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersColumnKeys)];
+        NSArray *columnKeys = object[@(MTQueryCacheSelectLimitOffsetParamatersColumnKeys)];
         [self setColumnKeys:columnKeys];
         
-        NSArray *sortDesc = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersSortDesc)];
+        NSArray *sortDesc = object[@(MTQueryCacheSelectLimitOffsetParamatersSortDesc)];
         [self setSortDesc:sortDesc];
         
-        NSArray *whereClause = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersWhere)];
+        NSArray *whereClause = object[@(MTQueryCacheSelectLimitOffsetParamatersWhere)];
         [self setWhereClause:whereClause];
         
-        NSDictionary *columns = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersColumns)];
+        NSDictionary *columns = object[@(MTQueryCacheSelectLimitOffsetParamatersColumns)];
         [self setColumns:columns];
         
-        NSNumber *dropRowid = [object objectForKey:@(MTQueryCacheSelectLimitOffsetParamatersDropRowid)];
+        NSNumber *dropRowid = object[@(MTQueryCacheSelectLimitOffsetParamatersDropRowid)];
         if (dropRowid != nil) {
             self.droprowid = [dropRowid boolValue];
         } else {
@@ -113,7 +113,7 @@
             
             MTDataColumn *dataColumn = nil;
             if ([self columns]) {
-                dataColumn = [[self columns] objectForKey:[sortDescriptor key]];
+                dataColumn = [self columns][[sortDescriptor key]];
             }
             NSString *sortDescription = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue]
                                                                        ascending:[sortDescriptor ascending]];
@@ -129,8 +129,8 @@
         NSUInteger counter = 0;
         for (NSDictionary *condition in [self whereClause]) {
             if (counter > 0) [sql appendString:@" AND "];
-            NSString *columnHandle = [condition objectForKey:MTQueryKeyPredicateColumn];
-            NSString *columnValue = [condition objectForKey:MTQueryKeyPredicateValue];
+            NSString *columnHandle = condition[MTQueryKeyPredicateColumn];
+            NSString *columnValue = condition[MTQueryKeyPredicateValue];
             [sql appendFormat:@"%@ = %@", columnHandle, columnValue];
             counter++;
         }

@@ -58,7 +58,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryLinks class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -128,7 +128,7 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     [queryLinks setTableright:      [[fieldRight inQueryTable] alias]];
     [queryLinks setFieldright:      [[fieldRight databaseSchemaField] name]];
     [queryLinks setJointype:        [RptqQueryLinks ReuseIdForLinkType:joinType]];
-    [queryLinks setJointypeenum:    [NSNumber numberWithInteger: joinType]];
+    [queryLinks setJointypeenum:    @(joinType)];
 
     return queryLinks;
 }

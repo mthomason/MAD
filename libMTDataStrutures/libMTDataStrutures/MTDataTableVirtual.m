@@ -113,7 +113,7 @@
     [super loadWithPlist:plist];
     
     NSString *keySortIndex = [MTDataTableVirtual keySortIndex];
-    NSArray *sortIndexArray = [plist objectForKey:keySortIndex];
+    NSArray *sortIndexArray = plist[keySortIndex];
     NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
     [self setSortIndex:sortIndex];
 }
@@ -156,7 +156,7 @@
     NSUInteger sortedIndex;
     if ([[self sortDescriptors] count] > 0) {
         sortedIndex = [[self sortIndex] indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj objectForKey:@"~rowid~"] integerValue] == index) {
+            if ([obj[@"~rowid~"] integerValue] == index) {
                 *stop = YES;
                 return YES;
             }
@@ -189,8 +189,8 @@
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
-    NSString *fieldKey = [[self columnKeys] objectAtIndex:column];
-    MTDataColumn *dataInColumn = [[self columns] objectForKey:fieldKey];
+    NSString *fieldKey = [self columnKeys][column];
+    MTDataColumn *dataInColumn = [self columns][fieldKey];
     NSUInteger sortedIndex = [self sortedIndexForIndex:row];
     id objectForField = [dataInColumn objectAtIndex:sortedIndex];
     return objectForField;
@@ -201,9 +201,9 @@
     
     NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithCapacity:[[self columnKeys] count]];
     for (NSString *fieldKey in [self columnKeys]) {
-        NSArray *dataInColumn = [[self columns] objectForKey:fieldKey];
-        id objectForField = [dataInColumn objectAtIndex:sortedIndex];
-        [data setObject:objectForField forKey:fieldKey];
+        NSArray *dataInColumn = [self columns][fieldKey];
+        id objectForField = dataInColumn[sortedIndex];
+        data[fieldKey] = objectForField;
     }
     return data;
 }
@@ -218,8 +218,8 @@
         NSString *key = [self columnKeys][index];
         MTDataColumn *column = [self columns][key];
         [column addObject:object];
-        [indexedRow setObject:object forKey:key];
-        [indexedRow setObject:ogRowIndex forKey:@"~rowid~"];
+        indexedRow[key] = object;
+        indexedRow[@"~rowid~"] = ogRowIndex;
         index++;
     }
     [[self sortIndex] addObject:indexedRow];
@@ -229,8 +229,8 @@
 
 - (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
     for (id key in [self columnKeys]) {
-        MTDataColumn *column = [[self columns] objectForKey:key];
-        id obj = [row objectForKey:key];
+        MTDataColumn *column = [self columns][key];
+        id obj = row[key];
         if (obj == nil) obj = @"";
         [column addObject:obj];
     }

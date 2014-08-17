@@ -25,17 +25,17 @@
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
         NSNumber *key = @(MTQuerySelectFieldKeys);
-        NSArray *columnsNames = [object objectForKey:key];
+        NSArray *columnsNames = object[key];
         if (columnsNames) {
             self.columnKeys = [NSArray arrayWithArray:columnsNames];
         }
  
-        self.rowId = [object objectForKey:@(MTQuerySelectRowId)];
+        self.rowId = object[@(MTQuerySelectRowId)];
         
-        NSString *tableName = [object objectForKey:@(MTQuerySelectTableName)];
+        NSString *tableName = object[@(MTQuerySelectTableName)];
         [self setTableName:tableName];
         
-        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:[object objectForKey:@(MTQuerySelectFieldDescriptors)]];
+        NSMutableDictionary *columns = [NSMutableDictionary dictionaryWithDictionary:object[@(MTQuerySelectFieldDescriptors)]];
         [self setColumns:columns];
     }
     return self;

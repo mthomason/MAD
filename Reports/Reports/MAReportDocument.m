@@ -294,7 +294,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
     NSDictionary *parameters = [sender userInfo];
-    NSNumber *pageNumber = [parameters objectForKey:MTDatabaseNumberOfPagesFormattedKey];
+    NSNumber *pageNumber = parameters[MTDatabaseNumberOfPagesFormattedKey];
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];

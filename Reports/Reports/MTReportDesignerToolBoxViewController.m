@@ -67,7 +67,7 @@
 }
 
 - (void)initalizeSegmentedControl {
-    UINavigationItem *navigationItem = [[[self navigationBar] items] objectAtIndex:0];
+    UINavigationItem *navigationItem = [[self navigationBar] items][0];
     [[navigationItem rightBarButtonItem] setTintColor:[UIColor tintColorRed]];
     
     UISegmentedControl *segmentedControl = (UISegmentedControl *)[[navigationItem leftBarButtonItem] customView];

@@ -46,15 +46,15 @@
         NSNumber *keyMTQuerySelectPredicates = @(MTQuerySelectPredicates);
         NSNumber *keyMTQuerySelectSortDescriptors = @(MTQuerySelectSortDescriptors);
     
-        MTDatabaseConnection *databaseConnection = [object objectForKey:keyMTQuerySelectConnection];
-        NSString *tableName = [object objectForKey:keyMTQuerySelectTableName];
-        NSArray *fieldKeys = [[NSArray alloc] initWithArray:[object objectForKey:keyMTQuerySelectFieldKeys]];
+        MTDatabaseConnection *databaseConnection = object[keyMTQuerySelectConnection];
+        NSString *tableName = object[keyMTQuerySelectTableName];
+        NSArray *fieldKeys = [[NSArray alloc] initWithArray:object[keyMTQuerySelectFieldKeys]];
 
-        NSUInteger limit = [[object objectForKey:keyMTQuerySelectLimit] integerValue];
-        NSUInteger offset = [[object objectForKey:keyMTQuerySelectOffset] integerValue];
+        NSUInteger limit = [object[keyMTQuerySelectLimit] integerValue];
+        NSUInteger offset = [object[keyMTQuerySelectOffset] integerValue];
         
-        NSArray *predicates = [[NSArray alloc] initWithArray:[object objectForKey:keyMTQuerySelectPredicates]];
-        NSArray *sortDescriptors = [[NSArray alloc] initWithArray:[object objectForKey:keyMTQuerySelectSortDescriptors]];
+        NSArray *predicates = [[NSArray alloc] initWithArray:object[keyMTQuerySelectPredicates]];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithArray:object[keyMTQuerySelectSortDescriptors]];
         
         [self setDatabaseConnection:databaseConnection];
         [self setTableName:tableName];

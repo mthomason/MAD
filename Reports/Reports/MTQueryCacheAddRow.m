@@ -44,10 +44,10 @@
         NSNumber *keyMTQueryCacheAddRowColumnKeys = @(MTQueryCacheAddRowColumnKeys);
         NSNumber *keyMTQueryCacheAddRowTableName = @(MTQueryCacheAddRowTableName);
         
-        NSURL *url = [object objectForKey:keyMTQueryCacheAddRowUrl];
-        NSArray *row = [object objectForKey:keyMTQueryCacheAddRowData];
-        NSDictionary *columns = [object objectForKey:keyMTQueryCacheAddRowColumns];
-        NSArray *columnKeys = [object objectForKey:keyMTQueryCacheAddRowColumnKeys];
+        NSURL *url = object[keyMTQueryCacheAddRowUrl];
+        NSArray *row = object[keyMTQueryCacheAddRowData];
+        NSDictionary *columns = object[keyMTQueryCacheAddRowColumns];
+        NSArray *columnKeys = object[keyMTQueryCacheAddRowColumnKeys];
         NSString *tableName = object[keyMTQueryCacheAddRowTableName];
         
         [self setUrl:url];
@@ -98,7 +98,7 @@
         [[self binaryBindings] addObject:databinding];
         
         snprintf(colCtrBuf, 19, "?%u", columnCounter + 1);
-        NSString *columnValue = [NSString stringWithUTF8String:colCtrBuf];
+        NSString *columnValue = @(colCtrBuf);
         [values appendString:columnValue];
         
         columnCounter++;

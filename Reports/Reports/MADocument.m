@@ -183,7 +183,7 @@ NSString * MTDocumentParentContextName          = @"moc";
     MTLog(@"UIManagedDocument error: %@", [error localizedDescription]);
     
     if (false) {
-        NSArray *errors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+        NSArray *errors = [error userInfo][NSDetailedErrorsKey];
         if (errors != nil && errors.count > 0) {
             for (NSError *error in errors) {
                 MTLog(@"  Error: %@", error.userInfo);
@@ -255,25 +255,22 @@ NSString * MTDocumentParentContextName          = @"moc";
         if (image != nil) {
             UIImage *extraImage = [UIImage imageWithData:imageData];
             NSString *key = [MADocument thumbnailSaveName];
-            [[self extraInformation] setObject:extraImage
-                                        forKey:key];
+            [self extraInformation][key] = extraImage;
         }
     }
     
     NSURL *metaUrl = [self urlMetaPlaylist];
 
     NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:metaUrl];
-    NSString *lastGenerator = [dicionary objectForKey:MTDocumentInfoKeyGenerator];
-    NSNumber *lastVersion = [dicionary objectForKey:MTDocumentInfoKeyGenerator];
+    NSString *lastGenerator = dicionary[MTDocumentInfoKeyGenerator];
+    NSNumber *lastVersion = dicionary[MTDocumentInfoKeyGenerator];
 
     if (lastGenerator == nil) lastGenerator = @"MAD Designer";
     if (lastVersion == nil) lastVersion = @(1.0);
     
-    [[self extraInformation] setObject:lastGenerator
-                                forKey:MTDocumentInfoKeyGenerator];
+    [self extraInformation][MTDocumentInfoKeyGenerator] = lastGenerator;
     
-    [[self extraInformation] setObject:lastVersion
-                                forKey:MTDocumentInfoKeyVersion];
+    [self extraInformation][MTDocumentInfoKeyVersion] = lastVersion;
  
     return YES;
 }
@@ -290,8 +287,8 @@ NSString * MTDocumentParentContextName          = @"moc";
             [self setExtraInformation:extraInfo];
         }
         NSNumber *dataVersion = @(1.0);
-        [[self extraInformation] setObject:dataVersion forKey:MTDocumentInfoKeyVersion];
-        [[self extraInformation] setObject:@"MAD Designer" forKey:MTDocumentInfoKeyGenerator];
+        [self extraInformation][MTDocumentInfoKeyVersion] = dataVersion;
+        [self extraInformation][MTDocumentInfoKeyGenerator] = @"MAD Designer";
         result = [self extraInformation];
     }
 
@@ -313,8 +310,8 @@ NSString * MTDocumentParentContextName          = @"moc";
         NSError *filePresenterError = nil;
         
         NSURL *metaUrl = [self urlMetaPlaylist];
-        id version = [content objectForKey:MTDocumentInfoKeyVersion];
-        id generator = [content objectForKey:MTDocumentInfoKeyGenerator];
+        id version = content[MTDocumentInfoKeyVersion];
+        id generator = content[MTDocumentInfoKeyGenerator];
         [(NSDictionary *)@{MTDocumentInfoKeyVersion:version, MTDocumentInfoKeyGenerator:generator} writeToURL:metaUrl atomically:NO];
         
         if (filePresenterError != nil) {

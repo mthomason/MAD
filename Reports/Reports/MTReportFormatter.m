@@ -125,7 +125,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSArray *)layoutForPage:(NSUInteger)page {
-    NSArray *result = [NSArray arrayWithArray:[[self reportLayout] objectAtIndex:page]];
+    NSArray *result = [NSArray arrayWithArray:[self reportLayout][page]];
     return (page < [[self reportLayout] count]) ? result : nil;
 }
 
@@ -372,7 +372,7 @@ NSString * const MTNullIdentifier = @"(null)";
             BOOL newFooter = comparsonResult != NSOrderedSame;
             
             if (newFooter) {
-                RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+                RptqQueryGroup *group = [self sortedQueryGroups][groupLevel];
                 [self addHeightFromGroupFooterWithQueryGroup: group];
                 [self addGroupFooterAtLevel:groupLevel];
             }
@@ -398,7 +398,7 @@ NSString * const MTNullIdentifier = @"(null)";
             }
             
             if (newHeader) {
-                RptqQueryGroup *gh = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+                RptqQueryGroup *gh = [self sortedQueryGroups][groupLevel];
                 [self addHeightFromGroupHeaderWithQueryGroup: gh];
                 [self addGroupHeaderLevel:groupLevel];
             }
@@ -523,7 +523,7 @@ NSString * const MTNullIdentifier = @"(null)";
                 calculatedRowId = YES;
             }
             self.machineState.detailRowIdLast = self.machineState.detailRowId;
-            self.machineState.detailRowId = rowIdOnly ? resultRow : [resultRow objectForKey:@"ROWID"];
+            self.machineState.detailRowId = rowIdOnly ? resultRow : resultRow[@"ROWID"];
             
             //Get row key values
             NSArray *keyValuesForComparson = [self keyValuesForResultRow:resultRow];
@@ -554,7 +554,7 @@ NSString * const MTNullIdentifier = @"(null)";
         NSArray *keyValuesForComparson = [self keyValuesForResultRow:lastResultRow];
         for (NSInteger groupLevel = [keyValuesForComparson count] - 1; groupLevel >= 0; groupLevel--) {
             @autoreleasepool {
-                RptqQueryGroup *group = [[self sortedQueryGroups] objectAtIndex:groupLevel];
+                RptqQueryGroup *group = [self sortedQueryGroups][groupLevel];
                 [self addHeightFromGroupFooterWithQueryGroup: group];
                 [self addGroupFooterAtLevel:groupLevel];
             }
@@ -567,7 +567,7 @@ NSString * const MTNullIdentifier = @"(null)";
     if ([resultRow isKindOfClass:[NSDictionary class]]) {
         NSMutableArray *keyValuesForComparson = [[NSMutableArray alloc] initWithCapacity:[self numberOfGroups]];
         for (NSSortDescriptor *sortDesc in self.machineState.sortDescriptors) {
-            id predicateValue = [resultRow objectForKey:[sortDesc key]];
+            id predicateValue = resultRow[[sortDesc key]];
             if (predicateValue != nil) {
                 [keyValuesForComparson addObject:predicateValue];
             } else {
@@ -576,7 +576,7 @@ NSString * const MTNullIdentifier = @"(null)";
         }
         keyValues = [NSArray arrayWithArray:keyValuesForComparson];
     } else {
-        keyValues = [NSArray array];
+        keyValues = @[];
     }
     return keyValues;
 }
@@ -603,7 +603,7 @@ NSString * const MTNullIdentifier = @"(null)";
             [[self reportLayout] addObject:pageInfo];
             
             //NSIndexSet *rowids = [self pageIndexesTemporary] != nil ? [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]] : [NSIndexSet indexSet];
-            NSArray *rowids = [self pageIndexesTemporary] != nil ? [NSArray arrayWithArray: [self pageIndexesTemporary]] : [NSArray array];
+            NSArray *rowids = [self pageIndexesTemporary] != nil ? [NSArray arrayWithArray: [self pageIndexesTemporary]] : @[];
             [[self reportIndexes] addObject:rowids];
             
             [self cleanupTemporaryPageIndexes];
@@ -676,7 +676,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addGroupFooterAtLevel:(NSUInteger)groupLevel {
-    NSNumber *gl = [[NSNumber alloc] initWithUnsignedInteger:groupLevel];
+    NSNumber *gl = @(groupLevel);
     NSDictionary *d = @{[MTReportFormatter KeyReportSectionType] : @(MNSDocumentSectionTypeGroupFooter),
                         MTReportGroupLevel : gl,
                         MTReportDetailRowId : self.machineState.detailRowIdLast};
@@ -721,7 +721,7 @@ NSString * const MTNullIdentifier = @"(null)";
         resultData = [[NSArray alloc] initWithArray:data];
     } else {
         if ([keys count] > 0) {
-            id subData = [data objectForKey:[keys objectAtIndex:0]];
+            id subData = data[keys[0]];
             NSArray *subKeys = nil;
             if ([keys count] > 1) {
                 NSRange range = NSMakeRange(1, [keys count] - 1);

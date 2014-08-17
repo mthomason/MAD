@@ -43,7 +43,7 @@
 }
 
 - (id)objectInRowHeightsAtIndex:(NSUInteger)idx {
-	return [_rowHeights objectAtIndex:idx];
+	return _rowHeights[idx];
 }
 
 - (void)insertObject:(id)anObject inRowHeightsAtIndex:(NSUInteger)idx {
@@ -63,7 +63,7 @@
 }
 
 - (void)replaceObjectInRowHeightsAtIndex:(NSUInteger)idx withObject:(id)anObject {
-	[_rowHeights replaceObjectAtIndex:idx withObject:anObject];
+	_rowHeights[idx] = anObject;
 }
 
 - (void)replaceRowHeightsAtIndexes:(NSIndexSet *)indexes withRowHeights:(NSArray *)rowHeightArray {

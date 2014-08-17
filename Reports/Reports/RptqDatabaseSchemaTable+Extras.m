@@ -34,7 +34,7 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -85,7 +85,7 @@
     [rptqTable setLabel: label];
     [rptqTable setLabel_plural: labelPlural];
     [rptqTable setName: name];
-    [rptqTable setQueryable: [NSNumber numberWithBool: queryable]];
+    [rptqTable setQueryable: @(queryable)];
     return rptqTable;
 }
 
@@ -97,7 +97,7 @@
     [rptqTable setLabel: [table label]];
     [rptqTable setLabel_plural: [table labelPlural]];
     [rptqTable setName: [table name]];
-    [rptqTable setQueryable: [NSNumber numberWithBool: [table queryable]]];
+    [rptqTable setQueryable: @([table queryable])];
     return rptqTable;
 }
 

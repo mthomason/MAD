@@ -28,7 +28,7 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqUserCredentals class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -114,7 +114,7 @@
 + (NSArray *)userCredentalsForManagedObjectContext:(NSManagedObjectContext *)objectContext {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqUserCredentals class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"database_driver_type" ascending:YES];
-    request.sortDescriptors = [NSArray arrayWithObject: sortDescriptor];
+    request.sortDescriptors = @[sortDescriptor];
     NSError *error = nil;
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
     NSArray *results = [[NSArray alloc] initWithArray:fetchResults];

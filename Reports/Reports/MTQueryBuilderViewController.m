@@ -263,7 +263,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
                     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending:YES];
-                    request.sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+                    request.sortDescriptors = @[sortDescriptor];
 
                     NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                           managedObjectContext: self.document.managedObjectContext
@@ -464,7 +464,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     RptqQuery *query = [[database hasQueries] anyObject];
 
     NSDictionary *oldLayout = [self datamodel];
-    NSArray *oldLayoutSectionTypes = [oldLayout objectForKey:MTTableSectionSectionsKey];
+    NSArray *oldLayoutSectionTypes = oldLayout[MTTableSectionSectionsKey];
     
     RptqDatabaseSchemaTable *table = (RptqDatabaseSchemaTable *)[managedObjectContext objectWithID:objectId];
     RptqQueryTable *newQueryTable = [RptqQueryTable queryTableWithSchemaTable:table];
@@ -480,7 +480,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
     
     NSDictionary *newLayout = [self datamodel];
-    NSArray *newLayoutSectionTypes = [newLayout objectForKey:MTTableSectionSectionsKey];
+    NSArray *newLayoutSectionTypes = newLayout[MTTableSectionSectionsKey];
 
     if ([oldLayoutSectionTypes count] != [newLayoutSectionTypes count]) {
         if ([oldLayoutSectionTypes count] < [newLayoutSectionTypes count]) { //add sections
@@ -492,7 +492,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             for (NSNumber *typenum in newLayoutSectionTypes) {
                 MTQuerySections stsection = [typenum integerValue];
                 if (secctr < [oldLayoutSectionTypes count]) {
-                    if (stsection == [[oldLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                    if (stsection == [oldLayoutSectionTypes[secctr] integerValue]) {
                         secctr++;
                     } else {
                         if (!startIndexSet) {
@@ -543,7 +543,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     id queryBuilderDataModel = [self datamodel];
-    NSInteger numberOfSections = [[queryBuilderDataModel objectForKey: MTTableHeaderSectionKey] count];
+    NSInteger numberOfSections = [queryBuilderDataModel[MTTableHeaderSectionKey] count];
     return numberOfSections;
 }
 
@@ -551,31 +551,31 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     MTQuerySections ts = [self tableSectionTypeForIndexPathSection: section];
     
-    NSDictionary *rowsDict = [[self datamodel] objectForKey: MTTableSectionRowKey];
+    NSDictionary *rowsDict = [self datamodel][MTTableSectionRowKey];
     NSInteger numberOfRows = 0;
-    numberOfRows = [[rowsDict objectForKey:[NSNumber numberWithInt: ts]] intValue];
+    numberOfRows = [rowsDict[[NSNumber numberWithInt: ts]] intValue];
     if (numberOfRows < 0) {
         switch (ts) {
             case MTQuerySectionsTables: {
-                numberOfRows = [[[self.fetchedResultsControllerTables sections] objectAtIndex: 0] numberOfObjects];
+                numberOfRows = [[self.fetchedResultsControllerTables sections][0] numberOfObjects];
                 //NSLog(@"Table Rows:     %d", numberOfRows);
                 break;
             }
             case MTQuerySectionsLinks: {
-                numberOfRows = [[[self.fetchedResultsControllerLinks sections] objectAtIndex: 0] numberOfObjects];
+                numberOfRows = [[self.fetchedResultsControllerLinks sections][0] numberOfObjects];
                 //NSLog(@"Link Rows:      %d", numberOfRows);
                 break;
             }
             case MTQuerySectionsPredicate: {
                 NSArray *sections = [[self fetchedResultsControllerPredicates] sections];
-                id sectionData = [sections objectAtIndex: 0];
+                id sectionData = sections[0];
                 numberOfRows = [sectionData numberOfObjects];
                 //NSLog(@"Predicate Rows: %d", numberOfRows);
                 break;
             }
             case MTQuerySectionsGroups: {
                 NSArray *sections = [[self fetchedResultsControllerGroups] sections];
-                id sectionData = [sections objectAtIndex: 0];
+                id sectionData = sections[0];
                 numberOfRows = [sectionData numberOfObjects];
                 break;
             }
@@ -647,7 +647,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [NSArray array];
+    return @[];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -668,7 +668,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             
             if (connections) {
                 if ([connections count] >= 1) {
-                    RptqUserCredentals *connection = [connections objectAtIndex: 0];
+                    RptqUserCredentals *connection = connections[0];
                     
                     NSString *databaseType = [NSString stringWithFormat:@"%@", [connection database_driver_type]];
                     NSString *schemaName = [connection databaseSchemaName];
@@ -927,8 +927,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
     } else {
         NSDictionary *datamodel = [self datamodel];
-        NSDictionary *tableMetaHeight = [datamodel objectForKey:MTTableSectionRowHeightKey];
-        if (tableMetaHeight) result = [[tableMetaHeight objectForKey: [NSNumber numberWithInt: section]] floatValue];
+        NSDictionary *tableMetaHeight = datamodel[MTTableSectionRowHeightKey];
+        if (tableMetaHeight) result = [tableMetaHeight[[NSNumber numberWithInt: section]] floatValue];
     }
     return result;
 }
@@ -1027,24 +1027,24 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
-                        [[self tableView] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] insertRowsAtIndexPaths: @[path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeDelete: {
-                        [[self tableView] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] deleteRowsAtIndexPaths: @[path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeUpdate: {
-                        [[self tableView] reloadRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] reloadRowsAtIndexPaths: @[path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeMove: {
-                        [[self tableView] deleteRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] deleteRowsAtIndexPaths: @[path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
-                        [[self tableView] insertRowsAtIndexPaths: [NSArray arrayWithObject:path]
+                        [[self tableView] insertRowsAtIndexPaths: @[path]
                                                           withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
@@ -1180,8 +1180,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         NSSet *sectionsToRemove = [groupToRemove hasSection];
         NSArray *sections = [sectionsToRemove allObjects];
         if ([sections count] == 2) {
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+            [groupToRemove removeHasSectionObject: sections[0]];
+            [groupToRemove removeHasSectionObject: sections[1]];
         }
         [[query managedObjectContext] deleteObject: groupToRemove];
         [query removeHasQueryGroupsObject: groupToRemove];
@@ -1263,7 +1263,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSString *entityName = NSStringFromClass([RptqQueryPredicate class]);
             NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"fieldleftpred" ascending:YES];
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            NSArray *sortDescriptors = @[sortDescriptor];
             [request setSortDescriptors: sortDescriptors];
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
@@ -1489,8 +1489,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     numberOfTables--;
     
     NSDictionary *newTableLayout = [[NSDictionary alloc] initWithDictionary: [self datamodelForNumberOfTables: numberOfTables]];
-    NSArray *oldLayoutSectionTypes = [oldTableLayout objectForKey:MTTableSectionSectionsKey];
-    NSArray *newLayoutSectionTypes = [newTableLayout objectForKey:MTTableSectionSectionsKey];
+    NSArray *oldLayoutSectionTypes = oldTableLayout[MTTableSectionSectionsKey];
+    NSArray *newLayoutSectionTypes = newTableLayout[MTTableSectionSectionsKey];
     
     if ([oldLayoutSectionTypes count] > [newLayoutSectionTypes count]) {
         NSInteger secctr = 0;
@@ -1500,7 +1500,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         for (NSNumber *typenum in oldLayoutSectionTypes) {
             MTQuerySections stsection = [typenum integerValue];
             if (secctr < [newLayoutSectionTypes count]) {
-                if (stsection == [[newLayoutSectionTypes objectAtIndex:secctr] integerValue]) {
+                if (stsection == [newLayoutSectionTypes[secctr] integerValue]) {
                     secctr++;
                 } else {
                     if (!startIndexSet) {
@@ -1672,9 +1672,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [managedObjectContext save:nil];
     if (deleteSections != nil) {
         [tableView deleteSections: deleteSections withRowAnimation: UITableViewRowAnimationAutomatic];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     } else {
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     if ([cellsToDelete count]) {
         [tableView deleteRowsAtIndexPaths:cellsToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1736,9 +1736,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)section withNumberOfTables:(NSInteger)numberOfTables {
     MTQuerySections result = section;
     NSDictionary *dataModel = [self datamodelForNumberOfTables:numberOfTables];
-    NSArray *sectionTypes = [dataModel objectForKey: MTTableSectionSectionsKey];
+    NSArray *sectionTypes = dataModel[MTTableSectionSectionsKey];
     if ([sectionTypes count] >= section) {
-        result = [[sectionTypes objectAtIndex:section] integerValue];
+        result = [sectionTypes[section] integerValue];
     }
     return result;
 }
@@ -1746,16 +1746,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec {
     MTQuerySections result = sec;
     NSDictionary *datamodel = [self datamodel];
-    NSArray *sectionTypes = [datamodel objectForKey: MTTableSectionSectionsKey];
+    NSArray *sectionTypes = datamodel[MTTableSectionSectionsKey];
     if ([sectionTypes count] >= sec) {
-        result = [[sectionTypes objectAtIndex:sec] integerValue];
+        result = [sectionTypes[sec] integerValue];
     }
     return result;
 }
 
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
     NSInteger result = 0;
-    NSArray *sectionTypes = [[self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]] objectForKey: MTTableSectionSectionsKey];
+    NSArray *sectionTypes = [self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]][MTTableSectionSectionsKey];
     NSInteger secPos = 0;
     for (NSNumber *num in sectionTypes) {
         if ([num integerValue] == sec) {

@@ -42,7 +42,7 @@
     NSString *queryField = NSStringFromSelector(@selector(identifier));
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: queryField ascending:NO];
-    [request setSortDescriptors: [NSArray arrayWithObject:sortDescriptor]];
+    [request setSortDescriptors: @[sortDescriptor]];
     [request setFetchLimit:1];
     NSError *error = nil;
     NSArray *fetchResults = [[self managedObjectContext] executeFetchRequest:request error:&error];
@@ -83,12 +83,12 @@
 
 - (RptqQueryGroup *)firstQueryGroup {
     NSArray *queryGroups = [self sortedQueryGroups];
-    return ([queryGroups count] >= 1) ? [queryGroups objectAtIndex:0] : nil;
+    return ([queryGroups count] >= 1) ? queryGroups[0] : nil;
 }
 
 - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index {
     NSArray *queryGroups = [self sortedQueryGroups];
-    return (index < [queryGroups count]) ? [queryGroups objectAtIndex:index] : nil;
+    return (index < [queryGroups count]) ? queryGroups[index] : nil;
 }
 
 - (NSArray *)sortedQueryGroups {
@@ -104,8 +104,8 @@
         NSSet *sectionsToRemove = [groupToRemove hasSection];
         NSArray *sections = [sectionsToRemove allObjects];
         if ([sections count] == 2) {
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 0]];
-            [groupToRemove removeHasSectionObject: [sections objectAtIndex: 1]];
+            [groupToRemove removeHasSectionObject: sections[0]];
+            [groupToRemove removeHasSectionObject: sections[1]];
         }
         [[self managedObjectContext] deleteObject: groupToRemove];
         [self removeHasQueryGroupsObject: groupToRemove];

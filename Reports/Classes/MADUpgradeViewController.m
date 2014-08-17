@@ -167,7 +167,7 @@ const NSInteger currentMajorVersion = 2;
         NSURL *documentDirectoryUrl = nil;
 
         if ([possibleDocumentDirectoryUrls count] >= 1) {
-            documentDirectoryUrl = [possibleDocumentDirectoryUrls objectAtIndex:0];
+            documentDirectoryUrl = possibleDocumentDirectoryUrls[0];
             NSURL *londonUrl = [documentDirectoryUrl URLByAppendingPathComponent:@"London.mad" isDirectory:NO];
             NSURL *musicUrl = [documentDirectoryUrl URLByAppendingPathComponent:@"Music.mad" isDirectory:NO];
             NSError *error = nil;

@@ -27,20 +27,20 @@
         
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));
         
-        NSString *tableName = [NSString stringWithString:[object objectForKey:@(MTQuerySelectTableName)]];
+        NSString *tableName = [NSString stringWithString:object[@(MTQuerySelectTableName)]];
         [self setTableName:tableName];
         
-        NSArray *predicates = [NSArray arrayWithArray:[object objectForKey:@(MTQuerySelectPredicates)]];
+        NSArray *predicates = [NSArray arrayWithArray:object[@(MTQuerySelectPredicates)]];
         [self setPredicates:predicates];
         
-        NSArray *fieldKeys = [object objectForKey:@(MTQuerySelectFieldKeys)];
+        NSArray *fieldKeys = object[@(MTQuerySelectFieldKeys)];
         NSString *columnName = [NSString stringWithString:[fieldKeys firstObject]];
         [self setColumnName:columnName];
         
-        [self setAccending:[[object objectForKey:@(MTQuerySelectSortAccending)] boolValue]];
+        [self setAccending:[object[@(MTQuerySelectSortAccending)] boolValue]];
         
         NSNumber *keyColumns = @(MTQuerySelectColumns);
-        NSDictionary *columns = [object objectForKey:keyColumns];
+        NSDictionary *columns = object[keyColumns];
         if (columns) {
             NSDictionary *c = [NSDictionary dictionaryWithDictionary:columns];
             [self setColumns:c];
@@ -53,8 +53,8 @@
     NSMutableString *sql = [NSMutableString stringWithFormat:@"SELECT DISTINCT %@ FROM %@", self.columnName, self.tableName];
     NSInteger i = 0;
     for (NSDictionary *predicate in [self predicates]) {
-        NSString *left = [predicate objectForKey:MTQueryKeyPredicateColumn];
-        NSString *right = [predicate objectForKey:MTQueryKeyPredicateValue];
+        NSString *left = predicate[MTQueryKeyPredicateColumn];
+        NSString *right = predicate[MTQueryKeyPredicateValue];
         if (i == 0) {
             [sql appendString:@" WHERE "];
         } else {
@@ -66,7 +66,7 @@
 
     MTDataColumn *dataColumn = nil;
     if ([self columns]) {
-        dataColumn = [[self columns] objectForKey:self.columnName];
+        dataColumn = [self columns][self.columnName];
     }
     NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
     NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:self.accending];
