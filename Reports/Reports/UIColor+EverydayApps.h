@@ -14,28 +14,28 @@
 #define vendColor(r, g, b) return [UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:1.0000f]
 #define vendColorWithAlpha(r, g, b, a) return [UIColor colorWithRed:(CGFloat)r/255.0000f green:(CGFloat)g/255.0000f blue:(CGFloat)b/255.0000f alpha:a]
 
-+ (id)edaBlackish;
-+ (id)edaBlueDark;
-+ (id)edaBlueLight;
-+ (id)edaBlueDarkSelection;
-+ (id)edaBlueLightSelection;
-+ (id)edaBlackFiftyPercent;
-+ (id)edaBlackTwentyFivePercent;
-+ (id)edaOrange;
-+ (id)edaYellow;
-+ (id)edaGreenDark;
-+ (id)edaGreenLight;
++ (instancetype)edaBlackish;
++ (instancetype)edaBlueDark;
++ (instancetype)edaBlueLight;
++ (instancetype)edaBlueDarkSelection;
++ (instancetype)edaBlueLightSelection;
++ (instancetype)edaBlackFiftyPercent;
++ (instancetype)edaBlackTwentyFivePercent;
++ (instancetype)edaOrange;
++ (instancetype)edaYellow;
++ (instancetype)edaGreenDark;
++ (instancetype)edaGreenLight;
 
-+ (id)tintColorWhiteAlpha;
-+ (id)edaBlueLightBackground;
-+ (id)edaTableHeaderBackground;
-+ (id)tintColorBlue;
-+ (id)tintColorRed;
-+ (id)tintColorWhite;
-+ (id)tintColorGold;
-+ (id)tintColorGold2;
++ (instancetype)tintColorWhiteAlpha;
++ (instancetype)edaBlueLightBackground;
++ (instancetype)edaTableHeaderBackground;
++ (instancetype)tintColorBlue;
++ (instancetype)tintColorRed;
++ (instancetype)tintColorWhite;
++ (instancetype)tintColorGold;
++ (instancetype)tintColorGold2;
 
-+ (id)tintColorAnalogous4;
++ (instancetype)tintColorAnalogous4;
 
 @end
 

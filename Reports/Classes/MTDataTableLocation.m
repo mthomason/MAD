@@ -12,6 +12,13 @@
 
 #import "MTDataTableLocation.h"
 
+@interface MTDataTableLocation ()
+
+- (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column NS_DESIGNATED_INITIALIZER;
+
+@end
+
 @implementation MTDataTableLocation
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
@@ -24,7 +31,7 @@
     
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if(self) {
         
@@ -37,7 +44,7 @@
     return self;
 }
 
-- (id)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column {
+- (instancetype)initWithRow:(NSUInteger)row inColumn:(NSUInteger)column {
     self = [super init];
     if (self) {
         [self setRow:row];
@@ -46,7 +53,7 @@
     return self;
 }
 
-+ (id)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
++ (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column {
     id result = [[MTDataTableLocation alloc] initWithRow:row inColumn:column];
     return result;
 }

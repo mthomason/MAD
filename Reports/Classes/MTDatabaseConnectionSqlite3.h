@@ -13,7 +13,7 @@
 
 @interface MTDatabaseConnectionSqlite3 : MTDatabaseConnection
 
-- (id)initWithUrl:(NSURL *)url;
+- (instancetype)initWithUrl:(NSURL *)url;
 
 @end
 

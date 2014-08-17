@@ -67,9 +67,9 @@
 
 #pragma mark - RptqDocumentObjectFactory
 
-+ (id)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objectId];
-    return result;
+    return (RptqDocumentObjectLabel *)result;
 }
 
 #pragma mark - MTProtocolCompare

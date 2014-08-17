@@ -12,7 +12,7 @@
     DBPROCESS *dbconn;
 }
 
-- (id)initWithProcess:(DBPROCESS *)process {
+- (instancetype)initWithProcess:(DBPROCESS *)process {
     self = [super init];
     if (self) {
         dbconn = process;

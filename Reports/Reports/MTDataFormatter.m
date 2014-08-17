@@ -34,7 +34,7 @@
 
 @implementation MTDataFormatter
 
-- (id)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuery *)query {
     self = [super init];
     if (self) {
         [self setQuery:query];
@@ -44,7 +44,7 @@
 }
 
 
-+ (id)reportFormatterWithQuery:(MTQuery *)query {
++ (instancetype)reportFormatterWithQuery:(MTQuery *)query {
     MTDataFormatter *result = [[MTDataFormatter alloc] initWithQuery:query];
     return result;
 }

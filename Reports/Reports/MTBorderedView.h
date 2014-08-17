@@ -13,7 +13,7 @@
 
 @interface MTBorderedView : UIView
 
-- (id)initWithFrame:(CGRect)frame andColor:(UIColor *)color;
+- (instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)color;
 
 @end
 

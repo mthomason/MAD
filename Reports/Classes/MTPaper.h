@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, MTPaperType) {
 
 @interface MTPaper : NSObject
 
-- (id)initWithType:(MTPaperType)papertype;
+- (instancetype)initWithType:(MTPaperType)papertype NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, assign) CGSize paperType;
 @property (nonatomic, assign) CGSize paperSize;

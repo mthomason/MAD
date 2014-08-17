@@ -10,19 +10,20 @@
 #define Reports_UIViewTableSectionHeaderDatabaseTable_h
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
 
 @protocol SectionHeaderViewDelegate <NSObject>
 @optional
--(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)section;
--(void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)section;
+- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)section;
+- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)section;
 @end
 
 @interface UIViewTableSectionHeaderDatabaseTable : UIView
 
--(id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate;
--(void)toggleOpenWithUserAction:(BOOL)userAction;
+- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+- (void)toggleOpenWithUserAction:(BOOL)userAction;
 
 @end
 

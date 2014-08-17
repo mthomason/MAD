@@ -10,6 +10,7 @@
 #define Reports_MTTableLayout_h
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *stop);
 
@@ -21,7 +22,7 @@ typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *s
 
 @interface MTTableLayout : UICollectionViewLayout
 
-- (id)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
+- (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
 - (void)setColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount;
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath;
 - (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath;

@@ -234,7 +234,7 @@
 			name = libTdsClientTests;
 			productName = libTdsClientTests;
 			productReference = 4CEBFA181760EF8B00FFA4F4 /* libTdsClientTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -242,7 +242,7 @@
 		4CEBF9FF1760EF8B00FFA4F4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0510;
+				LastTestingUpgradeCheck = 0600;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 			};

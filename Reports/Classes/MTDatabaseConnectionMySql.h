@@ -13,9 +13,9 @@
 
 @interface MTDatabaseConnectionMySql : MTDatabaseConnection
 
-- (id)initWithHost:(NSString *)host
-          database:(NSString *)database
-           andPort:(NSInteger)port;
+- (instancetype)initWithHost:(NSString *)host
+                    database:(NSString *)database
+                     andPort:(NSInteger)port;
 
 @end
 

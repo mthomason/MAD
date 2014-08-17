@@ -14,7 +14,7 @@
 
 @implementation MTDatabaseConnectionSqlite3
 
-- (id)initWithUrl:(NSURL *)url {
+- (instancetype)initWithUrl:(NSURL *)url {
     
     self = [super init];
     if (self) {

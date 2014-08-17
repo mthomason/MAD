@@ -22,9 +22,9 @@ typedef NS_ENUM(NSUInteger, MTAlgorithmColor) {
 
 @interface MTVertex : MTObject <MTProtocolCompare, MTProtocolLog>
 
-- (id)init;
-- (id)initWithID:(NSUInteger)idnumber;
-- (id)initWithID:(NSUInteger)idnumber andObject:(id)object;
+- (instancetype)init;
+- (instancetype)initWithID:(NSUInteger)idnumber;
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 - (void)addEdge:(MTEdge *)edge;
 

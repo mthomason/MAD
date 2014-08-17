@@ -21,7 +21,7 @@
 
 @implementation MTStack
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] init];
@@ -30,7 +30,16 @@
     return self;
 }
 
-- (id)initWithCapacity:(NSUInteger)capacity {
+- (instancetype)initWithObject:(id)object {
+    self = [super initWithObject:object];
+    if (self) {
+        NSMutableArray *stack = [[NSMutableArray alloc] init];
+        [self setStack:stack];
+    }
+    return self;
+}
+
+- (instancetype)initWithCapacity:(NSUInteger)capacity {
     self = [super init];
     if (self) {
         NSMutableArray *stack = [[NSMutableArray alloc] initWithCapacity:capacity];

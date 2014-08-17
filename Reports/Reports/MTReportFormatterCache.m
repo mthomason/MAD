@@ -22,7 +22,7 @@
     [_indexes removeAllObjects];
 }
 
-- (id)init {
+- (instancetype)init {
     if (self = [super init]) {
         
         NSMutableDictionary *layout = [[NSMutableDictionary alloc] initWithCapacity:2];

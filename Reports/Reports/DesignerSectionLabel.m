@@ -19,7 +19,7 @@
 @implementation DesignerSectionLabel
 
 
-- (id)initWithDisplayText:(NSString *)displayText {
+- (instancetype)initWithDisplayText:(NSString *)displayText {
     CGRect frame = CGRectZero;
     self = [super initWithFrame:frame];
     if (self) {

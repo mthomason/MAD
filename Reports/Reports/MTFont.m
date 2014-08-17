@@ -223,7 +223,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return 9.0000f;
 }
 
-+ (id)fontWithFamilyName:(NSString *)familyName {
++ (instancetype)fontWithFamilyName:(NSString *)familyName {
     if ([familyName length] == 0) {
         familyName = MTFontFamilyHelveticaNeue;
     }
@@ -231,15 +231,15 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return font;
 }
 
-- (id)init {
+- (instancetype)init {
     return [self initWithFamilyName:[MTFont defaultFamily]];
 }
 
-- (id)initWithFamilyName:(NSString *)familyName {
+- (instancetype)initWithFamilyName:(NSString *)familyName {
     return [self initWithFamilyName:familyName andPointSize:[MTFont defaultSize]];
 }
 
-- (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize {
+- (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize {
     self = [super init];
     if (self) {
         [self setFamilyName:familyName];
@@ -248,7 +248,7 @@ NSString * const MTFontFamilyZapfino             = @"Zapfino";
     return self;
 }
 
-- (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic {
+- (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic {
     self = [super init];
     if (self) {
         [self setBold:bold];

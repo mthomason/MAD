@@ -14,10 +14,10 @@
 
 @interface MTDatabaseConnectionSqlServer : MTDatabaseConnection
 
-- (id)initWithHost:(NSString *)host
-            server:(NSString *)server
-          database:(NSString *)database
-           andPort:(NSInteger)port;
+- (instancetype)initWithHost:(NSString *)host
+                      server:(NSString *)server
+                    database:(NSString *)database
+                     andPort:(NSInteger)port;
 
 @end
 

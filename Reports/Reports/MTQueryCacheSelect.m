@@ -26,11 +26,13 @@
 @property (nonatomic, assign) NSUInteger offset;
 @property (nonatomic, assign) NSUInteger limit;
 
+//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQueryCacheSelect
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

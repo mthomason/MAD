@@ -176,7 +176,7 @@ extern NSString * const MTQueryKeyPredicateValue;
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray *)sortDescriptors;  //For "cache" sqltie3
 - (NSInteger)columnTypeForColumnHanle:(NSString *)columnHandle;             //For "cache" sqltie3
 
-- (id)initWithObject:(id)object;
+- (instancetype)initWithObject:(id)object;
 - (NSString *)fieldKeyForIndex:(NSUInteger)index;
 
 - (BOOL)returnsResults;

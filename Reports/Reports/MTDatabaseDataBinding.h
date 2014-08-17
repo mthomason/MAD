@@ -15,7 +15,7 @@
 @property (nonatomic, assign, readonly) MTDataType datatype;
 @property (nonatomic, assign, readonly) NSUInteger fieldIndex;
 
-- (id)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value;
+- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value NS_DESIGNATED_INITIALIZER;
 
 - (id)value;
 

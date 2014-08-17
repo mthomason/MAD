@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeCode39Extended
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

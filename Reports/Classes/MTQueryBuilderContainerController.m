@@ -47,7 +47,7 @@
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];

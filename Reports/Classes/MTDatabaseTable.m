@@ -14,7 +14,7 @@
 
 @implementation MTDatabaseTable
 
-- (id)initWithTableName:(NSString *)tableName {
+- (instancetype)initWithTableName:(NSString *)tableName {
     self = [super init];
     if (self) {
         [self setName: tableName];

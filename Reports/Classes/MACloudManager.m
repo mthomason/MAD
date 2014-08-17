@@ -23,7 +23,7 @@ static MACloudManager *__sharedManager;
 
 @implementation MACloudManager
 
-+ (id)allocWithZone:(NSZone *)zone {
++ (instancetype)allocWithZone:(NSZone *)zone {
     //Do not release... this is a singleton yo.
     return [[self sharedManager] retain];
 }
@@ -32,7 +32,7 @@ static MACloudManager *__sharedManager;
     return self;
 }
 
-- (id)retain {
+- (instancetype)retain {
     return self;
 }
 
@@ -42,7 +42,7 @@ static MACloudManager *__sharedManager;
 
 - (oneway void)release { }
 
-- (id)autorelease {
+- (instancetype)autorelease {
     return self;
 }
 

@@ -18,11 +18,15 @@
 
 @implementation MTObject
 
-- (id)init {
-    return [self initWithObject:nil];
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self setObject:nil];
+    }
+    return self;
 }
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super init];
     if (self) {
         [self setObject:object];
@@ -30,7 +34,7 @@
     return self;
 }
 
-+ (id)objectWithObject:(id)object {
++ (instancetype)objectWithObject:(id)object {
     return [[self alloc] initWithObject:object];
 }
 

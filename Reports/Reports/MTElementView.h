@@ -10,6 +10,7 @@
 #define Reports_MTElementView_h
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 @class MTElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 
@@ -42,7 +43,7 @@
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
 
-- (id)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (instancetype)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

@@ -12,7 +12,7 @@
 
 @implementation MTDatabaseCache
 
-+ (id)databaseFactory:(MTDatabaseConnection *)connection {
++ (instancetype)databaseFactory:(MTDatabaseConnection *)connection {
     
     NSString *identifier = [connection databaseTypeIdentifier];
     

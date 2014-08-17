@@ -32,7 +32,7 @@ typedef struct _ColumnWidth {
 @implementation MTTableLayout
 
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self initalizeWithColumnCount:0 andRowCount:0];
@@ -40,7 +40,7 @@ typedef struct _ColumnWidth {
     return self;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self initalizeWithColumnCount:0 andRowCount:0];
@@ -48,7 +48,7 @@ typedef struct _ColumnWidth {
     return self;
 }
 
-- (id)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
+- (instancetype)initWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     self = [super init];
     if (self) {
         [self initalizeWithColumnCount:columnCount andRowCount:rowCount];

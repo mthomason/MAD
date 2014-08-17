@@ -20,7 +20,7 @@
 
 @implementation MTBarcodeMicroPdf417Iso24728
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

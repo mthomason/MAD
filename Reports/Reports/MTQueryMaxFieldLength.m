@@ -20,9 +20,13 @@
 #import "MTDataTable.h"
 #import "MTDatabaseConnection.h"
 
+@interface MTQueryMaxFieldLength ()
+
+@end
+
 @implementation MTQueryMaxFieldLength
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

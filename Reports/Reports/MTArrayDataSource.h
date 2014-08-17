@@ -20,7 +20,7 @@ typedef void (^MTCellConfigureBlock)(id cell, id item);
 
 @interface MTArrayDataSource : NSObject
 
-- (id)initWithItems:(NSArray *)items
+- (instancetype)initWithItems:(NSArray *)items
      cellIdentifier:(NSString *)cellIdentifier
  configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
             andType:(MTDataSourceType)type;

@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
+#import "Constants.h"
 
 extern NSString * const MTFontFamilyAmericanTypewriter;
 extern NSString * const MTFontFamilyArial;
@@ -28,10 +29,11 @@ extern NSString * const MTFontFamilyZapfino;
 
 @property (assign) CGFloat pointSize;
 
-+ (id)fontWithFamilyName:(NSString *)familyName;
-- (id)initWithFamilyName:(NSString *)familyName;
-- (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize;
-- (id)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic;
++ (instancetype)fontWithFamilyName:(NSString *)familyName;
+- (instancetype)init;
+- (instancetype)initWithFamilyName:(NSString *)familyName;
+- (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFamilyName:(NSString *)familyName andPointSize:(CGFloat)pointSize isBold:(BOOL)bold isItalic:(BOOL)italic NS_DESIGNATED_INITIALIZER;
 
 - (UIFont *)font;
 - (CTFontRef)coreTextFont;

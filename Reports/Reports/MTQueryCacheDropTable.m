@@ -19,13 +19,15 @@
 @property (nonatomic, strong) MTDatabaseConnection *connection;
 @property (nonatomic, strong) NSString *tableName;
 
+//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQueryCacheDropTable
 
 // FIXME: This is currently SQLite specific.
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

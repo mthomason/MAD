@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 @property (nonatomic, assign) id <MTDatabaseProtocol> delegate;
 @property (nonatomic, strong) MTDatabaseConnection *databaseConnection;
 
-+ (id)databaseFactory:(MTDatabaseConnection *)connection;
++ (instancetype)databaseFactory:(MTDatabaseConnection *)connection;
 
 - (void)getTables: (void (^)(BOOL success, NSError *error, NSArray *tables))completion;
 

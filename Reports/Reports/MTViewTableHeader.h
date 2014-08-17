@@ -13,8 +13,6 @@
 
 @interface MTViewTableHeader : UIView
 
-- (id)initWithFrame:(CGRect)frame;
-
 @property (nonatomic, strong) UIButton *buttonAdd;
 @property (nonatomic, strong) UILabel *labelTitle;
 

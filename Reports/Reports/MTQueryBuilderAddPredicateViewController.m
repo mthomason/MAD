@@ -20,7 +20,7 @@
 
 @implementation MTQueryBuilderAddPredicateViewController
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self setCurrentlyEditingPart: MNSPredicateNone];
@@ -28,7 +28,7 @@
     return self;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (instancetype)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         [self setCurrentlyEditingPart: MNSPredicateNone];

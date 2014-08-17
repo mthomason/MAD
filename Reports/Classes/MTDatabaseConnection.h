@@ -25,8 +25,8 @@
 
 - (NSString *)appname;
 
-+ (id)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier;
-+ (id)databaseConnectionFactory:(id)credentals;
++ (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier;
++ (instancetype)databaseConnectionFactory:(id)credentals;
 
 - (NSString *)identifier;
 + (NSString *)identifier;

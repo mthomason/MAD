@@ -16,7 +16,7 @@
 
 @implementation MTBorderedView
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [self setBorderColor:[UIColor blackColor]];
@@ -24,7 +24,7 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andColor:(UIColor *)color {
+- (instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)color {
     self = [super initWithFrame:frame];
     if (self) {
         [self setBorderColor:color];

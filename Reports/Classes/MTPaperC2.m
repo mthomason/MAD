@@ -14,7 +14,7 @@
 
 @implementation MTPaperC2
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

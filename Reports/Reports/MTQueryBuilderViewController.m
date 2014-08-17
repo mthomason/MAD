@@ -140,7 +140,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         
@@ -238,20 +238,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowDatabasesDrivers]) {                  // MARK: Prepair to show database drivers.
-        
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MTDatabaseDriverSelectorViewController class]]) {
-                    MTDatabaseDriverSelectorViewController *tvc = (MTDatabaseDriverSelectorViewController *)[navControl topViewController];
-                    if (tvc) [tvc setDelegate:self];
-                }
-            }
-        }
-        [[segue destinationViewController] setDelegate:self];
-
-    } else if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK:
+    if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK:
         MTShowSqlViewController *viewController;
         if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
             viewController = (MTShowSqlViewController *)[[segue destinationViewController] topViewController];
@@ -340,8 +327,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         [tvc setInitalNumberOfRows:[[section numberOfRows] integerValue]];
                     }
                 }
-    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowReportViewerFromQuery]) {
-        [[segue destinationViewController] setDelegate: self];
     }
 }
 

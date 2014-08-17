@@ -51,7 +51,7 @@ NSString * const MTDatabaseSqlite3SafeQuote = @"\"";
     return _database;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _database = NULL;

@@ -18,7 +18,7 @@
 
 @implementation RptqDatabaseSchemaFieldSelectorManager
 
-- (id)initWithTable:(RptqQueryTable *)sectionTable {
+- (instancetype)initWithTable:(RptqQueryTable *)sectionTable {
 	self = [super init];
 	if (self) {
 

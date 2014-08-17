@@ -11,14 +11,15 @@
 
 #import <Foundation/Foundation.h>
 #import "MTCacheProtocol.h"
+#import "Constants.h"
 
 @interface MTArrayCached : NSEnumerator
 
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 @property (nonatomic, strong, readonly) NSString *identifier;
 
-- (id)initWithIdentifier:(NSString *)identifier;
-- (id)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;
+- (instancetype)initWithIdentifier:(NSString *)identifier;
+- (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate;
 
 - (NSURL *)url;
 - (id)objectAtIndex:(NSUInteger)index;

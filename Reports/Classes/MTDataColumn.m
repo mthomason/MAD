@@ -61,7 +61,7 @@
 
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if(self) {
 
@@ -99,7 +99,7 @@
     return self;
 }
 
-- (id)initWithIdentifier:(NSString *)identifier {
+- (instancetype)initWithIdentifier:(NSString *)identifier {
     self = [super init];
     if (self) {
 
@@ -124,7 +124,7 @@
     return self;
 }
 
-- (id)initWithPlist:(id)plist {
+- (instancetype)initWithPlist:(id)plist {
     self = [super init];
     if(self) {
         
@@ -178,7 +178,7 @@
     }
 }
 
-- (id)plist {
+- (NSDictionary *)plist {
     
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithCapacity:8];
     NSString *keyFieldName = [MTDataColumn keyFieldName];

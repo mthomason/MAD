@@ -20,7 +20,7 @@
 
 @implementation MTBarcodeDataMatrixIso16022
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

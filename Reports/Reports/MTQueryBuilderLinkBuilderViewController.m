@@ -29,15 +29,18 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *labelRightField;
 
+//- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+//- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQueryBuilderLinkBuilderViewController
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     return self = [super initWithCoder:aDecoder];
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     return self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 

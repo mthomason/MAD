@@ -10,6 +10,7 @@
 #define Reports_MTResizeHandleView_h
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 	north = 1,
@@ -38,7 +39,7 @@ typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 @property (assign) CGPoint initalPoint;
 @property (assign, getter = isHighlighted) BOOL highlighted;
 
-- (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position;
+- (instancetype)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position NS_DESIGNATED_INITIALIZER;
 
 @end
 

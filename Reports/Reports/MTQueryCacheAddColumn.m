@@ -27,7 +27,6 @@
 @property (nonatomic, strong) NSString *columnName;
 @property (nonatomic, strong) MTDataColumn *column;
 @property (nonatomic, assign) BOOL createTable;
-
 @property (nonatomic, assign) BOOL uniqueColumnHack;
 
 @end
@@ -36,7 +35,7 @@
 
 // FIXME: This is currently SQLite specific.
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

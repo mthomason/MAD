@@ -10,15 +10,16 @@
 #define Reports_MTDatabaseTable_h
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
 
 @interface MTDatabaseTable : NSObject
-
-- (id)initWithTableName:(NSString *)tableName;
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *label;
 @property (nonatomic, strong) NSString *labelPlural;
 @property (nonatomic, assign) BOOL queryable;
+
+- (instancetype)initWithTableName:(NSString *)tableName NS_DESIGNATED_INITIALIZER;
 
 @end
 

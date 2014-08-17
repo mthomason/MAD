@@ -20,8 +20,8 @@
 
 @interface MTGraph : MTObject <MTProtocolLog>
 
-- (id)init;
-- (id)initWithVertices:(NSSet *)vertices;
+- (instancetype)init;
+- (instancetype)initWithVertices:(NSSet *)vertices NS_DESIGNATED_INITIALIZER;
 
 - (MTVertex *)addVertexWithObject:(id)object;
 - (MTEdge *)addEdgeWithOrigin:(MTVertex *)origin destination:(MTVertex *)destination object:(id)object andWeight:(NSNumber *)weight;

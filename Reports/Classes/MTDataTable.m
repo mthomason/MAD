@@ -72,7 +72,7 @@
                                            objectIdKey : objectIdV}];
 }
 
-+ (id)dataTableFactory:(NSDictionary *)parameters {
++ (instancetype)dataTableFactory:(NSDictionary *)parameters {
 
     NSNumber *keyDataTableType = @(MTDataTableTypeOfTable);
     NSNumber *keyDataTableObjectId = @(MTDataTableObjectId);
@@ -147,7 +147,7 @@
     return @"url";
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if(self) {
         NSString *name =                [decoder decodeObjectForKey: [MTDataTable keyName]];
@@ -172,7 +172,7 @@
     return self;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self initalizeWithObjectId:0 fromCache:NO];
@@ -180,10 +180,11 @@
     return self;
 }
 
-- (id)initWithId:(NSUInteger)objectId {
+- (instancetype)initWithId:(NSUInteger)objectId {
     return [self initWithId:objectId fromCache:YES];
 }
-- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+
+- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     self = [super init];
     if (self) {
         [self initalizeWithObjectId:objectId fromCache:fromCache];
@@ -237,7 +238,7 @@
     }
 }
 
-- (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
+- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
     self = [super init];
     if (self) {
         
@@ -277,7 +278,7 @@
     [self cachePlist:plist];
 }
 
-- (id)plist {
+- (NSDictionary *)plist {
     
     NSString *keyName = [MTDataTable keyName];
     NSString *keyColumnKeys = [MTDataTable keyColumnKeys];

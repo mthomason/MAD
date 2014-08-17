@@ -20,6 +20,7 @@
 #import "MTActivityIndicator.h"
 #import "UIColor+EverydayApps.h"
 #import "UIApplication+Extras.h"
+#import "MTErrorContainer.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Set connection settings.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
@@ -196,7 +197,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                     [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
                         self.navigationItem.prompt = readStatus;
                         progressView.progress = progress;
-                    } completion:^(BOOL success, NSError *error) {
+                    } completion:^(BOOL success, MTErrorContainer *errorContainer) {
                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                             dispatch_sync(dispatch_get_main_queue(), ^{
                                 
@@ -222,7 +223,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                             NSNumber *bgTaskWrapper = [NSNumber numberWithUnsignedInteger:bgTask];
                                             [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
                                         });
-                                        
                                     }];
                                 } else {
                                     [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
@@ -247,9 +247,19 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                                             
                                             [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
                                         });
-                                        
                                     }];
                                 }
+                                
+                                if (errorContainer && [errorContainer count] > 0) {
+                                    NSString *errorText = [errorContainer errorLogCompact];
+                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: @"Issues Encounterd"
+                                                                                        message: errorText
+                                                                                       delegate: nil
+                                                                              cancelButtonTitle: @"Continue"
+                                                                              otherButtonTitles: nil];
+                                    [alertView show];
+                                }
+                                
                                 [progressView removeFromSuperview];
                                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                             });

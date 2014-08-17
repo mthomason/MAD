@@ -12,9 +12,13 @@
 
 #import "MTQueryCustomNoResults.h"
 
+@interface MTQueryCustomNoResults ()
+
+@end
+
 @implementation MTQueryCustomNoResults
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

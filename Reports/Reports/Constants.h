@@ -9,6 +9,14 @@
 #ifndef Reports_Constants_h
 #define Reports_Constants_h
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
+
 #pragma mark - Layout
 
 // MARK: Margin
@@ -240,14 +248,11 @@ extern NSString * const KEY_DB_TYPE_DB;
 // MARK: Segue Identifiers
 extern NSString * const MTSegueOpenInViewer;
 extern NSString * const MNSIdentifierSegueShowLayoutSettings;
-extern NSString * const MNSIdentifierSegueShowDatabasesDrivers;
 extern NSString * const MNSIdentifierSegueShowAddDatabaseDrivers;
 extern NSString * const MNSIdentifierSegueShowAddTableViewController;
 extern NSString * const MNSIdentifierSegueShowAddLinkViewController;
 extern NSString * const MNSIdentifierSegueShowAddPredicateViewController;
 extern NSString * const MNSIdentifierSegueShowAddGroupViewController;
-//extern NSString * const MNSIdentifierSegueShowReportLayout;
-extern NSString * const MNSIdentifierSegueShowReportViewerFromQuery;
 extern NSString * const MNSSegueShowSql;
 
 #endif

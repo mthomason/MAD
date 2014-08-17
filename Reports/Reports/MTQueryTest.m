@@ -21,12 +21,11 @@
 
 @property (nonatomic, strong) MTDataTable *datatable;   // Holds datatable since used
                                                         //  in static function
-
 @end
 
 @implementation MTQueryTest
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

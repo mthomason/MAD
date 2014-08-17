@@ -10,157 +10,157 @@
 
 @implementation UIColor (PaperPatterns)
 
-+ (id)paperAqua {
++ (instancetype)paperAqua {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternAqua"]];
 }
-+ (id)paperBeigeWithWhiteFlecks {
++ (instancetype)paperBeigeWithWhiteFlecks {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBeigeWithWhiteFlecks"]];
 }
-+ (id)paperBlackWeave {
++ (instancetype)paperBlackWeave {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlackWeave"]];
 }
-+ (id)paperBlueCrepe {
++ (instancetype)paperBlueCrepe {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueCrepe"]];
 }
-+ (id)paperBlueSpecks {
++ (instancetype)paperBlueSpecks {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueSpecks"]];
 }
-+ (id)paperBlueTextured {
++ (instancetype)paperBlueTextured {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueTextured"]];
 }
-+ (id)paperBlueVellum {
++ (instancetype)paperBlueVellum {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBlueVellum"]];
 }
-+ (id)paperBuffTextured {
++ (instancetype)paperBuffTextured {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternBuffTextured"]];
 }
-+ (id)paperCharcoalFlecks {
++ (instancetype)paperCharcoalFlecks {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternCharcoalFlecks"]];
 }
-+ (id)paperCrepe {
++ (instancetype)paperCrepe {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternCrepe"]];
 }
-+ (id)paperFiberDarkGray {
++ (instancetype)paperFiberDarkGray {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternFiberDarkGray"]];
 }
-+ (id)paperFiber1 {
++ (instancetype)paperFiber1 {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternFiber1"]];
 }
-+ (id)paperFiber2 {
++ (instancetype)paperFiber2 {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternFiber2"]];
 }
-+ (id)paperGoldMetallic {
++ (instancetype)paperGoldMetallic {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGoldMetallic"]];
 }
-+ (id)paperGoldParchment {
++ (instancetype)paperGoldParchment {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGoldParchment"]];
 }
-+ (id)paperGoldVellum {
++ (instancetype)paperGoldVellum {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGoldVellum"]];
 }
-+ (id)paperGraphPaper {
++ (instancetype)paperGraphPaper {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGraphPaper"]];
 }
-+ (id)paperGrayGranite {
++ (instancetype)paperGrayGranite {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGrayGranite"]];
 }
-+ (id)paperGreenAndBlack {
++ (instancetype)paperGreenAndBlack {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreenAndBlack"]];
 }
-+ (id)paperGreenWithFibers {
++ (instancetype)paperGreenWithFibers {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreenWithFibers"]];
 }
-+ (id)paperGreyVellum {
++ (instancetype)paperGreyVellum {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternGreyVellum"]];
 }
-+ (id)paperHomemade {
++ (instancetype)paperHomemade {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternHomemadePaper"]];
 }
-+ (id)paperKraft {
++ (instancetype)paperKraft {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaper"]];
 }
-+ (id)paperKraft2 {
++ (instancetype)paperKraft2 {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaper2"]];
 }
-+ (id)paperKraftWaffle {
++ (instancetype)paperKraftWaffle {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftWaffle"]];
 }
-+ (id)paperKraftWaffle2 {
++ (instancetype)paperKraftWaffle2 {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternKraftPaperWaffle"]];
 }
-+ (id)paperLeaf {
++ (instancetype)paperLeaf {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLeaf"]];
 }
-+ (id)paperLined {
++ (instancetype)paperLined {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLined"]];
 }
-+ (id)paperLinen {
++ (instancetype)paperLinen {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLinen"]];
 }
-+ (id)paperLinenWeave {
++ (instancetype)paperLinenWeave {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternLinenWeave"]];
 }
-+ (id)paperMarbled {
++ (instancetype)paperMarbled {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMarbled"]];
 }
-+ (id)paperMarbled2 {
++ (instancetype)paperMarbled2 {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMarbled2"]];
 };
-+ (id)paperMetallicBlack {
++ (instancetype)paperMetallicBlack {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMetallicBlack"]];
 }
-+ (id)paperMetallicFlecks {
++ (instancetype)paperMetallicFlecks {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMetallicFlecks"]];
 }
-+ (id)paperMetallicFlecks2 {
++ (instancetype)paperMetallicFlecks2 {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternMetallicFlecks2"]];
 }
-+ (id)paperNotebook {
++ (instancetype)paperNotebook {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternNotebook"]];
 }
-+ (id)paperPebbled {
++ (instancetype)paperPebbled {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPebbled"]];
 }
-+ (id)paperPebbledPeach {
++ (instancetype)paperPebbledPeach {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPeachPebbled"]];
 }
-+ (id)paperPinkTextured {
++ (instancetype)paperPinkTextured {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPinkTextured"]];
 }
-+ (id)paperPinkWithFlecks {
++ (instancetype)paperPinkWithFlecks {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternPinkWithFlecks"]];
 }
-+ (id)paperRedTextured {
++ (instancetype)paperRedTextured {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternRedTextured"]];
 }
-+ (id)paperRedVellum {
++ (instancetype)paperRedVellum {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternRedVellum"]];
 }
-+ (id)paperSketchPaper {
++ (instancetype)paperSketchPaper {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternSketchPaper"]];
 }
-+ (id)paperStationary {
++ (instancetype)paperStationary {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternStationary"]];
 }
-+ (id)paperTextured {
++ (instancetype)paperTextured {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternTextured"]];
 }
-+ (id)paperWhiteColumns {
++ (instancetype)paperWhiteColumns {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteColumns"]];
 }
-+ (id)paperWhiteDiagonal {
++ (instancetype)paperWhiteDiagonal {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteDiagonal"]];
 }
-+ (id)paperWhiteStationary {
++ (instancetype)paperWhiteStationary {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteStationary"]];
 }
-+ (id)paperWhiteTextured {
++ (instancetype)paperWhiteTextured {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteTextured"]];
 }
-+ (id)paperWhiteWithWoodFibers {
++ (instancetype)paperWhiteWithWoodFibers {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternWhiteWithWoodFibers"]];
 }
-+ (id)paperYellowLined {
++ (instancetype)paperYellowLined {
     return [UIColor colorWithPatternImage:[UIImage imageNamed:@"UIImagePatternYellowLined"]];
 }
 

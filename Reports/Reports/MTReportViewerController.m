@@ -109,6 +109,11 @@
 @property (nonatomic, assign) BOOL didRefreshBeforeReaload;
 @property (nonatomic, assign) BOOL activityExporting;
 
+//- (instancetype)init NS_DESIGNATED_INITIALIZER;
+//- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+//- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+//- (instancetype)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTReportViewerController
@@ -132,7 +137,7 @@
 
 #pragma mark - Initalize
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self initalize];
@@ -140,7 +145,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self initalize];
@@ -148,7 +153,7 @@
     return self;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self initalize];
@@ -156,7 +161,7 @@
     return self;
 }
 
-- (id)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options {
+- (instancetype)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(NSDictionary *)options {
     self = [super initWithTransitionStyle:style navigationOrientation:navigationOrientation options:options];
     if (self) {
         [self initalize];

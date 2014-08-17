@@ -45,7 +45,7 @@
     return [self datatable];
 }
 
-- (id)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuery *)query {
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
     MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];

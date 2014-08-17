@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeUkPlessey
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

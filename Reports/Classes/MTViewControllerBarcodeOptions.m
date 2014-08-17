@@ -62,7 +62,7 @@
     }
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (instancetype)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         [self customInit];
@@ -70,7 +70,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self customInit];
@@ -126,20 +126,20 @@
     if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
 
         [self setSelectingField1:YES];
-        [[segue destinationViewController] setDelegate:self];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
         
         [self setSelectingField2:YES];
-        [[segue destinationViewController] setDelegate:self];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
         
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
         
         // FIXME: Set inital component
         [self setSelecting2dComponentType:YES];
-        [[segue destinationViewController] setDelegate:self];
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
 

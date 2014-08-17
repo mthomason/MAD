@@ -151,13 +151,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, weak) IBOutlet UIScrollView *designerScrollView;
 @property (nonatomic, weak) IBOutlet UIView *designerContentView;
 
-@property (nonatomic, strong) UIToolbar *toolboxToolbar;
-@property (nonatomic, strong) UIView *toolboxBackgroundView;
-@property (nonatomic, strong) UIScrollView *toolboxScrollView;
-
 @property (nonatomic, strong) NSArray *layoutConstraintsToolboxVisiable;
 @property (nonatomic, strong) NSArray *layoutConstraintsToolboxHidden;
-@property (nonatomic, strong) NSArray *toolbarTopItems;
 @property (nonatomic, strong) NSArray *toolbarBottomItems;
 
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
@@ -169,7 +164,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSettings;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonAddReportObject;
 
-@property (nonatomic, weak) IBOutlet UIToolbar *toolbarTop;
 @property (nonatomic, weak) IBOutlet UIToolbar *toolbarBottom;
 
 @property (nonatomic, strong) NSMutableSet *selectedObjectIds;
@@ -206,6 +200,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
 
 @property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
+
+@property (nonatomic, weak) UINavigationBar *navigationBar;
 
 @end
 
@@ -353,12 +349,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - NSObject
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
         [self initialize];
-        
     }
     return self;
 }
@@ -399,7 +393,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             } completion:NULL];
         }
     }
-
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -460,13 +453,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [[self navigationItem] setTitleView:labelMadDesigner];
     [[[self navigationItem] titleView] sizeToFit];
     
-    if ([UIDevice isLagacyOS]) {
-        MTReportDesignerBorderPadding = 3.0000f;
-        MTReportDesignerCornerRadius = 5.0000f;
-    } else {
-        MTReportDesignerBorderPadding = 0.0000f;
-        MTReportDesignerCornerRadius = 0.0000f;
-    }
+    MTReportDesignerBorderPadding = 0.0000f;
+    MTReportDesignerCornerRadius = 0.0000f;
+
     CGFloat toolBarHeight = [self toolbarBottomHeight];
     [[self toolbarBottomHeightConstraint] setConstant:toolBarHeight];
     
@@ -493,8 +482,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     NSLayoutConstraint *lc1 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeLeft   multiplier:1.0000f constant:0.0000f];
     NSLayoutConstraint *lc2 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self view]          attribute:NSLayoutAttributeRight  multiplier:1.0000f constant:0.0000f];
-    NSLayoutConstraint *lc3 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self toolbarTop]    attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f];
-    NSArray *constraints = @[lc1, lc2, lc3];
+
+    NSLayoutConstraint *lc3 = [NSLayoutConstraint constraintWithItem:[self designerContentView]
+                                                           attribute:NSLayoutAttributeTop
+                                                           relatedBy:NSLayoutRelationEqual
+                                                              toItem:self.topLayoutGuide
+                                                           attribute:NSLayoutAttributeBaseline
+                                                          multiplier:1.0000f
+                                                            constant:0.0000f];
+    //NSLayoutConstraint *lc4 = [NSLayoutConstraint constraintWithItem:[self designerContentView] attribute:NSLayoutAttributeBottom    relatedBy:NSLayoutRelationEqual toItem:self.bottomLayoutGuide attribute:NSLayoutAttributeTop multiplier:1.0000f constant:0.0000f];
+    NSArray *constraints = @[lc1, lc2, lc3/*, lc4*/];
     [[self view] addConstraints:constraints];
     
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
@@ -562,7 +559,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSMutableSet *set = [[NSMutableSet alloc] init];
     [self setSelectedObjectIds:set];
     
-    [self setToolbarTopItems:[[self toolbarTop] items]];
     [self setToolbarBottomItems:[[self toolbarBottom] items]];
     
     [[[AppDelegate app] reportDesigner] setToolboxIsVisible:NO];
@@ -680,8 +676,21 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
     NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
 
-    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:[self rulerView] attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil                        attribute:NSLayoutAttributeNotAnAttribute multiplier: 1.0000f constant: MTReportDesignerRulerHeight];
-    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:[self rulerView] attribute:NSLayoutAttributeTop    relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeTop            multiplier: 1.0000f constant: MTReportDesignerBorderPaddingVertical];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem: [self rulerView]
+                                                                   attribute: NSLayoutAttributeHeight
+                                                                   relatedBy: NSLayoutRelationEqual
+                                                                      toItem: nil
+                                                                   attribute: NSLayoutAttributeNotAnAttribute
+                                                                  multiplier: 1.0000f
+                                                                    constant: MTReportDesignerRulerHeight];
+
+    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem: [self rulerView]
+                                                                   attribute: NSLayoutAttributeTop
+                                                                   relatedBy: NSLayoutRelationEqual
+                                                                      toItem: [self designerContentView]
+                                                                   attribute: NSLayoutAttributeTop
+                                                                  multiplier: 1.0000f
+                                                                    constant: MTReportDesignerBorderPaddingVertical];
     NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:[self rulerView] attribute:NSLayoutAttributeLeft   relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeLeft           multiplier: 1.0000f constant: MTReportDesignerBorderPadding];
     NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:[self rulerView] attribute:NSLayoutAttributeRight  relatedBy:NSLayoutRelationEqual toItem:[self designerContentView] attribute:NSLayoutAttributeRight          multiplier: 1.0000f constant: -MTReportDesignerBorderPadding];
     
@@ -1730,7 +1739,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     [[weakSelf.viewControllerToolbox view] removeFromSuperview];
                 }
                 [[weakSelf toolbarBottom] setItems:[weakSelf toolbarBottomItems] animated:YES];
-                [[weakSelf toolbarTop] setItems:[weakSelf toolbarTopItems] animated:YES];
                 
                 CGPoint contentOffset = [[[AppDelegate app] reportDesigner] contentOffsetOnShowToolbox];
                 [[weakSelf designerScrollView] setContentOffset:contentOffset animated:YES];
@@ -1824,7 +1832,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)removeItemsFromToolbars {
     [[self toolbarBottom] setItems:nil animated:YES];
-    [[self toolbarTop] setItems:nil animated:YES];
 }
 
 - (void)repositionPopoverControllerInformationAnimated:(BOOL)animated {
@@ -2774,7 +2781,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         [result setLastTouchPoint: result.dropPoint];
         [result setDropIndex: [[documentObject dropIndex] integerValue]];
-        [result setDescription:[documentObject toStringHumanReadable]];
+        [result setLayoutDescription:[documentObject toStringHumanReadable]];
     } else {
         [result setDropPoint: CGPointZero];
         [result setLastTouchPoint:CGPointZero];

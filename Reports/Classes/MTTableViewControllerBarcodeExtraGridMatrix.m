@@ -13,6 +13,14 @@
 #import "MTTableViewControllerBarcodeExtraGridMatrix.h"
 #import "MTTableViewControllerStaticSelectRow.h"
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
+
 @interface MTTableViewControllerBarcodeExtraGridMatrix ()
     <MTTableViewControllerStaticSelectRowDelegate>
 
@@ -27,7 +35,7 @@
     
 }
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (instancetype)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) { }
     return self;
@@ -81,9 +89,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixError"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [(MTTableViewControllerStaticSelectRow *)[segue destinationViewController] setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixSize"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [(MTTableViewControllerStaticSelectRow *)[segue destinationViewController] setDelegate:self];
     }
 }
 

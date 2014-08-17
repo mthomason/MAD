@@ -19,7 +19,7 @@
 
 @implementation MTDatabaseField
 
-- (id)initWithName:(NSString *)name {
+- (instancetype)initWithName:(NSString *)name {
     self = [super init];
     if (self) {
         [self setLabel: name];

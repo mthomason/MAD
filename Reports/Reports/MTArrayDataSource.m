@@ -13,7 +13,7 @@
 
 @implementation MTArrayDataSource
 
-- (id)initWithItems:(NSArray *)items
+- (instancetype)initWithItems:(NSArray *)items
      cellIdentifier:(NSString *)cellIdentifier
  configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
             andType:(MTDataSourceType)type {

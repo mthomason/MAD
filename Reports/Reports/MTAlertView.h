@@ -16,7 +16,7 @@ typedef void (^MTAlertViewCancelBlock)();
 
 @interface MTAlertView : UIAlertView <UIAlertViewDelegate>
 
-- (id)initWithTitle:(NSString *)title
+- (instancetype)initWithTitle:(NSString *)title
             message:(NSString *)message
   cancelButtonTitle:(NSString *)cancelButtonTitle
    otherButtonTitle:(NSArray *)otherButtons

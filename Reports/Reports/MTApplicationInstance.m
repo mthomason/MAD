@@ -37,9 +37,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.1";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.1";
-NSString * const MTGlobalBundleRev                                  = @"1376";
+NSString * const MTGlobalBundleVersion                              = @"7.0.4";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.4";
+NSString * const MTGlobalBundleRev                                  = @"1379";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -68,7 +68,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 @implementation MTApplicationInstance
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
 

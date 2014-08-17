@@ -16,8 +16,8 @@
 
 @property (nonatomic, assign) BOOL didRefresh;
 
-- (id)initWithQuery:(MTQuery *)query;
-+ (id)reportFormatterWithQuery:(MTQuery *)query;
+- (instancetype)initWithQuery:(MTQuery *)query;
++ (instancetype)reportFormatterWithQuery:(MTQuery *)query;
 
 @end
 

@@ -14,7 +14,7 @@
 
 @implementation MTPaperGovernemntLegal
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         CGFloat width = CGFloatPointsForInches(8.5000f);

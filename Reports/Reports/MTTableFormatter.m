@@ -16,7 +16,7 @@
 
 @implementation MTTableFormatter
 
-- (id)initWithQuery:(MTQuery *)query {
+- (instancetype)initWithQuery:(MTQuery *)query {
     self = [super initWithQuery:query];
     if (self) {
 
@@ -26,7 +26,7 @@
     return self;
 }
 
-+ (id)reportFormatterWithQuery:(MTQuery *)query {
++ (instancetype)reportFormatterWithQuery:(MTQuery *)query {
     MTTableFormatter *result = [[MTTableFormatter alloc] initWithQuery:query];
     return result;
 }
@@ -34,9 +34,6 @@
 #pragma mark - Reading cached data
 
 - (BOOL)format {
-    
-    
-    
     return [super format];
 }
 

@@ -17,7 +17,7 @@
 @property (nonatomic, assign) NSUInteger column;
 @property (nonatomic, assign) NSUInteger row;
 
-+ (id)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column;
++ (instancetype)dataTableLocationForRow:(NSUInteger)row inColumn:(NSUInteger)column;
 
 @end
 

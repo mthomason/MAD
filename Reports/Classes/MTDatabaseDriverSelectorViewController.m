@@ -21,6 +21,11 @@
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt = @"Select a database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supported Databases";
 
+@interface MTDatabaseDriverSelectorViewController ()
+    <MTViewControllerProtocol>
+
+@end
+
 @implementation MTDatabaseDriverSelectorViewController
 
 - (void)viewDidLoad {
@@ -39,17 +44,17 @@ NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supporte
     NSString *dbId = nil;
     if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
-        [[segue destinationViewController] setDelegate:self];
+        [(MTConnectionViewController *)[segue destinationViewController] setDelegate:self];
         dbId = [MTDatabaseMySql identifier];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
-        [[segue destinationViewController] setDelegate:self];
+        [(MTConnectionViewController *)[segue destinationViewController] setDelegate:self];
         dbId = [MTDatabaseSqlServer identifier];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
-        [[segue destinationViewController] setDelegate:self];
+        [(MTConnectionViewController *)[segue destinationViewController] setDelegate:self];
         dbId = [MTDatabaseSqlite3 identifier];
 
     }

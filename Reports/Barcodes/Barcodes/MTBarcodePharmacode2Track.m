@@ -19,7 +19,7 @@
 
 @implementation MTBarcodePharmacode2Track
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

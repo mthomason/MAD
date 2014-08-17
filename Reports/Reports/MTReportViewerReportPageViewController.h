@@ -13,6 +13,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MTReportViewerReportPageView.h"
 #import "UIColor+EverydayApps.h"
+#import "Constants.h"
 
 @class MAReportDocument;
 
@@ -24,7 +25,7 @@
 @property (nonatomic, assign, readonly) NSUInteger pageNumber;
 @property (nonatomic, strong) NSDate *lastCacheDate;
 
-- (id)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages;
+- (instancetype)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages NS_DESIGNATED_INITIALIZER;
 
 @end
 

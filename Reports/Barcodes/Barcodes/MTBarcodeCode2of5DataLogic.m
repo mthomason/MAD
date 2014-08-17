@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeCode2of5DataLogic
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

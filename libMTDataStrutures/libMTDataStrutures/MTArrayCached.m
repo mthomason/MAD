@@ -58,7 +58,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     sqlite3_close(_database.databaseHandle);
 }
 
-- (id)initWithIdentifier:(NSString *)identifier {
+- (instancetype)initWithIdentifier:(NSString *)identifier {
     self = [super init];
     if (self) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];
@@ -77,7 +77,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
     return self;
 }
 
-- (id)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
+- (instancetype)initWithIdentifier:(NSString *)identifier cachedDelegate:(id<MTCacheProtocol>)cachedDelegate {
     self = [super init];
     if (self) {
         NSMutableArray *fastEnumerationObjects = [[NSMutableArray alloc] init];

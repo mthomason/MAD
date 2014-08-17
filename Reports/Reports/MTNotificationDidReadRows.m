@@ -36,11 +36,11 @@ static MTNotificationDidReadRows *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
++ (instancetype)allocWithZone:(NSZone *)zone {
     return [self sharedObject];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 

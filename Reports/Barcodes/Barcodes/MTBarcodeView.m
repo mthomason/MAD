@@ -20,7 +20,7 @@
     [super dealloc];
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         NSAssert(NO, @"Don't you dare!");
@@ -33,7 +33,7 @@
 }
 
 /*
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
                  type:(MTBarcodeType)barcodeType
           borderStyle:(MTBarcodeBorderStyle)borderStyle
        stringToEncode:(NSString *)stringToEncode

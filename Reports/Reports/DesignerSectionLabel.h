@@ -10,15 +10,17 @@
 #define Reports_DesignerSectionLabel_h
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 @interface DesignerSectionLabel : UIView
 
-- (id)initWithDisplayText:(NSString *)displayText;
+@property (nonatomic, strong) UILabel *labelSectionIdentifer;
+@property (nonatomic, assign, readonly) BOOL selected;
+
+- (instancetype)initWithDisplayText:(NSString *)displayText NS_DESIGNATED_INITIALIZER;
 - (void)dimView;
 - (void)normalView;
 
-@property (nonatomic, strong) UILabel *labelSectionIdentifer;
-@property (nonatomic, assign, readonly) BOOL selected;
 @end
 
 #endif

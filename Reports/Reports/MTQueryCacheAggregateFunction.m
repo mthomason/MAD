@@ -19,11 +19,13 @@
 @property (nonatomic, assign) MTAggregateGroupByType groupByType;
 @property (nonatomic, assign) MTAggregateFunctionType functionType;
 
+//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQueryCacheAggregateFunction
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

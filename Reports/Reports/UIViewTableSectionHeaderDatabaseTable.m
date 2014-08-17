@@ -22,7 +22,7 @@
 @implementation UIViewTableSectionHeaderDatabaseTable
 
 
-- (id)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
+- (instancetype)initWithFrame:(CGRect)frame title:(NSString*)title section:(NSInteger)sectionNumber delegate:(id <SectionHeaderViewDelegate>)delegate {
     
     self = [super initWithFrame:frame];
     

@@ -15,7 +15,7 @@
 
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
-- (id)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
+- (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
 - (UIImage *)thumbnail;
 
 @end

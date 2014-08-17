@@ -48,7 +48,7 @@
     _delegate = nil;
 }
 
-- (id)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
+- (instancetype)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         [self setDocument:document];

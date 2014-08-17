@@ -14,7 +14,7 @@
 #import "MTProtocolCompare.h"
 #import "RptqDocumentSection+Extras.h"
 
-@class NSManagedObjectContext, MTDatabase, RptqQuery, RptqQueryPredicate, RptqQueryLinks;
+@class NSManagedObjectContext, MTDatabase, RptqQuery, RptqQueryPredicate, RptqQueryLinks, MTErrorContainer;
 
 @interface RptqDocument (Extras) <MTProtocolCompare>
 
@@ -32,7 +32,7 @@
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *status, CGFloat progress))status
-         completion:(void (^)(BOOL success, NSError *error))completion;
+         completion:(void (^)(BOOL success, MTErrorContainer *error))completion;
 
 - (void)addQueryLink:(RptqQueryLinks *)queryLink;
 - (void)addPredicate:(RptqQueryPredicate *)predicate;

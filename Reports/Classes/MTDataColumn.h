@@ -10,6 +10,7 @@
 #define Reports_MTDataColumn_h
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
 
 @interface MTDataColumn : NSObject
     <NSCoding>
@@ -27,14 +28,14 @@
 @property (nonatomic, assign, getter = isNotNull) BOOL notNull;
 @property (nonatomic, assign, getter = isAutoIncrement) BOOL autoIncrement;
 
-- (id)initWithIdentifier:(NSString *)identifier;  //Init with a caption
+- (instancetype)initWithIdentifier:(NSString *)identifier;  //Init with a caption
+- (instancetype)initWithPlist:(id)plist;
 
-- (id)initWithPlist:(id)plist;
-- (id)plist;
+- (NSDictionary *)plist;
 - (void)removeAllObjects;
 
 - (void)addObject:(id)object;               //Adds to end of column data
-- (id)objectAtIndex:(NSInteger)index;       //Object at row number
+- (instancetype)objectAtIndex:(NSInteger)index;       //Object at row number
 - (void)addRows:(NSUInteger)count;          //Adds specifc number of rows with default value.
 
 @end

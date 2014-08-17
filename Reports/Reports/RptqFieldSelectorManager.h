@@ -10,6 +10,7 @@
 #define Reports_RptqDatabaseSchemaFieldSelectorManager_h
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
 
 @class RptqQueryTable, UIViewTableSectionHeaderDatabaseTable;
 
@@ -21,7 +22,7 @@
 @property (strong) UIViewTableSectionHeaderDatabaseTable *headerView;
 @property (nonatomic, strong) NSMutableArray *rowHeights;
 
-- (id)initWithTable:(RptqQueryTable *)sectionTable;
+- (instancetype)initWithTable:(RptqQueryTable *)sectionTable NS_DESIGNATED_INITIALIZER;
 
 - (NSUInteger)countOfRowHeights;
 - (id)objectInRowHeightsAtIndex:(NSUInteger)idx;

@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "sybdb.h"
+#import "Constants.h"
 
 @interface MTDatabaseProcessSqlServer : NSObject
 
-- (id)initWithProcess:(DBPROCESS *)process;
+- (instancetype)initWithProcess:(DBPROCESS *)process NS_DESIGNATED_INITIALIZER;
 - (DBPROCESS *)process;
 
 @end

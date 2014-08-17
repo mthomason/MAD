@@ -13,6 +13,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MTCacheProtocol.h"
+#import "Constants.h"
 
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
@@ -23,6 +24,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
+- (id)initWithFileURL:(NSURL *)url;
 - (void)quickSave;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;

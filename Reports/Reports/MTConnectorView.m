@@ -17,16 +17,17 @@
 @property (nonatomic, assign) CGSize shadowSize;
 @property (nonatomic, assign) CGSize smallCircleSize;
 
+- (instancetype)init;
+
 @end
 
 @implementation MTConnectorView
 
-
-- (id)init {
+- (instancetype)init {
     return [self initWithFrame:CGRectZero];
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         //[self setOpaque:YES];
@@ -61,7 +62,7 @@
     return self;
 }
 
-- (id)initWithOriginView:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
+- (instancetype)initWithOriginView:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
     self = [super initWithFrame:CGRectZero];
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];

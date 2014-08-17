@@ -11,6 +11,7 @@
 @interface MTReportFormatterCache : NSObject
 
 - (void)setLayout:(id)layout andIndexes:(id)indexes forSize:(CGSize)size;
+- (instancetype)init;
 - (id)layoutForSize:(CGSize)size;
 - (id)indexesForSize:(CGSize)size;
 - (void)dumpCache;

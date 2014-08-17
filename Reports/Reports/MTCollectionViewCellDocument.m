@@ -85,9 +85,6 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 }
 
 - (void)setText:(NSString *)text {
-    
-
-    
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     NSInteger length = [[attributedString string] length];
     CGFloat size = [UIDevice isPad] ? 22.0000f : 12.0000f;
@@ -99,7 +96,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     [[self labelTitle] setAttributedText:attributedString];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         UIColor *bgColor = [[UIColor tintColorBlue] colorWithAlphaComponent:0.70000f];

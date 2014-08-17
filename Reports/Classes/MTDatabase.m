@@ -43,7 +43,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
 
 @implementation MTDatabase
 
-+ (id)databaseFactory:(MTDatabaseConnection *)connection {
++ (instancetype)databaseFactory:(MTDatabaseConnection *)connection {
 
     NSString *identifier = [connection databaseTypeIdentifier];
     

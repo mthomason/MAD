@@ -20,7 +20,7 @@
 
 @implementation MTBarcodeCode39Iso16388
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
@@ -53,7 +53,7 @@
 
 @implementation MTBarcodeCode39Hbic
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

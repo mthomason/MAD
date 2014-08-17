@@ -14,11 +14,13 @@
 @property (nonatomic, strong) NSArray *rowids;
 @property (nonatomic, strong) NSArray *sortDescriptors;
 
+//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQueryCacheSelectRowIds
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         NSAssert([object isKindOfClass:[NSDictionary class]], @"%@ expects NSDictionary.", NSStringFromClass([self class]));

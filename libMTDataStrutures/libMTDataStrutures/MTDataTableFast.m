@@ -47,7 +47,7 @@
     
 }
 
-- (id)plist {
+- (NSDictionary *)plist {
     
     NSDictionary *superPlist = [super plist];
     NSMutableDictionary *plist = [[NSMutableDictionary alloc] initWithDictionary:superPlist];
@@ -141,9 +141,9 @@
 
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super initWithCoder:decoder];
-    if(self) {
+    if (self) {
         
         NSString *absoluteString = [decoder decodeObjectForKey: [MTDataTableFast keyUrlFastCache]];
         NSURL *url = [NSURL URLWithString:absoluteString];
@@ -175,11 +175,11 @@
     return NSStringFromSelector(selColumns);
 }
 
-- (id)initWithId:(NSUInteger)objectId {
+- (instancetype)initWithId:(NSUInteger)objectId {
     return [self initWithId:objectId fromCache:YES];
 }
 
-- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
+- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
     self = [super initWithId:objectId fromCache:fromCache];
     if (self) {
         [self setBulkInsertLoop:NO];
@@ -196,7 +196,7 @@
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
-- (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
+- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
     NSAssert(false, @"Not implemented");
     return nil;
 }

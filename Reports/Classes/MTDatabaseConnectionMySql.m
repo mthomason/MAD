@@ -14,7 +14,7 @@
 
 @implementation MTDatabaseConnectionMySql
 
-- (id)initWithHost:(NSString *)host database:(NSString *)database andPort:(NSInteger)port {
+- (instancetype)initWithHost:(NSString *)host database:(NSString *)database andPort:(NSInteger)port {
     self = [super init];
     if (self) {
         [self setServer: host];

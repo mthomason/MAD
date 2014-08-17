@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 @class MTDataFormatter, MTQuery;
 
@@ -14,7 +15,7 @@
 
 @property (nonatomic, strong, readonly) MTDataFormatter *tableFormatter;
 
-- (id)initWithQuery:(MTQuery *)query;
+- (instancetype)initWithQuery:(MTQuery *)query NS_DESIGNATED_INITIALIZER;
 - (NSUInteger)rowCount;
 - (NSUInteger)columnCount;
 

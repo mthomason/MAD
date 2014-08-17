@@ -10,17 +10,25 @@
 #import "MTObject.h"
 #import "MTProtocolLog.h"
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
+
 @interface MTPair : NSObject <MTProtocolLog>
 
 @property (nonatomic, strong) id former;
 @property (nonatomic, strong) id latter;
 
-- (id)init;
-- (id)initWithFormer:(id)former andLatter:(id)latter;
-+ (id)pairWithFormer:(id)former andLatter:(id)latter;
+- (instancetype)init;
+- (instancetype)initWithFormer:(id)former andLatter:(id)latter NS_DESIGNATED_INITIALIZER;
++ (instancetype)pairWithFormer:(id)former andLatter:(id)latter;
 
-- (id)initWithLeft:(id)left andRight:(id)right;
-+ (id)pairWithLeft:(id)left andRight:(id)right;
+- (instancetype)initWithLeft:(id)left andRight:(id)right;
++ (instancetype)pairWithLeft:(id)left andRight:(id)right;
 
 - (id)left;
 - (id)right;

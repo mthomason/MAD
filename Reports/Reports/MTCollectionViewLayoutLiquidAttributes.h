@@ -10,10 +10,10 @@
 
 @interface MTCollectionViewLayoutLiquidAttributes : UICollectionViewLayoutAttributes
 
-@property (nonatomic) CGPoint dropPoint;
-@property (nonatomic) NSUInteger dropIndex;
-@property (nonatomic) BOOL lastTouchPointValid;
-@property (nonatomic) CGPoint lastTouchPoint;
-@property (nonatomic, strong) NSString *description;
+@property (nonatomic, assign) CGPoint dropPoint;
+@property (nonatomic, assign) NSUInteger dropIndex;
+@property (nonatomic, assign) BOOL lastTouchPointValid;
+@property (nonatomic, assign) CGPoint lastTouchPoint;
+@property (nonatomic, strong) NSString *layoutDescription;
 
 @end

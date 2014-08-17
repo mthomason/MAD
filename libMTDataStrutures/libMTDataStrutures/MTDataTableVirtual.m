@@ -61,26 +61,41 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [super encodeWithCoder:encoder];
-    
     NSString *key = [MTDataTableVirtual keySortIndex];
     [encoder encodeObject: _sortIndex forKey: key];
-    
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self initalize];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super initWithCoder:decoder];
     if(self) {
-        
         NSString *key = [MTDataTableVirtual keySortIndex];
         NSMutableArray *sortIndex = [decoder decodeObjectForKey:key];
+        [self setSortIndex:sortIndex];
+    }
+    return self;
+}
+
+- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
+    self = [super initWithNumberOfColumns:numberOfColumns];
+    if (self) {
+        
+        NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
         [self setSortIndex:sortIndex];
         
     }
     return self;
 }
 
-- (id)init {
-    self = [super init];
+- (instancetype)initWithId:(NSUInteger)objectId {
+    self = [super initWithId:objectId];
     if (self) {
         
         [self initalize];
@@ -94,17 +109,6 @@
     [self setSortIndex:sortIndex];
 }
 
-- (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns {
-    self = [super initWithNumberOfColumns:numberOfColumns];
-    if (self) {
-        
-        NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithCapacity:numberOfColumns];
-        [self setSortIndex:sortIndex];
-        
-    }
-    return self;
-}
-
 - (void)loadWithPlist:(id)plist {
     [super loadWithPlist:plist];
     
@@ -112,16 +116,6 @@
     NSArray *sortIndexArray = [plist objectForKey:keySortIndex];
     NSMutableArray *sortIndex = [[NSMutableArray alloc] initWithArray:sortIndexArray];
     [self setSortIndex:sortIndex];
-}
-
-- (id)initWithId:(NSUInteger)objectId {
-    self = [super initWithId:objectId];
-    if (self) {
-
-        [self initalize];
-
-    }
-    return self;
 }
 
 - (id)plist {

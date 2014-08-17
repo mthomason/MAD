@@ -299,9 +299,9 @@ static NSNumberFormatter *currencyNumberFormatter;
     [managedObjectContext save:nil];
 }
 
-+ (id)documentObjectForObjectID:(NSManagedObjectID *)objid managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)documentObjectForObjectID:(NSManagedObjectID *)objid managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objid];
-    return result;
+    return (RptqDocumentObject *)result;
 }
 
 #pragma mark - MTProtocolCompare

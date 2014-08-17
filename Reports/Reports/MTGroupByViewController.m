@@ -27,7 +27,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 @implementation MTGroupByViewController
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         

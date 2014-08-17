@@ -24,7 +24,7 @@
 @implementation MTRulerView
 
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self commonInit];
@@ -32,7 +32,7 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [self commonInit];

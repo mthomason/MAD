@@ -10,7 +10,7 @@
 
 @implementation MTTree
 
-- (id)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right {
+- (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right {
     self = [super init];
     if (self) {
         [self setLeftNode:left];

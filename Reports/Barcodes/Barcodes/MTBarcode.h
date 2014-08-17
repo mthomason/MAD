@@ -164,7 +164,7 @@ typedef NS_ENUM(NSUInteger, MTBarcodeType) {
 
 + (NSString *)barcodeNameForType:(MTBarcodeType)type;
 + (NSDictionary *)names;
-+ (id)barcodeWithType :(MTBarcodeType)type;
++ (instancetype)barcodeWithType :(MTBarcodeType)type;
 
 @end
 

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="gok-n2-WN9">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -11,7 +10,6 @@
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="gok-n2-WN9" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="72b-A9-bsM">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -34,7 +32,7 @@
             </objects>
             <point key="canvasLocation" x="-1758" y="393"/>
         </scene>
-        <!--Licensing View Controller - Software Licensing-->
+        <!--Software Licensing-->
         <scene sceneID="Ogq-HK-GUh">
             <objects>
                 <tableViewController id="Csk-Ic-NB5" customClass="MTLicensingViewController" sceneMemberID="viewController">
@@ -316,11 +314,9 @@
                         <subviews>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8lE-6j-lZi">
                                 <rect key="frame" x="150" y="274" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Updating" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wZx-4n-Zo9">
                                 <rect key="frame" x="110" y="245" width="100" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -343,7 +339,6 @@
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Iah-MZ-57m" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HnM-dV-WPK">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -362,7 +357,7 @@
             </objects>
             <point key="canvasLocation" x="-939" y="-34"/>
         </scene>
-        <!--View Controller Open Document - MAD Viewer-->
+        <!--MAD Viewer-->
         <scene sceneID="DaQ-ET-rRf">
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="cfA-O3-YW7" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
@@ -476,7 +471,7 @@
             </objects>
             <point key="canvasLocation" x="47" y="1598"/>
         </scene>
-        <!--Table View Controller About - What is MAD?-->
+        <!--What is MAD?-->
         <scene sceneID="Kmr-uW-f9w">
             <objects>
                 <tableViewController id="xWb-ap-j8N" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -567,7 +562,6 @@
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="JJ7-jR-fBg" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="cer-7U-Ubk"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="BCd-wA-a4t">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -586,7 +580,7 @@
             </objects>
             <point key="canvasLocation" x="47" y="393"/>
         </scene>
-        <!--Report Viewer Controller - MAD Viewer-->
+        <!--MAD Viewer-->
         <scene sceneID="EqK-D0-vlP">
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="xKW-ao-6Re" customClass="MTReportViewerController" sceneMemberID="viewController">
@@ -631,7 +625,10 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination">
+            <size key="portraitSize" width="320" height="480"/>
+            <size key="landscapeSize" width="480" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="gUN-ox-xcz"/>

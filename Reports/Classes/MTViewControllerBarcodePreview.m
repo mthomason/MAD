@@ -27,7 +27,7 @@
 
 @implementation MTViewControllerBarcodePreview
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         NSDictionary *namesByType = [MTBarcode names];

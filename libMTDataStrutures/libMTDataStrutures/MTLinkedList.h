@@ -9,10 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "MTProtocolLog.h"
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
 // MARK: Just a wrapper around NSArray.
 
 @interface MTLinkedList : NSObject <NSFastEnumeration, MTProtocolLog>
 
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 - (NSUInteger)count;
 - (void)insert:(id)object;
 - (void)add:(id)object;

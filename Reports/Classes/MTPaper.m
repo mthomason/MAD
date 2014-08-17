@@ -52,11 +52,11 @@
 
 @implementation MTPaper
 
-//- (id)init {
+//- (instancetype)init {
 //    return [self initWithType:MTPaperLetter];
 //}
 
-- (id)initWithType:(MTPaperType)papertype {
+- (instancetype)initWithType:(MTPaperType)papertype {
     id result = nil;
     switch (papertype) {
         

@@ -11,6 +11,14 @@
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
+
 typedef NS_ENUM(NSUInteger, MTEdgeType) {
 	MTEdgeTypeTreeEdge,
 	MTEdgeTypeBackEdge,
@@ -26,9 +34,9 @@ typedef NS_ENUM(NSUInteger, MTEdgeType) {
 
 @property(assign) MTEdgeType dfsEdgeType;
 
-- (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2;
-- (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id)object;
-- (id)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id)object andWeight:(NSNumber *)weight;
+- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 andDestination:(MTVertex *)vertex2;
+- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 andObject:(id)object;
+- (instancetype)initWithUniqueID:(NSNumber *)uniqueID origin:(MTVertex *)vertex1 destination:(MTVertex *)vertex2 object:(id)object andWeight:(NSNumber *)weight NS_DESIGNATED_INITIALIZER;
 
 - (MTVertex *)origin;
 - (MTVertex *)destination;

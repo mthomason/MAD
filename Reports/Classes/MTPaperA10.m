@@ -14,7 +14,7 @@
 
 @implementation MTPaperA10
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

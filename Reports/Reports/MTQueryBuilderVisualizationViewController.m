@@ -94,6 +94,7 @@ typedef void(^MTBlockResultVoid)(void);
 
     @property (nonatomic, strong) UIStoryboard *storyboardDefault;
 
+
 @end
 
 @implementation MTQueryBuilderVisualizationViewController
@@ -105,7 +106,7 @@ typedef void(^MTBlockResultVoid)(void);
     [self removeViewControllers:setToRemove];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         

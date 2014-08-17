@@ -8,9 +8,13 @@
 
 #import "MTCollectionReusableViewFloatingLabel.h"
 
+@interface MTCollectionReusableViewFloatingLabel ()
+
+@end
+
 @implementation MTCollectionReusableViewFloatingLabel
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code

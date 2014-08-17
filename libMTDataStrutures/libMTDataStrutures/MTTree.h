@@ -8,11 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
+
 @interface MTTree : NSObject
 
 @property (nonatomic, strong) MTTree *leftNode;
 @property (nonatomic, strong) MTTree *rightNode;
 
-- (id)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right;
+- (instancetype)initWithLeftTree:(MTTree *)left andRightTree:(MTTree *)right NS_DESIGNATED_INITIALIZER;
 
 @end

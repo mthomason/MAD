@@ -111,13 +111,10 @@ CGFloat const MNSTableViewCellQueryLinkHeightDefault = 50.0000f;
 // MARK: Segue Identifiers
 NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
-NSString * const MNSIdentifierSegueShowDatabasesDrivers             = @"showDatabasesDrivers";
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MNSIdentifierSegueShowAddLinkViewController        = @"showAddLinkViewController";
 NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
 NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
-//NSString * const MNSIdentifierSegueShowReportLayout                 = @"showReportLayout";
-NSString * const MNSIdentifierSegueShowReportViewerFromQuery        = @"showReportViewerFromQuery";
 NSString * const MNSSegueShowSql                                    = @"MNSSegueShowSql";
 NSString * const MTSegueOpenInViewer                                = @"MTSegueOpenInViewer";
 

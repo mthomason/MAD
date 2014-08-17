@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeCode11
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

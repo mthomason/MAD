@@ -18,7 +18,7 @@
 
 @implementation MTReportViewerReportPageView
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self initalize];
@@ -26,7 +26,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self initalize];
@@ -34,7 +34,7 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [self initalize];

@@ -15,7 +15,7 @@
 @synthesize initalPoint = _initalPoint;
 @synthesize highlighted = _highlighted;
 
-- (id)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
+- (instancetype)initWithFrame:(CGRect)frame andType:(MNSCompusPosition)position {
     self = [super initWithFrame:frame];
     if (self) {
 

@@ -14,7 +14,7 @@
 
 @implementation MTDatabaseConnectionSqlServer
 
-- (id)initWithHost:(NSString *)host
+- (instancetype)initWithHost:(NSString *)host
             server:(NSString *)server
           database:(NSString *)database
            andPort:(NSInteger)port {

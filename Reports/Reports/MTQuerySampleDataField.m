@@ -24,12 +24,14 @@
 
 @property (nonatomic, strong) MTDataTable *datatable;
 
+//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQuerySampleDataField
 
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

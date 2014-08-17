@@ -17,7 +17,7 @@ void drawCurvedGloss(CGContextRef context, CGRect rect, CGFloat radius);
 CGMutablePathRef createRoundedRectForRect(CGRect rect, CGFloat radius);
 CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
 
@@ -25,7 +25,7 @@ CGMutablePathRef createRoundedRectForRectCCW(CGRect rect, CGFloat radius);
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
 

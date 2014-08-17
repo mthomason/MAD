@@ -8,9 +8,13 @@
 
 #import "MTCollectionReuseableViewDefault.h"
 
+@interface MTCollectionReuseableViewDefault ()
+
+@end
+
 @implementation MTCollectionReuseableViewDefault
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code

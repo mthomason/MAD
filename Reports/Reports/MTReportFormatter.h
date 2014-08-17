@@ -37,8 +37,8 @@ extern NSString * const MTNullIdentifier;
 
 - (void)initalizeStateMachine;
 
-- (id)initWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options ;
-+ (id)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options;
+- (instancetype)initWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options;
++ (instancetype)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options;
 + (NSValue *)KeyReportSectionType;
 
 - (void)formatForSize:(CGSize)printableSize;

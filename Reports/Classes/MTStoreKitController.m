@@ -79,16 +79,16 @@ static MTStoreKitController *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
++ (instancetype)allocWithZone:(NSZone *)zone {
     //Do not release... this is a singleton yo.
     return [[self sharedObject] retain];
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 
-- (id)retain {
+- (instancetype)retain {
     return self;
 }
 
@@ -98,7 +98,7 @@ static MTStoreKitController *sharedSingleton = nil;
 
 - (oneway void)release { }
 
-- (id)autorelease {
+- (instancetype)autorelease {
     return self;
 }
 

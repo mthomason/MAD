@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeCode2of5Industrial
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

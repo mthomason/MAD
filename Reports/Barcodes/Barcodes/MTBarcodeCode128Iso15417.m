@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeCode128Iso15417
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
@@ -45,7 +45,7 @@
 
 @implementation MTBarcodeCode128SubsetB
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
@@ -71,7 +71,7 @@
 
 @implementation MTBarcodeCode128Ean14
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
@@ -97,7 +97,7 @@
 
 @implementation MTBarcodeCode128Nve18
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
@@ -123,7 +123,7 @@
 
 @implementation MTBarcodeCode128Hibc
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
@@ -149,7 +149,7 @@
 
 @implementation MTBarcodeCode128Ean128
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

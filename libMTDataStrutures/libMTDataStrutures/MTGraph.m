@@ -31,13 +31,13 @@
 
 #pragma mark - NSObject Overrides
 
-- (id)init {
+- (instancetype)init {
     return [self initWithVertices:[NSSet set]];
 }
 
 #pragma mark - Factory
 
-- (id)initWithVertices:(NSSet *)verticesSet {
+- (instancetype)initWithVertices:(NSSet *)verticesSet {
     self = [super init];
     if (self) {
         NSArray *allVertices = [verticesSet allObjects];

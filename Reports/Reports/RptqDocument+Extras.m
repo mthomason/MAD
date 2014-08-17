@@ -55,6 +55,8 @@
 
 #import "UIApplication+Extras.h"
 
+#import "MTErrorContainer.h"
+
 @implementation RptqDocument (Extras)
 
 #pragma mark - Overrides
@@ -314,8 +316,9 @@
 
 - (void)addDatabase:(MTDatabase *)database
              status:(void (^)(NSString *status, CGFloat progress))status
-         completion:(void (^)(BOOL success, NSError *error))completion {
+         completion:(void (^)(BOOL success, MTErrorContainer *error))completion {
     
+    __block MTErrorContainer *errorContainer = [MTErrorContainer new];
     __weak RptqDocument *rptqDocument = self;
     __weak NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
     NSNumber *connectionId = @([[rptqDocument hasDatabaseSchemas] count] + 1);
@@ -334,7 +337,8 @@
             [[userCredentals inDatabase] setDatabaseDriverTypeEnum:@(MNSDatabaseTypeMySQL)];
             [userCredentals setMysql_host:      [connectionSettings server]];
             [userCredentals setMysql_database:  [connectionSettings database]];
-            [userCredentals setMysql_port:    @([connectionSettings port])];
+            NSNumber *port = @([connectionSettings port]);
+            [userCredentals setMysql_port:      port];
             [userCredentals setMysql_username:  [connectionSettings username]];
             [userCredentals setMysql_password:  [connectionSettings password]];
         }
@@ -349,7 +353,8 @@
             [userCredentals setTds_username:    [connectionSettings username]];
             [userCredentals setTds_password:    [connectionSettings password]];
             [userCredentals setTds_database:    [connectionSettings database]];
-            [userCredentals setTds_port:      @([connectionSettings port])];
+            NSNumber *port = @([connectionSettings port]);
+            [userCredentals setTds_port:        port];
         }
 
     } else if ([[database identifier] isEqualToString:[MTDatabaseSqlite3 identifier]]) {
@@ -375,7 +380,7 @@
     [rptqDocument setHasDatabaseSchemas: databaseSchemas];
     
     __weak MTDatabase *weakDatabase = database;
-
+    
     [database connectWithCredentals:[database databaseConnection] completion:^(id dbconnection, BOOL success, NSError *connectionError) {
         
         __weak id weakdbconnection = dbconnection;
@@ -391,17 +396,16 @@
         dispatch_queue_t queueMain = dispatch_get_main_queue();
         dispatch_set_target_queue(queueTables, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
         dispatch_set_target_queue(queueSave, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
-
+        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
         dispatch_async(queueTables, ^{
-
+            
             __weak MTDatabase *weakDatabase3 = weakDatabase2;
             [weakDatabase2 getTablesFromConnection:dbconnection completion:^(BOOL success, NSError *error, NSArray *resultTables) {
                 
                 NSManagedObjectContext *managedObjectContext = [rptqDocument managedObjectContext];
-                //__block RptqDocument *bdoc1 = rptqDocument;
-                
+
                 if (success) {
                     [tables setArray:resultTables];
                     NSInteger counter = 0, numberOfTables = [tables count];
@@ -417,8 +421,15 @@
                             });
                             __block NSMutableArray *fields = [[NSMutableArray alloc] init];
                             [weakDatabase3 getFieldsForTableName:[databaseTable name] connection:weakdbconnection completion:^(BOOL success, NSError *error, NSArray *results) {
-                                [fields setArray:results];
-                                gotit = success; gotitError = error;
+                                if (success && error == nil) {
+                                    [fields setArray:results];
+                                    gotit = success; gotitError = error;
+                                } else {
+                                    if (error) {
+                                        [errorContainer addError:error];
+                                    }
+                                }
+                                
                             }];
                             [tablesAndFields setObject:fields forKey:[databaseTable name]];
                         }
@@ -426,27 +437,37 @@
                     }
                     
                     gotit = success; gotitError = error;
-  //                  __weak RptqDocument *bdoc = bdoc1;
                     dispatch_sync(queueMain, ^{
+                        
                         for (MTDatabaseTable *table in tables) {
-//                            NSManagedObjectContext *managedObjectContext = rptqDocument.managedObjectContext;
-                            RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext
-                                                                                                                                   andTable: table];
-                            [[rptqDocument defaultDatabase] addHasTablesObject: rptqTable];
-                            NSArray *fields = [tablesAndFields objectForKey:[table name]];
                             
-                            NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:[fields count]];
-                            for (MTDatabaseField *field in fields) {
-                                RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
-                                                                                                                                         andField: field];
-                                [schemaFields addObject:schemaField];
+                            NSString *tableName = [table name];
+                            NSArray *fields = [tablesAndFields objectForKey:tableName];
+                            
+                            if ([fields count]) {
+                                RptqDatabaseSchemaTable *rptqTable = [RptqDatabaseSchemaTable databaseSchemaTableFactoryForManagedObjectContext: managedObjectContext
+                                                                                                                                       andTable: table];
+                                [[rptqDocument defaultDatabase] addHasTablesObject: rptqTable];
+                                
+                                NSMutableArray *schemaFields = [[NSMutableArray alloc] initWithCapacity:[fields count]];
+                                for (MTDatabaseField *field in fields) {
+                                    RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField databaseSchemaFieldFactoryForManagedObjectContext: managedObjectContext
+                                                                                                                                             andField: field];
+                                    [schemaFields addObject:schemaField];
+                                }
+                                
+                                NSOrderedSet *hasFields = [[NSOrderedSet alloc] initWithArray:schemaFields];
+                                [rptqTable setHasFields:hasFields];
+                                
+                                NSError *saveError = nil;
+                                [[rptqTable managedObjectContext] save:&saveError];
+                            } else {
+                                NSString *failure = [NSString stringWithFormat:@"Table %@ not Added", tableName];
+                                NSDictionary *userInfo = @{NSLocalizedDescriptionKey : @"Fields not found.",
+                                                           NSLocalizedFailureReasonErrorKey : failure};
+                                NSError *error = [NSError errorWithDomain:@"MADReportDocument" code:38292 userInfo:userInfo];
+                                [errorContainer addError:error];
                             }
-                            
-                            NSOrderedSet *hasFields = [[NSOrderedSet alloc] initWithArray:schemaFields];
-                            [rptqTable setHasFields:hasFields];
-                            
-                            NSError *saveError = nil;
-                            [[rptqTable managedObjectContext] save:&saveError];
                             
                         }
                         
@@ -455,19 +476,14 @@
                         [managedObjectContext save:&saveError];
                         NSAssert(saveError == nil, @"%@", saveError);
                         [weakDatabase3 closeProcess:weakdbconnection];
-                        completion(gotit, gotitError);
+                        completion(gotit, errorContainer);
                     });
                     
                     
                 }
             }];
             
-            });
-            
-
-            
-        //});
-
+        });
     }];
 }
 
@@ -568,7 +584,7 @@
                     break;
                 }
                 case MTAggregateFunctionInputTypeFormula: {
-                    RptqDocumentObjectFormula *formula =  [RptqDocumentObject documentObjectForObjectID:objectId managedObjectContext:mangedObjectContext];
+                    RptqDocumentObjectFormula *formula =  [RptqDocumentObjectFormula documentObjectForObjectID:objectId managedObjectContext:mangedObjectContext];
                     [reportObject setAggregateField:nil];
                     [reportObject setAggregateFunction:formula];
                     break;

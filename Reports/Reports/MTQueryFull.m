@@ -50,12 +50,14 @@
 
 @interface MTQueryFull ()
 
+//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation MTQueryFull
 
 
-- (id)initWithObject:(NSDictionary *)object {
+- (instancetype)initWithObject:(NSDictionary *)object {
     self = [super initWithObject:object];
     if (self) {
         
@@ -64,10 +66,6 @@
         NSDictionary *parameters = (NSDictionary *)object;
         NSNumber *parameterScheam = @(MTQueryCacheFullQuerySchema);
         RptqQuery *queryObject = [parameters objectForKey: parameterScheam];
-  //      RptqUserCredentals *userCredentals = [[queryObject inDatabase] ownedByUser];
-//        MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
-  //      MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-  //      [self setDatabase:db];
         [self setQueryObject:queryObject];
 
         

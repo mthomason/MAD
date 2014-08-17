@@ -21,7 +21,7 @@
 
 @implementation MTQueue
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] init];
@@ -31,7 +31,7 @@
     return self;
 }
 
-- (id)initWithCapacity:(NSUInteger)capacity {
+- (instancetype)initWithCapacity:(NSUInteger)capacity {
     self = [super init];
     if (self) {
         NSMutableArray *queue = [[NSMutableArray alloc] initWithCapacity:capacity];

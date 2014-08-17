@@ -23,7 +23,7 @@
 
 @implementation MTDatabaseDataBinding
 
-- (id)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value {
+- (instancetype)initWithDataType:(MTDataType)datatype fieldIndex:(NSInteger)fieldIndex value:(id)value {
     self = [super init];
     if (self) {
         

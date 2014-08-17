@@ -19,11 +19,11 @@
 
 @implementation MTPair
 
-- (id)init {
+- (instancetype)init {
     return [self initWithFormer:nil andLatter:nil];
 }
 
-- (id)initWithFormer:(id)former andLatter:(id)latter {
+- (instancetype)initWithFormer:(id)former andLatter:(id)latter {
     self = [super init];
     if (self) {
 
@@ -37,17 +37,17 @@
     return self;
 }
 
-- (id)initWithLeft:(id)left andRight:(id)right {
-    MTPair *pair = [[MTPair alloc] initWithFormer:left andLatter:right];
+- (instancetype)initWithLeft:(id)left andRight:(id)right {
+    MTPair *pair = [self initWithFormer:left andLatter:right];
     return pair;
 }
 
-+ (id)pairWithFormer:(id)former andLatter:(id)latter {
++ (instancetype)pairWithFormer:(id)former andLatter:(id)latter {
     id result = [[self alloc] initWithFormer:former andLatter:latter];
     return result;
 }
 
-+ (id)pairWithLeft:(id)left andRight:(id)right   {
++ (instancetype)pairWithLeft:(id)left andRight:(id)right   {
     return [MTPair pairWithFormer:left andLatter:right];
 }
 

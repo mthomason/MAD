@@ -110,7 +110,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)dealloc { }
 
-- (id)initWithQuery:(MTQueryFull *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options  {
+- (instancetype)initWithQuery:(MTQueryFull *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options  {
     self = [super initWithQuery:query];
     if (self) {
         [self setOptions:options];
@@ -119,7 +119,7 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
-+ (id)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options {
++ (instancetype)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
     return result;
 }
@@ -715,7 +715,7 @@ NSString * const MTNullIdentifier = @"(null)";
  // FIXME: Write function to return results for keys without having data stored in memeory.
  */
 
-+ (id)dataForGroupData:(id)data andKeys:(NSArray *)keys {
++ (instancetype)dataForGroupData:(id)data andKeys:(NSArray *)keys {
     id resultData = nil;
     if ([data isKindOfClass:[NSArray class]]) {
         resultData = [[NSArray alloc] initWithArray:data];

@@ -22,7 +22,7 @@
 
 @implementation MTQueryCacheVacuum
 
-- (id)initWithObject:(id)object {
+- (instancetype)initWithObject:(id)object {
     self = [super initWithObject:object];
     if (self) {
         

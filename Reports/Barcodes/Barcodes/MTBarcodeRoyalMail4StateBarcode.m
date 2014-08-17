@@ -19,7 +19,7 @@
 
 @implementation MTBarcodeRoyalMail4StateBarcode
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

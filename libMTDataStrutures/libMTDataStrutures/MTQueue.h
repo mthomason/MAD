@@ -9,8 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "MTProtocolLog.h"
 
+#ifndef NS_DESIGNATED_INITIALIZER
+#if __has_attribute(objc_designated_initializer)
+#define NS_DESIGNATED_INITIALIZER __attribute((objc_designated_initializer))
+#else
+#define NS_DESIGNATED_INITIALIZER
+#endif
+#endif
+
 @interface MTQueue : NSObject  <NSFastEnumeration,  MTProtocolLog>
 
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCapacity:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
 - (void)enqueue:(id)object;
 - (id)dequeue;
 - (NSUInteger)count;

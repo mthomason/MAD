@@ -79,16 +79,17 @@
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [[self delegate] viewControllerDidCancel: self];
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [[self delegate] viewControllerDidCancel: self];
 }
 
 - (IBAction)composeEmail:(id)sender {
     if ([UIDevice isPad]) {
-        [[self delegate] viewControllerDidRequestComposeEmail:self animated:YES];
+        [[self delegate] viewControllerDidRequestComposeEmail: self
+                                                     animated: YES];
     } else {
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
@@ -119,7 +120,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTSegueAboutGettingStarted"] ||
         [[segue identifier] isEqualToString:@"MTSegueAboutSwipeNext"]) {
-        [[segue destinationViewController] setDelegate:[self delegate]];
+        [(MTTableViewControllerAbout *)[segue destinationViewController] setDelegate:[self delegate]];
     }
 }
 

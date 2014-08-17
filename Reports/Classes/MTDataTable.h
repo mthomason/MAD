@@ -42,15 +42,15 @@ typedef NS_ENUM(NSUInteger, MTDataTableParameters) {
 @property (nonatomic, assign) NSUInteger tag;
 
 + (MTDataTable *)newDataTableForIdentifier:(NSString *)identifier;
-+ (id)dataTableFactory:(NSDictionary *)parameters;
 
-- (id)initWithId:(NSUInteger)objectId;
-- (id)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
-- (id)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
++ (instancetype)dataTableFactory:(NSDictionary *)parameters;
+- (instancetype)initWithId:(NSUInteger)objectId;
+- (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache;
+- (instancetype)initWithNumberOfColumns:(NSUInteger)numberOfColumns;
 
 - (NSURL *)url;
 - (void)cache;
-- (id)plist;
+- (NSDictionary *)plist;
 
 - (void)loadWithPlist:(id)plist;
 - (void)loadFromCache;

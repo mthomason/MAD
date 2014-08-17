@@ -47,8 +47,6 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 @property (nonatomic, strong) UIImage *thumbnail;
 
-//@property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
-
 @end
 
 @implementation MADocument
@@ -72,7 +70,6 @@ NSString * const MTDocumentInfoKeyMetaDateCreated = @"datacreated";
 - (id)initWithFileURL:(NSURL *)url {
     self = [super initWithFileURL:url];
     if (self) {
-        
         
         MADocumentState *documentState = [MADocumentState new];
         [documentState setSaveInProgress:NO];
@@ -171,7 +168,7 @@ NSString * MTDocumentTypenFileName              = @"typ";
 NSString * MTDocumentParentContextName          = @"moc";
 
 - (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
-    MTLog(@"Autosaving document");
+    NSLog(@"Autosaving document");
     // FIXME: Use this as a chance to wrap a mad file up.
     id result = [super contentsForType:typeName error:outError];
     return result;
@@ -302,8 +299,8 @@ NSString * MTDocumentParentContextName          = @"moc";
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
-
-    BOOL writeAdditionalContent;
+    BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
+    
     
     if (content ==[NSNull null] || [[self documentStatus] isSuspended]) {
 

@@ -22,16 +22,16 @@
 
 @implementation MTVertex
 
-- (id)init {
+- (instancetype)init {
     return [self initWithID:0];
 }
 
-- (id)initWithID:(NSUInteger)idnumber {
+- (instancetype)initWithID:(NSUInteger)idnumber {
     return [self initWithID:idnumber andObject:nil];
 }
 
-- (id)initWithID:(NSUInteger)idnumber andObject:(id)object {
-    self = [super init];
+- (instancetype)initWithID:(NSUInteger)idnumber andObject:(id)object {
+    self = [super initWithObject:object];
     if (self) {
         
         NSNumber *number = [[NSNumber alloc] initWithInteger:idnumber];

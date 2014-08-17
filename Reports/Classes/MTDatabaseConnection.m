@@ -20,9 +20,15 @@
 #import "NSFileManager+Common.h"
 #import "MTQuery.h"
 
+@interface MTDatabaseConnection ()
+
+//- (instancetype)init NS_DESIGNATED_INITIALIZER;
+
+@end
+
 @implementation MTDatabaseConnection
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         [self nullValues];
@@ -30,7 +36,7 @@
     return self;
 }
 
-+ (id)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier {
++ (instancetype)databaseConnectionFactoryEmpty:(NSString *)typeIdentifier {
     
     id resultCredentals = nil;
     
@@ -57,7 +63,7 @@
 
 }
 
-+ (id)databaseConnectionFactory:(id)connectionObject {
++ (instancetype)databaseConnectionFactory:(id)connectionObject {
     
     id resultCredentals = nil;
     

@@ -9,6 +9,9 @@
 #ifndef Reports_MTDatabaseField_h
 #define Reports_MTDatabaseField_h
 
+#import <Foundation/Foundation.h>
+#import "Constants.h"
+
 typedef NS_ENUM(NSUInteger, MTDataType) {
     MTDataTypeBit           = 0,
     MTDataTypeBlob          = 1,
@@ -36,11 +39,9 @@ typedef NS_ENUM(NSUInteger, MTDataType) {
     MTDataTypeNull          = 24
 };
 
-#import <Foundation/Foundation.h>
-
 @interface MTDatabaseField : NSObject
 
-- (id)initWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, strong) NSString *label;
 @property (nonatomic, strong) NSString *name;

@@ -21,7 +21,7 @@
 
 @implementation MTBarcodeQrCodeIso18004
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

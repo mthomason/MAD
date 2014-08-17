@@ -21,7 +21,7 @@
 
 @implementation MTBarcodeGridMatrix
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         
