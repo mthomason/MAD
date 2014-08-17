@@ -23,7 +23,7 @@ extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MADMimeType;
 
-@class MTQuery, MTReportFormatter, MTQueryFull;
+@class MTQuery, MTReportFormatter, MTQueryFull, MTErrorContainer;
 
 
 @interface MAReportDocument : MADocument
@@ -45,7 +45,7 @@ extern NSString * const MADMimeType;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 - (void)addConnection:(MTDatabaseConnection *)connection
                status:(void (^)(NSString *status, CGFloat progress))status
-           completion:(void(^)(BOOL success, NSError *error))completion;
+           completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 - (void)regenThumbnail;
 - (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
 
