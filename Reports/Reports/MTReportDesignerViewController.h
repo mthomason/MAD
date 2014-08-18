@@ -14,7 +14,7 @@
 
 typedef void(^MTBlockCompletionSimple)(BOOL finished);
 typedef void(^MTBlockCompletionNoReturn)(void);
-typedef void (^block_insertObject)(UIStoryboardSegue *);
+typedef void (^block_insertObject)(UIViewController *);
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeElement = 2,

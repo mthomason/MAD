@@ -131,12 +131,8 @@
 
 - (NSString *)keyForIdentifier {
     char buf[18];
-    snprintf(buf, 18, "s%lu", (unsigned long)[[self objectID] hash]);
+    snprintf(buf, 18, "s%lu", (unsigned long)[self.objectID hash]);
     return @(buf);
-    
-    //NSManagedObjectID *objectID = [[self objectID] hash];
-    //NSURL *url = [objectID URIRepresentation];
-    //return [url absoluteString];
 }
 
 - (NSUInteger)nextDropIndexForSection {

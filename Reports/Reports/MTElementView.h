@@ -16,9 +16,6 @@
 
 @protocol MTElementViewDelegate
 - (void)didTouchElementView:(MTElementView *)elementView;
-- (void)didHighlightElementView:(id)sender;
-- (void)didUnhighlightElementView:(id)sender;
-- (void)sizeChanged:(id)sender;
 @end
 
 @interface MTElementView : UIView

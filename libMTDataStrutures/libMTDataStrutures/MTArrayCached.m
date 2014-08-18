@@ -311,7 +311,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)index {
-    return self[index];
+    return [self objectAtIndex:index];
 }
 /*
 - (id)objectAtIndex:(NSUInteger)index {
@@ -387,7 +387,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
                                                                                                               sortDescriptors:sortdesc]];
     NSNumber *yes = @YES;
     NSNumber *key = @(MTQueryCacheSelectLimitOffsetParamatersDropRowid);
-    queryDefinationSelect[key] = yes;
+    [queryDefinationSelect setObject:yes forKey:key];
     return [MTQuery queryDefinitionSelect:queryDefinationSelect withLimit:1 andOffset:0];
 }
 
