@@ -176,7 +176,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, assign) CGSize currentScaleSize;
 
-@property (nonatomic, assign) BOOL toolbarBottomZero;
+@property (nonatomic, assign) BOOL toolboxVisible;
 
 @property (nonatomic, assign) UIEdgeInsets edgeInsetsWithToolbar;
 @property (nonatomic, assign) UIEdgeInsets edgeInsetsWithoutToolbar;
@@ -269,7 +269,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     self.insetsSetup = NO;
     self.designerScrollView.bouncesZoom = YES;
     self.designerScrollView.scrollsToTop = YES;
-    [self setToolbarBottomZero:YES];
+    [self setToolboxVisible:NO];
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -308,6 +308,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerViewController toolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
+    viewControllerSectionLayoutSettings.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
     
     UINavigationController *navigationController = [MTReportDesignerViewController navigationControllerSectionLayoutSettings:self.viewControllerSectionLayoutSettings];
@@ -327,22 +328,20 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     if ([UIDevice isPad] == NO) {
         
-        NSLayoutConstraint *c2 = [self layoutConstraintViewScrollerBottomToolbar];
-        NSLayoutConstraint *c4 = [self layoutConstraintToolBoxViewBottom];
-
-        NSLayoutConstraint *layoutConstraintViewToolbarHeightVisible = [self layoutConstraintViewToolbarHeightVisible];
         NSLayoutConstraint *layoutConstraintToolboxHeight = [self layoutConstraintToolBoxViewHeight];
-        NSArray *layoutConstraintsToolboxVisiable = @[layoutConstraintToolboxHeight/*, layoutConstraintViewToolbarHeightVisible*/];
-        self.layoutConstraintsToolboxVisiable = layoutConstraintsToolboxVisiable;
+        self.layoutConstraintsToolboxVisiable =  @[layoutConstraintToolboxHeight];
         
         NSLayoutConstraint *layoutConstraintViewToolbarHeightHidden = [self layoutConstraintViewToolbarHeightHidden];
         NSLayoutConstraint *layoutConstraintToolboxHeightHidden = [self layoutConstraintToolboxHeightHidden];
-        NSArray *layoutConstraintsToolboxHidden = @[layoutConstraintToolboxHeightHidden,c2, c4, constraintScrollerBottom];
+        
+        //NSLayoutConstraint *layoutConstraintViewScrollerBottomToolbar = [self layoutConstraintViewScrollerBottomToolbar];
+        NSLayoutConstraint *layoutConstraintToolBoxViewBottom = [self layoutConstraintToolBoxViewBottom];
+        NSArray *layoutConstraintsToolboxHidden = @[layoutConstraintToolboxHeightHidden, /*layoutConstraintViewScrollerBottomToolbar,*/ layoutConstraintToolBoxViewBottom, constraintScrollerBottom];
         self.layoutConstraintsToolboxHidden = layoutConstraintsToolboxHidden;
         
         NSLayoutConstraint *c1 = [self layoutConstraintViewScrollerTop];
         NSLayoutConstraint *c3 = [self layoutConstraintToolbarBottomToToolboxView];
-        NSArray *constraints = @[layoutConstraintToolboxHeightHidden, layoutConstraintViewToolbarHeightHidden, c1, c2, c3, c4];
+        NSArray *constraints = @[layoutConstraintToolboxHeightHidden, layoutConstraintViewToolbarHeightHidden, c1, /*layoutConstraintViewScrollerBottomToolbar,*/ c3, layoutConstraintToolBoxViewBottom];
         [self.view addConstraints:constraints];
         
         self.toolbarBottomHeightConstraint = layoutConstraintViewToolbarHeightHidden;
@@ -501,7 +500,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (UIEdgeInsets)desiredEdgeInsets {
-    return UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
+    return UIEdgeInsetsMake(self.topLayoutGuide.length,
+                            CGSizeZero.width,
+                            self.toolboxVisible ? CGSizeZero.height : self.tabBarController.tabBar.frame.size.height,
+                            CGSizeZero.width);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -585,6 +587,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    [self.viewControllerSectionLayoutSettings viewWillLayoutSubviews];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -598,6 +601,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.viewControllerSectionLayoutSettings willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
     __weak MTReportDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [[reportDesigner rulerView] setNeedsDisplay];
@@ -611,6 +616,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self.viewControllerSectionLayoutSettings didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
     if ([UIDevice isPad] == NO) {
         CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
@@ -618,6 +624,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             __weak MTReportDesignerViewController *reportDesigner = self;
             [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
                 [[reportDesigner toolbarBottomHeightConstraint] setConstant:[reportDesigner toolbarBottomHeight]];
+                [reportDesigner.viewControllerSectionLayoutSettings.tableView setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, reportDesigner.toolboxView.bounds.size.width, reportDesigner.toolboxView.bounds.size.height)];
+
             } completion:NULL];
         }
     }
@@ -625,6 +633,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)updateViewConstraints {
     [super updateViewConstraints];
+    [self.viewControllerSectionLayoutSettings updateViewConstraints];
 
     RptqDocument *document = [self.document activeDocumentModel];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
@@ -2395,14 +2404,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)setConstraintsForToolboxVisible {
     [self.view removeConstraints:self.layoutConstraintsToolboxHidden];
     [self.view addConstraints:self.layoutConstraintsToolboxVisiable];
-    self.toolbarBottomZero = NO;
+    self.toolboxVisible = YES;
     [self.toolbarBottomHeightConstraint setConstant:CGSizeZero.height];
 }
 
 - (void)setConstraintsForToolboxHidden {
     [self.view removeConstraints:[self layoutConstraintsToolboxVisiable]];
     [self.view addConstraints:[self layoutConstraintsToolboxHidden]];
-    self.toolbarBottomZero = YES;
+    self.toolboxVisible = NO;
     [self.toolbarBottomHeightConstraint setConstant:CGSizeZero.height];
 }
 
@@ -2949,9 +2958,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (CGFloat)toolbarBottomHeight {
-    
-    return self.toolbarBottomZero ? CGSizeZero.height :
-    self.navigationController.toolbar.frame.size.height;
+    return self.toolboxVisible ? CGSizeZero.height : CGSizeZero.height;
 }
 
 - (CGRect)rectForSelectedElements {

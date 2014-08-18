@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Generated Query-->
+        <!--Show Sql View Controller - Generated Query-->
         <scene sceneID="RZZ-HD-foi">
             <objects>
                 <viewController id="fBG-n5-WzK" customClass="MTShowSqlViewController" sceneMemberID="viewController">
@@ -70,7 +70,7 @@
             </objects>
             <point key="canvasLocation" x="3162" y="-1507"/>
         </scene>
-        <!--MAD Designer-->
+        <!--Navigation Controller - MAD Designer-->
         <scene sceneID="yOK-hf-Fsm">
             <objects>
                 <navigationController definesPresentationContext="YES" id="OXh-cm-FbU" customClass="MTNavigationController" sceneMemberID="viewController">
@@ -94,7 +94,7 @@
             </objects>
             <point key="canvasLocation" x="1762" y="-164"/>
         </scene>
-        <!--MAD Designer-->
+        <!--Report Designer View Controller - MAD Designer-->
         <scene sceneID="EBH-Aw-yHb">
             <objects>
                 <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SZT-w9-gB7" customClass="MTReportDesignerViewController" sceneMemberID="viewController">
@@ -166,7 +166,7 @@
             </objects>
             <point key="canvasLocation" x="2700" y="-164"/>
         </scene>
-        <!--MAD Viewer-->
+        <!--Navigation Controller - MAD Viewer-->
         <scene sceneID="xYb-0i-Y1Q">
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" toolbarHidden="NO" id="E4Y-T0-TTM" customClass="MTNavigationController" sceneMemberID="viewController">
@@ -257,7 +257,7 @@
             </objects>
             <point key="canvasLocation" x="-4721" y="389"/>
         </scene>
-        <!--About-->
+        <!--Table View Controller About - About-->
         <scene sceneID="3nb-Mk-rGo">
             <objects>
                 <tableViewController title="About" id="72w-1X-ndK" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -346,7 +346,7 @@
             </objects>
             <point key="canvasLocation" x="728" y="1595"/>
         </scene>
-        <!--MAD Query-->
+        <!--Navigation Controller - MAD Query-->
         <scene sceneID="BXL-cc-djF">
             <objects>
                 <navigationController extendedLayoutIncludesOpaqueBars="YES" definesPresentationContext="YES" toolbarHidden="NO" id="xGC-NN-HDb" customClass="MTNavigationController" sceneMemberID="viewController">
@@ -370,7 +370,7 @@
             </objects>
             <point key="canvasLocation" x="1127" y="-3227"/>
         </scene>
-        <!--Software Licensing-->
+        <!--Licensing View Controller - Software Licensing-->
         <scene sceneID="Cja-po-qQN">
             <objects>
                 <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="7Fv-TN-ixy" customClass="MTLicensingViewController" sceneMemberID="viewController">
@@ -659,7 +659,7 @@
             </objects>
             <point key="canvasLocation" x="-149" y="2475"/>
         </scene>
-        <!--MAD Query-->
+        <!--Query Builder View Controller - MAD Query-->
         <scene sceneID="jeR-GO-JXK">
             <objects>
                 <tableViewController id="joU-Nk-1nv" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
@@ -889,7 +889,7 @@
             </objects>
             <point key="canvasLocation" x="3162" y="-3855"/>
         </scene>
-        <!--MySQL Setup-->
+        <!--Connection View Controller - MySQL Setup-->
         <scene sceneID="ECv-se-hME">
             <objects>
                 <tableViewController id="EK3-rz-y2j" customClass="MTConnectionViewController" sceneMemberID="viewController">
@@ -1095,7 +1095,7 @@
             </objects>
             <point key="canvasLocation" x="1095" y="4500"/>
         </scene>
-        <!--MAD Viewer-->
+        <!--Tab Bar Controller - MAD Viewer-->
         <scene sceneID="6KI-hh-jgt">
             <objects>
                 <tabBarController definesPresentationContext="YES" id="NEH-Kw-MQz" sceneMemberID="viewController">
@@ -1145,7 +1145,7 @@
             </objects>
             <point key="canvasLocation" x="-149" y="4500"/>
         </scene>
-        <!--New Report-->
+        <!--Database Driver Selector View Controller - New Report-->
         <scene sceneID="aAj-et-qIX">
             <objects>
                 <tableViewController id="NkE-c4-ux8" customClass="MTDatabaseDriverSelectorViewController" sceneMemberID="viewController">
@@ -1310,7 +1310,7 @@
             </objects>
             <point key="canvasLocation" x="4496" y="-4303"/>
         </scene>
-        <!--Layout Settings-->
+        <!--Report Designer Section Layout Settings View Controller - Layout Settings-->
         <scene sceneID="qFs-uN-Jcs">
             <objects>
                 <tableViewController storyboardIdentifier="MTReportDesignerSectionLayoutSettingsViewControllerIdentifier" id="7dU-9p-e74" customClass="MTReportDesignerSectionLayoutSettingsViewController" sceneMemberID="viewController">
@@ -1374,7 +1374,7 @@
             </objects>
             <point key="canvasLocation" x="-831" y="6580"/>
         </scene>
-        <!--Link Builder-->
+        <!--Query Builder Link Builder View Controller - Link Builder-->
         <scene sceneID="dTf-U2-LTX">
             <objects>
                 <tableViewController id="ADi-Cg-NqP" customClass="MTQueryBuilderLinkBuilderViewController" sceneMemberID="viewController">
@@ -1520,7 +1520,7 @@
             </objects>
             <point key="canvasLocation" x="4496" y="-5752"/>
         </scene>
-        <!--Add Table-->
+        <!--Query Builder Add Table View Controller - Add Table-->
         <scene sceneID="FiN-8R-Kst">
             <objects>
                 <tableViewController id="eYd-TC-lTy" customClass="MTQueryBuilderAddTableViewController" sceneMemberID="viewController">
@@ -1565,7 +1565,7 @@
             </objects>
             <point key="canvasLocation" x="5443" y="-4303"/>
         </scene>
-        <!--Choose an Operator-->
+        <!--Table View Controller Opperators - Choose an Operator-->
         <scene sceneID="iyd-Xz-IXz">
             <objects>
                 <tableViewController id="cjk-Ku-cFi" customClass="UITableViewControllerOpperators" sceneMemberID="viewController">
@@ -1738,7 +1738,7 @@
             </objects>
             <point key="canvasLocation" x="7737" y="-6378"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="UO8-xl-8Vz">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseField" id="Gtp-vp-RJ8" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -1784,7 +1784,7 @@
             </objects>
             <point key="canvasLocation" x="7737" y="-3835"/>
         </scene>
-        <!--Sort Orders-->
+        <!--Query Builder Sort Type View Controller - Sort Orders-->
         <scene sceneID="v3X-Kz-t1d">
             <objects>
                 <tableViewController id="ET2-nF-Om5" customClass="MTQueryBuilderSortTypeViewController" sceneMemberID="viewController">
@@ -1853,7 +1853,7 @@
             </objects>
             <point key="canvasLocation" x="6678" y="-8014"/>
         </scene>
-        <!--Add Group-->
+        <!--Query Builder Add Group View Controller - Add Group-->
         <scene sceneID="UXY-9Y-l1m">
             <objects>
                 <tableViewController id="SD8-hm-piH" customClass="MTQueryBuilderAddGroupViewController" sceneMemberID="viewController">
@@ -1950,7 +1950,7 @@
             </objects>
             <point key="canvasLocation" x="5443" y="-5752"/>
         </scene>
-        <!--Predicate Format-->
+        <!--Query Builder Predicate Format View Controller - Predicate Format-->
         <scene sceneID="Kjj-zr-QtN">
             <objects>
                 <tableViewController id="9UR-0v-mkt" customClass="MTQueryBuilderPredicateFormatViewController" sceneMemberID="viewController">
@@ -2024,7 +2024,7 @@
             </objects>
             <point key="canvasLocation" x="5443" y="-5029"/>
         </scene>
-        <!--Add Predicate-->
+        <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="uFS-C0-l7l">
             <objects>
                 <tableViewController id="Ako-sk-WFW" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
@@ -2161,7 +2161,7 @@
             </objects>
             <point key="canvasLocation" x="3644" y="-524"/>
         </scene>
-        <!--Select Join Type-->
+        <!--Query Builder Add Link Join Type View Controller - Select Join Type-->
         <scene sceneID="cY0-Cc-W8F">
             <objects>
                 <tableViewController id="ri1-wI-VOd" customClass="MTQueryBuilderAddLinkJoinTypeViewController" sceneMemberID="viewController">
@@ -2302,7 +2302,7 @@
             </objects>
             <point key="canvasLocation" x="7737" y="-3059"/>
         </scene>
-        <!--Add Predicate-->
+        <!--Query Builder Add Predicate View Controller - Add Predicate-->
         <scene sceneID="O4k-yE-nsm">
             <objects>
                 <tableViewController id="R4o-wI-s9a" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
@@ -3317,7 +3317,7 @@
             </objects>
             <point key="canvasLocation" x="-1459" y="6580"/>
         </scene>
-        <!--Document Objects-->
+        <!--Report Designer Object Selector View Controller - Document Objects-->
         <scene sceneID="4ZZ-eN-ZLM">
             <objects>
                 <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="jN2-xg-Ric" customClass="MTReportDesignerObjectSelectorViewController" sceneMemberID="viewController">
@@ -3799,7 +3799,7 @@
             </objects>
             <point key="canvasLocation" x="4454" y="907"/>
         </scene>
-        <!--New Static Label-->
+        <!--Document Object New Static Label View Controller - New Static Label-->
         <scene sceneID="olE-tX-aFS">
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewStaticLabelViewControllerIdentifier" id="1Yf-BV-N7y" customClass="MTDocumentObjectNewStaticLabelViewController" sceneMemberID="viewController">
@@ -3858,7 +3858,7 @@
             </objects>
             <point key="canvasLocation" x="5663" y="-466"/>
         </scene>
-        <!--Aggregate Functions-->
+        <!--Aggregate Functions View Controller - Aggregate Functions-->
         <scene sceneID="eU5-mo-pmJ">
             <objects>
                 <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="ZoW-XN-PPC" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
@@ -4280,7 +4280,7 @@
             </objects>
             <point key="canvasLocation" x="6166" y="426"/>
         </scene>
-        <!--New Aggregate Function-->
+        <!--Document Object New Aggregate View Controller - New Aggregate Function-->
         <scene sceneID="swE-Dw-Ge0">
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewAggregateViewControllerIdentifier" id="lu5-Jf-OXi" customClass="MTDocumentObjectNewAggregateViewController" sceneMemberID="viewController">
@@ -4450,7 +4450,7 @@
             </objects>
             <point key="canvasLocation" x="5696" y="426"/>
         </scene>
-        <!--Group By-->
+        <!--Group By View Controller - Group By-->
         <scene sceneID="S0o-o3-0nb">
             <objects>
                 <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="Wvw-aD-3hr" customClass="MTGroupByViewController" sceneMemberID="viewController">
@@ -4594,7 +4594,7 @@
             </objects>
             <point key="canvasLocation" x="7744" y="-5185"/>
         </scene>
-        <!--SQL Server-->
+        <!--Connection View Controller - SQL Server-->
         <scene sceneID="KpL-5p-Bfb">
             <objects>
                 <tableViewController id="zYG-bi-IL0" customClass="MTConnectionViewController" sceneMemberID="viewController">
@@ -4842,7 +4842,7 @@
             </objects>
             <point key="canvasLocation" x="-2710" y="-901"/>
         </scene>
-        <!--MAD Designer-->
+        <!--View Controller Open Document - MAD Designer-->
         <scene sceneID="IYR-cZ-EMb">
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="9ul-yk-EvR" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
@@ -5001,7 +5001,7 @@
             </objects>
             <point key="canvasLocation" x="-149" y="3704"/>
         </scene>
-        <!--What is MAD?-->
+        <!--Table View Controller About - What is MAD?-->
         <scene sceneID="P8b-BK-jDJ">
             <objects>
                 <tableViewController id="mWR-jk-kaM" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -5260,7 +5260,7 @@
             </objects>
             <point key="canvasLocation" x="476" y="3704"/>
         </scene>
-        <!--Getting Started-->
+        <!--Table View Controller About - Getting Started-->
         <scene sceneID="h28-Jy-tWg">
             <objects>
                 <tableViewController id="Eqq-RR-9ms" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -5445,7 +5445,7 @@
             </objects>
             <point key="canvasLocation" x="1095" y="3704"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="He8-Gl-VvX">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldDataObject" id="Tzz-Jy-fth" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -5605,7 +5605,7 @@
             </objects>
             <point key="canvasLocation" x="1020" y="6580"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="y6l-Pm-t8b">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAddGroup" id="bce-zh-8oY" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -5651,7 +5651,7 @@
             </objects>
             <point key="canvasLocation" x="6678" y="-7290"/>
         </scene>
-        <!--MAD Query-->
+        <!--Query Builder Container Controller - MAD Query-->
         <scene sceneID="MpV-cu-Z9x">
             <objects>
                 <viewController id="cAm-KY-FCv" customClass="MTQueryBuilderContainerController" sceneMemberID="viewController">
@@ -5768,7 +5768,7 @@
             </objects>
             <point key="canvasLocation" x="3162" y="-2679"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="W2T-f1-ihk">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="aNn-Gg-71l" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -5824,7 +5824,7 @@
             </objects>
             <point key="canvasLocation" x="6166" y="-6"/>
         </scene>
-        <!--Barcode Designer-->
+        <!--View Controller Barcode Options - Barcode Designer-->
         <scene sceneID="TAy-rr-Zqg">
             <objects>
                 <tableViewController id="Y7f-Nc-Ib7" customClass="MTViewControllerBarcodeOptions" sceneMemberID="viewController">
@@ -6184,7 +6184,7 @@
             </objects>
             <point key="canvasLocation" x="4345" y="5429"/>
         </scene>
-        <!--Type-->
+        <!--Table View Controller Static Select Row - Type-->
         <scene sceneID="S7M-B6-ihT">
             <objects>
                 <tableViewController id="2EX-kM-g28" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -6314,7 +6314,7 @@
             </objects>
             <point key="canvasLocation" x="1902" y="4625"/>
         </scene>
-        <!--MAD Barcodes-->
+        <!--View Controller Barcode - MAD Barcodes-->
         <scene sceneID="Z0w-vS-nb6">
             <objects>
                 <viewController storyboardIdentifier="MTDocumentObjectNewBarcodeViewControllerIdentifier" extendedLayoutIncludesOpaqueBars="YES" id="FeM-9P-hhf" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
@@ -6400,7 +6400,7 @@
             </objects>
             <point key="canvasLocation" x="4028" y="3823"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="etF-WM-TiY">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseField2dComponent" id="uiE-2t-AeT" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -6451,7 +6451,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="4619"/>
         </scene>
-        <!--Barcode Type-->
+        <!--View Controller Barcode Type - Barcode Type-->
         <scene sceneID="5PA-Ds-5ZY">
             <objects>
                 <viewController id="nYU-TX-lFm" customClass="MTViewControllerBarcodeType" sceneMemberID="viewController">
@@ -6496,7 +6496,7 @@
             </objects>
             <point key="canvasLocation" x="5942" y="5067"/>
         </scene>
-        <!--Aztec Code-->
+        <!--Table View Controller Barcode Extra Aztec - Aztec Code-->
         <scene sceneID="RQB-cJ-SG9">
             <objects>
                 <tableViewController id="wEq-mn-wZJ" customClass="MTTableViewControllerBarcodeExtraAztec" sceneMemberID="viewController">
@@ -6593,7 +6593,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="6109"/>
         </scene>
-        <!--Code One-->
+        <!--Table View Controller Static Select Row - Code One-->
         <scene sceneID="LRK-NK-8dl">
             <objects>
                 <tableViewController id="FVu-jD-ot0" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -6807,7 +6807,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="6480"/>
         </scene>
-        <!--Size-->
+        <!--Table View Controller Static Select Row - Size-->
         <scene sceneID="D3q-HJ-HBQ">
             <objects>
                 <tableViewController id="XAj-ty-nXE" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7445,7 +7445,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="5936"/>
         </scene>
-        <!--Minimum Error Correction-->
+        <!--Table View Controller Static Select Row - Minimum Error Correction-->
         <scene sceneID="UKm-3u-O4r">
             <objects>
                 <tableViewController id="KLU-b3-8yJ" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7540,7 +7540,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="6282"/>
         </scene>
-        <!--Grid Matrix-->
+        <!--Table View Controller Barcode Extra Grid Matrix - Grid Matrix-->
         <scene sceneID="wk6-3L-i1Z">
             <objects>
                 <tableViewController id="yTe-B3-pB4" customClass="MTTableViewControllerBarcodeExtraGridMatrix" sceneMemberID="viewController">
@@ -7638,7 +7638,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="6822"/>
         </scene>
-        <!--Size-->
+        <!--Table View Controller Static Select Row - Size-->
         <scene sceneID="WtY-R9-oLD">
             <objects>
                 <tableViewController id="DDF-nA-Vch" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7886,7 +7886,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="6702"/>
         </scene>
-        <!--Minimum Error Correction-->
+        <!--Table View Controller Static Select Row - Minimum Error Correction-->
         <scene sceneID="oC0-pK-ewT">
             <objects>
                 <tableViewController id="0b4-zb-ao6" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7998,7 +7998,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="7032"/>
         </scene>
-        <!--Channel Code-->
+        <!--Table View Controller Static Select Row - Channel Code-->
         <scene sceneID="B2Z-x3-NiN">
             <objects>
                 <tableViewController id="StD-M2-3LL" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -8144,7 +8144,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="7165"/>
         </scene>
-        <!--QR Code-->
+        <!--Table View Controller Barcode Extra Qr Code - QR Code-->
         <scene sceneID="dm6-Kj-gSm">
             <objects>
                 <tableViewController id="Cis-CG-Ko0" customClass="MTTableViewControllerBarcodeExtraQrCode" sceneMemberID="viewController">
@@ -8242,7 +8242,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="7713"/>
         </scene>
-        <!--Size-->
+        <!--Table View Controller Static Select Row - Size-->
         <scene sceneID="uYq-SV-D85">
             <objects>
                 <tableViewController id="ZEp-lV-V2Y" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -8949,7 +8949,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="7377"/>
         </scene>
-        <!--Minimum Error Correction-->
+        <!--Table View Controller Static Select Row - Minimum Error Correction-->
         <scene sceneID="GOc-qJ-xMC">
             <objects>
                 <tableViewController id="gbo-M0-r0L" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9044,7 +9044,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="7713"/>
         </scene>
-        <!--PDF417-->
+        <!--Table View Controller - PDF417-->
         <scene sceneID="I6c-eW-hcb">
             <objects>
                 <tableViewController id="aHy-8G-qSe" sceneMemberID="viewController">
@@ -9149,7 +9149,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="8266"/>
         </scene>
-        <!--Number of Data Columns-->
+        <!--Table View Controller Static Select Row - Number of Data Columns-->
         <scene sceneID="1Xl-El-mvY">
             <objects>
                 <tableViewController id="S20-wo-eQT" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9533,7 +9533,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="8095"/>
         </scene>
-        <!--MSI Plessey-->
+        <!--Table View Controller Static Select Row - MSI Plessey-->
         <scene sceneID="3Mp-RD-ieY">
             <objects>
                 <tableViewController id="xfw-2m-eZT" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9645,7 +9645,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="8620"/>
         </scene>
-        <!--Maximum Codeword Length-->
+        <!--Table View Controller Static Select Row - Maximum Codeword Length-->
         <scene sceneID="sS6-Ci-UNr">
             <objects>
                 <tableViewController id="tjT-XT-7YG" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9740,7 +9740,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="8437"/>
         </scene>
-        <!--Micro QR Code-->
+        <!--Table View Controller Barcode Extra Micro Qr Code - Micro QR Code-->
         <scene sceneID="yWG-lu-ieJ">
             <objects>
                 <tableViewController id="xgt-xu-GBH" customClass="MTTableViewControllerBarcodeExtraMicroQrCode" sceneMemberID="viewController">
@@ -9838,7 +9838,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="9266"/>
         </scene>
-        <!--Size-->
+        <!--Table View Controller Static Select Row - Size-->
         <scene sceneID="XPY-EX-j8N">
             <objects>
                 <tableViewController id="pZR-Yw-EP4" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9933,7 +9933,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="9166"/>
         </scene>
-        <!--Error Correction-->
+        <!--Table View Controller Static Select Row - Error Correction-->
         <scene sceneID="eMa-ZG-lAS">
             <objects>
                 <tableViewController id="Slf-PZ-vLf" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -10011,7 +10011,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="9492"/>
         </scene>
-        <!--Micro Pdf417-->
+        <!--Table View Controller Static Select Row - Micro Pdf417-->
         <scene sceneID="Dmf-R1-KOQ">
             <objects>
                 <tableViewController id="loI-3G-XEE" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -10123,7 +10123,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="8942"/>
         </scene>
-        <!--Maxicode-->
+        <!--Table View Controller Barcode Extra Maxicode - Maxicode-->
         <scene sceneID="brX-Ng-OrO">
             <objects>
                 <tableViewController id="ftv-gF-hif" customClass="MTTableViewControllerBarcodeExtraMaxicode" sceneMemberID="viewController">
@@ -10249,7 +10249,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="9863"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="diZ-Mk-ivJ">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldMaxicode" id="eGY-uT-xNK" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -10297,7 +10297,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="9863"/>
         </scene>
-        <!--Data Matrix-->
+        <!--Table View Controller Barcode Extra Data Matrix - Data Matrix-->
         <scene sceneID="ub1-lh-cLP">
             <objects>
                 <tableViewController id="Rde-PM-7aF" customClass="MTTableViewControllerBarcodeExtraDataMatrix" sceneMemberID="viewController">
@@ -10855,7 +10855,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="10229"/>
         </scene>
-        <!--Databar Expanded Stacked-->
+        <!--Table View Controller Static Select Row - Databar Expanded Stacked-->
         <scene sceneID="oFq-sP-727">
             <objects>
                 <tableViewController id="hva-oT-lDo" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -11052,7 +11052,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="10564"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="5z4-tA-JNI">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldBarcode" id="LA2-X4-Vc3" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -11100,7 +11100,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="5009"/>
         </scene>
-        <!--Select Field-->
+        <!--Query Builder Choose Field View Controller - Select Field-->
         <scene sceneID="y2r-GP-Tda">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate2" id="NTv-mI-XMB" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -11172,13 +11172,11 @@
         <image name="UIImageExportTypeSqlServer.png" width="64" height="64"/>
         <image name="UIImageJustified20.png" width="20" height="20"/>
     </resources>
+    <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination">
-            <size key="portraitSize" width="768" height="1024"/>
-            <size key="landscapeSize" width="1024" height="768"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="En2-cS-5pQ"/>
@@ -11188,5 +11186,4 @@
         <segue reference="zUp-ku-ep4"/>
         <segue reference="glj-Nb-BHS"/>
     </inferredMetricsTieBreakers>
-    <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>
