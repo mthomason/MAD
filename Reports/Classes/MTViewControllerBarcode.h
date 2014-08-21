@@ -10,6 +10,7 @@
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTApplicationInstance.h"
+#import "MTUnwindProtocol.h"
 
 extern NSString * const MTIdentifierSegueDocumentObjectEditBarcode;
 extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
@@ -22,7 +23,9 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 @end
 
 @interface MTViewControllerBarcode : UIViewController
-    <MTViewControllerBarcodePreviewDelegate, MTViewControllerBarcodeOptionsDelegate>
+    <MTViewControllerBarcodePreviewDelegate,
+        MTViewControllerBarcodeOptionsDelegate,
+        MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerBarcodeDelegate> delegate;
 @property (nonatomic, weak) MAReportDocument *document;

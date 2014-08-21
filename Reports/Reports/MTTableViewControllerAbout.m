@@ -33,8 +33,25 @@
 
 @implementation MTTableViewControllerAbout
 
-- (IBAction)unwindToAbout:(UIStoryboardSegue *)action {
+#pragma mark - Exit
+
+- (IBAction)unwindToAbout:(UIStoryboardSegue *)action { }
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToAbout:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
     
+    return action == @selector(unwindToAbout:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
 }
 
 - (CGSize)preferredContentSize {
@@ -120,7 +137,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTSegueAboutGettingStarted"] ||
         [[segue identifier] isEqualToString:@"MTSegueAboutSwipeNext"]) {
-        [(MTTableViewControllerAbout *)[segue destinationViewController] setDelegate:[self delegate]];
+        [(MTTableViewControllerAbout *)segue.destinationViewController setDelegate:[self delegate]];
     }
 }
 

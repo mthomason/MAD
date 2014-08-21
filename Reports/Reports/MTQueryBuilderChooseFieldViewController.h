@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+#import "MTUnwindProtocol.h"
 
 @class MTQueryBuilderChooseFieldViewController, RptqQueryField, MAReportDocument;
 
@@ -22,7 +23,8 @@
 @interface MTQueryBuilderChooseFieldViewController : UITableViewController
     <UITableViewDataSource,
         UITableViewDelegate,
-        SectionHeaderViewDelegate>
+        SectionHeaderViewDelegate,
+        MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
 @property (nonatomic, weak) MAReportDocument *document;

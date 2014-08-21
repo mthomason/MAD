@@ -74,15 +74,15 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showGroupSortOrders"]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
-            MTQueryBuilderSortTypeViewController *dvc = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
+            MTQueryBuilderSortTypeViewController *dvc = segue.destinationViewController;
             [dvc setInitalSortOrder:[self sortOrder]];
-            [[segue destinationViewController] setDelegate:self];
+            [segue.destinationViewController setDelegate:self];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
             
-            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
                 [dvc setExcludeTables:@[]];
                 dvc.delegate = self;

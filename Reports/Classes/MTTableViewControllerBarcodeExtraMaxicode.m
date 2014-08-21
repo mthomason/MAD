@@ -34,7 +34,7 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [[segue destinationViewController] setDelegate:self];
+    [segue.destinationViewController setDelegate:self];
     if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderChooseFieldViewController class]]) {
         [segue.destinationViewController setDocument:self.document];
     }

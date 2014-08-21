@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="E7v-7q-ygd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.8" systemVersion="14A329f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="E7v-7q-ygd">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
     </dependencies>
     <scenes>
-        <!--Show Sql View Controller - Generated Query-->
+        <!--Generated Query-->
         <scene sceneID="56L-Y0-5R1">
             <objects>
                 <viewController id="rH1-dA-DYm" customClass="MTShowSqlViewController" sceneMemberID="viewController">
@@ -44,7 +43,7 @@
                     <navigationItem key="navigationItem" title="Generated Query" id="Cgk-lk-y7r">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="qSs-gO-dN0">
                             <connections>
-                                <segue destination="e2Q-nD-YXF" kind="unwind" unwindAction="unwindToQueryBuilder:" id="DYD-JW-7CX"/>
+                                <segue destination="e2Q-nD-YXF" kind="unwind" identifier="MTIdentifierViewControllerShowSql" unwindAction="unwindToQueryBuilder:" id="DYD-JW-7CX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -62,7 +61,6 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="xr3-YA-WVo" customClass="MTNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="16W-b9-OS4">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -78,7 +76,7 @@
             </objects>
             <point key="canvasLocation" x="2500" y="542"/>
         </scene>
-        <!--Navigation Controller - MAD Designer-->
+        <!--MAD Designer-->
         <scene sceneID="w7D-aP-uPq">
             <objects>
                 <navigationController definesPresentationContext="YES" id="rCj-aP-1mR" customClass="MTNavigationController" sceneMemberID="viewController">
@@ -97,7 +95,7 @@
             </objects>
             <point key="canvasLocation" x="1080" y="404"/>
         </scene>
-        <!--Report Designer View Controller - MAD Designer-->
+        <!--MAD Designer-->
         <scene sceneID="Lfd-iY-3rn">
             <objects>
                 <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d6e-CT-kmt" customClass="MTReportDesignerViewController" sceneMemberID="viewController">
@@ -114,7 +112,6 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yyc-Zp-ZTq">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -164,7 +161,10 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics">
+                        <size key="portraitSize" width="320" height="480"/>
+                        <size key="landscapeSize" width="480" height="320"/>
+                    </simulatedScreenMetrics>
                     <connections>
                         <outlet property="barButtonAddReportObject" destination="U4m-Tl-FVb" id="oTk-vL-p5M"/>
                         <outlet property="designerContentView" destination="Yyc-Zp-ZTq" id="5rj-6a-Nm3"/>
@@ -181,7 +181,7 @@
             </objects>
             <point key="canvasLocation" x="1486" y="404"/>
         </scene>
-        <!--Navigation Controller - MAD Viewer-->
+        <!--MAD Viewer-->
         <scene sceneID="V9N-EE-e2S">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Owb-NI-G7a" customClass="MTNavigationController" sceneMemberID="viewController">
@@ -189,7 +189,6 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xcf-5t-PGY">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -253,7 +252,6 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qEc-8J-yoE">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -274,7 +272,7 @@
             </objects>
             <point key="canvasLocation" x="-1758" y="393"/>
         </scene>
-        <!--Table View Controller About - About-->
+        <!--About-->
         <scene sceneID="qKw-Qd-GFQ">
             <objects>
                 <tableViewController title="About" id="BVv-gS-ZiD" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -433,7 +431,7 @@
             </objects>
             <point key="canvasLocation" x="59" y="326"/>
         </scene>
-        <!--Navigation Controller Hide Bottom Bar Unlicensed - MAD Query-->
+        <!--MAD Query-->
         <scene sceneID="whu-Gh-wLK">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="dE1-Aw-c3W" customClass="MTNavigationControllerHideBottomBarUnlicensed" sceneMemberID="viewController">
@@ -441,7 +439,6 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Ghs-TK-yEm">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -458,7 +455,7 @@
             </objects>
             <point key="canvasLocation" x="1048" y="-987"/>
         </scene>
-        <!--Licensing View Controller - Software Licensing-->
+        <!--Software Licensing-->
         <scene sceneID="W97-CM-fgJ">
             <objects>
                 <tableViewController id="z4e-mY-E0I" customClass="MTLicensingViewController" sceneMemberID="viewController">
@@ -762,7 +759,7 @@
             </objects>
             <point key="canvasLocation" x="0.0" y="1651"/>
         </scene>
-        <!--Query Builder View Controller - MAD Query-->
+        <!--MAD Query-->
         <scene sceneID="PdD-eD-j8w">
             <objects>
                 <tableViewController id="UDQ-hu-wqs" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
@@ -991,7 +988,7 @@
             </objects>
             <point key="canvasLocation" x="1486" y="-987"/>
         </scene>
-        <!--Connection View Controller - MySQL Setup-->
+        <!--MySQL Setup-->
         <scene sceneID="mhn-Ds-Eoe">
             <objects>
                 <tableViewController id="OZq-ny-MYn" customClass="MTConnectionViewController" sceneMemberID="viewController">
@@ -1205,7 +1202,6 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="beR-S1-BbF">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
@@ -1221,7 +1217,7 @@
             </objects>
             <point key="canvasLocation" x="-331" y="3269"/>
         </scene>
-        <!--Database Driver Selector View Controller - New Report-->
+        <!--New Report-->
         <scene sceneID="fhe-9S-gQo">
             <objects>
                 <tableViewController id="ZV6-4A-f9x" customClass="MTDatabaseDriverSelectorViewController" sceneMemberID="viewController">
@@ -1385,7 +1381,7 @@
             </objects>
             <point key="canvasLocation" x="2500" y="-770"/>
         </scene>
-        <!--Report Designer Section Layout Settings View Controller - Layout Settings-->
+        <!--Layout Settings-->
         <scene sceneID="v2j-Bh-XFX">
             <objects>
                 <tableViewController storyboardIdentifier="MTReportDesignerSectionLayoutSettingsViewControllerIdentifier" id="aNt-90-Z4U" customClass="MTReportDesignerSectionLayoutSettingsViewController" sceneMemberID="viewController">
@@ -1451,7 +1447,7 @@
             </objects>
             <point key="canvasLocation" x="642" y="5420"/>
         </scene>
-        <!--Query Builder Link Builder View Controller - Link Builder-->
+        <!--Link Builder-->
         <scene sceneID="GP1-D4-kAr">
             <objects>
                 <tableViewController id="OFj-sb-6RK" customClass="MTQueryBuilderLinkBuilderViewController" sceneMemberID="viewController">
@@ -1597,7 +1593,7 @@
             </objects>
             <point key="canvasLocation" x="2500" y="-2209"/>
         </scene>
-        <!--Query Builder Add Table View Controller - Add Table-->
+        <!--Add Table-->
         <scene sceneID="vSz-bH-FXK">
             <objects>
                 <tableViewController id="asI-dl-jqJ" customClass="MTQueryBuilderAddTableViewController" sceneMemberID="viewController">
@@ -1642,7 +1638,7 @@
             </objects>
             <point key="canvasLocation" x="2941" y="-770"/>
         </scene>
-        <!--Table View Controller Opperators - Choose an Operator-->
+        <!--Choose an Operator-->
         <scene sceneID="hMI-fn-9va">
             <objects>
                 <tableViewController id="DNS-Uz-Tfb" customClass="UITableViewControllerOpperators" sceneMemberID="viewController">
@@ -1815,7 +1811,7 @@
             </objects>
             <point key="canvasLocation" x="3873" y="-1450"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="upS-Pr-eds">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldMulti" id="wlp-wD-qxw" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -1861,7 +1857,7 @@
             </objects>
             <point key="canvasLocation" x="4818" y="553"/>
         </scene>
-        <!--Query Builder Sort Type View Controller - Sort Orders-->
+        <!--Sort Orders-->
         <scene sceneID="9NY-IW-ypl">
             <objects>
                 <tableViewController id="ddJ-v9-gEY" customClass="MTQueryBuilderSortTypeViewController" sceneMemberID="viewController">
@@ -1934,7 +1930,7 @@
             </objects>
             <point key="canvasLocation" x="3424" y="-2209"/>
         </scene>
-        <!--Query Builder Add Group View Controller - Add Group-->
+        <!--Add Group-->
         <scene sceneID="RCn-aj-ZyM">
             <objects>
                 <tableViewController id="eop-L6-mkF" customClass="MTQueryBuilderAddGroupViewController" sceneMemberID="viewController">
@@ -2033,7 +2029,7 @@
             </objects>
             <point key="canvasLocation" x="2886" y="-2209"/>
         </scene>
-        <!--Query Builder Predicate Format View Controller - Predicate Format-->
+        <!--Predicate Format-->
         <scene sceneID="LZp-Pu-coV">
             <objects>
                 <tableViewController id="NFZ-c1-UCp" customClass="MTQueryBuilderPredicateFormatViewController" sceneMemberID="viewController">
@@ -2107,7 +2103,7 @@
             </objects>
             <point key="canvasLocation" x="2941" y="-1450"/>
         </scene>
-        <!--Query Builder Add Predicate View Controller - Add Predicate-->
+        <!--Add Predicate-->
         <scene sceneID="RWe-Po-EfT">
             <objects>
                 <tableViewController id="wxP-IR-8aJ" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
@@ -2247,7 +2243,7 @@
             </objects>
             <point key="canvasLocation" x="2518" y="5002"/>
         </scene>
-        <!--Query Builder Add Link Join Type View Controller - Select Join Type-->
+        <!--Select Join Type-->
         <scene sceneID="tQn-xe-W8i">
             <objects>
                 <tableViewController id="OOQ-es-cu1" customClass="MTQueryBuilderAddLinkJoinTypeViewController" sceneMemberID="viewController">
@@ -2388,7 +2384,7 @@
             </objects>
             <point key="canvasLocation" x="3540" y="1225"/>
         </scene>
-        <!--Query Builder Add Predicate View Controller - Add Predicate-->
+        <!--Add Predicate-->
         <scene sceneID="lbx-ys-aJt">
             <objects>
                 <tableViewController id="nlj-fc-eCt" customClass="MTQueryBuilderAddPredicateViewController" sceneMemberID="viewController">
@@ -3404,7 +3400,7 @@
             </objects>
             <point key="canvasLocation" x="-490" y="5420"/>
         </scene>
-        <!--Report Designer Object Selector View Controller - MAD Objects-->
+        <!--MAD Objects-->
         <scene sceneID="v4Q-Qd-L31">
             <objects>
                 <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="V4K-tV-Wdf" customClass="MTReportDesignerObjectSelectorViewController" sceneMemberID="viewController">
@@ -3454,7 +3450,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="grz-Df-V23" kind="push" identifier="MTSegueNewDocumentObjectDynamicLabelIdentifer" id="MIM-db-jZd"/>
+                                    <segue destination="grz-Df-V23" kind="push" identifier="MTIdentifierSeguePushSelectField" id="MIM-db-jZd"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="8" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectWhitespaceCollectionViewCell" id="ZOv-eD-d7E">
@@ -3530,7 +3526,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="2pr-Qb-pVK" kind="push" id="ahh-m1-Iwq"/>
+                                    <segue destination="2pr-Qb-pVK" kind="push" identifier="MTIdentifierSeguePushStaticLabelNew" id="ahh-m1-Iwq"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectFormulaCollectionViewCell" id="f4g-SP-ifp">
@@ -3638,7 +3634,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="DqB-KB-PyC" kind="push" id="Twf-og-SpO"/>
+                                    <segue destination="DqB-KB-PyC" kind="push" identifier="MTIdentifierSeguePushAggregateLabelNew" id="Twf-og-SpO"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectImageCollectionViewCell" id="jCb-LZ-0jl">
@@ -3749,7 +3745,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="Dt2-Py-qG0" kind="push" id="VR5-fd-wm2"/>
+                                    <segue destination="Dt2-Py-qG0" kind="push" identifier="MTIdentifierSeguePushBarcodeLabelNew" id="VR5-fd-wm2"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -3883,7 +3879,7 @@
             </objects>
             <point key="canvasLocation" x="1728" y="5420"/>
         </scene>
-        <!--Document Object New Static Label View Controller - New Static Label-->
+        <!--New Static Label-->
         <scene sceneID="jEa-zS-D43">
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewStaticLabelViewControllerIdentifier" id="2pr-Qb-pVK" customClass="MTDocumentObjectNewStaticLabelViewController" sceneMemberID="viewController">
@@ -3945,7 +3941,7 @@
             </objects>
             <point key="canvasLocation" x="3692" y="2910"/>
         </scene>
-        <!--Aggregate Functions View Controller - Aggregate Functions-->
+        <!--Aggregate Functions-->
         <scene sceneID="qMF-lU-CNY">
             <objects>
                 <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="kfc-Go-Hl2" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
@@ -4342,7 +4338,7 @@
             </objects>
             <point key="canvasLocation" x="4356" y="3559"/>
         </scene>
-        <!--Document Object New Aggregate View Controller - New Aggregate Function-->
+        <!--New Aggregate Function-->
         <scene sceneID="PaV-8X-hq2">
             <objects>
                 <tableViewController storyboardIdentifier="MTDocumentObjectNewAggregateViewControllerIdentifier" id="DqB-KB-PyC" customClass="MTDocumentObjectNewAggregateViewController" sceneMemberID="viewController">
@@ -4532,7 +4528,7 @@
             </objects>
             <point key="canvasLocation" x="3692" y="3559"/>
         </scene>
-        <!--View Controller Barcode Options - Barcode Designer-->
+        <!--Barcode Designer-->
         <scene sceneID="7yS-a4-WSs">
             <objects>
                 <tableViewController id="Ih4-6Y-PiS" customClass="MTViewControllerBarcodeOptions" sceneMemberID="viewController">
@@ -4797,18 +4793,15 @@
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" fixedFrame="YES" text="Second Component" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Obw-L5-nKJ">
                                             <rect key="frame" x="20" y="0.0" width="270" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="alQ-Fk-Lkn">
                                             <rect key="frame" x="218" y="6" width="51" height="31"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </switch>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" fixedFrame="YES" text="Sample data" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oVV-AK-bcD">
                                             <rect key="frame" x="67" y="51" width="200" height="21"/>
-                                            <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -4895,7 +4888,7 @@
             </objects>
             <point key="canvasLocation" x="4345" y="5429"/>
         </scene>
-        <!--Table View Controller Static Select Row - Type-->
+        <!--Type-->
         <scene sceneID="xvS-d0-Hem">
             <objects>
                 <tableViewController id="RW9-eC-l1N" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -5010,7 +5003,7 @@
             </objects>
             <point key="canvasLocation" x="3972" y="5429"/>
         </scene>
-        <!--View Controller Barcode - MAD Barcodes-->
+        <!--MAD Barcodes-->
         <scene sceneID="pPS-1c-7aw">
             <objects>
                 <viewController storyboardIdentifier="MTDocumentObjectNewBarcodeViewControllerIdentifier" extendedLayoutIncludesOpaqueBars="YES" id="Dt2-Py-qG0" customClass="MTViewControllerBarcode" sceneMemberID="viewController">
@@ -5024,7 +5017,6 @@
                         <subviews>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SQu-hU-gH7">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" placeholder="YES" id="z1C-6V-gAr"/>
@@ -5035,7 +5027,6 @@
                             </containerView>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lhW-Ku-pv0">
                                 <rect key="frame" x="0.0" y="200" width="320" height="304"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
                                     <segue destination="Jed-ge-S8E" kind="embed" identifier="MTIdentifierSegueBarcodeTable" id="7Wg-Vq-icp"/>
@@ -5064,7 +5055,10 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
+                        <size key="portraitSize" width="320" height="568"/>
+                        <size key="landscapeSize" width="568" height="320"/>
+                    </simulatedScreenMetrics>
                     <connections>
                         <outlet property="barButtonItemSave" destination="yjj-A1-7wh" id="rwK-Gy-nUn"/>
                         <outlet property="bottomView" destination="lhW-Ku-pv0" id="IqV-EJ-Lur"/>
@@ -5098,7 +5092,7 @@
             </objects>
             <point key="canvasLocation" x="3972" y="4951"/>
         </scene>
-        <!--Group By View Controller - Group By-->
+        <!--Group By-->
         <scene sceneID="cPV-ne-a30">
             <objects>
                 <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="ZKJ-dl-Aik" customClass="MTGroupByViewController" sceneMemberID="viewController">
@@ -5170,7 +5164,6 @@
                             <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="qHZ-Nx-5zg">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellPredicateEnterValueString" id="zhS-dp-AYg" customClass="MTCellEnterText">
                                         <rect key="frame" x="0.0" y="55" width="320" height="44"/>
@@ -5209,7 +5202,6 @@
                             </tableView>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nrf-jA-1iV">
                                 <rect key="frame" x="0.0" y="342" width="320" height="162"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <outlet property="dataSource" destination="MxK-vj-cxa" id="UST-lK-KgK"/>
                                     <outlet property="delegate" destination="MxK-vj-cxa" id="Fy4-mC-AJn"/>
@@ -5244,7 +5236,7 @@
             </objects>
             <point key="canvasLocation" x="3873" y="-781"/>
         </scene>
-        <!--Connection View Controller - SQL Server-->
+        <!--SQL Server-->
         <scene sceneID="uTI-q1-IJ8">
             <objects>
                 <tableViewController id="c9T-2m-ezv" customClass="MTConnectionViewController" sceneMemberID="viewController">
@@ -5460,7 +5452,6 @@
                         <subviews>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="GAd-PK-vze">
                                 <rect key="frame" x="150" y="274" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -5486,7 +5477,6 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="H8I-sn-IQj">
-                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -5503,7 +5493,7 @@
             </objects>
             <point key="canvasLocation" x="-938" y="-37"/>
         </scene>
-        <!--View Controller Open Document - MAD Designer-->
+        <!--MAD Designer-->
         <scene sceneID="8fZ-iQ-Ovc">
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="F7A-ai-FfA" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
@@ -5657,7 +5647,7 @@
             </objects>
             <point key="canvasLocation" x="-137" y="2388"/>
         </scene>
-        <!--Table View Controller About - What is MAD?-->
+        <!--What is MAD?-->
         <scene sceneID="TFV-KX-WgC">
             <objects>
                 <tableViewController id="rAt-N3-wfV" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -5928,7 +5918,7 @@
             </objects>
             <point key="canvasLocation" x="230" y="2388"/>
         </scene>
-        <!--Table View Controller About - Getting Started-->
+        <!--Getting Started-->
         <scene sceneID="X6a-ME-uoM">
             <objects>
                 <tableViewController id="4gh-pV-2eP" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
@@ -6124,7 +6114,7 @@
             </objects>
             <point key="canvasLocation" x="600" y="2388"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="SWP-y2-mAo">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldDataObject" id="grz-Df-V23" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -6180,7 +6170,7 @@
             </objects>
             <point key="canvasLocation" x="3692" y="2240"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="vnk-CN-e91">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldAggregate" id="Ibv-MJ-tzZ" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -6336,7 +6326,7 @@
             </objects>
             <point key="canvasLocation" x="1028" y="5420"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="1ua-4b-GQK">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseField2dComponent" id="04I-ar-gb9" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -6387,7 +6377,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="4619"/>
         </scene>
-        <!--View Controller Barcode Type - Barcode Type-->
+        <!--Barcode Type-->
         <scene sceneID="Kov-n0-iNR">
             <objects>
                 <viewController id="KJY-pg-h9b" customClass="MTViewControllerBarcodeType" sceneMemberID="viewController">
@@ -6401,7 +6391,6 @@
                         <subviews>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vC7-pl-yRn">
                                 <rect key="frame" x="0.0" y="66" width="320" height="162"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <outlet property="dataSource" destination="KJY-pg-h9b" id="RUx-6W-PW1"/>
                                     <outlet property="delegate" destination="KJY-pg-h9b" id="CLd-Eu-TCH"/>
@@ -6428,7 +6417,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="5767"/>
         </scene>
-        <!--Table View Controller Barcode Extra Aztec - Aztec Code-->
+        <!--Aztec Code-->
         <scene sceneID="pBS-gd-fBd">
             <objects>
                 <tableViewController id="uqe-Wy-lNl" customClass="MTTableViewControllerBarcodeExtraAztec" sceneMemberID="viewController">
@@ -6525,7 +6514,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="6109"/>
         </scene>
-        <!--Table View Controller Static Select Row - Code One-->
+        <!--Code One-->
         <scene sceneID="TkZ-bE-Sxn">
             <objects>
                 <tableViewController id="3X0-NO-3rO" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -6739,7 +6728,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="6480"/>
         </scene>
-        <!--Table View Controller Static Select Row - Size-->
+        <!--Size-->
         <scene sceneID="VRk-jn-Xlt">
             <objects>
                 <tableViewController id="tmo-gd-LYF" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7377,7 +7366,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="5936"/>
         </scene>
-        <!--Table View Controller Static Select Row - Minimum Error Correction-->
+        <!--Minimum Error Correction-->
         <scene sceneID="yDy-IU-UEh">
             <objects>
                 <tableViewController id="Iix-BQ-5Ht" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7472,7 +7461,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="6282"/>
         </scene>
-        <!--Table View Controller Barcode Extra Grid Matrix - Grid Matrix-->
+        <!--Grid Matrix-->
         <scene sceneID="9ql-Ci-GBG">
             <objects>
                 <tableViewController id="xEA-ld-JJG" customClass="MTTableViewControllerBarcodeExtraGridMatrix" sceneMemberID="viewController">
@@ -7570,7 +7559,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="6822"/>
         </scene>
-        <!--Table View Controller Static Select Row - Size-->
+        <!--Size-->
         <scene sceneID="5rF-bl-pOp">
             <objects>
                 <tableViewController id="euy-4h-WEU" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7818,7 +7807,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="6702"/>
         </scene>
-        <!--Table View Controller Static Select Row - Minimum Error Correction-->
+        <!--Minimum Error Correction-->
         <scene sceneID="zDZ-gT-JXm">
             <objects>
                 <tableViewController id="lQd-qr-6vo" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -7930,7 +7919,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="7032"/>
         </scene>
-        <!--Table View Controller Static Select Row - Channel Code-->
+        <!--Channel Code-->
         <scene sceneID="EHg-PC-KqU">
             <objects>
                 <tableViewController id="gud-5h-raB" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -8076,7 +8065,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="7165"/>
         </scene>
-        <!--Table View Controller Barcode Extra Qr Code - QR Code-->
+        <!--QR Code-->
         <scene sceneID="P2Q-dE-Tjf">
             <objects>
                 <tableViewController id="OR8-hN-POz" customClass="MTTableViewControllerBarcodeExtraQrCode" sceneMemberID="viewController">
@@ -8174,7 +8163,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="7713"/>
         </scene>
-        <!--Table View Controller Static Select Row - Size-->
+        <!--Size-->
         <scene sceneID="7b0-gC-jYu">
             <objects>
                 <tableViewController id="xlX-sk-Xuu" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -8881,7 +8870,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="7377"/>
         </scene>
-        <!--Table View Controller Static Select Row - Minimum Error Correction-->
+        <!--Minimum Error Correction-->
         <scene sceneID="rIA-Gp-9qh">
             <objects>
                 <tableViewController id="cjd-eq-G1Z" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -8976,7 +8965,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="7705"/>
         </scene>
-        <!--Table View Controller - PDF417-->
+        <!--PDF417-->
         <scene sceneID="zsW-sO-aDc">
             <objects>
                 <tableViewController id="ZZx-Yz-U7z" sceneMemberID="viewController">
@@ -9081,7 +9070,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="8266"/>
         </scene>
-        <!--Table View Controller Static Select Row - Number of Data Columns-->
+        <!--Number of Data Columns-->
         <scene sceneID="bjf-Ib-39e">
             <objects>
                 <tableViewController id="iLP-oW-ynR" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9465,7 +9454,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="8095"/>
         </scene>
-        <!--Table View Controller Static Select Row - MSI Plessey-->
+        <!--MSI Plessey-->
         <scene sceneID="Hww-BT-IMz">
             <objects>
                 <tableViewController id="1LO-ot-od6" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9577,7 +9566,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="8620"/>
         </scene>
-        <!--Table View Controller Static Select Row - Maximum Codeword Length-->
+        <!--Maximum Codeword Length-->
         <scene sceneID="YnN-Id-FCd">
             <objects>
                 <tableViewController id="CN6-xd-Ffs" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9672,7 +9661,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="8437"/>
         </scene>
-        <!--Table View Controller Barcode Extra Micro Qr Code - Micro QR Code-->
+        <!--Micro QR Code-->
         <scene sceneID="Rc0-HN-Sko">
             <objects>
                 <tableViewController id="MSe-Mi-G6r" customClass="MTTableViewControllerBarcodeExtraMicroQrCode" sceneMemberID="viewController">
@@ -9770,7 +9759,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="9266"/>
         </scene>
-        <!--Table View Controller Static Select Row - Size-->
+        <!--Size-->
         <scene sceneID="mX6-Ti-Rli">
             <objects>
                 <tableViewController id="PSJ-7v-0UL" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9865,7 +9854,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="9166"/>
         </scene>
-        <!--Table View Controller Static Select Row - Error Correction-->
+        <!--Error Correction-->
         <scene sceneID="MpF-8g-uTv">
             <objects>
                 <tableViewController id="Ag2-Y7-sPd" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -9943,7 +9932,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="9492"/>
         </scene>
-        <!--Table View Controller Static Select Row - Micro Pdf417-->
+        <!--Micro Pdf417-->
         <scene sceneID="yKH-6O-Cyi">
             <objects>
                 <tableViewController id="SNs-mK-6EJ" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -10055,7 +10044,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="8942"/>
         </scene>
-        <!--Table View Controller Barcode Extra Maxicode - Maxicode-->
+        <!--Maxicode-->
         <scene sceneID="ZDq-d4-SDb">
             <objects>
                 <tableViewController id="fDh-S9-we7" customClass="MTTableViewControllerBarcodeExtraMaxicode" sceneMemberID="viewController">
@@ -10181,7 +10170,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="9863"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="kOi-QY-LXj">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldMaxicode" id="he0-nz-VV7" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -10229,7 +10218,7 @@
             </objects>
             <point key="canvasLocation" x="5427" y="9863"/>
         </scene>
-        <!--Table View Controller Barcode Extra Data Matrix - Data Matrix-->
+        <!--Data Matrix-->
         <scene sceneID="dvH-mR-ruD">
             <objects>
                 <tableViewController id="2IL-4f-091" customClass="MTTableViewControllerBarcodeExtraDataMatrix" sceneMemberID="viewController">
@@ -10787,7 +10776,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="10229"/>
         </scene>
-        <!--Table View Controller Static Select Row - Databar Expanded Stacked-->
+        <!--Databar Expanded Stacked-->
         <scene sceneID="QSf-kM-E9g">
             <objects>
                 <tableViewController id="AKX-A9-Qgu" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
@@ -10984,7 +10973,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="10564"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="Yif-Wu-Oia">
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldBarcode" id="sWB-rr-6Oh" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -11032,7 +11021,7 @@
             </objects>
             <point key="canvasLocation" x="4924" y="5009"/>
         </scene>
-        <!--Query Builder Choose Field View Controller - Select Field-->
+        <!--Select Field-->
         <scene sceneID="1qY-89-V3U">
             <objects>
                 <tableViewController storyboardIdentifier="MTTableViewControllerChooseFieldEditDynamicLabel" id="faV-0N-dYq" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
@@ -11104,11 +11093,13 @@
         <image name="UIImageExportTypeSqlServer.png" width="64" height="64"/>
         <image name="UIImageJustified20.png" width="20" height="20"/>
     </resources>
-    <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
+        <simulatedScreenMetrics key="destination" type="retina4">
+            <size key="portraitSize" width="320" height="568"/>
+            <size key="landscapeSize" width="568" height="320"/>
+        </simulatedScreenMetrics>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="VR5-fd-wm2"/>
@@ -11118,4 +11109,5 @@
         <segue reference="Twf-og-SpO"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
 </document>

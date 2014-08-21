@@ -56,10 +56,25 @@
 
 @implementation MTViewControllerBarcodeOptions
 
-- (IBAction)unwindToBarcodeOptions:(UIStoryboardSegue *)action {
-    if ([[action identifier] isEqualToString:@"MTIdentifierSegueBarcodeFieldUnwind"]) {
-    } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueBarcodeTypeUnwind"]) {
-    }
+#pragma mark - Exit
+
+- (IBAction)unwindToBarcodeOptions:(UIStoryboardSegue *)action { }
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToBarcodeOptions:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return action == @selector(unwindToBarcodeOptions:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
@@ -143,34 +158,34 @@
         
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
 
-        MTViewControllerBarcodeType *barcodeTypeViewController = [segue destinationViewController];
+        MTViewControllerBarcodeType *barcodeTypeViewController = segue.destinationViewController;
         MTBarcode *barcode = [[self delegate] barcodeToDisplay];
         [barcodeTypeViewController setInitalKey:[barcode barcodeType]];
         [barcodeTypeViewController setDelegate:self];
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasCodeOne"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrix"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCode"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasPdf417"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
         [segue.destinationViewController setDocument:self.document];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     }
 
 }

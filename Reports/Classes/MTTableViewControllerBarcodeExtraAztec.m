@@ -23,8 +23,25 @@
 
 @implementation MTTableViewControllerBarcodeExtraAztec
 
-- (IBAction)unwindToBarcodeExtraAztec:(UIStoryboardSegue *)action {
+#pragma mark - Exit
+
+- (IBAction)unwindToBarcodeExtraAztec:(UIStoryboardSegue *)action { }
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToBarcodeExtraAztec:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
     
+    return action == @selector(unwindToBarcodeExtraAztec:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
@@ -81,9 +98,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztecError"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztecSize"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     }
 }
 

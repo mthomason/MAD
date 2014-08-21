@@ -44,22 +44,22 @@ NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supporte
     NSString *dbId = nil;
     if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
-        [(MTConnectionViewController *)[segue destinationViewController] setDelegate:self];
+        [(MTConnectionViewController *)segue.destinationViewController setDelegate:self];
         dbId = [MTDatabaseMySql identifier];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
-        [(MTConnectionViewController *)[segue destinationViewController] setDelegate:self];
+        [(MTConnectionViewController *)segue.destinationViewController setDelegate:self];
         dbId = [MTDatabaseSqlServer identifier];
 
     } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
-        [(MTConnectionViewController *)[segue destinationViewController] setDelegate:self];
+        [(MTConnectionViewController *)segue.destinationViewController setDelegate:self];
         dbId = [MTDatabaseSqlite3 identifier];
 
     }
-    if ([[segue destinationViewController] respondsToSelector:@selector(setDatabaseType:)]) {
-        [(MTConnectionViewController *)[segue destinationViewController] setDatabaseType:dbId];
+    if ([segue.destinationViewController respondsToSelector:@selector(setDatabaseType:)]) {
+        [(MTConnectionViewController *)segue.destinationViewController setDatabaseType:dbId];
     }
 }
 

@@ -2946,6 +2946,7 @@
 		4CE314161694BCEC00114431 /* UIImageAlignBottom20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageAlignBottom20@2x.png"; path = "Reports/UIImageAlignBottom20@2x.png"; sourceTree = "<group>"; };
 		4CE3143516952E3B00114431 /* MTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTextView.h; sourceTree = "<group>"; };
 		4CE3143616952E3B00114431 /* MTTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTextView.m; sourceTree = "<group>"; };
+		4CE3A8E219A63B75002EA3A3 /* MTUnwindProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUnwindProtocol.h; sourceTree = "<group>"; };
 		4CE7B77314C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerObjectSelectorViewController.h; sourceTree = "<group>"; };
 		4CE7B77414C2D168007D0148 /* MTReportDesignerObjectSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerObjectSelectorViewController.m; sourceTree = "<group>"; };
 		4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MAD.xcdatamodel; sourceTree = "<group>"; };
@@ -4016,6 +4017,7 @@
 				4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */,
 				4CB0FF6A16F500C300B88626 /* MTToolboxViewControllerProtocol.h */,
 				4C928ABC19784133008E56ED /* MTCacheProtocol.h */,
+				4CE3A8E219A63B75002EA3A3 /* MTUnwindProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";

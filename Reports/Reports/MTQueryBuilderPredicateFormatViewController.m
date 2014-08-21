@@ -34,14 +34,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorValue"]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
-            MTQueryBuilderAddPredicateViewController *tvcSC = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
+            MTQueryBuilderAddPredicateViewController *tvcSC = segue.destinationViewController;
             tvcSC.document = self.document;
             tvcSC.delegate = self;
         }
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFormatFieldOperatorField"]) {
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
-            MTQueryBuilderAddPredicateViewController *tvcSC = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddPredicateViewController class]]) {
+            MTQueryBuilderAddPredicateViewController *tvcSC = segue.destinationViewController;
             tvcSC.document = self.document;
             tvcSC.delegate = self;
         }

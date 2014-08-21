@@ -104,9 +104,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @implementation MTViewControllerOpenDocument
 
-- (MAReportDocument *)document {
-    return [self currentDocument];
-}
+#pragma mark - Exit
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     
@@ -126,7 +124,27 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     } else {
         [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
     }
+}
 
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToOpenDocumentViewController:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return action == @selector(unwindToOpenDocumentViewController:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
+}
+
+- (MAReportDocument *)document {
+    return [self currentDocument];
 }
 
 - (void)awakeFromNib {
@@ -259,8 +277,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)prepareForSegueAddDocument:(UIStoryboardSegue *)segue {
-    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = [segue destinationViewController];
+    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = segue.destinationViewController;
         if ([navControl topViewController]) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                 [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
@@ -269,16 +287,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [(MTDatabaseDriverSelectorViewController *)[navControl topViewController] setDelegate:self];
         }
     }
-    [[segue destinationViewController] setDelegate:self];
+    [segue.destinationViewController setDelegate:self];
 }
 
 - (void)prepareForSegueDetails:(UIStoryboardSegue *)segue {
-    UINavigationController *navigationController = [segue destinationViewController];
+    UINavigationController *navigationController = segue.destinationViewController;
     MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
     [aboutViewController setDelegate:self];
     
-    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = [segue destinationViewController];
+    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = segue.destinationViewController;
         if ([navControl topViewController]) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                 [self setAboutPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
@@ -300,15 +318,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
-    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = [segue destinationViewController];
+    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = segue.destinationViewController;
         id tvc = [navControl topViewController];
         [tvc setDelegate:self];
     }
-    [[segue destinationViewController] setDelegate:self];
+    [segue.destinationViewController setDelegate:self];
     
-    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = [segue destinationViewController];
+    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+        UINavigationController *navControl = segue.destinationViewController;
         if ([navControl topViewController]) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                 [self setLicensingPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
@@ -326,12 +344,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }*/
     
     
-    MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
+    MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
     viewControllerReportViewer.document = [self currentDocument];
     /*
     if (url != nil) {
-        MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)[segue destinationViewController] topViewController];
+        MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
         [viewControllerReportViewer setViewControllerDelegate:self];
 
         __weak MTReportViewerController *reportViewer = viewControllerReportViewer;
@@ -345,10 +363,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]] || [[segue destinationViewController] isKindOfClass: [UITabBarController class]]) {
+    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] || [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
         
         if ([UIDevice isPad]) {
-            UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+            UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
             [[tabBarController view] setTintColor:[UIColor tintColorRed]];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
@@ -370,7 +388,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
         } else {
             
-            UITabBarController *tabBarController = (UITabBarController *)[segue destinationViewController];
+            UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
             [[tabBarController view] setTintColor:[UIColor greenColor]];
             [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
             
@@ -392,10 +410,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
         }
         
-    } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderContainerController class]]) {
+    } else if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderContainerController class]]) {
         
-    } else if ([[segue destinationViewController] isKindOfClass:[MTQueryBuilderViewController class]]) {
-        MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[[segue destinationViewController] topViewController];
+    } else if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderViewController class]]) {
+        MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[segue.destinationViewController topViewController];
         MAReportDocument *document = [self currentDocument];
         queryBuilderViewController.document = document;
         [queryBuilderViewController reloadDocument:document animated:YES];

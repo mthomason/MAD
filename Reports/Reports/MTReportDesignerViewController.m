@@ -225,6 +225,23 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self setDisplayActive];
 }
 
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToDesigner:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return action == @selector(unwindToDesigner:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
+}
+
 #pragma mark - NSObject
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -671,14 +688,14 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         }
         
         MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = nil;
-        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *d = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *d = segue.destinationViewController;
             [d setDelegate:self];
             viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)[d topViewController];
             viewControllerObjectSelector.objectSelectorDelegate = self;
             viewControllerObjectSelector.document = self.document;
         } else {
-            viewControllerObjectSelector = [segue destinationViewController];
+            viewControllerObjectSelector = segue.destinationViewController;
             viewControllerObjectSelector.objectSelectorDelegate = self;
             viewControllerObjectSelector.document = self.document;
         }
@@ -687,7 +704,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
         if ([UIDevice isPad]) {
             MTReportViewerController *viewControllerReportViewer;
-            UINavigationController *d = [segue destinationViewController];
+            UINavigationController *d = segue.destinationViewController;
             viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
             viewControllerReportViewer.viewControllerDelegate = self;
         }
@@ -700,7 +717,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
         
         
-        MTViewControllerBarcode *barcodeViewController = [segue destinationViewController];
+        MTViewControllerBarcode *barcodeViewController = segue.destinationViewController;
         barcodeViewController.document = self.document;
 
         NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
@@ -711,7 +728,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
         
-        MTDocumentObjectNewAggregateViewController *aggregateViewController = [segue destinationViewController];
+        MTDocumentObjectNewAggregateViewController *aggregateViewController = segue.destinationViewController;
         aggregateViewController.document = self.document;
 
         NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
@@ -2916,83 +2933,20 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             [elementView setFrame: marginViewFrame];
             
-            NSString *fontName = [documentObject fontname];
-            CGFloat pointSize = [[documentObject fontsize] floatValue];
-            
-            UIFont *displayFont = nil;
-            if ([fontName length] == 0) {
-                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            } else {
-                MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
-                if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
-                    displayFont = [stylizedDisplayFont boldItalicFont];
-                } else if ([[documentObject bold] boolValue]) {
-                    displayFont = [stylizedDisplayFont boldFont];
-                } else if ([[documentObject italic] boolValue]) {
-                    displayFont = [stylizedDisplayFont italicFont];
-                } else {
-                    displayFont = [stylizedDisplayFont font];
-                }
-            }
-            
-            if (displayFont == nil) {
-                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            }
-            [elementView setDisplayFont:displayFont];
-            
-            NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-            
-            MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
-            NSTextAlignment textAlignment;
-            switch (horizontalAlignment) {
-                case MTHorizontalAlignmentCenter:
-                    textAlignment = NSTextAlignmentCenter;
-                    break;
-                case MTHorizontalAlignmentLeft:
-                    textAlignment = NSTextAlignmentLeft;
-                    break;
-                case MTHorizontalAlignmentRight:
-                    textAlignment = NSTextAlignmentRight;
-                    break;
-                case MTHorizontalAlignmentJustified:
-                    textAlignment = NSTextAlignmentJustified;
-                    break;
-                default:
-                    textAlignment = NSTextAlignmentLeft;
-                    break;
-            }
-            [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingMiddle];
-            [paragraphStyle setAlignment:textAlignment];
-            [elementView setParagraphStyle:paragraphStyle];
-            
             NSString *string = [documentObject designerRepresentationText];
-            
             [elementView setDisplayImage:nil];
             [elementView setDisplayBarcode:nil];
             [elementView setDisplayImage:nil];
             
             if ([documentObject getType] == MTDocumentObjectTypeImage) {
-                
                 [elementView setDisplayImage:[[documentObject isImage] image]];
-                
             } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
-                
                 MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
                 [elementView setDisplayBarcode:displayBarcode];
             }
             
-            NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-            [elementView setUnderlineStyle:underlineStyle];
             
-            NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-            [elementView setStrikeThroughStyle:strikeThroughStyle];
-            
-            NSDictionary *attributes = @{
-                                         NSParagraphStyleAttributeName : [elementView paragraphStyle],
-                                         NSFontAttributeName : [elementView displayFont],
-                                         NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
-                                         NSUnderlineStyleAttributeName : [elementView underlineStyle]
-                                         };
+            NSDictionary *attributes = [documentObject attributesForDrawingText];
             NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
                                                                                     attributes:attributes];
             [elementView setDisplayStringAttributed:attributtedString];
@@ -3026,12 +2980,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     break;
             }
             
-            CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
-            CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
+            CGFloat contentViewX = [documentObject spacingLeft];
+            CGFloat contentViewY = [documentObject spacingTop];
             CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
             drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
-            [elementView setDrawingRect:drawingBounds];
-            
+
             [elementView setNeedsLayout];
             [elementView setNeedsDisplay];
         }

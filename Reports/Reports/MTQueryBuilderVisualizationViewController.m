@@ -275,15 +275,15 @@ typedef void(^MTBlockResultVoid)(void);
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
             [popoverController setDelegate:self];
             [self setShowSqlPopoverController:popoverController];
-            [[segue destinationViewController] setDelegate: self];
+            [segue.destinationViewController setDelegate: self];
         } else {
-            [[segue destinationViewController] setDelegate: self];
+            [segue.destinationViewController setDelegate: self];
         }
         
-        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTShowSqlViewController *)[[segue destinationViewController] topViewController];
+        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+            viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
         } else {
-            viewController = [segue destinationViewController];
+            viewController = segue.destinationViewController;
         }
         viewController.delegate = self;
         viewController.query = self.document.defaultQuery;

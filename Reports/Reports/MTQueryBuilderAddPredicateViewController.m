@@ -60,15 +60,15 @@
     if ([[segue identifier] isEqualToString:@"showAddPredicateFovOperator"] ||
         [[segue identifier] isEqualToString:@"showAddPredicateFofOperator"]) {
         [self setCurrentlyEditingPart: MNSPredicateCenter];
-        if ([[segue destinationViewController] isKindOfClass: [UITableViewControllerOpperators class]]) {
-            [[segue destinationViewController] setDelegate:self];
+        if ([segue.destinationViewController isKindOfClass: [UITableViewControllerOpperators class]]) {
+            [segue.destinationViewController setDelegate:self];
         }
     } else if ([[segue identifier] isEqualToString:@"showAddPredicateFovLeftSide"] ||
                [[segue identifier] isEqualToString:@"showAddPredicateFofLeftSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateLeft];
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
 
-            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
                 dvc.excludeTables = @[];
                 dvc.delegate = self;
@@ -80,15 +80,15 @@
                [[segue identifier] isEqualToString:@"showAddPredicateFofRightSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
-            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
+            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
                 dvc.excludeTables = @[];
                 dvc.delegate = self;
                 dvc.document = self.document;
             }
-        } else if ([[segue destinationViewController] isKindOfClass: [MTViewControllerValueBasedOnField class]]) {
-            MTViewControllerValueBasedOnField *tvcEnterString = [segue destinationViewController];
+        } else if ([segue.destinationViewController isKindOfClass: [MTViewControllerValueBasedOnField class]]) {
+            MTViewControllerValueBasedOnField *tvcEnterString = segue.destinationViewController;
             tvcEnterString.enterStringDelegate = self;
             tvcEnterString.document = self.document;
             tvcEnterString.schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID;
@@ -100,33 +100,7 @@
 
 - (IBAction)save:(id)sender {
     
-    RptqQueryPredicate *queryPredicate = nil;
-    
-    if ([self leftValue] == nil) {
-        if ([self rightValue] == nil) {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightField: self.fieldRight
-                                                       forManagedObjectContext: self.document.managedObjectContext];
-        } else {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightValue: self.rightValue
-                                                       forManagedObjectContext: self.document.managedObjectContext];
-        }
-    } else {
-        if ([self rightValue] == nil) {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightField: self.fieldRight
-                                                       forManagedObjectContext: self.document.managedObjectContext];
-        } else {
-            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: self.leftValue
-                                                             comparsonOperator: self.predicateOperator
-                                                                 andRightValue: self.rightValue
-                                                       forManagedObjectContext: self.document.managedObjectContext];
-        }
-    }
+    RptqQueryPredicate *queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:self.fieldLeft leftValue:self.leftValue comparsonOperator:self.predicateOperator rightField:self.fieldRight rightValue:self.rightValue forManagedObjectContext:self.document.managedObjectContext];
     [[self delegate] uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }

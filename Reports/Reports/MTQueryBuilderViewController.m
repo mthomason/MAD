@@ -130,6 +130,23 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
 
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToQueryBuilder:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return action == @selector(unwindToQueryBuilder:) ?
+                        self :
+                        [super viewControllerForUnwindSegueAction: action
+                                               fromViewController: fromViewController
+                                                       withSender: sender];
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc {
@@ -240,10 +257,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK:
         MTShowSqlViewController *viewController;
-        if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTShowSqlViewController *)[[segue destinationViewController] topViewController];
+        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+            viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
         } else {
-            viewController = [segue destinationViewController];
+            viewController = segue.destinationViewController;
         }
         viewController.delegate = self;
         viewController.query = self.document.defaultQuery;
@@ -251,8 +268,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         
     } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
                     
@@ -275,8 +292,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         }
 
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
                     
@@ -289,8 +306,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = segue.destinationViewController;
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
@@ -303,8 +320,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
-        if ([[segue destinationViewController] isKindOfClass: [UINavigationController class]]) {
-            UINavigationController *navControl = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
+            UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
                     MTQueryBuilderAddGroupViewController *tvc = (MTQueryBuilderAddGroupViewController *)[navControl topViewController];
@@ -316,8 +333,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
     } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
-                if ([[segue destinationViewController] isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
-                    MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)[segue destinationViewController];
+                if ([segue.destinationViewController isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
+                    MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
                         RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: [self lastSelectedRowNumber]

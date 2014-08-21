@@ -106,9 +106,23 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 #pragma mark - View lifecycle
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelIdentifer"]) {
-        id destinationViewController = [segue destinationViewController];
-        [destinationViewController setDelegate: self];
+    if ([[segue identifier] isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
+        
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate: self];
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushStaticLabelNew"]) {
+
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushAggregateLabelNew"]) {
+        
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushBarcodeLabelNew"]) {
+        
+        [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
+        
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
         [segue.destinationViewController setDocument:self.document];

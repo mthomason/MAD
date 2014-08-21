@@ -33,4 +33,29 @@
     return [[self topViewController] tabBarItem];
 }
 
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    UIViewController *foundViewController;
+    
+    for (UIViewController *childViewController in self.viewControllers) {
+        foundViewController = [childViewController viewControllerForUnwindSegueAction:action
+                                                                   fromViewController:fromViewController
+                                                                           withSender:sender];
+        
+        if (foundViewController) {
+            break;
+        }
+    }
+    
+    if (!foundViewController) {
+        foundViewController = [super viewControllerForUnwindSegueAction:action
+                                                     fromViewController:fromViewController
+                                                             withSender:sender];
+    }
+    
+    return foundViewController;
+}
+
 @end

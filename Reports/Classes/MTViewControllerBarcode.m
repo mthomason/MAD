@@ -62,6 +62,25 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 @implementation MTViewControllerBarcode
 
+@synthesize unwindViewController;
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return NO;
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return self.unwindViewController ?
+            self.unwindViewController :
+            [super viewControllerForUnwindSegueAction: action
+                           fromViewController: fromViewController
+                                   withSender: sender];
+}
+
 - (void)dealloc {
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
     NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
@@ -409,13 +428,13 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     
     NSString *identifier = [segue identifier];
     if ([identifier isEqualToString:@"MTIdentifierSegueBarcodePreview"]) {
-        MTViewControllerBarcodePreview *pvc = [segue destinationViewController];
+        MTViewControllerBarcodePreview *pvc = segue.destinationViewController;
         [pvc setDelegate:self];
         [pvc setBarcodeToPreview:[self barcode]];
         [[pvc view] layoutIfNeeded];
         [self setPreviewViewController:pvc];
     } else if ([identifier isEqualToString:@"MTIdentifierSegueBarcodeTable"]) {
-        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[[segue destinationViewController] topViewController];
+        MTViewControllerBarcodeOptions *ovc = (MTViewControllerBarcodeOptions *)[segue.destinationViewController topViewController];
         ovc.delegate = self;
         ovc.document = self.document;
         [self setOptionsViewController:ovc];

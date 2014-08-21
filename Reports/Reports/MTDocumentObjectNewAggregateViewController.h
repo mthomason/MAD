@@ -13,6 +13,7 @@
 #import <CoreData/CoreData.h>
 #import "MTAggregateFunctionsViewController.h"
 #import "Constants.h"
+#import "MTUnwindProtocol.h"
 
 extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;
@@ -29,7 +30,7 @@ extern NSString * const MTIdentifierSegueDocumentObjectEditAggregate;
 @end
 
 @interface MTDocumentObjectNewAggregateViewController : UITableViewController
-    <UITableViewDelegate>
+    <UITableViewDelegate, MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerAggregateDelegate> delegate;
 @property (nonatomic, weak) MAReportDocument *document;

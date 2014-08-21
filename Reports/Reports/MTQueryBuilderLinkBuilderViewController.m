@@ -61,8 +61,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showSelectJoinType"]) {
 
-        if ([[segue destinationViewController] isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
-            MTQueryBuilderAddLinkJoinTypeViewController *vcFf = [segue destinationViewController];
+        if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
+            MTQueryBuilderAddLinkJoinTypeViewController *vcFf = segue.destinationViewController;
             vcFf.delegate = self;
             vcFf.document = self.document;
         }
@@ -72,7 +72,7 @@
             
             [self setCurrentlyEditingPart: MNSLinkLeft];
             
-            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             
             if (dvc != nil) {
                 [dvc setExcludeTables: ([[self secondTable] alias] ? @[[[self secondTable] alias]] : @[])];
@@ -84,7 +84,7 @@
             
             [self setCurrentlyEditingPart: MNSLinkRight];
             
-            MTQueryBuilderChooseFieldViewController *dvc = [segue destinationViewController];
+            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
             if (dvc != nil) {
                 [dvc setExcludeTables: ([[self firstTable] alias] ? @[[[self firstTable] alias]] : @[])];
                 dvc.delegate = self;

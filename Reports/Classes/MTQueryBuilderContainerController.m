@@ -118,12 +118,12 @@
             showSqlViewController.query = self.document.defaultQuery;
             [self disableTabBarItems];
         } else {
-            [[segue destinationViewController] setDelegate: self];
+            [segue.destinationViewController setDelegate: self];
         }
         
     } else if (sender == self) {
-        [[segue destinationViewController] setDocument:self.document];
-        [[segue destinationViewController] reloadDocument:self.document animated:YES];
+        [segue.destinationViewController setDocument:self.document];
+        [segue.destinationViewController reloadDocument:self.document animated:YES];
     } else {
         if ([self popover] != nil) {
             if ([[self popover] isPopoverVisible]) {
@@ -137,10 +137,10 @@
             [self disableTabBarItems];
         }
         if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
-            if ([[segue destinationViewController] isKindOfClass: [MTReportDesignerViewController class]]) {
-                [[segue destinationViewController] setDelegate: self];
-            } else if ([[segue destinationViewController] isKindOfClass:[UINavigationController class]]) {
-                [(MTReportDesignerViewController *)[[segue destinationViewController] topViewController] setDelegate:self];
+            if ([segue.destinationViewController isKindOfClass: [MTReportDesignerViewController class]]) {
+                [segue.destinationViewController setDelegate: self];
+            } else if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+                [(MTReportDesignerViewController *)[segue.destinationViewController topViewController] setDelegate:self];
             }
         }
     }

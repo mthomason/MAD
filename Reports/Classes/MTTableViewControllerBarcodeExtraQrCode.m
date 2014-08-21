@@ -23,8 +23,25 @@
 
 @implementation MTTableViewControllerBarcodeExtraQrCode
 
-- (IBAction)unwindToBarcodeExtraQrCode:(UIStoryboardSegue *)action {
+#pragma mark - Exit
+
+- (IBAction)unwindToBarcodeExtraQrCode:(UIStoryboardSegue *)action { }
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToBarcodeExtraQrCode:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
     
+    return action == @selector(unwindToBarcodeExtraQrCode:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
 }
 
 - (void)viewDidLoad {
@@ -71,9 +88,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCodeError"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCodeSize"]) {
-        [[segue destinationViewController] setDelegate:self];
+        [segue.destinationViewController setDelegate:self];
     }
 }
 

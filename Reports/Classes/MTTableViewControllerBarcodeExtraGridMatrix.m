@@ -31,8 +31,25 @@
 
 @implementation MTTableViewControllerBarcodeExtraGridMatrix
 
-- (IBAction)unwindToBarcodeExtraGridMatrix:(UIStoryboardSegue *)action {
+#pragma mark - Exit
+
+- (IBAction)unwindToBarcodeExtraGridMatrix:(UIStoryboardSegue *)action { }
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return action == @selector(unwindToBarcodeExtraGridMatrix:);
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
     
+    return action == @selector(unwindToBarcodeExtraGridMatrix:) ?
+            self :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
@@ -89,9 +106,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixError"]) {
-        [(MTTableViewControllerStaticSelectRow *)[segue destinationViewController] setDelegate:self];
+        [(MTTableViewControllerStaticSelectRow *)segue.destinationViewController setDelegate:self];
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixSize"]) {
-        [(MTTableViewControllerStaticSelectRow *)[segue destinationViewController] setDelegate:self];
+        [(MTTableViewControllerStaticSelectRow *)segue.destinationViewController setDelegate:self];
     }
 }
 

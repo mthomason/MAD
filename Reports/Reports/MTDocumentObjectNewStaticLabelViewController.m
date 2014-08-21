@@ -23,6 +23,8 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 @implementation MTDocumentObjectNewStaticLabelViewController
 
+@synthesize unwindViewController;
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -63,6 +65,23 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+}
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return NO;
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return self.unwindViewController ?
+            self.unwindViewController :
+            [super viewControllerForUnwindSegueAction: action
+                           fromViewController: fromViewController
+                                   withSender: sender];
 }
 
 #pragma mark -
