@@ -76,6 +76,7 @@
 
 #import "UIViewController+ui.h"
 #import "UIViewController+tabBarItem.h"
+#import "UIScrollView+Extras.h"
 
 NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
@@ -688,7 +689,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             MTReportViewerController *viewControllerReportViewer;
             UINavigationController *d = [segue destinationViewController];
             viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
-            [viewControllerReportViewer setViewControllerDelegate:self];
+            viewControllerReportViewer.viewControllerDelegate = self;
         }
         [self.designerScrollView scrollRectToVisible:CGRectZero animated:NO];
 
@@ -1011,8 +1012,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     if (selectedImage != nil) {
         __weak MTReportDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
+            NSNumber *type = @(MTDocumentObjectTypeImage);
             [reportDesigner insertDocumentObjectWithDefination:
-             @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeImage),
+             @{MTDocumentObjectDefinationType: type,
                MTDocumentObjectDefinationObject : selectedImage}];
         }];
     }
@@ -1057,112 +1059,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
 }
 
-- (BOOL)dismissAllPopovers {
-    BOOL result = NO;
-    if ([UIDevice isPad]) {
-        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
-        if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
-        if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
-        if ([self popoverControllerSectionSettings] != nil) [allpopovers addObject:[self popoverControllerSectionSettings]];
-        
-        for (UIPopoverController *popoverController in allpopovers) {
-            if ([popoverController isPopoverVisible]) {
-                [popoverController dismissPopoverAnimated:YES];
-                result = YES;
-            }
-        }
-        [self deselectAllElementsAnimated:YES];
-    }
-    [self setDisplayActive];
-    return result;
-}
-
-- (NSSet *)elementViews {
-    
-    RptqDocument *document = [self.document activeDocumentModel];
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
-    NSMutableSet *results = [[NSMutableSet alloc] init];
-
-    for (RptqDocumentSection *documentSection in sectionEnumerator) {
-        MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
-        NSInteger numberOfSectionsInCollectionView = [documentSectionView numberOfSections];
-        
-        for (NSUInteger section = 0; section < numberOfSectionsInCollectionView; section++) {
-            NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
-            
-            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
-                MTElementView *elementView = [self elementViewAtIndexPath: [NSIndexPath indexPathForItem:item inSection:section]
-                                                         inCollectionView: documentSectionView];
-                if (elementView != nil) {
-                    [results addObject:elementView];
-                }
-            }
-        }
-    }
-    return results;
-}
-
-- (MTDocumentSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
-    MTDocumentSectionView *documentSectionView = nil;
-    for (id subview in [self.designerContentView subviews]) {
-        if ([subview tag] == identifer && [subview isKindOfClass:[MTDocumentSectionView class]]) {
-            documentSectionView = subview;
-            break;
-        }
-    }
-    return documentSectionView;
-}
-
-- (NSSet *)selectedElementViews {
-
-    NSMutableSet *results = [[NSMutableSet alloc] init];
-    
-    if ([[self selectedObjectIds] count] > 0) {
-        //Try quick hash method...
-        BOOL quickHashWorks = YES;
-        for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
-            UIView *selectedView = [self viewForObjectID:selectedObjectId];
-            if (selectedView != nil) {
-                [results addObject:selectedView];
-            } else {
-                quickHashWorks = NO;
-            }
-        }
-        
-        //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
-        if (quickHashWorks == NO) {     //Case when views are off screen.
-            
-            RptqDocument *document = [self.document activeDocumentModel];
-            SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
-            
-            for (RptqDocumentSection *documentSection in sectionEnumerator) {
-                MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
-                
-                for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
-                    for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
-                        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
-                        MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
-                        if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
-                            [results addObject:elementView];
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return results;
-}
-
-- (UICollectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionViews[[documentSection sectionKey]];
-}
-
-- (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
-    return self.sectionControlViews[[documentSection sectionKey]];
-}
-
-#pragma mark - Actions
-
 - (IBAction)done:(id)sender {
     
     NSError *error = nil;
@@ -1184,257 +1080,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     } else {
         [self deselectAllElementsAnimated:YES];
     }
-}
-
-#pragma mark - Helpers
-
-#pragma mark Element View helpers
-
-- (void)deselectAllElementsAnimated:(BOOL)animated {
-    
-    //Remove border from element views
-    for (MTElementView *elementView in [self selectedElementViews]) {
-        [self deselectElementView:elementView animated:animated];
-    }
-    
-    [self removeBorderFromSectionViews];
-}
-
-- (void)deselectLastElementViewToShowMenu {
-    if ([self lastElementViewToShowMenu]) {
-        [self deselectElementView:[self lastElementViewToShowMenu] animated:YES];
-    }
-}
-
-- (void)removeBorderFromSectionViews {
-    //Remove border from the section views
-    [self.sectionControlViews enumerateKeysAndObjectsUsingBlock:^(id key, DesignerSectionLabel *view, BOOL *stop) {
-        [view normalView];
-    }];
-    
-    //Remove border from the section views
-    [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, UICollectionView *view, BOOL *stop) {
-        [[view layer] setBorderWidth:0.0000f];
-    }];
-}
-
-- (void)applyBorderToView:(UIView *)view {
-    NSNumber *key = @([view tag]);
-    [self borderAppliedToView][key] = @YES;
-    UIColor *tintColor = [UIColor tintColorAnalogous4];
-    [[view layer] setBorderColor:[tintColor CGColor]];
-    [[view layer] setBorderWidth:1.0000f / [[UIScreen mainScreen] scale]];
-}
-
-- (BOOL)removeBorderFromView:(UIView *)view {
-    BOOL result;
-    if ([self isBorderAppliedToView:view]) {
-        NSNumber *key = @([view tag]);
-        [self borderAppliedToView][key] = @NO;
-        result = YES;
-        
-        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
-        [[view layer] setBorderWidth:0.0000f];
-    } else {
-        result = NO;
-    }
-    return result;
-}
-
-- (BOOL)isBorderAppliedToView:(UIView *)view {
-    NSNumber *key = @([view tag]);
-    BOOL borderApplied = [[self borderAppliedToView][key] boolValue];
-    return borderApplied;
-}
-
-- (MTElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
-    MTElementView *elementView = nil;
-    elementView = (MTElementView *)[self viewForObjectID:[managedObject objectID]];
-    if (!elementView) {
-        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
-        if (documentObject) {
-            NSUInteger hash = [[documentObject objectID] hash];
-            elementView = (MTElementView *)[self.designerContentView viewWithTag:hash];
-            if (!elementView) {
-                elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:[documentObject managedObjectContext]];
-                [elementView setTag: hash];
-                [elementView setDelegate:self];
-                [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-                [self updateElementView:elementView forManagedObjectContext:[documentObject managedObjectContext]];
-            }
-        }
-    }
-    return elementView;
-}
-
-- (RptqDocumentObject *)documentObjectForElementView:(MTElementView *)elementView inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    NSManagedObjectID *objectID = [elementView objectIdTag];
-    return (RptqDocumentObject *)[managedObjectContext objectWithID:objectID];
-}
-
-- (void)updateElementView:(MTElementView *)elementView forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-    if (elementView) {
-        
-        // TODO: Only update specific properties when they change.
-        
-        RptqDocumentObject *documentObject = [self documentObjectForElementView:elementView inManagedObjectContext:managedObjectContext];
-        
-        if (documentObject != nil) {
-            
-            CGRect marginViewFrame = [documentObject boundsContentView];
-            
-            [elementView setFrame: marginViewFrame];
-            
-            NSString *fontName = [documentObject fontname];
-            CGFloat pointSize = [[documentObject fontsize] floatValue];
-            
-            UIFont *displayFont = nil;
-            if ([fontName length] == 0) {
-                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            } else {
-                MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
-                if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
-                    displayFont = [stylizedDisplayFont boldItalicFont];
-                } else if ([[documentObject bold] boolValue]) {
-                    displayFont = [stylizedDisplayFont boldFont];
-                } else if ([[documentObject italic] boolValue]) {
-                    displayFont = [stylizedDisplayFont italicFont];
-                } else {
-                    displayFont = [stylizedDisplayFont font];
-                }
-            }
-            
-            if (displayFont == nil) {
-                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            }
-            [elementView setDisplayFont:displayFont];
-            
-            NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-            
-            MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
-            NSTextAlignment textAlignment;
-            switch (horizontalAlignment) {
-                case MTHorizontalAlignmentCenter:
-                    textAlignment = NSTextAlignmentCenter;
-                    break;
-                case MTHorizontalAlignmentLeft:
-                    textAlignment = NSTextAlignmentLeft;
-                    break;
-                case MTHorizontalAlignmentRight:
-                    textAlignment = NSTextAlignmentRight;
-                    break;
-                case MTHorizontalAlignmentJustified:
-                    textAlignment = NSTextAlignmentJustified;
-                    break;
-                default:
-                    textAlignment = NSTextAlignmentLeft;
-                    break;
-            }
-            [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingMiddle];
-            [paragraphStyle setAlignment:textAlignment];
-            [elementView setParagraphStyle:paragraphStyle];
-            
-            NSString *string = [documentObject designerRepresentationText];
-            
-            [elementView setDisplayImage:nil];
-            [elementView setDisplayBarcode:nil];
-            [elementView setDisplayImage:nil];
-            
-            if ([documentObject getType] == MTDocumentObjectTypeImage) {
-                
-                [elementView setDisplayImage:[[documentObject isImage] image]];
-                
-            } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
-                
-                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
-                [elementView setDisplayBarcode:displayBarcode];
-            }
-            
-            NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-            [elementView setUnderlineStyle:underlineStyle];
-            
-            NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
-            [elementView setStrikeThroughStyle:strikeThroughStyle];
-            
-            NSDictionary *attributes = @{
-                                         NSParagraphStyleAttributeName : [elementView paragraphStyle],
-                                         NSFontAttributeName : [elementView displayFont],
-                                         NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
-                                         NSUnderlineStyleAttributeName : [elementView underlineStyle]
-                                         };
-            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
-                                                                                    attributes:attributes];
-            [elementView setDisplayStringAttributed:attributtedString];
-            
-            CGSize sizeContentView = [documentObject sizeContentView];
-            CGRect boundsContentView = [documentObject boundsContentView]; //x1
-            NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
-            [elementView setDrawingOptions:drawingOptions];
-            CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize:sizeContentView options:drawingOptions context:nil]; //x35
-            CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
-            
-            MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-            
-            switch (verticalAlignment) {
-                case MTVerticalAlignmentCenter: {
-                    CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
-                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                    break;
-                }
-                case MTVerticalAlignmentBottom: {
-                    CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
-                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
-                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
-                    break;
-                }
-                case MTVerticalAlignmentTop:
-                default:
-                    break;
-            }
-            
-            CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
-            CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
-            CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
-            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
-            [elementView setDrawingRect:drawingBounds];
-            
-            [elementView setNeedsLayout];
-            [elementView setNeedsDisplay];
-        }
-    }
-}
-
-+ (NSString *)reuseIdentifierSection:(NSInteger)sectionNumber {
-    return [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%ld", (long)sectionNumber];
-}
-
-
-- (CGFloat)heightTopBars {
-    CGFloat height = self.navigationController.navigationBar.bounds.size.height;
-    return UIDeviceOrientationIsLandscape([self interfaceOrientation]) ? (height += [UIApplication sharedApplication].statusBarFrame.size.width) : (height += [UIApplication sharedApplication].statusBarFrame.size.height);
-}
-
-- (CGFloat)heightScrollViewAdjustment {
-    return (([self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f)) * self.designerScrollView.zoomScale);
-}
-
-+ (CGRect)visableRect:(UIScrollView *)scrollView {
-    CGRect visibleRect;
-    visibleRect.origin = scrollView.contentOffset;
-    visibleRect.size = scrollView.bounds.size;
-    return [MTReportDesignerViewController adjustRect:visibleRect forZoomScale:scrollView.zoomScale];
-}
-
-+ (CGRect)adjustRect:(CGRect)rect forZoomScale:(CGFloat)zoomScale {
-    CGFloat scale = 1.0000f / zoomScale;
-    if ( isless(scale, 1.0000f) ) {
-        rect.origin.x *= scale;
-        rect.origin.y *= scale;
-        rect.size.width *= scale;
-        rect.size.height *= scale;
-    }
-    return rect;
 }
 
 #pragma mark - UIPopoverControllerDelegate
@@ -2381,7 +2026,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest {
     
-    CGRect visableRect = [MTReportDesignerViewController visableRect:self.designerScrollView];
+    CGRect visableRect = [self.designerScrollView visableRect];
     CGRect bounds = [self.designerScrollView convertRect: self.designerScrollView.bounds
                                                   toView: self.view];
     CGFloat adjustment = [self heightScrollViewAdjustment];
@@ -2392,9 +2037,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             bounds.size.height -= adjustment;
             rectOfInterest.origin.y -= adjustment;
             visableRect.origin.y -= adjustment;
-            contentOffset = [MTReportDesignerViewController contentOffsetTopOfRect:rectOfInterest];
+            contentOffset = CGPointContentOffsetTopOfRect(rectOfInterest);
         } else {
-            contentOffset = [MTReportDesignerViewController contectOffsetBottomOfRect:rectOfInterest inRect:visableRect];
+            contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest, visableRect);
         }
         contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.designerScrollView.zoomScale);
         [self.designerScrollView setContentOffset:contentOffset animated:YES];
@@ -2426,16 +2071,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                        animated: animated];
 }
 
-+ (CGPoint)contentOffsetTopOfRect:(CGRect)rect {
-    CGFloat yOffset = rect.origin.y;
-    return CGPointMake(CGPointZero.x, yOffset);
-}
-
-+ (CGPoint)contectOffsetBottomOfRect:(CGRect)rect inRect:(CGRect)containerRect {
-    CGFloat yOffset = rect.origin.y - containerRect.size.height + rect.size.height;
-    return CGPointMake(CGPointZero.x, yOffset);
-}
-
 - (void)addPointA:(CGPoint)pointA andPointB:(CGPoint)pointB {
     _currentNewPointA.x *= previousScaleWeight;
     _currentNewPointA.x += (1 - previousScaleWeight) * pointA.x;
@@ -2450,24 +2085,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (CGPoint)locationOfPointInWindows:(CGPoint)point {
     UIWindow *window = [AppDelegate window];
     return [self.designerScrollView convertPoint:point fromView:window];
-}
-
-- (CGFloat)directionInDegreesFromVelocity:(CGPoint)velocity {
-    CGFloat direction = 0.0000f;
-    if (velocity.y == 0) {
-        if (velocity.x < 0) {
-            direction = -90.0000f;
-        } else {
-            direction = 90.0000f;
-        }
-    } else {
-        if (velocity.y > 0) {
-            direction = atan(velocity.x / velocity.y);
-        } else {
-            direction = 180 + atan(velocity.x / velocity.y);
-        }
-    }
-    return direction;
 }
 
 - (MTDirection)generalDirectionOfDegrees:(CGFloat)degrees {
@@ -3096,6 +2713,345 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     }
 }
 
+#pragma mark - Helpers
+
+#pragma mark Element View helpers
+
+- (BOOL)dismissAllPopovers {
+    BOOL result = NO;
+    if ([UIDevice isPad]) {
+        NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
+        if ([self popoverControllerInformation] != nil) [allpopovers addObject:[self popoverControllerInformation]];
+        if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
+        if ([self popoverControllerSectionSettings] != nil) [allpopovers addObject:[self popoverControllerSectionSettings]];
+        
+        for (UIPopoverController *popoverController in allpopovers) {
+            if ([popoverController isPopoverVisible]) {
+                [popoverController dismissPopoverAnimated:YES];
+                result = YES;
+            }
+        }
+        [self deselectAllElementsAnimated:YES];
+    }
+    [self setDisplayActive];
+    return result;
+}
+
+- (NSSet *)elementViews {
+    
+    RptqDocument *document = [self.document activeDocumentModel];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    
+    for (RptqDocumentSection *documentSection in sectionEnumerator) {
+        MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
+        NSInteger numberOfSectionsInCollectionView = [documentSectionView numberOfSections];
+        
+        for (NSUInteger section = 0; section < numberOfSectionsInCollectionView; section++) {
+            NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
+            
+            for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
+                MTElementView *elementView = [self elementViewAtIndexPath: [NSIndexPath indexPathForItem:item inSection:section]
+                                                         inCollectionView: documentSectionView];
+                if (elementView != nil) {
+                    [results addObject:elementView];
+                }
+            }
+        }
+    }
+    return results;
+}
+
+- (MTDocumentSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifer {
+    MTDocumentSectionView *documentSectionView = nil;
+    for (id subview in [self.designerContentView subviews]) {
+        if ([subview tag] == identifer && [subview isKindOfClass:[MTDocumentSectionView class]]) {
+            documentSectionView = subview;
+            break;
+        }
+    }
+    return documentSectionView;
+}
+
+- (NSSet *)selectedElementViews {
+    
+    NSMutableSet *results = [[NSMutableSet alloc] init];
+    
+    if ([[self selectedObjectIds] count] > 0) {
+        //Try quick hash method...
+        BOOL quickHashWorks = YES;
+        for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
+            UIView *selectedView = [self viewForObjectID:selectedObjectId];
+            if (selectedView != nil) {
+                [results addObject:selectedView];
+            } else {
+                quickHashWorks = NO;
+            }
+        }
+        
+        //NSAssert(quickHashWorks, @"Maybe not such a good idea.");
+        if (quickHashWorks == NO) {     //Case when views are off screen.
+            
+            RptqDocument *document = [self.document activeDocumentModel];
+            SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
+            
+            for (RptqDocumentSection *documentSection in sectionEnumerator) {
+                MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
+                
+                for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
+                    for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
+                        MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
+                        if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
+                            [results addObject:elementView];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return results;
+}
+
+- (UICollectionView *)getSectionViewForDocumentSection:(RptqDocumentSection *)documentSection {
+    return self.sectionViews[[documentSection sectionKey]];
+}
+
+- (UIView *)getSectionControlViewForDocumentSection:(RptqDocumentSection *)documentSection {
+    return self.sectionControlViews[[documentSection sectionKey]];
+}
+
+- (void)deselectAllElementsAnimated:(BOOL)animated {
+    
+    //Remove border from element views
+    for (MTElementView *elementView in [self selectedElementViews]) {
+        [self deselectElementView:elementView animated:animated];
+    }
+    
+    [self removeBorderFromSectionViews];
+}
+
+- (void)deselectLastElementViewToShowMenu {
+    if ([self lastElementViewToShowMenu]) {
+        [self deselectElementView:[self lastElementViewToShowMenu] animated:YES];
+    }
+}
+
+- (void)removeBorderFromSectionViews {
+    //Remove border from the section views
+    [self.sectionControlViews enumerateKeysAndObjectsUsingBlock:^(id key, DesignerSectionLabel *view, BOOL *stop) {
+        [view normalView];
+    }];
+    
+    //Remove border from the section views
+    [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, UICollectionView *view, BOOL *stop) {
+        [[view layer] setBorderWidth:0.0000f];
+    }];
+}
+
+- (void)applyBorderToView:(UIView *)view {
+    NSNumber *key = @([view tag]);
+    [self borderAppliedToView][key] = @YES;
+    UIColor *tintColor = [UIColor tintColorAnalogous4];
+    [[view layer] setBorderColor:[tintColor CGColor]];
+    [[view layer] setBorderWidth:1.0000f / [[UIScreen mainScreen] scale]];
+}
+
+- (BOOL)removeBorderFromView:(UIView *)view {
+    BOOL result;
+    if ([self isBorderAppliedToView:view]) {
+        NSNumber *key = @([view tag]);
+        [self borderAppliedToView][key] = @NO;
+        result = YES;
+        
+        [[view layer] setBorderColor:[[UIColor blackColor] CGColor]];
+        [[view layer] setBorderWidth:0.0000f];
+    } else {
+        result = NO;
+    }
+    return result;
+}
+
+- (BOOL)isBorderAppliedToView:(UIView *)view {
+    NSNumber *key = @([view tag]);
+    BOOL borderApplied = [[self borderAppliedToView][key] boolValue];
+    return borderApplied;
+}
+
+- (MTElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
+    MTElementView *elementView = nil;
+    elementView = (MTElementView *)[self viewForObjectID:[managedObject objectID]];
+    if (!elementView) {
+        RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
+        if (documentObject) {
+            NSUInteger hash = [[documentObject objectID] hash];
+            elementView = (MTElementView *)[self.designerContentView viewWithTag:hash];
+            if (!elementView) {
+                elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:[documentObject managedObjectContext]];
+                [elementView setTag: hash];
+                [elementView setDelegate:self];
+                [elementView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+                [self updateElementView:elementView forManagedObjectContext:[documentObject managedObjectContext]];
+            }
+        }
+    }
+    return elementView;
+}
+
+- (RptqDocumentObject *)documentObjectForElementView:(MTElementView *)elementView inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectID *objectID = [elementView objectIdTag];
+    return (RptqDocumentObject *)[managedObjectContext objectWithID:objectID];
+}
+
+- (void)updateElementView:(MTElementView *)elementView forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (elementView) {
+        
+        // TODO: Only update specific properties when they change.
+        
+        RptqDocumentObject *documentObject = [self documentObjectForElementView:elementView inManagedObjectContext:managedObjectContext];
+        
+        if (documentObject != nil) {
+            
+            CGRect marginViewFrame = [documentObject boundsContentView];
+            
+            [elementView setFrame: marginViewFrame];
+            
+            NSString *fontName = [documentObject fontname];
+            CGFloat pointSize = [[documentObject fontsize] floatValue];
+            
+            UIFont *displayFont = nil;
+            if ([fontName length] == 0) {
+                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            } else {
+                MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
+                if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
+                    displayFont = [stylizedDisplayFont boldItalicFont];
+                } else if ([[documentObject bold] boolValue]) {
+                    displayFont = [stylizedDisplayFont boldFont];
+                } else if ([[documentObject italic] boolValue]) {
+                    displayFont = [stylizedDisplayFont italicFont];
+                } else {
+                    displayFont = [stylizedDisplayFont font];
+                }
+            }
+            
+            if (displayFont == nil) {
+                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            }
+            [elementView setDisplayFont:displayFont];
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+            
+            MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
+            NSTextAlignment textAlignment;
+            switch (horizontalAlignment) {
+                case MTHorizontalAlignmentCenter:
+                    textAlignment = NSTextAlignmentCenter;
+                    break;
+                case MTHorizontalAlignmentLeft:
+                    textAlignment = NSTextAlignmentLeft;
+                    break;
+                case MTHorizontalAlignmentRight:
+                    textAlignment = NSTextAlignmentRight;
+                    break;
+                case MTHorizontalAlignmentJustified:
+                    textAlignment = NSTextAlignmentJustified;
+                    break;
+                default:
+                    textAlignment = NSTextAlignmentLeft;
+                    break;
+            }
+            [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingMiddle];
+            [paragraphStyle setAlignment:textAlignment];
+            [elementView setParagraphStyle:paragraphStyle];
+            
+            NSString *string = [documentObject designerRepresentationText];
+            
+            [elementView setDisplayImage:nil];
+            [elementView setDisplayBarcode:nil];
+            [elementView setDisplayImage:nil];
+            
+            if ([documentObject getType] == MTDocumentObjectTypeImage) {
+                
+                [elementView setDisplayImage:[[documentObject isImage] image]];
+                
+            } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
+                
+                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
+                [elementView setDisplayBarcode:displayBarcode];
+            }
+            
+            NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+            [elementView setUnderlineStyle:underlineStyle];
+            
+            NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+            [elementView setStrikeThroughStyle:strikeThroughStyle];
+            
+            NSDictionary *attributes = @{
+                                         NSParagraphStyleAttributeName : [elementView paragraphStyle],
+                                         NSFontAttributeName : [elementView displayFont],
+                                         NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
+                                         NSUnderlineStyleAttributeName : [elementView underlineStyle]
+                                         };
+            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
+                                                                                    attributes:attributes];
+            [elementView setDisplayStringAttributed:attributtedString];
+            
+            CGSize sizeContentView = [documentObject sizeContentView];
+            CGRect boundsContentView = [documentObject boundsContentView]; //x1
+            NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
+            [elementView setDrawingOptions:drawingOptions];
+            CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize: sizeContentView
+                                                                                      options: drawingOptions
+                                                                                      context: nil];
+            CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
+            
+            MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
+            
+            switch (verticalAlignment) {
+                case MTVerticalAlignmentCenter: {
+                    CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
+                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                    break;
+                }
+                case MTVerticalAlignmentBottom: {
+                    CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
+                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                    break;
+                }
+                case MTVerticalAlignmentTop:
+                default:
+                    break;
+            }
+            
+            CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
+            CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
+            CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
+            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
+            [elementView setDrawingRect:drawingBounds];
+            
+            [elementView setNeedsLayout];
+            [elementView setNeedsDisplay];
+        }
+    }
+}
+
++ (NSString *)reuseIdentifierSection:(NSInteger)sectionNumber {
+    return [[MTCollectionViewCellElement reuseIdentifier] stringByAppendingFormat:@"%ld", (long)sectionNumber];
+}
+
+
+- (CGFloat)heightTopBars {
+    CGFloat height = self.navigationController.navigationBar.bounds.size.height;
+    return UIDeviceOrientationIsLandscape([self interfaceOrientation]) ? (height += [UIApplication sharedApplication].statusBarFrame.size.width) : (height += [UIApplication sharedApplication].statusBarFrame.size.height);
+}
+
+- (CGFloat)heightScrollViewAdjustment {
+    return (([self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f)) * self.designerScrollView.zoomScale);
+}
+
 #pragma mark Constraints Helpers
 
 - (void)contentViewRemoveAllConstraints {
@@ -3123,33 +3079,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 #pragma mark NSNotificationCenter Helpers
-
-- (void)removeObservers {
-    
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: self.document.managedObjectContext];
-    [defaultCenter removeObserver: self
-                             name: NSManagedObjectContextDidSaveNotification
-                           object: self.document.managedObjectContext];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidHideMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerDidShowMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerWillHideMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIMenuControllerWillShowMenuNotification
-                           object: nil];
-    [defaultCenter removeObserver: self
-                             name: UIDocumentStateChangedNotification
-                           object: self.document];
-}
 
 - (void)addObservers {
     
@@ -3189,6 +3118,39 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                       selector: @selector(documentStateChanged)
                           name: UIDocumentStateChangedNotification
                         object: self.document];
+}
+
+- (void)removeObservers {
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextObjectsDidChangeNotification
+                           object: self.document.managedObjectContext];
+    
+    [defaultCenter removeObserver: self
+                             name: NSManagedObjectContextDidSaveNotification
+                           object: self.document.managedObjectContext];
+    
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidHideMenuNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerDidShowMenuNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerWillHideMenuNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UIMenuControllerWillShowMenuNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UIDocumentStateChangedNotification
+                           object: self.document];
 }
 
 #pragma mark - Creators

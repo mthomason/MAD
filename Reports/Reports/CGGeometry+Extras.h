@@ -59,6 +59,53 @@ CGLineSegmentMake(CGPoint p1, CGPoint p2) {
     return lineSegment;
 }
 
+CG_INLINE CGPoint CGPointContentOffsetTopOfRect(CGRect rect);
+CG_INLINE
+CGPoint CGPointContentOffsetTopOfRect(CGRect rect) {
+    CGFloat yOffset = rect.origin.y;
+    return CGPointMake(CGPointZero.x, yOffset);
+}
+
+CG_INLINE CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect);
+CG_INLINE
+CGPoint CGPointContentOffsetBottomOfRect(CGRect rect, CGRect containerRect) {
+    CGFloat yOffset = rect.origin.y - containerRect.size.height + rect.size.height;
+    return CGPointMake(CGPointZero.x, yOffset);
+}
+
+CG_INLINE CGFloat CGDirectionInDegreesFromVelocity(CGPoint velocity);
+CG_INLINE CGFloat
+CGDirectionInDegreesFromVelocity(CGPoint velocity) {
+    CGFloat direction = 0.0000f;
+    if (velocity.y == 0) {
+        if (velocity.x < 0) {
+            direction = -90.0000f;
+        } else {
+            direction = 90.0000f;
+        }
+    } else {
+        if (velocity.y > 0) {
+            direction = atan(velocity.x / velocity.y);
+        } else {
+            direction = 180 + atan(velocity.x / velocity.y);
+        }
+    }
+    return direction;
+}
+
+CG_INLINE CGRect CGRectAdjustForScale(CGRect rect, CGFloat zoomScale);
+CG_INLINE CGRect
+CGRectAdjustForScale(CGRect rect, CGFloat zoomScale) {
+    CGFloat scale = 1.0000f / zoomScale;
+    if ( isless(scale, 1.0000f) ) {
+        rect.origin.x *= scale;
+        rect.origin.y *= scale;
+        rect.size.width *= scale;
+        rect.size.height *= scale;
+    }
+    return rect;
+}
+
 CG_INLINE BOOL CGRectAboveRect(CGRect rect1, CGRect rect2);
 CG_INLINE BOOL
 CGRectAboveRect(CGRect rect1, CGRect rect2) {

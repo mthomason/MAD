@@ -267,6 +267,8 @@
 		4C0E7854163B5AEC003B951E /* UIImageExportTypeAppEngine.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3101535919400738091 /* UIImageExportTypeAppEngine.png */; };
 		4C0E7855163B5AEC003B951E /* UIImageExportTypeAppEngine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC3111535919400738091 /* UIImageExportTypeAppEngine@2x.png */; };
 		4C101DAD14F4D54000AAF676 /* RptqDocumentObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C113C9119A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
+		4C113C9219A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */; };
 		4C11BCF718DD4DE7001E3D33 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BCF818DD4DE7001E3D33 /* MTTableFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C11BCFB18DDE863001E3D33 /* MTQuerySampleDataField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11BCFA18DDE863001E3D33 /* MTQuerySampleDataField.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1766,6 +1768,8 @@
 		4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesignerPadOS6.storyboard; path = Reports/MTStoryboardReportDesignerPadOS6.storyboard; sourceTree = "<group>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
+		4C113C8F19A3D6BB00D1A3B0 /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
+		4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+Extras.m"; sourceTree = "<group>"; };
 		4C11BCF518DD4DE7001E3D33 /* MTTableFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableFormatter.h; sourceTree = "<group>"; };
 		4C11BCF618DD4DE7001E3D33 /* MTTableFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableFormatter.m; sourceTree = "<group>"; };
 		4C11BCF918DDE863001E3D33 /* MTQuerySampleDataField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySampleDataField.h; sourceTree = "<group>"; };
@@ -5127,6 +5131,8 @@
 				4C8251541948AC9800C32335 /* UIViewController+ui.m */,
 				4C825164194A244900C32335 /* NSData+Comparson.h */,
 				4C825165194A244900C32335 /* NSData+Comparson.m */,
+				4C113C8F19A3D6BB00D1A3B0 /* UIScrollView+Extras.h */,
+				4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -6246,6 +6252,7 @@
 				4C16809F1907B45200980D8D /* MTQueryCacheJournalModeOverride.m in Sources */,
 				4C23FBBF18FAE4F7009F234F /* MTPaperB6.m in Sources */,
 				4C23FBD318FAE4F7009F234F /* MTPaperC5.m in Sources */,
+				4C113C9219A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */,
 				4C23FBB118FAE4F7009F234F /* MTPaperA10.m in Sources */,
 				4C0E776A163B5AEC003B951E /* UIViewTableSectionHeaderDatabaseTable.m in Sources */,
 				4C0E776B163B5AEC003B951E /* RptqFieldSelectorManager.m in Sources */,
@@ -6746,6 +6753,7 @@
 				4C23FBA418FAE4F7009F234F /* MTPaperA4.m in Sources */,
 				4C23FBA218FAE4F7009F234F /* MTPaperA3.m in Sources */,
 				4C16809E1907B45200980D8D /* MTQueryCacheJournalModeOverride.m in Sources */,
+				4C113C9119A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */,
 				4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */,
 				4C75C9F218E20306006E8526 /* MTTableCell.m in Sources */,
 				4C1A585A14DE2AB400184445 /* UITableViewControllerOpperators.m in Sources */,
