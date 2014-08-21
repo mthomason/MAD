@@ -144,9 +144,46 @@ static NSNumberFormatter *currencyNumberFormatter;
     }
 }
 
+- (CGFloat)spacingLeft {
+    return self.marginLeft.floatValue +
+           self.borderWidthLeft.floatValue +
+           self.paddingLeft.floatValue;
+}
+
+- (CGFloat)spacingRight {
+    return self.marginRight.floatValue +
+           self.borderWidthRight.floatValue +
+           self.paddingRight.floatValue;
+}
+
+- (CGFloat)spacingTop {
+    return self.marginTop.floatValue +
+           self.borderHeightTop.floatValue +
+           self.paddingTop.floatValue;
+}
+
+- (CGFloat)spacingBottom {
+    return self.marginBottom.floatValue +
+           self.borderHeightBottom.floatValue +
+           self.paddingBottom.floatValue;
+}
+
 - (CGSize)size {
-    CGFloat width = self.paddingLeft.floatValue + self.borderWidthLeft.floatValue + self.marginLeft.floatValue + self.sizewidth.floatValue + self.marginRight.floatValue + self.borderWidthRight.floatValue + self.paddingRight.floatValue;
-    CGFloat height = self.paddingTop.floatValue + self.borderHeightTop.floatValue + self.marginTop.floatValue + self.sizeheight.floatValue + self.marginBottom.floatValue + self.borderHeightBottom.floatValue + self.paddingBottom.floatValue;
+    CGFloat width = self.paddingLeft.floatValue +
+                    self.borderWidthLeft.floatValue +
+                    self.marginLeft.floatValue +
+                    self.sizewidth.floatValue +
+                    self.marginRight.floatValue +
+                    self.borderWidthRight.floatValue +
+                    self.paddingRight.floatValue;
+    
+    CGFloat height = self.paddingTop.floatValue +
+                    self.borderHeightTop.floatValue +
+                    self.marginTop.floatValue +
+                    self.sizeheight.floatValue +
+                    self.marginBottom.floatValue +
+                    self.borderHeightBottom.floatValue +
+                    self.paddingBottom.floatValue;
     return CGSizeMake(width, height);
 }
 

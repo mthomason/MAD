@@ -32,6 +32,13 @@ typedef NS_ENUM(NSUInteger, MNSPredicateOperator) {
 
 @interface RptqQueryPredicate (Extras) <MTProtocolCompare>
 
++ (instancetype)predicateFactoryWithLeftField:(RptqQueryField *)fieldLeft
+                                    leftValue:(NSString *)valueLeft
+                            comparsonOperator:(MNSPredicateOperator)predicateOperator
+                                   rightField:(RptqQueryField *)fieldRight
+                                   rightValue:(NSString *)valueRight
+                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+
 + (instancetype)predicateFactoryWithLeftField:(RptqQueryField *)leftField
                             comparsonOperator:(MNSPredicateOperator)comparsonOperator
                                 andRightField:(RptqQueryField *)rightField

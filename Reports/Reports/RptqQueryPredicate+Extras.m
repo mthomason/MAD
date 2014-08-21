@@ -67,6 +67,43 @@
 
 #pragma mark - Static
 
++ (instancetype)predicateFactoryWithLeftField:(RptqQueryField *)fieldLeft
+                                    leftValue:(NSString *)valueLeft
+                            comparsonOperator:(MNSPredicateOperator)predicateOperator
+                                   rightField:(RptqQueryField *)fieldRight
+                                   rightValue:(NSString *)valueRight
+                      forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    
+    RptqQueryPredicate *queryPredicate = nil;
+    
+    if (valueLeft == nil) {
+        if (valueRight == nil) {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: fieldLeft
+                                                             comparsonOperator: predicateOperator
+                                                                 andRightField: fieldRight
+                                                       forManagedObjectContext: managedObjectContext];
+        } else {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: fieldLeft
+                                                             comparsonOperator: predicateOperator
+                                                                 andRightValue: valueRight
+                                                       forManagedObjectContext: managedObjectContext];
+        }
+    } else {
+        if (valueRight == nil) {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: valueLeft
+                                                             comparsonOperator: predicateOperator
+                                                                 andRightField: fieldRight
+                                                       forManagedObjectContext: managedObjectContext];
+        } else {
+            queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftValue: valueLeft
+                                                             comparsonOperator: predicateOperator
+                                                                 andRightValue: valueRight
+                                                       forManagedObjectContext: managedObjectContext];
+        }
+    }
+    return queryPredicate;
+}
+
 + (instancetype)predicateFactoryWithLeftField:(RptqQueryField *)leftField
                             comparsonOperator:(MNSPredicateOperator)comparsonOperator
                                 andRightField:(RptqQueryField *)rightField

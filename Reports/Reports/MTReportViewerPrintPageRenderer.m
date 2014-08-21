@@ -585,11 +585,11 @@
                                 CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;
                                 CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;
                                 
-                                CGFloat originPointXPadding = originPointX + [[item paddingLeft] floatValue] + [[item marginLeft] floatValue];
-                                CGFloat originPointYPadding = originPointY + [[item paddingTop] floatValue] + [[item marginTop] floatValue];
+                                CGFloat originPointXPadding = originPointX + item.spacingLeft;
+                                CGFloat originPointYPadding = originPointY + item.spacingTop;
                                 
-                                CGFloat sizeWidthPadding = [[item sizewidth] floatValue] + [[item paddingRight] floatValue] + [[item marginRight] floatValue];
-                                CGFloat sizeHeightPadding = [[item sizeheight] floatValue] + [[item paddingBottom] floatValue] + [[item marginBottom] floatValue];
+                                CGFloat sizeWidthPadding = [[item sizewidth] floatValue] + item.spacingRight;
+                                CGFloat sizeHeightPadding = [[item sizeheight] floatValue] + item.spacingBottom;
                                 
                                 CGRect elementCanvasRect = CGRectMake(originPointXPadding, originPointYPadding, sizeWidthPadding, sizeHeightPadding);
                                 
@@ -614,8 +614,7 @@
                                 } else {
                                     [drawingObject drawInRect:elementCanvasRect];
                                 }
-                                //displayString = nil;
-                                //drawingObject = nil;
+
                             }
                         }
                     }
@@ -628,12 +627,8 @@
                 if (typeDocumentSection == MNSDocumentSectionTypeGroupFooter) {
                     [groupLevelKeys removeAllObjects];
                 }
-                
-                //                }
-                
             }
-            
-                layoutSectionCounter++;
+            layoutSectionCounter++;
         } else {
             //NSAssert(false, @"Error: %s", __PRETTY_FUNCTION__);
         }

@@ -64,7 +64,6 @@
         
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
-        [self setManagedObjectContext:managedObjectContext];
 
         [self setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self setDisplayWobbling: NO];
@@ -88,14 +87,14 @@ static size_t const kDashedCount            = (2.0f);
 
 - (void)drawRect:(CGRect)rect {
 
-    if ([self displayImage]) {
+    if (self.displayImage) {
         [[self displayImage] drawInRect:rect];
-    } else if ([self displayBarcode]) {
-        [[self displayBarcode] initSampleData];
-        [[self displayBarcode] setForgroundColor:[UIColor lightGrayColor]];
-        [[self displayBarcode] drawInRect:rect];
+    } else if (self.displayBarcode) {
+        [self.displayBarcode initSampleData];
+        [self.displayBarcode setForgroundColor:[UIColor lightGrayColor]];
+        [self.displayBarcode drawInRect:rect];
     } else {
-        [[self displayStringAttributed] drawWithRect:rect options:[self drawingOptions] context:nil];
+        [self.displayStringAttributed drawWithRect:rect options:self.drawingOptions context:nil];
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
