@@ -21,6 +21,8 @@
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
+#import "UIColor+EverydayApps.h"
+
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectChartCollectionViewCell = @"MTIdentiferDocumentObjectChartCollectionViewCell";
@@ -46,54 +48,47 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
-@property (nonatomic, weak) IBOutlet UINavigationItem *navigationItemMain;
-
-@property (nonatomic, weak) IBOutlet UICollectionViewController *visibleViewController;
-@property (nonatomic, strong) UIViewController *childViewController;
-@property (nonatomic, strong) UIViewController *viewControllerToPush;
-@property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, strong) UIView *childDisplayedView;
 
 @property (nonatomic, strong) MTAggregateFunctionsViewController *aggregateFunctionsViewController;
-@property (nonatomic, assign) BOOL showAggregateFunctionsViewController;
 
 @property (nonatomic, strong) MTDocumentObjectNewAggregateViewController *aggregateViewController;
-@property (nonatomic, assign) BOOL showNewAggregateViewController;
 
 @property (nonatomic, strong) MTGroupByViewController *groupByViewController;
-@property (nonatomic, assign) BOOL showGroupByViewController;
 
 @property (nonatomic, strong) UITableViewController *fieldOrFormulaViewController;
-@property (nonatomic, assign) BOOL showFieldOrFormulaViewController;
 
 @property (nonatomic, strong) MTQueryBuilderChooseFieldViewController *fieldOrFormulaFieldPickerViewController;
-@property (nonatomic, assign) BOOL showFieldOrFormulaFieldPickerViewController;
 
 @property (nonatomic, strong) UITableViewController *fieldOrFormulaFormulaPickerViewController;
 @property (nonatomic, assign) BOOL showFieldOrFormulaFormulaPickerViewerController;
 
-@property (atomic, assign) MTDocumentObjectType typeOfObjectToPush;
-@property (atomic, assign) BOOL rootSelectorControllerIsVisable;
-
-@property (atomic, assign) BOOL shouldDismissThis;
-
-@property (nonatomic, strong) NSManagedObjectID *aggregateInputField;
-@property (atomic, assign) BOOL fieldSelectionPopPartOneOfTwo;
-
-@property (nonatomic, strong) NSManagedObjectID *aggregateInputFormula;
-@property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
-@property (nonatomic, assign) MTAggregateFunctionInputType  aggregateFunctionInputType;
 @property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 @property (nonatomic, assign) NSUInteger aggregateGroupBySectionNumber;
-
-@property (nonatomic, strong) UIImagePickerController *imagePicker;
-@property (nonatomic, strong) UIBarButtonItem *saveButton;
 
 - (IBAction)done:(id)sender;
 
 @end
 
 @implementation MTReportDesignerObjectSelectorViewController
+
+#pragma mark - Exit
+
+- (BOOL)canPerformUnwindSegueAction:(SEL)action
+                 fromViewController:(UIViewController *)fromViewController
+                         withSender:(id)sender {
+    return NO;
+}
+
+- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+                                      fromViewController:(UIViewController *)fromViewController
+                                              withSender:(id)sender {
+    
+    return action == @selector(unwindToDesigner:) ?
+            (UIViewController *)self.objectSelectorDelegate :
+            [super viewControllerForUnwindSegueAction: action
+                                   fromViewController: fromViewController
+                                           withSender: sender];
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -129,6 +124,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     }
 }
 
+- (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    [super performSegueWithIdentifier:identifier sender:sender];
+}
+
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
@@ -137,7 +136,32 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 #pragma mark - UICollectionViewDataSource
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+        didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+
+    switch (cell.tag) {
+
+        case MTDocumentObjectTypeImage: {
+            UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+            imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            imagePicker.delegate = (id <UINavigationControllerDelegate ,UIImagePickerControllerDelegate>)self.objectSelectorDelegate;
+            imagePicker.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+            
+            [self presentViewController:imagePicker animated:YES completion:NULL];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *result = nil;
     NSString *cellIdentifier = nil;
     NSUInteger tag = 0;
@@ -249,10 +273,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
 }
@@ -295,12 +315,14 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     return CGSizeMake(150.0000f, 100.0000f);
 }
 
+#pragma mark - Actions
+
+
+
 #pragma mark
 #pragma mark - Aggregate Functions View Controller Delegate Protocol
 
 - (void)didSelectFunction:(MTAggregateFunctionType)functionType {
-    [self setAggregateFunctionType: functionType];
-
     [self displaySelectedFunction:functionType];
     
     [[self navigationBar] popNavigationItemAnimated:YES];
@@ -328,23 +350,16 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             
         case MTDocumentObjectTypeLabelDynamic:
             
-            //[[self objectSelectorDelegate] insertDocumentObjectDataField: field];
             [[self objectSelectorDelegate] viewControllerDidFinish:self];
             
             break;
             
         case MTViewTagFieldOrFormulaSelector: {
             
-            [self setAggregateFunctionInputType: MTAggregateFunctionInputTypeField];
-            NSManagedObjectID *objectId = [field objectID];
-            [self setAggregateInputField: objectId];
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
             NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
             [[[[self aggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
-            [self setFieldSelectionPopPartOneOfTwo:YES];
             [[self navigationBar] popNavigationItemAnimated:YES];
-            
-            [[self saveButton] setEnabled:YES];
             
             break;
             
@@ -361,21 +376,21 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (void)didSelectGroupByPage {
     [self setAggregateGroupByType: MTAggregateGroupByTypePage];
-    [self setAggregateGroupBySectionNumber: 0];
+    self.aggregateGroupBySectionNumber = 0;
     [self displaySelectedGroupByType];
     [[self navigationBar] popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupByReport {
     [self setAggregateGroupByType: MTAggregateGroupByTypeReport];
-    [self setAggregateGroupBySectionNumber: 0];
+    self.aggregateGroupBySectionNumber = 0;
     [self displaySelectedGroupByType];
     [[self navigationBar] popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
-    [self setAggregateGroupByType: MTAggregateGroupByTypeSection];
-    [self setAggregateGroupBySectionNumber: groupNumber];
+    self.aggregateGroupByType = MTAggregateGroupByTypeSection;
+    self.aggregateGroupBySectionNumber = groupNumber;
     [self displaySelectedGroupByType];
     [[self navigationBar] popNavigationItemAnimated:YES];
 }
@@ -385,7 +400,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
         switch ([self aggregateGroupByType]) {
             case MTAggregateGroupByTypeSection: {
 
-                NSUInteger group = [self aggregateGroupBySectionNumber];
+                NSUInteger group = self.aggregateGroupBySectionNumber;
                 NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
                 NSString *detail = [NSString stringWithFormat:format, group];
                 [[[[self aggregateViewController] tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
@@ -440,7 +455,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     
                     NSString *navigationItemTitle = NSLocalizedString(@"Field Selector", @"Field Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [self setShowFieldOrFormulaFieldPickerViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
                     break;
 
@@ -469,7 +483,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
                     NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [self setShowAggregateFunctionsViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
                     break;
                     
@@ -478,14 +491,12 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     
                     NSString *navigationItemTitle = NSLocalizedString(@"Data Object Selector", @"Data Object Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [self setShowFieldOrFormulaViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
                     break;
                 }
                 case 2: {   //Group By *For Each*
                     NSString *navigationItemTitle = NSLocalizedString(@"Group By Selector", @"Group By Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [self setShowGroupByViewController:YES];
                     [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
                     break;
                 }

@@ -246,9 +246,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
-    if (self) {
-
-    }
+    if (self) { }
     return self;
 }
 
@@ -675,66 +673,25 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([[segue identifier] isEqualToString:@"showObjects"]) {
-        
-        if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-            [self setDisplayInactive];
-            UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
-            UIPopoverController *popoverController = [popoverSegue popoverController];
-            [popoverController setDelegate:self];
-            CGSize popoverSize = CGSizeMake(320.0000f, 480.0000 + 44.0000f);
-            [popoverController setPopoverContentSize:popoverSize animated:YES];
-            
-            [self setPopoverControllerObjectSelector:popoverController];
-        }
-        
-        MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = nil;
-        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *d = segue.destinationViewController;
-            [d setDelegate:self];
-            viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)[d topViewController];
-            viewControllerObjectSelector.objectSelectorDelegate = self;
-            viewControllerObjectSelector.document = self.document;
-        } else {
-            viewControllerObjectSelector = segue.destinationViewController;
-            viewControllerObjectSelector.objectSelectorDelegate = self;
-            viewControllerObjectSelector.document = self.document;
-        }
+
+        [self performSegueShowObjects:segue];
 
     } else if ([[segue identifier] isEqualToString:@"MTSegueShowReportViewer"]) {
 
-        if ([UIDevice isPad]) {
-            MTReportViewerController *viewControllerReportViewer;
-            UINavigationController *d = segue.destinationViewController;
-            viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
-            viewControllerReportViewer.viewControllerDelegate = self;
-        }
-        [self.designerScrollView scrollRectToVisible:CGRectZero animated:NO];
+        [self performSegueShowReportViewer:segue];
 
     } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
     
-        [self.designerScrollView scrollRectToVisible:CGRectZero animated:NO];
-
+        [self performSegueShowReportViewerFromDesigner:segue];
+        
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
         
-        
-        MTViewControllerBarcode *barcodeViewController = segue.destinationViewController;
-        barcodeViewController.document = self.document;
-
-        NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
-        NSManagedObjectID *objectId = [self objectIdEditBarcode];
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
-        RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
-        [barcodeViewController setBarcodeToEdit: barcodeObject];
+        [self performSegueEditBarcode:segue];
 
     } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
         
-        MTDocumentObjectNewAggregateViewController *aggregateViewController = segue.destinationViewController;
-        aggregateViewController.document = self.document;
-
-        NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:objectId];
-        RptqDocumentObjectAggregate *aggregateObject = [documentObject isAggregate];
-        [aggregateViewController setAggregateObjectToEdit:aggregateObject];
+        [self performSegueEditAggregate:segue.destinationViewController];
+        
     }
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
         [segue.destinationViewController setDocument:self.document];
@@ -774,8 +731,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     for (UICollectionView *section in [self.sectionViews objectEnumerator]) {
         [section setContentScaleFactor:scale];
-        //[section invalidateIntrinsicContentSize];
-        //[[section collectionViewLayout] invalidateLayout];
     }
 }
 
@@ -866,7 +821,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-                                                                                inManagedObjectContext: [self.document managedObjectContext]];
+                                                                                inManagedObjectContext: self.document.managedObjectContext];
         NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[documentSection hasRows] array]];
         [newRowToAppend setInSection:documentSection];
         [hasRows addObject:newRowToAppend];
@@ -876,9 +831,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         //Remove row
         RptqDocumentSectionRows *rowToDelete = [[documentSection hasRows] lastObject];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[documentSection hasRows] array]];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[documentSection.hasRows array]];
         [[hasRows lastObject] setInSection:nil];
-        [hasRows removeObjectAtIndex:[hasRows count] - 1];
+        [hasRows removeObjectAtIndex:hasRows.count - 1];
         [documentSection setHasRows:hasRows];
         [rowToDelete setInSection:nil];
         
@@ -1084,7 +1039,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [self.document.managedObjectContext save:&error];
     }
     if (![self dismissAllPopovers]) {
-        [[self delegate] viewControllerDidFinish:@(NO)];
+        [self.delegate viewControllerDidFinish:@(NO)];
     } else {
         [self deselectAllElementsAnimated:YES];
     }
@@ -2923,46 +2878,50 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)updateElementView:(MTElementView *)elementView forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     if (elementView) {
         
-        // TODO: Only update specific properties when they change.
-        
-        RptqDocumentObject *documentObject = [self documentObjectForElementView:elementView inManagedObjectContext:managedObjectContext];
-        
+        RptqDocumentObject *documentObject = [self documentObjectForElementView: elementView
+                                                         inManagedObjectContext: managedObjectContext];
         if (documentObject != nil) {
             
             CGRect marginViewFrame = [documentObject boundsContentView];
             
-            [elementView setFrame: marginViewFrame];
+            elementView.frame = marginViewFrame;
+            elementView.displayImage = nil;
+            elementView.displayBarcode = nil;
+            elementView.displayImage = nil;
             
+
             NSString *string = [documentObject designerRepresentationText];
-            [elementView setDisplayImage:nil];
-            [elementView setDisplayBarcode:nil];
-            [elementView setDisplayImage:nil];
-            
-            if ([documentObject getType] == MTDocumentObjectTypeImage) {
-                [elementView setDisplayImage:[[documentObject isImage] image]];
-            } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
-                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
-                [elementView setDisplayBarcode:displayBarcode];
+
+            switch ([documentObject getType]) {
+                
+                case MTDocumentObjectTypeImage:
+                    elementView.displayImage = documentObject.isImage.image;
+                    break;
+                    
+                case MTDocumentObjectTypeBarcode: {
+                    MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:documentObject.isBarcode];
+                    elementView.displayBarcode = displayBarcode;
+                    break;
+                }
+                    
+                default:
+                    break;
             }
-            
             
             NSDictionary *attributes = [documentObject attributesForDrawingText];
             NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
                                                                                     attributes:attributes];
-            [elementView setDisplayStringAttributed:attributtedString];
+            elementView.displayStringAttributed = attributtedString;
             
             CGSize sizeContentView = [documentObject sizeContentView];
             CGRect boundsContentView = [documentObject boundsContentView]; //x1
-            NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
-            [elementView setDrawingOptions:drawingOptions];
+            elementView.drawingOptions = (NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading);
             CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize: sizeContentView
-                                                                                      options: drawingOptions
+                                                                                      options: elementView.drawingOptions
                                                                                       context: nil];
             CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
             
-            MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
-            
-            switch (verticalAlignment) {
+            switch ([documentObject.verticalAlignment integerValue]) {
                 case MTVerticalAlignmentCenter: {
                     CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
                     CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
@@ -2980,11 +2939,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     break;
             }
             
-            CGFloat contentViewX = [documentObject spacingLeft];
-            CGFloat contentViewY = [documentObject spacingTop];
-            CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
-            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
-
+            CGAffineTransform transformSpacing = CGAffineTransformMakeTranslation([documentObject spacingLeft],
+                                                                                  [documentObject spacingTop]);
+            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformSpacing);
             [elementView setNeedsLayout];
             [elementView setNeedsDisplay];
         }
@@ -2998,11 +2955,76 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (CGFloat)heightTopBars {
     CGFloat height = self.navigationController.navigationBar.bounds.size.height;
-    return UIDeviceOrientationIsLandscape([self interfaceOrientation]) ? (height += [UIApplication sharedApplication].statusBarFrame.size.width) : (height += [UIApplication sharedApplication].statusBarFrame.size.height);
+    return UIDeviceOrientationIsLandscape([self interfaceOrientation]) ?
+                                            (height += [UIApplication sharedApplication].statusBarFrame.size.width) :
+                                            (height += [UIApplication sharedApplication].statusBarFrame.size.height);
 }
 
 - (CGFloat)heightScrollViewAdjustment {
-    return (([self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f)) * self.designerScrollView.zoomScale);
+    return ([self heightTopBars] + (MTReportDesignerBorderPadding / 2.0000f)) *
+                                                                self.designerScrollView.zoomScale;
+}
+
+#pragma mark Segue Helpers
+
+- (void)performSegueShowObjects:(UIStoryboardSegue *)segue {
+    if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+        [self setDisplayInactive];
+        UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
+        UIPopoverController *popoverController = [popoverSegue popoverController];
+        [popoverController setDelegate:self];
+        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f + 44.0000f);
+        [popoverController setPopoverContentSize:popoverSize animated:YES];
+        
+        [self setPopoverControllerObjectSelector:popoverController];
+    }
+    
+    MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = nil;
+    if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *d = segue.destinationViewController;
+        [d setDelegate:self];
+        viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)d.topViewController;
+        viewControllerObjectSelector.objectSelectorDelegate = self;
+        viewControllerObjectSelector.document = self.document;
+    } else {
+        viewControllerObjectSelector = segue.destinationViewController;
+        viewControllerObjectSelector.objectSelectorDelegate = self;
+        viewControllerObjectSelector.document = self.document;
+    }
+}
+
+- (void)performSegueShowReportViewer:(UIStoryboardSegue *)segue {
+    if ([UIDevice isPad]) {
+        MTReportViewerController *viewControllerReportViewer;
+        UINavigationController *d = segue.destinationViewController;
+        viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
+        viewControllerReportViewer.viewControllerDelegate = self;
+    }
+    [self.designerScrollView scrollRectToVisible:CGRectZero animated:NO];
+}
+
+- (void)performSegueShowReportViewerFromDesigner:(UIStoryboardSegue *)segue {
+    [self.designerScrollView scrollRectToVisible:CGRectZero animated:NO];
+}
+
+- (void)performSegueEditBarcode:(UIStoryboardSegue *)segue {
+    MTViewControllerBarcode *barcodeViewController = segue.destinationViewController;
+    barcodeViewController.document = self.document;
+    
+    NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
+    NSManagedObjectID *objectId = [self objectIdEditBarcode];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
+    RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
+    [barcodeViewController setBarcodeToEdit: barcodeObject];
+}
+
+- (void)performSegueEditAggregate:(UIStoryboardSegue *)segue {
+    MTDocumentObjectNewAggregateViewController *aggregateViewController = segue.destinationViewController;
+    aggregateViewController.document = self.document;
+    NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:objectId];
+    RptqDocumentObjectAggregate *aggregateObject = [documentObject isAggregate];
+    [aggregateViewController setAggregateObjectToEdit:aggregateObject];
 }
 
 #pragma mark Constraints Helpers
@@ -3486,18 +3508,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)saveWhiteSpace {
-    
     __weak MTReportDesignerViewController *reportDesigner = self;
     block_insertObject insert = ^(UIViewController *action) {
         NSNumber *type = @(MTDocumentObjectTypeWhtiespace);
         NSDictionary *options = @{MTDocumentObjectDefinationType: type};
         [reportDesigner insertDocumentObjectWithDefination: options];
     };
-    if ([UIDevice isPad]) {
-        insert(nil);
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{ insert(nil); }];
-    }
+    insert(nil);
 }
 
 - (void)saveDynamicLabel:(MTQueryBuilderChooseFieldViewController *)viewController {
@@ -3511,51 +3528,49 @@ const CGFloat previousScaleWeight                   =  0.6666f;
            MTDocumentObjectDefinationObject : [queryField objectID]}];
     };
     
-    if ([UIDevice isPad]) {
-        insert(viewController);
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{ insert(viewController); }];
-    }
+    insert(viewController);
 }
 
 - (void)saveAggregateLabel:(MTDocumentObjectNewAggregateViewController *)viewController {
     if ([self aggregateToEdit] && [self editAggregate]) {
         if ([viewController fieldObject] != nil) {
-            [[self aggregateToEdit] updateAggregateFunctionWithFunctionType:[viewController aggregateFunctionType]
-                                                                  inputType:MTAggregateFunctionInputTypeField
-                                                                  groupType:[viewController aggregateGroupByType]
-                                                            aggregateObject:[viewController fieldObject]
-                                                                groupNumber:[viewController groupTypeSectionNumber]];
+            [[self aggregateToEdit] updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
+                                                                  inputType: MTAggregateFunctionInputTypeField
+                                                                  groupType: viewController.aggregateGroupByType
+                                                            aggregateObject: viewController.fieldObject
+                                                                groupNumber: viewController.groupTypeSectionNumber];
         }
     } else {
         if ([viewController fieldObjectId] != nil) {
             NSNumber *groupNumber = @([viewController groupTypeSectionNumber]);
-            [self insertDocumentObjectNewAggregateFunctionWithType:[viewController aggregateFunctionType]
-                                                         inputType:MTAggregateFunctionInputTypeField
-                                                       inputObject:[viewController fieldObjectId]
-                                                         groupType:[viewController aggregateGroupByType]
-                                                       groupNumber:groupNumber];
+            [self insertDocumentObjectNewAggregateFunctionWithType: viewController.aggregateFunctionType
+                                                         inputType: MTAggregateFunctionInputTypeField
+                                                       inputObject: viewController.fieldObjectId
+                                                         groupType: viewController.aggregateGroupByType
+                                                       groupNumber: groupNumber];
         }
     }
 }
 
 - (void)saveImageLabel {
-    __weak MTReportDesignerViewController *reportDesigner = self;
+   /* __weak MTReportDesignerViewController *reportDesigner = self;
     block_insertObject insert = ^(UIViewController *action) {
         if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
             UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
             [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
             [imagePicker setDelegate: reportDesigner];
             [[imagePicker navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
-            [reportDesigner presentViewController:imagePicker animated:YES completion:NULL];
+            
+            [reportDesigner.tabBarController presentViewController:imagePicker animated:YES completion:NULL];
         }
     };
     
-    if ([UIDevice isPad]) {
+    //if ([UIDevice isPad]) {
         insert(nil);
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{ insert(nil); }];
-    }
+    //} else {
+    //    [self dismissViewControllerAnimated:YES completion:^{ insert(nil); }];
+    //}
+    */
 }
 
 - (void)saveBarcodeLabel:(MTViewControllerBarcode *)viewController {
