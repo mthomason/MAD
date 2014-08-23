@@ -74,13 +74,13 @@
     
     if (userAction) {
         if ([[self disclosureButton] isSelected]) {
-            if ([[self delegate] respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
-                [[self delegate] sectionHeaderView:self sectionOpened:[self section]];
+            if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionOpened:)]) {
+                [self.delegate sectionHeaderView:self sectionOpened:[self section]];
             }
         }
         else {
-            if ([[self delegate] respondsToSelector:@selector(sectionHeaderView:sectionClosed:)]) {
-                [[self delegate] sectionHeaderView:self sectionClosed:[self section]];
+            if ([self.delegate respondsToSelector:@selector(sectionHeaderView:sectionClosed:)]) {
+                [self.delegate sectionHeaderView:self sectionClosed:[self section]];
             }
         }
     }

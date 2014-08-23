@@ -14,10 +14,6 @@
 
 @implementation MTQueryBuilderPredicateFormatViewController
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -49,19 +45,19 @@
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [[self delegate] viewControllerDidFinish:sender];
+    [self.delegate viewControllerDidFinish:sender];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
-    [[self delegate] viewControllerDidCancel:sender];
+    [self.delegate viewControllerDidCancel:sender];
 }
 
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate {
-    [[self delegate] addQueryPredicate: predicate];
+    [self.delegate addQueryPredicate: predicate];
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidCancel: self];
+    [self.delegate viewControllerDidCancel: self];
 }
 
 @end

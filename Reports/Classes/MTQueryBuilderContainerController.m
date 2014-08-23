@@ -188,7 +188,7 @@
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
-    [[self delegate] viewControllerDidFinish:self animated:YES];
+    [self.delegate viewControllerDidFinish:self animated:YES];
 }
 
 - (IBAction)showReportDesigner:(id)sender { }
@@ -202,7 +202,7 @@
     if (error != nil) {
         [self.document.managedObjectContext save:&error];
     }
-    [[self delegate] viewControllerDidFinish:self animated:YES];
+    [self.delegate viewControllerDidFinish:self animated:YES];
 }
 - (IBAction)redrawQueryVisualization:(id)sender {
     [[self queryBuilderControllerAdvanced] redraw];

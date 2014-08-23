@@ -142,7 +142,7 @@ static size_t const kDashedCount            = (2.0f);
 
 - (void)toggleSelection:(UITapGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
-        [[self delegate] didTouchElementView:self];
+        [self.delegate didTouchElementView:self];
     }
 }
 

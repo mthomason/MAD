@@ -208,8 +208,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
     if (queryField != nil) {
-        if ([self delegate] != nil) {
-            [[self delegate] tableViewControllerChooseFieldDidFinish:self withField: queryField];
+        if (self.delegate != nil) {
+            [self.delegate tableViewControllerChooseFieldDidFinish:self withField: queryField];
         }
     }
 }

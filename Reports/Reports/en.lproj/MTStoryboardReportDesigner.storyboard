@@ -3671,9 +3671,6 @@
                                     <constraint firstItem="M3l-6C-Ic0" firstAttribute="leading" secondItem="jCb-LZ-0jl" secondAttribute="leading" constant="20" id="whn-qa-ngv"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
-                                <connections>
-                                    <segue destination="fmR-5o-cXk" kind="unwind" identifier="MTSegueChooseImageSaveIdentifer" unwindAction="unwindToDesigner:" id="IAX-R8-awZ"/>
-                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="6" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectGroupKeyCollectionViewCell" id="jMP-Hu-6N0">
                                 <rect key="frame" x="170" y="270" width="150" height="80"/>

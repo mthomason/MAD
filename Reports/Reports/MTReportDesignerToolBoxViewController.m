@@ -108,8 +108,8 @@
 }
 
 - (IBAction)userDidRequestFinish:(id)sender {
-    if ([self delegate] != nil) {
-        [[self delegate] hideToolbox];
+    if (self.delegate != nil) {
+        [self.delegate hideToolbox];
     }
 }
 
@@ -163,7 +163,7 @@
 #pragma mark - UINavigationBarDelegate
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
-    [[self delegate] toolboxHeightChanged:[self contentHeight]];
+    [self.delegate toolboxHeightChanged:[self contentHeight]];
     
     if ([item isEqual:[self navigationItemFontSelector]]) {
     } else if ([item isEqual:[self navigationItemLayout]]) {
@@ -173,7 +173,7 @@
 }
 
 - (void)navigationBar:(UINavigationBar *)navigationBar didPushItem:(UINavigationItem *)item {
-    [[self delegate] toolboxHeightChanged:[self contentHeight]];
+    [self.delegate toolboxHeightChanged:[self contentHeight]];
 }
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {

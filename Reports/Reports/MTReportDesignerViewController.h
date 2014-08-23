@@ -39,6 +39,7 @@ typedef NS_ENUM(NSUInteger, MTDirection) {
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MAReportDocument *document;
 
+- (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
 - (IBAction)done:(id)sender;
 - (IBAction)add:(id)sender;
 

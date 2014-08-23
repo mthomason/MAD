@@ -38,15 +38,15 @@
 }
 
 - (void)delete:(id)sender {
-    [[self delegate] deleteDocumentRepresentedByCell:self];
+    [self.delegate deleteDocumentRepresentedByCell:self];
 }
 
 - (void)email:(id)sender {
-    [[self delegate] email:self];
+    [self.delegate email:self];
 }
 
 - (void)rename:(id)sender {
-    [[self delegate] rename:self];
+    [self.delegate rename:self];
 }
 
 @end

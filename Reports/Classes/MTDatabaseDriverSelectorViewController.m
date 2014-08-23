@@ -64,11 +64,11 @@ NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supporte
 }
 
 - (void)viewControllerDidFinish:(id)sender {
-    [[self delegate] viewControllerDidFinish:self];
+    [self.delegate viewControllerDidFinish:self];
 }
 
 - (void)viewControllerDidCancel:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [self.delegate viewControllerDidCancel:self];
 }
 
 @end

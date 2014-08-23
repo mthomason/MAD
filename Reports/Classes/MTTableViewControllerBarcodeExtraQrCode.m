@@ -56,7 +56,7 @@
 }
 
 - (void)updateCells {
-    BOOL autoresize = [[self delegate] barcodeQrCodeAutomaticResizing];
+    BOOL autoresize = [self.delegate barcodeQrCodeAutomaticResizing];
     UITableViewCell *cellSize = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -67,12 +67,12 @@
         [[cellError detailTextLabel] setText:automatic];
     } else {
         [cellAuto setAccessoryType:UITableViewCellAccessoryNone];
-        NSInteger initalErrorCorrecion = [[self delegate] barcodeQrCodeInitalErrorCorrection];
+        NSInteger initalErrorCorrecion = [self.delegate barcodeQrCodeInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
             [[cellError detailTextLabel] setText:automatic];
             [[cellSize detailTextLabel] setText:@"Custom"];
         }
-        NSInteger initalSize = [[self delegate] barcodeQrCodeInitalSize];
+        NSInteger initalSize = [self.delegate barcodeQrCodeInitalSize];
         if (initalSize == 0) {
             [[cellSize detailTextLabel] setText:automatic];
             [[cellError detailTextLabel] setText:@"Custom"];
@@ -106,7 +106,7 @@
             
             switch (row) {
                 case 0:
-                    [[self delegate] barcodeQrCodeDidEnableAutomaticResizing];
+                    [self.delegate barcodeQrCodeDidEnableAutomaticResizing];
                     break;
                 case 1:
                     [self setDisplayingSize:YES];
@@ -128,14 +128,14 @@
 }
 
 - (NSInteger)initalRow {
-    return [self displayingSize] ? [[self delegate] barcodeQrCodeInitalSize] : [[self delegate] barcodeQrCodeInitalErrorCorrection];
+    return [self displayingSize] ? [self.delegate barcodeQrCodeInitalSize] : [self.delegate barcodeQrCodeInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
     if ([self displayingSize]) {
-        [[self delegate] barcodeQrCodeDidSetSize:tag];
+        [self.delegate barcodeQrCodeDidSetSize:tag];
     } else {
-        [[self delegate] barcodeQrCodeDidSetErrorCorrection:tag];
+        [self.delegate barcodeQrCodeDidSetErrorCorrection:tag];
     }
     [self updateCells];
 }

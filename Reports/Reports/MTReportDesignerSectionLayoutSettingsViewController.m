@@ -84,18 +84,18 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 - (IBAction)heightChanged:(id)sender {
     double stepperValue = [self stepperValueNormalized];
     [self setHeighLabel: stepperValue];
-    [[self delegate] sectionLayoutDidUpdateHeight: stepperValue];
+    [self.delegate sectionLayoutDidUpdateHeight: stepperValue];
 }
 
 - (IBAction)numberOfRowsChanged:(id)sender {
     UIStepper *rowStepper = sender;
     NSUInteger numberOfRows = [rowStepper value];
     [self setNumberOfRowsLabel:numberOfRows];
-    [[self delegate] sectionLayoutDidUpdateNumberOfRows:numberOfRows];
+    [self.delegate sectionLayoutDidUpdateNumberOfRows:numberOfRows];
 }
 
 - (IBAction)visibilityChanged:(id)sender {
-    [[self delegate] sectionLayoutDidUpdateVisibility:[[self visibilitySwitch] isOn]];
+    [self.delegate sectionLayoutDidUpdateVisibility:[[self visibilitySwitch] isOn]];
 }
 
 #pragma mark - Helpers

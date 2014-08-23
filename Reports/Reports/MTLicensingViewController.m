@@ -284,7 +284,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish: self];
+    [self.delegate viewControllerDidFinish: self];
 }
 
 - (IBAction)licenseDesignerOneYear:(id)sender {

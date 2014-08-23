@@ -205,8 +205,8 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     [[self barcode] setInput:[self barcodeInput]];
     [[self previewViewController] update];
 
-    if ([self delegate] != nil) {
-        [[self delegate] didUpdateBarcode:[self barcode]
+    if (self.delegate != nil) {
+        [self.delegate didUpdateBarcode:[self barcode]
                              withFieldOne:[self queryField1]
                               andFieldTwo:[self queryField2]];
     }

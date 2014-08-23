@@ -74,7 +74,7 @@
 }
 
 - (void)updateCells {
-    BOOL autoresize = [[self delegate] barcodeGridMatrixAutomaticResizing];
+    BOOL autoresize = [self.delegate barcodeGridMatrixAutomaticResizing];
     UITableViewCell *cellSize = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -85,12 +85,12 @@
         [[cellError detailTextLabel] setText:automatic];
     } else {
         [cellAuto setAccessoryType:UITableViewCellAccessoryNone];
-        NSInteger initalErrorCorrecion = [[self delegate] barcodeGridMatrixInitalErrorCorrection];
+        NSInteger initalErrorCorrecion = [self.delegate barcodeGridMatrixInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
             [[cellError detailTextLabel] setText:automatic];
             [[cellSize detailTextLabel] setText:@"Custom"];
         }
-        NSInteger initalSize = [[self delegate] barcodeGridMatrixInitalSize];
+        NSInteger initalSize = [self.delegate barcodeGridMatrixInitalSize];
         if (initalSize == 0) {
             [[cellSize detailTextLabel] setText:automatic];
             [[cellError detailTextLabel] setText:@"Custom"];
@@ -125,7 +125,7 @@
             switch (row) {
                 case 0:
                     
-                    [[self delegate] barcodeGridMatrixDidEnableAutomaticResizing];
+                    [self.delegate barcodeGridMatrixDidEnableAutomaticResizing];
                     break;
                     
                 case 1:
@@ -148,14 +148,14 @@
 }
 
 - (NSInteger)initalRow {
-    return [self displayingSize] ? [[self delegate] barcodeGridMatrixInitalSize] : [[self delegate] barcodeGridMatrixInitalErrorCorrection];
+    return [self displayingSize] ? [self.delegate barcodeGridMatrixInitalSize] : [self.delegate barcodeGridMatrixInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
     if ([self displayingSize]) {
-        [[self delegate] barcodeGridMatrixDidSetSize:tag];
+        [self.delegate barcodeGridMatrixDidSetSize:tag];
     } else {
-        [[self delegate] barcodeGridMatrixDidSetErrorCorrection:tag];
+        [self.delegate barcodeGridMatrixDidSetErrorCorrection:tag];
     }
     [self updateCells];
 }

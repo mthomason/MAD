@@ -73,7 +73,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self checkLinkType:[[self delegate] initalLinktype]];
+    [self checkLinkType:[self.delegate initalLinktype]];
 }
 
 - (void)checkLinkType:(MNSLinkType)type {
@@ -205,7 +205,7 @@
     }
     if ((NSInteger)linktype != NSNotFound) {
         [self checkLinkType:linktype];
-        [[self delegate] viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype
+        [self.delegate viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype
                                                                      from: self.document];
     }
 

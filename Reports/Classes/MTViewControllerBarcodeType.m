@@ -91,7 +91,7 @@
     if ([keys count] > 0) {
         NSNumber *key = keys[0];
         MTBarcodeType resultType = [key integerValue];
-        [[self delegate] didChangeBarcodeType:resultType];
+        [self.delegate didChangeBarcodeType:resultType];
     }
 }
 

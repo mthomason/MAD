@@ -48,7 +48,7 @@
 
 - (void)drawRect:(CGRect)rect {
     if ([self drawBlankPage] == NO) {
-        [[self delegate] drawView:self inRect:rect];
+        [self.delegate drawView:self inRect:rect];
     }
 }
 

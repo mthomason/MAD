@@ -60,7 +60,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
 #pragma mark - Actions
 
 - (void)cancel:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [self.delegate viewControllerDidCancel:self];
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {

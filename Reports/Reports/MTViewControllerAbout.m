@@ -27,11 +27,11 @@
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [self.delegate viewControllerDidCancel:self];
 }
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [self.delegate viewControllerDidCancel:self];
 }
 
 - (IBAction)composeEmail:(id)sender {
@@ -60,7 +60,7 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [segue.destinationViewController setDelegate:[self delegate]];
+    [segue.destinationViewController setDelegate:self.delegate];
 }
 
 @end

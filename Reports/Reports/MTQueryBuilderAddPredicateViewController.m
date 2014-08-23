@@ -101,12 +101,12 @@
 - (IBAction)save:(id)sender {
     
     RptqQueryPredicate *queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:self.fieldLeft leftValue:self.leftValue comparsonOperator:self.predicateOperator rightField:self.fieldRight rightValue:self.rightValue forManagedObjectContext:self.document.managedObjectContext];
-    [[self delegate] uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
+    [self.delegate uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] viewControllerDidCancel: self];
+    [self.delegate viewControllerDidCancel: self];
 }
 
 #pragma mark - Delegates

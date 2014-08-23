@@ -107,7 +107,7 @@
 }
 
 - (void)drawView:(id)sender inRect:(CGRect)rect {
-    [[self delegate] drawPage:self.pageNumber - 1
+    [self.delegate drawPage:self.pageNumber - 1
                        inRect:rect];
 }
 

@@ -86,7 +86,7 @@
         default:
             break;
     }
-    [[self delegate] resizeHandle:self didMoveToPoint:pointAfterMove];
+    [self.delegate resizeHandle:self didMoveToPoint:pointAfterMove];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

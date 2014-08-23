@@ -470,7 +470,7 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 
                 int numberOfColumns = sqlite3_column_count(statement);
                 
-                MTDataTable *dataTable = [[self delegate] dataTableForQuery:query];
+                MTDataTable *dataTable = [self.delegate dataTableForQuery:query];
                 [dataTable removeAllObjects];
                 
                 NSUInteger rowCounter = 0;

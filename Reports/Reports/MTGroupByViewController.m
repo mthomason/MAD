@@ -130,15 +130,15 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         
         case 0:
             [self setGroupType:MTAggregateGroupByTypePage];
-            if ([self delegate] != nil) {
-                [[self delegate] didSelectGroupByPage];
+            if (self.delegate != nil) {
+                [self.delegate didSelectGroupByPage];
             }
             break;
         
         case 1:
             [self setGroupType:MTAggregateGroupByTypeReport];
-            if ([self delegate] != nil) {
-                [[self delegate] didSelectGroupByReport];
+            if (self.delegate != nil) {
+                [self.delegate didSelectGroupByReport];
             }
             break;
         
@@ -146,8 +146,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             NSUInteger groupNumber = [indexPath row] - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
-            if ([self delegate] != nil) {
-                [[self delegate] didSelectGroupBySectionNumber: groupNumber];
+            if (self.delegate != nil) {
+                [self.delegate didSelectGroupBySectionNumber: groupNumber];
             }
             break;
         }

@@ -56,7 +56,7 @@
     UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:[self pdfurl]];
     [c setDelegate:self];
     [self setInteractionController:c];
-    [[self delegate] prepareForInteractionController:c withCompletionHandler:^(BOOL success) {
+    [self.delegate prepareForInteractionController:c withCompletionHandler:^(BOOL success) {
         if (success) {
             [c presentPreviewAnimated:YES];
         }
@@ -68,7 +68,7 @@
 }
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
-    UIViewController *result = [[self delegate] previewViewControllerForInteractionController:controller];
+    UIViewController *result = [self.delegate previewViewControllerForInteractionController:controller];
     return result;
 }
 

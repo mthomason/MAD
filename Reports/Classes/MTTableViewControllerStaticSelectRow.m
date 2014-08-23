@@ -16,7 +16,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSInteger row = [[self delegate] initalRow];
+    NSInteger row = [self.delegate initalRow];
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 }
@@ -33,7 +33,7 @@
         [c setAccessoryType:UITableViewCellAccessoryNone];
     }
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-    [[self delegate] didSelectTag:[cell tag]];
+    [self.delegate didSelectTag:[cell tag]];
 }
 
 @end

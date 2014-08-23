@@ -28,7 +28,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSInteger row = [[self delegate] initalEncodingMode];
+    NSInteger row = [self.delegate initalEncodingMode];
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 }
@@ -56,7 +56,7 @@
             MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
             [self setDataTableSampleData:dt];
             NSArray *allObjects = [[self dataTableSampleData] allObjects];
-            [[self delegate] barcodeMaxicodeDidChooseSampleData:allObjects];
+            [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
             [[self tableView] reloadData];
         }
     }];
@@ -87,7 +87,7 @@
             [c setAccessoryType:UITableViewCellAccessoryNone];
         }
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [[self delegate] barcodeMaxicodeDidSetEncodingMode:[cell tag]];
+        [self.delegate barcodeMaxicodeDidSetEncodingMode:[cell tag]];
     }
 }
 

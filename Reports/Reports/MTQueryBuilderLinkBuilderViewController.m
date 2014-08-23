@@ -100,14 +100,14 @@
 - (IBAction)save:(id)sender {
     if ([self firstField] && [self secondField]) {
         RptqQueryLinks *queryLink = [RptqQueryLinks queryLinkFactoryWithLeftField:[self firstField] rightField:[self secondField] joinType:[self linkType]];
-        [[self delegate] viewControllerSchemaAddLinkDidAdd:queryLink];
+        [self.delegate viewControllerSchemaAddLinkDidAdd:queryLink];
     } else {
         [self cancel:sender];
     }
 }
 
 - (IBAction)cancel:(id)sender {
-    [[self delegate] viewControllerDidCancel:self];
+    [self.delegate viewControllerDidCancel:self];
 }
 
 #pragma mark - Delegate callbacks

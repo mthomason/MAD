@@ -160,10 +160,10 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     [self updateFunctionType];
     [self updateGroupType];
     
-    if ([self delegate]) {
+    if (self.delegate) {
 
         NSNumber *groupNumber = @([self groupTypeSectionNumber]);
-        [[self delegate] didUpdateggregateFunctionWithType:[self aggregateFunctionType]
+        [self.delegate didUpdateggregateFunctionWithType:[self aggregateFunctionType]
                                                  inputType:MTAggregateFunctionInputTypeField
                                                inputObject:[self fieldObject]
                                                  groupType:[self aggregateGroupByType]

@@ -48,17 +48,17 @@
 
 - (void)setCenter:(CGPoint)center {
     [[self view] setCenter:center];
-    [[self delegate] didMoveFieldRect:self animated:NO];
+    [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (void)setBounds:(CGRect)bounds {
     [[self view] setBounds:bounds];
-    [[self delegate] didMoveFieldRect:self animated:NO];
+    [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (void)setTransform:(CGAffineTransform)transform {
     [[self view] setTransform:transform];
-    [[self delegate] didMoveFieldRect:self animated:NO];
+    [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (CGPoint)center {
@@ -214,7 +214,7 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [[self delegate] didMoveFieldRect:self animated:NO];
+    [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 @end

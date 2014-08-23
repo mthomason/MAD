@@ -106,8 +106,8 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
     [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
     [self setSelectedFunctionType: [tableViewCell tag]];
     
-    if ([self delegate] != nil) {
-        [[self delegate] didSelectFunction: [self selectedFunctionType]];
+    if (self.delegate != nil) {
+        [self.delegate didSelectFunction: [self selectedFunctionType]];
     }
 
 }

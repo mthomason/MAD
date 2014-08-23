@@ -84,7 +84,7 @@ typedef struct _ColumnWidth {
         }
         ColumnWidth columnWidth;
         columnWidth.originX = lastColumnWidth.originX + lastColumnWidth.width;
-        columnWidth.width = [[self delegate] collectionView:[self collectionView] layout:self widthRequiredColumn:i];
+        columnWidth.width = [self.delegate collectionView:[self collectionView] layout:self widthRequiredColumn:i];
         NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];;
         [columnWidths addObject:columnWidthEncoding];
     }

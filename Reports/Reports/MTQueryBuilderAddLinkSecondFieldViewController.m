@@ -50,7 +50,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     RptqQueryField *field = [[self fetchedResultsController] objectAtIndexPath: indexPath];
-    [[self delegate] viewControllerSchemaAddLinkDidSecondFieldFinishWith: field];
+    [self.delegate viewControllerSchemaAddLinkDidSecondFieldFinishWith: field];
 }
 
 @end

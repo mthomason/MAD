@@ -66,7 +66,7 @@
 }
 
 - (void)updateCells {
-    BOOL autoresize = [[self delegate] barcodeAztecAutomaticResizing];
+    BOOL autoresize = [self.delegate barcodeAztecAutomaticResizing];
     UITableViewCell *cellSize = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -77,12 +77,12 @@
         [[cellError detailTextLabel] setText:automatic];
     } else {
         [cellAuto setAccessoryType:UITableViewCellAccessoryNone];
-        NSInteger initalErrorCorrecion = [[self delegate] barcodeAztecInitalErrorCorrection];
+        NSInteger initalErrorCorrecion = [self.delegate barcodeAztecInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
             [[cellError detailTextLabel] setText:automatic];
             [[cellSize detailTextLabel] setText:@"Custom"];
         }
-        NSInteger initalSize = [[self delegate] barcodeAztecInitalSize];
+        NSInteger initalSize = [self.delegate barcodeAztecInitalSize];
         if (initalSize == 0) {
             [[cellSize detailTextLabel] setText:automatic];
             [[cellError detailTextLabel] setText:@"Custom"];
@@ -118,7 +118,7 @@
             switch (row) {
                 case 0:
 
-                    [[self delegate] barcodeAztecDidEnableAutomaticResizing];
+                    [self.delegate barcodeAztecDidEnableAutomaticResizing];
                     break;
                     
                 case 1:
@@ -141,14 +141,14 @@
 }
 
 - (NSInteger)initalRow {
-    return [self displayingSize] ? [[self delegate] barcodeAztecInitalSize] : [[self delegate] barcodeAztecInitalErrorCorrection];
+    return [self displayingSize] ? [self.delegate barcodeAztecInitalSize] : [self.delegate barcodeAztecInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
     if ([self displayingSize]) {
-        [[self delegate] barcodeAztecDidSetSize:tag];
+        [self.delegate barcodeAztecDidSetSize:tag];
     } else {
-        [[self delegate] barcodeAztecDidSetErrorCorrection:tag];
+        [self.delegate barcodeAztecDidSetErrorCorrection:tag];
     }
     [self updateCells];
 }

@@ -60,7 +60,7 @@
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     BOOL result = NO;
     
-    MTDocumentObjectType objectType = [[self delegate] objectTypeRepresentedByCell:self];
+    MTDocumentObjectType objectType = [self.delegate objectTypeRepresentedByCell:self];
 
     BOOL deleteAction = action == @selector(delete:);
     BOOL editAction = action == @selector(edit:);
@@ -104,15 +104,15 @@
 }
 
 - (void)format:(id)sender {
-    [[self delegate] formatDocumentObjectRepresentedByCell:self];
+    [self.delegate formatDocumentObjectRepresentedByCell:self];
 }
 
 - (void)edit:(id)sender {
-    [[self delegate] editDocumentObjectRepresentedByCell:self];
+    [self.delegate editDocumentObjectRepresentedByCell:self];
 }
 
 - (void)delete:(id)sender {
-    [[self delegate] deleteDocumentObjectRepresentedByCell:self];
+    [self.delegate deleteDocumentObjectRepresentedByCell:self];
 }
 
 @end

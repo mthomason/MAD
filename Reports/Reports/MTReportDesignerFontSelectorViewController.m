@@ -68,27 +68,27 @@
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
 
     if ([cell isEqual:[self tableViewCellFontAmericanTypewriter]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyAmericanTypewriter];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyAmericanTypewriter];
     } else if ([cell isEqual:[self tableViewCellFontArial]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyArial];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyArial];
     } else if ([cell isEqual:[self tableViewCellFontCourierNew]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourierNew];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourierNew];
     } else if ([cell isEqual:[self tableViewCellFontCourier]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourier];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyCourier];
     } else if ([cell isEqual:[self tableViewCellFontGeorgia]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyGeorgia];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyGeorgia];
     } else if ([cell isEqual:[self tableViewCellFontHelvetica]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelvetica];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelvetica];
     } else if ([cell isEqual:[self tableViewCellFontHelveticaNeue]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelveticaNeue];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyHelveticaNeue];
     } else if ([cell isEqual:[self tableViewCellFontTimesNewRoman]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTimesNewRoman];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTimesNewRoman];
     } else if ([cell isEqual:[self tableViewCellFontTrebuchet]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTrebuchet];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyTrebuchet];
     } else if ([cell isEqual:[self tableViewCellFontVerdana]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyVerdana];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyVerdana];
     } else if ([cell isEqual:[self tableViewCellFontZapfino]]) {
-        [[self delegate] uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyZapfino];
+        [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyZapfino];
     }
     
     if ([cell accessoryType] != UITableViewCellAccessoryCheckmark) {

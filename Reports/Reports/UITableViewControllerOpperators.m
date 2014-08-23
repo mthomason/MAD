@@ -25,17 +25,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorEqual]]) {
-        [[self delegate] uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorEqual];
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorEqual];
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorNotEqual]]) {
-        [[self delegate] uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorNotEqual];
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorNotEqual];
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorGreaterThan]]) {
-        [[self delegate] uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorGreaterThan];
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorGreaterThan];
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorGreaterThanOrEqualTo]]) {
-        [[self delegate] uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorGreaterThanOrEqualTo];
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorGreaterThanOrEqualTo];
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorLessThan]]) {
-        [[self delegate] uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorLessThan];
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorLessThan];
     } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:MNSPredicateOperatorReuseIds[MNSPredicateOperatorLessThanOrEqualTo]]) {
-        [[self delegate] uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorLessThanOrEqualTo];
+        [self.delegate uITableViewControllerOpperatorsDidSelectOperator: MNSPredicateOperatorLessThanOrEqualTo];
     }
 }
 

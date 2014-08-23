@@ -24,7 +24,7 @@
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self delegate] viewControllerDidFinish: self];
+    [self.delegate viewControllerDidFinish: self];
 }
 
 #pragma mark -
@@ -50,7 +50,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     RptqDatabaseSchemaTable *tablea = [[self fetchedResultsController] objectAtIndexPath: indexPath];
-    [[self delegate] viewControllerSchemaAddTableDidSelectTable: tablea.objectID];
+    [self.delegate viewControllerSchemaAddTableDidSelectTable: tablea.objectID];
 }
 
 @end

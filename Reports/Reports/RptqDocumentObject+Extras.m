@@ -239,14 +239,14 @@ static NSNumberFormatter *currencyNumberFormatter;
 #pragma mark - Member
 
 - (MTDocumentObjectType)getType {
-    return [[self type] integerValue];
+    return [self.type integerValue];
 }
 
 - (NSString *)designerRepresentationText {
 
     NSString *result = nil;
     
-    switch ([[self type] integerValue]) {
+    switch ([self getType]) {
     
         case MTDocumentObjectTypeAggregate: {
             result = [[self isAggregate] designerRepresentationText];

@@ -66,7 +66,7 @@
 }
 
 - (void)updateCells {
-    BOOL autoresize = [[self delegate] barcodeMicroQrCodeAutomaticResizing];
+    BOOL autoresize = [self.delegate barcodeMicroQrCodeAutomaticResizing];
     UITableViewCell *cellSize = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     UITableViewCell *cellError = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     UITableViewCell *cellAuto = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -77,12 +77,12 @@
         [[cellError detailTextLabel] setText:automatic];
     } else {
         [cellAuto setAccessoryType:UITableViewCellAccessoryNone];
-        NSInteger initalErrorCorrecion = [[self delegate] barcodeMicroQrCodeInitalErrorCorrection];
+        NSInteger initalErrorCorrecion = [self.delegate barcodeMicroQrCodeInitalErrorCorrection];
         if (initalErrorCorrecion == 0) {
             [[cellError detailTextLabel] setText:automatic];
             [[cellSize detailTextLabel] setText:@"Custom"];
         }
-        NSInteger initalSize = [[self delegate] barcodeMicroQrCodeInitalSize];
+        NSInteger initalSize = [self.delegate barcodeMicroQrCodeInitalSize];
         if (initalSize == 0) {
             [[cellSize detailTextLabel] setText:automatic];
             [[cellError detailTextLabel] setText:@"Custom"];
@@ -118,7 +118,7 @@
             switch (row) {
                 case 0:
                     
-                    [[self delegate] barcodeMicroQrCodeDidEnableAutomaticResizing];
+                    [self.delegate barcodeMicroQrCodeDidEnableAutomaticResizing];
                     break;
                     
                 case 1:
@@ -141,14 +141,14 @@
 }
 
 - (NSInteger)initalRow {
-    return [self displayingSize] ? [[self delegate] barcodeMicroQrCodeInitalSize] : [[self delegate] barcodeMicroQrCodeInitalErrorCorrection];
+    return [self displayingSize] ? [self.delegate barcodeMicroQrCodeInitalSize] : [self.delegate barcodeMicroQrCodeInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
     if ([self displayingSize]) {
-        [[self delegate] barcodeMicroQrCodeDidSetSize:tag];
+        [self.delegate barcodeMicroQrCodeDidSetSize:tag];
     } else {
-        [[self delegate] barcodeMicroQrCodeDidSetErrorCorrection:tag];
+        [self.delegate barcodeMicroQrCodeDidSetErrorCorrection:tag];
     }
     [self updateCells];
 }

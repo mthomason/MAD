@@ -885,7 +885,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[tableView cellForRowAtIndexPath:indexPath] isEqual:[self fontLabelTableViewCell]]) {
-        [[self delegate] fontSettingsTableViewControllerDidSelectFontList: self];
+        [self.delegate fontSettingsTableViewControllerDidSelectFontList: self];
     }
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
