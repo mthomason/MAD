@@ -11,5 +11,6 @@
 @interface UIScrollView (Extras)
 
 - (CGRect)visableRect;
+- (void)positionForRectOfInterest:(CGRect)rectOfInterest withAdjustment:(CGFloat)adjustment;
 
 @end

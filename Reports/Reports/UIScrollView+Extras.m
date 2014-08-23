@@ -18,4 +18,22 @@
     return CGRectAdjustForScale(visibleRect, self.zoomScale);
 }
 
+- (void)positionForRectOfInterest:(CGRect)rectOfInterest withAdjustment:(CGFloat)adjustment {
+    
+    CGRect visableRect = [self visableRect];
+    CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
+                                            visableRect.origin.y + adjustment,
+                                            CGFLOAT_MAX,
+                                            visableRect.size.height);
+    CGRect rectOfInterestAdjusted = CGRectMake(rectOfInterest.origin.x,
+                                               rectOfInterest.origin.y + adjustment,
+                                               rectOfInterest.size.width,
+                                               rectOfInterest.size.height);
+    if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
+        CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest, visableRect);
+        contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.zoomScale);
+        [self setContentOffset:contentOffset animated:YES];
+    }
+}
+
 @end
