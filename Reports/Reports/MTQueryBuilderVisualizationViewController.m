@@ -634,8 +634,8 @@ typedef void(^MTBlockResultVoid)(void);
         RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID:controller.tableObjectId
                                                        managedObjectContext:self.document.managedObjectContext];
         for (RptqQueryLinks *queryLink in [[queryTable inQuery] hasQueryLinks]) {
-            RptqQueryTable *leftTable = [[queryLink hasLeftField] inQueryTable];
-            RptqQueryTable *rightTable = [[queryLink hasRightField] inQueryTable];
+            RptqQueryTable *leftTable = [queryLink.hasLeftField inQueryTable];
+            RptqQueryTable *rightTable = [queryLink.hasRightField inQueryTable];
             if ([leftTable isEqualTo:queryTable] ||
                 [rightTable isEqualTo:queryTable]) {
                 [self layoutQueryLinkViewController:queryLink animated:animated];
@@ -680,7 +680,7 @@ typedef void(^MTBlockResultVoid)(void);
     for (RptqQueryLinks *queryLink in hasQueryLinks) {
         
         RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
-        RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
+        RptqQueryTable *tableDestination =   [queryLink.hasRightField inQueryTable];
         
         id objectOrigin =               [tableOrigin objectID];
         id objectDestination =          [tableDestination objectID];

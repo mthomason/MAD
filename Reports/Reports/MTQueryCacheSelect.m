@@ -89,7 +89,7 @@
         for (RptqQueryLinks *queryLink in hasQueryLinks) {
             
             RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
-            RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
+            RptqQueryTable *tableDestination =   [queryLink.hasRightField inQueryTable];
             
             id objectOrigin =               [tableOrigin objectID];
             id objectDestination =          [tableDestination objectID];

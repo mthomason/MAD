@@ -101,7 +101,7 @@
         for (RptqQueryLinks *queryLink in hasQueryLinks) {
             
             RptqQueryTable *tableOrigin =        [[queryLink  hasLeftField] inQueryTable];
-            RptqQueryTable *tableDestination =   [[queryLink hasRightField] inQueryTable];
+            RptqQueryTable *tableDestination =   [queryLink.hasRightField inQueryTable];
             
             id objectOrigin =               [tableOrigin objectID];
             id objectDestination =          [tableDestination objectID];
@@ -338,11 +338,11 @@
     }
     
     for (RptqQueryLinks *queryLink in queryLinks) {
-        RptqQueryField *queryFieldLeft = [queryLink hasLeftField];
+        RptqQueryField *queryFieldLeft = queryLink.hasLeftField;
         if (queryFieldLeft != nil) {
             [queryFields addObject:queryFieldLeft];
         }
-        RptqQueryField *queryFieldRight = [queryLink hasRightField];
+        RptqQueryField *queryFieldRight = queryLink.hasRightField;
         if (queryFieldRight != nil) {
             [queryFields addObject:queryFieldRight];
         }
@@ -465,7 +465,7 @@
                                 NSString *sqlForLink = [RptqQueryLinks SqlForLinkType:[[queryLink jointypeenum] integerValue]];
                                 [result appendFormat:@" %@ ", sqlForLink];
                                 
-                                RptqQueryField *rightField = [queryLink hasRightField];
+                                RptqQueryField *rightField = queryLink.hasRightField;
                                 RptqQueryTable *rightTable = [rightField inQueryTable];
                                 NSString *ogTableName = [[rightTable databaseSchemaTable] name];
                                 NSString *safeOgTableName = [[[self dataDelegate] database] safeIdentifier:ogTableName];
@@ -481,7 +481,7 @@
                                 
                                 [result appendString:@"ON "];
                                 
-                                RptqQueryField *leftField = [queryLink hasLeftField];
+                                RptqQueryField *leftField = queryLink.hasLeftField;
                                 if (leftField) {
                                     NSString *s = [[[self dataDelegate] database] safeQueryField:leftField];
                                     [result appendString: s];

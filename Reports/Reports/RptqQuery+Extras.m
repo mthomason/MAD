@@ -124,7 +124,7 @@
 }
 
 - (NSUInteger)numberOfTables {
-    return [[self hasQueryTables] count];
+    return self.hasQueryTables.count;
 }
 
 #pragma mark - MTProtocolCompare
@@ -135,7 +135,7 @@
         result = YES;
     } else {
         RptqQuery *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        result = [self.identifier isEqualToNumber:s.identifier];
     }
     return result;
 }
