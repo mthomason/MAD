@@ -605,7 +605,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger section = [indexPath section];
+    NSUInteger section = indexPath.section;
     MTQuerySections sectionType = [self tableSectionTypeForIndexPathSection: section];
 	return (sectionType == MTQuerySectionsTables ||
             sectionType == MTQuerySectionsGroups ||
@@ -614,13 +614,13 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return ([self tableSectionTypeForIndexPathSection:[indexPath section]] == MTQuerySectionsGroups) ? YES : NO;
+    return ([self tableSectionTypeForIndexPathSection:indexPath.section] == MTQuerySectionsGroups) ? YES : NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
                                             forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:[indexPath section]];
+    MTQuerySections querySection = [self tableSectionTypeForIndexPathSection:indexPath.section];
 
     switch (editingStyle) {
 
@@ -672,8 +672,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     UITableViewCell *result = nil;
 
-    NSInteger row = [indexPath row];
-    MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
+    NSInteger row = indexPath.row;
+    MTQuerySections section = [self tableSectionTypeForIndexPathSection: indexPath.section];
 
     switch (section) {
 
@@ -921,7 +921,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([self tableSectionTypeForIndexPathSection: [indexPath section]] == MTQuerySectionsTables) {
+    if ([self tableSectionTypeForIndexPathSection: indexPath.section] == MTQuerySectionsTables) {
         [self displayTableSampleDataForIndexPath:indexPath];
     }
 }
@@ -940,9 +940,9 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat result = MNSTableViewCellHeightDefault;
-    MTQuerySections section = [self tableSectionTypeForIndexPathSection: [indexPath section]];
+    MTQuerySections section = [self tableSectionTypeForIndexPathSection: indexPath.section];
     if (section == MTQuerySectionsSql) {
-        result = [indexPath row] == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
+        result = indexPath.row == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
     } else {
         NSDictionary *datamodel = [self datamodel];
         NSDictionary *tableMetaHeight = datamodel[MTTableSectionRowHeightKey];
@@ -1043,7 +1043,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     for (NSNumber *section in sections) {
         MTQuerySections updateSection = [section integerValue];
         
-        NSIndexPath *path = [NSIndexPath indexPathForRow: [indexPath row]
+        NSIndexPath *path = [NSIndexPath indexPathForRow: indexPath.row
                                                inSection: updateSection];
         if (path) {
             if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
@@ -1497,7 +1497,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
-    RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: [NSIndexPath indexPathForRow: [indexPath row] inSection: 0]];
+    RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: [NSIndexPath indexPathForRow: indexPath.row inSection: 0]];
     MTTableController *tableController = [self tableControllerForTable:table];
     [[self navigationController] pushViewController:tableController animated:YES];
 }
@@ -1580,7 +1580,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                               inTableView:(UITableView *)tableView
                            numberOfTables:(NSInteger)numberOfTables
                                 inContext:(NSManagedObjectContext *)context {
-    
     
     NSInteger numberOfRowsInSection = [tableView numberOfRowsInSection:section];
     NSMutableArray *cellsToDelete = [[NSMutableArray alloc] init];
@@ -1775,7 +1774,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)deleteQueryGroupFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     RptqDocument *document = [self.document activeDocumentModel];
-    [[document defaultQuery] deleteQueryGroupAtIndex:[indexPath row]];
+    [[document defaultQuery] deleteQueryGroupAtIndex:indexPath.row];
 }
 
 - (void)deleteQueryPredicateFromTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {

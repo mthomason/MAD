@@ -1396,8 +1396,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                   layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
+    NSInteger row = indexPath.row;
+    NSInteger section = indexPath.section;
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                             inManagedObjectContext: self.document.managedObjectContext];
     
@@ -1421,15 +1421,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
                                                                             inManagedObjectContext:self.document.managedObjectContext];
-    NSOrderedSet *objects = [[documentSection hasRows][[indexPath section]] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][indexPath.section] hasObjects];
     NSString *resuseId = [self collectionViewReuseIdentifiers][[documentSection identifier]];
     
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
     [cell setDelegate:self];
-    if ([objects count] > [indexPath row]) {
+    if ([objects count] > indexPath.row) {
         
-        RptqDocumentObject *documentObject = objects[[indexPath row]];
+        RptqDocumentObject *documentObject = objects[indexPath.row];
     
         CGSize documentObjectSize = [documentObject size];
         CGRect cellFrame = CGRectMake(CGPointZero.x, CGPointZero.y, documentObjectSize.width, documentObjectSize.height);
@@ -1550,11 +1550,11 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-    NSInteger row = [indexPath row];
+    NSInteger row = indexPath.row;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: collectionView.objectIdTag
                                                                     inManagedObjectContext: self.document.managedObjectContext];
-    NSOrderedSet *objects = [[documentSection hasRows][[indexPath section]] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][indexPath.section] hasObjects];
     
     if ([objects count] > row) {
         RptqDocumentObject *documentObject = objects[row];
@@ -1588,6 +1588,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 #pragma mark - MUIViewControllerDelegate
 
 - (void)viewControllerDidFinish:(id)sender {
+    
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [self.designerScrollView setZoomScale:1.0000f animated:NO];
         __weak MTReportDesignerViewController *reportDesigner = self;
@@ -1596,6 +1597,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [[reportDesigner designerContentView] setNeedsLayout];
             [[reportDesigner designerContentView] setNeedsDisplay];
         }];
+        
     } else if ([sender isKindOfClass:[MTReportViewerController class]]) {
         if ([UIDevice isPad]) {
             [self dismissViewControllerAnimated:YES completion:^{}];
@@ -1736,10 +1738,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
                                                                             inManagedObjectContext:self.document.managedObjectContext];
     
-    NSOrderedSet *objects = [[documentSection hasRows][[indexPath section]] hasObjects];
+    NSOrderedSet *objects = [[documentSection hasRows][indexPath.section] hasObjects];
     NSUInteger dropIndex = 0;
-    if ([objects count] > [indexPath row]) {
-        RptqDocumentObject *documentObject = objects[[indexPath row]];
+    if ([objects count] > indexPath.row) {
+        RptqDocumentObject *documentObject = objects[indexPath.row];
         NSUInteger dropIndex = [documentSection nextDropIndexForSection];
         [documentObject setDropIndex:@(dropIndex)];
         NSError *error = nil;
@@ -1753,8 +1755,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
           setDropPoint:(CGPoint)dropPoint
     forItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
+    NSInteger row = indexPath.row;
+    NSInteger section = indexPath.section;
     
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                             inManagedObjectContext: self.document.managedObjectContext];
@@ -2488,13 +2490,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [detailSection objectIdTag]
                                                                             inManagedObjectContext: [self.document managedObjectContext]];
-            [documentSection setHeight:@([detailSection intrinsicContentSize].height)];
-            
-            [UIView animateWithDuration:0.30000f animations:^{
-                [[reportDesigner designerContentView] setNeedsUpdateConstraints];
-            }];
-            [self.document saveContext];
-            [self.document quickSave];
+            documentSection.height = @([detailSection intrinsicContentSize].height);
+            [reportDesigner.designerContentView setNeedsUpdateConstraints];
+            [reportDesigner.document saveContext];
+            [reportDesigner.document quickSave];
         }
         
     }];

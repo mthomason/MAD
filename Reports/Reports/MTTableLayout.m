@@ -117,10 +117,10 @@ typedef struct _ColumnWidth {
 }
 
 - (NSUInteger)columnForIndexPath:(NSIndexPath *)indexPath {
-    return [indexPath row] % [self columnCount];
+    return indexPath.row % [self columnCount];
 }
 - (NSUInteger)rowForIndexPath:(NSIndexPath *)indexPath {
-    return [indexPath row] / [self columnCount];
+    return indexPath.row / [self columnCount];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {

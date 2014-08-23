@@ -242,7 +242,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if ([indexPath row] == 1 && [indexPath section] == 0) {
+    if (indexPath.row == 1 && indexPath.section == 0) {
         
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId

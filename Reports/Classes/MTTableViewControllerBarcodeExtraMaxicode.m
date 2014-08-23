@@ -80,7 +80,7 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if ([indexPath section] == 1) {
+    if (indexPath.section == 1) {
         NSInteger numberOfRows = [tableView numberOfRowsInSection:1];
         for (NSInteger i = 0; i < numberOfRows; i++) {
             UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];

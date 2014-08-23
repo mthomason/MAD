@@ -271,9 +271,9 @@
     //NSString *displayText = nil;
     UITableViewCell *cell = nil;
     MTBarcode *barcode = [self.delegate barcodeToDisplay];
-    NSInteger section = [indexPath section];
+    NSInteger section = indexPath.section;
     if (section == [self tableViewSectionDefination]) {
-        switch ([indexPath row]) {
+        switch (indexPath.row) {
             case 0: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeData forIndexPath:indexPath];
                 
@@ -324,7 +324,7 @@
                 break;
         }
     } else if (section == [self tableViewSectionRendering]) {
-        switch ([indexPath row]) {
+        switch (indexPath.row) {
             case 0: {
                 BOOL humanReadable = [barcode humanReadable];
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeShowHumanReadableText forIndexPath:indexPath];
@@ -369,7 +369,7 @@
     } else if (section == [self tableViewSectionBorder]) {
         MTBarcodeBorderStyle borderStyle = [barcode borderStyle];
         
-        switch ([indexPath row]) {
+        switch (indexPath.row) {
             case 0: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcodeAppearanceBorderNone forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = borderStyle == MTBarcodeBorderStyleNone ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
@@ -434,7 +434,7 @@
                 break;
         }
     } else if (section == [self tableViewSection2dComponent]) {
-        switch ([indexPath row]) {
+        switch (indexPath.row) {
             case 0: {
                 cell = [tableView dequeueReusableCellWithIdentifier:MTIdentifierTvcBarcode2dComponentEnabled forIndexPath:indexPath];
                 UITableViewCellAccessoryType accessory = [barcode has2dComponentEnabled] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
@@ -506,8 +506,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
+    NSInteger row = indexPath.row;
+    NSInteger section = indexPath.section;
     if (section == [self tableViewSectionDefination]) {
         switch (row) {
             case 2: {

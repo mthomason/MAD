@@ -129,7 +129,7 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *rectsForSection = [self itemAttributesBySection][[indexPath section]];
+    NSArray *rectsForSection = [self itemAttributesBySection][indexPath.section];
     UICollectionViewLayoutAttributes *layoutAttributes = rectsForSection[[indexPath item]];
 
     return layoutAttributes;
@@ -137,14 +137,14 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewLayoutAttributes *layoutAttributes = [self decorationAttributesBySection][[indexPath section]];
+    UICollectionViewLayoutAttributes *layoutAttributes = [self decorationAttributesBySection][indexPath.section];
     [layoutAttributes setFrame:CGRectMake(layoutAttributes.frame.origin.x, layoutAttributes.frame.origin.y, self.collectionView.contentSize.width, layoutAttributes.frame.size.height)];
     return  layoutAttributes;
 
 }
 
 - (UICollectionViewLayoutAttributes *)invalidatedLayoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *rectsForSection = [self invalidatedLayoutArray][[indexPath section]];
+    NSArray *rectsForSection = [self invalidatedLayoutArray][indexPath.section];
     UICollectionViewLayoutAttributes *layoutAttributes = rectsForSection[[indexPath item]];
 
     return layoutAttributes;
@@ -230,11 +230,11 @@
         
         UICollectionViewLayoutAttributes *layoutAttributes = [self layoutAttributesForItemAtIndexPath: indexPath];
         
-        if ([indexPath section] == section) {
+        if (indexPath.section == section) {
             
             if (alienCenter.x < [layoutAttributes center].x && valueSet == NO) {
                 item = [indexPath item];
-                //section = [indexPath section];
+                //section = indexPath.section;
                 valueSet = YES;
                 //break;
             }

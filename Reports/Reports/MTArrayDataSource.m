@@ -49,7 +49,7 @@
 }
 
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self itemAtIndex:[indexPath row]];
+    return [self itemAtIndex:indexPath.row];
 }
 
 - (id)itemAtIndex:(NSUInteger)index {

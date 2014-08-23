@@ -31,8 +31,8 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSInteger section = [indexPath section];
-    switch ([indexPath section]) {
+    NSInteger section = indexPath.section;
+    switch (indexPath.section) {
         case 0: {
             BOOL suppress = [self.delegate barcodeDataMatrixSuppressRectangularSymbols] == NO;
             UITableViewCell *c = [tableView cellForRowAtIndexPath:indexPath];

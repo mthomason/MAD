@@ -148,7 +148,7 @@
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
     
-    NSManagedObjectID *fieldObjectId = [self hasFieldsObjectIds][[indexPath row]];
+    NSManagedObjectID *fieldObjectId = [self hasFieldsObjectIds][indexPath.row];
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
     UILabel *detailLabel = [result detailLabel];

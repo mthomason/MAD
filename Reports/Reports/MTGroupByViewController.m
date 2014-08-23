@@ -60,7 +60,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 }
 
 - (NSIndexPath *)updatedIndexPath:(NSIndexPath *)indexPath {
-    return [NSIndexPath indexPathForRow:[indexPath row] - 2 inSection:[indexPath section]];
+    return [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
 }
 
 - (void)setGroupType:(MTAggregateGroupByType)groupType {
@@ -115,10 +115,10 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSUInteger rowCount = [tableView numberOfRowsInSection:[indexPath section]];
+    NSUInteger rowCount = [tableView numberOfRowsInSection:indexPath.section];
 
     for (NSInteger i = 0; i < rowCount; i++) {
-        NSIndexPath *cellPath = [NSIndexPath indexPathForItem:i inSection:[indexPath section]];
+        NSIndexPath *cellPath = [NSIndexPath indexPathForItem:i inSection:indexPath.section];
         UITableViewCell *tableViewCell = [[self tableView] cellForRowAtIndexPath:cellPath];
         [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
     }
@@ -126,7 +126,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     
-    switch ([indexPath row]) {
+    switch (indexPath.row) {
         
         case 0:
             [self setGroupType:MTAggregateGroupByTypePage];
@@ -143,7 +143,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             break;
         
         default: {
-            NSUInteger groupNumber = [indexPath row] - 2;
+            NSUInteger groupNumber = indexPath.row - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
             if (self.delegate != nil) {
@@ -158,7 +158,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     UITableViewCell *cell = sender;
     NSIndexPath *indexPath = [[self tableView] indexPathForCell:cell];
-    switch ([indexPath row]) {
+    switch (indexPath.row) {
             
         case 0:
             [self setGroupType:MTAggregateGroupByTypePage];
@@ -169,7 +169,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             break;
             
         default: {
-            NSUInteger groupNumber = [indexPath row] - 2;
+            NSUInteger groupNumber = indexPath.row - 2;
             [self setGroupType:MTAggregateGroupByTypeSection];
             [self setGroupTypeSectionWithNumber: groupNumber];
             break;
@@ -204,7 +204,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     static NSString *tableViewCellIdentifier = @"MTGroupByTableViewCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: tableViewCellIdentifier];
 
-    switch ([indexPath row]) {
+    switch (indexPath.row) {
 
         case 0:
             [[cell textLabel] setText:[RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage]];
@@ -228,7 +228,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
                     [NSString stringWithFormat:@"Group %d", groupLevel] :
                     [NSString stringWithFormat:@"Group %d (%@)", groupLevel, fieldNameNice];
             [[cell textLabel] setText:textLabel];
-            if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && [indexPath row] - 2 == [self aggregateGroupNumber]) {
+            if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && indexPath.row - 2 == [self aggregateGroupNumber]) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
             }
             break;

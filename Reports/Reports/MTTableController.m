@@ -226,7 +226,7 @@
            viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     NSUInteger column =[(MTTableLayout *)[collectionView collectionViewLayout] columnForIndexPath:indexPath];
     NSString *reuseId = [self reuseIdSupplementForColumn:column];
-    NSString *fieldKey = [[self query] fieldKeyForIndex:[indexPath row]];
+    NSString *fieldKey = [[self query] fieldKeyForIndex:indexPath.row];
     NSArray *components = [fieldKey componentsSeparatedByString:@"."];
     NSString *safeFieldName = [components lastObject];
     NSString *fieldName = [safeFieldName stringByReplacingOccurrencesOfString:@"\"" withString:@""];

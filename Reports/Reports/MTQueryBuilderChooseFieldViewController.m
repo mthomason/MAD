@@ -168,15 +168,16 @@
         
     }
     
-    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = (RptqDatabaseSchemaFieldSelectorManager *)[self sectionInfoArray][[indexPath section]];
+    RptqDatabaseSchemaFieldSelectorManager *fieldSelectorManager = (RptqDatabaseSchemaFieldSelectorManager *)[self sectionInfoArray][indexPath.section];
     NSSet *fields = [[fieldSelectorManager table] hasQueryFields];
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
-    NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
+    NSArray *descriptors = @[namesAccending];
+    NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:descriptors];
 
-    RptqDatabaseSchemaField *field = [fieldsArray[[indexPath row]] databaseSchemaField];
+    RptqDatabaseSchemaField *field = [fieldsArray[indexPath.row] databaseSchemaField];
     if (field) {
-        [[cell textLabel] setText: [field name]];
-        [[cell detailTextLabel] setText: [[field fieldTypeDisplay] lowercaseString]];
+        cell.textLabel.text = [field name];
+        cell.detailTextLabel.text = [field fieldTypeDisplay].lowercaseString;
     }
 
     return cell;
@@ -186,10 +187,9 @@
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
 	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][section];
     if (![sectionInfo headerView]) {
-		NSString *name = [[sectionInfo table] alias];
-        CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, [[self tableView] bounds].size.width, HEADER_HEIGHT);
+        CGRect rect = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, HEADER_HEIGHT);
         UIViewTableSectionHeaderDatabaseTable *vsht = [[UIViewTableSectionHeaderDatabaseTable alloc] initWithFrame: rect
-                                                                                                             title: name
+                                                                                                             title: sectionInfo.table.alias
                                                                                                            section: section
                                                                                                           delegate: self];
         [sectionInfo setHeaderView: vsht];
@@ -200,8 +200,8 @@
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
     
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][[indexPath section]];
-    return [[sectionInfo objectInRowHeightsAtIndex:[indexPath row]] floatValue];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][indexPath.section];
+    return [[sectionInfo objectInRowHeightsAtIndex:indexPath.row] floatValue];
 }
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
@@ -209,19 +209,20 @@
     RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
     if (queryField != nil) {
         if (self.delegate != nil) {
-            [self.delegate tableViewControllerChooseFieldDidFinish:self withField: queryField];
+            [self.delegate tableViewControllerChooseFieldDidFinish: self
+                                                         withField: queryField];
         }
     }
 }
 
 - (RptqQueryField *)queryFieldForIndexPath:(NSIndexPath *)indexPath {
     RptqQueryField *queryField = nil;
-    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][[indexPath section]];
-    if ([[[sectionInfo table] hasQueryFields] count] > [indexPath row]) {
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][indexPath.section];
+    if ([[[sectionInfo table] hasQueryFields] count] > indexPath.row) {
         NSSet *fields = [[sectionInfo table] hasQueryFields];
         NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"databaseSchemaField.name" ascending:YES];
         NSArray *fieldsArray = [fields sortedArrayUsingDescriptors:@[namesAccending]];
-        queryField = fieldsArray[[indexPath row]];
+        queryField = fieldsArray[indexPath.row];
         [self setQueryField:queryField];
     }
     return queryField;

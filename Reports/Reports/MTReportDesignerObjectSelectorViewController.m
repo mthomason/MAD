@@ -165,9 +165,9 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     UICollectionViewCell *result = nil;
     NSString *cellIdentifier = nil;
     NSUInteger tag = 0;
-    switch ([indexPath section]) {
+    switch (indexPath.section) {
         case 0: {
-            switch ([indexPath row]) {
+            switch (indexPath.row) {
                 case 1: {
                     cellIdentifier = MTIdentiferDocumentObjectLabelCollectionViewCell;
                     tag = MTDocumentObjectTypeLabelStatic;
@@ -350,7 +350,8 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             
         case MTDocumentObjectTypeLabelDynamic:
             
-            [[self objectSelectorDelegate] viewControllerDidFinish:self];
+            //[self performSegueWithIdentifier:@"MTIdentifierSeguePushSelectField" sender:<#(id)#>];
+            //[[self objectSelectorDelegate] viewControllerDidFinish:self];
             
             break;
             
@@ -449,7 +450,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     switch ([tableView tag]) {
         case MTViewTagFieldOrFormulaSelector:
 
-            switch ([indexPath row]) {
+            switch (indexPath.row) {
                 
                 case 0: {   // Group by a Field
                     
@@ -477,7 +478,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             break;
         case MTViewTagDocumentObjectNewAggregate: {
             
-            switch ([indexPath row]) {
+            switch (indexPath.row) {
 
                 case 0: {   // Aggrage Function *f(x)*
 
