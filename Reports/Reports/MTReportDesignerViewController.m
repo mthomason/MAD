@@ -192,6 +192,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditBarcode;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditImage;
 
+@property (nonatomic, strong) NSManagedObjectID *objectIdJustDisplayed;
+
 @property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
 @property (nonatomic, strong) RptqDocumentObjectAggregate *aggregateToEdit;
 
@@ -541,8 +543,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [self scrollViewDidEndZooming:nil withView:nil atScale:[self.designerScrollView zoomScale]];
         [self.designerScrollView scrollRectToVisible:[[app reportDesigner] boundsOnDisappear] animated:NO];
     }
-    self.designerContentView.backgroundColor = [UIColor greenColor];
-    self.designerScrollView.backgroundColor = [UIColor redColor];
+//    self.designerContentView.backgroundColor = [UIColor greenColor];
+//    self.designerScrollView.backgroundColor = [UIColor redColor];
     
 }
 
@@ -1468,9 +1470,19 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 
                 [elementView setFrame:cellFrame];
                 [cell setObjectIdTag:[documentObject objectID]];
-                [cell setUserInteractionEnabled:YES];
-                [[cell contentView] addSubview:elementView];
+                cell.userInteractionEnabled = YES;
+                [cell.contentView addSubview:elementView];
                 
+                if (self.objectIdJustDisplayed != nil) {
+                    if (self.objectIdJustDisplayed == documentObject.objectID) {
+                        __weak MTReportDesignerViewController *weakself = self;
+                        [elementView flash:^(BOOL finished) {
+                            if (finished) {
+                                weakself.objectIdJustDisplayed = nil;
+                            }
+                        }];
+                    }
+                }
                 __weak UICollectionViewCell *blockCell = cell;
                 __weak MTElementView *blockElementView = elementView;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -1723,7 +1735,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     return result;
 }
 
-- (NSUInteger)numberOfItemsInSection:(NSUInteger)section ofCollectionView:(UICollectionView *)collectionView {
+- (NSUInteger)numberOfItemsInSection: (NSUInteger)section
+                    ofCollectionView: (UICollectionView *)collectionView {
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[collectionView objectIdTag]
                                                                     inManagedObjectContext:self.document.managedObjectContext];
     NSOrderedSet *objects = [[documentSection hasRows][section] hasObjects];
@@ -2399,21 +2412,23 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         
         RptqDocumentObject *documentObject = [document addDocumentObject:documentObjectDefination];
         [documentObject obtainPermanentID];
+        reportDesigner.objectIdJustDisplayed = documentObject.objectID;
         
-        [detailSection insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: 0
+                                                     inSection: 0];
+        NSArray *indexPaths = @[indexPath];
+        [detailSection insertItemsAtIndexPaths:indexPaths];
         
+        [documentObject saveContext];
     } completion:^(BOOL finished) {
         
-        if (finished) {
-            [detailSection reloadData];
-            
-            RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [detailSection objectIdTag]
-                                                                            inManagedObjectContext: [self.document managedObjectContext]];
-            documentSection.height = @([detailSection intrinsicContentSize].height);
-            [reportDesigner.designerContentView setNeedsUpdateConstraints];
-            [reportDesigner.document saveContext];
-            [reportDesigner.document quickSave];
-        }
+        
+        RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: detailSection.objectIdTag
+                                                                        inManagedObjectContext: reportDesigner.document.managedObjectContext];
+        documentSection.height = @([detailSection intrinsicContentSize].height);
+        [reportDesigner.designerContentView setNeedsUpdateConstraints];
+        [reportDesigner.document saveContext];
+        [reportDesigner.document quickSave];
         
     }];
 }
@@ -2833,9 +2848,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             
             CGSize sizeContentView = [documentObject sizeContentView];
             CGRect boundsContentView = [documentObject boundsContentView]; //x1
-            elementView.drawingOptions = (NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading);
             CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize: sizeContentView
-                                                                                      options: elementView.drawingOptions
+                                                                                      options: [MTElementView drawingOptions]
                                                                                       context: nil];
             CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
             

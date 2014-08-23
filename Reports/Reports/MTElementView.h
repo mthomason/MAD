@@ -26,15 +26,18 @@
 @property (assign) BOOL displayWobbling;
 @property (assign) BOOL displayHighlighted;
 
-@property (nonatomic, assign) NSStringDrawingOptions drawingOptions;
 @property (nonatomic, strong) NSAttributedString *displayStringAttributed;
 @property (nonatomic, strong) UIImage *displayImage;
 @property (nonatomic, strong) MTBarcode *displayBarcode;
 
++ (NSStringDrawingOptions)drawingOptions;
+
 - (void)setWobbleRunning:(BOOL)running;
 - (BOOL)isWobbleRunning;
+- (void)flash:(void (^)(BOOL finished))completion;
 
-- (instancetype)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (instancetype)initWithObjectId:(NSManagedObjectID *)objectId
+                 inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end
 

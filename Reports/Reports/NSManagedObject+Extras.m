@@ -11,12 +11,14 @@
 @implementation NSManagedObject (Extras)
 
 - (void)obtainPermanentID {
-    if ([[self objectID] isTemporaryID]) {
+    if (self.objectID.isTemporaryID) {
         NSError *error = nil;
-        [[self managedObjectContext] obtainPermanentIDsForObjects:@[self] error:&error];
+        [self.managedObjectContext obtainPermanentIDsForObjects:@[self]
+                                                          error:&error];
         if (error != nil) {
             error = nil;
-            [[self managedObjectContext] obtainPermanentIDsForObjects:@[self] error:&error];
+            [self.managedObjectContext obtainPermanentIDsForObjects:@[self]
+                                                              error:&error];
             NSAssert(error == nil, @"Error %@", error);
         }
     }
