@@ -27,6 +27,7 @@
 - (RptqDocumentSection *)documentSectionForType:(MNSDocumentSectionType)type andLevel:(NSUInteger)level;
 - (NSDictionary *)layoutHeightsBySectionKey;
 
+- (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSInteger)sectionRow;
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow;
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow;
@@ -38,6 +39,7 @@
 - (void)addPredicate:(RptqQueryPredicate *)predicate;
 - (RptqDocumentObject *)addDocumentObject:(NSDictionary *)defination;
 - (void)removeDocumentObject:(RptqDocumentObject *)documentObject;
+- (BOOL)newPageAfterSectionAtRow:(NSInteger)sectionRow;
 
 @end
 

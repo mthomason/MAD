@@ -23,6 +23,11 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
     MNSDocumentSectionTypeGroupFooter = 7,
 };
 
+typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
+    RptqDocumentSectionWrappingStyleStandard = 1,
+    RptqDocumentSectionWrappingStyleNewPageAfter = 2,
+};
+
 @class RptqQuery, RptqDocumentObject, RptqDocumentSectionRows;
 
 @interface RptqDocumentSection (Extras) <MTProtocolCompare>
@@ -44,6 +49,8 @@ typedef NS_ENUM(NSUInteger, MNSDocumentSectionType) {
 - (void)setInterfaceHeight:(CGFloat)height;
 - (MNSDocumentSectionType)getDocumentSectionType;
 - (NSUInteger)nextDropIndexForSection;
+- (BOOL)producesFormFeed;
+- (void)setProducesFormFeed:(BOOL)producesFormFeed;
 
 @end
 

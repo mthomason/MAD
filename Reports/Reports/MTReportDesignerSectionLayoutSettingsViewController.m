@@ -23,7 +23,8 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 @property (nonatomic, weak) IBOutlet UIStepper *heightStepper;
 @property (nonatomic, weak) IBOutlet UIStepper *rowsStepper;
 
-@property (nonatomic, weak) IBOutlet UISwitch *visibilitySwitch;
+@property (nonatomic, weak) IBOutlet UISwitch *switchFormFeed;
+@property (nonatomic, weak) IBOutlet UISwitch *switchVisibility;
 
 @end
 
@@ -57,13 +58,13 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 }
 
 - (void)updateDisplay {
-
-    [[self visibilitySwitch] setOn:[self initalSwitchValue]];
-    [[self heightStepper] setValue:[self initalStepperValue] * 2];
-    [[self rowsStepper] setValue:[self initalNumberOfRows]];
+    [self.switchFormFeed setOn:self.initalFormFeedEnabled];
+    [self.switchVisibility setOn:self.initalVisibility];
+    [self.heightStepper setValue:self.initalHeightValue * 2];
+    [self.rowsStepper setValue:self.initalNumberOfRows];
     
     [self setNumberOfRowsLabel:[self initalNumberOfRows]];
-    [self setHeighLabel:[self initalStepperValue]];
+    [self setHeighLabel:[self initalHeightValue]];
     
 }
 
@@ -94,8 +95,13 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
     [self.delegate sectionLayoutDidUpdateNumberOfRows:numberOfRows];
 }
 
-- (IBAction)visibilityChanged:(id)sender {
-    [self.delegate sectionLayoutDidUpdateVisibility:[[self visibilitySwitch] isOn]];
+- (IBAction)valueChangedVisibility:(id)sender {
+    [self.delegate sectionLayoutDidUpdateVisibility:self.switchVisibility.isOn];
+}
+
+- (IBAction)valueChangedNewPageAfter:(id)sender {
+    [self.delegate layoutSettings: self
+                     newPageAfter: self.switchFormFeed.isOn];
 }
 
 #pragma mark - Helpers
@@ -108,4 +114,6 @@ NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdentifier =
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath { }
 
+- (IBAction)switchNewPageAfter:(id)sender {
+}
 @end

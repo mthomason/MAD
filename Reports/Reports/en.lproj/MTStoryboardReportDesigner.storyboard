@@ -1402,7 +1402,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ulc-86-ffo">
                                                     <rect key="frame" x="239" y="7" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="visibilityChanged:" destination="aNt-90-Z4U" eventType="valueChanged" id="nGv-dU-8cw"/>
+                                                        <action selector="valueChangedVisibility:" destination="aNt-90-Z4U" eventType="valueChanged" id="6vY-WT-lfb"/>
                                                     </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Visible" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="zh8-Jf-j6r">
@@ -1424,6 +1424,38 @@
                                             <constraint firstItem="zh8-Jf-j6r" firstAttribute="leading" secondItem="mhc-r0-QQh" secondAttribute="leading" constant="30" id="qo1-Dg-DYR"/>
                                         </constraints>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellVisible" id="5oR-A0-0G1">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5oR-A0-0G1" id="hrI-1w-m1F">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sSb-5l-KVX">
+                                                    <rect key="frame" x="239" y="7" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="valueChangedNewPageAfter:" destination="aNt-90-Z4U" eventType="valueChanged" id="nlu-Iy-ab8"/>
+                                                    </connections>
+                                                </switch>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Produces Form Feed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="3Sz-18-yBU">
+                                                    <rect key="frame" x="30" y="12" width="187" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="187" id="ykj-r2-Kld"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="3Sz-18-yBU" firstAttribute="leading" secondItem="5oR-A0-0G1" secondAttribute="leading" constant="30" id="3Mv-Ol-2wo"/>
+                                            <constraint firstItem="3Sz-18-yBU" firstAttribute="centerY" secondItem="sSb-5l-KVX" secondAttribute="centerY" id="Jxg-ei-fPh"/>
+                                            <constraint firstItem="sSb-5l-KVX" firstAttribute="centerY" secondItem="5oR-A0-0G1" secondAttribute="centerY" id="iNU-BC-wjh"/>
+                                            <constraint firstAttribute="trailing" secondItem="sSb-5l-KVX" secondAttribute="trailing" constant="32" id="yqq-xY-hsp"/>
+                                        </constraints>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1440,7 +1472,8 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="300"/>
                     <connections>
-                        <outlet property="visibilitySwitch" destination="ulc-86-ffo" id="H31-FG-gJj"/>
+                        <outlet property="switchFormFeed" destination="sSb-5l-KVX" id="11k-dB-Rmf"/>
+                        <outlet property="switchVisibility" destination="ulc-86-ffo" id="M4X-kv-N0p"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nnx-pY-sa1" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -760,6 +760,25 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - MTReportDesignerSectionLayoutSettingsDelegate
 
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings newPageAfter:(BOOL)newPageAfter {
+    NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
+    
+    RptqDocument *document = [self.document activeDocumentModel];
+    [document setNewPageAfter:newPageAfter forSectionAtRow:selectedSectionNumber];
+
+    /*
+    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForRow: selectedSectionNumber
+                                                                                query: query];
+    
+    UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
+    UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
+    [documentSectionView setBackgroundColor:color];
+    */
+    [self.document saveContext];
+}
+
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     
     NSUInteger selectedSectionNumber = [self lastSelectedSectionControlPanel];
@@ -2313,8 +2332,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                     [[superView layer] setBorderWidth:  1.0000f];
                 }
                 
-                [self.viewControllerSectionLayoutSettings setInitalStepperValue:([section.height floatValue])];
-                [self.viewControllerSectionLayoutSettings setInitalSwitchValue:[section.visibility boolValue]];
+                [self.viewControllerSectionLayoutSettings setInitalHeightValue:([section.height floatValue])];
+                self.viewControllerSectionLayoutSettings.initalVisibility = [section.visibility boolValue];
+                self.viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
                 [self.viewControllerSectionLayoutSettings setInitalNumberOfRows:[section.numberOfRows integerValue]];
                 [self.viewControllerSectionLayoutSettings updateDisplay];
                 

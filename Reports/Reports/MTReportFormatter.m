@@ -481,9 +481,14 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
-    CGFloat layoutHeight = [self heightForSection:documentSection];
-    [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
-    self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage + layoutHeight;
+    if ([documentSection producesFormFeed]) {
+        [self forcePageBreakWithFooterHeight:[self heightForSection:self.layout.hasPageFooterSection]];
+    } else {
+        CGFloat layoutHeight = [self heightForSection:documentSection];
+        if ([self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight]) {
+            self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage + layoutHeight;
+        }
+    }
 }
 
 - (RptqQueryGroup *)sortGroupAtLevel:(NSInteger)level {
@@ -589,38 +594,38 @@ NSString * const MTNullIdentifier = @"(null)";
     
     BOOL newPageCreated = NO;
     
-//    @autoreleasepool {
-        CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.hasPageFooterSection];
+    CGFloat pageFooterSectionHeight = [self heightForSection:self.layout.hasPageFooterSection];
+    
+    if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > [self printableHeight]) {
         
-        if (self.machineState.counterHeightUsedCurrentPage + nextItemHeight + pageFooterSectionHeight > [self printableHeight]) {
-            
-            newPageCreated = YES;
-            CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + pageFooterSectionHeight;
-            self.machineState.counterHeightUsedCurrentPage = newHeight;
-            [self addPageFooter];
-            
-            NSArray *pageInfo = [self pageLayoutTemporary] != nil ? [NSArray arrayWithArray: [self pageLayoutTemporary]] : @[];
-            [[self reportLayout] addObject:pageInfo];
-            
-            //NSIndexSet *rowids = [self pageIndexesTemporary] != nil ? [[NSIndexSet alloc] initWithIndexSet:[self pageIndexesTemporary]] : [NSIndexSet indexSet];
-            NSArray *rowids = [self pageIndexesTemporary] != nil ? [NSArray arrayWithArray: [self pageIndexesTemporary]] : @[];
-            [[self reportIndexes] addObject:rowids];
-            
-            [self cleanupTemporaryPageIndexes];
-            
-            self.machineState.pageCounter++;
-            [[MTNotificationDidFormatPage sharedObject] reportFormatter:self formattedPage:self.machineState.pageCounter];
-            RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
-            CGFloat pageHeaderHeight = CGPointZero.y;
-            pageHeaderHeight += [self heightForSection:pageHeaderSection];
-            self.machineState.counterHeightUsedCurrentPage = pageHeaderHeight;
-            
-            [self addPageHeader];
-            
-        }
-//    }
+        newPageCreated = YES;
+        [self forcePageBreakWithFooterHeight:pageFooterSectionHeight];
+    }
 
     return newPageCreated;
+}
+
+- (void)forcePageBreakWithFooterHeight:(CGFloat)footerHeight {
+    CGFloat newHeight = self.machineState.counterHeightUsedCurrentPage + footerHeight;
+    self.machineState.counterHeightUsedCurrentPage = newHeight;
+    [self addPageFooter];
+    
+    NSArray *pageInfo = [self pageLayoutTemporary] != nil ? [NSArray arrayWithArray: [self pageLayoutTemporary]] : @[];
+    [[self reportLayout] addObject:pageInfo];
+    
+    NSArray *rowids = [self pageIndexesTemporary] != nil ? [NSArray arrayWithArray: [self pageIndexesTemporary]] : @[];
+    [[self reportIndexes] addObject:rowids];
+    
+    [self cleanupTemporaryPageIndexes];
+    
+    self.machineState.pageCounter++;
+    [[MTNotificationDidFormatPage sharedObject] reportFormatter:self formattedPage:self.machineState.pageCounter];
+    RptqDocumentSection *pageHeaderSection = [[self layout] hasPageHeaderSection];
+    CGFloat pageHeaderHeight = CGPointZero.y;
+    pageHeaderHeight += [self heightForSection:pageHeaderSection];
+    self.machineState.counterHeightUsedCurrentPage = pageHeaderHeight;
+    
+    [self addPageHeader];
 }
 
 - (void)addReportHeaderToReportLayout {

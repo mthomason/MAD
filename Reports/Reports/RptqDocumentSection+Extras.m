@@ -63,14 +63,14 @@
     NSNumber *identiferNumber = @(identifier);
     [self setIdentifier:identiferNumber];
     
-    // MARK: Initalize section height.
     NSNumber *height = [RptqDocumentSection defaultHeight];
     NSNumber *layoutHeight = @(0.0000f);
     NSNumber *numberOfRows = @(1);
-    [self setHeight:height];
-    [self setLayoutHeight:layoutHeight];
-    [self setNumberOfRows:numberOfRows];
-    
+    NSNumber *wrapperStyle = @(RptqDocumentSectionWrappingStyleStandard);
+    self.height = height;
+    self.layoutHeight = layoutHeight;
+    self.numberOfRows = numberOfRows;
+    self.wrappingStyle = wrapperStyle;
     
 }
 
@@ -101,6 +101,17 @@
     }
 }
 
+- (BOOL)producesFormFeed {
+    return [self.wrappingStyle integerValue] == RptqDocumentSectionWrappingStyleNewPageAfter;
+}
+
+- (void)setProducesFormFeed:(BOOL)producesFormFeed {
+    NSNumber *wrappingStyle = @(producesFormFeed ?
+                                    RptqDocumentSectionWrappingStyleNewPageAfter :
+                                    RptqDocumentSectionWrappingStyleStandard);
+    self.wrappingStyle = wrappingStyle;
+}
+
 - (NSString *)sectionKey {
     return [self keyForIdentifier];
 }
@@ -113,7 +124,7 @@
     if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
         [(NSMutableOrderedSet *)[self hasRows] addObject:value];
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasRows]];
+        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
         [tempSet addObject:value];
         [self setHasRows: tempSet];
     }
@@ -123,7 +134,7 @@
     if ([[self hasRows] isKindOfClass:[NSMutableOrderedSet class]]) {
         [(NSMutableOrderedSet *)[self hasRows] removeObject:value];
     } else {
-        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:[self hasRows]];
+        NSMutableOrderedSet* tempSet = [NSMutableOrderedSet orderedSetWithOrderedSet:self.hasRows];
         [tempSet removeObject:value];
         [self setHasRows: tempSet];
     }
@@ -156,7 +167,6 @@
 
 - (NSIndexPath *)addDocumentObject:(RptqDocumentObject *)documentObject
                      withDropPoint:(CGPoint)origin {
-    
     
     [documentObject setOrigin:origin];
     [documentObject setDropPoint:origin];

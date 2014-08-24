@@ -1331,7 +1331,7 @@
                                                 <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ijh-KG-gaR">
                                                     <rect key="frame" x="459" y="7" width="51" height="31"/>
                                                     <connections>
-                                                        <action selector="visibilityChanged:" destination="7dU-9p-e74" eventType="valueChanged" id="tQt-VO-LWt"/>
+                                                        <action selector="valueChangedVisibility:" destination="7dU-9p-e74" eventType="valueChanged" id="die-yi-C33"/>
                                                     </connections>
                                                 </switch>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Visible" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="abz-yC-AFZ">
@@ -1367,7 +1367,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="visibilitySwitch" destination="ijh-KG-gaR" id="AUh-bs-xXQ"/>
+                        <outlet property="switchVisibility" destination="ijh-KG-gaR" id="XQM-xJ-JX5"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KKP-33-TV9" userLabel="First Responder" sceneMemberID="firstResponder"/>

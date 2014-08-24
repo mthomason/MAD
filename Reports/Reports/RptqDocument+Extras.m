@@ -297,7 +297,19 @@
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
     RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
     NSNumber *visibility = @(isVisible);
-    [section setVisibility: visibility];
+    section.visibility = visibility;
+}
+
+- (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSInteger)sectionRow {
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    [section setProducesFormFeed:newPageAfter];
+}
+
+- (BOOL)newPageAfterSectionAtRow:(NSInteger)sectionRow {
+    RptqQuery *query = [[self defaultDatabase] defaultQuery];
+    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    return [section producesFormFeed];
 }
 
 - (NSDictionary *)layoutHeightsBySectionKey {

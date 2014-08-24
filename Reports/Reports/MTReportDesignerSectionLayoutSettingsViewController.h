@@ -16,10 +16,12 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 @class MTReportDesignerSectionLayoutSettingsViewController;
 
 @protocol MTReportDesignerSectionLayoutSettingsDelegate
-- (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible;
-- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+          newPageAfter:(BOOL)newPageAfter;
 @optional
+- (void)sectionLayoutDidUpdateHeight:(CGFloat)height;
+- (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows;
 - (void)sectionLayoutSettingsDidFinish:(MTReportDesignerSectionLayoutSettingsViewController *)controller;
 @end
 
@@ -28,8 +30,9 @@ extern NSString * const MTReportDesignerSectionLayoutSettingsViewControllerIdent
 
 @property (weak) IBOutlet id <MTReportDesignerSectionLayoutSettingsDelegate> delegate;
 
-@property (nonatomic, assign) NSInteger initalStepperValue;
-@property (nonatomic, assign) BOOL initalSwitchValue;
+@property (nonatomic, assign) NSInteger initalHeightValue;
+@property (nonatomic, assign) BOOL initalVisibility;
+@property (nonatomic, assign) BOOL initalFormFeedEnabled;
 @property (nonatomic, assign) NSUInteger initalNumberOfRows;
 
 - (void)updateDisplay;

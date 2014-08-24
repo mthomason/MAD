@@ -339,8 +339,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                         tvc.delegate = self;
                         RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: [self lastSelectedRowNumber]
                                                                                              query: [[self.document activeDocumentModel] defaultQuery]];
-                        [tvc setInitalStepperValue:([[section height] floatValue])];
-                        [tvc setInitalSwitchValue:[[section visibility] boolValue]];
+                        [tvc setInitalHeightValue:([[section height] floatValue])];
+                        [tvc setInitalVisibility:[[section visibility] boolValue]];
                         [tvc setInitalNumberOfRows:[[section numberOfRows] integerValue]];
                     }
                 }
@@ -391,15 +391,23 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
     RptqDocument *document = [self.document activeDocumentModel];
-    [document setVisibility:isVisible
-            forSectionAtRow:self.lastSelectedRowNumber];
+    [document setVisibility: isVisible
+            forSectionAtRow: self.lastSelectedRowNumber];
     [self.document saveContext];
-    
+}
+
+- (void)layoutSettings:(MTReportDesignerSectionLayoutSettingsViewController *)layoutSettings
+          newPageAfter:(BOOL)newPageAfter {
+    RptqDocument *document = [self.document activeDocumentModel];
+    [document setNewPageAfter: newPageAfter
+              forSectionAtRow: self.lastSelectedRowNumber];
+    [self.document saveContext];
 }
 
 - (void)sectionLayoutDidUpdateNumberOfRows:(NSUInteger)numberOfRows {
     RptqDocument *document = [self.document activeDocumentModel];
-    [document setNumberOfRows:numberOfRows forSectionAtRow:self.lastSelectedRowNumber];
+    [document setNumberOfRows: numberOfRows
+              forSectionAtRow: self.lastSelectedRowNumber];
     [self.document saveContext];
 }
 
