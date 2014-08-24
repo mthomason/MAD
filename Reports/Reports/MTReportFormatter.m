@@ -477,18 +477,17 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (CGFloat)heightForSection:(RptqDocumentSection *)documentSection {
-    return [[self layoutHeightsBySectionKey][[documentSection sectionKey]] floatValue];
+    return [self.layoutHeightsBySectionKey[[documentSection sectionKey]] floatValue];
 }
 
 - (void)addHeightFromDocumentSectionToReportLayout:(RptqDocumentSection *)documentSection {
+    CGFloat layoutHeight = [self heightForSection:documentSection];
     if ([documentSection producesFormFeed]) {
         [self forcePageBreakWithFooterHeight:[self heightForSection:self.layout.hasPageFooterSection]];
     } else {
-        CGFloat layoutHeight = [self heightForSection:documentSection];
-        if ([self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight]) {
-            self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage + layoutHeight;
-        }
+        [self addPageBreakToReportLayoutWithNextItemHeight: layoutHeight];
     }
+    self.machineState.counterHeightUsedCurrentPage = self.machineState.counterHeightUsedCurrentPage + layoutHeight;
 }
 
 - (RptqQueryGroup *)sortGroupAtLevel:(NSInteger)level {
@@ -693,7 +692,6 @@ NSString * const MTNullIdentifier = @"(null)";
     NSDictionary *detail = @{[MTReportFormatter KeyReportSectionType] : type,
                              MTReportDetailRowId : self.machineState.detailRowId};
     [[self pageLayoutTemporary] addObject: detail];
-
     [[self pageIndexesTemporary] addObject:self.machineState.detailRowId];
     //[[self pageIndexesTemporary] addIndex:[self.machineState.detailRowId integerValue]];
 }
