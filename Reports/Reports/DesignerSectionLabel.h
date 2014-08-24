@@ -12,14 +12,26 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
+@protocol DesignerSectionLabelDelegate;
+@class RptqDocumentSection;
+
 @interface DesignerSectionLabel : UIView
 
+@property (nonatomic, weak) id <DesignerSectionLabelDelegate> delegate;
 @property (nonatomic, strong) UILabel *labelSectionIdentifer;
 @property (nonatomic, assign, readonly) BOOL selected;
+@property (nonatomic, assign) BOOL indicatorFormFeed;
+@property (nonatomic, assign) BOOL indicatorVisible;
 
-- (instancetype)initWithDisplayText:(NSString *)displayText NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSection:(RptqDocumentSection *)section NS_DESIGNATED_INITIALIZER;
 - (void)dimView;
 - (void)normalView;
+
+@end
+
+@protocol DesignerSectionLabelDelegate <NSObject>
+
+- (void)toggleSectionControlPanel:(DesignerSectionLabel *)label;
 
 @end
 

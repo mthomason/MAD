@@ -102,7 +102,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         MTDocumentSectionViewDelegate,
         MTReportDesignerSectionLayoutSettingsDelegate,
         MTQueryBuilderChooseFieldDelegate,
-        MTTabBarImageProtocol,
+        MTTabBarImageProtocol, DesignerSectionLabelDelegate,
         UIPopoverControllerDelegate,
         UICollectionViewDataSource,
         UICollectionViewDelegate,
@@ -436,8 +436,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             sectionView.sectionDelegate = self;
             sectionView.dataSource = self;
             
-            DesignerSectionLabel *sectionViewLabel = [MTReportDesignerViewController sectionLabel: reportSection
-                                                                                         delegate: self];
+            DesignerSectionLabel *sectionViewLabel = [[DesignerSectionLabel alloc] initWithSection:reportSection];
+            sectionViewLabel.delegate = self;
             sectionViewLabel.tag = sectionCounter;
             
             // MARK: Setup vert auto layout
@@ -487,8 +487,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             sectionCounter++;
             
         }
-        
     }
+    
     self.sectionViewsArray = sectionViewsArray;
     self.sectionControlViewsArray = sectionControlViewsArray;
     
@@ -543,8 +543,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         [self scrollViewDidEndZooming:nil withView:nil atScale:[self.designerScrollView zoomScale]];
         [self.designerScrollView scrollRectToVisible:[[app reportDesigner] boundsOnDisappear] animated:NO];
     }
-//    self.designerContentView.backgroundColor = [UIColor greenColor];
-//    self.designerScrollView.backgroundColor = [UIColor redColor];
     
 }
 
@@ -2289,68 +2287,57 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self hideToolbox];
 }
 
-- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
+- (void)toggleSectionControlPanel:(DesignerSectionLabel *)label {
+    [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
     
-    if ([sender state] == UIGestureRecognizerStateEnded) {
+    if ([[self selectedElementViews] count] >= 1) {
+        [self hideToolbox];
+    } else {
         
-        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
-        
-        if ([[self selectedElementViews] count] >= 1) {
+        self.viewControllerToolbox.document = self.document;
+        if ([label selected]) {
+            
+            
+            [label normalView];
             [self hideToolbox];
+            
         } else {
             
-            self.viewControllerToolbox.document = self.document;
-            if ([(DesignerSectionLabel *)[sender view] selected]) {
-                
-                
-                DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
-                if ([sectionLabel selected]) {
-                    [sectionLabel normalView];
-                }
-                
-                [self hideToolbox];
+            [self deselectAllElementsAnimated:YES];
+            
+            self.lastSelectedSectionControlPanel = label.tag;
+            
+            RptqDocument *document = [self.document activeDocumentModel];
+            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
+            RptqQuery *query = [[database hasQueries] anyObject];
+            RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: self.lastSelectedSectionControlPanel
+                                                                                query: query];
+            
+            
+                [label dimView];
+                UIColor *borderColor = [UIColor tintColorAnalogous4];
+                UIView *superView = [self getSectionViewForDocumentSection: section];
+                [[superView layer] setBorderColor:  [borderColor CGColor]];
+                [[superView layer] setBorderWidth:  1.0000f];
+            
+            self.viewControllerSectionLayoutSettings.initalHeightValue = section.height.floatValue;
+            self.viewControllerSectionLayoutSettings.initalVisibility = section.visibility.boolValue;
+            self.viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
+            self.viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows.integerValue;
+            [self.viewControllerSectionLayoutSettings updateDisplay];
+            
+            if ([UIDevice isPad]) {
+                [self.popoverControllerSectionSettings setPopoverContentSize: CGSizeMake(320.0000f, 260.00000f)
+                                                                    animated: NO];
+                self.popoverControllerSectionSettings.passthroughViews = @[label];
+                [self.popoverControllerSectionSettings presentPopoverFromRect: label.bounds
+                                                                       inView: label
+                                                     permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                                     animated:YES];
+                [self setDisplayInactive];
                 
             } else {
-                
-                [self deselectAllElementsAnimated:YES];
-                
-                [self setLastSelectedSectionControlPanel:[[sender view] tag]];
-                
-                RptqDocument *document = [self.document activeDocumentModel];
-                RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-                RptqQuery *query = [[database hasQueries] anyObject];
-                RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: [self lastSelectedSectionControlPanel]
-                                                                                    query: query];
-                
-                
-                if ([[sender view] isKindOfClass:[DesignerSectionLabel class]]) {
-                    DesignerSectionLabel *sectionLabel = (DesignerSectionLabel *)[sender view];
-                    [sectionLabel dimView];
-                    UIColor *borderColor = [UIColor tintColorAnalogous4];
-                    UIView *superView = [self getSectionViewForDocumentSection: section];
-                    [[superView layer] setBorderColor:  [borderColor CGColor]];
-                    [[superView layer] setBorderWidth:  1.0000f];
-                }
-                
-                [self.viewControllerSectionLayoutSettings setInitalHeightValue:([section.height floatValue])];
-                self.viewControllerSectionLayoutSettings.initalVisibility = [section.visibility boolValue];
-                self.viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
-                [self.viewControllerSectionLayoutSettings setInitalNumberOfRows:[section.numberOfRows integerValue]];
-                [self.viewControllerSectionLayoutSettings updateDisplay];
-                
-                if ([UIDevice isPad]) {
-                    [self.popoverControllerSectionSettings setPopoverContentSize: CGSizeMake(320.0000f, 260.00000f)
-                                                                          animated: NO];
-                    self.popoverControllerSectionSettings.passthroughViews = @[sender.view];
-                    [self.popoverControllerSectionSettings presentPopoverFromRect: sender.view.bounds
-                                                                             inView: sender.view
-                                                           permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                                           animated:YES];
-                    [self setDisplayInactive];
-                    
-                } else {
-                    [self showToolbox:MTToolboxTypeSection];
-                }
+                [self showToolbox:MTToolboxTypeSection];
             }
         }
     }
@@ -3090,30 +3077,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self setRulerView:viewRuler];
 }
 
-+ (DesignerSectionLabel *)sectionLabel:(RptqDocumentSection *)section delegate:(id)delegate {
-    DesignerSectionLabel *sectionControlView = [[DesignerSectionLabel alloc] initWithDisplayText:[section localizedDisplayName]];
-    sectionControlView.backgroundColor = [UIColor clearColor];
-    sectionControlView.translatesAutoresizingMaskIntoConstraints = NO;
-    sectionControlView.layer.cornerRadius = MTReportDesignerCornerRadius;
-    sectionControlView.clipsToBounds = YES;
-    
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:delegate action:@selector(toggleSectionControlPanel:)];
-    [tapGestureRecognizer setNumberOfTapsRequired:1];
-    [tapGestureRecognizer setNumberOfTouchesRequired:1];
-    [tapGestureRecognizer setDelegate: delegate];
-    [sectionControlView addGestureRecognizer:tapGestureRecognizer];
-    
-    [sectionControlView setContentHuggingPriority: UILayoutPriorityDefaultLow
-                                          forAxis: UILayoutConstraintAxisHorizontal];
-    [sectionControlView setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
-                                                        forAxis: UILayoutConstraintAxisHorizontal];
-    return sectionControlView;
-}
-
 + (UIBarButtonItem *)buttonDone:(id)target {
-    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                          target:target
-                                                                          action:@selector(hideToolbox)];
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                          target: target
+                                                                          action: @selector(hideToolbox)];
     return done;
 }
 

@@ -36,8 +36,6 @@
 
 @interface RptqDocumentSection ()
 
-//@property (nonatomic, retain) NSString *secKey;
-
 @end
 
 @implementation RptqDocumentSection (Extras)
@@ -76,9 +74,6 @@
 
 - (void)awakeFromFetch {
     [super awakeFromFetch];
-
-    //NSString *keyForIdentifier = [self keyForIdentifier];
-    //[self setSecKey: keyForIdentifier];
 }
 
 - (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
@@ -328,8 +323,8 @@
         for (RptqDocumentSectionRows *row in [self hasRows]) {
             for (RptqDocumentObject *element in [row hasObjects]) {
                 
-                CGFloat originPointX        = [[element dropPointX] floatValue];
-                CGFloat originPointY        = [[element dropPointY] floatValue];
+                CGFloat originPointX        = [element.dropPointX floatValue];
+                CGFloat originPointY        = [element.dropPointY floatValue];
                 
                 CGSize marginSize           = [element size];
                 CGRect elementCanvasRect    = CGRectMake(originPointX, originPointY, marginSize.width, marginSize.height);
@@ -343,6 +338,79 @@
     }
     return resultHeight;
 }
+
+- (RptqDocument *)inRptqDocument {
+    return [RptqDocumentSection rptqDocumentForSection:self];
+}
+
++ (RptqDocument *)rptqDocumentForSection:(RptqDocumentSection *)section {
+    RptqDocument *result = nil;
+    if ([section inGroup]) {
+        result = section.inGroup.inQuery.inDatabase.ownedByQueryAsStaticResource;
+    } else if (section.inReport) {
+        result = section.inReport;
+    } else if (section.inReportPageFooter) {
+        result = section.inReportPageFooter;
+    } else if (section.inReportPageHeader) {
+        result = section.inReportPageHeader;
+    } else if (section.inReportReportFooter) {
+        result = section.inReportReportFooter;
+    } else if (section.inReportReportHeader) {
+        result = section.inReportReportHeader;
+    }
+    return result;
+}
+
+- (MNSDocumentSectionType)getDocumentSectionType {
+    return [[self type] integerValue];
+}
+
+
+
+- (NSString *)localizedDisplayName {
+    NSString *result = nil;
+    switch ([[self type] integerValue]) {
+        case MNSDocumentSectionTypeReportHeader:
+            result = NSLocalizedString(@"Report Header", @"Report Header");
+            break;
+        case MNSDocumentSectionTypePageHeader:
+            result = NSLocalizedString(@"Page Header", @"Page Header");
+            break;
+        case MNSDocumentSectionTypeBody:
+            result = NSLocalizedString(@"Report Detail", @" Report Detail");
+            break;
+        case MNSDocumentSectionTypePageFooter:
+            result = NSLocalizedString(@"Page Footer", @"Page Footer");
+            break;
+        case MNSDocumentSectionTypeReportFooter:
+            result = NSLocalizedString(@"Report Footer", @"Report Footer");
+            break;
+        case MNSDocumentSectionTypeGroupHeader:
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [[self inGroup] fieldNameQuery]];
+            break;
+        case MNSDocumentSectionTypeGroupFooter:
+            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [[self inGroup] fieldNameQuery]];
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
+#pragma mark - MTProtocolCompare
+
+- (BOOL)isEqualTo:(id)sender {
+    BOOL result;
+    if ([self isEqual:sender]) {
+        result = YES;
+    } else {
+        RptqDocumentSection *s = sender;
+        result = [[self identifier] isEqualToNumber:[s identifier]];
+    }
+    return result;
+}
+
+#pragma mark - Handling Rows
 
 + (NSString *)getDocumentSectionNameForRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups {
     NSInteger documentHeader    = 0;
@@ -383,7 +451,7 @@
     
     NSInteger result = 0;
     BOOL breakNow = NO;
-    RptqDocument *document = [RptqDocumentSection rptqDocumentForSection:section];
+    RptqDocument *document = [section inRptqDocument];
     SectionEnumerator *enumerator = [[SectionEnumerator alloc] initWithDocument:document];
     NSURL *urlNeedle = [[section objectID] URIRepresentation];
     for (RptqDocumentSection *sec in enumerator) {
@@ -393,74 +461,6 @@
             if (breakNow) break;
             result++;
         }
-    }
-    return result;
-}
-
-- (RptqDocument *)inRptqDocument {
-    return [RptqDocumentSection rptqDocumentForSection:self];
-}
-
-+ (RptqDocument *)rptqDocumentForSection:(RptqDocumentSection *)section {
-    RptqDocument *result = nil;
-    if ([section inGroup]) {
-        result = [[[[section inGroup] inQuery] inDatabase] ownedByQueryAsStaticResource];
-    } else if ([section inReport]) {
-        result = [section inReport];
-    } else if ([section inReportPageFooter]) {
-        result = [section inReportPageFooter];
-    } else if ([section inReportPageHeader]) {
-        result = [section inReportPageHeader];
-    } else if ([section inReportReportFooter]) {
-        result = [section inReportReportFooter];
-    } else if ([section inReportReportHeader]) {
-        result = [section inReportReportHeader];
-    }
-    return result;
-}
-
-- (MNSDocumentSectionType)getDocumentSectionType {
-    return [[self type] integerValue];
-}
-
-- (NSString *)localizedDisplayName {
-    NSString *result = nil;
-    switch ([[self type] integerValue]) {
-        case MNSDocumentSectionTypeReportHeader:
-            result = NSLocalizedString(@"Report Header", @"Report Header");
-            break;
-        case MNSDocumentSectionTypePageHeader:
-            result = NSLocalizedString(@"Page Header", @"Page Header");
-            break;
-        case MNSDocumentSectionTypeBody:
-            result = NSLocalizedString(@"Report Detail", @" Report Detail");
-            break;
-        case MNSDocumentSectionTypePageFooter:
-            result = NSLocalizedString(@"Page Footer", @"Page Footer");
-            break;
-        case MNSDocumentSectionTypeReportFooter:
-            result = NSLocalizedString(@"Report Footer", @"Report Footer");
-            break;
-        case MNSDocumentSectionTypeGroupHeader:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Header (%@)", @"\"Group Header 1\""), [[self inGroup] fieldNameQuery]];
-            break;
-        case MNSDocumentSectionTypeGroupFooter:
-            result = [NSString stringWithFormat:NSLocalizedString(@"Group Footer - (%@)", @"\"Group Footer 1\""),  [[self inGroup] fieldNameQuery]];
-            break;
-        default:
-            break;
-    }
-    return result;
-}
-#pragma mark - MTProtocolCompare
-
-- (BOOL)isEqualTo:(id)sender {
-    BOOL result;
-    if ([self isEqual:sender]) {
-        result = YES;
-    } else {
-        RptqDocumentSection *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
     }
     return result;
 }

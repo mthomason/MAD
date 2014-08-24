@@ -9,17 +9,20 @@
 #import "DesignerSectionLabel.h"
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
+#import "RptqDocumentSection+Extras.h"
+#import <CoreData/CoreData.h>
 
 @interface DesignerSectionLabel ()
+    <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign, readwrite) BOOL selected;
+@property (nonatomic, strong) RptqDocumentSection *section;
 
 @end
 
 @implementation DesignerSectionLabel
 
-
-- (instancetype)initWithDisplayText:(NSString *)displayText {
+- (instancetype)initWithSection:(RptqDocumentSection *)section {
     CGRect frame = CGRectZero;
     self = [super initWithFrame:frame];
     if (self) {
@@ -30,12 +33,28 @@
         [labelSectionIdentifer setFont:[UIFont systemFontOfSize:10.0000f]];
         UIColor *tintColor = [UIColor tintColorBlue];
         [labelSectionIdentifer setTextColor:tintColor];
-        [labelSectionIdentifer setText: displayText];
+        labelSectionIdentifer.text = [section localizedDisplayName];
         [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
         [self addSubview:labelSectionIdentifer];
         [self setLabelSectionIdentifer:labelSectionIdentifer];
 
+        
+        self.backgroundColor = [UIColor clearColor];
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.layer.cornerRadius = 0.0000f;
+        self.clipsToBounds = YES;
+        [self setContentHuggingPriority: UILayoutPriorityDefaultLow
+                                forAxis: UILayoutConstraintAxisHorizontal];
+        [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
+                                              forAxis: UILayoutConstraintAxisHorizontal];
+        
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                                               action: @selector(toggleSectionControlPanel:)];
+        tapGestureRecognizer.numberOfTapsRequired = 1;
+        tapGestureRecognizer.numberOfTouchesRequired = 1;
+        tapGestureRecognizer.delegate = self;
+        [self addGestureRecognizer: tapGestureRecognizer];
     }
     return self;
 }
@@ -71,6 +90,13 @@
 
 - (void)tintColorDidChange {
 
+}
+
+- (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
+    
+    if ([sender state] == UIGestureRecognizerStateEnded) {
+        [self.delegate toggleSectionControlPanel:self];
+    }
 }
 
 @end
