@@ -316,7 +316,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSLayoutConstraint *constraintContentRight = [self layoutConstraintViewContentRight];
     NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
     NSLayoutConstraint *constraintScrollerBottom = [self layoutConstraintViewScrollerBottom];
-    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom];
+    
+    //NSLayoutConstraint *constraintScrollerRight = [self layoutConstraintViewScrollerRight];
+    //NSLayoutConstraint *constraintScrollerLeft = [self layoutConstraintViewScrollerLeft];
+    //constraintScrollerRight.priority = UILayoutPriorityRequired;
+    //constraintScrollerLeft.priority = UILayoutPriorityRequired;
+    
+    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom
+    //                         ,constraintContentLeft
+    //                         ,constraintContentRight
+                             ];
     [self.view addConstraints:constraints];
     
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [MTReportDesignerViewController toolbox];
@@ -454,11 +463,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
             [self.designerContentView addSubview:sectionView];
             [self.designerContentView addSubview:sectionViewLabel];
             
-            NSLayoutConstraint *lc1a = [MTReportDesignerViewController layoutConstraintSection:sectionView toItemBottom:constraintItem];
-            NSLayoutConstraint *lc1b = [MTReportDesignerViewController layoutConstraintSection:sectionView toHeight:reportSectionHeight];
-            NSLayoutConstraint *lc1c = [MTReportDesignerViewController layoutConstraintSection:sectionView toLabelRight:sectionViewLabel];
-            NSLayoutConstraint *lc1d = [MTReportDesignerViewController layoutConstraintSection:sectionView toLabelBottom:sectionViewLabel];
-            NSLayoutConstraint *lc1e = [MTReportDesignerViewController layoutConstraintLabel:sectionViewLabel toHeight:MTReportDesignerSectionLabelHeight];
+            NSLayoutConstraint *lc1a = [MTReportDesignerViewController layoutConstraintSection:sectionView
+                                                                                  toItemBottom:constraintItem];
+            NSLayoutConstraint *lc1b = [MTReportDesignerViewController layoutConstraintSection:sectionView
+                                                                                      toHeight:reportSectionHeight];
+            NSLayoutConstraint *lc1c = [MTReportDesignerViewController layoutConstraintSection:sectionView
+                                                                                  toLabelRight:sectionViewLabel];
+            NSLayoutConstraint *lc1d = [MTReportDesignerViewController layoutConstraintSection:sectionView
+                                                                                 toLabelBottom:sectionViewLabel];
+            NSLayoutConstraint *lc1e = [MTReportDesignerViewController layoutConstraintLabel:sectionViewLabel
+                                                                                    toHeight:MTReportDesignerSectionLabelHeight];
             NSArray *designerContentViewConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
             
             [self.designerContentView addConstraints:designerContentViewConstraints];
@@ -3216,6 +3230,28 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
 }
+
+/*
+- (NSLayoutConstraint *)layoutConstraintViewScrollerRight {
+    return [NSLayoutConstraint constraintWithItem: self.designerContentView
+                                        attribute: NSLayoutAttributeLeftMargin
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: self.view
+                                        attribute: NSLayoutAttributeLeftMargin
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}
+
+- (NSLayoutConstraint *)layoutConstraintViewScrollerLeft {
+    return [NSLayoutConstraint constraintWithItem: self.designerContentView
+                                        attribute: NSLayoutAttributeRightMargin
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: self.view
+                                        attribute: NSLayoutAttributeRightMargin
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}
+*/
 
 - (NSLayoutConstraint *)layoutConstraintViewToolbarHeightHidden {
     return [NSLayoutConstraint constraintWithItem: self.toolbarBottom

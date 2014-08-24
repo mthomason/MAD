@@ -27,19 +27,23 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setSelected:NO];
-        UILabel *labelSectionIdentifer = [[UILabel alloc] initWithFrame:frame];
-        [labelSectionIdentifer setBackgroundColor:[UIColor clearColor]];
-        [labelSectionIdentifer setTextAlignment:NSTextAlignmentCenter];
-        [labelSectionIdentifer setFont:[UIFont systemFontOfSize:10.0000f]];
+
+        UIColor *backgroundColor = [UIColor clearColor];
         UIColor *tintColor = [UIColor tintColorBlue];
-        [labelSectionIdentifer setTextColor:tintColor];
+
+        UILabel *labelSectionIdentifer = [[UILabel alloc] initWithFrame:frame];
+        labelSectionIdentifer.backgroundColor = backgroundColor;
+        labelSectionIdentifer.textAlignment = NSTextAlignmentCenter;
+        labelSectionIdentifer.font = [UIFont systemFontOfSize:10.0000f];
+        
+        labelSectionIdentifer.textColor = tintColor;
         labelSectionIdentifer.text = [section localizedDisplayName];
-        [labelSectionIdentifer setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [labelSectionIdentifer setTranslatesAutoresizingMaskIntoConstraints:YES];
+        labelSectionIdentifer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        labelSectionIdentifer.translatesAutoresizingMaskIntoConstraints = YES;
+        
         [self addSubview:labelSectionIdentifer];
         [self setLabelSectionIdentifer:labelSectionIdentifer];
 
-        
         self.backgroundColor = [UIColor clearColor];
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.layer.cornerRadius = 0.0000f;
@@ -57,6 +61,11 @@
         [self addGestureRecognizer: tapGestureRecognizer];
     }
     return self;
+}
+
+- (void)setNeedsDisplay {
+    
+    [super setNeedsDisplay];
 }
 
 - (void)layoutSubviews {
