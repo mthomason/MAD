@@ -319,10 +319,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     
     NSLayoutConstraint *constraintContentLeft = [self layoutConstraintViewContentLeft];
     NSLayoutConstraint *constraintContentRight = [self layoutConstraintViewContentRight];
+    //NSLayoutConstraint *layoutConstraintViewContentWidth = [self layoutConstraintViewContentWidth];
+    //NSLayoutConstraint *layoutConstraintViewContentCenter = [self layoutConstraintViewContentCenterX];
     NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
     NSLayoutConstraint *constraintScrollerBottom = [self layoutConstraintViewScrollerBottom];
 
-    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom];
+    NSArray *constraints = @[
+                             //layoutConstraintViewContentWidth, layoutConstraintViewContentCenter,
+                             constraintContentLeft, constraintContentRight,
+                             constraintContentTop, constraintScrollerBottom];
     
     [self.view addConstraints:constraints];
     if ([UIDevice isModernOS]) {
@@ -446,6 +451,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSMutableArray *sectionControlViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     NSMutableArray *sectionViewsArray = [[NSMutableArray alloc] initWithCapacity:numberOfSections];
     
+    //NSLayoutConstraint *lcc1 = [self layoutConstraintViewLeft:self.rulerView];
+    //NSLayoutConstraint *lcc2 = [self layoutConstraintViewRight:self.rulerView];
+
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         
         @autoreleasepool {
@@ -490,7 +498,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                                                                  toLabelBottom:sectionViewLabel];
             NSLayoutConstraint *lc1e = [MTReportDesignerViewController layoutConstraintLabel:sectionViewLabel
                                                                                     toHeight:MTReportDesignerSectionLabelHeight];
-            NSArray *designerContentViewConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
+            
+            //NSLayoutConstraint *lcc3 = [self layoutConstraintViewLeft:sectionView];
+            //NSLayoutConstraint *lcc4 = [self layoutConstraintViewRight:sectionView];
+            
+            //NSArray *viewConstraints = @[lcc3, lcc4];
+            //[self.view addConstraints:viewConstraints];
+            
+            NSArray *designerContentViewConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e
+                                                        
+                                                        ];
             
             [self.designerContentView addConstraints:designerContentViewConstraints];
             
@@ -640,10 +657,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         NSLayoutConstraint *width = [self layoutConstraintContentWidthCalculated];
         [self.view addConstraint:width];
         self.layoutConstraintContainerWidth = width;
-        
         self.designerScrollView.contentSize = CGSizeMake([self widthScrollViewContent],
                                                          self.designerScrollView.contentSize.height);
-        
     }
 
 }
@@ -751,15 +766,33 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - UIScrollViewDelegate
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+//    self.designerScrollView.contentSize = CGSizeMake([self widthScrollViewContent],
+//                                                     self.designerScrollView.contentSize.height);
+//    [self.view setNeedsLayout];
+}
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self.view setNeedsLayout];
+}
+- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    return YES;
+}
+
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.designerContentView;
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     scale *= [[[self.designerScrollView window] screen] scale];
 
@@ -777,7 +810,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     for (UICollectionView *section in [self.sectionViews objectEnumerator]) {
         [section setContentScaleFactor:scale];
     }
-    
+
     [self.view setNeedsLayout];
 
 }
@@ -3216,6 +3249,27 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - NSLayoutConstraint
 #pragma mark Content View
+
+/*- (NSLayoutConstraint *)layoutConstraintViewContentCenterX {
+    return [NSLayoutConstraint constraintWithItem: self.designerContentView
+                                        attribute: NSLayoutAttributeCenterX
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: self.view
+                                        attribute: NSLayoutAttributeCenterX
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}*/
+
+/*- (NSLayoutConstraint *)layoutConstraintViewContentWidth {
+    return [NSLayoutConstraint constraintWithItem: self.designerContentView
+                                        attribute: NSLayoutAttributeWidth
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: self.view
+                                        attribute: NSLayoutAttributeWidth
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}*/
+
 - (NSLayoutConstraint *)layoutConstraintViewContentLeft {
     return [NSLayoutConstraint constraintWithItem: self.designerContentView
                                         attribute: NSLayoutAttributeLeft
@@ -3235,6 +3289,27 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
 }
+
+- (NSLayoutConstraint *)layoutConstraintViewLeft:(UIView *)view {
+    return [NSLayoutConstraint constraintWithItem: view
+                                        attribute: NSLayoutAttributeLeft
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: self.designerContentView
+                                        attribute: NSLayoutAttributeLeft
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}
+
+- (NSLayoutConstraint *)layoutConstraintViewRight:(UIView *)view {
+    return [NSLayoutConstraint constraintWithItem: view
+                                        attribute: NSLayoutAttributeRight
+                                        relatedBy: NSLayoutRelationEqual
+                                           toItem: self.designerContentView
+                                        attribute: NSLayoutAttributeRight
+                                       multiplier: 1.0000f
+                                         constant: 0.0000f];
+}
+
 - (NSLayoutConstraint *)layoutConstraintViewContentTop {
     return [NSLayoutConstraint constraintWithItem: self.designerContentView
                                         attribute: NSLayoutAttributeTop
