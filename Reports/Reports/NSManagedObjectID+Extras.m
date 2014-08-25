@@ -7,13 +7,16 @@
 //
 
 #import "NSManagedObjectID+Extras.h"
-#import "MAReportDocument.h"
-#import "NSError+UserInterface.h"
-#import "AppDelegate.h"
 
 @implementation NSManagedObjectID (Extras)
 
 #pragma mark - MTProtocolLog
+
+- (NSString *)key {
+    char buf[18];
+    snprintf(buf, 18, "s%lu", (unsigned long)self.hash);
+    return [NSString stringWithUTF8String:buf];
+}
 
 - (NSString *)toStringHumanReadable {
     return [NSString stringWithFormat:@"%@", self];

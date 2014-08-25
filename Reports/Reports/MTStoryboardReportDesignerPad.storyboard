@@ -154,8 +154,8 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="barButtonAddReportObject" destination="1QU-im-22s" id="35u-e7-a9Q"/>
-                        <outlet property="designerContentView" destination="ezX-JQ-yr9" id="u5E-l7-9Zw"/>
-                        <outlet property="designerScrollView" destination="IOG-3q-Pa5" id="loD-d7-VEC"/>
+                        <outlet property="container" destination="ezX-JQ-yr9" id="u5E-l7-9Zw"/>
+                        <outlet property="scroller" destination="IOG-3q-Pa5" id="hgw-Yd-shu"/>
                         <outlet property="view" destination="VIm-k8-3OZ" id="gIT-Ap-5iN"/>
                         <segue destination="FeM-9P-hhf" kind="push" identifier="MTIdentifierSegueDocumentObjectEditBarcode" id="vXr-rE-Oaf"/>
                         <segue destination="NTv-mI-XMB" kind="push" identifier="MTIdentifierSegueEditField" id="ljr-gV-CKP"/>

@@ -14,6 +14,8 @@
 
 @interface NSManagedObjectID (Extras)
 
+- (NSString *)key;
+
 @end
 
 #endif

@@ -39,6 +39,8 @@
 - (instancetype)initWithObjectId:(NSManagedObjectID *)objectId
                  inObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
+- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+
 @end
 
 #endif

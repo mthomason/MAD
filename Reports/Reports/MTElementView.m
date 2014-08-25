@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+NSObjectIdTag.h"
-#import "RptqDocumentObjectImage+Extras.h"
 #import "Constants.h"
 #import "MTTextView.h"
 #import "UIDevice+Hack.h"
@@ -18,6 +17,10 @@
 #import "MTBarcode.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
+#import "RptqDocumentObjectBarcode.h"
+#import "RptqDocumentObjectBarcode+Extras.h"
+#import "RptqDocumentObjectImage.h"
+#import "RptqDocumentObjectImage+Extras.h"
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 #define kAnimationRotateDeg 1.0
@@ -227,6 +230,75 @@ static size_t const kDashedCount            = (2.0f);
 
 - (id)debugQuickLookObject {
     return self;
+}
+
+- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[context objectWithID:self.objectIdTag];
+    if (documentObject != nil) {
+        
+        CGRect marginViewFrame = [documentObject boundsContentView];
+        
+        self.frame = marginViewFrame;
+        self.displayImage = nil;
+        self.displayBarcode = nil;
+        self.displayImage = nil;
+        
+        
+        NSString *string = [documentObject designerRepresentationText];
+        
+        switch ([documentObject getType]) {
+                
+            case MTDocumentObjectTypeImage:
+                self.displayImage = documentObject.isImage.image;
+                break;
+                
+            case MTDocumentObjectTypeBarcode: {
+                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:documentObject.isBarcode];
+                self.displayBarcode = displayBarcode;
+                break;
+            }
+                
+            default:
+                break;
+        }
+        
+        NSDictionary *attributes = [documentObject attributesForDrawingText];
+        NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
+                                                                                attributes:attributes];
+        self.displayStringAttributed = attributtedString;
+        
+        CGSize sizeContentView = [documentObject sizeContentView];
+        CGRect boundsContentView = [documentObject boundsContentView]; //x1
+        CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize: sizeContentView
+                                                                                  options: [MTElementView drawingOptions]
+                                                                                  context: nil];
+        CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
+        
+        switch ([documentObject.verticalAlignment integerValue]) {
+            case MTVerticalAlignmentCenter: {
+                CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
+                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                break;
+            }
+            case MTVerticalAlignmentBottom: {
+                CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
+                CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                break;
+            }
+            case MTVerticalAlignmentTop:
+            default:
+                break;
+        }
+        
+        CGAffineTransform transformSpacing = CGAffineTransformMakeTranslation([documentObject spacingLeft],
+                                                                              [documentObject spacingTop]);
+        drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformSpacing);
+        [self setNeedsLayout];
+        [self setNeedsDisplay];
+    }
+    
 }
 
 @end

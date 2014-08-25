@@ -167,10 +167,10 @@
                     </simulatedScreenMetrics>
                     <connections>
                         <outlet property="barButtonAddReportObject" destination="U4m-Tl-FVb" id="oTk-vL-p5M"/>
-                        <outlet property="designerContentView" destination="Yyc-Zp-ZTq" id="5rj-6a-Nm3"/>
-                        <outlet property="designerScrollView" destination="lma-we-TIM" id="rFb-YO-vzO"/>
+                        <outlet property="container" destination="Yyc-Zp-ZTq" id="rrh-KV-hkp"/>
+                        <outlet property="scroller" destination="lma-we-TIM" id="bD4-AU-4Ia"/>
                         <outlet property="toolbarBottom" destination="cSM-my-rda" id="psB-WE-cMp"/>
-                        <outlet property="toolboxView" destination="XNt-T0-zvD" id="H84-bL-bjA"/>
+                        <outlet property="toolbox" destination="XNt-T0-zvD" id="h2w-z6-EpH"/>
                         <outlet property="view" destination="lLt-so-kJY" id="nov-Zf-9lU"/>
                         <segue destination="faV-0N-dYq" kind="push" identifier="MTIdentifierSegueEditField" id="am3-aZ-0MA"/>
                         <segue destination="Dt2-Py-qG0" kind="push" identifier="MTIdentifierSegueDocumentObjectEditBarcode" id="pCi-yT-77G"/>

@@ -33,6 +33,9 @@
 
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
+#import "NSManagedObject+Extras.h"
+
+#import "NSManagedObjectID+Extras.h"
 
 @interface RptqDocumentSection ()
 
@@ -136,9 +139,7 @@
 }
 
 - (NSString *)keyForIdentifier {
-    char buf[18];
-    snprintf(buf, 18, "s%lu", (unsigned long)[self.objectID hash]);
-    return @(buf);
+    return [self.objectID key];
 }
 
 - (NSUInteger)nextDropIndexForSection {
