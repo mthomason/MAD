@@ -181,7 +181,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 @property (nonatomic, assign) CGPoint currentNewPointA;
 @property (nonatomic, assign) CGPoint currentNewPointB;
-
 @property (nonatomic, assign) CGSize currentScaleSize;
 
 @property (nonatomic, assign) BOOL toolboxVisible;
@@ -1517,26 +1516,23 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 for (UIView *subview in [[cell contentView] subviews]) {
                     [subview removeFromSuperview];
                 }
-                //if ([[documentObject objectID] isTemporaryID]) {
-// FIXME: What's happening here.
-                //}
 
-                [cell setBackgroundColor:[UIColor clearColor]];
-                [[cell contentView] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-                
-                
+                cell.backgroundColor = [UIColor clearColor];
+                cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 
                 MTElementView *elementView = [self elementViewForManagedObject:documentObject];
                 
-                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panPiece:)];
-                [panGesture setMaximumNumberOfTouches:1];
-                [panGesture setDelegate:self];
+                UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self
+                                                                                             action: @selector(panPiece:)];
+                panGesture.maximumNumberOfTouches = 1;
+                panGesture.delegate = self;
                 
-                UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchPiece:)];
-                [pinchGesture setDelegate:self];
+                UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: self
+                                                                                                   action: @selector(pinchPiece:)];
+                pinchGesture.delegate = self;
                 
-                [[self.scroller panGestureRecognizer] requireGestureRecognizerToFail:panGesture];
-                [[self.scroller pinchGestureRecognizer] requireGestureRecognizerToFail:pinchGesture];
+                [self.scroller.panGestureRecognizer requireGestureRecognizerToFail:panGesture];
+                [self.scroller.pinchGestureRecognizer requireGestureRecognizerToFail:pinchGesture];
                 
                 [elementView addGestureRecognizer:panGesture];
                 [elementView addGestureRecognizer:pinchGesture];
@@ -1561,11 +1557,8 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [blockCell setContentScaleFactor:contextScale];
-                        [[blockCell contentView] setContentScaleFactor:contextScale];
+                        [blockCell.contentView setContentScaleFactor:contextScale];
                         [blockElementView setContentScaleFactor:contextScale];
-                        //[[blockElementView displayLabel] setContentScaleFactor:contextScale];
-                        //[[blockElementView imageView] setContentScaleFactor:contextScale];
-                        //[[blockElementView displayLabel] setNeedsDisplay];
                     });
                 });
                 break;
@@ -2817,15 +2810,16 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 - (MTElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
     MTElementView *elementView = nil;
-    elementView = (MTElementView *)[self viewForObjectID:[managedObject objectID]];
+    elementView = (MTElementView *)[self viewForObjectID:managedObject.objectID];
     if (!elementView) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
         if (documentObject) {
-            NSUInteger hash = [[documentObject objectID] hash];
-            elementView = (MTElementView *)[self.container viewWithTag:hash];
+            elementView = (MTElementView *)[self.container viewWithTag:documentObject.objectID.hash];
             if (!elementView) {
-                elementView = [[MTElementView alloc] initWithObjectId:[documentObject objectID] inObjectContext:[documentObject managedObjectContext]];
-                elementView.tag = hash;
+                
+                elementView = [[MTElementView alloc] initWithObjectId: documentObject.objectID
+                                                      inObjectContext: documentObject.managedObjectContext];
+                elementView.tag = documentObject.objectID.hash;
                 elementView.delegate = self;
                 elementView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 [elementView updateForManagedObjectContent:documentObject.managedObjectContext];
