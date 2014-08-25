@@ -332,7 +332,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     [self.view addConstraints:constraints];
     if ([UIDevice isModernOS]) {
         NSLayoutConstraint *cw = [self layoutConstraintContentWidthCalculated];
-        [self.view addConstraint:cw];
+        //[self.view addConstraint:cw];
         [self setLayoutConstraintContainerWidth:cw];
     }
     
@@ -666,9 +666,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.navigationItem.titleView sizeToFit];
-    
-
-    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -766,34 +763,22 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-//    self.designerScrollView.contentSize = CGSizeMake([self widthScrollViewContent],
-//                                                     self.designerScrollView.contentSize.height);
-//    [self.view setNeedsLayout];
-}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self.view setNeedsLayout];
 }
-- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    return YES;
-}
+//- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView {
+//    return YES;
+//}
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.designerContentView;
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
 }
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
     scale *= [[[self.designerScrollView window] screen] scale];
 
     [self.rulerView setContentScaleFactor:scale];
@@ -1115,19 +1100,10 @@ const CGFloat previousScaleWeight                   =  0.6666f;
         BOOL zoomIn = initalZoomScale < 1.500f;
         BOOL zoomIn2 = zoomIn == NO && initalZoomScale < 2.5000f;
         CGFloat zoomScale = zoomIn ? 2.0000f : zoomIn2 ? 3.0000f : 1.0000f;
-
-        [self.designerScrollView setContentOffset:CGPointZero animated:NO];
         [self.designerScrollView setZoomScale:zoomScale animated:YES];
         [self scrollViewDidEndZooming: self.designerScrollView
-                             withView: self.designerContentView atScale:zoomScale];
-        
-        __weak UIScrollView *blockScrollView = self.designerScrollView;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [blockScrollView setContentOffset:CGPointZero animated:NO];
-            });
-        });
-        // FIXME: Zoom to double tap point.
+                             withView: self.designerContentView
+                              atScale: zoomScale];
     }
 }
 
