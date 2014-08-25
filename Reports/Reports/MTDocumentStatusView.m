@@ -116,7 +116,7 @@
     if ([self active]) {
         [[UIColor clearColor] set];
     }
-    CGFloat lineWidth = ([UIDevice isModernOS] ? 1.0000f : 3.0000f);
+    CGFloat lineWidth = 1.0000f;
     CGContextSetLineWidth(currentContext, lineWidth);
     
     CGContextDrawPath(currentContext, kCGPathEOFillStroke);

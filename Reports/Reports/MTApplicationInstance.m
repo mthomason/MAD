@@ -37,9 +37,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.22";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.22";
-NSString * const MTGlobalBundleRev                                  = @"1397";
+NSString * const MTGlobalBundleVersion                              = @"7.0.23";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.23";
+NSString * const MTGlobalBundleRev                                  = @"1398";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -288,21 +288,11 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 }
 
 + (NSString *)storyboardName {
-    NSString *_storyboardName;
-    if ([MTApplicationInstance isMadDesigner]) {
-        if ([UIDevice isModernOS]) {
-            _storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-        } else {
-            _storyboardName = [UIDevice isPad] ? MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
-        }
-    } else if ([MTApplicationInstance isMadViewer]) {
-        if ([UIDevice isModernOS]) {
-            _storyboardName = [UIDevice isPad] ? MTStoryboardReportViewerPad : MTStoryboardReportViewer;
-        } else {
-            _storyboardName = [UIDevice isPad] ? MTStoryboardReportViewerPadLagacy : MTStoryboardReportViewer;
-        }
+    if ([UIDevice isModernOS]) {
+        return [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+    } else {
+        return [UIDevice isPad] ? MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
     }
-    return _storyboardName;
 }
 
 + (UIStoryboard *)storyboard {

@@ -8,7 +8,7 @@
 
 #import "UIDevice+Hack.h"
 
-const int MTModernOSMajorVersion = 7;
+const int MTModernOSMajorVersion = 8;
 
 @implementation UIDevice (Hack)
 
@@ -16,10 +16,14 @@ const int MTModernOSMajorVersion = 7;
     static NSUInteger _deviceSystemMajorVersion = -1;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _deviceSystemMajorVersion = [[[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."][0] integerValue];
+        NSArray *versionComponents = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+        NSString *versionComponentMajor = versionComponents[0];
+        _deviceSystemMajorVersion = [versionComponentMajor integerValue];
     });
     return _deviceSystemMajorVersion;
 }
+
+
 
 + (BOOL)isPad {
     static BOOL _isPad;

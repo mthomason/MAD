@@ -138,15 +138,17 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, strong) UIPopoverController *popoverControllerEditAggregate;
 
 @property (nonatomic, strong) MTElementView *lastElementViewToShowMenu;
-@property (nonatomic, strong) MTRulerView *rulerView;
 
 @property (nonatomic, weak) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsToRemove;
+
+@property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
 
 @property (nonatomic, strong) NSMutableDictionary *sectionViews;
 @property (nonatomic, strong) NSMutableDictionary *sectionControlViews;
 
 @property (nonatomic, strong) NSMutableDictionary *borderAppliedToView;
 
+@property (nonatomic, strong) MTRulerView *rulerView;
 @property (nonatomic, weak) IBOutlet UIScrollView *designerScrollView;
 @property (nonatomic, weak) IBOutlet UIView *designerContentView;
 
@@ -200,6 +202,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 @property (nonatomic, assign) BOOL lastMenuItemSelectRequiresElementView;
 
 @property (nonatomic, weak) UINavigationBar *navigationBar;
+
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *layoutConstraintsContainerToScroller;
+
 
 @end
 
@@ -316,17 +321,15 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSLayoutConstraint *constraintContentRight = [self layoutConstraintViewContentRight];
     NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
     NSLayoutConstraint *constraintScrollerBottom = [self layoutConstraintViewScrollerBottom];
+
+    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom];
     
-    //NSLayoutConstraint *constraintScrollerRight = [self layoutConstraintViewScrollerRight];
-    //NSLayoutConstraint *constraintScrollerLeft = [self layoutConstraintViewScrollerLeft];
-    //constraintScrollerRight.priority = UILayoutPriorityRequired;
-    //constraintScrollerLeft.priority = UILayoutPriorityRequired;
-    
-    NSArray *constraints = @[constraintContentLeft, constraintContentRight, constraintContentTop, constraintScrollerBottom
-    //                         ,constraintContentLeft
-    //                         ,constraintContentRight
-                             ];
     [self.view addConstraints:constraints];
+    if ([UIDevice isModernOS]) {
+        NSLayoutConstraint *cw = [self layoutConstraintContentWidthCalculated];
+        [self.view addConstraint:cw];
+        [self setLayoutConstraintContainerWidth:cw];
+    }
     
     MTReportDesignerToolBoxViewController *viewControllerToolbox = [MTReportDesignerViewController toolbox];
     viewControllerToolbox.delegate = self;
@@ -382,6 +385,20 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     self.toolbarBottomItems = toolbarBottomItems;
     
     [[[AppDelegate app] reportDesigner] setToolboxIsVisible:NO];
+}
+
+- (CGFloat)widthScrollViewContent {
+    return self.view.bounds.size.width / self.designerScrollView.zoomScale;
+}
+
+- (NSLayoutConstraint *)layoutConstraintContentWidthCalculated {
+    return [NSLayoutConstraint constraintWithItem: self.designerContentView
+                                                          attribute: NSLayoutAttributeWidth
+                                                          relatedBy: NSLayoutRelationEqual
+                                                             toItem: nil
+                                                          attribute: NSLayoutAttributeNotAnAttribute
+                                                         multiplier: 1.0000f
+                                                           constant: [self widthScrollViewContent]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -616,11 +633,27 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     [self.viewControllerSectionLayoutSettings viewWillLayoutSubviews];
+    
+    if ([UIDevice isModernOS]) {    //Needed for iOS8 Scroll View Changes
+        
+        [self.view removeConstraint: self.layoutConstraintContainerWidth];
+        NSLayoutConstraint *width = [self layoutConstraintContentWidthCalculated];
+        [self.view addConstraint:width];
+        self.layoutConstraintContainerWidth = width;
+        
+        self.designerScrollView.contentSize = CGSizeMake([self widthScrollViewContent],
+                                                         self.designerScrollView.contentSize.height);
+        
+    }
+
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.navigationItem.titleView sizeToFit];
+    
+
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -744,6 +777,9 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     for (UICollectionView *section in [self.sectionViews objectEnumerator]) {
         [section setContentScaleFactor:scale];
     }
+    
+    [self.view setNeedsLayout];
+
 }
 
 #pragma mark - UIDocumentStateChangedNotification
@@ -2138,6 +2174,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
                 gestureRecognizer.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, scaleWidth, scaleHeight);
                 [gestureRecognizer.view  setNeedsDisplay];
                 _currentScaleSize = CGSizeMake(scaleWidth, scaleHeight);
+                
             }
             break;
         }
@@ -2457,7 +2494,6 @@ const CGFloat previousScaleWeight                   =  0.6666f;
 - (void)removeCollectionViewCellForElementView:(NSManagedObjectID *)elementViewId
                                     completion:(void (^)(BOOL finished))completion {
     
-    
     RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: elementViewId
                                                                   managedObjectContext: self.document.managedObjectContext];
     
@@ -2670,7 +2706,7 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
     for (RptqDocumentSection *documentSection in sectionEnumerator) {
-        MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:[[documentSection identifier] integerValue]];
+        MTDocumentSectionView *documentSectionView = [self documentSectionViewWithIdentifier:documentSection.identifier.integerValue];
         NSInteger numberOfSectionsInCollectionView = [documentSectionView numberOfSections];
         
         for (NSUInteger section = 0; section < numberOfSectionsInCollectionView; section++) {

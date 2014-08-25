@@ -34,7 +34,7 @@
     CGRect bounds = [self bounds];
     CGRect labelBounds = CGRectMake(CGPointZero.x, CGPointZero.y, bounds.size.width, bounds.size.height - 4.0000f);
     UILabel *label = [[UILabel alloc] initWithFrame:labelBounds];
-    if ([UIDevice isLagacyOS]) {
+        /*
         [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [label setFont:[UIFont boldSystemFontOfSize:20.0000f]];
         [label setBackgroundColor:[UIColor clearColor]];
@@ -46,13 +46,11 @@
         [[label layer] setShadowColor:[[UIColor blackColor] CGColor]];
         BOOL retna = [UIDevice isRetnaDisplay];
         CGSize shadowOffset = CGSizeMake(0.0, !retna ? -1 : -1.5);
-        [[label layer] setShadowOffset:shadowOffset];
-    } else {
-        [label setFont:[UIFont systemFontOfSize:20.0000f]];
-        [label setTextColor:[UIColor whiteColor]];
-        [label setTextAlignment:NSTextAlignmentCenter];
-    }
-    [label setText:@""];
+        [[label layer] setShadowOffset:shadowOffset];*/
+    label.font = [UIFont systemFontOfSize:20.0000f];
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = @"";
     [self addSubview:label];
     [self setLabel:label];
 }

@@ -103,13 +103,9 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
         [self setBgColor:bgColor];
         
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
-        if ([UIDevice isLagacyOS]) {
-            [[selectedBackground layer] setCornerRadius: 1.0000f];
-        }
+        //[[selectedBackground layer] setCornerRadius: 1.0000f];
         [selectedBackground setClipsToBounds:YES];
-        if ([UIDevice isModernOS]) {
-            [selectedBackground setBackgroundColor:[self bgColor]];
-        }
+        [selectedBackground setBackgroundColor:[self bgColor]];
         
         [self setSelectedBackgroundView:selectedBackground];
         
