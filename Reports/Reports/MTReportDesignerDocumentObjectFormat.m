@@ -61,6 +61,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if ([UIDevice isModernOS]) {
+        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        self.tableView.backgroundView = visualEffectsView;
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.view.opaque = NO;
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -85,8 +95,8 @@
     if ([UIDevice isPad] == NO) {
         //CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
         UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
-        [[self tableView] setContentInset:tableInset];
-        [[self tableView] setScrollIndicatorInsets:tableInset];
+        [self.tableView setContentInset:tableInset];
+        [self.tableView setScrollIndicatorInsets:tableInset];
     }
 }
 
@@ -226,6 +236,13 @@
 
 #pragma mark -
 #pragma mark Table View Delegate Protocol
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([UIDevice isModernOS]) {
+        cell.backgroundColor = [UIColor clearColor];
+        cell.contentView.backgroundColor = [UIColor clearColor];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	

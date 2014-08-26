@@ -98,8 +98,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[self schemaTableViewController] setDataSource:self];
-    [[self schemaTableViewController] setDelegate:self];
-    [[[self containerView] layer] setCornerRadius: 25.0000f];
+    [self schemaTableViewController].delegate = self;
+    [[self containerView] layer].cornerRadius =  25.0000f;
     [[self containerView] setClipsToBounds: YES];
     [[self schemaTableViewController] reloadData];
     [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];

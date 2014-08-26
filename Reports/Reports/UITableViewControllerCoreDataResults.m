@@ -78,7 +78,7 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     if (![self suspendAutomaticTrackingOfChangesInManagedObjectContext]) {
-        [[self tableView] beginUpdates];
+        [self.tableView beginUpdates];
         [self setBeganUpdates: YES];
     }
 }
@@ -109,20 +109,20 @@
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
         switch(type) {
             case NSFetchedResultsChangeInsert:
-                [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeDelete:
-                [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeUpdate:
-                [[self tableView] reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
                 
             case NSFetchedResultsChangeMove:
-                [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                 break;
         }
     }
@@ -130,7 +130,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     if ([self beganUpdates])
-        [[self tableView] endUpdates];
+        [self.tableView endUpdates];
 }
 
 - (void)endSuspensionOfUpdatesDueToContextChanges {

@@ -79,7 +79,7 @@
         [[segue identifier] isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
         
         UITableViewCell *cell = sender;
-        NSIndexPath *indexPath = [[self tableView] indexPathForCell: cell];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell: cell];
         RptqQueryField *queryField = [self queryFieldForIndexPath:indexPath];
         [self setQueryField:queryField];
     
@@ -96,7 +96,7 @@
     [[self navigationItem] setLeftItemsSupplementBackButton:YES];
     [[self navigationItem] setHidesBackButton:NO];
     
-    [[self tableView] setSectionHeaderHeight: HEADER_HEIGHT];
+    [self.tableView setSectionHeaderHeight: HEADER_HEIGHT];
 
     _openSectionIndex = NSNotFound;
     RptqDocument *document = [self.document activeDocumentModel];
@@ -108,14 +108,14 @@
     NSArray *queryTablesArray = [queryTables sortedArrayUsingDescriptors:@[namesAccending]];
     [self setDataTables:queryTablesArray];
     
-    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated]; 
 	
-	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != [self numberOfSectionsInTableView:[self tableView]])) {
+	if (([self sectionInfoArray] == nil) || ([[self sectionInfoArray] count] != [self numberOfSectionsInTableView:self.tableView])) {
 		
 		NSMutableArray *infoArray = [[NSMutableArray alloc] init];
 		
@@ -275,10 +275,10 @@
     }
     
     // Apply the updates.
-    [[self tableView] beginUpdates];
-    [[self tableView] insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
-    [[self tableView] deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
-    [[self tableView] endUpdates];
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
+    [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
+    [self.tableView endUpdates];
     [self setOpenSectionIndex: sectionOpened];
     
 }
@@ -293,14 +293,14 @@
 	
 	[sectionInfo setOpen: NO];
 
-    NSInteger countOfRowsToDelete = [[self tableView] numberOfRowsInSection:sectionClosed];
+    NSInteger countOfRowsToDelete = [self.tableView numberOfRowsInSection:sectionClosed];
     
     if (countOfRowsToDelete > 0) {
         NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
         for (NSInteger i = 0; i < countOfRowsToDelete; i++) {
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:sectionClosed]];
         }
-        [[self tableView] deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
     }
     [self setOpenSectionIndex: NSNotFound];
 }

@@ -31,7 +31,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         //[self setOpaque:YES];
-        [self setBackgroundColor:[UIColor clearColor]];
+        self.backgroundColor = [UIColor clearColor];
 
         CGSize shadowSize = CGSizeMake(2.0000f, 2.0000f);
         [self setShadowSize:shadowSize];
@@ -42,8 +42,8 @@
         UIView *anchorLeft = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, 1.0000f, 1.0000f)];
         UIView *anchorRight = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width, frame.origin.y + frame.size.height, 1.0000f, 1.0000f)];
         
-        [anchorLeft setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin];
-        [anchorRight setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin];
+        anchorLeft.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+        anchorRight.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         
         UIColor *color = [UIColor tintColorRed];
         [self setForgroundColor:color];
@@ -57,7 +57,7 @@
         
         [self setClipsToBounds:NO];
         [[self layer] setMasksToBounds:NO];
-        [self setContentMode:UIViewContentModeScaleAspectFit];
+        self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;
 }
@@ -65,9 +65,9 @@
 - (instancetype)initWithOriginView:(CGPoint)originPoint andDestinationPoint:(CGPoint)destinationPoint {
     self = [super initWithFrame:CGRectZero];
     if (self) {
-        [self setBackgroundColor:[UIColor clearColor]];
+        self.backgroundColor = [UIColor clearColor];
         [self setOriginPoint:originPoint andDestinationPoint:destinationPoint];
-        [self setContentMode:UIViewContentModeScaleAspectFit];
+        self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;
 }

@@ -41,7 +41,7 @@
 }
 
 - (void)commonInit {
-    [self setBackgroundColor:[UIColor whiteColor]];
+    self.backgroundColor = [UIColor whiteColor];
     UIFont *font = [UIFont systemFontOfSize: 5.0000f];
     UIFont *font2 = [UIFont systemFontOfSize: 4.0000f];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];

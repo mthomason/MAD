@@ -137,7 +137,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTSegueAboutGettingStarted"] ||
         [[segue identifier] isEqualToString:@"MTSegueAboutSwipeNext"]) {
-        [(MTTableViewControllerAbout *)segue.destinationViewController setDelegate:self.delegate];
+        ((MTTableViewControllerAbout *)segue.destinationViewController).delegate = self.delegate;
     }
 }
 

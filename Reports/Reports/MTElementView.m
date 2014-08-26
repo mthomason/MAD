@@ -134,7 +134,7 @@ static size_t const kDashedCount            = (2.0f);
     [super setAlpha:alpha];
     
     UIColor *labelBackgroundColor = [UIColor colorWithRed:1.0000f green:1.0000f blue:1.0000f alpha:alpha];
-    [self setBackgroundColor:labelBackgroundColor];
+    self.backgroundColor = labelBackgroundColor;
 }
 
 - (instancetype)initWithObjectId:(NSManagedObjectID *)objectId inObjectContext:(NSManagedObjectContext *)managedObjectContext {
@@ -158,17 +158,17 @@ static size_t const kDashedCount            = (2.0f);
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSelection:)];
         [tapGestureRecognizer setNumberOfTapsRequired:1];
         [tapGestureRecognizer setNumberOfTouchesRequired:1];
-        [tapGestureRecognizer setDelegate: self];
+        tapGestureRecognizer.delegate =  self;
         [self addGestureRecognizer:tapGestureRecognizer];
         
         [self setDisplayHighlighted:NO];
         [self setObjectIdTag:objectId];
 
-        [self setTranslatesAutoresizingMaskIntoConstraints:YES];
+        self.translatesAutoresizingMaskIntoConstraints = YES;
         [self setDisplayWobbling: NO];
         [self setDisplayHighlighted: NO];
         
-        [self setBackgroundColor:[UIColor clearColor]];
+        self.backgroundColor = [UIColor clearColor];
         [self setClipsToBounds:YES];
 
     }

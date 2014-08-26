@@ -46,7 +46,7 @@ static MTVerificationController *singleton;
     [self setModernReceiptIsValid:isValidReceipt];
     if (isValidReceipt == NO) {
         SKReceiptRefreshRequest *request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
-        [request setDelegate:self];
+        request.delegate = self;
         [request start];
     } else {
         NSDate *experationDate = [[MTStoreKitController sharedObject] experationDateIOS7];

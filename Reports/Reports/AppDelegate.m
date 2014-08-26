@@ -131,7 +131,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                                                    cancelButtonTitle:@"Continue"
                                                    otherButtonTitles:nil];
         [alertView setTag:MATagNewDocument];
-        [alertView setDelegate:self];
+        alertView.delegate = self;
         [alertView show];
     }
     return result;

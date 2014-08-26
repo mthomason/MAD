@@ -21,7 +21,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSInteger row = [self.delegate barcodeDataMatrixInitalSize];
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:1]];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:1]];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 }
 

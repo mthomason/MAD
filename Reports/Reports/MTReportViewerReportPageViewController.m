@@ -62,11 +62,11 @@
 
 - (void)loadView {
     MTReportViewerReportPageView *renderedReportView = [[MTReportViewerReportPageView alloc] initWithFrame:CGRectZero];
-    [renderedReportView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    [renderedReportView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    renderedReportView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    renderedReportView.translatesAutoresizingMaskIntoConstraints = YES;
     UIColor *whiteColor = [UIColor whiteColor];
-    [renderedReportView setBackgroundColor:whiteColor];
-    [renderedReportView setDelegate:self];
+    renderedReportView.backgroundColor = whiteColor;
+    renderedReportView.delegate = self;
     [self setView:renderedReportView];
 }
 
@@ -127,12 +127,12 @@
         [label setUserInteractionEnabled:NO];
         [view setUserInteractionEnabled:NO];
         UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
-        [view setBackgroundColor:bgColor];
-        [label setBackgroundColor:[UIColor clearColor]];
+        view.backgroundColor = bgColor;
+        label.backgroundColor = [UIColor clearColor];
         
         [view addSubview:label];
         [view setAlpha:0.0000f];
-        [[view layer] setCornerRadius: 6.0000f];
+        [view layer].cornerRadius =  6.0000f;
         
         [[self view] addSubview:view];
         __weak UIView *blockView = view;
@@ -229,11 +229,11 @@
     [labelView setTextColor:[UIColor whiteColor]];
     [labelView setTextAlignment:NSTextAlignmentCenter];
     UIColor *bgColor = [UIColor colorWithWhite:0.0000f alpha:0.5000f];
-    [numberView setBackgroundColor:bgColor];
+    numberView.backgroundColor = bgColor;
     [numberView setUserInteractionEnabled:NO];
     [labelView setUserInteractionEnabled:NO];
-    [labelView setBackgroundColor:[UIColor clearColor]];
-    [[numberView layer] setCornerRadius: 6.0000f];
+    labelView.backgroundColor = [UIColor clearColor];
+    [numberView layer].cornerRadius =  6.0000f;
     [numberView addSubview:labelView];
     [numberView setAlpha:0.0000f];
     [[self view] addSubview:numberView];

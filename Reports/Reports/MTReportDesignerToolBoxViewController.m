@@ -80,6 +80,8 @@
     [super viewDidLoad];
 
     [self initialize];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:self.tableViewControllerTextLayoutSettings.view];
 }
 

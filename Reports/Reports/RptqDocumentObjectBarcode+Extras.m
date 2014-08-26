@@ -65,7 +65,7 @@
 
     [self setAdd2dComponent:    @([barcode has2dComponent])];
     [self setBorderStyle:       @([barcode borderStyle])];
-    [self setBorderWidth:       @([barcode borderWidth])];
+    self.borderWidth =        @([barcode borderWidth]);
     [self setType:              @([barcode barcodeType])];
     [self setHeight:            @([barcode height])];
     [self setHumanReadable:     @([barcode humanReadable])];
@@ -87,7 +87,7 @@
 
     [barcode setHas2dComponentEnabled:[[documentObject add2dComponent] boolValue]];
     [barcode setBorderStyle:        [[documentObject borderStyle] integerValue]];
-    [barcode setBorderWidth:        [[documentObject borderWidth] integerValue]];
+    barcode.borderWidth =         [[documentObject borderWidth] integerValue];
     [barcode setHeight:             [[documentObject height] integerValue]];
     [barcode setHumanReadable:      [[documentObject humanReadable] integerValue]];
     [barcode setOption1:            [[documentObject option1] integerValue]];
@@ -135,7 +135,7 @@
         
         [reportObject setAdd2dComponent:componentEnabled];
         [reportObject setBorderStyle:borderStyle];
-        [reportObject setBorderWidth:borderWidth];
+        reportObject.borderWidth = borderWidth;
         [reportObject setColorBackground:colorBackground];
         [reportObject setColorForeground:colorForeground];
         [reportObject setHeight:height];

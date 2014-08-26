@@ -52,7 +52,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     [[self navigationItem] setHidesBackButton:NO];
     [[self navigationItem] setLeftItemsSupplementBackButton: YES];
-    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
 }
@@ -68,10 +68,10 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    [[transitionContext containerView] setBackgroundColor:[UIColor clearColor]];
+    [transitionContext containerView].backgroundColor = [UIColor clearColor];
     [[transitionContext containerView] setOpaque:NO];
     [[viewControllerTo view] setBounds:[[viewControllerFrom view] bounds]];
-    [[viewControllerTo view] setBackgroundColor:[UIColor clearColor]];
+    [viewControllerTo view].backgroundColor = [UIColor clearColor];
     [[transitionContext containerView] addSubview:[viewControllerTo view]];
     [[viewControllerTo view] setBounds:[[transitionContext containerView] bounds]];
     [[viewControllerTo view] setCenter:[[transitionContext containerView] center]];
@@ -137,10 +137,10 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     [progressView setFrame:CGRectMake(progressView.frame.origin.x, progressView.frame.origin.y, self.tableView.frame.size.width, progressView.frame.size.height)];
-    [progressView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     progressView.progressTintColor = [UIColor tintColorAnalogous4];
     progressView.trackTintColor = [UIColor grayColor];
-    [[self tableView] addSubview:progressView];
+    [self.tableView addSubview:progressView];
     
     self.navigationItem.prompt = @"Importing schema.";
     

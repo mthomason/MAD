@@ -93,7 +93,7 @@
             if (conn && error == nil) {
                 @autoreleasepool {
                     MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                    [myFetch setDelegate:self];
+                    myFetch.delegate = self;
                     [myFetch performQuery: query
                              onConnection: conn];
                     completion(YES, nil);

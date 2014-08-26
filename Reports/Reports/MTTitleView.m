@@ -30,14 +30,14 @@
 }
 
 - (void)initalize {
-    [self setBackgroundColor:[UIColor clearColor]];
+    self.backgroundColor = [UIColor clearColor];
     CGRect bounds = [self bounds];
     CGRect labelBounds = CGRectMake(CGPointZero.x, CGPointZero.y, bounds.size.width, bounds.size.height - 4.0000f);
     UILabel *label = [[UILabel alloc] initWithFrame:labelBounds];
         /*
-        [label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [label setFont:[UIFont boldSystemFontOfSize:20.0000f]];
-        [label setBackgroundColor:[UIColor clearColor]];
+        label.backgroundColor = [UIColor clearColor];
         [label setTextColor:[UIColor whiteColor]];
         [label setTextAlignment:NSTextAlignmentCenter];
         [[label layer] setShadowOpacity:1.0000f];

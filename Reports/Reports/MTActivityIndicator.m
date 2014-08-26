@@ -24,13 +24,13 @@
                                                UIViewAutoresizingFlexibleTopMargin;
         UIViewAutoresizing maskLabelView = UIViewAutoresizingFlexibleBottomMargin |
                                            UIViewAutoresizingFlexibleWidth;
-        [self.layer setCornerRadius:5.0000f];
+        self.layer.cornerRadius = 5.0000f;
         UIColor *bgColor = [UIColor edaBlueLightBackground];
-        [self setBackgroundColor:bgColor];
+        self.backgroundColor = bgColor;
         UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         
-        [self setAutoresizingMask:maskView];
-        [activityIndicator setAutoresizingMask:maskIndicatorView];
+        self.autoresizingMask = maskView;
+        activityIndicator.autoresizingMask = maskIndicatorView;
         
         
         [self addSubview:activityIndicator];
@@ -45,7 +45,7 @@
         
         [status setFont:font];
         [status setText:@"Formatting report."];
-        [status setAutoresizingMask:maskLabelView];
+        status.autoresizingMask = maskLabelView;
         [status setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:status];
         [self setStatus:status];

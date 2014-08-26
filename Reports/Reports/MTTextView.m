@@ -21,13 +21,13 @@
     if (self) {
 
         [self setClipsToBounds:YES];
-        [self setBackgroundColor:[UIColor clearColor]];
+        self.backgroundColor = [UIColor clearColor];
         CGRect textViewFrame = CGRectInset(frame, -4.0000f, -4.0000f);
         [self setInitalFrame:textViewFrame];
         UITextView *textView = [[UITextView alloc] initWithFrame:textViewFrame];
         [textView setUserInteractionEnabled:NO];
         
-        [textView setBackgroundColor:[UIColor clearColor]];
+        textView.backgroundColor = [UIColor clearColor];
         [self addSubview:textView];
         [textView setClipsToBounds:YES];
         [self setTextView:textView];

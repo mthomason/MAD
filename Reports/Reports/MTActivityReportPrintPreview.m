@@ -54,7 +54,7 @@
 
 - (void)performActivity {
     UIDocumentInteractionController *c = [UIDocumentInteractionController  interactionControllerWithURL:[self pdfurl]];
-    [c setDelegate:self];
+    c.delegate = self;
     [self setInteractionController:c];
     [self.delegate prepareForInteractionController:c withCompletionHandler:^(BOOL success) {
         if (success) {

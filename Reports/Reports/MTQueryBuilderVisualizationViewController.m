@@ -147,35 +147,35 @@ typedef void(^MTBlockResultVoid)(void);
     if ([UIDevice isPad]) {
         CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
         UIColor *borderColor = [UIColor lightGrayColor];
-        [[[self backgroundContainer] layer] setBorderWidth:borderWidth];
-        [[[self backgroundContainer] layer] setBorderColor:[borderColor CGColor]];
+        [[self backgroundContainer] layer].borderWidth = borderWidth;
+        [[self backgroundContainer] layer].borderColor = [borderColor CGColor];
     }
     [self setShowSqlIsVisable:NO];
     UIView *containerView = [[UIView alloc] initWithFrame:[[self backgroundContainer] bounds]];
     
     UIViewAutoresizing autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [containerView setAutoresizingMask:autoresizingMask];
-    [containerView setContentMode:UIViewContentModeScaleAspectFit];
-    [containerView setAutoresizesSubviews:NO];
-    [[self contentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    containerView.contentMode = UIViewContentModeScaleAspectFit;
+    containerView.autoresizesSubviews = NO;
+    [self contentView].translatesAutoresizingMaskIntoConstraints = NO;
     MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:[[self backgroundContainer] bounds]];
-    [scrollView setShowsHorizontalScrollIndicator:YES];
-    [scrollView setShowsVerticalScrollIndicator:YES];
-    [scrollView setAutoresizingMask:autoresizingMask];
+    scrollView.showsHorizontalScrollIndicator = YES;
+    scrollView.showsVerticalScrollIndicator = YES;
+    scrollView.autoresizingMask = autoresizingMask;
     [scrollView setContentOffset:CGPointZero];
-    [scrollView setMaximumZoomScale:4.0000f];
+    scrollView.maximumZoomScale = 4.0000f;
     [scrollView setMinimumZoomScale:0.2000f];
-    [scrollView setZoomScale:1.0000f];
+    scrollView.zoomScale = 1.0000f;
     [scrollView setScrollEnabled:YES];
-    [scrollView setBounces:YES];
+    scrollView.bounces = YES;
     [scrollView setAlwaysBounceHorizontal:YES];
     [scrollView setAlwaysBounceVertical:YES];
     [scrollView setBouncesZoom:NO];
     [scrollView setDelegate:self];
-    [scrollView setDelaysContentTouches:YES];
-    [scrollView setBackgroundColor:bgColor];
+    scrollView.delaysContentTouches = YES;
+    scrollView.backgroundColor = bgColor;
     [scrollView addSubview:containerView];
-    [scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self setScrollView:scrollView];
 
@@ -1307,7 +1307,7 @@ typedef void(^MTBlockResultVoid)(void);
     [width setPriority:1000];
     [height setPriority:1000];
     
-    [[viewController view] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [viewController view].translatesAutoresizingMaskIntoConstraints = NO;
     
     constraints = @[width, height];
     

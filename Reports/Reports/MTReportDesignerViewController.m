@@ -279,6 +279,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if ([UIDevice isModernOS]) {
+        self.toolbox.backgroundColor = [UIColor clearColor];
+        self.view.backgroundColor = [UIColor purpleColor];
+        self.scroller.backgroundColor = [UIColor brownColor];
+    }
+    
     [self initializeRuler];
     
     self.boundsOnDisappear = CGRectZero;
@@ -316,10 +322,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self scrollerRemoveAllConstraints];
     
     UITapGestureRecognizer *tapGestureDoubleTap = [MTReportDesignerViewController tapGestureRecognizerDouble:self];
-    [tapGestureDoubleTap setDelegate: self];
+    tapGestureDoubleTap.delegate =  self;
     
     UITapGestureRecognizer *tapGestureSingleTap = [MTReportDesignerViewController tapGestureRecognizerSingle:self];
-    [tapGestureSingleTap setDelegate: self];
+    tapGestureSingleTap.delegate =  self;
     [tapGestureSingleTap requireGestureRecognizerToFail:tapGestureDoubleTap];
     
     [self.scroller addGestureRecognizer:tapGestureDoubleTap];
@@ -335,12 +341,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.scroller.translatesAutoresizingMaskIntoConstraints = NO;
     
     if ([UIDevice isModernOS]) {
-        constraintContentLeft.priority = UILayoutPriorityDefaultLow;
-        constraintContentRight.priority = UILayoutPriorityDefaultLow;
+        //self.scroller setB
+        self.scroller.bouncesZoom = NO;
+        //constraintContentLeft.constant = 1.0000f;
+        //constraintContentRight.constant = 1.0000f;
+        constraints = @[//constraintContentLeft,
+                        //constraintContentRight,
+                        constraintContentTop, constraintScrollerBottom];
+    } else {
+        constraints = @[constraintContentLeft, constraintContentRight,
+                        constraintContentTop, constraintScrollerBottom];
     }
     
-    constraints = @[constraintContentLeft, constraintContentRight,
-                    constraintContentTop, constraintScrollerBottom];
     
     [self.view addConstraints:constraints];
     if ([UIDevice isModernOS]) {
@@ -520,7 +532,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.lastMenuItemSelectRequiresElementView = NO;
     
     self.zoomScaleRestore = self.scroller.zoomScale;
-    [self.scroller setZoomScale:1.0000f animated:NO];
+    [self.scroller setZoomScale: 1.0000f animated:NO];
     
     RptqDocument *document = [self.document activeDocumentModel];
     SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
@@ -874,7 +886,21 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if ([scrollView isEqual:self.scroller]) {   //Force no vertical scroll to work around appearant iOS8 bug.    if (scrollView.contentOffset.x != 0) {
+        CGPoint offset = scrollView.contentOffset;
+        offset.x = 0.0000f;
+        scrollView.contentOffset = offset;
+    }
+
+        if (scrollView.contentOffset.x != 0) {
+            CGPoint offset = scrollView.contentOffset;
+            offset.x = 0.0000f;
+            scrollView.contentOffset = offset;
+        }
+    }
+}
+
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     [self.view setNeedsLayout];
 }
@@ -952,7 +978,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
-    [documentSectionView setBackgroundColor:color];
+    documentSectionView.backgroundColor = color;
     */
     [self.document saveContext];
 }
@@ -971,7 +997,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
     UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
-    [documentSectionView setBackgroundColor:color];
+    documentSectionView.backgroundColor = color;
     [self.document saveContext];
 }
 
@@ -1381,7 +1407,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             CGRect popoverRect = [viewToEdit convertRect:viewToEdit.bounds
                                                   toView:self.container];
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
-            [popoverController setDelegate:self];
+            popoverController.delegate = self;
             [popoverController setPopoverContentSize:popoverSize animated:NO];
             [popoverController presentPopoverFromRect: popoverRect
                                                inView: self.container
@@ -1413,7 +1439,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             UIStoryboard *storyboard = [MTApplicationInstance storyboard];
             MTViewControllerBarcode *barcodeViewController = [storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier];
             barcodeViewController.document = self.document;
-            [barcodeViewController setDelegate:self];
+            barcodeViewController.delegate = self;
             
             RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:objectId];
             RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
@@ -1422,7 +1448,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:self.container];
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:barcodeViewController];
-            [popoverController setDelegate:self];
+            popoverController.delegate = self;
             [popoverController setPopoverContentSize:popoverSize animated:NO];
             [popoverController presentPopoverFromRect:popoverRect
                                                inView:self.container
@@ -1467,7 +1493,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:self.container];
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:chooseFieldViewController];
-            [popoverController setDelegate:self];
+            popoverController.delegate = self;
             [popoverController setPopoverContentSize:popoverSize animated:NO];
             [popoverController presentPopoverFromRect:popoverRect
                                                inView:self.container
@@ -1495,10 +1521,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                               otherButtonTitles: NSLocalizedString(@"Change", @"Change"), nil
                               ];
     [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
-    [alertView setDelegate:self];
+    alertView.delegate = self;
     UITextField *textField = [alertView textFieldAtIndex:0];
     [textField setClearButtonMode:UITextFieldViewModeAlways];
-    [textField setDelegate:self];
+    textField.delegate = self;
     NSString *textFieldText = [[object isLabel] text];
     [textField setText:textFieldText];
     [alertView setTag:MTDocumentObjectTypeLabelStatic];
@@ -1614,7 +1640,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     MTCollectionViewCellElement *cell = [collectionView dequeueReusableCellWithReuseIdentifier:resuseId
                                                                                   forIndexPath:indexPath];
-    [cell setDelegate:self];
+    cell.delegate = self;
     if ([objects count] > indexPath.row) {
         
         RptqDocumentObject *documentObject = objects[indexPath.row];
@@ -1782,7 +1808,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewControllerDidFinish:(id)sender {
     
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
-        [self.scroller setZoomScale:1.0000f animated:NO];
+        [self.scroller setZoomScale: 1.0000f animated:NO];
         __weak MTReportDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
             [[reportDesigner view] setNeedsUpdateConstraints];
@@ -2912,7 +2938,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     //Remove border from the section views
     [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, UICollectionView *view, BOOL *stop) {
-        [view.layer setBorderWidth:0.0000f];
+        view.layer.borderWidth = 0.0000f;
     }];
 }
 
@@ -2995,7 +3021,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self setDisplayInactive];
         UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
         UIPopoverController *popoverController = [popoverSegue popoverController];
-        [popoverController setDelegate:self];
+        popoverController.delegate = self;
         CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f + 44.0000f);
         [popoverController setPopoverContentSize:popoverSize animated:YES];
         
@@ -3005,7 +3031,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = nil;
     if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *d = segue.destinationViewController;
-        [d setDelegate:self];
+        d.delegate = self;
         viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)d.topViewController;
         viewControllerObjectSelector.objectSelectorDelegate = self;
         viewControllerObjectSelector.document = self.document;
@@ -3068,11 +3094,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)setupPopoverControllers {
     UIPopoverController *popoverControllerInformation = [MTReportDesignerViewController popoverWithContoller:self.viewControllerToolbox];
-    [popoverControllerInformation setDelegate:self];
+    popoverControllerInformation.delegate = self;
     self.popoverControllerInformation = popoverControllerInformation;
     
     UIPopoverController *popoverControllerSectionSettings = [MTReportDesignerViewController popoverWithContoller:self.navigationControllerSectionLayoutSettings];
-    [popoverControllerSectionSettings setDelegate:self];
+    popoverControllerSectionSettings.delegate = self;
     self.popoverControllerSectionSettings = popoverControllerSectionSettings;
 }
 
@@ -3155,9 +3181,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)initializeRuler {
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
-    [[viewRuler layer] setBorderWidth: 0.5000f];
-    [[viewRuler layer] setBorderColor:[[MTReportDesignerViewController borderColor] CGColor]];
-    [viewRuler setTranslatesAutoresizingMaskIntoConstraints:NO];
+    viewRuler.layer.borderWidth = 0.5000f;
+    viewRuler.layer.borderColor = [MTReportDesignerViewController borderColor].CGColor;
+    viewRuler.translatesAutoresizingMaskIntoConstraints = NO;
     [self setRuler:viewRuler];
 }
 
@@ -3211,10 +3237,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 + (MTDocumentSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {
     MTReportDesignerSectionBackgroundView *backgroundView = [[MTReportDesignerSectionBackgroundView alloc] initWithFrame:CGRectZero];
     [backgroundView setNumberOfRowsInBackground:section.numberOfRows.integerValue];
-    [backgroundView setBackgroundColor:[UIColor clearColor]];
+    backgroundView.backgroundColor = [UIColor clearColor];
     
     MTReportDesignerSectionViewLayoutLiquid *flowLayoutDesignerSection = [[MTReportDesignerSectionViewLayoutLiquid alloc] init];
-    [flowLayoutDesignerSection setDelegate:layoutDelegate];
+    flowLayoutDesignerSection.delegate = layoutDelegate;
     MTDocumentSectionView *collectionView = [[MTDocumentSectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayoutDesignerSection];
     [collectionView setObjectIdTag: section.objectID];
     
@@ -3626,7 +3652,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
             UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
             [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-            [imagePicker setDelegate: reportDesigner];
+            imagePicker.delegate =  reportDesigner;
             [[imagePicker navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
             
             [reportDesigner.tabBarController presentViewController:imagePicker animated:YES completion:NULL];

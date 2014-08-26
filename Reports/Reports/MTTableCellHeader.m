@@ -46,15 +46,21 @@
 }
 
 - (void)initalize {
-    UILabel *lbl = [[UILabel alloc] initWithFrame:[self bounds]];
+    UILabel *lbl = [[UILabel alloc] initWithFrame:self.bounds];
     UIColor *bgcolor = [UIColor tintColorBlue];
-    [lbl setBackgroundColor:bgcolor];
-    [lbl setTextColor:[UIColor tintColorWhite]];
-    [lbl setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
+    lbl.backgroundColor = bgcolor;
+    lbl.textColor = [UIColor tintColorWhite];
+    lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+                           UIViewAutoresizingFlexibleWidth |
+                           UIViewAutoresizingFlexibleTopMargin |
+                           UIViewAutoresizingFlexibleBottomMargin |
+                           UIViewAutoresizingFlexibleRightMargin |
+                           UIViewAutoresizingFlexibleLeftMargin;
+
     [self addSubview:lbl];
-    [self setLabel:lbl];
-    [[self layer] setBorderWidth:1.0000f];
-    [[self layer] setBorderColor:[bgcolor CGColor]];
+    self.label = lbl;
+    self.layer.borderWidth = 1.0000f;
+    self.layer.borderColor = [bgcolor CGColor];
 }
 
 @end

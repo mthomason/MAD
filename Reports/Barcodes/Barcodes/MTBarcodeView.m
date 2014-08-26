@@ -43,7 +43,7 @@
     if (self) {
         
         [self setRotate:(90 * M_PI / 180)];
-        [self setBackgroundColor:[UIColor clearColor]];
+        self.backgroundColor = [UIColor clearColor];
         
         CGFloat pixelSize = 1.0000f * [[UIScreen mainScreen] scale];
         [self setPixelSize:pixelSize];

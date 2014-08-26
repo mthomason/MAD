@@ -140,7 +140,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
             
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
             __weak MTViewControllerBarcode *weakself = self;
-            [[querySampleDataField database] setDelegate:self];
+            [querySampleDataField database].delegate = self;
             [self setQuery:querySampleDataField];
             [[self query] performQuery:^(BOOL success, NSError *error) {
                 if (success) {
@@ -155,7 +155,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
             RptqDatabaseSchemaField *schemaField = [[self queryField2] databaseSchemaField];
             MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
             __weak MTViewControllerBarcode *weakself = self;
-            [[querySampleDataField database] setDelegate:self];
+            [querySampleDataField database].delegate = self;
             [self setQuery2:querySampleDataField];
             [[self query2] performQuery:^(BOOL success, NSError *error) {
                 if (success) {
@@ -297,7 +297,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 }
 
 - (void)setBorderWidth:(CGFloat)borderWidth {
-    [[self barcode] setBorderWidth:borderWidth];
+    [self barcode].borderWidth = borderWidth;
     [self updateBarcode];
 }
 
@@ -429,7 +429,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     NSString *identifier = [segue identifier];
     if ([identifier isEqualToString:@"MTIdentifierSegueBarcodePreview"]) {
         MTViewControllerBarcodePreview *pvc = segue.destinationViewController;
-        [pvc setDelegate:self];
+        pvc.delegate = self;
         [pvc setBarcodeToPreview:[self barcode]];
         [[pvc view] layoutIfNeeded];
         [self setPreviewViewController:pvc];

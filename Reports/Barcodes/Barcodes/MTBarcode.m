@@ -354,11 +354,11 @@
 
 - (void)commonInit {
     [self setForgroundColor:[UIColor blackColor]];
-    [self setBackgroundColor:[UIColor whiteColor]];
+    self.backgroundColor = [UIColor whiteColor];
     [self setShowErrorMessages:YES];
     [self setHumanReadable:YES];
     [self setHeight:50];
-    [self setBorderWidth:5];
+    self.borderWidth = 5;
     [self setRotate:(90.0000f * M_PI / 180.0000f)];
     [self setOption1: NO];
     [self setOption2: NO];

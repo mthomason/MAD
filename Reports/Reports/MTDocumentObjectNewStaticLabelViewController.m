@@ -47,7 +47,7 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
     [super viewDidLoad];
     [[self navigationItem] setLeftItemsSupplementBackButton:YES];
     [[self navigationItem] setHidesBackButton:NO];
-    [[self labelTextTextbox] setDelegate:self];
+    [self labelTextTextbox].delegate = self;
     [[self labelTextTextbox] becomeFirstResponder];
 }
 

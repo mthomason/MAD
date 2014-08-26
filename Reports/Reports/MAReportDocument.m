@@ -103,7 +103,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
 @implementation MAReportDocument
 
 - (void)dealloc {
-    [[_mainQuery database] setDelegate:nil];
+    [_mainQuery database].delegate = nil;
 }
 
 - (id)initWithFileURL:(NSURL *)url {
@@ -257,7 +257,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
     RptqUserCredentals *userCredentals = [[query inDatabase] ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
-    [db setDelegate:self];
+    db.delegate = self;
     [self setMainDatabase:db];
 }
 
@@ -324,7 +324,7 @@ NSString * const MADMimeType = @"application/vnd.everydayapps.mad";
         [self initalizeMainQuery];
         [self initalizeReportFormatter];
         MTQuery *fullQuery = [self defaultQuery];
-        [[fullQuery database] setDelegate:self];
+        [fullQuery database].delegate = self;
         __weak MAReportDocument *weakself = self;
         
         @autoreleasepool {

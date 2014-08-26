@@ -29,7 +29,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSInteger row = [self.delegate initalEncodingMode];
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 }
 
@@ -57,7 +57,7 @@
             [self setDataTableSampleData:dt];
             NSArray *allObjects = [[self dataTableSampleData] allObjects];
             [self.delegate barcodeMaxicodeDidChooseSampleData:allObjects];
-            [[self tableView] reloadData];
+            [self.tableView reloadData];
         }
     }];
 }

@@ -45,16 +45,19 @@
 }
 
 - (void)initalize {
-    UILabel *lbl = [[UILabel alloc] initWithFrame:[[self contentView] frame]];
-    UIColor *whiteColor = [UIColor whiteColor];
-    //UIColor *whiteColor = [[UIColor whiteColor] colorWithAlphaComponent:.8f];
-    [lbl setBackgroundColor:whiteColor];
+    UILabel *lbl = [[UILabel alloc] initWithFrame:self.contentView.frame];
+    lbl.backgroundColor = [UIColor whiteColor];
     
-    [[self contentView] addSubview:lbl];
-    [lbl setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin];
-    [self setLabel:lbl];
-    [[[self contentView] layer] setBorderWidth:1.0000f];
-    [[[self contentView] layer] setBorderColor:[UIColor darkGrayColor].CGColor];
+    [self.contentView addSubview:lbl];
+    lbl.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+                           UIViewAutoresizingFlexibleWidth |
+                           UIViewAutoresizingFlexibleTopMargin |
+                           UIViewAutoresizingFlexibleBottomMargin |
+                           UIViewAutoresizingFlexibleRightMargin |
+                           UIViewAutoresizingFlexibleLeftMargin;
+    self.label = lbl;
+    self.contentView.layer.borderWidth = 1.0000f;
+    self.contentView.layer.borderColor = [UIColor darkGrayColor].CGColor;
 }
 
 @end

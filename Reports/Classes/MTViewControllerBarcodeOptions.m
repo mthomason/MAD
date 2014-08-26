@@ -98,7 +98,7 @@
 }
 
 - (void)customInit {
-    [self setBorderWidth:5];
+    self.borderWidth = 5;
     [self setSampleBarcodeIndex: 0];
     NSArray *sampleBarcodeData = @[@{@"Set Datasource" : @"Set Datasource"}];
     NSArray *sampleBarcodeDataMaxicode = @[@{@"" : @""}];
@@ -125,7 +125,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[self tableView] reloadData];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -191,7 +191,7 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    [[self tableView] reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -487,18 +487,18 @@
 
 
 - (void)didChangeBorderWidth:(UIStepper *)sender {
-    [self setBorderWidth:(NSInteger) [sender value]];
+    self.borderWidth = (NSInteger) [sender value];
     NSString *detail = [NSString stringWithFormat:@"%ld", (long)[sender value]];
     NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Border width" withDetail:detail];
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:2]];
     [[cell textLabel] setAttributedText:attributedString];
-    [self.delegate setBorderWidth:[sender value]];
+    [self.delegate setBorderWidth: [sender value]];
 }
 
 - (void)didChangeSymbolHeight:(UIStepper *)sender {
     NSString *detail = [NSString stringWithFormat:@"%ld", (long)[sender value]];
     NSAttributedString *attributedString = [MTViewControllerBarcodeOptions subject:@"Symbol height" withDetail:detail];
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
     [[cell textLabel] setAttributedText:attributedString];
     [self.delegate didChangeSymbolHeight:[sender value]];
 }
@@ -754,7 +754,7 @@
                 NSArray *allObjects = [[self sampleDataTable] allObjects];
                 [self setSampleBarcodeData2dComponent:allObjects];
             }
-            [[self tableView] reloadData];
+            [self.tableView reloadData];
 
         }
     }];

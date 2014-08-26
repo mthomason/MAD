@@ -38,7 +38,7 @@
 @implementation MTTableController
 
 - (void)dealloc {
-    [[_query database] setDelegate:nil];
+    [_query database].delegate = nil;
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
@@ -51,11 +51,11 @@
     MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
-        [[query database] setDelegate:self];
+        [query database].delegate = self;
         
         MTDataTable *datatable = [MTTableController dataTableWithObjectId:[[query queryObject] objectID]];
         [self setDatatable:datatable];
-        [tableLayout setDelegate:self];
+        tableLayout.delegate = self;
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         [self setTableFormatter:tableFormatter];
         [self setQuery:query];
@@ -66,7 +66,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initalize];
-    [[self collectionView] setBackgroundColor:[UIColor tintColorBlue]];
+    [self collectionView].backgroundColor = [UIColor tintColorBlue];
     [[self collectionView] setAlwaysBounceHorizontal:YES];
     [[self collectionView] setAlwaysBounceVertical:YES];
     
@@ -151,7 +151,7 @@
 }
 
 - (void)initalize {
-    [[self collectionView] setDelegate:self];
+    [self collectionView].delegate = self;
     [[self collectionView] setDataSource:self];
 }
 

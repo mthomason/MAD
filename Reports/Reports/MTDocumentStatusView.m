@@ -20,7 +20,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundColor: [UIColor clearColor]];
+        self.backgroundColor =  [UIColor clearColor];
         [self setDocumentState: UIDocumentStateNormal];
         [self setMessage:@""];
     }

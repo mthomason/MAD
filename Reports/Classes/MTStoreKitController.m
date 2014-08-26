@@ -111,7 +111,7 @@ static MTStoreKitController *sharedSingleton = nil;
         [self setProductIdentifiers:            productIdentifiers];
         NSSet *productIdSet = [NSSet setWithArray:[self productIdentifiers]];
         SKProductsRequest *request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdSet];
-        [request setDelegate:self];
+        request.delegate = self;
         [request start];
     } else if ([[self products] count] == 0) {
         NSDictionary *errorInfo = @{NSLocalizedDescriptionKey :         @"Product Load Failed",

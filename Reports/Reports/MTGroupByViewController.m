@@ -41,7 +41,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
                                                                               managedObjectContext: self.document.managedObjectContext
                                                                                 sectionNameKeyPath: nil
                                                                                          cacheName: nil];
-        [frc setDelegate:self];
+        frc.delegate = self;
         [self setFetchedResultsControllerGroups: frc];
 
         NSError *error = nil;
@@ -119,7 +119,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
     for (NSInteger i = 0; i < rowCount; i++) {
         NSIndexPath *cellPath = [NSIndexPath indexPathForItem:i inSection:indexPath.section];
-        UITableViewCell *tableViewCell = [[self tableView] cellForRowAtIndexPath:cellPath];
+        UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:cellPath];
         [tableViewCell setAccessoryType: UITableViewCellAccessoryNone];
     }
     
@@ -157,7 +157,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     UITableViewCell *cell = sender;
-    NSIndexPath *indexPath = [[self tableView] indexPathForCell:cell];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     switch (indexPath.row) {
             
         case 0:

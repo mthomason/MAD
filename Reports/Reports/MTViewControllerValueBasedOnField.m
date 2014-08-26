@@ -237,7 +237,7 @@
     MTCellEnterText *result = [tableView dequeueReusableCellWithIdentifier: MTTableViewCellTextFieldIdentifier];
     
     [[result textField] setReturnKeyType:UIReturnKeyDone];
-    [[result textField] setDelegate:self];
+    [result textField].delegate = self;
     
     [self setTextField:[result textField]];
     return result;

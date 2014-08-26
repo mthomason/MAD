@@ -29,7 +29,7 @@
 
 - (void)commonInit {
     UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
-    [self setBackgroundColor: bgColor];
+    self.backgroundColor =  bgColor;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -58,7 +58,7 @@
 
 - (void)commonInit {
     UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
-    [self setBackgroundColor: bgColor];
+    self.backgroundColor =  bgColor;
 }
 
 - (void)drawRect:(CGRect)rect {

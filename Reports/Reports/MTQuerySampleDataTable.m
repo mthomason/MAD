@@ -70,7 +70,7 @@
     
     NSOrderedSet *fields = [[self queryObject] hasFields];
     MTQuery *queryMaxFieldLenght = [[MTQuery alloc] initWithQueryType:MTQueryTypeMaxFieldLength object:fields];
-    [[queryMaxFieldLenght database] setDelegate:self];
+    [queryMaxFieldLenght database].delegate = self;
     [[queryMaxFieldLenght database] executeQuery:queryMaxFieldLenght completion:^(BOOL success, NSError *errorFl) {
         if (success && [[self dataTableMaxFieldLength] numberOfRows] > 0) {
             

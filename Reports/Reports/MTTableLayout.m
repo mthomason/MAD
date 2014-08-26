@@ -67,7 +67,7 @@ typedef struct _ColumnWidth {
     [self setColumnCount:columnCount];
     [self setHeightRow:22.0000f];
     [self setHeightHeader:24.0000f];
-    [[self collectionView] setDelegate:self];
+    [self collectionView].delegate = self;
 }
 
 - (void)prepareLayout {

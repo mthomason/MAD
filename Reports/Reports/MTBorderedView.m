@@ -19,7 +19,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBorderColor:[UIColor blackColor]];
+        self.borderColor = [UIColor blackColor];
     }
     return self;
 }
@@ -27,7 +27,7 @@
 - (instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)color {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBorderColor:color];
+        self.borderColor = color;
     }
     return self;
 }

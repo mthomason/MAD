@@ -182,7 +182,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     [super viewDidLoad];
     
     
-    [[self tableView] registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
+    [self.tableView registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
     
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
     
@@ -234,7 +234,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
         
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-        [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
         [labelMadDesigner setAttributedText:attributedString];
         [[self navigationItem] setTitleView:labelMadDesigner];
@@ -275,7 +275,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     
                     MTQueryBuilderAddTableViewController *tvc = (MTQueryBuilderAddTableViewController *)[navControl topViewController];
                     if (tvc) {
-                        [tvc setDelegate:self];
+                        tvc.delegate = self;
                     }
 
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
@@ -300,7 +300,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     MTQueryBuilderLinkBuilderViewController *tvc = (MTQueryBuilderLinkBuilderViewController *)[navControl topViewController];
                     tvc.document = self.document;
                     if (tvc) {
-                        [tvc setDelegate:self];
+                        tvc.delegate = self;
                     }
                 }
             }
@@ -443,7 +443,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
-        [[self tableView] reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     [self.document quickSave];
 }
@@ -541,22 +541,22 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
     if (indexSetSections != nil) {
         
-        //[[self tableView] beginUpdates];
-        //[[self tableView] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+        //[self.tableView beginUpdates];
+        //[self.tableView insertRowsAtIndexPaths: @[insertedRowIndexPath]
         //                        withRowAnimation: UITableViewRowAnimationAutomatic];
-        //[[self tableView] insertSections: indexSetSections
+        //[self.tableView insertSections: indexSetSections
         //                withRowAnimation: UITableViewRowAnimationAutomatic];
 //        NSError *error = nil;
         [document saveContext];
         
     } else {
         
-        //[[self tableView] beginUpdates];
-        //[[self tableView] insertRowsAtIndexPaths: @[insertedRowIndexPath]
+        //[self.tableView beginUpdates];
+        //[self.tableView insertRowsAtIndexPaths: @[insertedRowIndexPath]
         //                        withRowAnimation: UITableViewRowAnimationAutomatic];
         NSError *error = nil;
         [document.managedObjectContext save:&error];
-       // [[self tableView] endUpdates];
+       // [self.tableView endUpdates];
     }
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
@@ -734,10 +734,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             //[result setAccessoryType:UITableViewCellAccessoryDetailButton];
             [result setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             [[result textLabel] setFont: font];
-            [[result textLabel] setBackgroundColor:[UIColor whiteColor]];
+            [result textLabel].backgroundColor = [UIColor whiteColor];
             [result setIndentationLevel: 1];
             [result setTintColor:[UIColor tintColorBlue]];
-            [result setBackgroundColor:[UIColor whiteColor]];
+            result.backgroundColor = [UIColor whiteColor];
             //[result setSelectionStyle:UITableViewCellSelectionStyleNone];
             
             break;
@@ -786,7 +786,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             static NSString *MyIdentifierUITableViewCellInstruction = @"UITableViewCellQueryGroup";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
-            [[result backgroundView] setBackgroundColor:[UIColor whiteColor]];
+            [result backgroundView].backgroundColor = [UIColor whiteColor];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             
@@ -971,7 +971,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
-        [[self tableView] beginUpdates];
+        [self.tableView beginUpdates];
         [self setBeganUpdates: YES];
     }
 }
@@ -1020,12 +1020,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             MTQuerySections updateSection = [section integerValue];
             switch(type) {
                 case NSFetchedResultsChangeInsert:
-                    [[self tableView] insertSections: [NSIndexSet indexSetWithIndex:updateSection]
+                    [self.tableView insertSections: [NSIndexSet indexSetWithIndex:updateSection]
                                     withRowAnimation: UITableViewRowAnimationFade];
                     break;
                     
                 case NSFetchedResultsChangeDelete:
-                    [[self tableView] deleteSections:
+                    [self.tableView deleteSections:
                      [NSIndexSet indexSetWithIndex:updateSection] withRowAnimation:UITableViewRowAnimationFade];
                     break;
                 case NSFetchedResultsChangeMove:
@@ -1057,24 +1057,24 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
-                        [[self tableView] insertRowsAtIndexPaths: @[path]
+                        [self.tableView insertRowsAtIndexPaths: @[path]
                                                 withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeDelete: {
-                        [[self tableView] deleteRowsAtIndexPaths: @[path]
+                        [self.tableView deleteRowsAtIndexPaths: @[path]
                                                 withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeUpdate: {
-                        [[self tableView] reloadRowsAtIndexPaths: @[path]
+                        [self.tableView reloadRowsAtIndexPaths: @[path]
                                                 withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeMove: {
-                        [[self tableView] deleteRowsAtIndexPaths: @[path]
+                        [self.tableView deleteRowsAtIndexPaths: @[path]
                                                 withRowAnimation: UITableViewRowAnimationFade];
-                        [[self tableView] insertRowsAtIndexPaths: @[path]
+                        [self.tableView insertRowsAtIndexPaths: @[path]
                                                 withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
@@ -1086,7 +1086,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     if ([self beganUpdates]) {
-        [[self tableView] endUpdates];
+        [self.tableView endUpdates];
     }
     [self setBeganUpdates:NO];
 }
@@ -1120,7 +1120,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     if (controller) {
         [controller performFetch:nil];
     }
-    [[self tableView] reloadData];
+    [self.tableView reloadData];
 }
 
 
@@ -1134,7 +1134,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (IBAction)edit:(id)sender {
     
-    BOOL editing = ![[self tableView] isEditing];
+    BOOL editing = ![self.tableView isEditing];
     
     if ([UIDevice isPad] == NO) {
         UIBarButtonSystemItem buttonType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
@@ -1148,7 +1148,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         [self setBarButtonItemEdit:barButtonItem];
     }
     
-    [[self tableView] setEditing: editing];
+    [self.tableView setEditing: editing];
 }
 
 - (void)addConnection:(id)sender {
@@ -1202,11 +1202,11 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 }
 
 - (void)enableUserInteraction {
-    [[self tableView] setUserInteractionEnabled:YES];
+    [self.tableView setUserInteractionEnabled:YES];
 }
 
 - (void)disableUserInteraction {
-    [[self tableView] setUserInteractionEnabled:NO];
+    [self.tableView setUserInteractionEnabled:NO];
 }
 
 - (void)removeGroup:(RptqQueryGroup *)groupToRemove {
@@ -1263,7 +1263,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
-            [frc setDelegate:self];
+            frc.delegate = self;
             [self setFetchedResultsControllerTables: frc];
             [self performFetchTables];
             frc = nil;
@@ -1278,7 +1278,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
-            [frc setDelegate:self];
+            frc.delegate = self;
             [self setFetchedResultsControllerLinks: frc];
             [self performFetchLinks];
             frc = nil;
@@ -1293,7 +1293,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
-            [frc setDelegate:self];
+            frc.delegate = self;
             [self setFetchedResultsControllerGroups: frc];
             [self performFetchGroups];
             frc = nil;
@@ -1310,12 +1310,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                                                   managedObjectContext: managedObjectContext
                                                                                     sectionNameKeyPath: nil
                                                                                              cacheName: nil];
-            [frc setDelegate:self];
+            frc.delegate = self;
             [self setFetchedResultsControllerPredicates: frc];
             [self performFetchPredicate];
             frc = nil;
         }
-        [[self tableView] reloadData];
+        [self.tableView reloadData];
     }
     
 }
@@ -1469,7 +1469,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
     UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
-    [sampleDataTitleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    sampleDataTitleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName:[schemaTable name]];
     [sampleDataTitleView setAttributedText:titleViewText];
@@ -1842,7 +1842,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec {
     NSInteger result = 0;
-    NSArray *sectionTypes = [self datamodelForNumberOfTables:[[self tableView] numberOfRowsInSection: 1]][MTTableSectionSectionsKey];
+    NSArray *sectionTypes = [self datamodelForNumberOfTables:[self.tableView numberOfRowsInSection: 1]][MTTableSectionSectionsKey];
     NSInteger secPos = 0;
     for (NSNumber *num in sectionTypes) {
         if ([num integerValue] == sec) {

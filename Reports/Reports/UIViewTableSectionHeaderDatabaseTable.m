@@ -32,7 +32,7 @@
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleOpen:)];
         [self addGestureRecognizer:tapGesture];
         
-        [self setDelegate: delegate];
+        self.delegate =  delegate;
         [self setUserInteractionEnabled: YES];
         
         [self setSection: sectionNumber];
@@ -45,7 +45,7 @@
         [label setText: title];
         [label setFont: [UIFont boldSystemFontOfSize:17.0000f]];
         [label setTextColor: [UIColor tintColorBlue]];
-        [label setBackgroundColor: [UIColor clearColor]];
+        label.backgroundColor =  [UIColor clearColor];
         [self addSubview:label];
         [self setTitleLabel: label];
         
@@ -57,7 +57,7 @@
         [self addSubview:button];
         [self setDisclosureButton: button];
         
-        [self setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        self.backgroundColor = [UIColor groupTableViewBackgroundColor];
     }
     
     return self;

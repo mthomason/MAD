@@ -195,11 +195,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self initalizeBackground];
 
     UIColor *bgColor = [UIColor lightGrayColor];
-    [[self collectionView] setBackgroundColor:bgColor];
+    [self collectionView].backgroundColor = bgColor;
     
     [self setSavingActivityIndicatorVisible:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     NSAttributedString *attributedString = nil;
     if ([MTApplicationInstance isMadDesigner]) {
@@ -224,7 +224,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [toolbarButtons removeObject:[self barButtonItemAction]];
     [self setToolbarItems:toolbarButtons animated:NO];
     
-    [[self collectionView] setDelegate:self];
+    [self collectionView].delegate = self;
     [self initalizeDataSource];
 
 }
@@ -282,18 +282,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([navControl topViewController]) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                 [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
-                [[self openDocumentPopoverController] setDelegate:self];
+                [self openDocumentPopoverController].delegate = self;
             }
-            [(MTDatabaseDriverSelectorViewController *)[navControl topViewController] setDelegate:self];
+            ((MTDatabaseDriverSelectorViewController *)[navControl topViewController]).delegate = self;
         }
     }
-    [segue.destinationViewController setDelegate:self];
+    [segue.destinationViewController setDelegate: self];
 }
 
 - (void)prepareForSegueDetails:(UIStoryboardSegue *)segue {
     UINavigationController *navigationController = segue.destinationViewController;
     MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
-    [aboutViewController setDelegate:self];
+    aboutViewController.delegate = self;
     
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
@@ -321,9 +321,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
         id tvc = [navControl topViewController];
-        [tvc setDelegate:self];
+        [tvc setDelegate: self];
     }
-    [segue.destinationViewController setDelegate:self];
+    [segue.destinationViewController setDelegate: self];
     
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
@@ -659,7 +659,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)initalizeLongPressGestureRecognizer {
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
                                                                                                              action: @selector(activateEditMode:)];
-    [longPressGestureRecognizer setDelegate: self];
+    longPressGestureRecognizer.delegate =  self;
     [[self collectionView] addGestureRecognizer:longPressGestureRecognizer];
     [self setLongPressGestureRecognizer:longPressGestureRecognizer];
 }
@@ -667,7 +667,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)initalizeTapGestureRecognizer {
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                                            action: @selector(endEditMode:)];
-    [tapGestureRecognizer setDelegate: self];
+    tapGestureRecognizer.delegate =  self;
     [[self collectionView] addGestureRecognizer:tapGestureRecognizer];
     [self setTapGestureRecognizer:tapGestureRecognizer];
 }
@@ -675,7 +675,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)initalizeDataSource {
     __weak MTViewControllerOpenDocument *weakself = self;
     MTCellConfigureBlock configureCell = ^(MTCollectionViewCellDocument *cell, NSURL *url) {
-        [cell setDelegate: weakself];
+        cell.delegate =  weakself;
         [cell isSelected] ? [cell performSelectionAnimations] : [cell performDeselectionAnimations];
         [cell configureCellForUrl:url];
         if ([weakself isEditing]) {
@@ -1178,7 +1178,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-            [popoverController setDelegate:self];
+            popoverController.delegate = self;
             [popoverController presentPopoverFromBarButtonItem:[self barButtonItemAction] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             [self setPopoverControllerActivity:popoverController];
         }
@@ -1250,13 +1250,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                               otherButtonTitles: NSLocalizedString(@"Rename", @"Rename"), nil
                               ];
     [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
-    [alertView setDelegate:self];
+    alertView.delegate = self;
     NSIndexPath *indexPath = [[self collectionView] indexPathForCell:cellDocument];
     [alertView setTag:[indexPath item]];
     UITextField *textField = [alertView textFieldAtIndex:0];
     [textField setText:[[cellDocument labelTitle] text]];
     [textField setClearButtonMode:UITextFieldViewModeAlways];
-    [textField setDelegate:self];
+    textField.delegate = self;
     [self setRenameAlertView:alertView];
     [[self renameAlertView] show];
 }

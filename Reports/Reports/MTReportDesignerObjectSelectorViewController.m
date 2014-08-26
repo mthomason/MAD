@@ -103,7 +103,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
         
-        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate: self];
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate =  self;
         [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushStaticLabelNew"]) {
@@ -228,7 +228,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     if ([result selectedBackgroundView] == nil) {
         UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:result.frame];
         UIColor *bgColor = [UIColor colorWithWhite:0.30000f alpha:0.30000f];
-        [selectedBackgroundView setBackgroundColor:bgColor];
+        selectedBackgroundView.backgroundColor = bgColor;
         [result setSelectedBackgroundView:selectedBackgroundView];
     }
     [[result contentView] setTag: tag];

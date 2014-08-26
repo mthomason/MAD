@@ -25,7 +25,7 @@
 }
 
 - (void)awakeFromNib {
-    [[self imageThumbnail] setContentMode:UIViewContentModeScaleAspectFit];
+    [self imageThumbnail].contentMode = UIViewContentModeScaleAspectFit;
     [super awakeFromNib];
 }
 

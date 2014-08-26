@@ -31,7 +31,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self tableView] setDelegate:self];
+    self.tableView.delegate = self;
+    
+    if ([UIDevice isModernOS]) {
+        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        self.tableView.backgroundView = visualEffectsView;
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.view.opaque = NO;
+    }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -55,17 +65,24 @@
     [super viewWillLayoutSubviews];
     if ([UIDevice isPad] == NO) {
         UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
-        [[self tableView] setContentInset:tableInset];
-        [[self tableView] setScrollIndicatorInsets:tableInset];
+        [self.tableView setContentInset:tableInset];
+        [self.tableView setScrollIndicatorInsets:tableInset];
     }
 }
 
 #pragma mark -
 #pragma mark Table view delegate
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([UIDevice isModernOS]) {
+        cell.backgroundColor = [UIColor clearColor];
+        cell.contentView.backgroundColor = [UIColor clearColor];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 
     if ([cell isEqual:[self tableViewCellFontAmericanTypewriter]]) {
         [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyAmericanTypewriter];
@@ -95,10 +112,10 @@
         [self uncheckAllCells];
         
         //Check this box, or not (could test)
-        [[[self tableView] cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
+        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
     
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 

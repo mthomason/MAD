@@ -32,7 +32,7 @@
 		};
 		gradient = CGGradientCreateWithColorComponents(rgb, colors, NULL, sizeof(colors)/(sizeof(colors[0])*4));
 		CGColorSpaceRelease(rgb);
-        [self setBackgroundColor: [UIColor clearColor]];
+        self.backgroundColor =  [UIColor clearColor];
     }
     return self;
 }

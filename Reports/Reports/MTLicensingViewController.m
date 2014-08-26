@@ -80,13 +80,13 @@
             
             BOOL allowPurchase = [experationDate timeIntervalSinceNow] < MTTimeIntervalDay * 15;
             if ([MTApplicationInstance isMadDesigner]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue]];
+                [weakViewController viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneYear] setHidden:!allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setHidden:!allowPurchase];
             } else if ([MTApplicationInstance isMadViewer]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:!allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue]];
+                [weakViewController viewBuyButtonsBackground].backgroundColor = !allowPurchase ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
                 [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:allowPurchase];
                 [[weakViewController buttonBuyNowViewerOneMonth] setHidden:!allowPurchase];
                 [[weakViewController buttonBuyNowViewerOneYear] setEnabled:allowPurchase];
@@ -102,13 +102,13 @@
             }];
 
             if ([MTApplicationInstance isMadDesigner]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue]];
+                [weakViewController viewBuyButtonsBackground].backgroundColor = NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
                 [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:NO];
                 [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:NO];
                 //[[self buttonBuyNowDesignerOneYear] setHidden:YES];
                 //[[self buttonBuyNowDesignerOneMonth] setHidden:YES];
             } else if ([MTApplicationInstance isMadViewer]) {
-                [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue]];
+                [weakViewController viewBuyButtonsBackground].backgroundColor = NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
                 [[weakViewController buttonBuyNowViewerOneYear] setEnabled:NO];
                 [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:NO];
                 //[[self buttonBuyNowViewerOneYear] setHidden:YES];
@@ -137,13 +137,13 @@
                 
                 [weakViewController enableUserInterface];
                 if ([MTApplicationInstance isMadDesigner]) {
-                    [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue]];
+                    [weakViewController viewBuyButtonsBackground].backgroundColor = NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
                     [[weakViewController buttonBuyNowDesignerOneYear] setEnabled:success];
                     [[weakViewController buttonBuyNowDesignerOneYear] setHidden:NO];
                     [[weakViewController buttonBuyNowDesignerOneMonth] setEnabled:success];
                     [[weakViewController buttonBuyNowDesignerOneMonth] setHidden:NO];
                 } else if ([MTApplicationInstance isMadViewer]) {
-                    [[weakViewController viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue]];
+                    [weakViewController viewBuyButtonsBackground].backgroundColor = NO ? [UIColor tintColorBlue] : [UIColor tintColorBlue];
                     [[weakViewController buttonBuyNowViewerOneYear] setEnabled:success];
                     [[weakViewController buttonBuyNowViewerOneYear] setHidden:NO];
                     [[weakViewController buttonBuyNowViewerOneMonth] setEnabled:success];
@@ -202,11 +202,11 @@
     [self setStandardCompletion:completion];
 
     if ([MTApplicationInstance isMadDesigner]) {
-        [[[self buttonBuyNowDesignerOneYear] layer] setCornerRadius:6.6666f];
-        [[[self buttonBuyNowDesignerOneMonth] layer] setCornerRadius:6.6666f];
+        [[self buttonBuyNowDesignerOneYear] layer].cornerRadius = 6.6666f;
+        [[self buttonBuyNowDesignerOneMonth] layer].cornerRadius = 6.6666f;
     } else if ([MTApplicationInstance isMadViewer]) {
-        [[[self buttonBuyNowViewerOneYear] layer] setCornerRadius:6.6666f];
-        [[[self buttonBuyNowViewerOneMonth] layer] setCornerRadius:6.6666f];
+        [[self buttonBuyNowViewerOneYear] layer].cornerRadius = 6.6666f;
+        [[self buttonBuyNowViewerOneMonth] layer].cornerRadius = 6.6666f;
     }
 }
 
@@ -214,11 +214,11 @@
     [super viewWillAppear:animated];
 
     if ([MTApplicationInstance isMadDesigner]) {
-        //[[self viewBuyButtonsBackground] setBackgroundColor:YES ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+        //[self viewBuyButtonsBackground].backgroundColor = YES ? [UIColor whiteColor] : [UIColor lightGrayColor];
         [[self buttonBuyNowDesignerOneYear] setEnabled:NO];
         [[self buttonBuyNowDesignerOneMonth] setEnabled:NO];
     } else if ([MTApplicationInstance isMadViewer]) {
-        //[[self viewBuyButtonsBackground] setBackgroundColor:YES ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+        //[self viewBuyButtonsBackground].backgroundColor = YES ? [UIColor whiteColor] : [UIColor lightGrayColor];
         [[self buttonBuyNowViewerOneYear] setEnabled:NO];
         [[self buttonBuyNowViewerOneMonth] setEnabled:NO];
     }
@@ -304,7 +304,7 @@
 }
 
 - (void)licenseProductWithIdentifier:(NSString *)identifier {
-    [[self viewBuyButtonsBackground] setBackgroundColor:NO ? [UIColor whiteColor] : [UIColor lightGrayColor]];
+    [self viewBuyButtonsBackground].backgroundColor = NO ? [UIColor whiteColor] : [UIColor lightGrayColor];
     [self disableUserInterface];
     [[self activityIndicatorDesignerLicenseOneYear] startAnimating];
     [[self activityIndicator2] startAnimating];

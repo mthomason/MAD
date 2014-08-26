@@ -39,12 +39,12 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 }
 
 - (void)updateSelectedFunctionType {
-    NSInteger numberOfSections = [[self tableView] numberOfSections];
+    NSInteger numberOfSections = [self.tableView numberOfSections];
     for (NSInteger sectionCtr = 0; sectionCtr < numberOfSections; sectionCtr++) {
-        NSInteger numberOfRows = [[self tableView] numberOfRowsInSection:sectionCtr];
+        NSInteger numberOfRows = [self.tableView numberOfRowsInSection:sectionCtr];
         for (NSInteger rowCtr = 0; rowCtr < numberOfRows; rowCtr++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowCtr inSection:sectionCtr];
-            UITableViewCell *tableViewCell = [[self tableView] cellForRowAtIndexPath:indexPath];
+            UITableViewCell *tableViewCell = [self.tableView cellForRowAtIndexPath:indexPath];
             if ([tableViewCell tag] == [self selectedFunctionType]) {
                 [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
             } else {

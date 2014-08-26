@@ -94,39 +94,50 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [[self tableView] setDelegate:self];
+    
+    self.tableView.delegate = self;
 
     UIColor *tintColor = [[self view] tintColor];
-    [[[self buttonBold] layer] setBorderColor:[tintColor CGColor]];
-    [[[self buttonBold] layer] setCornerRadius:6.6666f];
-    [[[self buttonBold] layer] setBorderWidth:1.0000f];
+    self.buttonBold.layer.borderColor = tintColor.CGColor;
+    self.buttonBold.layer.cornerRadius = 6.6666f;
+    self.buttonBold.layer.borderWidth = 1.0000f;
     
-    [[[self buttonItalic] layer] setBorderColor:[tintColor CGColor]];
-    [[[self buttonItalic] layer] setCornerRadius:6.6666f];
-    [[[self buttonItalic] layer] setBorderWidth:1.0000f];
+    self.buttonItalic.layer.borderColor = tintColor.CGColor;
+    self.buttonItalic.layer.cornerRadius = 6.6666f;
+    self.buttonItalic.layer.borderWidth = 1.0000f;
     
-    [[[self buttonStrike] layer] setBorderColor:[tintColor CGColor]];
-    [[[self buttonStrike] layer] setCornerRadius:6.6666f];
-    [[[self buttonStrike] layer] setBorderWidth:1.0000f];
+    self.buttonStrike.layer.borderColor = tintColor.CGColor;
+    self.buttonStrike.layer.cornerRadius = 6.6666f;
+    self.buttonStrike.layer.borderWidth = 1.0000f;
     
-    [[[self buttonUnderline] layer] setBorderColor:[tintColor CGColor]];
-    [[[self buttonUnderline] layer] setCornerRadius:6.6666f];
-    [[[self buttonUnderline] layer] setBorderWidth:1.0000f];
+    self.buttonUnderline.layer.borderColor = tintColor.CGColor;
+    self.buttonUnderline.layer.cornerRadius = 6.6666f;
+    self.buttonUnderline.layer.borderWidth = 1.0000f;
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     if ([UIDevice isPad] == NO) {
         UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
-        [[self tableView] setContentInset:tableInset];
-        [[self tableView] setScrollIndicatorInsets:tableInset];
+        [self.tableView setContentInset:tableInset];
+        [self.tableView setScrollIndicatorInsets:tableInset];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateDisplay];
+    
+    if ([UIDevice isModernOS]) {
+        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        self.tableView.backgroundView = visualEffectsView;
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.view.opaque = NO;
+    }
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -185,7 +196,7 @@
      [control setSelected:select];
      [control setHighlighted:highlight];
     if ([control isKindOfClass:[UIButton class]]) {
-        [control setBackgroundColor:backgroundColor];
+        control.backgroundColor = backgroundColor;
         [control setTintColor:titleColor];
         [[(UIButton *)control titleLabel] setTextColor:titleColor];
     }
@@ -200,7 +211,7 @@
             [weakControl setHighlighted:highlight];
             
             if ([weakControl isKindOfClass:[UIButton class]]) {
-                [weakControl setBackgroundColor:backgroundColor];
+                weakControl.backgroundColor = backgroundColor;
                 [weakControl setTintColor:titleColor];
                 [[(UIButton *)weakControl titleLabel] setTextColor:titleColor];
             }
@@ -220,10 +231,10 @@
 
 - (void)updateDisplay {
     if ([[self userSelectedObjectIds] count] == 0) {
-        [[self buttonItalic] setEnabled:NO];
-        [[self buttonBold] setEnabled:NO];
-        [[self buttonStrike] setEnabled:NO];
-        [[self buttonUnderline] setEnabled:NO];
+        [self.buttonItalic setEnabled:NO];
+        [self.buttonBold setEnabled:NO];
+        [self.buttonStrike setEnabled:NO];
+        [self.buttonUnderline setEnabled:NO];
         [self setControlStateBold: MTControlStateOff];
         [self setControlStateItalic: MTControlStateOff];
         [self setControlStateStrike: MTControlStateOff];
@@ -232,14 +243,14 @@
                                                                 ofSize:[[[self labelFontName] font] pointSize]]];
         [[self labelFontSize] setAttributedText:[self boldSystemString:NSLocalizedString(@"Nothing", @"Nothing")
                                                                 ofSize:[[[self labelFontSize] font] pointSize]]];
-        [[self buttonBold] setSelected:NO];
-        [[self buttonBold] setHighlighted:NO];
-        [[self buttonItalic] setSelected:NO];
-        [[self buttonItalic] setHighlighted:NO];
-        [[self buttonStrike] setSelected:NO];
-        [[self buttonStrike] setHighlighted:NO];
-        [[self buttonUnderline] setSelected:NO];
-        [[self buttonUnderline] setHighlighted:NO];
+        [self.buttonBold setSelected:NO];
+        [self.buttonBold setHighlighted:NO];
+        [self.buttonItalic setSelected:NO];
+        [self.buttonItalic setHighlighted:NO];
+        [self.buttonStrike setSelected:NO];
+        [self.buttonStrike setHighlighted:NO];
+        [self.buttonUnderline setSelected:NO];
+        [self.buttonUnderline setHighlighted:NO];
         [[self segmentedControlHorizontalAlignment] setSelected:NO];
         [[self segmentedControlHorizontalAlignment] setHighlighted:NO];
         [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
@@ -273,10 +284,10 @@
             [stepper setUserInteractionEnabled:YES];
         }
         
-        [[self buttonItalic] setEnabled:YES];
-        [[self buttonBold] setEnabled:YES];
-        [[self buttonStrike] setEnabled:YES];
-        [[self buttonUnderline] setEnabled:YES];
+        [self.buttonItalic setEnabled:YES];
+        [self.buttonBold setEnabled:YES];
+        [self.buttonStrike setEnabled:YES];
+        [self.buttonUnderline setEnabled:YES];
         
         [self setControlStateBold: MTControlStateOn];
         [self setControlStateItalic: MTControlStateOn];
@@ -451,20 +462,20 @@
         if (controlStateHorizontalAlignment == MTControlStateAmbiguous) {
             [[self segmentedControlHorizontalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
             UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
-            [[self segmentedControlHorizontalAlignment] setBackgroundColor:tentColor];
+            [self segmentedControlHorizontalAlignment].backgroundColor = tentColor;
         } else {
             //[[self segmentedControlHorizontalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            [[self segmentedControlHorizontalAlignment] setBackgroundColor:[UIColor clearColor]];
+            [self segmentedControlHorizontalAlignment].backgroundColor = [UIColor clearColor];
         }
         if (controlStateVerticalAlignment == MTControlStateAmbiguous) {
             //UIImage *imageButtonSelected = [UIImage imageNamed:@"UIButtonSelected"];
             [[self segmentedControlVerticalAlignment] setSelectedSegmentIndex:UISegmentedControlNoSegment];
             //[[self segmentedControlVerticalAlignment] setBackgroundImage:[imageButtonSelected resizableImage] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
             UIColor *tentColor = [[UIColor tintColor] colorWithAlphaComponent:0.5000f];
-            [[self segmentedControlVerticalAlignment] setBackgroundColor:tentColor];
+            [self segmentedControlVerticalAlignment].backgroundColor = tentColor;
         } else {
             //[[self segmentedControlVerticalAlignment] setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-            [[self segmentedControlVerticalAlignment] setBackgroundColor:[UIColor clearColor]];
+            [self segmentedControlVerticalAlignment].backgroundColor = [UIColor clearColor];
         }
          */
         [self setStateInControl:[self segmentedControlHorizontalAlignment] forState:controlStateHorizontalAlignment];
@@ -477,10 +488,10 @@
         [[self segmentedControlVerticalAlignment] setUserInteractionEnabled:YES];
 
     }
-    [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
-    [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
-    [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
-    [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
+    [self setStateInControl:self.buttonBold forState:[self controlStateBold]];
+    [self setStateInControl:self.buttonItalic forState:[self controlStateItalic]];
+    [self setStateInControl:self.buttonStrike forState:[self controlStateStrike]];
+    [self setStateInControl:self.buttonUnderline forState:[self controlStateUnderline]];
 
 }
 
@@ -634,7 +645,7 @@
             [self setControlStateBold:MTControlStateOn];
             break;
     }
-    [self setStateInControl:[self buttonBold] forState:[self controlStateBold]];
+    [self setStateInControl:self.buttonBold forState:[self controlStateBold]];
     
     NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -660,7 +671,7 @@
             [self setControlStateItalic:MTControlStateOn];
             break;
     }
-    [self setStateInControl:[self buttonItalic] forState:[self controlStateItalic]];
+    [self setStateInControl:self.buttonItalic forState:[self controlStateItalic]];
     
     NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -686,7 +697,7 @@
             [self setControlStateStrike:MTControlStateOn];
             break;
     }
-    [self setStateInControl:[self buttonStrike] forState:[self controlStateStrike]];
+    [self setStateInControl:self.buttonStrike forState:[self controlStateStrike]];
     
     NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -712,7 +723,7 @@
             [self setControlStateUnderline:MTControlStateOn];
             break;
     }
-    [self setStateInControl:[self buttonUnderline] forState:[self controlStateUnderline]];
+    [self setStateInControl:self.buttonUnderline forState:[self controlStateUnderline]];
     
     NSManagedObjectContext *managedObjectContext = [[self.document activeDocumentModel] managedObjectContext];
     for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -870,6 +881,13 @@
 
 #pragma mark -
 #pragma mark Table View Delegate Protocol
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([UIDevice isModernOS]) {
+        cell.backgroundColor = [UIColor clearColor];
+        cell.contentView.backgroundColor = [UIColor clearColor];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	

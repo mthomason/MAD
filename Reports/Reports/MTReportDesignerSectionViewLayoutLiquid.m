@@ -118,10 +118,10 @@
             NSMutableArray *itemLayouts = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
             
             for (NSInteger itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
-                
-                MTCollectionViewLayoutLiquidAttributes *itemAttributes = [self.delegate collectionView: [self collectionView]
-                                                                                                  layout: self
-                                                                      layoutAttributesForItemAtIndexPath: [NSIndexPath indexPathForItem:itemIndex inSection:sectionIndex]];
+                NSIndexPath *path = [NSIndexPath indexPathForItem:itemIndex inSection:sectionIndex];
+                MTCollectionViewLayoutLiquidAttributes *itemAttributes = [self.delegate collectionView: self.collectionView
+                                                                                                layout: self
+                                                                    layoutAttributesForItemAtIndexPath: path];
                 [itemLayouts addObject:itemAttributes];
                 
             }

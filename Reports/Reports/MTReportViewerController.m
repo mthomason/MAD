@@ -215,7 +215,7 @@
 - (void)initalizeLabelStatus {
     UILabel *labelStatus = [[UILabel alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 30.0000f, 44.0000f)];
     [labelStatus setNumberOfLines:3];
-    [labelStatus setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+    labelStatus.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
     UIBarButtonItem *barButtonLabelStatus = [[UIBarButtonItem alloc] initWithCustomView:labelStatus];
     [self setBarButtonLabelStatus:barButtonLabelStatus];
@@ -242,7 +242,7 @@
     [self setTitle:@"MAD Viewer"];
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-    [labelMadDesigner setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
     [labelMadDesigner setAttributedText:attributedString];
@@ -261,10 +261,10 @@
     [self setPageIsAnimating:NO];
     [self setStartedRefresh:NO];
     
-    [[self view] setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    [self view].backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     [self setDataSource:self];
-    [self setDelegate:self];
+    self.delegate = self;
     
     [self setCurrentPageIndex:0];
     [self updatePageStatus];
@@ -408,7 +408,7 @@
     UIImage *blank = [UIImage new];
     [toolbar setBackgroundImage:blank forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [toolbar setShadowImage:blank forToolbarPosition:UIToolbarPositionAny];
-    [toolbar setBackgroundColor:[UIColor tintColorWhiteAlpha]];
+    toolbar.backgroundColor = [UIColor tintColorWhiteAlpha];
 }
 
 - (void)addSliderPagination {
@@ -433,7 +433,7 @@
                                                                                                                 PageNumber: self.currentPageIndex + 1
                                                                                                                    ofPages: self.numberOfPages];
         [[pageOne view] setFrame:[[self view] bounds]];
-        [pageOne setDelegate:self];
+        pageOne.delegate = self;
         
         __block MTReportViewerController *reportViewer = self;
         [[self view] bringSubviewToFront:[self toolbarSideRight]];
@@ -781,7 +781,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             [self.document setActivityDelegate:weakself];
                             UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
                             [sharedController setPrintPageRenderer:printPageRender];
-                            [sharedController setDelegate:self.document] ;
+                            sharedController.delegate = self.document ;
                             __weak MTReportViewerController *weakself2 = weakself;
                             void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                             ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
@@ -803,7 +803,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     self.pageSlider.enabled = NO;
     
     MTActivityItemProviderPdf *activityItemProviderPdf = [self activityItemProviderPdf];
-    [activityItemProviderPdf setDelegate:self];
+    activityItemProviderPdf.delegate = self;
     NSArray *activityItems = @[activityItemProviderPdf];
     [self setActivityItemProviderPdf:activityItemProviderPdf];
     
@@ -826,10 +826,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
                     if (sharedController) {
-                        [sharedController setDelegate:self];
+                        sharedController.delegate = self;
                         UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
                         [sharedController setPrintPageRenderer:printPageRender];
-                        [sharedController setDelegate:self.document];
+                        sharedController.delegate = self.document;
                         __weak MTReportViewerController *weakself = self;
                         if ([UIDevice isPad] == NO) {
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
@@ -939,7 +939,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                                                                                                     PageNumber: ([blockViewer2 currentPageIndex] + 1)
                                                                                                                        ofPages: numberOfPages];
             [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
-            [pageOne setDelegate:blockViewer2];
+            pageOne.delegate = blockViewer2;
             NSArray *viewControllers = @[pageOne];
             
             [blockViewer2 setViewControllers: viewControllers direction:UIPageViewControllerNavigationDirectionForward
@@ -990,8 +990,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     if ([(MTReportViewerController *)pageViewController pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = 0;
         MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
-        [[lastPage view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [[lastPage view] setTranslatesAutoresizingMaskIntoConstraints:YES];
+        [lastPage view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [lastPage view].translatesAutoresizingMaskIntoConstraints = YES;
         if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
             visablePageNumber = [lastPage pageNumber];
         }
@@ -999,10 +999,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                            PageNumber: visablePageNumber + 1
                                                                               ofPages: [self numberOfPages]];
-            [result setDelegate: self];
+            result.delegate =  self;
             [[result view] setFrame:[[self view] bounds]];
-            [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-            [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
+            [result view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            [result view].translatesAutoresizingMaskIntoConstraints = YES;
         }
     }
     return result;
@@ -1022,10 +1022,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                            PageNumber: visablePageNumber - 1
                                                                               ofPages: [self numberOfPages]];
-            [result setDelegate: self];
+            result.delegate =  self;
             [[result view] setFrame:[[self view] bounds]];
-            [[result view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-            [[result view] setTranslatesAutoresizingMaskIntoConstraints:YES];
+            [result view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            [result view].translatesAutoresizingMaskIntoConstraints = YES;
         }
     }
     return result;

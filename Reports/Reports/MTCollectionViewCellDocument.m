@@ -46,9 +46,9 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
     [[self labelTitle] setClipsToBounds:NO];
     
-    [[[self selectedBackgroundView] layer] setCornerRadius:5.0000f];
+    [[self selectedBackgroundView] layer].cornerRadius = 5.0000f;
     
-    [[self imagePreview] setContentMode:UIViewContentModeScaleAspectFit];
+    [self imagePreview].contentMode = UIViewContentModeScaleAspectFit;
     
     [super awakeFromNib];
 }
@@ -103,15 +103,15 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
         [self setBgColor:bgColor];
         
         UIView *selectedBackground = [[UIView alloc] initWithFrame:[self frame]];
-        //[[selectedBackground layer] setCornerRadius: 1.0000f];
+        //[selectedBackground layer].cornerRadius =  1.0000f;
         [selectedBackground setClipsToBounds:YES];
-        [selectedBackground setBackgroundColor:[self bgColor]];
+        selectedBackground.backgroundColor = [self bgColor];
         
         [self setSelectedBackgroundView:selectedBackground];
         
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         [activityView stopAnimating];
-        [activityView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
+        activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [activityView setCenter:[[self contentView] center]];
         [[self contentView] addSubview:activityView];
         [self setActivityIndicator:activityView];
@@ -155,12 +155,12 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 }
 
 - (void)dimTint {
-    [[self selectedBackgroundView] setBackgroundColor:[UIColor lightGrayColor]];
+    [self selectedBackgroundView].backgroundColor = [UIColor lightGrayColor];
     [[self labelTitle] setTextColor:[UIColor darkGrayColor]];
 }
 
 - (void)normalizeTint {
-    [[self selectedBackgroundView] setBackgroundColor:[self bgColor]];
+    [self selectedBackgroundView].backgroundColor = [self bgColor];
     [[self labelTitle] setTextColor:[UIColor whiteColor]];
 }
 

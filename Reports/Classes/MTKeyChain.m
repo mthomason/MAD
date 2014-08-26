@@ -275,7 +275,7 @@ const NSUInteger tagAlertViewAquire         = 666;
                                               otherButtonTitles:@"Continue", nil];
     [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
     [alertView setTag:tagAlertViewAquire];
-    [alertView setDelegate:self];
+    alertView.delegate = self;
     [self setTextFieldOne:[alertView textFieldAtIndex:0]];
     [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
     [alertView show];
@@ -289,7 +289,7 @@ const NSUInteger tagAlertViewAquire         = 666;
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:@"Continue", nil];
     [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-    [alertView setDelegate:self];
+    alertView.delegate = self;
     [alertView setTag:tagAlertViewAquire];
     [self setTextFieldOne:[alertView textFieldAtIndex:0]];
     [self setTextFieldTwo:[alertView textFieldAtIndex:1]];

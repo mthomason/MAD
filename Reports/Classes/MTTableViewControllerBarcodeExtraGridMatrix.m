@@ -75,9 +75,9 @@
 
 - (void)updateCells {
     BOOL autoresize = [self.delegate barcodeGridMatrixAutomaticResizing];
-    UITableViewCell *cellSize = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    UITableViewCell *cellError = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-    UITableViewCell *cellAuto = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+    UITableViewCell *cellAuto = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     NSString *automatic = NSLocalizedString(@"Automatic", @"Automatic");
     if (autoresize) {
         [cellAuto setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -106,9 +106,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixError"]) {
-        [(MTTableViewControllerStaticSelectRow *)segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixSize"]) {
-        [(MTTableViewControllerStaticSelectRow *)segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     }
 }
 
