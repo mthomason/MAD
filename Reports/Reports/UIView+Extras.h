@@ -11,5 +11,6 @@
 @interface UIView (Extras)
 
 - (CGRect)popoverRectForSelectedViews:(NSSet *)views;
+- (CGPoint)locationInMainWindow:(UIGestureRecognizer *)gestureRecognizer;
 
 @end

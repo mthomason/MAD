@@ -39,6 +39,13 @@
 
 @property (nonatomic, weak) id <MTElementCanvasDelegate>canvasDelegate;
 
+
+@property (nonatomic, strong) UIFont *displayFont;
+@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
+@property (nonatomic, strong) NSNumber *underlineStyle;
+@property (nonatomic, strong) NSNumber *strikeThroughStyle;
+@property (nonatomic, assign) CGRect drawingRect;
+
 @end
 
 @implementation MTElementCanvas
@@ -109,19 +116,12 @@ static size_t const kDashedCount            = (2.0f);
 }
 
 - (id)displayObject {
-    
     if (self.displayImage != nil) {
-
         return self.displayImage;
-
     } else if (self.displayBarcode != nil) {
-    
         return self.displayBarcode;
-    
     } else {
-    
         return self.displayStringAttributed;
-    
     }
 }
 
@@ -153,6 +153,7 @@ static size_t const kDashedCount            = (2.0f);
         canvasView.canvasDelegate = self;
         
         [self addSubview:canvasView];
+        self.canvasView = canvasView;
         
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleSelection:)];
         [tapGestureRecognizer setNumberOfTapsRequired:1];
@@ -300,5 +301,144 @@ static size_t const kDashedCount            = (2.0f);
     }
     
 }
+
+
+/*
+
+
+- (void)updateElementView:(MTElementView *)elementView forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+    if (elementView) {
+        
+        // TODO: Only update specific properties when they change.
+        
+        RptqDocumentObject *documentObject = [self documentObjectForElementView:elementView inManagedObjectContext:managedObjectContext];
+        
+        if (documentObject != nil) {
+            
+            CGRect marginViewFrame = [documentObject boundsContentView];
+            
+            [elementView setFrame: marginViewFrame];
+            
+            NSString *fontName = [documentObject fontname];
+            CGFloat pointSize = [[documentObject fontsize] floatValue];
+            
+            UIFont *displayFont = nil;
+            if ([fontName length] == 0) {
+                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            } else {
+                MTFont *stylizedDisplayFont = [[MTFont alloc] initWithFamilyName:fontName andPointSize:pointSize];
+                if ([[documentObject bold] boolValue] && [[documentObject italic] boolValue]) {
+                    displayFont = [stylizedDisplayFont boldItalicFont];
+                } else if ([[documentObject bold] boolValue]) {
+                    displayFont = [stylizedDisplayFont boldFont];
+                } else if ([[documentObject italic] boolValue]) {
+                    displayFont = [stylizedDisplayFont italicFont];
+                } else {
+                    displayFont = [stylizedDisplayFont font];
+                }
+            }
+            
+            if (displayFont == nil) {
+                displayFont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            }
+            [self setDisplayFont:displayFont];
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+            
+            MTHorizontalAlignment horizontalAlignment = [[documentObject horizontalAlignment] integerValue];
+            NSTextAlignment textAlignment;
+            switch (horizontalAlignment) {
+                case MTHorizontalAlignmentCenter:
+                    textAlignment = NSTextAlignmentCenter;
+                    break;
+                case MTHorizontalAlignmentLeft:
+                    textAlignment = NSTextAlignmentLeft;
+                    break;
+                case MTHorizontalAlignmentRight:
+                    textAlignment = NSTextAlignmentRight;
+                    break;
+                case MTHorizontalAlignmentJustified:
+                    textAlignment = NSTextAlignmentJustified;
+                    break;
+                default:
+                    textAlignment = NSTextAlignmentLeft;
+                    break;
+            }
+            [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingMiddle];
+            [paragraphStyle setAlignment:textAlignment];
+            [elementView setParagraphStyle:paragraphStyle];
+            
+            NSString *string = [documentObject designerRepresentationText];
+            
+            [elementView setDisplayImage:nil];
+            [elementView setDisplayBarcode:nil];
+            [elementView setDisplayImage:nil];
+            
+            if ([documentObject getType] == MTDocumentObjectTypeImage) {
+                
+                [elementView setDisplayImage:[[documentObject isImage] image]];
+                
+            } else if ([documentObject getType] == MTDocumentObjectTypeBarcode) {
+                
+                MTBarcode *displayBarcode = [RptqDocumentObjectBarcode barcodeWithDocumentObject:[documentObject isBarcode]];
+                [elementView setDisplayBarcode:displayBarcode];
+            }
+            
+            NSNumber *underlineStyle = [[documentObject underline] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+            [elementView setUnderlineStyle:underlineStyle];
+            
+            NSNumber *strikeThroughStyle = [[documentObject strike] boolValue] ? @(NSUnderlineStyleSingle) : @(NSUnderlineStyleNone);
+            [elementView setStrikeThroughStyle:strikeThroughStyle];
+            
+            NSDictionary *attributes = @{
+                                         NSParagraphStyleAttributeName : [elementView paragraphStyle],
+                                         NSFontAttributeName : [elementView displayFont],
+                                         NSStrikethroughStyleAttributeName : [elementView strikeThroughStyle],
+                                         NSUnderlineStyleAttributeName : [elementView underlineStyle]
+                                         };
+            NSAttributedString *attributtedString = [[NSAttributedString alloc] initWithString:string
+                                                                                    attributes:attributes];
+            [elementView setDisplayStringAttributed:attributtedString];
+            
+            CGSize sizeContentView = [documentObject sizeContentView];
+            CGRect boundsContentView = [documentObject boundsContentView]; //x1
+            NSStringDrawingOptions drawingOptions = (NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading);
+            [elementView setDrawingOptions:drawingOptions];
+            CGRect boundingRect = [[elementView displayStringAttributed] boundingRectWithSize:sizeContentView options:drawingOptions context:nil]; //x35
+            CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
+            
+            MTVerticalAlignment verticalAlignment = [[documentObject verticalAlignment] integerValue];
+            
+            switch (verticalAlignment) {
+                case MTVerticalAlignmentCenter: {
+                    CGFloat offsetY = (sizeContentView.height - drawingBounds.size.height) / 2.0000f;
+                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                    break;
+                }
+                case MTVerticalAlignmentBottom: {
+                    CGFloat offsetY = sizeContentView.height - drawingBounds.size.height;
+                    CGAffineTransform transform = CGAffineTransformMakeTranslation(CGSizeZero.width, offsetY);
+                    drawingBounds = CGRectApplyAffineTransform(drawingBounds, transform);
+                    break;
+                }
+                case MTVerticalAlignmentTop:
+                default:
+                    break;
+            }
+            
+            CGFloat contentViewX = documentObject.marginLeft.floatValue + documentObject.borderWidthLeft.floatValue + documentObject.paddingLeft.floatValue;
+            CGFloat contentViewY = documentObject.marginTop.floatValue + documentObject.borderHeightTop.floatValue + documentObject.paddingTop.floatValue;
+            CGAffineTransform transformPaddingBorderMargin = CGAffineTransformMakeTranslation(contentViewX, contentViewY);
+            drawingBounds = CGRectApplyAffineTransform(drawingBounds, transformPaddingBorderMargin);
+            [elementView setDrawingRect:drawingBounds];
+            
+            [elementView setNeedsLayout];
+            [elementView setNeedsDisplay];
+        }
+    }
+}
+
+*/
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "UIView+Extras.h"
+#import "AppDelegate.h"
 
 @implementation UIView (Extras)
 
@@ -38,6 +39,14 @@
         result = CGRectMake(minx, miny, maxx - minx, maxy - miny);
     }
     return result;
+}
+
+- (CGPoint)locationInMainWindow:(UIGestureRecognizer *)gestureRecognizer {
+    UIWindow *window = [AppDelegate window];
+    CGPoint gestureLocation = [gestureRecognizer locationInView:window];
+    return [self convertPoint: gestureLocation
+                     fromView: window];
+    
 }
 
 @end
