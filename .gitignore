@@ -15,7 +15,11 @@
 #
 #########################
 
-3rdPartyProjects/
+3rdPartyProjects/BlurryModalSegue
+3rdPartyProjects/Color
+3rdPartyProjects/DejalActivityView
+3rdPartyProjects/MZAppearance
+3rdPartyProjects/pkg-config-0.28
 
 StaticLibraries/freetds/Fat/share
 StaticLibraries/freetds/armv7/share
