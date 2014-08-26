@@ -1391,7 +1391,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="MTReportDesignerSectionLayoutSettingsViewControllerIdentifier" id="aNt-90-Z4U" customClass="MTReportDesignerSectionLayoutSettingsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="DG0-3B-f9T">
-                        <rect key="frame" x="0.0" y="94" width="320" height="206"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="236"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1469,10 +1469,10 @@
                         </connections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Layout Settings" prompt="Configure the layout display settings." id="hYL-D9-81D">
+                    <navigationItem key="navigationItem" title="Layout Settings" id="hYL-D9-81D">
                         <barButtonItem key="backBarButtonItem" title="Query" id="mHr-La-N73"/>
                     </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="300"/>

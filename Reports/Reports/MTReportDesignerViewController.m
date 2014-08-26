@@ -600,16 +600,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                                                  toLabelBottom:sectionViewLabel];
             NSLayoutConstraint *lc1e = [MTReportDesignerViewController layoutConstraintLabel:sectionViewLabel
                                                                                     toHeight:MTReportDesignerSectionLabelHeight];
-            
-            //NSLayoutConstraint *lcc3 = [self layoutConstraintViewLeft:sectionView];
-            //NSLayoutConstraint *lcc4 = [self layoutConstraintViewRight:sectionView];
-            
-            //NSArray *viewConstraints = @[lcc3, lcc4];
-            //[self.view addConstraints:viewConstraints];
-            
-            NSArray *designerContentViewConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e
-                                                        
-                                                        ];
+            NSArray *designerContentViewConstraints = @[lc1a, lc1b, lc1c, lc1d, lc1e];
             
             [self.container addConstraints:designerContentViewConstraints];
             
@@ -2518,6 +2509,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             self.viewControllerSectionLayoutSettings.initalFormFeedEnabled = section.producesFormFeed;
             self.viewControllerSectionLayoutSettings.initalNumberOfRows = section.numberOfRows.integerValue;
             [self.viewControllerSectionLayoutSettings updateDisplay];
+            
+            UIEdgeInsets ei = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
+            self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height + self.tabBarController.tabBar.bounds.size.height, ei.right);
+            self.viewControllerSectionLayoutSettings.tableView.contentInset = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
             
             if ([UIDevice isPad]) {
                 [self.popoverControllerSectionSettings setPopoverContentSize: CGSizeMake(320.0000f, 260.00000f)
