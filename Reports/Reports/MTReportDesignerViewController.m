@@ -330,9 +330,13 @@ const CGFloat previousScaleWeight                   =  0.6666f;
     NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
     NSLayoutConstraint *constraintScrollerBottom = [self layoutConstraintViewScrollerBottom];
 
-    NSArray *constraints = @[constraintContentLeft, constraintContentRight,
-                             constraintContentTop, constraintScrollerBottom];
-    
+    NSArray *constraints;
+    if ([UIDevice isModernOS]) {
+        constraints = @[constraintContentTop, constraintScrollerBottom];
+    } else {
+        constraints = @[constraintContentLeft, constraintContentRight,
+                        constraintContentTop, constraintScrollerBottom];
+    }
     [self.view addConstraints:constraints];
     if ([UIDevice isModernOS]) {
         NSLayoutConstraint *cw = [self layoutConstraintContentWidthCalculated];

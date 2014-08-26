@@ -877,6 +877,8 @@
 		4C8BA990174533CF00B646E2 /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
 		4C8BAFE219AB113600A55780 /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFE119AB113600A55780 /* UIView+Extras.m */; };
 		4C8BAFE319AB113600A55780 /* UIView+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFE119AB113600A55780 /* UIView+Extras.m */; };
+		4C8BAFF719ABCCBF00A55780 /* MADBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFF619ABCCBF00A55780 /* MADBlurView.m */; };
+		4C8BAFF819ABCCBF00A55780 /* MADBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BAFF619ABCCBF00A55780 /* MADBlurView.m */; };
 		4C8BF42F16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8BF43016F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8BF46F16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BF46E16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2563,6 +2565,8 @@
 		4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewControllerValueBasedOnField.m; sourceTree = "<group>"; };
 		4C8BAFE019AB113600A55780 /* UIView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extras.h"; sourceTree = "<group>"; };
 		4C8BAFE119AB113600A55780 /* UIView+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extras.m"; sourceTree = "<group>"; };
+		4C8BAFF519ABCCBF00A55780 /* MADBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBlurView.h; sourceTree = "<group>"; };
+		4C8BAFF619ABCCBF00A55780 /* MADBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBlurView.m; sourceTree = "<group>"; };
 		4C8BF42D16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentObjectNewStaticLabelViewController.h; sourceTree = "<group>"; };
 		4C8BF42E16F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentObjectNewStaticLabelViewController.m; sourceTree = "<group>"; };
 		4C8BF46D16F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectAggregate+Extras.h"; sourceTree = "<group>"; };
@@ -5226,6 +5230,8 @@
 				4C75C9F118E20306006E8526 /* MTTableCell.m */,
 				4C75C9FC18E272F6006E8526 /* MTTableCellHeader.h */,
 				4C75C9FD18E272F6006E8526 /* MTTableCellHeader.m */,
+				4C8BAFF519ABCCBF00A55780 /* MADBlurView.h */,
+				4C8BAFF619ABCCBF00A55780 /* MADBlurView.m */,
 			);
 			name = "Report Desinger";
 			sourceTree = "<group>";
@@ -6378,6 +6384,7 @@
 				4CA14FF918B7D42A001AFAD8 /* MTActivityItemProviderPdf.m in Sources */,
 				4CC6BA5116A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C28FB8F16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m in Sources */,
+				4C8BAFF819ABCCBF00A55780 /* MADBlurView.m in Sources */,
 				4C825167194A244900C32335 /* NSData+Comparson.m in Sources */,
 				4C75C9FF18E272F6006E8526 /* MTTableCellHeader.m in Sources */,
 				4C1680A31907B46400980D8D /* MTQueryCacheJournalModeDefault.m in Sources */,
@@ -6880,6 +6887,7 @@
 				4CABE46B1837DF7B007EDD9D /* RptqQuery.m in Sources */,
 				4C23FBB618FAE4F7009F234F /* MTPaperB2.m in Sources */,
 				4C3727DC168AA44D007DA7C3 /* MTCollectionReusableViewFloatingLabel.m in Sources */,
+				4C8BAFF719ABCCBF00A55780 /* MADBlurView.m in Sources */,
 				4C23FB2C18FADE46009F234F /* MADWatermarkView.m in Sources */,
 				4C825166194A244900C32335 /* NSData+Comparson.m in Sources */,
 				4CDBED24168B50AB00C5147B /* MTReportDesignerSectionView.m in Sources */,
