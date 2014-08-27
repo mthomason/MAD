@@ -17,6 +17,11 @@
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
 - (UIImage *)thumbnail;
+- (UIImage *)thumbnailWithRect:(CGRect)rect
+                          size:(CGFloat)size
+                    edgeEffect:(BOOL)edgeEffect
+                    zoomEffect:(BOOL)zoomEffect
+                    cornerSize:(CGFloat)cornerSize;
 
 @end
 

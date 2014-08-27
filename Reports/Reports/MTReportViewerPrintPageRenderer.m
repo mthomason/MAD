@@ -113,91 +113,100 @@
     }
 }
 
-- (UIImage *)thumbnail {
-    
-    CGRect letterRect = [MTPaper rectLetter];
+- (UIImage *)thumbnailWithRect:(CGRect)rect
+                          size:(CGFloat)size
+                    edgeEffect:(BOOL)edgeEffect
+                    zoomEffect:(BOOL)zoomEffect
+                    cornerSize:(CGFloat)cornerSize {
+    CGRect letterRect = rect;
     CGFloat scale = [[UIScreen mainScreen] scale];
-    BOOL isPad =[UIDevice isPad] ;
-    CGFloat imageSizeTrue = isPad == YES ? 256.0000f * scale :
-                                                        128.0000f * scale;
+    CGFloat imageSizeTrue = size;
+    CGFloat imageSizeWidth = (imageSizeTrue * letterRect.size.width) / letterRect.size.height;
     
-    CGFloat imageSizeWidth = (imageSizeTrue * 8.5000f) / 11.0000f;
     CGSize trueSize = CGSizeMake(imageSizeWidth, imageSizeTrue);
     CGRect zoomRect = CGRectMake(0.0000f, 0.0000f, trueSize.width, trueSize.height);
     CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
-    // FIXME: Don't cache data for the whole report when just printing the first page for a
-    //          fucking thumbnail.
     CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
     CGPoint startPoint = CGPointMake(pathRect.origin.x, startPointY);
     CGFloat topRightPointX = pathRect.origin.x + pathRect.size.width;
     CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
     CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
     
+
+    
     UIGraphicsBeginImageContextWithOptions(letterRect.size, NO, 0.0000f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-
-    CGFloat cornerSize = (isPad ? 10.0000f : 5.0000f) * scale;
-    CGMutablePathRef cornerPath = CGPathCreateMutable();
-    CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
-    CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
-    CGPathAddLineToPoint(cornerPath, NULL, topRightPoint.x, topRightPoint.y);
-    CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x, bottomRightPoint.y - cornerSize);
-    CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x - cornerSize, bottomRightPoint.y);
-    CGPathAddLineToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
-    CGContextAddPath(context, cornerPath);
-    CGContextClosePath (context);
-    CGContextClip(context);
-    CGPathRelease(cornerPath);
-
-    CGMutablePathRef zigPath = CGPathCreateMutable();
-    CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-    CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
-    CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
-    //zig
-    CGFloat zigDivisor = 4.0000f;
-    int topRandNumber = 4;
-
-    NSInteger numberOfZigs = pathRect.size.height / zigDivisor;
-    for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
-        NSInteger zigNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
-        CGFloat zigReal = zigNumber / scale;
-        CGFloat zigDistance = pow(zigNumber, 1.0001) + zigReal;
-        CGFloat zigX = topRightPoint.x - zigDistance;
-        CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
-        CGPoint zigPoint = CGPointMake(zigX, zigY);
-        CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
+    
+    if (zoomEffect) {
+        CGMutablePathRef cornerPath = CGPathCreateMutable();
+        CGPathMoveToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
+        CGPathAddLineToPoint(cornerPath, NULL, pathRect.origin.x, pathRect.origin.y);
+        CGPathAddLineToPoint(cornerPath, NULL, topRightPoint.x, topRightPoint.y);
+        CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x, bottomRightPoint.y - cornerSize);
+        CGPathAddLineToPoint(cornerPath, NULL, bottomRightPoint.x - cornerSize, bottomRightPoint.y);
+        CGPathAddLineToPoint(cornerPath, NULL, startPoint.x, startPoint.y);
+        CGContextAddPath(context, cornerPath);
+        CGContextClosePath (context);
+        CGContextClip(context);
+        CGPathRelease(cornerPath);
     }
-    CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
-    //CGContextClosePath (context);
-    CGContextAddPath(context, zigPath);
-    CGContextClip(context);
-    CGPathRelease(zigPath);
+    
+    if (edgeEffect) {
+
+        CGMutablePathRef zigPath = CGPathCreateMutable();
+        CGPathMoveToPoint(zigPath, NULL, startPoint.x, startPoint.y);
+        CGPathAddLineToPoint(zigPath, NULL, pathRect.origin.x, pathRect.origin.y);
+        CGPathAddLineToPoint(zigPath, NULL, topRightPoint.x, topRightPoint.y);
+        //zig
+        CGFloat zigDivisor = 4.0000f;
+        int topRandNumber = 4;
+        
+        NSInteger numberOfZigs = pathRect.size.height / zigDivisor;
+        for (NSInteger zigCounter = 0; zigCounter <= numberOfZigs; zigCounter++) {
+            NSInteger zigNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
+            CGFloat zigReal = zigNumber / scale;
+            CGFloat zigDistance = pow(zigNumber, 1.0001) + zigReal;
+            CGFloat zigX = topRightPoint.x - zigDistance;
+            CGFloat zigY = topRightPoint.y + (zigCounter * zigDivisor);
+            CGPoint zigPoint = CGPointMake(zigX, zigY);
+            CGPathAddLineToPoint(zigPath, NULL, zigPoint.x, zigPoint.y);
+        }
+        CGPathAddLineToPoint(zigPath, NULL, startPoint.x, startPoint.y);
+        //CGContextClosePath (context);
+        CGContextAddPath(context, zigPath);
+        CGContextClip(context);
+        CGPathRelease(zigPath);
+        
+        
+        CGMutablePathRef zagPath = CGPathCreateMutable();
+        CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
+        CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
+        CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
+        CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
+        
+        //zag
+        CGFloat zagDivisor = 4.0000f;
+        NSInteger numberOfZags = pathRect.size.height / zagDivisor;
+        for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
+            
+            NSInteger zagNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
+            CGFloat zagReal = zagNumber / scale;
+            CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
+            CGFloat zagDistance = pow(zagNumber, 1.0001) + zagReal;
+            CGFloat zagY = bottomRightPoint.y - zagDistance;
+            CGPoint zagPoint = CGPointMake(zagX, zagY);
+            CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
+        }
+        CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
+        CGContextAddPath(context, zagPath);
+        CGContextClip(context);
+        CGPathRelease(zagPath);
+    }
     
 
-    CGMutablePathRef zagPath = CGPathCreateMutable();
-    CGPathMoveToPoint(zagPath, NULL, startPoint.x, startPoint.y);
-    CGPathAddLineToPoint(zagPath, NULL, pathRect.origin.x, pathRect.origin.y);
-    CGPathAddLineToPoint(zagPath, NULL, topRightPoint.x, topRightPoint.y);
-    CGPathAddLineToPoint(zagPath, NULL, bottomRightPoint.x, bottomRightPoint.y);
-
-    //zag
-    CGFloat zagDivisor = 4.0000f;
-    NSInteger numberOfZags = pathRect.size.height / zagDivisor;
-    for (NSInteger zagCounter = 0; zagCounter <= numberOfZags; zagCounter++) {
-        
-        NSInteger zagNumber = [MTMath getRandomNumberBetween: 0 to: topRandNumber];
-        CGFloat zagReal = zagNumber / scale;
-        CGFloat zagX = bottomRightPoint.x - (zagCounter * zagDivisor);
-        CGFloat zagDistance = pow(zagNumber, 1.0001) + zagReal;
-        CGFloat zagY = bottomRightPoint.y - zagDistance;
-        CGPoint zagPoint = CGPointMake(zagX, zagY);
-        CGPathAddLineToPoint(zagPath, NULL, zagPoint.x, zagPoint.y);
-    }
-    CGPathAddLineToPoint(zagPath, NULL, startPoint.x, startPoint.y);
-    CGContextAddPath(context, zagPath);
-    CGContextClip(context);
-    CGPathRelease(zagPath);
+    
+    
     
     CGContextSaveGState(context);
     
@@ -205,12 +214,24 @@
     CGContextRestoreGState(context);
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomRect);
-
-    UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
+    UIImage *croppedImage;
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomEffect ? zoomRect : letterRect);
+    croppedImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
     UIGraphicsEndImageContext();
     return croppedImage;
+
+}
+
+- (UIImage *)thumbnail {
+    
+    CGFloat scale = [UIScreen mainScreen].scale;
+    return [self thumbnailWithRect: [MTPaper rectLetter]
+                              size: [UIDevice isPad] ? 256.0000f * scale : 128.0000f * scale
+                        edgeEffect: YES
+                        zoomEffect: YES
+                        cornerSize: ([UIDevice isPad] ? 10.0000f : 5.0000f) * scale];
 }
 
 - (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
