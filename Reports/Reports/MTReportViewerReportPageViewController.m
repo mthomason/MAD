@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign) BOOL displayDebuggingInfo;
 
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @end
 
@@ -48,7 +48,7 @@
     _delegate = nil;
 }
 
-- (instancetype)initWithDocument:(MAReportDocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
+- (instancetype)initWithDocument:(MADocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         [self setDocument:document];

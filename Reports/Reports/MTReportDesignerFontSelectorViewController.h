@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MAReportDocument, MTReportDesignerFontSelectorViewController, MTFont;
+@class MADocument, MTReportDesignerFontSelectorViewController, MTFont;
 
 @protocol MTReportDesignerFontSelectorDelegate
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
@@ -21,7 +21,7 @@
     <UITableViewDelegate>
 
 @property (nonatomic, weak) id <MTReportDesignerFontSelectorDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontArial;

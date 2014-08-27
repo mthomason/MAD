@@ -14,14 +14,14 @@
 #import "MUIViewControllerDelegate.h"
 #import "MADActivityProtocol.h"
 
-@class MAReportDocument;
+@class MADocument;
 
 @interface MTReportViewerController : UIPageViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
 @property (nonatomic, assign) id <MTViewControllerProtocol> viewControllerDelegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (void)reload;
 

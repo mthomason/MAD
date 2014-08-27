@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MAReportDocument;
+@class MADocument;
 
 @protocol MTReportDesignerToolBoxDelegate
 - (void)toolboxHeightChanged:(CGFloat)newHeight;
@@ -21,7 +21,7 @@
 @interface MTReportDesignerToolBoxViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet id <MTReportDesignerToolBoxDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds;
 - (IBAction)valueChanged:(id)sender;

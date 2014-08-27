@@ -17,7 +17,6 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+EverydayApps.h"
 #import "MADocument.h"
-#import "MAReportDocument.h"
 
 @interface MTCollectionViewCellDocument ()
 
@@ -70,7 +69,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     __weak MTCollectionViewCellDocument *weakself = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void) {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
-            NSURL *thumbnailUrl = [MAReportDocument thumbnailUrlForMadUrl:url];
+            NSURL *thumbnailUrl = [MADocument thumbnailUrlForMadUrl:url];
             NSString *path = [thumbnailUrl path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image) {

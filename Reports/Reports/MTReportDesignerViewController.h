@@ -32,12 +32,12 @@ typedef NS_ENUM(NSUInteger, MTDirection) {
     MTDirectionWest,        //210˚-150˚
 };
 
-@class MAReportDocument;
+@class MADocument;
 
 @interface MTReportDesignerViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (IBAction)unwindToDesigner:(UIStoryboardSegue *)action;
 - (IBAction)done:(id)sender;

@@ -14,13 +14,13 @@
 
 @class MTQueryBuilderViewController,
         MTQueryBuilderVisualizationViewController,
-        MAReportDocument;
+        MADocument;
 
 @interface MTQueryBuilderContainerController : UIViewController
     <MTViewControllerProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (MTQueryBuilderViewController *)queryBuilderController;
 - (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced;

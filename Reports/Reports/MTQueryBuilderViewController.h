@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 
-@class MAReportDocument;
+@class MADocument;
 
 extern NSString * const NSFetchedResultsCacheName;
 extern NSString * const NSFetchedResultsCacheTables;
@@ -23,11 +23,11 @@ extern NSString * const NSFetchedResultsCachePredicates;
 @interface MTQueryBuilderViewController : UITableViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property BOOL debug;
 
-- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated;
+- (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated;
 
 - (IBAction)edit:(id)sender;
 

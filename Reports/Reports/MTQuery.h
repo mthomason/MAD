@@ -141,7 +141,8 @@ extern NSString * const MTQueryKeyPredicateValue;
 
 
 
-#import "MAReportDocument.h"
+#import "MADocument.h"
+#import "MADDataProtocol.h"
 
 @interface MTQuery : NSObject
 

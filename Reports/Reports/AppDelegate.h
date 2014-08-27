@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MTApplicationInstance, MAReportDocument,
+@class MTApplicationInstance,
             RptqDocument, RptqDatabase, RptqQuery;
 
 @interface AppDelegate : UIResponder

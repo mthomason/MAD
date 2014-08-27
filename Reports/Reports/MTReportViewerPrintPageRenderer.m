@@ -14,7 +14,7 @@
 #import <CoreText/CoreText.h>
 #import <QuartzCore/QuartzCore.h>
 #import "MTApplicationInstance.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "MTDatabaseField.h"
 
 #import "RptqDocument.h"

@@ -148,7 +148,7 @@
     [self updateSaveButtonState];
 }
 
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MAReportDocument *)document {
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MADocument *)document {
     [self setJoinType:result];
     [[self navigationController] popToViewController: self animated: YES];
 }

@@ -14,21 +14,58 @@
 #import <Foundation/Foundation.h>
 #import "MTCacheProtocol.h"
 #import "Constants.h"
+#import "MADocument.h"
+#import "MTDatabase.h"
+#import "MTDatabaseConnection.h"
+#import "MTReportFormatter.h"
+#import "MADDataProtocol.h"
+#import "MADActivityProtocol.h"
 
+extern NSString * const MADMimeType;
+extern NSString * const MTReportSectionType;
+extern NSString * const MTReportDetailRowId;
+extern NSString * const MTReportGroupLevel;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
-@class MADocumentState;
+@class MADocumentState, MTErrorContainer;
 
 @interface MADocument : UIManagedDocument
-    <MTCacheProtocol>
+<MTReportFormatterDataSource,
+MTCacheProtocol,
+MADDataProtocol,
+UIPrintInteractionControllerDelegate>
+
+@property (nonatomic, strong) MTReportFormatter *reportFormatter;
+@property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
+@property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
+
+@property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
+
 
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
-- (id)initWithFileURL:(NSURL *)url;
+- (instancetype)initWithFileURL:(NSURL *)url;
 - (void)quickSave;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 + (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion;
+
+- (void)open:(void (^)(BOOL))completion;
+- (void)refresh:(void (^)(BOOL success, NSError *error))completion;
+- (void)addConnection:(MTDatabaseConnection *)connection
+               status:(void (^)(NSString *status, CGFloat progress))status
+           completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
+- (void)regenThumbnail;
+- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
+
+- (void)close:(void(^)(BOOL success, NSError *error))completion;
+- (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
+
+- (UIPrintPageRenderer *)printerPrintPageRender;
+
+- (RptqDocument *)activeDocumentModel;
++ (NSString *)fileType;
+
 - (NSString *)name;
 - (NSString *)fileName;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
@@ -38,6 +75,14 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
 - (void)wrapFileOverwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion;
+
++ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
++ (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
+
+- (NSURL *)cachedDataUrl;
+- (void)initalizeMainQuery;
+- (void)prepareForQuery;
+- (MTQuery *)defaultQuery;
 
 @end
 

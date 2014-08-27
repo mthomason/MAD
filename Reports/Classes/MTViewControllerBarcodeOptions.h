@@ -74,7 +74,7 @@
         MTTableViewControllerBarcodeExtraDataMatrixDelegate>
 
 @property (nonatomic, weak) id <MTViewControllerBarcodeOptionsDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, retain) NSArray *sampleBarcodeData;
 @property (nonatomic, retain) NSArray *sampleBarcodeData2dComponent;

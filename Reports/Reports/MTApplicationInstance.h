@@ -10,7 +10,7 @@
 #define Reports_MTApplicationInstance_h
 
 #import <Foundation/Foundation.h>
-#import "MAReportDocument.h"
+#import "MADocument.h"
 
 typedef NS_ENUM(NSUInteger, MTReportState) {
 	MTReportStateOpen = 0,
@@ -45,7 +45,7 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 @property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
 
-- (MAReportDocument *)currentdocappinst;
+- (MADocument *)currentdocappinst;
 
 - (void)initalizeAppearance;
 - (id)mainWindow;

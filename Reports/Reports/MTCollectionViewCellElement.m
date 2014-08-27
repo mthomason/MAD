@@ -9,7 +9,7 @@
 #import "MTCollectionViewCellElement.h"
 #import <CoreData/CoreData.h>
 #import "UIView+NSObjectIdTag.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 
 @interface MTCollectionViewCellElement ()
 

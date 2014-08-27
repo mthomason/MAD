@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTToolboxViewControllerProtocol.h"
 
-@class MAReportDocument, MTReportDesignerFontSettingsViewController, MTFont;
+@class MADocument, MTReportDesignerFontSettingsViewController, MTFont;
 
 @protocol MTReportDesignerFontSettingsDelegate
 - (void)fontSettingsTableViewControllerDidSelectFontList:(MTReportDesignerFontSettingsViewController *)controller;
@@ -22,7 +22,7 @@
     <MTToolboxViewControllerProtocol>
 
 @property (nonatomic, weak) id <MTReportDesignerFontSettingsDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
 

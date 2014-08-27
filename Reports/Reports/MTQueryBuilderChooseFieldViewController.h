@@ -14,7 +14,7 @@
 #import "UIViewTableSectionHeaderDatabaseTable.h"
 #import "MTUnwindProtocol.h"
 
-@class MTQueryBuilderChooseFieldViewController, RptqQueryField, MAReportDocument;
+@class MTQueryBuilderChooseFieldViewController, RptqQueryField, MADocument;
 
 @protocol MTQueryBuilderChooseFieldDelegate
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field;
@@ -27,7 +27,7 @@
         MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTQueryBuilderChooseFieldDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *fieldCells;
 

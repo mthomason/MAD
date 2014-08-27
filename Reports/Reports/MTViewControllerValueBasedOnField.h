@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MAReportDocument, NSManagedObjectID;
+@class MADocument, NSManagedObjectID;
 
 @protocol MTViewControllerValueBasedOnFieldDelegate
 - (void)enterStringDidFinishWithString:(NSString *)userInput;
@@ -22,7 +22,7 @@
         UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, weak) id <MTViewControllerValueBasedOnFieldDelegate> enterStringDelegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 @property (nonatomic, strong) NSManagedObjectID *schemaFieldObjectId;
 
 @end

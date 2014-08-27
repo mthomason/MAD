@@ -149,7 +149,7 @@ const NSInteger currentMajorVersion = 2;
         if (exampleFileUrl != nil) {
             
             __weak MADUpgradeViewController *blockSelf = self;
-            [MAReportDocument initalSaveUsingUrl:exampleFileUrl andConnection:dbDetails completion:^(BOOL success) {
+            [MADocument initalSaveUsingUrl:exampleFileUrl andConnection:dbDetails completion:^(BOOL success) {
                 [blockSelf performSegueWithIdentifier:@"MTSegueUpgradeComplete" sender:blockSelf];
             }];
         }

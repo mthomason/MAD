@@ -40,7 +40,7 @@ NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
 @interface MTOpenFiles : NSObject
-    @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MAReportDocument stored by their NSURLS
+    @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
     @property (nonatomic, strong) NSURL *openUrl;
 @end
 
@@ -143,7 +143,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                            withSender: sender];
 }
 
-- (MAReportDocument *)document {
+- (MADocument *)document {
     return [self currentDocument];
 }
 
@@ -381,7 +381,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self ;
             
-            MAReportDocument *document = [self currentDocument];
+            MADocument *document = [self currentDocument];
             queryBuilderContainerController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
@@ -402,7 +402,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
             MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self;
-            MAReportDocument *document = [self currentDocument];
+            MADocument *document = [self currentDocument];
             queryBuilderViewController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
@@ -414,7 +414,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
     } else if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderViewController class]]) {
         MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[segue.destinationViewController topViewController];
-        MAReportDocument *document = [self currentDocument];
+        MADocument *document = [self currentDocument];
         queryBuilderViewController.document = document;
         [queryBuilderViewController reloadDocument:document animated:YES];
     }
@@ -844,7 +844,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [cell performSelectionAnimations];
     
     NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
-    NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
+    NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
     if (image == nil) {
@@ -858,7 +858,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [cell performDeselectionAnimations];
     
     NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
-    NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+    NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
     if (image == nil) {
@@ -896,7 +896,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
-    NSURL *url = [MAReportDocument thumbnailUrlForMadUrl:fileUrl];
+    NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
     if (image == nil) {
@@ -913,7 +913,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [cell performDeselectionAnimations];
     
     NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
-    NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+    NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
     if (image == nil) {
@@ -1028,7 +1028,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             
             MTCollectionViewCellDocument *visibleCell = (MTCollectionViewCellDocument *)[[openDocument collectionView] cellForItemAtIndexPath:indexPath];
-            NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+            NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image) {
@@ -1108,7 +1108,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [cell performDeselectionAnimations];
             
             NSURL *fileUrl = [[self dataSource] itemAtIndexPath:path];
-            NSURL *url = [MAReportDocument thumbnailWithBorderUrlForMadUrl:fileUrl];
+            NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image == nil) {
@@ -1276,7 +1276,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         NSURL *fileToAttach = [self urlForDocumentCell:cell];
         
-        MAReportDocument *documentReport = [[MAReportDocument alloc] initWithFileURL:fileToAttach];
+        MADocument *documentReport = [[MADocument alloc] initWithFileURL:fileToAttach];
         
         if ([documentReport documentState] != UIDocumentStateClosed) {
             __weak MTViewControllerOpenDocument *weakself = self;
@@ -1326,12 +1326,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self displaySavingReportActivityIndicator];
     
     __weak MTViewControllerOpenDocument *blockSelf = self;
-    __weak MAReportDocument *activeDocument = [self currentDocument];
+    __weak MADocument *activeDocument = [self currentDocument];
     if (activeDocument) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             
-            __weak MAReportDocument *blockActiveDocument = activeDocument;
+            __weak MADocument *blockActiveDocument = activeDocument;
             __weak MTViewControllerOpenDocument *blockSelf2 = blockSelf;
             
             if ([blockActiveDocument documentState] != UIDocumentStateClosed) {
@@ -1343,7 +1343,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                         
                         [[blockActiveDocument documentStatus] setSuspended:YES];
                         
-                        __weak MAReportDocument *blockActiveDocument2 = blockActiveDocument;
+                        __weak MADocument *blockActiveDocument2 = blockActiveDocument;
                         __weak MTViewControllerOpenDocument *blockself3 = blockSelf2;
                         
                         [blockActiveDocument2 wrapFileOverwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
@@ -1374,8 +1374,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
 }
 
-- (MAReportDocument *)currentDocument {
-    MAReportDocument *result = nil;
+- (MADocument *)currentDocument {
+    MADocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
         NSString *key = [self.openFiles.openUrl key];
         result = (self.openFiles.openFiles)[key];
@@ -1385,7 +1385,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
     self.openFiles.openUrl = url;
-    MAReportDocument *document = [[MAReportDocument alloc] initWithFileURL:url];
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
     NSString *key = [url key];
     (self.openFiles.openFiles)[key] = document;
     [document open:^(BOOL success) {

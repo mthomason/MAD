@@ -11,7 +11,7 @@
 #endif
 
 #import "MTConnectionViewController.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "UIDevice+Hack.h"
 #import "MTDatabaseSqlServer.h"
 #import "NSURL+Document.h"
@@ -29,7 +29,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
 
 @property (nonatomic, assign) BOOL activitySpinnerVisable;
 @property (nonatomic, strong) UIBarButtonItem *holderButton;
-@property (nonatomic, strong) MAReportDocument *docToSave;
+@property (nonatomic, strong) MADocument *docToSave;
 
 @end
 
@@ -185,15 +185,15 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     [dbDetails testConnection:^(BOOL success, NSError *error) {
         if (success) {
             
-            MAReportDocument *doc = [[MAReportDocument alloc] initWithFileURL:applicationFileUrlWithExtention];
+            MADocument *doc = [[MADocument alloc] initWithFileURL:applicationFileUrlWithExtention];
             [self setDocToSave:doc];
-            __weak __block MAReportDocument *weakdoc1 = doc;
+            __weak __block MADocument *weakdoc1 = doc;
             __weak MTDatabaseConnection *weakConnection = dbDetails;
             [weakdoc1 open:^(BOOL success) {
                 
                 NSString *name = [NSString stringWithString:[doc name]];
                 if (success) {
-                    __weak __block MAReportDocument *weakdoc = weakdoc1;
+                    __weak __block MADocument *weakdoc = weakdoc1;
                     [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
                         self.navigationItem.prompt = readStatus;
                         progressView.progress = progress;

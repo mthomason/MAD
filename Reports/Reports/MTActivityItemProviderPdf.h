@@ -15,12 +15,12 @@
 - (void)showPrintDialog;
 @end
 
-@class MAReportDocument;
+@class MADocument;
 
 @interface MTActivityItemProviderPdf : UIActivityItemProvider
 
 @property (nonatomic, weak) id <MTActivityItemProviderDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 @property (nonatomic, weak, readonly) UIActivityViewController *activityViewController;
 
 @end

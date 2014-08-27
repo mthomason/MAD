@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, MNSLinkPart) {
         MTQueryBuilderChooseFieldDelegate>
 
 @property (nonatomic, weak) id <MTQueryBuilderLinkBuilderDelegate, MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellTableFieldOne;
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellJoinType;

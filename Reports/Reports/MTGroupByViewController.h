@@ -15,7 +15,7 @@
 
 extern NSString * const MTGroupByViewControllerIdentifier;
 
-@class MAReportDocument;
+@class MADocument;
 
 @protocol MTGroupByViewControllerDelegate
 - (void)didSelectGroupByPage;
@@ -27,7 +27,7 @@ extern NSString * const MTGroupByViewControllerIdentifier;
     <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) id <MTGroupByViewControllerDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, assign, readonly) MTAggregateGroupByType aggregateGroupType;
 @property (nonatomic, assign, readonly) NSUInteger aggregateGroupNumber;

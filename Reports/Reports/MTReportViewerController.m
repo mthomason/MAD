@@ -15,7 +15,7 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "UIApplication+Extras.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "MTActivityItemProviderPdf.h"
 #import "UAAppReviewManager.h"
 #import "RptqDocument.h"
@@ -909,7 +909,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [self.document prepareForQuery];
     
-    __weak MAReportDocument *weakdoc = self.document;
+    __weak MADocument *weakdoc = self.document;
 
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
@@ -926,7 +926,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
         [self ignoreFormatter: weakdoc.reportFormatter];
 
-        __weak MAReportDocument *doc2 = weakdoc;
+        __weak MADocument *doc2 = weakdoc;
         __weak MTReportViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             

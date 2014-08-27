@@ -12,7 +12,7 @@
 
 #import "MTGroupByViewController.h"
 #import "AppDelegate.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
 #import "NSError+UserInterface.h"

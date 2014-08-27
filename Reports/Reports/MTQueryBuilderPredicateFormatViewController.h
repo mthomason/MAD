@@ -22,7 +22,7 @@
     <MTViewControllerProtocol, MTQueryBuilderAddPredicateDelegate>
 
 @property (nonatomic, weak) id <MTQueryBuilderPredicateFormatDelegate, MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (IBAction)done:(id)sender;
 

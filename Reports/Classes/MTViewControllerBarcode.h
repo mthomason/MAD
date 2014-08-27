@@ -28,7 +28,7 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         MTUnwindProtocol>
 
 @property (nonatomic, weak) id <MTViewControllerBarcodeDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, strong, readwrite) RptqQueryField *queryField1;
 @property (nonatomic, strong, readwrite) RptqQueryField *queryField2;

@@ -15,7 +15,7 @@
 #import "RptqDocument+Extras.h"
 #import "SectionEnumerator.h"
 #import "MTProtocolCompare.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"

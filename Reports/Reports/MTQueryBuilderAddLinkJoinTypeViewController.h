@@ -12,18 +12,18 @@
 #import <UIKit/UIKit.h>
 #import "RptqQueryLinks+Extras.h"
 
-@class MTQueryBuilderAddLinkJoinTypeViewController, MAReportDocument;
+@class MTQueryBuilderAddLinkJoinTypeViewController, MADocument;
 
 @protocol MTQueryBuilderAddLinkJoinTypeDelegate
 - (MNSLinkType)initalLinktype;
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MAReportDocument *)document;
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MADocument *)document;
 @end
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController
     <UITableViewDelegate>
 
 @property (nonatomic, weak) id <MTQueryBuilderAddLinkJoinTypeDelegate> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @end
 

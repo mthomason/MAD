@@ -10,7 +10,7 @@
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import <CoreData/CoreData.h>
 #import "MTToolboxViewControllerProtocol.h"
 #import "RptqDocumentObject+Extras.h"

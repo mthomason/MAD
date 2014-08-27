@@ -481,7 +481,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
     NSIndexSet *indexSetSections = nil;
 
-    MAReportDocument *reportDocument = self.document;
+    MADocument *reportDocument = self.document;
     
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocument *document = [reportDocument activeDocumentModel];
@@ -1241,7 +1241,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
 }
 
-- (void)reloadDocument:(MAReportDocument *)reportDocument animated:(BOOL)animated {
+- (void)reloadDocument:(MADocument *)reportDocument animated:(BOOL)animated {
     
     if (reportDocument) {
         

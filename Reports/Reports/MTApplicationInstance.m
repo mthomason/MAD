@@ -16,7 +16,7 @@
 
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "NSFileManager+Common.h"
 #import "UAAppReviewManager.h"
 
@@ -24,7 +24,7 @@
 #import "MTReportDesigner.h"
 #import "MTReportViewer.h"
 #import "MTQueryDesigner.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "MTUser.h"
 #import "MADocumentState.h"
 
@@ -37,9 +37,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.35";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.35";
-NSString * const MTGlobalBundleRev                                  = @"1410";
+NSString * const MTGlobalBundleVersion                              = @"7.0.37";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.37";
+NSString * const MTGlobalBundleRev                                  = @"1412";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
@@ -62,7 +62,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 @property (nonatomic, strong, readwrite) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
-@property (nonatomic, strong) NSMutableDictionary *documents;   //MAReportDocument stored by their NSURLS
+@property (nonatomic, strong) NSMutableDictionary *documents;   //MADocument stored by their NSURLS
 
 @end
 
@@ -197,8 +197,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     return [NSString stringWithFormat: localizedPrefix, localizedSuffix];
 }
 
-- (MAReportDocument *)currentdocappinst {
-    MAReportDocument *result = nil;
+- (MADocument *)currentdocappinst {
+    MADocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
         NSDictionary *documents = [self documents];
         NSURL *currentUrl = [self currentDocument];

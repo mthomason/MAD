@@ -917,7 +917,6 @@
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
 		4C92946118C4CB930010AAEF /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
-		4C92946318C4CB9C0010AAEF /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
 		4C92946418C4CBA70010AAEF /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4C92946518C4CBAA0010AAEF /* MTViewControllerOpenDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MTViewControllerOpenDocument.m */; };
 		4C92946618C4CBB10010AAEF /* NSFileManager+Reports.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7B814CC3908003DA079 /* NSFileManager+Reports.m */; };
@@ -1206,7 +1205,6 @@
 		4CA1638A167EB85400540A14 /* RptqUserCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E281650C6B50002F8EA /* RptqUserCredentals+Extras.m */; };
 		4CA1638D167EB85B00540A14 /* SectionEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A99814EA22F90069A0AF /* SectionEnumerator.m */; };
 		4CA16394167EB89B00540A14 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
-		4CA16395167EB89B00540A14 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; };
 		4CA163AB167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; };
 		4CA163AD167EB8B300540A14 /* MTClipboardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C87407915052D3D007FC473 /* MTClipboardView.m */; };
 		4CA163B5167EB8BA00540A14 /* MTElementView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A9AF14ECDE560069A0AF /* MTElementView.m */; };
@@ -1606,8 +1604,6 @@
 		4CFD36581836A257000EF14B /* MTBarcodeCode39Iso16388.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36551836A257000EF14B /* MTBarcodeCode39Iso16388.h */; };
 		4CFD36591836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36561836A257000EF14B /* MTBarcodeCode39Extended.h */; };
 		4CFD365A1836A257000EF14B /* MTBarcodeCode39Extended.h in Resources */ = {isa = PBXBuildFile; fileRef = 4CFD36561836A257000EF14B /* MTBarcodeCode39Extended.h */; };
-		4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CFF3E7E164CD75D0070E880 /* MAReportDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CFF3F21164D76270070E880 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4CFF3F25164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -3002,8 +2998,6 @@
 		4CFD364A18368935000EF14B /* MTBarcodeChannelCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeChannelCode.h; path = Barcodes/Barcodes/MTBarcodeChannelCode.h; sourceTree = "<group>"; };
 		4CFD36551836A257000EF14B /* MTBarcodeCode39Iso16388.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Iso16388.h; path = Barcodes/Barcodes/MTBarcodeCode39Iso16388.h; sourceTree = "<group>"; };
 		4CFD36561836A257000EF14B /* MTBarcodeCode39Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeCode39Extended.h; path = Barcodes/Barcodes/MTBarcodeCode39Extended.h; sourceTree = "<group>"; };
-		4CFF3E7B164CD75D0070E880 /* MAReportDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = MAReportDocument.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MAReportDocument.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CFF3F1F164D76270070E880 /* NSURL+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+Document.h"; sourceTree = "<group>"; };
 		4CFF3F20164D76270070E880 /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Document.m"; sourceTree = "<group>"; };
 		4CFF3F23164DFF1F0070E880 /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADocument.h; sourceTree = "<group>"; };
@@ -4483,8 +4477,6 @@
 			children = (
 				4CFF3F23164DFF1F0070E880 /* MADocument.h */,
 				4CFF3F24164DFF1F0070E880 /* MADocument.m */,
-				4CFF3E7B164CD75D0070E880 /* MAReportDocument.h */,
-				4CFF3E7C164CD75D0070E880 /* MAReportDocument.m */,
 				4C40EC0619349A7A00F12AAC /* MADocumentState.h */,
 				4C40EC0719349A7A00F12AAC /* MADocumentState.m */,
 				4C40EC171934A77400F12AAC /* MAReportDocumentState.h */,
@@ -6318,7 +6310,6 @@
 				4CB4A47C183C7290008D52B5 /* RptqDocumentObject.m in Sources */,
 				4C0E779A163B5AEC003B951E /* RptqDatabase+Extras.m in Sources */,
 				4C77328D190FFD6A005AE7C2 /* MysqlDelete.m in Sources */,
-				4CFF3E7E164CD75D0070E880 /* MAReportDocument.m in Sources */,
 				4C23FBD918FAE4F7009F234F /* MTPaperC8.m in Sources */,
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
 				4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */,
@@ -6552,7 +6543,6 @@
 				4CA1638A167EB85400540A14 /* RptqUserCredentals+Extras.m in Sources */,
 				4CA1638D167EB85B00540A14 /* SectionEnumerator.m in Sources */,
 				4CA16394167EB89B00540A14 /* MADocument.m in Sources */,
-				4CA16395167EB89B00540A14 /* MAReportDocument.m in Sources */,
 				4CA163AB167EB8B300540A14 /* UIViewTableSectionHeaderQueryBuilder.m in Sources */,
 				4CA163AD167EB8B300540A14 /* MTClipboardView.m in Sources */,
 				4CA163B5167EB8BA00540A14 /* MTElementView.m in Sources */,
@@ -6824,7 +6814,6 @@
 				4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */,
 				4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */,
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
-				4CFF3E7D164CD75D0070E880 /* MAReportDocument.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,
 				4CCD243D193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */,
 				4C40EBF3193387D100F12AAC /* MTQueryCacheSelectRowIds.m in Sources */,
@@ -7156,7 +7145,6 @@
 				4C9294E018C4CC6A0010AAEF /* MTFont.m in Sources */,
 				4CA14CEB19693E6D006D6F9B /* MTDatabaseCache.m in Sources */,
 				4C92951218C4CC7F0010AAEF /* RptqQueryPredicate+Extras.m in Sources */,
-				4C92946318C4CB9C0010AAEF /* MAReportDocument.m in Sources */,
 				4C92950318C4CC7F0010AAEF /* RptqDocumentObjectAggregate+Extras.m in Sources */,
 				4C9294D618C4CC340010AAEF /* DesignerSectionLabel.m in Sources */,
 				4C92949018C4CBF90010AAEF /* MTElementView.m in Sources */,

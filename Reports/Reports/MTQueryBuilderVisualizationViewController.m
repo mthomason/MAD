@@ -707,7 +707,7 @@ typedef void(^MTBlockResultVoid)(void);
     [self reloadDocument:self.document animated:YES];
 }
 
-- (void)reloadDocument:(MAReportDocument *)documentReport animated:(BOOL)animated {
+- (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated {
     if (documentReport) {
         
         NSManagedObjectContext *objectContext = [documentReport managedObjectContext];

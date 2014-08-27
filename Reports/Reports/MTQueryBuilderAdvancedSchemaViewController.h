@@ -15,7 +15,7 @@
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
-@class MTSchemaFieldCell, NSManagedObjectID, MAReportDocument;
+@class MTSchemaFieldCell, NSManagedObjectID, MADocument;
 
 @interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
     <UIDynamicItem>
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
 @property (nonatomic, weak) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 - (void)setCenter:(CGPoint)center;
 - (void)setBounds:(CGRect)bounds;

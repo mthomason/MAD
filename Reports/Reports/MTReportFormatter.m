@@ -11,7 +11,7 @@
 #endif
 
 #import "MTReportFormatter.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "MTQueryFull.h"
 
 #import "SectionEnumerator.h"

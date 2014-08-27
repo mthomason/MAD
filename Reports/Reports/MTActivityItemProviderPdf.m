@@ -13,7 +13,7 @@
 #import "MTActivityItemProviderPdf.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 #import "UIDevice+Hack.h"
 
 @interface  MTActivityItemProviderPdf ()

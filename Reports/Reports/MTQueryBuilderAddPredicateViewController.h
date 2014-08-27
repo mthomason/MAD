@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateNone
 };
 
-@class MTQueryBuilderAddPredicateViewController, RptqQueryPredicate, MAReportDocument;
+@class MTQueryBuilderAddPredicateViewController, RptqQueryPredicate, MADocument;
 
 @protocol MTQueryBuilderAddPredicateDelegate
 - (void)uITableViewControllerSchemaAddPredicateDidAddPredicate:(RptqQueryPredicate *)predicate;
@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 
 @property (nonatomic, weak) IBOutlet id <MTQueryBuilderAddPredicateDelegate, MTViewControllerProtocol> delegate;
-@property (nonatomic, weak) MAReportDocument *document;
+@property (nonatomic, weak) MADocument *document;
 
 @property (assign) MNSPredicatePart currentlyEditingPart;
 

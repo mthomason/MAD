@@ -17,7 +17,7 @@
 #import "MTReportDesigner.h"
 #import "MTReportViewer.h"
 #import "MTQueryDesigner.h"
-#import "MAReportDocument.h"
+#import "MADocument.h"
 
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
@@ -106,7 +106,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MAReportDocument *documentReport = [[self applicationInstance] currentdocappinst];
+    MADocument *documentReport = [[self applicationInstance] currentdocappinst];
     [documentReport quickSave];
 }
 
