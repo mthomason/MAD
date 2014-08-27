@@ -283,14 +283,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     return [MADocument fileType];
 }
 
-- (BOOL)writeContents:(id)contents
-        andAttributes:(NSDictionary *)additionalFileAttributes
-          safelyToURL:(NSURL *)url
-     forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                error:(NSError *__autoreleasing *)outError {
-    
-}
-
 #pragma mark - UIManagedDocument
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
