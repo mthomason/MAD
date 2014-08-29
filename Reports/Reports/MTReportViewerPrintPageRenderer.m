@@ -60,6 +60,8 @@
 #import "MTArrayCached.h"
 #import "MTReportFormatterPageDefinition.h"
 
+#import "UIImage+Border.h"
+
 @interface MTReportViewerPrintPageRenderer ()
 
 
@@ -117,13 +119,14 @@
                           size:(CGFloat)size
                     edgeEffect:(BOOL)edgeEffect
                     zoomEffect:(BOOL)zoomEffect
-                    cornerSize:(CGFloat)cornerSize {
-    CGRect letterRect = rect;
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGFloat imageSizeTrue = size;
-    CGFloat imageSizeWidth = (imageSizeTrue * letterRect.size.width) / letterRect.size.height;
-    
-    CGSize trueSize = CGSizeMake(imageSizeWidth, imageSizeTrue);
+                  squareEffect:(BOOL)squareEffect
+                    cornerSize:(CGFloat)cornerSize
+                         scale:(CGFloat)scale {
+    size = size * scale;
+    cornerSize = cornerSize * scale;
+    //CGRect rectSquare = CGRectMake(rect.origin.x, rect.origin.y, maxLenght, maxLenght);
+    CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
+    CGSize trueSize = CGSizeMake(imageSizeWidth, size);
     CGRect zoomRect = CGRectMake(0.0000f, 0.0000f, trueSize.width, trueSize.height);
     CGRect pathRect = CGRectMake(zoomRect.origin.x, zoomRect.origin.y, zoomRect.size.width/scale, zoomRect.size.height/scale);
     CGFloat startPointY = pathRect.origin.y + pathRect.size.height;
@@ -132,9 +135,7 @@
     CGPoint topRightPoint = CGPointMake(topRightPointX, pathRect.origin.y);
     CGPoint bottomRightPoint = CGPointMake(topRightPointX, startPointY);
     
-
-    
-    UIGraphicsBeginImageContextWithOptions(letterRect.size, NO, 0.0000f);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0000f);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -205,33 +206,36 @@
     }
     
 
-    
-    
-    
     CGContextSaveGState(context);
     
-    [self drawPageAtIndex:0 inRect:letterRect withTransparentBackground:YES];
+    [self drawPageAtIndex:0 inRect:rect withTransparentBackground:YES];
+
     CGContextRestoreGState(context);
-    
+        
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIImage *croppedImage;
     
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomEffect ? zoomRect : letterRect);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomEffect ? zoomRect : rect);
     croppedImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
     UIGraphicsEndImageContext();
+    
+    if (squareEffect) {
+        croppedImage = [UIImage imageMadeSquare:croppedImage];
+    }
+    
     return croppedImage;
 
 }
 
 - (UIImage *)thumbnail {
-    
-    CGFloat scale = [UIScreen mainScreen].scale;
     return [self thumbnailWithRect: [MTPaper rectLetter]
-                              size: [UIDevice isPad] ? 256.0000f * scale : 128.0000f * scale
+                              size: [UIDevice isPad] ? 256.0000f : 128.0000f
                         edgeEffect: YES
                         zoomEffect: YES
-                        cornerSize: ([UIDevice isPad] ? 10.0000f : 5.0000f) * scale];
+                      squareEffect: NO
+                        cornerSize: ([UIDevice isPad] ? 10.0000f : 5.0000f)
+                             scale: [UIScreen mainScreen].scale];
 }
 
 - (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {

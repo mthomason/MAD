@@ -116,7 +116,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 @interface MADocument ()
     <MTDatabaseProtocol>
 
-@property (nonatomic, strong) NSFileWrapper *fileWrapper;
 @property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 @property (nonatomic, strong) UIImage *thumbnail;
 
@@ -222,6 +221,18 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     return self;
 }
 
+- (void)closeWithCompletionHandler:(void (^)(BOOL success))completionHandler {
+    __weak MADocument *weakself = self;
+    [super closeWithCompletionHandler:^(BOOL success) {
+        if (success) {
+            [weakself removeGuts];
+            completionHandler(YES);
+        } else {
+            completionHandler(NO);
+        }
+    }];
+}
+
 - (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
     NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
 
@@ -269,10 +280,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     //NSURL *resultUrl;
     BOOL success = NO;
     if (fileWrapperError == nil) {
-        //NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-        //fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
-        //resultUrl = [[MACloudManager sharedManager] documentsDirectoryURL];
-        //resultUrl = [resultUrl URLByAppendingPathComponent:fileName isDirectory:NO];
         NSData *data = [fileWrapper serializedRepresentation];
         NSError *errorWriting = nil;
         success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
@@ -378,24 +385,44 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 - (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url
                             forSaveOperation:(UIDocumentSaveOperation)saveOperation
                                        error:(NSError **)outError {
-    NSLog(@"\n\t%s\n\t%@\n\t%ld\n\n", __PRETTY_FUNCTION__, url, saveOperation);
 
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter
-                                                                                                              dataTable: self.mainDataTable];
-    UIImage *thumbnail = [printPageRender thumbnailWithRect: [MTPaper rectLetter]
-                                                       size: 1024
-                                                 edgeEffect: NO zoomEffect:NO
-                                                 cornerSize: 0.0000f];
-    
-    NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-    [pngImage writeToFile:@"/Users/mthomason/Desktop/test.png" options:NSAtomicWrite error:nil];
-    
-    //NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
-    return @{
-             //NSURLThumbnailDictionaryKey : thumbnails
-             };
+    return [UIDevice isModernOS] ? [self fileAttributesOSModernError:outError] :
+                                   [self fileAttributesOSLagacy];
     
 }
+
+- (NSDictionary *)fileAttributesOSModernError:(NSError **)outError {
+    
+    MTReportViewerPrintPageRenderer *printPageRender =
+        [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter
+                                                               dataTable: self.mainDataTable];
+
+    CGRect letterRect = [MTPaper rectLetter];
+    UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y, (1024.0000f * letterRect.size.width) / 1024.0000f, 1024.0000f)
+                                                       size: 1024.0000f
+                                                 edgeEffect: NO
+                                                 zoomEffect: NO
+                                               squareEffect: YES
+                                                 cornerSize: 0.0000f
+                                                      scale: 1.0000f];
+    
+    NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
+    NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+    NSError *error = nil;
+    [pngImage writeToFile:@"/Users/mthomason/Desktop/test.png" options:NSAtomicWrite error:&error];
+    NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
+    *outError = error;
+    
+    return @{
+             NSURLThumbnailDictionaryKey : thumbnails
+             };
+
+}
+
+- (NSDictionary *)fileAttributesOSLagacy {
+    return @{};
+}
+
 
 - (NSString *)fileNameExtensionForType:(NSString *)typeName saveOperation:(UIDocumentSaveOperation)saveOperation {
     return MTDocumentExtentionMobleApplicationDocumentArchive;
@@ -453,22 +480,14 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
     NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
     
-    id result;
-    
-    //if ([self.documentStatus isSuspended]) {
-    //    result = [NSNull null];
-    //} else {
-        if (self.extraInformation == nil) {
-            NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
-            [self setExtraInformation:extraInfo];
-        }
-        NSNumber *dataVersion = @(1.0);
-        self.extraInformation[MTDocumentInfoKeyVersion] = dataVersion;
-        self.extraInformation[MTDocumentInfoKeyGenerator] = @"MAD Designer";
-        result = self.extraInformation;
-    //}
-    
-    return result;
+    if (self.extraInformation == nil) {
+        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
+        [self setExtraInformation:extraInfo];
+    }
+    NSNumber *dataVersion = @(1.0);
+    self.extraInformation[MTDocumentInfoKeyVersion] = dataVersion;
+    self.extraInformation[MTDocumentInfoKeyGenerator] = @"MAD Designer";
+    return self.extraInformation;
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
@@ -627,12 +646,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
             [self.managedObjectContext save:nil]; //Try again!?!?!?!
         }
     }
-}
-
-- (void)saveToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation completionHandler:(void (^)(BOOL success))completionHandler {
-    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
-
-    [super saveToURL:self.fileURL forSaveOperation:saveOperation completionHandler:completionHandler];
 }
 
 - (void)quickSave {
@@ -1036,36 +1049,10 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
 - (NSArray *)sortDescriptors {
     
-    if (self.mainDatabase == nil) {
-        [self initalizeMainDatabase];
-    }
-    
+    if (self.mainDatabase == nil) [self initalizeMainDatabase];
     RptqDatabase *database = [self.document defaultDatabase];
     RptqQuery *rquery = [database defaultQuery];
-    
-    NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
-    
-    for (RptqQueryGroup *queryGroup in [rquery sortedQueryGroups]) {
-        @autoreleasepool {
-            BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
-            RptqQueryField *groupField = [queryGroup hasField];
-            
-            NSString *queryTable = [[groupField inQueryTable] queryAlias];
-            NSString *safeQueryTable = [[self mainDatabase] safeIdentifier:queryTable];
-            NSString *fieldName = [[groupField databaseSchemaField] name];
-            NSString *safeFieldName = [[self mainDatabase] safeIdentifier:fieldName];
-            NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
-            NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
-            
-            SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
-                                                                           ascending: sortAscending
-                                                                            selector: sel];
-            [sortedSortDescriptorsGroup addObject:sortDescriptor];
-        }
-    }
-    
-    return sortedSortDescriptorsGroup;
+    return [rquery sortDescriptorsForDatabase:self.mainDatabase];
 }
 
 - (UIPrintPageRenderer *)printerPrintPageRender {

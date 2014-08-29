@@ -21,7 +21,9 @@
                           size:(CGFloat)size
                     edgeEffect:(BOOL)edgeEffect
                     zoomEffect:(BOOL)zoomEffect
-                    cornerSize:(CGFloat)cornerSize;
+                  squareEffect:(BOOL)squareEffect
+                    cornerSize:(CGFloat)cornerSize
+                         scale:(CGFloat)scale;
 
 @end
 

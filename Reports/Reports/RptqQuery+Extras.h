@@ -21,6 +21,7 @@
 - (NSArray *)sortedQueryGroups;
 - (void)deleteQueryGroupAtIndex:(NSInteger)index;
 - (NSUInteger)numberOfTables;
+- (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)mainDatabase;
 
 @end
 

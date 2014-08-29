@@ -19,13 +19,19 @@
 #import "MTGraph.h"
 #import "MTPair.h"
 #import "RptqQueryGroup.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
 #import "RptqDatabase.h"
 #import "MTDatabase.h"
 #import "MTGraph.h"
 #import "RptqQueryTable.h"
-#import "RptqDatabaseSchemaTable.h"
+#import "RptqQueryTable+Extras.h"
+
 
 @implementation RptqQuery (Extras)
 
@@ -125,6 +131,31 @@
 
 - (NSUInteger)numberOfTables {
     return self.hasQueryTables.count;
+}
+
+- (NSArray *)sortDescriptorsForDatabase:(MTDatabase *)mainDatabase {
+    NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];
+    
+    for (RptqQueryGroup *queryGroup in [self sortedQueryGroups]) {
+        @autoreleasepool {
+            BOOL sortAscending = ([[queryGroup sort] integerValue] == MNSSortOrderAccending);
+            RptqQueryField *groupField = [queryGroup hasField];
+            
+            NSString *queryTable = [[groupField inQueryTable] queryAlias];
+            NSString *safeQueryTable = [mainDatabase safeIdentifier:queryTable];
+            NSString *fieldName = [[groupField databaseSchemaField] name];
+            NSString *safeFieldName = [mainDatabase safeIdentifier:fieldName];
+            NSString *keyFirstPart = [safeQueryTable stringByAppendingString:@"."];
+            NSString *key = [keyFirstPart stringByAppendingString: safeFieldName];
+            
+            SEL sel = [MTDatabaseField selectorForSorting:[[[groupField databaseSchemaField] dataType] integerValue]];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key
+                                                                           ascending: sortAscending
+                                                                            selector: sel];
+            [sortedSortDescriptorsGroup addObject:sortDescriptor];
+        }
+    }
+    return sortedSortDescriptorsGroup;
 }
 
 #pragma mark - MTProtocolCompare

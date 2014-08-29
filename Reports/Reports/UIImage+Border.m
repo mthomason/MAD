@@ -32,5 +32,20 @@
     return result;
 }
 
++ (UIImage *)imageMadeSquare:(UIImage *)source {
+    CGSize size = CGSizeMake(MAX(source.size.width, source.size.height),
+                             MAX(source.size.width, source.size.height));
+    UIGraphicsBeginImageContext(size);
+    CGRect rect = CGRectMake(CGPointZero.x + ((size.width - source.size.width) / 2.0000f),
+                             CGPointZero.x + ((size.height - source.size.height) / 2.0000f),
+                             source.size.width, source.size.height);
+    [source drawInRect:rect blendMode:kCGBlendModeNormal alpha:1.0000f];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(context, [UIColor clearColor].CGColor);
+    CGContextStrokeRectWithWidth(context, rect, 1.0000f);
+    UIImage *result =  UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
+}
 
 @end

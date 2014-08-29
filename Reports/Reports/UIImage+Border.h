@@ -15,6 +15,7 @@
 
 + (UIImage *)imageWithBorder:(UIImage *)source;
 + (UIImage *)imageWithBorder:(UIImage *)source usingColor:(UIColor *)color;
++ (UIImage *)imageMadeSquare:(UIImage *)source;
 
 @end
 
