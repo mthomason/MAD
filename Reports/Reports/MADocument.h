@@ -31,26 +31,22 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
-MTCacheProtocol,
-MADDataProtocol,
-UIPrintInteractionControllerDelegate>
+    MTCacheProtocol,
+    MADDataProtocol,
+    UIPrintInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
-
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
-
-
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
+@property (nonatomic, strong, readonly) NSURL *urlGuts;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
 - (void)quickSave;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
-+ (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion;
 
-- (void)open:(void (^)(BOOL))completion;
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion;
 - (void)addConnection:(MTDatabaseConnection *)connection
                status:(void (^)(NSString *status, CGFloat progress))status
@@ -74,7 +70,7 @@ UIPrintInteractionControllerDelegate>
 - (NSURL *)urlThumbnail;
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
-- (void)wrapFileOverwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion;
+- (void)wrapFileOverwrite:(BOOL)overwrite;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;

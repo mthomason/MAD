@@ -336,30 +336,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
-    /*NSURL *url = nil;
-    if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
-        url = [self urlForDocumentCell:sender];
-    } else if ([sender isKindOfClass:[NSURL class]]) {
-        url = sender;
-    }*/
-    
-    
     MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
     viewControllerReportViewer.document = [self currentDocument];
-    /*
-    if (url != nil) {
-        MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
-        [viewControllerReportViewer setViewControllerDelegate:self];
-
-        __weak MTReportViewerController *reportViewer = viewControllerReportViewer;
-        [self openReport:url withCompletionHandler:^(BOOL success) {
-            if (success) [reportViewer reload];
-        }];
-        
-    } else {
-        NSAssert(url != nil, @"No URL to open.");
-    }*/
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -443,6 +422,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self prepareForSegueShowOpenDocument:segue sender:sender];
     }
 }
+
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     
@@ -576,20 +556,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [uIAlertView show];
     }
 }
-
-/*- (void)setupQueryDesignerController:(MTQueryBuilderViewController *)tvc usingFileAtUrl:(NSURL*)url {
-    __weak MTQueryBuilderViewController *weakTvc = tvc;
-    [self openReport:self.openFiles.openUrl withCompletionHandler:^(BOOL success) {
-        if (success) {
-            __weak MTViewControllerOpenDocument *weakself = self;
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    [weakTvc reloadDocument:weakself.document animated:YES];
-                });
-            });
-        }
-    }];
-}*/
 
 #pragma mark - Static functions
 
@@ -1325,49 +1291,31 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     [self displaySavingReportActivityIndicator];
     
-    __weak MTViewControllerOpenDocument *blockSelf = self;
     __weak MADocument *activeDocument = [self currentDocument];
     if (activeDocument) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            
-            __weak MADocument *blockActiveDocument = activeDocument;
-            __weak MTViewControllerOpenDocument *blockSelf2 = blockSelf;
-            
-            if ([blockActiveDocument documentState] != UIDocumentStateClosed) {
-                [blockActiveDocument regenThumbnail];
-                
-                [blockActiveDocument closeWithCompletionHandler:^(BOOL success) {
-                    
-                    if (success) {
-                        
-                        [[blockActiveDocument documentStatus] setSuspended:YES];
-                        
-                        __weak MADocument *blockActiveDocument2 = blockActiveDocument;
-                        __weak MTViewControllerOpenDocument *blockself3 = blockSelf2;
-                        
-                        [blockActiveDocument2 wrapFileOverwrite: YES completion:^(BOOL success, NSURL *resultUrl) {
-                            
-                            __weak MTViewControllerOpenDocument *blockself4 = blockself3;
-                            [[NSFileManager defaultManager] closeAndDelete:blockActiveDocument2 completion:^(BOOL success) {
-                                
-                                if (success) {
-                                    [self setReportState:MTReportStateClosed];
-                                    NSString *key = [self.openFiles.openUrl key];
-                                    [self.openFiles.openFiles removeObjectForKey:key];
-                                    
-                                    dispatch_sync(dispatch_get_main_queue(), ^{
-                                        [blockself4 reenable];
-                                    });
-                                }
-                            }];
-                        }];
-                    };
-                }];
-            } else {
-                [blockSelf2 reenable];
-            }
-        });
+        if (activeDocument.documentState != UIDocumentStateClosed) {
+            [activeDocument regenThumbnail];
+            __weak MTViewControllerOpenDocument *blockSelf = self;
+            [activeDocument saveToURL: activeDocument.fileURL
+                     forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                if (success) {
+                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
+                        if (success) {
+                            [blockSelf setReportState:MTReportStateClosed];
+                            NSString *key = [blockSelf.openFiles.openUrl key];
+                            [blockSelf.openFiles.openFiles removeObjectForKey:key];
+                            [blockSelf reenable];
+                        } else {
+                            [blockSelf reenable];
+                        }
+                    }];
+
+                }
+            }];
+        } else {
+            [self reenable];
+        }
         
     } else {
         [self reenable];
@@ -1388,7 +1336,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     NSString *key = [url key];
     (self.openFiles.openFiles)[key] = document;
-    [document open:^(BOOL success) {
+    [document openWithCompletionHandler:^(BOOL success) {
         if (success) [self setReportState:MTReportStateOpen];
         completionHandler(success);
     }];

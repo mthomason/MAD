@@ -231,42 +231,4 @@
     return data;
 }
 
-- (void)closeAndDelete:(UIManagedDocument *)managedDocument completion:(void (^)(BOOL success))completion {
-    __weak NSURL *blockFileUrl = [managedDocument fileURL];
-    
-    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        
-        NSArray *propertyKeys = @[NSURLIsDirectoryKey];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl includingPropertiesForKeys:propertyKeys options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
-            NSAssert(error == nil, @"%@", error);
-            return YES;
-        }];
-        for (NSURL *blockFileUrl in enumerator) {
-            NSError *error = nil;
-            [fileManager removeItemAtURL:blockFileUrl error:&error];
-            NSAssert(error == nil, @"%@", error);
-        }
-        NSError *deleteError = nil;
-        [fileManager removeItemAtURL:blockFileUrl error:&deleteError];
-        NSAssert(deleteError == nil, @"%@", deleteError);
-        
-        completion(YES);
-    };
-    
-    NSString *pathExtension = [[managedDocument fileURL] pathExtension];
-    BOOL properTypeToWrap = [pathExtension isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive];
-    if (properTypeToWrap) {
-        
-        if ([managedDocument documentState] != UIDocumentStateClosed) {
-            __weak UIManagedDocument *weakdoc = managedDocument;
-            [managedDocument closeWithCompletionHandler:^(BOOL success) {
-                [weakdoc performAsynchronousFileAccessUsingBlock:asyncBlock];
-            }];
-        } else {
-            [managedDocument performAsynchronousFileAccessUsingBlock:asyncBlock];
-        }
-    }
-}
-
 @end

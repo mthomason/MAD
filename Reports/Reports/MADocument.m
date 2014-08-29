@@ -135,6 +135,8 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
+@property (nonatomic, strong, readwrite) NSURL *urlGuts;
+
 @end
 
 @implementation MADocument
@@ -148,10 +150,10 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextObjectsDidChangeNotification
-                           object: [self managedObjectContext]];
+                           object: self.managedObjectContext];
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextDidSaveNotification
-                           object: [self managedObjectContext]];
+                           object: self.managedObjectContext];
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextWillSaveNotification
                            object: self];
@@ -163,10 +165,22 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 #pragma mark - UIDocument
 
 - (instancetype)initWithFileURL:(NSURL *)url {
-    url = [MADocument madFileCheck:url];
+    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
     self = [super initWithFileURL:url];
     if (self) {
         
+        NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
+        NSNumber *inferMappingModelAutomaticallyOption = @(YES);
+        NSDictionary *options = @{
+                                  NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
+                                  NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
+                                  };
+        [self setPersistentStoreOptions: options];
+        
+        NSURL *destinationUrl = [self archiveUrlForMadUrl:url];
+        NSLog(@"Archive URL: %@", destinationUrl);
+        self.urlGuts = destinationUrl;
+
         MADocumentState *documentState = [MADocumentState new];
         [documentState setSaveInProgress:NO];
         [documentState setNeedsSave:NO];
@@ -180,12 +194,12 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         [defaultCenter addObserver: self
                           selector: @selector(managedObjectContextDidChange:)
                               name: NSManagedObjectContextObjectsDidChangeNotification
-                            object: [self managedObjectContext]];
+                            object: self.managedObjectContext];
         
         [defaultCenter addObserver: self
                           selector: @selector(managedObjectContextDidSave:)
                               name: NSManagedObjectContextDidSaveNotification
-                            object: [self managedObjectContext]];
+                            object: self.managedObjectContext];
 
         [defaultCenter addObserver: self
                           selector: @selector(managedObjectContextWillSave:)
@@ -203,31 +217,138 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         
         NSString *name = [self fileNameMinusExtention];
         [self initalizeMainDataTableWithName:name];
-
+        
     }
     return self;
 }
 
-- (id)contentsForType:(NSString *)typeName error:(NSError **)outError {
-    NSLog(@"Autosaving document");
-    // FIXME: Use this as a chance to wrap a mad file up.
-    id result = [super contentsForType:typeName error:outError];
-    return result;
+- (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
+    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
+
+    //Unpack files from binary NSData url to NSFileWrapper in tmp folder
+    BOOL success = nil;
+    if ([url.pathExtension isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager deleteCoreDataFilesAtDirectory:self.urlGuts];
+        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+        NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+        NSError *fileWrittingError = nil;
+        [fileWrapper writeToURL:self.urlGuts options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        if (fileWrittingError) {
+            fileWrittingError = nil;
+            [fileWrapper writeToURL:self.urlGuts options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        }
+        success = fileWrittingError == nil;
+    }
+    if (success) {
+        success = [super readFromURL:self.urlGuts error:outError];
+    }
+    return success;
 }
 
-- (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError {
-    BOOL result = [super loadFromContents:contents ofType:typeName error:outError];
-    return result;
+- (BOOL)writeContents:(id)contents
+        andAttributes:(NSDictionary *)additionalFileAttributes
+          safelyToURL:(NSURL *)url
+     forSaveOperation:(UIDocumentSaveOperation)saveOperation
+                error:(NSError **)outError {
+    NSLog(@"\n\t%s\n\t%@\n\t%@\n\t%@\n\t%ld\n\n", __PRETTY_FUNCTION__, contents, additionalFileAttributes, url, saveOperation);
+    NSLog(@"\n\tAutosave bitches");
+    
+    [super writeContents:contents andAttributes:additionalFileAttributes
+             safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
+    
+    
+    [self wrapFileOverwrite: YES];
+    
+    NSError *fileWrapperError = nil;
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
+                                                            options: NSFileWrapperReadingImmediate
+                                                              error: &fileWrapperError];
+    
+    //NSURL *resultUrl;
+    BOOL success = NO;
+    if (fileWrapperError == nil) {
+        //NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
+        //fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
+        //resultUrl = [[MACloudManager sharedManager] documentsDirectoryURL];
+        //resultUrl = [resultUrl URLByAppendingPathComponent:fileName isDirectory:NO];
+        NSData *data = [fileWrapper serializedRepresentation];
+        NSError *errorWriting = nil;
+        success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
+        if (errorWriting) {
+            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
+            if (errorWriting) {
+                *outError = errorWriting;
+            }
+        }
+    } else {
+        *outError = fileWrapperError;
+    }
+    
+    return YES;
+}
+
+- (void)removeGuts {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSArray *propertyKeys = @[NSURLIsDirectoryKey];
+    NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:self.urlGuts includingPropertiesForKeys:propertyKeys options:-1 errorHandler:^BOOL(NSURL *url, NSError *error) {
+        NSAssert(error == nil, @"%@", error);
+        return YES;
+    }];
+    for (NSURL *url in enumerator) {
+        NSError *error = nil;
+        [fileManager removeItemAtURL:url error:&error];
+        NSAssert(error == nil, @"%@", error);
+    }
+    NSError *deleteError = nil;
+    [fileManager removeItemAtURL:self.urlGuts error:&deleteError];
+    NSAssert(deleteError == nil, @"%@", deleteError);
+   
+}
+
+- (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl {
+    NSURL *urlToOpen = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL fileexist = [fileManager fileExistsAtPath:[url path]];
+    if (fileexist) {
+        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
+        NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
+        NSError *fileWrittingError = nil;
+        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        if (fileWrittingError) {
+            fileWrittingError = nil;
+            [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
+        }
+        if (fileWrittingError == nil) {
+            urlToOpen = destinationUrl;
+        }
+    } else {
+        urlToOpen = url;
+    }
+    return urlToOpen;
+}
+
+- (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
+    NSString *filename = [madUrl.lastPathComponent stringByDeletingPathExtension];
+    NSString *destinationName = [filename stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *destinationDirectoryUrl = [fileManager localTemporaryDirectory];
+    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
+    [directories lastObject];
+    return [destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES];
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
-    MTLog(@"UIManagedDocument error: %@", [error localizedDescription]);
+    MTLog(@"%s %@\n\n", __PRETTY_FUNCTION__, [error localizedDescription]);
     
     if (false) {
         NSArray *errors = [error userInfo][NSDetailedErrorsKey];
         if (errors != nil && errors.count > 0) {
             for (NSError *error in errors) {
-                MTLog(@"  Error: %@", error.userInfo);
+                NSLog(@"  Error: %@", error.userInfo);
             }
         }
     }
@@ -257,7 +378,8 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 - (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url
                             forSaveOperation:(UIDocumentSaveOperation)saveOperation
                                        error:(NSError **)outError {
-    
+    NSLog(@"\n\t%s\n\t%@\n\t%ld\n\n", __PRETTY_FUNCTION__, url, saveOperation);
+
     MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter
                                                                                                               dataTable: self.mainDataTable];
     UIImage *thumbnail = [printPageRender thumbnailWithRect: [MTPaper rectLetter]
@@ -268,9 +390,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSData *pngImage = UIImagePNGRepresentation(thumbnail);
     [pngImage writeToFile:@"/Users/mthomason/Desktop/test.png" options:NSAtomicWrite error:nil];
     
-    NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
+    //NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
     return @{
-             NSURLThumbnailDictionaryKey : thumbnails
+             //NSURLThumbnailDictionaryKey : thumbnails
              };
     
 }
@@ -285,7 +407,21 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
 #pragma mark - UIManagedDocument
 
+- (BOOL)configurePersistentStoreCoordinatorForURL:(NSURL *)storeURL
+                                           ofType:(NSString *)fileType
+                               modelConfiguration:(NSString *)configuration
+                                     storeOptions:(NSDictionary *)storeOptions
+                                            error:(NSError **)error {
+    NSLog(@"\n\t%s\n\tstore url: %@\n\n", __PRETTY_FUNCTION__, storeURL);
+    return [super configurePersistentStoreCoordinatorForURL:storeURL
+                                                     ofType:fileType
+                                         modelConfiguration:configuration
+                                               storeOptions:storeOptions
+                                                      error:error];
+}
+
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
+    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
     
     NSData *imageData = [[NSFileManager defaultManager] dataForUrl:self.urlThumbnail];;
     
@@ -294,7 +430,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         if (image != nil) {
             UIImage *extraImage = [UIImage imageWithData:imageData];
             NSString *key = [MADocument thumbnailSaveName];
-            [self extraInformation][key] = extraImage;
+            self.extraInformation[key] = extraImage;
         }
     }
     
@@ -307,38 +443,40 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     if (lastGenerator == nil) lastGenerator = @"MAD Designer";
     if (lastVersion == nil) lastVersion = @(1.0);
     
-    [self extraInformation][MTDocumentInfoKeyGenerator] = lastGenerator;
+    self.extraInformation[MTDocumentInfoKeyGenerator] = lastGenerator;
     
-    [self extraInformation][MTDocumentInfoKeyVersion] = lastVersion;
+    self.extraInformation[MTDocumentInfoKeyVersion] = lastVersion;
     
     return YES;
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
+    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
     
     id result;
     
-    if ([[self documentStatus] isSuspended]) {
-        result = [NSNull null];
-    } else {
-        if ([self extraInformation] == nil) {
+    //if ([self.documentStatus isSuspended]) {
+    //    result = [NSNull null];
+    //} else {
+        if (self.extraInformation == nil) {
             NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
             [self setExtraInformation:extraInfo];
         }
         NSNumber *dataVersion = @(1.0);
-        [self extraInformation][MTDocumentInfoKeyVersion] = dataVersion;
-        [self extraInformation][MTDocumentInfoKeyGenerator] = @"MAD Designer";
-        result = [self extraInformation];
-    }
+        self.extraInformation[MTDocumentInfoKeyVersion] = dataVersion;
+        self.extraInformation[MTDocumentInfoKeyGenerator] = @"MAD Designer";
+        result = self.extraInformation;
+    //}
     
     return result;
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
+    NSLog(@"\n\t%s\n\tabsoluteURL: %@\n\tabsoluteOriginalContentsURL%@\n\n", __PRETTY_FUNCTION__, absoluteURL, absoluteOriginalContentsURL);
     BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
     
     
-    if (content ==[NSNull null] || [[self documentStatus] isSuspended]) {
+    if (content ==[NSNull null] || [self.documentStatus isSuspended]) {
         
         writeAdditionalContent  = NO;
         
@@ -383,11 +521,12 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
     UIPrintPaper *printPaper = printInteractionController.printPaper;
-    [self.printingReportFormatter setDataDelegate:self];
-    [self.printingReportFormatter setLayoutSize:printPaper.paperSize];
-    [self.printingReportFormatter setMarginUsingPrintableRect:printPaper.printableRect];
-    [self.printingReportFormatter setDidRefresh:YES];   //Force formatting
-    [self.printingReportFormatter formatForSize:printPaper.paperSize contentChanged:NO];
+    self.printingReportFormatter.dataDelegate = self;
+    self.printingReportFormatter.layoutSize = printPaper.paperSize;
+    self.printingReportFormatter.marginUsingPrintableRect = printPaper.printableRect;
+    self.printingReportFormatter.didRefresh = YES;   //Force formatting
+    [self.printingReportFormatter formatForSize: printPaper.paperSize
+                                 contentChanged: NO];
 }
 - (void)printInteractionControllerDidFinishJob:(UIPrintInteractionController *)printInteractionController {
     [self setPrintingReportFormatter:nil];
@@ -397,21 +536,21 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 #pragma mark NSManagedObjectContextObjectsDidChangeNotification
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
-    [[self documentStatus] setNeedsSave:YES];
-    [[self documentStatus] setContextChagned:YES];
+    [self.documentStatus setNeedsSave:YES];
+    [self.documentStatus setContextChagned:YES];
 }
 
 #pragma mark NSManagedObjectContextDidSaveNotification
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-    [[self documentStatus] setSaveInProgress:NO];
-    [[self documentStatus] setNeedsSave:NO];
+    [self.documentStatus setSaveInProgress:NO];
+    [self.documentStatus setNeedsSave:NO];
 }
 
 #pragma mark NSManagedObjectContextWillSaveNotification
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
-    [[self documentStatus] setSaveInProgress:YES];
+    [self.documentStatus setSaveInProgress:YES];
 }
 
 #pragma mark - UIDocument Notifications
@@ -421,19 +560,19 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
     switch (self.documentState) {
         case UIDocumentStateClosed:
-            MTLog(@"Document state closed.");
+            NSLog(@"\n\n\tDocument state closed.\n\n");
             break;
         case UIDocumentStateEditingDisabled:
-            MTLog(@"Document state editing disabled.");
+            NSLog(@"\n\n\tDocument state editing disabled.\n\n");
             break;
         case UIDocumentStateInConflict:
-            MTLog(@"Document state in conflict.");
+            NSLog(@"\n\n\tDocument state in conflict.\n\n");
             break;
         case UIDocumentStateNormal:
-            MTLog(@"Document state normal.");
+            NSLog(@"\n\n\tDocument state normal.\n\n");
             break;
         case UIDocumentStateSavingError:
-            MTLog(@"Document state saving error.");
+            NSLog(@"\n\n\tDocument state saving error.\n\n");
             break;
         default:
             break;
@@ -458,8 +597,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 #pragma mark - Helpers
 
 - (NSString *)name {
-    NSString *lastPathComponent = [[self fileURL] lastPathComponent];
-    return [lastPathComponent stringByDeletingPathExtension];
+    return [self.fileURL.lastPathComponent stringByDeletingPathExtension];
 }
 
 + (NSString *)thumbnailSaveName {
@@ -467,80 +605,74 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (NSURL *)urlThumbnail {
-    NSURL *fileurl = [self fileURL];
-    return [MADocument thumbnailUrlForMadUrl:fileurl];
+    return [MADocument thumbnailUrlForMadUrl:self.fileURL];
 }
 
 - (NSURL *)urlMetaPlaylist {
-    NSURL *fileurl = [self fileURL];
-    return [fileurl URLByAppendingPathComponent:@"meta.plist"];
+    return [self.urlGuts URLByAppendingPathComponent:@"meta.plist"];
 }
 
 - (NSString *)fileName {
-    return [MADocument fileNameForMadUrl:[self fileURL]];
+    return [MADocument fileNameForMadUrl:self.fileURL];
 }
 
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
-    if ([[madUrl pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
-
-    } else {
-        
-    }
-    return [[madUrl lastPathComponent] stringByDeletingPathExtension];
+    return [madUrl.lastPathComponent stringByDeletingPathExtension];
 }
 
 - (void)saveContext {
     NSError *error;
-    if ([self managedObjectContext] != nil) {
-        if ([[self managedObjectContext] hasChanges] && ![[self managedObjectContext] save:&error]) {
-            [[self managedObjectContext] save:nil]; //Try again!?!?!?!
+    if (self.managedObjectContext != nil) {
+        if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
+            [self.managedObjectContext save:nil]; //Try again!?!?!?!
         }
     }
 }
 
+- (void)saveToURL:(NSURL *)url forSaveOperation:(UIDocumentSaveOperation)saveOperation completionHandler:(void (^)(BOOL success))completionHandler {
+    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
+
+    [super saveToURL:self.fileURL forSaveOperation:saveOperation completionHandler:completionHandler];
+}
+
 - (void)quickSave {
-    if ([[self documentStatus] saveInProgressLock] == NO) {
-        [[self documentStatus] setSaveInProgressLock:YES];
-        NSURL *url = [self fileURL];
+    if ([self.documentStatus saveInProgressLock] == NO) {
+        [self.documentStatus setSaveInProgressLock:YES];
+        NSURL *url = self.fileURL;
         __block MADocument *blockSelf = self;
-        [blockSelf saveToURL: url forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+        
+        [blockSelf saveToURL: url
+            forSaveOperation: UIDocumentSaveForOverwriting
+           completionHandler:^(BOOL success) {
             
-            [[blockSelf documentStatus] setSuspended:YES];
-            [self wrapFileOverwrite:YES completion:nil];
-            [[blockSelf documentStatus] setSuspended:NO];
-            
-            [[blockSelf documentStatus] setSaveInProgressLock:NO];
+            blockSelf.documentStatus.suspended = YES;
+            [blockSelf wrapFileOverwrite:YES];
+            blockSelf.documentStatus.suspended = NO;
+            blockSelf.documentStatus.saveInProgressLock = NO;
             blockSelf = nil;
         }];
     }
 }
 
-- (void)wrapFileOverwrite:(BOOL)overwrite completion:(void (^)(BOOL success, NSURL *resultUrl))completion {
+- (void)wrapFileOverwrite:(BOOL)overwrite {
     NSError *fileWrapperError = nil;
     BOOL success = NO;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: [self fileURL]
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
                                                             options: NSFileWrapperReadingImmediate
                                                               error: &fileWrapperError];
     
+    NSURL *resultUrl;
     if (fileWrapperError == nil) {
-        NSString *fileName = [[[self fileURL] lastPathComponent] stringByDeletingPathExtension];
         if (overwrite) {
-            fileName = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
-            NSURL *resultUrl = [[[MACloudManager sharedManager] documentsDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO];
             NSData *data = [fileWrapper serializedRepresentation];
             NSError *errorWriting = nil;
-            success = [data writeToURL:resultUrl options:NSDataWritingAtomic error:&errorWriting];
-            if (completion != NULL) {
-                completion(success, resultUrl);
-            }
+            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
         } else {
-            NSURL *resultUrl = [NSURL uniqueUrlForDocumentWithName:fileName
-                                                     withExtension:MTDocumentExtentionMobleApplicationDocument];
+            NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
+            resultUrl = [NSURL uniqueUrlForDocumentWithName:fileName
+                                              withExtension:MTDocumentExtentionMobleApplicationDocument];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
-            if (completion != NULL) {
-                completion(success, resultUrl);
-            }
         }
     }
 }
@@ -556,11 +688,12 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion {
     
     MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        NSURL *fileURL = [self fileURL];
+        NSURL *fileURL = self.fileURL;
         NSError *deleteError = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSArray *properties = @[NSURLIsDirectoryKey];
         NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: fileURL
-                                              includingPropertiesForKeys: @[NSURLIsDirectoryKey]
+                                              includingPropertiesForKeys: properties
                                                                  options: -1
                                                             errorHandler: ^BOOL(NSURL *url, NSError *error) {
             return YES;
@@ -579,7 +712,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSError *error;
     
     // retrieve the store URL
-    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [managedObjectContext persistentStoreCoordinator];
     NSArray *persistentStores = [persistentStoreCoordinator persistentStores];
     NSPersistentStore *persistentStore = [persistentStores lastObject];
@@ -606,41 +739,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
 }
 
-+ (void)deleteFromDisk:(NSURL *)fileUrl completion:(void (^)(BOOL success))completion {
-    
-    __weak NSURL *blockFileUrl = fileUrl;
-    MTPerformAsynchronousFileAccessUsingBlock asyncBlock = ^() {
-        NSError *deleteError = nil;
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:blockFileUrl
-                                              includingPropertiesForKeys:@[NSURLIsDirectoryKey]
-                                                                 options:-1
-                                                            errorHandler:^BOOL(NSURL *url, NSError *error) {
-            return YES;
-        }];
-        for (NSURL *blockFileUrl in enumerator) {
-            NSError *error = nil;
-            [fileManager removeItemAtURL:blockFileUrl error:&error];
-        }
-        [fileManager removeItemAtURL:blockFileUrl error:&deleteError];
-        completion(YES);
-    };
-    
-    MADocument *documentReport = [[MADocument alloc] initWithFileURL:fileUrl];
-    BOOL properTypeToWrap = [[fileUrl pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive];
-    if (properTypeToWrap) {
-    
-        if ([documentReport documentState] != UIDocumentStateClosed) {
-            __weak MADocument *blockReport = documentReport;
-            [documentReport closeWithCompletionHandler:^(BOOL success) {
-                [blockReport performAsynchronousFileAccessUsingBlock:asyncBlock];
-            }];
-        } else {
-            [documentReport performAsynchronousFileAccessUsingBlock:asyncBlock];
-        }
-    }
-}
-
 - (NSURL *)cachedFilesDirectory {
     return [MADocument cacheFilesDirectoryForFilename:[self fileName]];
 }
@@ -660,7 +758,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         [rptqDocument addDatabase:self.mainDatabase status:^(NSString *message, CGFloat progress) {
             status(message, progress);
         } completion:^(BOOL success, MTErrorContainer *errorContainer) {
-            NSLog(@"%@", errorContainer);
+            NSLog(@"\n\t%@", errorContainer);
             completion(success, errorContainer);
         }];
     } else {
@@ -668,42 +766,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     }
 }
 
-+ (NSURL *)madFileCheck:(NSURL *)url {
-    NSURL *urlToOpen = nil;
-    if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *destinationUrl = [fileManager archiveUrlForMadUrl:url];
-        [fileManager deleteCoreDataFilesAtDirectory:destinationUrl];
-        urlToOpen = [fileManager unpackMadFile:url toDestinationUrl:destinationUrl];
-    } else if ([[url pathExtension] isEqualToString:MTDocumentExtentionMobleApplicationDocumentArchive]) {
-        urlToOpen = url;
-    } else {
-        urlToOpen = url;
-    }
-    return urlToOpen;
-}
-
-- (void)open:(void (^)(BOOL))completion {
-    NSNumber *migratePersistentStoresAutomaticallyOption = @(YES);
-    NSNumber *inferMappingModelAutomaticallyOption = @(YES);
-    NSDictionary *options = @{
-                              NSMigratePersistentStoresAutomaticallyOption : migratePersistentStoresAutomaticallyOption,
-                              NSInferMappingModelAutomaticallyOption : inferMappingModelAutomaticallyOption,
-                              };
-    [self setPersistentStoreOptions: options];
-    
-    MTCompletionHandlerSuccess handlerOpen = ^(BOOL success) { completion(success); };
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.fileURL path]]) {
-        [self openWithCompletionHandler:handlerOpen];
-    } else {
-        [self saveToURL: self.fileURL forSaveOperation: UIDocumentSaveForCreating
-      completionHandler: handlerOpen];
-    }
-}
-
 - (RptqDocument *)activeDocumentModel {
     if ([self document] == nil) {
-        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+        NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
         RptqDocument *document = [RptqDocument documentForManagedObjectContext: managedObjectContext];
         if (document == nil) {
             document = [RptqDocument documentFactory:managedObjectContext];
@@ -812,7 +877,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (NSString *)fileNameMinusExtention {
-    return [[self fileURL] filenameMinusExtention];
+    return [self.fileURL filenameMinusExtention];
 }
 
 - (NSUInteger)fileNameHash {
@@ -894,7 +959,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    return [MADocument thumbnailUrlForHandle:[[madUrl lastPathComponent] stringByDeletingPathExtension]
+    return [MADocument thumbnailUrlForHandle:[madUrl.lastPathComponent stringByDeletingPathExtension]
                                   andRetinaDisplay:[UIDevice isRetnaDisplay]];
 }
 
@@ -925,12 +990,11 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 - (void)close:(void(^)(BOOL success, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL success) {
         if (success) {
-            [[self documentStatus] setSuspended:YES];
-            [[self managedObjectContext] lock];
-            [self wrapFileOverwrite:NO completion:^(BOOL success, NSURL *resultUrl) {
-                [self deleteFromDiskCompletion:^(BOOL success) {
-                    [NSThread completeOnMainThread:completion withObject:nil andSuccess:YES];
-                }];
+            [self.documentStatus setSuspended:YES];
+            [self.managedObjectContext lock];
+            [self wrapFileOverwrite:NO];
+            [self deleteFromDiskCompletion:^(BOOL success) {
+                [NSThread completeOnMainThread:completion withObject:nil andSuccess:YES];
             }];
         }
     }];
@@ -960,7 +1024,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
 - (void)regenThumbnail {
     [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
-    BOOL contentChanged = [self activeDocumentModel] != nil && ([[self documentStatus] contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
+    BOOL contentChanged = [self activeDocumentModel] != nil && ([self.documentStatus contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]
                                                                                                                   dataTable:[self mainDataTable]];

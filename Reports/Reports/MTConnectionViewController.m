@@ -171,7 +171,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     __weak id blockSender = sender;
     
     NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
-                                                                   withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+                                                                   withExtension:MTDocumentExtentionMobleApplicationDocument];
 
     MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]];
     [dbDetails setServer:                  blockServer];
@@ -189,91 +189,110 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
             [self setDocToSave:doc];
             __weak __block MADocument *weakdoc1 = doc;
             __weak MTDatabaseConnection *weakConnection = dbDetails;
-            [weakdoc1 open:^(BOOL success) {
-                
-                NSString *name = [NSString stringWithString:[doc name]];
-                if (success) {
-                    __weak __block MADocument *weakdoc = weakdoc1;
-                    [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
-                        self.navigationItem.prompt = readStatus;
-                        progressView.progress = progress;
-                    } completion:^(BOOL success, MTErrorContainer *errorContainer) {
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                
-                                if (success) {
-                                    
-                                    [self.docToSave close:^(BOOL success, NSError *error) {
-                                        
-                                        [blockSender setEnabled:YES];
-                                        [[blockSelf delegate] viewControllerDidFinish: blockSelf];
-                                        
-                                        UILocalNotification *notification = [[UILocalNotification alloc] init];
-                                        NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'", @"Created report '%@.'");
-                                        NSString *body = [NSString stringWithFormat:reportIsReady, name];
-                                        [notification setAlertBody:body];
-                                        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                                        
-                                        [self enableTextFields];
-                                        self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+            
+            [weakdoc1 saveToURL: weakdoc1.fileURL forSaveOperation: UIDocumentSaveForCreating
+          completionHandler:^(BOOL success) {
+              
+              //if (success) {
+              //    [weakdoc1 openWithCompletionHandler:^(BOOL success) {
 
-                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                            UIApplication *app = [UIApplication sharedApplication];
-                                            NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
-                                            NSNumber *bgTaskWrapper = @(bgTask);
-                                            [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
-                                        });
-                                    }];
-                                } else {
-                                    [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
-                                        [blockSender setEnabled:YES];
-                                        [self enableNavigation];
-                                        
-                                        if (error != nil) {
-                                            UILocalNotification *notification = [[UILocalNotification alloc] init];
-                                            NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
-                                            NSString *body = [NSString stringWithFormat:localizedErrorString, error.localizedDescription];
-                                            [notification setAlertBody:body];
-                                            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-                                        }
-                                        
-                                        [self enableTextFields];
-                                        self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
-                                        
-                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                            UIApplication *app = [UIApplication sharedApplication];
-                                            NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
-                                            NSNumber *bgTaskWrapper = @(bgTask);
-                                            
-                                            [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
-                                        });
-                                    }];
-                                }
-                                
-                                if (errorContainer && [errorContainer count] > 0) {
-                                    NSString *errorText = [errorContainer errorLogCompact];
-                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: @"Issues Encounterd"
-                                                                                        message: errorText
-                                                                                       delegate: nil
-                                                                              cancelButtonTitle: @"Continue"
-                                                                              otherButtonTitles: nil];
-                                    [alertView show];
-                                }
-                                
-                                [progressView removeFromSuperview];
-                                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                            });
-                        });
-                        
-                    }];
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [blockSender setEnabled:YES];
-                        [blockSelf enableNavigation];
-                        [[blockSelf delegate] viewControllerDidFinish: blockSelf];
-                        [progressView removeFromSuperview];
-                    });
-                }
+                      
+
+                      
+                      NSString *name = [NSString stringWithString:[doc name]];
+                      if (success) {
+                          __weak __block MADocument *weakdoc = weakdoc1;
+                          [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
+                              self.navigationItem.prompt = readStatus;
+                              progressView.progress = progress;
+                          } completion:^(BOOL success, MTErrorContainer *errorContainer) {
+                                      
+                                      if (success) {
+                                          [self.docToSave saveToURL:self.docToSave.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                                              if (success) {
+                                                  [self.docToSave closeWithCompletionHandler:^(BOOL success) {
+                                                      [blockSender setEnabled:YES];
+                                                      [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                                                      
+                                                      UILocalNotification *notification = [[UILocalNotification alloc] init];
+                                                      NSString *reportIsReady = NSLocalizedString(@"Created report '%@.'", @"Created report '%@.'");
+                                                      NSString *body = [NSString stringWithFormat:reportIsReady, name];
+                                                      [notification setAlertBody:body];
+                                                      [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                                      
+                                                      [self enableTextFields];
+                                                      self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+                                                      
+                                                      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                                          UIApplication *app = [UIApplication sharedApplication];
+                                                          NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
+                                                          NSNumber *bgTaskWrapper = @(bgTask);
+                                                          [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
+                                                      });
+                                                      
+                                                  }];
+                                              }
+                                          }];
+                                      } else {
+                                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                              dispatch_sync(dispatch_get_main_queue(), ^{
+
+                                          [self.docToSave closeAndDelete:^(BOOL success, NSError *error) {
+                                              [blockSender setEnabled:YES];
+                                              [self enableNavigation];
+                                              
+                                              if (error != nil) {
+                                                  UILocalNotification *notification = [[UILocalNotification alloc] init];
+                                                  NSString *localizedErrorString = NSLocalizedString(@"Error: %@. Please try again.", @"Error: %@. Please try again.");
+                                                  NSString *body = [NSString stringWithFormat:localizedErrorString, error.localizedDescription];
+                                                  [notification setAlertBody:body];
+                                                  [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                              }
+                                              
+                                              [self enableTextFields];
+                                              self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
+                                              
+                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                                                  UIApplication *app = [UIApplication sharedApplication];
+                                                  NSTimeInterval time = app.backgroundTimeRemaining > 7.0 ? 5.0 : app.backgroundTimeRemaining - 0.1;
+                                                  NSNumber *bgTaskWrapper = @(bgTask);
+                                                  
+                                                  [NSTimer scheduledTimerWithTimeInterval:time target:[UIApplication sharedApplication] selector:@selector(handoffBackground:) userInfo:bgTaskWrapper repeats:NO];
+                                              });
+                                          }];
+                                              });
+                                          });
+                                      }
+                                      
+                                      if (errorContainer && [errorContainer count] > 0) {
+                                          NSString *errorText = [errorContainer errorLogCompact];
+                                          UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: @"Issues Encounterd"
+                                                                                              message: errorText
+                                                                                             delegate: nil
+                                                                                    cancelButtonTitle: @"Continue"
+                                                                                    otherButtonTitles: nil];
+                                          [alertView show];
+                                      }
+                                      
+                                      [progressView removeFromSuperview];
+                                      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                              
+                          }];
+                      } else {
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                              [blockSender setEnabled:YES];
+                              [blockSelf enableNavigation];
+                              [[blockSelf delegate] viewControllerDidFinish: blockSelf];
+                              [progressView removeFromSuperview];
+                          });
+                      }
+
+                      
+                      
+                      
+             //     }];
+             // }
+              
             }];
         } else {
             [blockSender setEnabled:YES];
@@ -281,6 +300,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
             [progressView removeFromSuperview];
         }
     }];
+
 }
 
 - (void)disableNavigation {

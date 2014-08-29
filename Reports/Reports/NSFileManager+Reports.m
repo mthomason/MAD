@@ -7,17 +7,8 @@
 //
 
 #import "NSFileManager+Reports.h"
-#import "NSFileManager+Common.h"
-#import "Constants.h"
 
 @implementation NSFileManager (Reports)
 
-- (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
-    NSString *destinationName = [[[madUrl lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
-    NSURL *destinationDirectoryUrl = [self localTemporaryDirectory];
-    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSAutosavedInformationDirectory, NSUserDomainMask, YES);
-    [directories lastObject];
-    return [destinationDirectoryUrl URLByAppendingPathComponent:destinationName isDirectory:YES];
-}
 
 @end

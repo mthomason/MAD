@@ -13,8 +13,6 @@
 
 @interface NSFileManager (Reports)
 
-- (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl;
-
 @end
 
 #endif

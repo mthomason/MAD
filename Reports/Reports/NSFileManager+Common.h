@@ -32,7 +32,6 @@
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle;
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
 - (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl;
-- (void)closeAndDelete:(UIManagedDocument *)managedDocument completion:(void (^)(BOOL success))completion;
 - (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl;
 - (NSData *)dataForUrl:(NSURL *)url;
 
