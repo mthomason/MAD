@@ -2158,10 +2158,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                              [weakSelf setConstraintsForToolboxVisible];
                              
                              UIEdgeInsets insets = [weakSelf desiredScrollInsets];
-                             [weakSelf setContentInset:insets];
+                             weakSelf.contentInset = insets;
                              insets = [weakSelf desiredScrollInsets];
-                             [weakSelf setScrollIndicatorInsets:insets];
-                             [[weakSelf view] layoutIfNeeded];
+                             weakSelf.scrollIndicatorInsets = insets;
+                             [weakSelf.view layoutIfNeeded];
+                             
                          } completion: ^(BOOL finished) {
                              if (finished) {
                                  [weakSelf adjustContextOffsetForToolboxWithToolboxType:toolboxType];
@@ -2191,8 +2192,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         MTBlockCompletionNoReturn animations = ^{
             [weakSelf setConstraintsForToolboxHidden];
             UIEdgeInsets insets = [weakSelf desiredEdgeInsets];
-            [weakSelf setContentInset:insets];
-            [weakSelf setScrollIndicatorInsets:insets];
+            weakSelf.contentInset = insets;
+            weakSelf.scrollIndicatorInsets = insets;
             [[weakSelf view] layoutIfNeeded];
         };
         
@@ -2211,6 +2212,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             }
         };
         
+        //[self.navigationController setNavigationBarHidden:NO animated:YES];
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf animations: animations
                          completion: completion];
     }
@@ -2290,9 +2292,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)repositionPopoverControllerInformationAnimated:(BOOL)animated {
     [self.popoverControllerInformation presentPopoverFromRect: self.rectForSelectedElements
-                                                         inView: self.container
-                                       permittedArrowDirections: UIPopoverArrowDirectionAny
-                                                       animated: animated];
+                                                       inView: self.container
+                                     permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                     animated: animated];
 }
 
 - (void)addPointA:(CGPoint)pointA andPointB:(CGPoint)pointB {

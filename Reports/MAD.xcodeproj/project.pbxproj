@@ -740,6 +740,10 @@
 		4C67B74719474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */; };
 		4C67B75319475A88006B4D5B /* UIPageViewController+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C67B75419475A88006B4D5B /* UIPageViewController+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */; };
+		4C6A17CE19B193610098717E /* MADImageToolbarCloudDownload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6A17CC19B193610098717E /* MADImageToolbarCloudDownload@2x.png */; };
+		4C6A17CF19B193610098717E /* MADImageToolbarCloudDownload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6A17CC19B193610098717E /* MADImageToolbarCloudDownload@2x.png */; };
+		4C6A17D019B193610098717E /* MADImageToolbarCloudDownload.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6A17CD19B193610098717E /* MADImageToolbarCloudDownload.png */; };
+		4C6A17D119B193610098717E /* MADImageToolbarCloudDownload.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6A17CD19B193610098717E /* MADImageToolbarCloudDownload.png */; };
 		4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */; };
 		4C6C9B1E17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */; };
 		4C6C9B2317318966000E1161 /* MTReportDesignerSectionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C9B2217318965000E1161 /* MTReportDesignerSectionBackgroundView.m */; };
@@ -2319,6 +2323,8 @@
 		4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTSliderThumbRotateDisabled.png; sourceTree = "<group>"; };
 		4C67B75119475A88006B4D5B /* UIPageViewController+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPageViewController+Extras.h"; sourceTree = "<group>"; };
 		4C67B75219475A88006B4D5B /* UIPageViewController+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIPageViewController+Extras.m"; sourceTree = "<group>"; };
+		4C6A17CC19B193610098717E /* MADImageToolbarCloudDownload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarCloudDownload@2x.png"; path = "Resources/Images/MADImageToolbarCloudDownload@2x.png"; sourceTree = "<group>"; };
+		4C6A17CD19B193610098717E /* MADImageToolbarCloudDownload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageToolbarCloudDownload.png; path = Resources/Images/MADImageToolbarCloudDownload.png; sourceTree = "<group>"; };
 		4C6B943C16E7E4AC007795F6 /* RptqDocumentObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObjectFactory.h; sourceTree = "<group>"; };
 		4C6C9B1B17305FCF000E1161 /* MTReportDesignerSectionDecorationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionDecorationView.h; sourceTree = "<group>"; };
 		4C6C9B1C17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTReportDesignerSectionDecorationView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -3860,6 +3866,8 @@
 		4C47571917B4094500530CAF /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				4C6A17CC19B193610098717E /* MADImageToolbarCloudDownload@2x.png */,
+				4C6A17CD19B193610098717E /* MADImageToolbarCloudDownload.png */,
 				4C6461AF18C0E6590069EF8D /* MTActivityProvidence~iPad@2x.png */,
 				4C6461B018C0E6590069EF8D /* MTActivityProvidence@2x.png */,
 				4C6461B118C0E6590069EF8D /* MTActivityProvidence~iPad.png */,
@@ -5710,6 +5718,7 @@
 				4C0E7821163B5AEC003B951E /* UIImagePatternMarbled@2x.png in Resources */,
 				4C0E7822163B5AEC003B951E /* UIImagePatternMarbled2.png in Resources */,
 				4C0E7823163B5AEC003B951E /* UIImagePatternMarbled2@2x.png in Resources */,
+				4C6A17CF19B193610098717E /* MADImageToolbarCloudDownload@2x.png in Resources */,
 				4C77333A19100098005AE7C2 /* probes_mysql.d.base in Resources */,
 				4C0E7824163B5AEC003B951E /* UIImagePatternMetallicBlack.png in Resources */,
 				4C0E7825163B5AEC003B951E /* UIImagePatternMetallicBlack@2x.png in Resources */,
@@ -5812,6 +5821,7 @@
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4C66355817D5C73B004AC646 /* MTStoryboardReportViewer.storyboard in Resources */,
 				4C5CB7C6189E2A7D00BB5AF8 /* cstypes.h in Resources */,
+				4C6A17D119B193610098717E /* MADImageToolbarCloudDownload.png in Resources */,
 				4CFA64E117B92B7A0025BE1E /* MADIcon64.png in Resources */,
 				4CFA64E317B92B7A0025BE1E /* MADIcon320.png in Resources */,
 				4CFA64E917B930090025BE1E /* MADIcon44x58.png in Resources */,
@@ -5873,6 +5883,7 @@
 				4CB3C2301923374200F3213E /* MTSliderThumb@2x.png in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
 				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
+				4C6A17D019B193610098717E /* MADImageToolbarCloudDownload.png in Resources */,
 				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
 				4C80A6041831F28200242703 /* MTBarcodeMicroPdf417Iso24728.h in Resources */,
 				4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */,
@@ -5913,6 +5924,7 @@
 				4C92956818C4E0770010AAEF /* MTImageLaunchViewerPadPortrait.png in Resources */,
 				4CCD8CDE15036DBB002B9E77 /* UIImagePatternPebbled@2x.png in Resources */,
 				4CCD8CDF15036DBB002B9E77 /* UIImagePatternStationary.png in Resources */,
+				4C6A17CE19B193610098717E /* MADImageToolbarCloudDownload@2x.png in Resources */,
 				4CCD8CE015036DBB002B9E77 /* UIImagePatternStationary@2x.png in Resources */,
 				4CCD8D54150385DA002B9E77 /* UIImagePatternAqua.png in Resources */,
 				4C5CB7CB189E2A7D00BB5AF8 /* sqldb.h in Resources */,
@@ -7365,8 +7377,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MAD Viewer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7395,7 +7407,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "MAD Viewer";
-				PROVISIONING_PROFILE = "5C5FDDF5-C73B-4176-A6DA-E92017B632C3";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5C5FDDF5-C73B-4176-A6DA-E92017B632C3";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -7409,8 +7421,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "MAD Viewer.entitlements";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7439,7 +7451,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "MAD Viewer";
-				PROVISIONING_PROFILE = "7019972F-DCB4-4433-9890-79699F0713CA";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7019972F-DCB4-4433-9890-79699F0713CA";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -7662,8 +7674,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Michael Thomason (8DB47U4ACU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7691,7 +7703,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "CA7CD65C-789D-4A8A-A084-3CBCA240801E";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CA7CD65C-789D-4A8A-A084-3CBCA240801E";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -7706,8 +7718,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "MAD Designer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Everyday Apps LLC (D3C58YS54A)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7734,7 +7746,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F719F57B-8052-4C6D-8DB1-3F5A6B1BE525";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F719F57B-8052-4C6D-8DB1-3F5A6B1BE525";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s arm64";

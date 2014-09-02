@@ -175,7 +175,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[[self navigationItem] titleView] sizeToFit];
+    [[self.navigationItem titleView] sizeToFit];
 }
 
 - (void)viewDidLoad {
@@ -237,12 +237,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
         [labelMadDesigner setAttributedText:attributedString];
-        [[self navigationItem] setTitleView:labelMadDesigner];
-        [[[self navigationItem] titleView] sizeToFit];
+        [self.navigationItem setTitleView:labelMadDesigner];
+        [[self.navigationItem titleView] sizeToFit];
     }
     
     [self enableTabBarItems];
-    [[[self navigationItem] titleView] sizeToFit];
+    [[self.navigationItem titleView] sizeToFit];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -1144,7 +1144,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                                                                                        action: toggleEditModeQueryDesigner];
         
         
-        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+        [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
         [self setBarButtonItemEdit:barButtonItem];
     }
     

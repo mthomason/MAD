@@ -14,6 +14,7 @@
 @interface MTUser : NSObject
 
 - (NSArray *)hasMadDocuments;
+- (BOOL)addDocument:(NSURL *)url error:(NSError **)error;
 
 @end
 

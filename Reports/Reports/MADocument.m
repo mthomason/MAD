@@ -111,6 +111,7 @@ NSString * const MTReportSectionType                    = @"a";
 NSString * const MTReportGroupLevel                     = @"b";
 NSString * const MTReportDetailRowId                    = @"d";
 
+NSString * const MADUtiType                             = @"com.everydayapps.productivity.mad";
 NSString * const MADMimeType                            = @"application/vnd.everydayapps.mad";
 
 @interface MADocument ()

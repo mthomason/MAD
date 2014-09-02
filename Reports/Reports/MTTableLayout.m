@@ -59,7 +59,7 @@ typedef struct _ColumnWidth {
 - (void)initalizeWithColumnCount:(NSUInteger)columnCount andRowCount:(NSUInteger)rowCount {
     
     UIEdgeInsets scrollInsets = UIEdgeInsetsMake(88.0000f, CGSizeZero.width, CGSizeZero.height, CGSizeZero.width);
-    [[self collectionView] setScrollIndicatorInsets: scrollInsets];
+    [self.collectionView setScrollIndicatorInsets: scrollInsets];
     
     NSMutableArray *columnWidths = [NSMutableArray array];
     [self setColumnWidth:columnWidths];
@@ -67,7 +67,7 @@ typedef struct _ColumnWidth {
     [self setColumnCount:columnCount];
     [self setHeightRow:22.0000f];
     [self setHeightHeader:24.0000f];
-    [self collectionView].delegate = self;
+    self.collectionView.delegate = self;
 }
 
 - (void)prepareLayout {
@@ -84,7 +84,7 @@ typedef struct _ColumnWidth {
         }
         ColumnWidth columnWidth;
         columnWidth.originX = lastColumnWidth.originX + lastColumnWidth.width;
-        columnWidth.width = [self.delegate collectionView:[self collectionView] layout:self widthRequiredColumn:i];
+        columnWidth.width = [self.delegate collectionView:self.collectionView layout:self widthRequiredColumn:i];
         NSValue *columnWidthEncoding = [NSValue valueWithBytes:&columnWidth objCType:@encode(ColumnWidth)];;
         [columnWidths addObject:columnWidthEncoding];
     }

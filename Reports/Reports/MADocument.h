@@ -21,6 +21,7 @@
 #import "MADDataProtocol.h"
 #import "MADActivityProtocol.h"
 
+extern NSString * const MADUtiType;
 extern NSString * const MADMimeType;
 extern NSString * const MTReportSectionType;
 extern NSString * const MTReportDetailRowId;

@@ -170,7 +170,7 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
                                                groupNumber:groupNumber];
     }
     BOOL enabled = [self fieldObject] != nil;
-    [[[self navigationItem] rightBarButtonItem] setEnabled:enabled];
+    [[self.navigationItem rightBarButtonItem] setEnabled:enabled];
 }
 
 - (void)updateField {
@@ -271,8 +271,8 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     [self setAggregateFunctionType:MTAggregateFunctionTypeSum];
     [self setGroupTypeSectionNumber:0];
     [self setAggregateGroupByType:MTAggregateGroupByTypePage];
-    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
-    [[self navigationItem] setHidesBackButton:NO];
+    [self.navigationItem setLeftItemsSupplementBackButton:YES];
+    [self.navigationItem setHidesBackButton:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -98,7 +98,7 @@
     }
     [layout setFrame: nearestRect];
 
-    [self.delegate collectionView: [self collectionView]
+    [self.delegate collectionView: self.collectionView
                            layout: self
                      setDropPoint: layout.frame.origin
                forItemAtIndexPath: [layout indexPath]];
@@ -115,7 +115,7 @@
     
     for (NSInteger sectionIndex = 0; sectionIndex < numberOfSections; sectionIndex++) {
         
-        NSInteger numberOfItems = [self.delegate numberOfItemsInSection:sectionIndex ofCollectionView:[self collectionView]];
+        NSInteger numberOfItems = [self.delegate numberOfItemsInSection:sectionIndex ofCollectionView:self.collectionView];
         
         NSMutableArray *itemLayouts = [[NSMutableArray alloc] initWithCapacity:numberOfItems];
         
@@ -150,7 +150,7 @@
                         CGPoint dropPoint = [itemAttributes frame].origin;
                         NSIndexPath *indexPath = [itemAttributes indexPath];
                         
-                        [self.delegate collectionView: [self collectionView]
+                        [self.delegate collectionView: self.collectionView
                                                layout: self
                                          setDropPoint: dropPoint
                                    forItemAtIndexPath: indexPath];
@@ -293,11 +293,11 @@
                 }
                 
                 [layoutToChange setFrame: [availablePositionsOrdered[indexOfNearestPosition] CGRectValue]];
-                [layoutToChange setDropIndex: [self.delegate collectionView: [self collectionView]
+                [layoutToChange setDropIndex: [self.delegate collectionView: self.collectionView
                                                                        layout: self
                                             updateDropIndexForItemAtIndexPath: [layoutToChange indexPath]]];
                 [layoutToChange setDropPoint: [layoutToChange frame].origin];
-                [self.delegate collectionView:[self collectionView] layout:self
+                [self.delegate collectionView:self.collectionView layout:self
                                    setDropPoint:[layoutToChange frame].origin
                              forItemAtIndexPath:[layoutToChange indexPath]];
                 [layoutToChange setLastTouchPointValid: NO];
@@ -401,7 +401,7 @@
 }
 
 - (void)finalizeCollectionViewUpdates {
-    [self.delegate collectionViewDidFinishUpdates:[self collectionView]];
+    [self.delegate collectionViewDidFinishUpdates:self.collectionView];
     [super finalizeCollectionViewUpdates];
 }
 

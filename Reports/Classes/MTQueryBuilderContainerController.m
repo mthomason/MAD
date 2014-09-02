@@ -54,8 +54,8 @@
         labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
         [labelMadDesigner setAttributedText:attributedString];
-        [[self navigationItem] setTitleView:labelMadDesigner];
-        [[[self navigationItem] titleView] sizeToFit];
+        [self.navigationItem setTitleView:labelMadDesigner];
+        [[self.navigationItem titleView] sizeToFit];
     }
     return self;
 }
@@ -80,7 +80,7 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[[self navigationItem] titleView] sizeToFit];
+    [[self.navigationItem titleView] sizeToFit];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -239,7 +239,7 @@
                                                                                        target: self
                                                                                        action: toggleEditModeQueryDesigner];
         
-        [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+        [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
         
         [self setBarButtonItemEdit:barButtonItem];
     }

@@ -59,6 +59,7 @@ static MACloudManager *__sharedManager;
                                                      name: NSUbiquityIdentityDidChangeNotification
                                                    object: nil];
         [__sharedManager updateFileStorageContainerURL:nil];
+        __sharedManager.isCloudEnabled = [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
     });
 }
 
@@ -78,15 +79,16 @@ static MACloudManager *__sharedManager;
                 NSDirectoryEnumerationOptions enumerationOptions = NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsPackageDescendants | NSDirectoryEnumerationSkipsHiddenFiles;
                 
                 NSError *readDocumentsError = nil;
-                NSArray *localDocuments = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:oldDocumentsDirectoryURL
-                                                                        includingPropertiesForKeys:nil
-                                                                                           options:enumerationOptions
-                                                                                             error:&readDocumentsError];
+                NSFileManager *defaultFileManager = [NSFileManager defaultManager];
+                NSArray *localDocuments = [defaultFileManager contentsOfDirectoryAtURL: oldDocumentsDirectoryURL
+                                                            includingPropertiesForKeys: nil
+                                                                               options: enumerationOptions
+                                                                                 error: &readDocumentsError];
                 NSError *readPreviewsError = nil;
-                NSArray *localPreviews = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:oldDataDirectoryURL
-                                                                       includingPropertiesForKeys:nil
-                                                                                          options:enumerationOptions
-                                                                                            error:&readPreviewsError];
+                NSArray *localPreviews = [defaultFileManager contentsOfDirectoryAtURL: oldDataDirectoryURL
+                                                           includingPropertiesForKeys: nil
+                                                                              options: enumerationOptions
+                                                                                error: &readPreviewsError];
                 
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {

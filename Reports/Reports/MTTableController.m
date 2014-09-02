@@ -66,11 +66,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initalize];
-    [self collectionView].backgroundColor = [UIColor tintColorBlue];
-    [[self collectionView] setAlwaysBounceHorizontal:YES];
-    [[self collectionView] setAlwaysBounceVertical:YES];
+    self.collectionView.backgroundColor = [UIColor tintColorBlue];
+    [self.collectionView setAlwaysBounceHorizontal:YES];
+    [self.collectionView setAlwaysBounceVertical:YES];
     
-    UINavigationItem *navitagionItem = [self navigationItem];
+    UINavigationItem *navitagionItem = self.navigationItem;
     UIBarButtonItem *barButtonItemDone = [navitagionItem rightBarButtonItem];
     [barButtonItemDone setTintColor:[UIColor tintColorWhite]];
     
@@ -119,7 +119,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[self collectionView] flashScrollIndicators];
+    [self.collectionView flashScrollIndicators];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -127,14 +127,14 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [[[self navigationItem] titleView] sizeToFit];
+    [[self.navigationItem titleView] sizeToFit];
 }
 
 #pragma mark - Helpers
 
 - (void)invalidateLayout {
     [[self tableFormatter] format];
-    UICollectionView *collectionView = [self collectionView];
+    UICollectionView *collectionView = self.collectionView;
     [collectionView reloadData];
     [(MTTableLayout *)[self collectionViewLayout] setColumnCount:self.columnCount
                                                      andRowCount:self.rowCount];
@@ -142,17 +142,17 @@
     for (NSInteger i=0; i<self.columnCount; i++) {
 
         __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
-        [[self collectionView] registerClass:classCollectionViewCell forCellWithReuseIdentifier:[self reuseIdForColumn:i]];
+        [self.collectionView registerClass:classCollectionViewCell forCellWithReuseIdentifier:[self reuseIdForColumn:i]];
         __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
-        [[self collectionView] registerClass:classCollectionViewCellHeader forSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:[self reuseIdSupplementForColumn:i]];
+        [self.collectionView registerClass:classCollectionViewCellHeader forSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:[self reuseIdSupplementForColumn:i]];
 
     }
 
 }
 
 - (void)initalize {
-    [self collectionView].delegate = self;
-    [[self collectionView] setDataSource:self];
+    self.collectionView.delegate = self;
+    [self.collectionView setDataSource:self];
 }
 
 #pragma mark - Methods

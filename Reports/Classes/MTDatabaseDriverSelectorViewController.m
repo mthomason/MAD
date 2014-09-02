@@ -36,7 +36,7 @@ NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supporte
     }
 
     self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle, MTDatabaseDriverSelectorViewControllerDefaultTitle);
-    [[self navigationItem] setLeftItemsSupplementBackButton: YES];
+    [self.navigationItem setLeftItemsSupplementBackButton: YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

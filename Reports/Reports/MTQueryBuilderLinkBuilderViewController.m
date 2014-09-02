@@ -181,7 +181,7 @@
 
 - (void)updateSaveButtonState {
     BOOL enabled = [self firstFieldSet] && [self secondField];
-    [[[self navigationItem] rightBarButtonItem] setEnabled:enabled];
+    [[self.navigationItem rightBarButtonItem] setEnabled:enabled];
 }
 
 @end

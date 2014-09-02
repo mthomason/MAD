@@ -78,8 +78,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
-    [[self navigationItem] setHidesBackButton:NO];
+    [self.navigationItem setLeftItemsSupplementBackButton:YES];
+    [self.navigationItem setHidesBackButton:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -50,8 +50,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];
     
-    [[self navigationItem] setHidesBackButton:NO];
-    [[self navigationItem] setLeftItemsSupplementBackButton: YES];
+    [self.navigationItem setHidesBackButton:NO];
+    [self.navigationItem setLeftItemsSupplementBackButton: YES];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
@@ -153,7 +153,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
     __weak MTConnectionViewController *blockSelf = self;
     
@@ -304,17 +304,17 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
 }
 
 - (void)disableNavigation {
-    [[[self navigationItem] leftBarButtonItem] setEnabled:NO];
-    [[self navigationItem] setHidesBackButton:YES animated:YES];
-    [[[self navigationItem] backBarButtonItem] setEnabled:NO];
-    [self setHolderButton: [[self navigationItem] rightBarButtonItem]];
+    [[self.navigationItem leftBarButtonItem] setEnabled:NO];
+    [self.navigationItem setHidesBackButton:YES animated:YES];
+    [[self.navigationItem backBarButtonItem] setEnabled:NO];
+    [self setHolderButton: [self.navigationItem rightBarButtonItem]];
 }
 
 - (void)enableNavigation {
-    [[[self navigationItem] backBarButtonItem] setEnabled:YES];
-    [[[self navigationItem] leftBarButtonItem] setEnabled:YES];
-    [[self navigationItem] setHidesBackButton:NO animated:YES];
-    [[self navigationItem] setRightBarButtonItem:[self holderButton] animated:YES];
+    [[self.navigationItem backBarButtonItem] setEnabled:YES];
+    [[self.navigationItem leftBarButtonItem] setEnabled:YES];
+    [self.navigationItem setHidesBackButton:NO animated:YES];
+    [self.navigationItem setRightBarButtonItem:[self holderButton] animated:YES];
 }
 
 - (IBAction)documentNameDidEndOnExit:(id)sender { }

@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "MTQueryBuilderViewController.h"
 #import "MTApplicationInstance.h"
+#import "MTUser.h"
 
 #import "MTReportDesigner.h"
 #import "MTReportViewer.h"
@@ -25,17 +26,16 @@
 
 #import "MTViewControllerOpenDocument.h"
 #import "UIManagedDocument+FileOperations.h"
-#import "UIApplication+Extras.h"
 #import "evp.h"
 #import "VerifyStoreReceipt.h"
-
-#import "UIDevice+Hack.h"
 #import "MACloudManager.h"
 #import "MTStoreKitController.h"
 #import "MTLog.h"
+
+#import "UIApplication+Extras.h"
+#import "UIDevice+Hack.h"
 #import "NSURL+Document.h"
 #import "RptqDocument+Extras.h"
-
 #import "UIColor+EverydayApps.h"
 
 const NSInteger MATagNewDocument = 3838;
@@ -111,28 +111,21 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-
-    NSString *openDocumentName = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSString *openDocumentExt = [url pathExtension];
-    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:openDocumentName withExtension:openDocumentExt];
-    NSString *uniqueName = [[destinationUrl lastPathComponent] stringByDeletingPathExtension];
-    
-    NSError *fileWrittingError = nil;
-    [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:&fileWrittingError];
     BOOL result;
-    if (fileWrittingError) {
-        result = NO;
-        [fileWrittingError presentErrorToUser];
-    } else {
+    NSError *error = nil;
+    if ([self.applicationInstance.user addDocument:url error:&error]) {
         result = YES;
-        UIAlertView *alertView = [[UIAlertView alloc]  initWithTitle:@"New Document"
-                                                             message:[NSString stringWithFormat:@"Added document %@.", uniqueName]
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"Continue"
-                                                   otherButtonTitles:nil];
-        [alertView setTag:MATagNewDocument];
+        UIAlertView *alertView = [[UIAlertView alloc]  initWithTitle: @"New Document"
+                                                             message: @"Added document."
+                                                            delegate: nil
+                                                   cancelButtonTitle: @"Continue"
+                                                   otherButtonTitles: nil];
+        alertView.tag = MATagNewDocument;
         alertView.delegate = self;
         [alertView show];
+    } else {
+        result = NO;
+        [error presentErrorToUser];
     }
     return result;
 }

@@ -4909,6 +4909,11 @@
                                 <action selector="activity:" destination="9ul-yk-EvR" id="2Ox-j6-hkn"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem image="MADImageToolbarCloudDownload.png" id="TpV-3i-yet">
+                            <connections>
+                                <action selector="download:" destination="9ul-yk-EvR" id="5if-9U-hzk"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem title="Information" id="RRb-ys-wtH">
                             <connections>
                                 <segue destination="Qvq-4t-vff" kind="popover" identifier="MTSegueDetails" popoverAnchorBarButtonItem="RRb-ys-wtH" id="euR-WJ-MGv">
@@ -4945,6 +4950,7 @@
                         <outlet property="barButtonItemAbout" destination="Fma-SS-ARx" id="5c8-qD-gQ7"/>
                         <outlet property="barButtonItemAction" destination="B8W-SU-UV0" id="Ev3-Gp-9BW"/>
                         <outlet property="barButtonItemAddNewDocument" destination="YQ8-FP-cM9" id="4Sy-dl-INf"/>
+                        <outlet property="barButtonItemCloudDown" destination="TpV-3i-yet" id="Y6q-eR-yJg"/>
                         <outlet property="barButtonItemEdit" destination="2wM-rP-7Tw" id="g1s-hv-0v1"/>
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
@@ -11158,6 +11164,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="MADImageToolbarCloudDownload.png" width="22" height="22"/>
         <image name="UIBarButtonItemDatabase.png" width="48" height="32"/>
         <image name="UIBarButtonItemMadDesigner.png" width="48" height="32"/>
         <image name="UIBarButtonItemMadViewer.png" width="48" height="32"/>

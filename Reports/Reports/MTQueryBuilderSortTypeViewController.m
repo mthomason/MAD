@@ -31,8 +31,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self navigationItem] setLeftItemsSupplementBackButton:YES];
-    [[self navigationItem] setHidesBackButton:NO];
+    [self.navigationItem setLeftItemsSupplementBackButton:YES];
+    [self.navigationItem setHidesBackButton:NO];
     if ([self initalSortOrder] == MNSSortOrderAccending) {
         [[self tableViewCellAccending] setAccessoryType:UITableViewCellAccessoryCheckmark];
     } else {

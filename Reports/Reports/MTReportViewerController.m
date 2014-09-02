@@ -246,8 +246,8 @@
     
     NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
     [labelMadDesigner setAttributedText:attributedString];
-    [[self navigationItem] setTitleView:labelMadDesigner];
-    [[[self navigationItem] titleView] sizeToFit];
+    [self.navigationItem setTitleView:labelMadDesigner];
+    [[self.navigationItem titleView] sizeToFit];
     
     _timerLabelTimeSinceRefreh = nil;
     
@@ -488,7 +488,7 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[[self navigationItem] titleView] sizeToFit];
+    [[self.navigationItem titleView] sizeToFit];
 }
 
 - (IBAction)done:(id)sender {
@@ -583,7 +583,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    [[[self navigationItem] titleView] sizeToFit];
+    [[self.navigationItem titleView] sizeToFit];
     if (self.activityExporting == NO) {
         
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
@@ -667,7 +667,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [[self labelDateLastRefreshed] setText:@""];
     [[self labelDateLastRefreshed] setNeedsDisplay];
 
-    [[self navigationItem] setRightBarButtonItem:[self barButtonItemRefresh] animated:YES];
+    [self.navigationItem setRightBarButtonItem:[self barButtonItemRefresh] animated:YES];
 
 }
 
@@ -700,7 +700,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [activityIndicator setHidden:NO];
     [activityIndicator setHidesWhenStopped:NO];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [[self navigationItem] setRightBarButtonItem:barButtonItem animated:YES];
+    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
 }
 

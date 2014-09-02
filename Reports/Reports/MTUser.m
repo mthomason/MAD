@@ -12,6 +12,8 @@
 
 #import "MTUser.h"
 #import "NSFileManager+Common.h"
+#import "NSURL+Document.h"
+#import "NSError+UserInterface.h"
 
 @interface MTUser()
 
@@ -37,5 +39,15 @@
     NSArray *sortDescriptors = @[sortByFileName];
     return [madFiles sortedArrayUsingDescriptors:sortDescriptors];
 }
+
+- (BOOL)addDocument:(NSURL *)url error:(NSError **)error {
+    NSString *openDocumentName = [[url lastPathComponent] stringByDeletingPathExtension];
+    NSString *openDocumentExt = [url pathExtension];
+    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:openDocumentName withExtension:openDocumentExt];
+    [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:error];
+    return error == nil;
+}
+
+
 
 @end
