@@ -33,7 +33,6 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTAlertView.h"
 #import "NSFileManager+Common.h"
-#import "MTArrayDataSource.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
@@ -68,9 +67,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MTViewControllerProtocol,
         MTDocumentCellProtocol,
         UIDocumentInteractionControllerDelegate,
-        UIDocumentPickerDelegate>
+        UIDocumentPickerDelegate,
+        UISearchBarDelegate>
 
-@property (nonatomic, strong) MTArrayDataSource *dataSource;
 
 @property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 
@@ -83,6 +82,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAbout;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemCloudDown;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSearch;
 
 @property (nonatomic, strong) UIAlertView *renameAlertView;
 
@@ -99,8 +99,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible) BOOL savingActivityIndicatorVisible;
 
+@property (nonatomic, strong) NSArray *urls;
 @property (nonatomic, strong) MTOpenFiles *openFiles;
 @property (nonatomic, assign) MTReportState reportState;
+
+@property (nonatomic, strong) UICollectionReusableView *searchView;
+
+@property (nonatomic, strong) UISearchBar *searchBar;
+
+@property (nonatomic, strong) UILabel *labelMadDesigner;
 
 @end
 
@@ -117,7 +124,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    [self reloadData];
+    //[self reloadData];
     
     if ([MTApplicationInstance isMadViewer] && [UIDevice isPad]) {
 
@@ -212,6 +219,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSAssert(attributedString != nil, @"Navigation title is not set.");
     [labelMadDesigner setAttributedText:attributedString];
     self.navigationItem.titleView = labelMadDesigner;
+    self.labelMadDesigner = labelMadDesigner;
     [self.navigationItem.titleView sizeToFit];
 
     self.navigationItem.hidesBackButton = YES;
@@ -226,12 +234,66 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [toolbarButtons removeObject:self.barButtonItemAction];
     if ([UIDevice isLagacyOS]) {
         [toolbarButtons removeObject:self.barButtonItemCloudDown];
+    } else {
+        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+        searchBar.delegate = self;
+        searchBar.showsBookmarkButton = NO;
+        searchBar.showsCancelButton = YES;
+        searchBar.showsScopeBar = NO;
+        searchBar.showsSearchResultsButton = NO;
+        searchBar.hidden = YES;
+        [searchBar sizeToFit];
+        self.searchBar = searchBar;
+        
+        if (self.barButtonItemEdit == nil) {
+            UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)];
+            self.barButtonItemEdit = edit;
+        }
+        [toolbarButtons addObject:self.barButtonItemEdit];
     }
+    
     [self setToolbarItems:toolbarButtons animated:NO];
     
     self.collectionView.delegate = self;
     [self initalizeDataSource];
 
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
+    NSLog(@"The default search selected scope button index changed to %ld.", (long)selectedScope);
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if (searchText.length > 0) {
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            
+            NSRange range = NSMakeRange(0, MIN(searchText.length, ((NSURL *)evaluatedObject).path.lastPathComponent.length));
+            return [((NSURL *)evaluatedObject).path.lastPathComponent compare:searchText
+                                                                      options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch
+                                                                        range:range] == NSOrderedSame;
+        }];
+        self.urls = [[[[AppDelegate app] user] hasMadDocuments] filteredArrayUsingPredicate:predicate];
+        NSIndexSet *set = [NSIndexSet indexSetWithIndex:0];
+        
+        __weak UICollectionView *weakCollectionView = self.collectionView;
+        [self.collectionView performBatchUpdates:^{
+            [weakCollectionView reloadSections:set];
+        } completion:nil];
+    } else {
+        [self reloadData];
+    }
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"The default search bar cancel button was tapped.");
+    if (self.searchBar.text.length > 0) {
+        self.searchBar.text = @"";
+        [self reloadData];
+    }
+    [searchBar resignFirstResponder];
+    [self search:self];     //Hides the search bar
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -247,13 +309,20 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [weakSelf addActionItemToToolbar:animated];
         }
     }];
-    
-    [self reloadData];
+    [self reenableDataWithSearch];
+}
+
+- (void)reenableDataWithSearch {
+    if (self.searchBar) {
+        [self searchBar:self.searchBar
+          textDidChange:self.searchBar.text];
+    } else {
+        [self reloadData];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
     for (NSIndexPath *indexPath in self.collectionView.indexPathsForVisibleItems) {
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
         [cell performDeselectionAnimations];
@@ -270,14 +339,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[self.navigationItem titleView] sizeToFit];
+    [self.navigationItem.titleView sizeToFit];
+    [self.collectionView.backgroundView setNeedsDisplay];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     __weak UICollectionViewController *weakSelf = self;
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [[[weakSelf collectionView] backgroundView] setNeedsDisplay];
+        [weakSelf.collectionView.backgroundView setNeedsDisplay];
     } completion:NULL];
 }
 
@@ -390,7 +460,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             queryBuilderViewController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
-//            [queryBuilderViewController reloadDocument:document animated:YES];
 
         }
         
@@ -644,63 +713,33 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)initalizeDataSource {
-    __weak MTViewControllerOpenDocument *weakself = self;
-    MTCellConfigureBlock configureCell = ^(MTCollectionViewCellDocument *cell, NSURL *url) {
-        cell.delegate =  weakself;
-        [cell isSelected] ? [cell performSelectionAnimations] : [cell performDeselectionAnimations];
-        [cell configureCellForUrl:url];
-        if ([weakself isEditing]) {
-            [cell startWobble];
-        }
-        if ([weakself isSavingActivityIndicatorVisible] == NO) {
-            [cell.activityIndicator stopAnimating];
-        }
-        if (weakself.isSavingActivityIndicatorVisible) {
-            NSComparisonResult comparionResult = [[self.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
-            if (comparionResult == NSOrderedSame) {
-                [cell.activityIndicator startAnimating];
-            } else {
-                [cell.activityIndicator stopAnimating];
-            }
-        } else {
-            [cell.activityIndicator stopAnimating];
-        }
-        
-    };
-    
-    self.dataSource = [[MTArrayDataSource alloc] initWithItems: [[[AppDelegate app] user] hasMadDocuments]
-                                                cellIdentifier: MTCollectionViewCellDocumentIdentifier
-                                            configureCellBlock: configureCell
-                                                       andType: MTDataSourceTypeCollectionView];
-    
-    self.collectionView.dataSource = (id<UICollectionViewDataSource>)self.dataSource;
+    self.collectionView.dataSource = self;
 }
 
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
     NSInteger row = [[self.collectionView indexPathForCell:cellDocument] row];
-    return [[self dataSource] itemAtIndex:row];
+    return [self.urls objectAtIndex:row];
     
 }
 
 - (void)reloadData {
-    [[self dataSource] updateWithItems: [[[AppDelegate app] user] hasMadDocuments]];
+    self.urls = [[[AppDelegate app] user] hasMadDocuments];
     [self.collectionView reloadData];
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
-    return [[self dataSource] itemAtIndexPath:indexPath];
+    return [self.urls objectAtIndex:indexPath.item];
+}
 
+- (NSUInteger)dataSourceCount {
+    return self.urls.count;
 }
 
 - (void)deleteDocumentAtIndexPath:(NSIndexPath *)index error:(NSError **)error {
     NSURL *documentUrl = [self documentForIndexPath:index];
     [self removeCachedFileForDocumentUrl:documentUrl];
     [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:error];
-    if (*error == nil) {
-        if ([index item] < [[self dataSource] count]) {
-            [[self dataSource] removeItemAtIndex:[index item]];
-        }
-    } else {
+    if (*error != nil) {
         [*error presentErrorToUser];
     }
 }
@@ -758,8 +797,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [validFileName show];
         } else {
             NSURL *urlToRename = nil;
-            if ([alertView tag] < [[self dataSource] count]) {
-                urlToRename = [[self dataSource] itemAtIndex:[alertView tag]];
+            if ([alertView tag] < [self dataSourceCount]) {
+                NSIndexPath *path = [NSIndexPath indexPathForItem:alertView.tag inSection:0];
+                urlToRename = [self documentForIndexPath:path];
                 NSString *fileName = [textField text];
                 NSString *filenameWithExtention = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
                 NSURL *newUrl = [[urlToRename URLByDeletingLastPathComponent] URLByAppendingPathComponent:filenameWithExtention isDirectory:NO];
@@ -784,28 +824,25 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - UIMenuController required methods
 
 - (BOOL)canBecomeFirstResponder {
-    return NO;
+    return YES;
+//    return NO;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     return NO;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
+
 #pragma mark - Collection View Delegate Protocol
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
     return YES;
 }
 
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    /*for (NSIndexPath *indexPath in self.collectionView.indexPathsForVisibleItems) {
-        UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-        if ([self isEditing]) {
-            [cell startWobble];
-        }
-    }*/
-}
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
 
@@ -814,7 +851,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     
-    NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
+    NSURL *fileUrl = [self documentForIndexPath:indexPath];
     NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
@@ -828,7 +865,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
-    NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
+    NSURL *fileUrl = [self documentForIndexPath:indexPath];
     NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
@@ -841,8 +878,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
-
+    NSURL *fileUrl = [self documentForIndexPath:indexPath];
     if ([self isEditing] == NO) {
         [collectionView deselectItemAtIndexPath:indexPath animated:YES];
         
@@ -883,7 +919,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
-    NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
+    NSURL *fileUrl = [self documentForIndexPath:indexPath];
     NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
     NSString *path = [url path];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
@@ -928,6 +964,50 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return [UIDevice isPad] ? 50.0000f : 5.0000f;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeZero;
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.urls.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
+                                                                                   forIndexPath:indexPath];
+    NSURL *url = [self.urls objectAtIndex:indexPath.item];
+    
+    if (cell.delegate == nil) {
+        cell.delegate =  self;
+    }
+    [cell configureCellForUrl:url];
+    if (self.isEditing) {
+        [cell startWobble];
+    }
+    if (self.isSavingActivityIndicatorVisible == NO) {
+        [cell.activityIndicator stopAnimating];
+    } else {
+        NSComparisonResult comparionResult = [[self.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
+        if (comparionResult == NSOrderedSame) {
+            [cell.activityIndicator startAnimating];
+        } else {
+            [cell.activityIndicator stopAnimating];
+        }
+    }
+    
+    return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    return nil;
+}
+
 #pragma mark - Misc
 
 #pragma mark Edit Mode
@@ -941,6 +1021,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)endEditMode:(UITapGestureRecognizer *)sender {
+    [self.searchBar resignFirstResponder];
     if ([self editModeEnabled]) {
         [self edit:self];
     }
@@ -973,13 +1054,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
         [cell.activityIndicator stopAnimating];
     }
-    [self.collectionView reloadData];
+    [self reenableDataWithSearch];
 }
 
 - (void)displaySavingReportActivityIndicator {
     [self setSavingActivityIndicatorVisible:YES];
     for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
-        NSURL *visibleUrl = [self.dataSource itemAtIndexPath:path];
+        NSURL *visibleUrl = [self documentForIndexPath:path];
         BOOL animate = [self.openFiles.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
         if (animate) {
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
@@ -993,7 +1074,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
-    __block __weak NSURL *fileUrl = [[self dataSource] itemAtIndexPath:indexPath];
+    __block __weak NSURL *fileUrl = [self documentForIndexPath:indexPath];
     __block __weak MTViewControllerOpenDocument *openDocument = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
@@ -1057,6 +1138,50 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [controller removeFromParentViewController];
 }
 
+- (IBAction)search:(id)sender {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (self.searchBar.isHidden) {
+        [self.searchBar sizeToFit];
+        self.searchBar.hidden = NO;
+        self.searchBar.alpha = 0.0000f;
+        self.labelMadDesigner.alpha = 1.0000f;
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+        __weak MTViewControllerOpenDocument *weakself = self;
+        [UIView transitionWithView:self.navigationItem.titleView
+                          duration:0.2000f
+                           options:UIViewAnimationOptionCurveEaseOut animations:^{
+            weakself.searchBar.alpha = 1.0000f;
+            weakself.labelMadDesigner.alpha = 0.0000f;
+            self.navigationItem.titleView = self.searchBar;
+        } completion:^(BOOL finished) {
+            if (weakself.searchBar.isFirstResponder == NO) {
+                [weakself.searchBar becomeFirstResponder];
+            }
+        }];
+        
+    } else {
+        if (self.searchBar.text.length > 0) {
+            self.searchBar.text = @"";
+            [self reloadData];
+        }
+        self.searchBar.hidden = YES;
+        self.searchBar.alpha = 0.1000f;
+        self.labelMadDesigner.alpha = 0.0000f;
+        [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+        __weak MTViewControllerOpenDocument *weakself = self;
+        [UIView transitionWithView:self.navigationItem.titleView
+                          duration:0.2000f
+                           options:UIViewAnimationOptionCurveEaseOut animations:^{
+            weakself.searchBar.alpha = 0.0000f;
+            weakself.labelMadDesigner.alpha = 1.0000f;
+            weakself.navigationItem.titleView = self.labelMadDesigner;
+        } completion:nil];
+        
+    }
+}
+
 - (IBAction)done:(id)sender { }
 
 - (IBAction)edit:(id)sender {
@@ -1065,31 +1190,52 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setEditing:startEdit animated:YES];
     
     if (startEdit) {
-        [self setEditModeEnabled:YES];
+        self.editModeEnabled = YES;
         [[self barButtonItemLicensing] setEnabled:NO];
         [[self barButtonItemAddNewDocument] setEnabled:NO];
         [[self barButtonItemAbout] setEnabled:NO];
         [[self barButtonItemInformation] setEnabled:NO];
         
         [self.collectionView setAllowsMultipleSelection:YES];
-        [self.navigationItem setRightBarButtonItem:[self barButtonItemEditDone] animated:YES];
-
+        
         for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
             [cell startWobble];
         }
+        
+        if ([UIDevice isModernOS]) {
+            NSMutableArray *items = [self.toolbarItems mutableCopy];
+            [items removeObject:self.barButtonItemEdit];
+            [items addObject:self.barButtonItemEditDone];
+            [self setToolbarItems:items animated:YES];
+            [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        } else {
+            [self.navigationItem setRightBarButtonItem:self.barButtonItemEditDone animated:YES];
+        }
+
     } else {
-        [self setEditModeEnabled:NO];
-        [[self barButtonItemLicensing] setEnabled:YES];
-        [[self barButtonItemAddNewDocument] setEnabled:YES];
-        [[self barButtonItemAbout] setEnabled:YES];
-        [[self barButtonItemInformation] setEnabled:YES];
+        self.editModeEnabled = NO;
+        self.barButtonItemLicensing.enabled = YES;
+        self.barButtonItemAddNewDocument.enabled = YES;
+        self.barButtonItemAbout.enabled = YES;
+        self.barButtonItemInformation.enabled = YES;
         
-        [[self barButtonItemTrash] setEnabled:NO];
-        [[self barButtonItemAction] setEnabled:NO];
+        self.barButtonItemTrash.enabled = NO;
+        self.barButtonItemAction.enabled = NO;
         
-        [self.collectionView setAllowsMultipleSelection:NO];
-        [self.navigationItem setRightBarButtonItem:[self barButtonItemEdit] animated:YES];
+        self.collectionView.allowsMultipleSelection = NO;
+        
+        
+        if ([UIDevice isLagacyOS]) {
+            [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
+        } else {
+            [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
+            
+            NSMutableArray *items = [self.toolbarItems mutableCopy];
+            [items removeObject:self.barButtonItemEditDone];
+            [items addObject:self.barButtonItemEdit];
+            [self setToolbarItems:items animated:YES];
+        }
 
         for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
             [self.collectionView deselectItemAtIndexPath:path animated:YES];
@@ -1097,7 +1243,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [cell stopWobble];
             [cell performDeselectionAnimations];
             
-            NSURL *fileUrl = [[self dataSource] itemAtIndexPath:path];
+            NSURL *fileUrl = [self documentForIndexPath:path];
             NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
@@ -1132,9 +1278,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (IBAction)activity:(id)sender {
-    NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity:[[self dataSource] count]];
+    NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity:[self dataSourceCount]];
     for (NSIndexPath *selectedCellLocation in self.collectionView.indexPathsForSelectedItems) {
-        NSURL *fileUrl = [[self dataSource] itemAtIndexPath:selectedCellLocation];
+        NSURL *fileUrl = [self documentForIndexPath:selectedCellLocation];
         [wrappedUrls addObject:fileUrl];
     }
     for (NSIndexPath *visibleCellLocations in self.collectionView.indexPathsForVisibleItems) {
@@ -1186,11 +1332,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
         for (NSIndexPath *selectedItem in [self.collectionView indexPathsForSelectedItems]) {
             [itemsToDelete addObject:selectedItem];
-            NSURL *url = [[self dataSource] itemAtIndexPath:selectedItem];
+            NSURL *url = [self documentForIndexPath:selectedItem];
             [urlsToDelete addObject:url];
         }
-        
-        [self.dataSource removeObjectsInArray:urlsToDelete];
         
         for (NSURL *url in urlsToDelete) {
             NSError *error = nil;

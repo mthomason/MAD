@@ -52,7 +52,7 @@
     return [self itemAtIndex:indexPath.row];
 }
 
-- (id)itemAtIndex:(NSUInteger)index {
+- (id) :(NSUInteger)index {
     return self.items[index];
 }
 

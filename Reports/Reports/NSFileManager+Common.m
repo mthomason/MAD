@@ -144,13 +144,20 @@
 
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle {
     NSURL *cachedArrayDirectories = [[NSFileManager cacheDirectory] URLByAppendingPathComponent:handle isDirectory:YES];
-    BOOL exist, isDirectory;
-    exist = [self fileExistsAtPath:[cachedArrayDirectories path] isDirectory:&isDirectory];
-    if (exist == NO || isDirectory == NO) {
-        NSError *error = nil;
-        [self createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:@{} error:&error];
-        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BOOL exist, isDirectory;
+        exist = [self fileExistsAtPath:[cachedArrayDirectories path] isDirectory:&isDirectory];
+        if (exist == NO || isDirectory == NO) {
+            NSError *error = nil;
+            [self createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:@{} error:&error];
+            if (error) {
+                error = nil;
+                [self createDirectoryAtURL:cachedArrayDirectories withIntermediateDirectories:YES attributes:@{} error:&error];
+            }
+            NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
+        }
+    });
     return cachedArrayDirectories;
 }
 

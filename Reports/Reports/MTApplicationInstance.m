@@ -37,12 +37,14 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.41";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.41";
-NSString * const MTGlobalBundleRev                                  = @"1416";
+NSString * const MTGlobalBundleVersion                              = @"7.0.42";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.42";
+NSString * const MTGlobalBundleRev                                  = @"1417";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
+NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
+NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
 NSString * const MTStoryboardReportDesignerLagacy                   = @"MTStoryboardReportDesignerOS6";
 NSString * const MTStoryboardReportDesignerPadLagacy                = @"MTStoryboardReportDesignerPadOS6";
 
@@ -289,9 +291,9 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 + (NSString *)storyboardName {
     if ([UIDevice isModernOS]) {
-        return [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
+        return [UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
     } else {
-        return [UIDevice isPad] ? MTStoryboardReportDesignerPadLagacy : MTStoryboardReportDesigner;
+        return [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
     }
 }
 
@@ -406,9 +408,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
     [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
 
-    [[UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil]            setBarTintColor: tintColor];
-    [[UIToolbar appearanceWhenContainedIn:[UINavigationBar class], nil]                   setBarTintColor: tintColor];
-//    [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
+    [[UIToolbar appearanceWhenContainedIn:[UINavigationController class], nil]                  setBarTintColor: tintColor];
+    [[UIToolbar appearanceWhenContainedIn:[UINavigationBar class], nil]                         setBarTintColor: tintColor];
     [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setBarTintColor: tintColor];
     
     [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil]                 setColor: edaGreen];

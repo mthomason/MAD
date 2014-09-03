@@ -165,7 +165,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 #pragma mark - UIDocument
 
 - (instancetype)initWithFileURL:(NSURL *)url {
-    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
+    MTLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
     self = [super initWithFileURL:url];
     if (self) {
         
@@ -178,7 +178,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         [self setPersistentStoreOptions: options];
         
         NSURL *destinationUrl = [self archiveUrlForMadUrl:url];
-        NSLog(@"Archive URL: %@", destinationUrl);
+        MTLog(@"Archive URL: %@", destinationUrl);
         self.urlGuts = destinationUrl;
 
         MADocumentState *documentState = [MADocumentState new];
@@ -235,7 +235,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError **)outError {
-    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
+    MTLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
 
     //Unpack files from binary NSData url to NSFileWrapper in tmp folder
     BOOL success = nil;
@@ -264,8 +264,8 @@ NSString * const MADMimeType                            = @"application/vnd.ever
           safelyToURL:(NSURL *)url
      forSaveOperation:(UIDocumentSaveOperation)saveOperation
                 error:(NSError **)outError {
-    NSLog(@"\n\t%s\n\t%@\n\t%@\n\t%@\n\t%ld\n\n", __PRETTY_FUNCTION__, contents, additionalFileAttributes, url, saveOperation);
-    NSLog(@"\n\tAutosave bitches");
+    MTLog(@"\n\t%s\n\t%@\n\t%@\n\t%@\n\t%ld\n\n", __PRETTY_FUNCTION__, contents, additionalFileAttributes, url, saveOperation);
+    MTLog(@"\n\tAutosave bitches");
     
     [super writeContents:contents andAttributes:additionalFileAttributes
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
@@ -356,7 +356,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         NSArray *errors = [error userInfo][NSDetailedErrorsKey];
         if (errors != nil && errors.count > 0) {
             for (NSError *error in errors) {
-                NSLog(@"  Error: %@", error.userInfo);
+                MTLog(@"  Error: %@", error.userInfo);
             }
         }
     }
@@ -479,7 +479,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
-    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
+    MTLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
     
     if (self.extraInformation == nil) {
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
@@ -492,7 +492,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
-    NSLog(@"\n\t%s\n\tabsoluteURL: %@\n\tabsoluteOriginalContentsURL%@\n\n", __PRETTY_FUNCTION__, absoluteURL, absoluteOriginalContentsURL);
+    MTLog(@"\n\t%s\n\tabsoluteURL: %@\n\tabsoluteOriginalContentsURL%@\n\n", __PRETTY_FUNCTION__, absoluteURL, absoluteOriginalContentsURL);
     BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
     
     
@@ -580,19 +580,19 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
     switch (self.documentState) {
         case UIDocumentStateClosed:
-            NSLog(@"\n\n\tDocument state closed.\n\n");
+            MTLog(@"\n\n\tDocument state closed.\n\n");
             break;
         case UIDocumentStateEditingDisabled:
-            NSLog(@"\n\n\tDocument state editing disabled.\n\n");
+            MTLog(@"\n\n\tDocument state editing disabled.\n\n");
             break;
         case UIDocumentStateInConflict:
-            NSLog(@"\n\n\tDocument state in conflict.\n\n");
+            MTLog(@"\n\n\tDocument state in conflict.\n\n");
             break;
         case UIDocumentStateNormal:
-            NSLog(@"\n\n\tDocument state normal.\n\n");
+            MTLog(@"\n\n\tDocument state normal.\n\n");
             break;
         case UIDocumentStateSavingError:
-            NSLog(@"\n\n\tDocument state saving error.\n\n");
+            MTLog(@"\n\n\tDocument state saving error.\n\n");
             break;
         default:
             break;
@@ -772,7 +772,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         [rptqDocument addDatabase:self.mainDatabase status:^(NSString *message, CGFloat progress) {
             status(message, progress);
         } completion:^(BOOL success, MTErrorContainer *errorContainer) {
-            NSLog(@"\n\t%@", errorContainer);
+            MTLog(@"\n\t%@", errorContainer);
             completion(success, errorContainer);
         }];
     } else {
@@ -992,7 +992,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
     NSString *fileName = [handle stringByAppendingString:extention];
     
-    NSString *fileNameId = [NSFileManager filenameId:[handle hash]];
+    NSString *fileNameId = [NSFileManager filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }

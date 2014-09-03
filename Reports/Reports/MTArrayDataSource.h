@@ -21,9 +21,9 @@ typedef void (^MTCellConfigureBlock)(id cell, id item);
 @interface MTArrayDataSource : NSObject
 
 - (instancetype)initWithItems:(NSArray *)items
-     cellIdentifier:(NSString *)cellIdentifier
- configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
-            andType:(MTDataSourceType)type;
+               cellIdentifier:(NSString *)cellIdentifier
+           configureCellBlock:(MTCellConfigureBlock)cellConfigureBlock
+                      andType:(MTDataSourceType)type;
 
 
 - (NSInteger)count;
