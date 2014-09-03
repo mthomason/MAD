@@ -31,37 +31,36 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
     [self setParagraphStyle:paragraphStyle];
     
-    [[[self imagePreview] layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
-    [[[self imagePreview] layer] setShadowRadius:2.0000f];
-    [[[self imagePreview] layer] setShadowOpacity:1.0000f];
-    CGSize offsetSize = CGSizeMake(offset, offset);
-    [[[self imagePreview] layer] setShadowOffset:offsetSize];
+    self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+    self.imagePreview.layer.shadowRadius = 2.0000f;
+    self.imagePreview.layer.shadowOpacity = 1.0000f;
+    self.imagePreview.layer.shadowOffset = CGSizeMake(offset, offset);
 
-    [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
-    [[self labelTitle] setClipsToBounds:NO];
+    self.labelTitle.textColor = [UIColor tintColorBlue];
+    self.labelTitle.clipsToBounds = NO;
     
-    [[self selectedBackgroundView] layer].cornerRadius = 5.0000f;
+    self.selectedBackgroundView.layer.cornerRadius = 5.0000f;
     
-    [self imagePreview].contentMode = UIViewContentModeScaleAspectFit;
+    self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
     
     [super awakeFromNib];
 }
 
 - (void)performSelectionAnimations {
-    [[self labelTitle] setTextColor:[UIColor whiteColor]];
+    self.labelTitle.textColor = [UIColor whiteColor];
 }
 
 - (void)performDeselectionAnimations {
-    [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
+    self.labelTitle.textColor = [UIColor tintColorBlue];
 }
 
 - (void)configureCellForUrl:(NSURL *)url {
-    [self setText: [MADocument fileNameForMadUrl:url]];
+    self.text = [MADocument fileNameForMadUrl:url];
     [self loadPreviewImageForUrl:url];
 }
 
@@ -92,7 +91,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     [attributedString addAttribute:NSFontAttributeName value:fonta range:range];
     [attributedString addAttribute:NSParagraphStyleAttributeName value:self.paragraphStyle range:range];
-    [[self labelTitle] setAttributedText:attributedString];
+    [self.labelTitle setAttributedText:attributedString];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -112,7 +111,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
         [activityView stopAnimating];
         activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [activityView setCenter:[[self contentView] center]];
-        [[self contentView] addSubview:activityView];
+        [self.contentView addSubview:activityView];
         [self setActivityIndicator:activityView];
         
     }
@@ -124,12 +123,12 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 }
 
 - (BOOL)resignFirstResponder {
-    [[self labelTitle] setTextColor:[UIColor tintColorBlue]];
+    self.labelTitle.textColor = [UIColor tintColorBlue];
     return YES;
 }
 
 - (BOOL)becomeFirstResponder {
-    [[self labelTitle] setTextColor:[UIColor whiteColor]];
+    self.labelTitle.textColor = [UIColor whiteColor];
     return YES;
 }
 
@@ -154,13 +153,13 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
 }
 
 - (void)dimTint {
-    [self selectedBackgroundView].backgroundColor = [UIColor lightGrayColor];
-    [[self labelTitle] setTextColor:[UIColor darkGrayColor]];
+    self.selectedBackgroundView.backgroundColor = [UIColor lightGrayColor];
+    self.labelTitle.textColor = [UIColor darkGrayColor];
 }
 
 - (void)normalizeTint {
-    [self selectedBackgroundView].backgroundColor = [self bgColor];
-    [[self labelTitle] setTextColor:[UIColor whiteColor]];
+    self.selectedBackgroundView.backgroundColor = [self bgColor];
+    self.labelTitle.textColor = [UIColor whiteColor];
 }
 
 @end
