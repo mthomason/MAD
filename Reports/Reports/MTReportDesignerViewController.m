@@ -870,23 +870,23 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:@"showObjects"]) {
+    if ([segue.identifier isEqualToString:@"showObjects"]) {
 
         [self performSegueShowObjects:segue];
 
-    } else if ([[segue identifier] isEqualToString:@"MTSegueShowReportViewer"]) {
+    } else if ([segue.identifier isEqualToString:@"MTSegueShowReportViewer"]) {
 
         [self performSegueShowReportViewer:segue];
 
-    } else if ([[segue identifier] isEqualToString:@"showReportViewerFromDesign"]) {
+    } else if ([segue.identifier isEqualToString:@"showReportViewerFromDesign"]) {
     
         [self performSegueShowReportViewerFromDesigner:segue];
         
-    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
         
         [self performSegueEditBarcode:segue];
 
-    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
         
         [self performSegueEditAggregate:segue.destinationViewController];
         

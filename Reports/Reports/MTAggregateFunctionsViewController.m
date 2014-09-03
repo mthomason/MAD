@@ -26,7 +26,7 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:@"MTSegueSelectAggregateFunction"]) {
+    if ([segue.identifier isEqualToString:@"MTSegueSelectAggregateFunction"]) {
         UITableViewCell *tableViewCell = (UITableViewCell *)sender;
         [tableViewCell setAccessoryType: UITableViewCellAccessoryCheckmark];
         [self setSelectedFunctionType: [tableViewCell tag]];

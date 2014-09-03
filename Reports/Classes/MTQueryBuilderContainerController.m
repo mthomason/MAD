@@ -136,7 +136,7 @@
             [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
             [self disableTabBarItems];
         }
-        if ([[segue identifier] isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
+        if ([segue.identifier isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
             if ([segue.destinationViewController isKindOfClass: [MTReportDesignerViewController class]]) {
                 [segue.destinationViewController setDelegate: self];
             } else if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {

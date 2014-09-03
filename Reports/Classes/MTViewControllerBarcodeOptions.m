@@ -138,53 +138,53 @@
     [self setSelectingField2:NO];
     [self setSelecting2dComponentType:NO];
 
-    if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
+    if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField"]) {
 
         [self setSelectingField1:YES];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
 
-    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeField2"]) {
         
         [self setSelectingField2:YES];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDocument:self.document];
         
-    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcode2dComponentType"]) {
         
         // FIXME: Set inital component
         [self setSelecting2dComponentType:YES];
         [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         
-    } else if ([[segue identifier] isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueBarcodeType"]) {
 
         MTViewControllerBarcodeType *barcodeTypeViewController = segue.destinationViewController;
         MTBarcode *barcode = [self.delegate barcodeToDisplay];
         [barcodeTypeViewController setInitalKey:[barcode barcodeType]];
         [barcodeTypeViewController setDelegate:self];
 
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasCodeOne"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasCodeOne"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrix"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrix"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCode"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCode"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasPdf417"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasPdf417"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
         [segue.destinationViewController setDelegate:self];
         [segue.destinationViewController setDocument:self.document];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"]) {
         [segue.destinationViewController setDelegate:self];
     }
 

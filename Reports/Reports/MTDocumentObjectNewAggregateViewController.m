@@ -219,21 +219,21 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     //FIXME... set document for all needed view controllers
     
-    if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
+    if ([segue.identifier isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
 
-    } else if ([[segue identifier] isEqualToString:@"MTSegueAggregateFunctionChooser"]) {
+    } else if ([segue.identifier isEqualToString:@"MTSegueAggregateFunctionChooser"]) {
     
         MTAggregateFunctionsViewController *functionChooser = segue.destinationViewController;
         [functionChooser setSelectedFunctionType: self.aggregateFunctionType];
 
-    } else if ([[segue identifier] isEqualToString:@"MTSegueGroupByPush"]) {
+    } else if ([segue.identifier isEqualToString:@"MTSegueGroupByPush"]) {
 
         MTGroupByViewController *groupChooser = segue.destinationViewController;
         groupChooser.document = self.document;
         [groupChooser selectGroupType: self.aggregateGroupByType
                     withSectionNumber: self.groupTypeSectionNumber];
         
-    } else if ([[segue identifier] isEqualToString:@"MADSegueAggregateFunctionField"]) {
+    } else if ([segue.identifier isEqualToString:@"MADSegueAggregateFunctionField"]) {
         [segue.destinationViewController setDocument:self.document];
     }
 

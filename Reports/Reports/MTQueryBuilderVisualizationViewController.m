@@ -268,7 +268,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:MNSSegueShowSql]) {
+    if ([segue.identifier isEqualToString:MNSSegueShowSql]) {
         MTShowSqlViewController *viewController;
         if ([UIDevice isPad]) {
             [self setShowSqlIsVisable:YES];

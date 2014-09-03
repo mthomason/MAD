@@ -42,17 +42,17 @@ NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supporte
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     NSString *dbId = nil;
-    if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
+    if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceMySqlIdentifier]) {
 
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
         dbId = [MTDatabaseMySql identifier];
 
-    } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
+    } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSqlServerIdentifier]) {
     
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
         dbId = [MTDatabaseSqlServer identifier];
 
-    } else if ([[segue identifier] isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
+    } else if ([segue.identifier isEqualToString:MTSegueShowSetUpDatasourceSalesForceIdentifier]) {
     
         ((MTConnectionViewController *)segue.destinationViewController).delegate = self;
         dbId = [MTDatabaseSqlite3 identifier];

@@ -97,9 +97,9 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeError"]) {
+    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeError"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeSize"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeSize"]) {
         [segue.destinationViewController setDelegate:self];
     }
 }

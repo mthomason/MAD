@@ -57,14 +57,14 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showAddPredicateFovOperator"] ||
-        [[segue identifier] isEqualToString:@"showAddPredicateFofOperator"]) {
+    if ([segue.identifier isEqualToString:@"showAddPredicateFovOperator"] ||
+        [segue.identifier isEqualToString:@"showAddPredicateFofOperator"]) {
         [self setCurrentlyEditingPart: MNSPredicateCenter];
         if ([segue.destinationViewController isKindOfClass: [UITableViewControllerOpperators class]]) {
             [segue.destinationViewController setDelegate:self];
         }
-    } else if ([[segue identifier] isEqualToString:@"showAddPredicateFovLeftSide"] ||
-               [[segue identifier] isEqualToString:@"showAddPredicateFofLeftSide"]) {
+    } else if ([segue.identifier isEqualToString:@"showAddPredicateFovLeftSide"] ||
+               [segue.identifier isEqualToString:@"showAddPredicateFofLeftSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateLeft];
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
 
@@ -76,8 +76,8 @@
             }
 
         }
-    } else if ([[segue identifier] isEqualToString:@"showAddPredicateFovRightSide"] ||
-               [[segue identifier] isEqualToString:@"showAddPredicateFofRightSide"]) {
+    } else if ([segue.identifier isEqualToString:@"showAddPredicateFovRightSide"] ||
+               [segue.identifier isEqualToString:@"showAddPredicateFofRightSide"]) {
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {

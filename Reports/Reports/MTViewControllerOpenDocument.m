@@ -83,6 +83,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemCloudDown;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSearch;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
 
 @property (nonatomic, strong) UIAlertView *renameAlertView;
 
@@ -131,7 +132,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     } else if ([MTApplicationInstance isMadViewer] && ![UIDevice isPad]) {
     
     } else {
-        [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+        [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     }
 }
 
@@ -246,11 +247,21 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         self.searchBar = searchBar;
         
         if (self.barButtonItemEdit == nil) {
-            UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(edit:)];
+            UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                                                                                  target:self
+                                                                                  action:@selector(edit:)];
             self.barButtonItemEdit = edit;
         }
         [toolbarButtons addObject:self.barButtonItemEdit];
     }
+    
+    UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
+    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage:imageDuplcate style:UIBarButtonItemStyleBordered
+                                                                              target:self
+                                                                              action:@selector(duplicate:)];
+    barButtonItemDuplicate.enabled = NO;
+    [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
+    self.barButtonItemDuplicate = barButtonItemDuplicate;
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
@@ -323,7 +334,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    for (NSIndexPath *indexPath in self.collectionView.indexPathsForVisibleItems) {
+    for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
         [cell performDeselectionAnimations];
     }
@@ -357,7 +368,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if ([navControl topViewController]) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
                 [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
-                [self openDocumentPopoverController].delegate = self;
+                self.openDocumentPopoverController.delegate = self;
             }
             ((MTDatabaseDriverSelectorViewController *)[navControl topViewController]).delegate = self;
         }
@@ -380,14 +391,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     
     if ([UIDevice isPad]) {
-        if ([[segue identifier] isEqualToString:@"MTSegueDetails"]) {
+        if ([segue.identifier isEqualToString:@"MTSegueDetails"]) {
             if ([MTApplicationInstance isMadViewer]) {
-                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(420.0000f, 376.0000f)];
+                self.aboutPopoverController.popoverContentSize = CGSizeMake(420.0000f, 376.0000f);
             } else {
-                [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(540.0000f, 556.0000f)];
+                self.aboutPopoverController.popoverContentSize = CGSizeMake(540.0000f, 556.0000f);
             }
         } else {
-            [[self aboutPopoverController]  setPopoverContentSize: CGSizeMake(320.0000f, 320.0000f)];
+            self.aboutPopoverController.popoverContentSize = CGSizeMake(320.0000f, 320.0000f);
         }
     }
 }
@@ -402,9 +413,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
-        if ([navControl topViewController]) {
+        if (navControl.topViewController) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                [self setLicensingPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
+                self.licensingPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
             }
         }
     }
@@ -478,20 +489,20 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
     [self dismissAllPopovers];
     
-    if ([[segue identifier] isEqualToString:MTSegueShowAddDocument]) {
+    if ([segue.identifier isEqualToString:MTSegueShowAddDocument]) {
         [self prepareForSegueAddDocument:segue];
         
-    } else if ([[segue identifier] isEqualToString:@"MTSegueDetails"] || [[segue identifier] isEqualToString:@"MTSegueAbout"]) {
+    } else if ([segue.identifier isEqualToString:@"MTSegueDetails"] || [segue.identifier isEqualToString:@"MTSegueAbout"]) {
         [self prepareForSegueDetails:segue];
         
-    } else if ([[segue identifier] isEqualToString:MTSegueLicensing]) {
+    } else if ([segue.identifier isEqualToString:MTSegueLicensing]) {
         [self prepareForSegueLicensing:segue];
 
-    } else if ([[segue identifier] isEqualToString:MTSegueOpenInViewer]) {
+    } else if ([segue.identifier isEqualToString:MTSegueOpenInViewer]) {
         [[self currentDocument] activeDocumentModel];
         [self prepareForSegueOpenInViewer:segue sender:sender];
         
-    } else if ([[segue identifier] isEqualToString:MTSegueShowOpenDocument]) {
+    } else if ([segue.identifier isEqualToString:MTSegueShowOpenDocument]) {
         [[self currentDocument] activeDocumentModel];
         [self prepareForSegueShowOpenDocument:segue sender:sender];
     }
@@ -511,13 +522,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
         if ([UIDevice isPad]) {
             shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
-            [self setShouldShowAddDocumentPopover:NO];
-            [[self barButtonItemAddNewDocument] setEnabled:NO];
+            self.shouldShowAddDocumentPopover = NO;
+            self.barButtonItemAddNewDocument.enabled = NO;
         }
     } else if ([identifier isEqualToString:MTSegueShowOpenDocument]) {
-        shouldPerformSegueWithIdentifier = ![self isEditing];
+        shouldPerformSegueWithIdentifier = !self.isEditing;
     } else if ([identifier isEqualToString:MTSegueOpenInViewer]) {
-        shouldPerformSegueWithIdentifier = ![self isEditing];
+        shouldPerformSegueWithIdentifier = !self.isEditing;
     }
     return shouldPerformSegueWithIdentifier;
 }
@@ -525,7 +536,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - UIPopoverControllerDelegate
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
-    return [[self openDocumentPopoverController] isEqual:popoverController] == NO;
+    return [self.openDocumentPopoverController isEqual:popoverController] == NO;
 }
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -552,7 +563,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark - UIDocumentInteractionControllerDelegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
-    return [self navigationController];
+    return self.navigationController;
 }
 
 
@@ -569,8 +580,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setShouldShowAddDocumentPopover:YES];
     [self closeReport];
     
-    if ([[self openDocumentPopoverController] isPopoverVisible]) {
-        [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    if ([self.openDocumentPopoverController isPopoverVisible]) {
+        [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     } else {
         [self dismissViewControllerAnimated:YES completion:^{ }];
     }
@@ -596,13 +607,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
-    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
 }
 
 - (void)viewControllerDidCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [[self openDocumentPopoverController] dismissPopoverAnimated:YES];
+    [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
 }
@@ -773,7 +784,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
     
     //Only allow the thumbnails to proceed to after an error.
-    return [[[dstURL pathExtension] lowercaseString] isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
+    return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
 }
 
 #pragma mark -
@@ -981,10 +992,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
                                                                                    forIndexPath:indexPath];
+    
     NSURL *url = [self.urls objectAtIndex:indexPath.item];
     
     if (cell.delegate == nil) {
         cell.delegate =  self;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rename:)];
+        tap.numberOfTapsRequired = 1;
+        tap.numberOfTouchesRequired = 1;
+        [cell.labelTitle addGestureRecognizer:tap];
+        cell.labelTitle.userInteractionEnabled = YES;
     }
     [cell configureCellForUrl:url];
     if (self.isEditing) {
@@ -1033,7 +1050,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     BOOL result = NO;
     if ([UIDevice isPad]) {
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
-        if ([self openDocumentPopoverController] != nil) [allpopovers addObject:[self openDocumentPopoverController]];
+        if (self.openDocumentPopoverController != nil) [allpopovers addObject:self.openDocumentPopoverController];
         if ([self licensingPopoverController] != nil) [allpopovers addObject:[self licensingPopoverController]];
         if ([self aboutPopoverController] != nil) [allpopovers addObject:[self aboutPopoverController]];
         
@@ -1103,16 +1120,19 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSUInteger selectedCellCounter = [self numberOfItemsSelected];
     switch (selectedCellCounter) {
         case 0:
-            [[self barButtonItemTrash] setEnabled:NO];
-            [[self barButtonItemAction] setEnabled:NO];
+            self.barButtonItemTrash.enabled = NO;
+            self.barButtonItemDuplicate.enabled = NO;
+            self.barButtonItemAction.enabled = NO;
             break;
         case 1:
-            [[self barButtonItemTrash] setEnabled:YES];
-            [[self barButtonItemAction] setEnabled:YES];
+            self.barButtonItemTrash.enabled = YES;
+            self.barButtonItemDuplicate.enabled = YES;
+            self.barButtonItemAction.enabled = YES;
             break;
         default:
-            [[self barButtonItemTrash] setEnabled:YES];
-            [[self barButtonItemAction] setEnabled:NO];
+            self.barButtonItemTrash.enabled = YES;
+            self.barButtonItemDuplicate.enabled = YES;
+            self.barButtonItemAction.enabled = NO;
             break;
     }
 }
@@ -1191,12 +1211,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     if (startEdit) {
         self.editModeEnabled = YES;
-        [[self barButtonItemLicensing] setEnabled:NO];
-        [[self barButtonItemAddNewDocument] setEnabled:NO];
-        [[self barButtonItemAbout] setEnabled:NO];
-        [[self barButtonItemInformation] setEnabled:NO];
-        
-        [self.collectionView setAllowsMultipleSelection:YES];
+        self.barButtonItemLicensing.enabled = NO;
+        self.barButtonItemAddNewDocument.enabled = NO;
+        self.barButtonItemAbout.enabled = NO;
+        self.barButtonItemInformation.enabled = NO;
+        //self.barButtonItemDuplicate.enabled = NO;
+        self.collectionView.allowsMultipleSelection = YES;
         
         for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:path];
@@ -1221,6 +1241,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         self.barButtonItemInformation.enabled = YES;
         
         self.barButtonItemTrash.enabled = NO;
+        self.barButtonItemDuplicate.enabled = NO;
         self.barButtonItemAction.enabled = NO;
         
         self.collectionView.allowsMultipleSelection = NO;
@@ -1366,16 +1387,42 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)duplicate:(id)sender {
-    MTCollectionViewCellDocument *cellDocument = sender;
-    NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    NSURL *url = [self documentForIndexPath:indexPath];
-    [[NSFileManager defaultManager] duplicateUrl:url];
-    [self reloadData];
+    NSMutableArray *urls = [NSMutableArray new];
+    MTCollectionViewCellDocument *cellDocument;
+    if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+        cellDocument = sender;
+        NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
+        NSURL *url = [self documentForIndexPath:indexPath];
+        [urls addObject:url];
+    } else if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+        for (NSIndexPath *path in [self.collectionView indexPathsForSelectedItems]) {
+            NSURL *url = [self documentForIndexPath:path];
+            [urls addObject:url];
+        }
+    }
+    if (urls.count > 0) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        for (NSURL *url in urls) {
+            [fileManager duplicateUrl:url];
+        }
+        [self reloadData];
+    }
+}
+
+- (void)duplicateUrl:(NSURL *)url {
+    
 }
 
 - (void)rename:(id)sender {
-    MTCollectionViewCellDocument *cellDocument = sender;
+    MTCollectionViewCellDocument *cellDocument;
+    if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
+        cellDocument = sender;
+    } else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
+        //NSAssert([sender isKindOfClass:[UILabel class]], @"Expects touched label");
+        UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
+        cellDocument = (MTCollectionViewCellDocument *)contentView.superview;
+    }
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Rename Document", @"Rename Document")
                                                         message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")

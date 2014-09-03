@@ -74,9 +74,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"] ||
-        [[segue identifier] isEqualToString:@"MTSegueAggregateFieldSave"] ||
-        [[segue identifier] isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
+    if ([segue.identifier isEqualToString:@"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer"] ||
+        [segue.identifier isEqualToString:@"MTSegueAggregateFieldSave"] ||
+        [segue.identifier isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
         
         UITableViewCell *cell = sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell: cell];

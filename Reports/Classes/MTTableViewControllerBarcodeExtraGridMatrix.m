@@ -105,9 +105,9 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixError"]) {
+    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixError"]) {
         ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixSize"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrixSize"]) {
         ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     }
 }

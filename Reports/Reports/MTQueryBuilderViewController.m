@@ -255,7 +255,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([[segue identifier] isEqualToString: MNSSegueShowSql]) {                                 // MARK:
+    if ([segue.identifier isEqualToString: MNSSegueShowSql]) {                                 // MARK:
         MTShowSqlViewController *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
             viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
@@ -266,7 +266,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         viewController.query = self.document.defaultQuery;
         [self disableTabBarItems];
         
-    } else if ([[segue identifier] isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
+    } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
         
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
@@ -291,7 +291,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             }
         }
 
-    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
+    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddLinkViewController]) {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
@@ -305,7 +305,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 }
             }
         }
-    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
+    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddPredicateViewController]) {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
@@ -319,7 +319,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 }
             }
         }
-    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
+    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowAddGroupViewController]) {
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
@@ -332,7 +332,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                 }
             }
         }
-    } else if ([[segue identifier] isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
+    } else if ([segue.identifier isEqualToString:MNSIdentifierSegueShowLayoutSettings]) {
                 if ([segue.destinationViewController isKindOfClass:[MTReportDesignerSectionLayoutSettingsViewController class]]) {
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {

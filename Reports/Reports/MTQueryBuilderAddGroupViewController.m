@@ -73,13 +73,13 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showGroupSortOrders"]) {
+    if ([segue.identifier isEqualToString:@"showGroupSortOrders"]) {
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
             MTQueryBuilderSortTypeViewController *dvc = segue.destinationViewController;
             [dvc setInitalSortOrder:[self sortOrder]];
             [segue.destinationViewController setDelegate:self];
         }
-    } else if ([[segue identifier] isEqualToString:@"showAddGroupByField"]) {
+    } else if ([segue.identifier isEqualToString:@"showAddGroupByField"]) {
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
             
             MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;

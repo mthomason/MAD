@@ -426,7 +426,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [super prepareForSegue:segue sender:sender];
     
-    NSString *identifier = [segue identifier];
+    NSString *identifier = segue.identifier;
     if ([identifier isEqualToString:@"MTIdentifierSegueBarcodePreview"]) {
         MTViewControllerBarcodePreview *pvc = segue.destinationViewController;
         pvc.delegate = self;

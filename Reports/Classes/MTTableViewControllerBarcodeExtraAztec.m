@@ -97,9 +97,9 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztecError"]) {
+    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztecError"]) {
         [segue.destinationViewController setDelegate:self];
-    } else if ([[segue identifier] isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztecSize"]) {
+    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztecSize"]) {
         [segue.destinationViewController setDelegate:self];
     }
 }

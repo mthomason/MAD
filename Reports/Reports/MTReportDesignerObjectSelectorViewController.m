@@ -101,7 +101,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 #pragma mark - View lifecycle
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
+    if ([segue.identifier isEqualToString:@"MTIdentifierSeguePushSelectField"]) {
         
         ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate =  self;
         [(id <MTUnwindProtocol>)segue.destinationViewController setUnwindViewController:(UIViewController *)self.objectSelectorDelegate];

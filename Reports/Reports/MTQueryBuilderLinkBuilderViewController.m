@@ -59,7 +59,7 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showSelectJoinType"]) {
+    if ([segue.identifier isEqualToString:@"showSelectJoinType"]) {
 
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderAddLinkJoinTypeViewController class]]) {
             MTQueryBuilderAddLinkJoinTypeViewController *vcFf = segue.destinationViewController;
@@ -68,7 +68,7 @@
         }
     } else {
         
-        if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldOne"]) {
+        if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldOne"]) {
             
             [self setCurrentlyEditingPart: MNSLinkLeft];
             
@@ -80,7 +80,7 @@
                 dvc.document = self.document;
             }
 
-        } else if ([[segue identifier] isEqualToString:@"showSelectLinkTableFieldTwo"]) {
+        } else if ([segue.identifier isEqualToString:@"showSelectLinkTableFieldTwo"]) {
             
             [self setCurrentlyEditingPart: MNSLinkRight];
             
