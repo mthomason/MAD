@@ -82,7 +82,7 @@
                 NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 8];
                 [s drawInRect:locationRect withAttributes:[self attributes]];
                 length = 1.0000f;
-                CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
+                CGContextSetLineWidth(currentContext, [self lineWidth]/* * 3.0000f*/);
             } else if (i % 2) {
                 length = 4.0000f;
                 CGContextSetLineWidth(currentContext, [self thinLineWidth]);
@@ -109,7 +109,7 @@
                 NSString *s = [NSString stringWithFormat:@"%ld", (long)i / 10];
                 [s drawInRect:locationRect withAttributes:[self attributesMetric]];
                 length = 2.0000f;
-                CGContextSetLineWidth(currentContext, [self lineWidth] * 2.0000f);
+                CGContextSetLineWidth(currentContext, [self lineWidth] /** 2.0000f*/);
             } else if (i % 5) {
                 length = 2.0000f;
                 CGContextSetLineWidth(currentContext, [self thinLineWidth]);

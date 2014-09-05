@@ -68,7 +68,7 @@ static size_t const kDashedCount            = (2.0f);
                             options: [MTElementView drawingOptions]
                             context: nil];
     } else {
-        [displayObject drawRect:rect];
+        [displayObject drawInRect:rect];
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
