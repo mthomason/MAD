@@ -13,4 +13,6 @@
 - (CGRect)popoverRectForSelectedViews:(NSSet *)views;
 - (CGPoint)locationInMainWindow:(UIGestureRecognizer *)gestureRecognizer;
 
+- (CGFloat)borderWidthThin;
+
 @end

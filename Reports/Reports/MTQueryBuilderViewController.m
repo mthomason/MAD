@@ -337,11 +337,12 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
                     MTReportDesignerSectionLayoutSettingsViewController *tvc = (MTReportDesignerSectionLayoutSettingsViewController *)segue.destinationViewController;
                     if (tvc) {
                         tvc.delegate = self;
-                        RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: [self lastSelectedRowNumber]
-                                                                                             query: [[self.document activeDocumentModel] defaultQuery]];
-                        [tvc setInitalHeightValue:([[section height] floatValue])];
-                        [tvc setInitalVisibility:[[section visibility] boolValue]];
-                        [tvc setInitalNumberOfRows:[[section numberOfRows] integerValue]];
+                        RptqQuery *query = [[self.document activeDocumentModel] defaultQuery];
+                        
+                        RptqDocumentSection *section = [query documentSectionForRow: self.lastSelectedRowNumber];
+                        tvc.initalHeightValue = section.height.floatValue;
+                        tvc.initalVisibility = section.visibility.boolValue;
+                        tvc.initalNumberOfRows = section.numberOfRows.integerValue;
                     }
                 }
     }

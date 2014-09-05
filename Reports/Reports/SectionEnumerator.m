@@ -15,6 +15,7 @@
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 #import "RptqQueryGroup.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
@@ -30,17 +31,17 @@
 - (id)initWithDocument:(RptqDocument *)document {
     self = [super init];
     if (self) {
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
-        [self setCurrent: 0];
-        [self setTotal: [[query hasQueryGroups] count]];
-        [self setDocument:document];
+        RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+        RptqQuery *query = [database.hasQueries anyObject];
+        self.current = 0;
+        self.total = query.hasQueryGroups.count;
+        self.document = document;
     }
     return self;
 }
 
 - (NSInteger)count {
-    return [self total];
+    return self.total;
 }
 
 - (NSArray *)allObjects {
@@ -51,8 +52,7 @@
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:([self total] - current)];
     for (; [self current]<[self total]; self.current++) {
         @autoreleasepool {
-            RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: current
-                                                                                query: query];
+            RptqDocumentSection *section = [query documentSectionForRow: current];
             [result addObject:section];
         }
     }
@@ -64,7 +64,7 @@
     RptqQuery *query = [[database hasQueries] anyObject];
 
     NSInteger current = [self current];
-    id result = [RptqDocumentSection documentSectionForRow: current query: query];
+    id result = [query documentSectionForRow: current];
     current++;
     [self setCurrent:current];
     return result;

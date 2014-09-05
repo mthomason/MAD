@@ -19,6 +19,8 @@
 #import "MTBarcode.h"
 #import "Constants.h"
 #import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
+#import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 
 #import "RptqDocumentSectionRows.h"
@@ -250,34 +252,34 @@
 
 - (void)setLayoutHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     [section setLayoutHeight: @(height)];
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     
-    if ([[section numberOfRows] integerValue] == numberOfRows) {
+    if (section.numberOfRows.integerValue == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > [[section numberOfRows] integerValue]) {
+    } else if (numberOfRows > section.numberOfRows.integerValue) {
         
         //Add row
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: managedObjectContext];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
         [newRowToAppend setInSection:section];
         [hasRows addObject:newRowToAppend];
         [section setHasRows:hasRows];
         
-    } else if (numberOfRows < [[section numberOfRows] integerValue]) {
+    } else if (numberOfRows < section.numberOfRows.integerValue) {
         
         //Remove row
-        RptqDocumentSectionRows *rowToDelete = [[section hasRows] lastObject];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[section hasRows] array]];
+        RptqDocumentSectionRows *rowToDelete = section.hasRows.lastObject;
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray: section.hasRows.array];
         [[hasRows lastObject] setInSection:nil];
         [hasRows removeObjectAtIndex:[hasRows count] - 1];
         [section setHasRows:hasRows];
@@ -289,26 +291,26 @@
 
 - (void)setHeight:(CGFloat)height forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
-    [section setLayoutHeight: @(height)];
+    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
+    section.layoutHeight = @(height);
 }
 
 - (void)setVisibility:(BOOL)isVisible forSectionAtRow:(NSUInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     NSNumber *visibility = @(isVisible);
     section.visibility = visibility;
 }
 
 - (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     [section setProducesFormFeed:newPageAfter];
 }
 
 - (BOOL)newPageAfterSectionAtRow:(NSInteger)sectionRow {
     RptqQuery *query = [[self defaultDatabase] defaultQuery];
-    RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: sectionRow query: query];
+    RptqDocumentSection *section = [query documentSectionForRow: sectionRow];
     return [section producesFormFeed];
 }
 

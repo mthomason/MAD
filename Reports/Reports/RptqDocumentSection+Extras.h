@@ -36,9 +36,9 @@ typedef NS_ENUM(NSUInteger, RptqDocumentSectionWrappingStyle) {
 
 + (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid inManagedObjectContext:(NSManagedObjectContext *)moc;
 
-+ (instancetype)documentSectionForRow:(NSInteger)row query:(RptqQuery *)query;
-+ (instancetype)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
-+ (instancetype)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
++ (MNSDocumentSectionType)getSectionTypeforRow:(NSInteger)row withNumberOfGroups:(NSInteger)numberOfGroups;
++ (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
++ (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query;
 
 - (CGFloat)layoutHeightCalculated;
 - (NSString *)localizedDisplayName;

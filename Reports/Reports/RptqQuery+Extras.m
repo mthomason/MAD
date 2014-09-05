@@ -12,6 +12,8 @@
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
@@ -86,6 +88,83 @@
 }
 
 #pragma mark - Actions
+
+- (RptqDocumentSection *)documentSectionForRow:(NSInteger)row {
+    NSInteger numberOfGroups = self.hasQueryGroups.count;
+    RptqDocumentSection *resultSection = nil;
+    if (row < (numberOfGroups * 2) + 5) {
+        
+        RptqDocument *document = self.inDatabase.ownedByQueryAsStaticResource;
+        
+        switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
+                
+            case MNSDocumentSectionTypeReportHeader:
+                resultSection = [document hasReportHeaderSection];
+                break;
+                
+            case MNSDocumentSectionTypePageHeader:
+                resultSection = [document hasPageHeaderSection];
+                break;
+                
+            case MNSDocumentSectionTypeBody:
+                resultSection = [document hasDetailSection];
+                break;
+                
+            case MNSDocumentSectionTypePageFooter:
+                resultSection = [document hasPageFooterSection];
+                break;
+                
+            case MNSDocumentSectionTypeReportFooter:
+                resultSection = [document hasReportFooterSection];
+                break;
+                
+            case MNSDocumentSectionTypeGroupHeader: {
+                NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
+                RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
+                resultSection = [self headerSectionInSections:[group hasSection]];
+                break;
+            }
+                
+            case MNSDocumentSectionTypeGroupFooter: {
+                NSInteger body          = 2 + numberOfGroups;
+                NSInteger indentLevel   = body - (row - body);
+                NSInteger groupNumber   = indentLevel - 2;
+                RptqQueryGroup *group = [self queryGroupForIndex:groupNumber];
+                resultSection = [self footerSectionInSections:[group hasSection]];
+                break;
+            }
+                
+            default:
+                break;
+        }
+        
+    }
+    
+    return resultSection;
+
+}
+
+- (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
+    RptqDocumentSection *resultSection = nil;
+    for (RptqDocumentSection *section in sections) {
+        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupFooter) {
+            resultSection = section;
+            break;
+        }
+    }
+    return resultSection;
+}
+
+- (RptqDocumentSection *)headerSectionInSections:(NSSet *)sections {
+    RptqDocumentSection *resultSection = nil;
+    for (RptqDocumentSection *section in sections) {
+        if ([[section type] integerValue] == MNSDocumentSectionTypeGroupHeader) {
+            resultSection = section;
+            break;
+        }
+    }
+    return resultSection;
+}
 
 - (RptqQueryGroup *)firstQueryGroup {
     NSArray *queryGroups = [self sortedQueryGroups];

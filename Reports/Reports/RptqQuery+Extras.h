@@ -12,10 +12,11 @@
 #import "RptqQuery.h"
 #import "MTProtocolCompare.h"
 
-@class RptqDocument;
+@class RptqDocument, MTDatabase;
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 
+- (RptqDocumentSection *)documentSectionForRow:(NSInteger)row;
 - (RptqQueryGroup *)firstQueryGroup;
 - (RptqQueryGroup *)queryGroupForIndex:(NSUInteger)index;
 - (NSArray *)sortedQueryGroups;

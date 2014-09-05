@@ -229,70 +229,14 @@
     return result;
 }
 
-+ (instancetype)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
++ (RptqDocumentSection *)groupHeaderForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
     RptqQueryGroup *group = [query queryGroupForIndex:groupLevel];
     return [RptqDocumentSection headerSectionInSections:[group hasSection]];
 }
 
-+ (instancetype)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
++ (RptqDocumentSection *)groupFooterForLevel:(NSUInteger)groupLevel query:(RptqQuery *)query {
     RptqQueryGroup *group =  [query queryGroupForIndex:groupLevel];
     return [RptqDocumentSection footerSectionInSections:[group hasSection]];
-}
-
-+ (instancetype)documentSectionForRow:(NSInteger)row
-                                         query:(RptqQuery *)query {
-    
-    NSInteger numberOfGroups = [[query hasQueryGroups] count];
-    RptqDocumentSection *resultSection = nil;
-    if (row < (numberOfGroups * 2) + 5) {
-        
-        RptqDocument *document = [[query inDatabase] ownedByQueryAsStaticResource];
-
-        switch ([RptqDocumentSection getSectionTypeforRow:row withNumberOfGroups:numberOfGroups]) {
-
-            case MNSDocumentSectionTypeReportHeader:
-                resultSection = [document hasReportHeaderSection];
-                break;
-            
-            case MNSDocumentSectionTypePageHeader:
-                resultSection = [document hasPageHeaderSection];
-                break;
-            
-            case MNSDocumentSectionTypeBody:
-                resultSection = [document hasDetailSection];
-                break;
-            
-            case MNSDocumentSectionTypePageFooter:
-                resultSection = [document hasPageFooterSection];
-                break;
-            
-            case MNSDocumentSectionTypeReportFooter:
-                resultSection = [document hasReportFooterSection];
-                break;
-            
-            case MNSDocumentSectionTypeGroupHeader: {
-                NSInteger groupNumber = row - 2;    //Minus Rpt Header and Page Header
-                RptqQueryGroup *group = [query queryGroupForIndex:groupNumber];
-                resultSection = [RptqDocumentSection headerSectionInSections:[group hasSection]];
-                break;
-            }
-            
-            case MNSDocumentSectionTypeGroupFooter: {
-                NSInteger body          = 2 + numberOfGroups;
-                NSInteger indentLevel   = body - (row - body);
-                NSInteger groupNumber   = indentLevel - 2;
-                RptqQueryGroup *group = [query queryGroupForIndex:groupNumber];
-                resultSection = [RptqDocumentSection footerSectionInSections:[group hasSection]];
-                break;
-            }
-            
-            default:
-                break;
-        }
-        
-    }
-
-    return resultSection;
 }
 
 + (RptqDocumentSection *)footerSectionInSections:(NSSet *)sections {
