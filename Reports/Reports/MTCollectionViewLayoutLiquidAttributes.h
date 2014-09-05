@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTCollectionViewLayoutLiquidAttributes_h
+#define Reports_MTCollectionViewLayoutLiquidAttributes_h
+
 #import <UIKit/UIKit.h>
 
 @interface MTCollectionViewLayoutLiquidAttributes : UICollectionViewLayoutAttributes
@@ -17,3 +20,5 @@
 @property (nonatomic, strong) NSString *layoutDescription;
 
 @end
+
+#endif

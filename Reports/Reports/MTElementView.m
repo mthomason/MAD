@@ -125,9 +125,14 @@ static size_t const kDashedCount            = (2.0f);
     }
 }
 
+- (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
+    [self.canvasView setContentScaleFactor:contentScaleFactor];
+    [super setContentScaleFactor:contentScaleFactor];
+}
+
 - (void)setNeedsDisplay {
-    [super setNeedsDisplay];
     [self.canvasView  setNeedsDisplay];
+    [super setNeedsDisplay];
 }
 
 - (void)setAlpha:(CGFloat)alpha {

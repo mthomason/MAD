@@ -37,24 +37,29 @@
     if (self) {
         
         NSMutableArray *itemAttributesBySection = [[NSMutableArray alloc] init];
-        [self setItemAttributesBySection:itemAttributesBySection];
+        self.itemAttributesBySection = itemAttributesBySection;
         
         NSMutableArray *placedItemDropPoint = [[NSMutableArray alloc] init];
-        [self setPlacedItemDropPoint:placedItemDropPoint];
+        self.placedItemDropPoint = placedItemDropPoint;
 
         NSMutableArray *placedItemFrame = [[NSMutableArray alloc] init];
-        [self setPlacedItemFrame:placedItemFrame];
+        self.placedItemFrame = placedItemFrame;
 
+        NSString *decorationViewKind = NSStringFromClass([MTReportDesignerSectionDecorationView class]);
         [self registerClass: [MTReportDesignerSectionDecorationView class]
-    forDecorationViewOfKind: NSStringFromClass([MTReportDesignerSectionDecorationView class])];
+    forDecorationViewOfKind: decorationViewKind];
 
-        [self setFirstTime:YES];
+        self.firstTime = YES;
     }
     return self;
 }
 
 - (MTCollectionViewLayoutLiquidAttributes *)placeLayouts:(NSArray *)layoutAttributesForSection
                                                forLayout:(MTCollectionViewLayoutLiquidAttributes *)layout {
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
     
     CGFloat distanceFromDropPoint = -1.0000f;   //Represents an invalid distance
     CGRect nearestRect = CGRectZero;
@@ -101,13 +106,17 @@
     [self.delegate collectionView: self.collectionView
                            layout: self
                      setDropPoint: layout.frame.origin
-               forItemAtIndexPath: [layout indexPath]];
+               forItemAtIndexPath: layout.indexPath];
 
     return layout;
 }
 
 - (void)prepareLayout {
     [super prepareLayout];
+
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
     
     NSInteger numberOfSections = 1;
     
@@ -139,16 +148,15 @@
         @autoreleasepool {
             NSUInteger itemCounter = 0;
             //NSUInteger indexOfPotentiallyDroppedItem = [[sectionItemLayouts lastObject] dropIndex];
-            
-            NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:[sectionItemLayouts count]];
+            NSMutableArray *layoutAttributesForSection = [[NSMutableArray alloc] initWithCapacity:sectionItemLayouts.count];
             
             for (MTCollectionViewLayoutLiquidAttributes *itemAttributes in sectionItemLayouts) {
                 @autoreleasepool {
                     if (itemCounter == 0) {
                         CGRect zeroPointRect = CGRectMake(CGPointZero.x, CGPointZero.y, itemAttributes.frame.size.width, itemAttributes.frame.size.height);
-                        [itemAttributes setFrame: zeroPointRect];
-                        CGPoint dropPoint = [itemAttributes frame].origin;
-                        NSIndexPath *indexPath = [itemAttributes indexPath];
+                        itemAttributes.frame = zeroPointRect;
+                        CGPoint dropPoint = itemAttributes.frame.origin;
+                        NSIndexPath *indexPath = itemAttributes.indexPath;
                         
                         [self.delegate collectionView: self.collectionView
                                                layout: self
@@ -185,11 +193,15 @@
         }
     }
     
-    [self setItemAttributesBySection: itemAttributesBySection];
+    self.itemAttributesBySection = itemAttributesBySection;
     
 }
 
 - (NSSet *)positionsOfRects:(CGRect)rect aroundRect:(CGRect)centerRect {
+
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
     
     //There exist four potental placement spots for each alredy placed rect
     CGFloat x1 = centerRect.origin.x;
@@ -214,24 +226,34 @@
 
 - (NSSet *)availablePositionsOfRect:(CGRect)rect aroundRect:(CGRect)centerRect {
     
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
+    
     //There exist two potental placement spots around a rect to put another rect.
-    CGFloat x1 = centerRect.origin.x;
-    CGFloat x2 = centerRect.origin.x + centerRect.size.width;
-    CGFloat y1 = centerRect.origin.y;
-    CGFloat y2 = centerRect.origin.y + centerRect.size.height;
     
-    CGRect placement1, placement3;
+    CGRect placement1 = CGRectMake(centerRect.origin.x + centerRect.size.width,
+                                   centerRect.origin.y,
+                                   rect.size.width,
+                                   rect.size.height);
+
+    CGRect placement3 = CGRectMake(centerRect.origin.x,
+                                   centerRect.origin.y + centerRect.size.height,
+                                   rect.size.width,
+                                   rect.size.height);
     
-    placement1 = CGRectMake(x2, y1, rect.size.width, rect.size.height);
-    placement3 = CGRectMake(x1, y2, rect.size.width, rect.size.height);
-    
-    
+    NSValue *value1 = [NSValue valueWithCGRect: placement1];
+    NSValue *value2 = [NSValue valueWithCGRect: placement3];
     return [NSSet setWithObjects:
-              [NSValue valueWithCGRect: placement1],
-              [NSValue valueWithCGRect: placement3], nil];
+              value1,
+              value2, nil];
 }
 
 - (NSArray *)layout:(MTCollectionViewLayoutLiquidAttributes *)layout overlapWithLayout:(NSArray *)layouts {
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
 
 //    BOOL overlapWithAnother = NO;
     NSMutableArray *layoutsToReposition = [[NSMutableArray alloc] init];
@@ -250,6 +272,10 @@
 
 
 - (void)repositionLayouts:(NSArray *)layouts forLayout:(MTCollectionViewLayoutLiquidAttributes *)layoutToReposition {
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
 
     NSMutableArray *layoutsToReposition = [[NSMutableArray alloc] initWithArray:[self layout:layoutToReposition overlapWithLayout:layouts]];
     
@@ -258,16 +284,14 @@
         //Sort layouts by distance from layoutToReposition
         CGPoint layoutToRepositionOrigin = layoutToReposition.frame.origin;
         [layoutsToReposition sortUsingComparator:^NSComparisonResult(MTCollectionViewLayoutLiquidAttributes *layout1, MTCollectionViewLayoutLiquidAttributes *layout2) {
-            return (CGDistance(layoutToRepositionOrigin, layout1.frame.origin) > CGDistance(layoutToRepositionOrigin, layout2.frame.origin)) ? NSOrderedDescending : NSOrderedAscending;
+            return (CGDistance(layoutToRepositionOrigin, layout1.frame.origin) > CGDistance(layoutToRepositionOrigin, layout2.frame.origin)) ?
+                        NSOrderedDescending : NSOrderedAscending;
         }];
 
-        
-        
         // FIXME: Order by distance from layoutToReposition
         NSUInteger ctr = 0;
         for (MTCollectionViewLayoutLiquidAttributes *layoutToChange in layoutsToReposition) {
 
-            
             if (ctr == 0) {
 
                 NSSet *availablePositions = [self availablePositionsOfRect:[layoutToChange frame]
@@ -292,17 +316,18 @@
                     positionCounter++;
                 }
                 
-                [layoutToChange setFrame: [availablePositionsOrdered[indexOfNearestPosition] CGRectValue]];
-                [layoutToChange setDropIndex: [self.delegate collectionView: self.collectionView
-                                                                       layout: self
-                                            updateDropIndexForItemAtIndexPath: [layoutToChange indexPath]]];
-                [layoutToChange setDropPoint: [layoutToChange frame].origin];
-                [self.delegate collectionView:self.collectionView layout:self
-                                   setDropPoint:[layoutToChange frame].origin
-                             forItemAtIndexPath:[layoutToChange indexPath]];
-                [layoutToChange setLastTouchPointValid: NO];
-                
+                NSValue *position = availablePositionsOrdered[indexOfNearestPosition];
+                layoutToChange.frame = [position CGRectValue];
+                layoutToChange.dropIndex = [self.delegate collectionView: self.collectionView
+                                                                  layout: self
+                                       updateDropIndexForItemAtIndexPath: layoutToChange.indexPath];
+                layoutToChange.dropPoint = layoutToChange.frame.origin;
 
+                [self.delegate collectionView: self.collectionView
+                                       layout: self
+                                 setDropPoint: layoutToChange.frame.origin
+                           forItemAtIndexPath: layoutToChange.indexPath];
+                layoutToChange.lastTouchPointValid = NO;
             
             } else {
             
@@ -316,37 +341,50 @@
             ctr++;
         }
     }
-    
 }
 
 - (CGSize)collectionViewContentSize {
+
+#if DEBUG
+   // //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
+
     CGFloat width = CGSizeZero.width, height = CGSizeZero.height;
-    for (NSArray *items in [self itemAttributesBySection]) {
-        
+    for (NSArray *items in self.itemAttributesBySection) {
         for (MTCollectionViewLayoutLiquidAttributes *itemAttribute in items) {
+            
             CGFloat w = itemAttribute.frame.origin.x + itemAttribute.frame.size.width;
             width = width > w ? width : w;
             CGFloat h = itemAttribute.frame.origin.y + itemAttribute.frame.size.height;
             height = height > h ? height : h;
+            
         }
     }
-    [self setContentSize:CGSizeMake(width, height)];
-    return [self contentSize];
+    self.contentSize = CGSizeMake(width, height);
+    return self.contentSize;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSMutableArray *layoutAttributes = [[NSMutableArray alloc] init];
     
-    for (NSArray *items in [self itemAttributesBySection]) {
-        
-        for (MTCollectionViewLayoutLiquidAttributes *itemAttribute in items) {
-            if (CGRectIntersectsRect(rect, itemAttribute.frame)) {
-                [layoutAttributes addObject:itemAttribute];
-            }
+#if DEBUG
+    ////NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
 
-        }
-    }
+    NSArray *layoutAttributes;
     
+    if (self.itemAttributesBySection.count > 0) {
+        layoutAttributes = [[NSMutableArray alloc] init];
+        for (NSArray *items in self.itemAttributesBySection) {
+            for (MTCollectionViewLayoutLiquidAttributes *itemAttribute in items) {
+                if (CGRectIntersectsRect(rect, itemAttribute.frame)) {
+                    [(NSMutableArray *)layoutAttributes addObject:itemAttribute];
+                }
+                
+            }
+        }
+    } else {
+        layoutAttributes = @[];
+    }
     return layoutAttributes;
 }
 
@@ -357,6 +395,11 @@
 //- (UICollectionViewLayoutInvalidationContext *)invalidationContextForPreferredLayoutAttributes:(UICollectionViewLayoutAttributes *)preferredAttributes withOriginalAttributes:(UICollectionViewLayoutAttributes *)originalAttributes
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
+
     MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
     BOOL found = NO;
     for (NSArray *section in [self itemAttributesBySection]) {
@@ -378,6 +421,10 @@
 
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)indexPath {
     
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
+
     MTCollectionViewLayoutLiquidAttributes *resultLayout = nil;
     BOOL found = NO;
     for (NSArray *section in [self itemAttributesBySection]) {
@@ -398,18 +445,31 @@
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
     [super prepareForCollectionViewUpdates:updateItems];
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
+
 }
 
 - (void)finalizeCollectionViewUpdates {
     [self.delegate collectionViewDidFinishUpdates:self.collectionView];
     [super finalizeCollectionViewUpdates];
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
+
 }
 
 - (void)invalidateLayout {
-    NSMutableArray *invalidatedLayoutArray = [[self itemAttributesBySection] copy];
-    [self setInvalidatedLayoutArray:invalidatedLayoutArray];
-
+    NSMutableArray *invalidatedLayoutArray = [self.itemAttributesBySection copy];
+    self.invalidatedLayoutArray = invalidatedLayoutArray;
     [super invalidateLayout];
+    
+#if DEBUG
+    //NSLog(@"\n\t%@\n\t%s", self, __PRETTY_FUNCTION__);
+#endif
 
 }
 

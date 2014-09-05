@@ -19,6 +19,7 @@
 + (instancetype)edaBlueLight;
 + (instancetype)edaBlueDarkSelection;
 + (instancetype)edaBlueLightSelection;
++ (instancetype)edaBlackSeventyFivePercent;
 + (instancetype)edaBlackFiftyPercent;
 + (instancetype)edaBlackTwentyFivePercent;
 + (instancetype)edaOrange;

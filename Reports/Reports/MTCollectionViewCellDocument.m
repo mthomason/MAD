@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-NSString * const MTImageBlank                               = @"UIImageDocumentBlank";
+NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 #import "MTCollectionViewCellDocument.h"
 #import "UIDevice+Hack.h"
@@ -34,7 +34,7 @@ NSString * const MTImageBlank                               = @"UIImageDocumentB
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
-    [self setParagraphStyle:paragraphStyle];
+    self.paragraphStyle = paragraphStyle;
     
     self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
