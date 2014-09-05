@@ -580,6 +580,8 @@
 		4C44DC4519B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */; };
 		4C44DC5919B93E500050BBDD /* MADViewDetailSmall.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C44DC5819B93E500050BBDD /* MADViewDetailSmall.m */; };
 		4C44DC5A19B93E500050BBDD /* MADViewDetailSmall.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C44DC5819B93E500050BBDD /* MADViewDetailSmall.m */; };
+		4C44DC6819B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */; };
+		4C44DC6919B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */; };
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
@@ -2192,6 +2194,8 @@
 		4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarDuplicate@2x.png"; path = "Resources/Images/MADImageToolbarDuplicate@2x.png"; sourceTree = "<group>"; };
 		4C44DC5719B93E500050BBDD /* MADViewDetailSmall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewDetailSmall.h; sourceTree = "<group>"; };
 		4C44DC5819B93E500050BBDD /* MADViewDetailSmall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADViewDetailSmall.m; sourceTree = "<group>"; };
+		4C44DC6619B95FFA0050BBDD /* NSLayoutConstraint+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+Extras.h"; sourceTree = "<group>"; };
+		4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+Extras.m"; sourceTree = "<group>"; };
 		4C45742614E795CE00FF326C /* RptqDocument+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocument+Extras.h"; sourceTree = "<group>"; };
 		4C45742714E795CE00FF326C /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+Extras.m"; sourceTree = "<group>"; };
 		4C472A6E174A150900A7A5E6 /* NSManagedObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Extras.h"; sourceTree = "<group>"; };
@@ -5082,6 +5086,8 @@
 				4CCDFD1117C27F5F00B79D34 /* MTViewControllerAbout.m */,
 				4CB46B6317C3EC26000D3F3C /* MTTableViewControllerAbout.h */,
 				4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */,
+				4C44DC6619B95FFA0050BBDD /* NSLayoutConstraint+Extras.h */,
+				4C44DC6719B95FFA0050BBDD /* NSLayoutConstraint+Extras.m */,
 			);
 			name = Controllers;
 			path = Reports;
@@ -6484,6 +6490,7 @@
 				4C8BF47C16F645D3002D9F9B /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4C02F75F18D5DCAB00061A83 /* MTReportViewer.m in Sources */,
 				4C23FB4A18FAE0CA009F234F /* VerifyStoreReceipt.m in Sources */,
+				4C44DC6919B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */,
 				4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */,
 				4C15EB90192DF50600C412A4 /* MTQuerySelectItemsForGroup.m in Sources */,
 				4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */,
@@ -6984,6 +6991,7 @@
 				4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4C23FB0218FADCE4009F234F /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
+				4C44DC6819B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */,
 				4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 				4C02F75E18D5DCAB00061A83 /* MTReportViewer.m in Sources */,
 				4C15EB8F192DF50600C412A4 /* MTQuerySelectItemsForGroup.m in Sources */,
