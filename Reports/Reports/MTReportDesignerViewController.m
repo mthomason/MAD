@@ -615,9 +615,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSArray *endScrollViewConstraints = @[layoutConstraintDesignerContentViewHeight, layoutConstraintContentToScollerBottom];
     
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
-    //[self.scroller addConstraints:endScrollViewConstraints];
     [constraintsScroller addObjectsFromArray:endScrollViewConstraints];
-    
     [viewDidAppearDesignerScrollViewConstraints addObjectsFromArray:endScrollViewConstraints];
     
     self.viewDidAppearDesignerScrollViewConstraints = viewDidAppearDesignerScrollViewConstraints;
@@ -690,43 +688,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    if (animated) {
-        
-        CGFloat animationDuration = 0.2222f;
-        CGFloat delay = 0.0000f;
-        
-        __weak MTReportDesignerViewController *weakSelf = self;
-        [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [[weakSelf ruler] removeFromSuperview];
-        } completion:NULL];
-        
-        for (UIView *view in [self sectionViewsArray]) {
-            __weak UIView *bview = view;
-            [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                [bview removeFromSuperview];
-            } completion:NULL];
-        }
-        for (UIView *view in [self sectionControlViewsArray]) {
-            __weak UIView *bview = view;
-            [UIView animateWithDuration:animationDuration delay:delay options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                [bview removeFromSuperview];
-            } completion:NULL];
-        }
-        
-    } else {
-        [self.ruler removeFromSuperview];
-        for (UIView *view in [self sectionViewsArray]) {
-            [view removeFromSuperview];
-        }
-        for (UIView *view in [self sectionControlViewsArray]) {
-            [view removeFromSuperview];
-        }
+    [self.ruler removeFromSuperview];
+    for (UIView *view in [self sectionViewsArray]) {
+        [view removeFromSuperview];
+    }
+    for (UIView *view in [self sectionControlViewsArray]) {
+        [view removeFromSuperview];
     }
     
     [self.scroller removeConstraints:self.viewDidAppearDesignerScrollViewConstraints];
     [self.scroller removeConstraints:self.viewDidAppearDesignerContentViewConstraints];
     
-    [[[AppDelegate app] reportDesigner] setShownAndHidden:YES];
+    [[AppDelegate app] reportDesigner].shownAndHidden = YES;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -2402,13 +2375,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             gestureRecognizer.view.alpha = 0.8888f;
             [self.container bringSubviewToFront: gestureRecognizer.view];
             
-            CGFloat scale = self.scroller.zoomScale;
-            [gestureRecognizer.view setTransform: CGAffineTransformScale(CGAffineTransformIdentity, scale, scale)];
+            gestureRecognizer.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.scroller.zoomScale, self.scroller.zoomScale);
             CGPoint newCenter = [self.scroller locationInMainWindow:gestureRecognizer];
             [self.scroller addSubview: gestureRecognizer.view];
             [self removeCollectionViewCellForElementView:[gestureRecognizer.view objectIdTag]
                                               completion:nil];
-            [gestureRecognizer.view setCenter: newCenter];
+            gestureRecognizer.view.center = newCenter;
             
             break;
         }
@@ -2425,8 +2397,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         case UIGestureRecognizerStateFailed:
         case UIGestureRecognizerStateEnded: {
             
-            [gestureRecognizer.view setAlpha:1.0000f];
-            [gestureRecognizer.view setTransform: CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000)];
+            gestureRecognizer.view.alpha = 1.0000f;
+            gestureRecognizer.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0000, 1.0000);
+
             UICollectionView *sectionView = [self sectionViewFor:gestureRecognizer];
             
             if (sectionView != nil) {
@@ -2519,7 +2492,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             RptqDocument *document = [self.document activeDocumentModel];
             RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqQuery *query = [[database hasQueries] anyObject];
+            RptqQuery *query = [database.hasQueries anyObject];
             RptqDocumentSection *section = [RptqDocumentSection documentSectionForRow: self.lastSelectedSectionControlPanel
                                                                                 query: query];
             
@@ -2715,15 +2688,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;
     for (RptqDocumentSection *reportSection in sectionEnumerator) {
         designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
-        designerContentViewSize.height += [[reportSection height] floatValue];
+        designerContentViewSize.height += reportSection.height.floatValue;
     }
     designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
     return designerContentViewSize;
 }
 
 - (UIView *)viewForObjectID:(NSManagedObjectID *)objectID {
-    NSUInteger hash = [objectID hash];
-    return [self.container viewWithTag: hash];
+    return [self.container viewWithTag: objectID.hash];
 }
 
 #pragma mark Display Helpers
@@ -2744,19 +2716,19 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)enableUserInteraction:(id)sender {
-    [self.view setUserInteractionEnabled:YES];
+    self.view.userInteractionEnabled = YES;
 }
 
 - (void)disableUserInteraction:(id)sender {
-    [self.view setUserInteractionEnabled:NO];
+    self.view.userInteractionEnabled = NO;
 }
 
 - (void)storeLayoutConstraintsForSectionHeights {
     for (NSLayoutConstraint *layoutConstraint in [self.container constraints]) {
-        if ([layoutConstraint firstAttribute] ==  NSLayoutAttributeHeight &&
-            [layoutConstraint secondItem] == nil &&
-            [[layoutConstraint firstItem] isKindOfClass:[MTDocumentSectionView class]]) {
-            NSManagedObjectID *objectId = [[layoutConstraint firstItem] objectIdTag];
+        if (layoutConstraint.firstAttribute ==  NSLayoutAttributeHeight &&
+            layoutConstraint.secondItem == nil &&
+            [layoutConstraint.firstItem isKindOfClass:[MTDocumentSectionView class]]) {
+            NSManagedObjectID *objectId = [layoutConstraint.firstItem objectIdTag];
             NSString *key = [objectId key];
             self.layoutConstraintsReportSectionHeight[key] = layoutConstraint;
         }
