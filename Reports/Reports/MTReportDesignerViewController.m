@@ -92,8 +92,8 @@ NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueN
 NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
 NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
 
-const CGFloat MADSizeWidthViewDetailDisplay = 32.0000f;
-const CGFloat MADSizeHeightViewDetailDisplay = 24.0000f;
+const CGFloat MADSizeWidthViewDetailDisplay         = 32.0000f;
+const CGFloat MADSizeHeightViewDetailDisplay        = 24.0000f;
 //const CGFloat MADSizeWidthViewDetailDisplay
 
 const CGFloat MTReportDesignerRulerHeight           = 20.0000f;
@@ -135,8 +135,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
-@property (nonatomic, weak) IBOutlet UIView *toolbox;                               //iPhone only
 @property (nonatomic, strong) MTRulerView *ruler;
+@property (nonatomic, weak) IBOutlet UIView *toolbox;                               //iPhone only
 @property (nonatomic, weak) IBOutlet UIScrollView *scroller;
 @property (nonatomic, weak) IBOutlet UIView *container;
 
@@ -518,7 +518,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         @autoreleasepool {
             
-            sectionHeights += MTReportDesignerBufferPaddingVertical;//MTReportDesignerBorderPaddingVertical;
+            sectionHeights += MTReportDesignerBufferPaddingVertical;
             
             MTDocumentSectionView *sectionView = [MTReportDesignerViewController documentSectionView: reportSection
                                                                                             delegate: self];
@@ -575,12 +575,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [viewDidAppearDesignerContentViewConstraints addObject:lc1e];
             
             NSArray *collectionViewConstraints = [MTReportDesignerViewController layoutConstraintsForSection: sectionView
-                                                                                                   content: self.container];
+                                                                                                     content: self.container];
             [constraintsScroller addObjectsFromArray:collectionViewConstraints];
             [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
             
             NSLayoutConstraint *layoutConstraintSectionLabelContainer = [MTReportDesignerViewController layoutConstraintsForSectionLabel: sectionViewLabel
-                                                                                                                                 content:self.container];
+                                                                                                                                 content: self.container];
             
             [constraintsScroller addObject:layoutConstraintSectionLabelContainer];
             self.layoutConstraintSectionLabelContainer = layoutConstraintSectionLabelContainer;
@@ -757,83 +757,38 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
     CGFloat zoomscale = self.scroller.zoomScale;
     
-//    CGFloat borderPaddingSides = [self bufferPaddingVerticalWithScale];
-/*    [self.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
+    CGFloat borderPaddingSides = MTReportDesignerBorderPaddingSides / self.scroller.zoomScale;
+    [self.layoutConstraintsSectionsSidesBorder enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
         constraint.constant = constraint.constant > 0 ? borderPaddingSides : -borderPaddingSides;
-    }];*/
-    
-    CGFloat bufferPaddingVertical = [self bufferVerticalWithScale];
-    [self.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
-        constraint.constant = constraint.constant > 0 ? bufferPaddingVertical : -bufferPaddingVertical;
     }];
     
-    self.layoutConstraintSectionLabelContainer.constant = (MADSizeWidthSectionLabel /*/ self.view.window.screen.scale*/) / zoomscale;
+    [self.layoutConstraintsSectionsVerticalBuffer enumerateObjectsUsingBlock:^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+        constraint.constant = constraint.constant > 0 ? MTReportDesignerBufferPaddingVertical : -MTReportDesignerBufferPaddingVertical;
+    }];
     
-    
+    self.layoutConstraintSectionLabelContainer.constant = (MADSizeWidthSectionLabel) / zoomscale;
     self.layoutConstraintDesignerContentViewHeight.constant = [self designerContentViewSize].height;
-    
-//    [self.view setNeedsLayout];
-}
-
-- (CGSize)designerContentViewSize {
-    RptqDocument *document = [self.document activeDocumentModel];
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
-    CGSize designerContentViewSize = CGSizeMake([self.view bounds].size.width, CGSizeZero.height);
-    designerContentViewSize.height += MTReportDesignerRulerHeight + [self borderPaddingVertical];//MTReportDesignerBorderPaddingVertical;//[self borderPaddingVertical];//MTReportDesignerBorderPaddingVertical;
-    for (RptqDocumentSection *reportSection in sectionEnumerator) {
-        designerContentViewSize.height += [self bufferVerticalWithScale];//MTReportDesignerBufferPaddingVertical; //[self bufferVerticalWithScale];//MTReportDesignerBufferPaddingVertical;//MTReportDesignerBorderPaddingVertical;
-        designerContentViewSize.height += reportSection.height.floatValue;
-    }
-    designerContentViewSize.height += [self borderPaddingVertical];//MTReportDesignerBorderPaddingVertical;//[self borderPaddingVertical];//MTReportDesignerBorderPaddingVertical;
-    
-    NSLog(@"Content view size %@", NSStringFromCGSize(designerContentViewSize));
-    return designerContentViewSize;
-}
-
-- (void)updateViewConstraints {
-    [super updateViewConstraints];
-    /*
-    [self.viewControllerSectionLayoutSettings updateViewConstraints];
-    
-    RptqDocument *document = [self.document activeDocumentModel];
-    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
-    CGSize designerContentViewSize = CGSizeMake([self.view bounds].size.width, CGSizeZero.height);
-    
-    designerContentViewSize.height += MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical;//[self borderPaddingVertical];// MTReportDesignerBorderPaddingVertical;
-    
-    for (RptqDocumentSection *reportSection in sectionEnumerator) {
-        CGFloat height = [[reportSection height] floatValue];
-        NSString *key = [reportSection sectionKey];
-        NSLayoutConstraint *layoutConstraint = self.layoutConstraintsReportSectionHeight[key];
-        [layoutConstraint setConstant:height];
-        designerContentViewSize.height += MTReportDesignerBufferPaddingVertical;//[self bufferVerticalWithScale];//MTReportDesignerBufferPaddingVertical;//MTReportDesignerBorderPaddingVertical;
-        designerContentViewSize.height += reportSection.height.floatValue;
-    }
-    designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;//[self borderPaddingVertical];// MTReportDesignerBorderPaddingVertical;
-    
-    self.layoutConstraintDesignerContentViewHeight.constant = designerContentViewSize.height;
-    */
-}
-
-- (CGFloat)bufferPaddingVerticalWithScale {
-    return MTReportDesignerBorderPaddingSides;
-}
-
-- (CGFloat)borderPaddingVertical {
-    return MTReportDesignerBorderPaddingVertical / self.scroller.zoomScale;
-}
-
-- (CGFloat)bufferVerticalWithScale {
-    CGFloat zoomscale = self.scroller.zoomScale;
-    CGFloat minline = ((1.0000f / self.view.window.screen.scale) / zoomscale);
-    return MAX(MTReportDesignerBufferPaddingVertical / zoomscale, minline);
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.navigationItem.titleView sizeToFit];
-    //self.ruler.contentScaleFactor = self.scroller.zoomScale;
     [self.ruler setNeedsDisplay];
+}
+
+- (CGSize)designerContentViewSize {
+    RptqDocument *document = [self.document activeDocumentModel];
+    SectionEnumerator *sectionEnumerator = [[SectionEnumerator alloc] initWithDocument:document];
+    CGSize designerContentViewSize = CGSizeMake(self.view.bounds.size.width, CGSizeZero.height);
+    
+    designerContentViewSize.height += (MTReportDesignerRulerHeight + MTReportDesignerBorderPaddingVertical);
+    for (RptqDocumentSection *reportSection in sectionEnumerator) {
+        designerContentViewSize.height += (MTReportDesignerBufferPaddingVertical +
+                                           reportSection.height.floatValue);
+    }
+    designerContentViewSize.height += MTReportDesignerBorderPaddingVertical;
+    
+    return designerContentViewSize;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -2370,15 +2325,54 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)pinchPiece:(UIPinchGestureRecognizer *)gestureRecognizer {
     gestureRecognizer.view.transform = CGAffineTransformScale(gestureRecognizer.view.transform, gestureRecognizer.scale, gestureRecognizer.scale);
-    gestureRecognizer.scale = 1;
+    gestureRecognizer.scale = 1.0000f;
+
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
+        gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
+        gestureRecognizer.state == UIGestureRecognizerStateFailed) {
+
+        UICollectionView *collectionView = [self sectionViewFor:gestureRecognizer];
+        
+        __weak MTReportDesignerViewController *weakself = self;
+        MTBlockCompletionNoReturn update = ^(void) {
+            
+            
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: [(MTElementView *)gestureRecognizer.view objectIdTag]
+                                                                          managedObjectContext: weakself.document.managedObjectContext];
+            CGFloat sizeWidth = nearbyintf(gestureRecognizer.view.frame.size.width);
+            CGFloat sizeHeight = nearbyintf(gestureRecognizer.view.frame.size.height);
+            documentObject.sizewidth = @(sizeWidth);
+            documentObject.sizeheight = @(sizeHeight);
+            [documentObject setDropPoint:gestureRecognizer.view.frame.origin];
+            [weakself.document.managedObjectContext save:nil];
+            
+            [gestureRecognizer.view setNeedsLayout];
+            [gestureRecognizer.view setNeedsDisplay];
+            
+        };
+        
+        __weak UICollectionView *weakCollectionView = collectionView;
+        MTBlockCompletionSimple finishedUpdate = ^(BOOL finished) {
+            if (finished) {
+                [UIView animateWithDuration:0.6666f animations:^{
+                    [weakCollectionView invalidateIntrinsicContentSize];
+                }];
+            }
+            
+        };
+        
+        [collectionView performBatchUpdates:update completion:finishedUpdate];
+        [collectionView.collectionViewLayout invalidateLayout];
+    }
+    
     /*
     switch ([gestureRecognizer state]) {
 
         case UIGestureRecognizerStatePossible:
             break;
-        
+     
         case UIGestureRecognizerStateBegan: {
-            
+     
             if ([gestureRecognizer numberOfTouches] >= 2) {
                 self.pinchBeginTransform = gestureRecognizer.view.transform;
                 
@@ -3308,26 +3302,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - NSLayoutConstraint
 #pragma mark Content View
 
-/*- (NSLayoutConstraint *)layoutConstraintViewContentCenterX {
-    return [NSLayoutConstraint constraintWithItem: self.designerContentView
-                                        attribute: NSLayoutAttributeCenterX
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeCenterX
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}*/
-
-/*- (NSLayoutConstraint *)layoutConstraintViewContentWidth {
-    return [NSLayoutConstraint constraintWithItem: self.designerContentView
-                                        attribute: NSLayoutAttributeWidth
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeWidth
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}*/
-
 - (NSLayoutConstraint *)layoutConstraintViewContentLeft {
     return [NSLayoutConstraint constraintWithItem: self.container
                                         attribute: NSLayoutAttributeLeft
@@ -3399,28 +3373,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                        multiplier: 1.0000f
                                          constant: 0.0000f];
 }
-
-/*
-- (NSLayoutConstraint *)layoutConstraintViewScrollerRight {
-    return [NSLayoutConstraint constraintWithItem: self.designerContentView
-                                        attribute: NSLayoutAttributeLeftMargin
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeLeftMargin
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-
-- (NSLayoutConstraint *)layoutConstraintViewScrollerLeft {
-    return [NSLayoutConstraint constraintWithItem: self.designerContentView
-                                        attribute: NSLayoutAttributeRightMargin
-                                        relatedBy: NSLayoutRelationEqual
-                                           toItem: self.view
-                                        attribute: NSLayoutAttributeRightMargin
-                                       multiplier: 1.0000f
-                                         constant: 0.0000f];
-}
-*/
 
 - (NSLayoutConstraint *)layoutConstraintViewToolbarHeightHidden {
     return [NSLayoutConstraint constraintWithItem: self.toolbarBottom
