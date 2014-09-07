@@ -554,8 +554,6 @@
 		4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
 		4C384E3514B29789007B4F48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C3A96A1189F8567007AF476 /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
-		4C3A96A2189F8569007AF476 /* ReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */; };
 		4C3ACA3F16715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1771,10 +1769,6 @@
 		4C0CAB88190578020044D866 /* MTDataTableFastObjectEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableFastObjectEnumerator.m; sourceTree = "<group>"; };
 		4C0E785B163B5AEC003B951E /* MAD Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C0E785D163B5AEC003B951E /* madview-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "madview-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/madview-Info.plist"; sourceTree = "<absolute>"; };
-		4C0EF6CD178A96BC007BF2AE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewerOS6.storyboard; sourceTree = "<group>"; };
-		4C0EF6CF178A96BC007BF2AE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewerPadOS6.storyboard; sourceTree = "<group>"; };
-		4C0EF6D1178A96BC007BF2AE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportDesignerOS6.storyboard; sourceTree = "<group>"; };
-		4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesignerPadOS6.storyboard; path = Reports/MTStoryboardReportDesignerPadOS6.storyboard; sourceTree = "<group>"; };
 		4C101DAB14F4D54000AAF676 /* RptqDocumentObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObject+Extras.h"; sourceTree = "<group>"; };
 		4C101DAC14F4D54000AAF676 /* RptqDocumentObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObject+Extras.m"; sourceTree = "<group>"; };
 		4C113C8F19A3D6BB00D1A3B0 /* UIScrollView+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+Extras.h"; sourceTree = "<group>"; };
@@ -2091,7 +2085,6 @@
 		4C384E3614B29789007B4F48 /* Reports-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Reports-Prefix.pch"; sourceTree = "<group>"; };
 		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4C384E3E14B29789007B4F48 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/ReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* MTViewControllerOpenDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTViewControllerOpenDocument.h; sourceTree = "<group>"; };
 		4C3ACA3D16715679001BC16D /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
@@ -2649,8 +2642,6 @@
 		4C94ADF817C3514200037FCB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		4C94ADFA17C3514200037FCB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		4C94ADFC17C3514200037FCB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		4C94ADFF17C3514200037FCB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesOS6.storyboard; sourceTree = "<group>"; };
-		4C94AE0217C3514200037FCB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MTStoryboardLaunchImagesPadOS6.storyboard; sourceTree = "<group>"; };
 		4C94AE0417C3514200037FCB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4C94AE0517C3514200037FCB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4C9514F915126311004AF941 /* Reports.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Reports.entitlements; sourceTree = "<group>"; };
@@ -3345,12 +3336,6 @@
 		4C0EF6CA178A9688007BF2AE /* iOS6 */ = {
 			isa = PBXGroup;
 			children = (
-				4C94ADFE17C3514200037FCB /* MTStoryboardLaunchImagesOS6.storyboard */,
-				4C94AE0117C3514200037FCB /* MTStoryboardLaunchImagesPadOS6.storyboard */,
-				4C0EF6D0178A96BC007BF2AE /* MTStoryboardReportDesignerOS6.storyboard */,
-				4C0EF6D2178A96BC007BF2AE /* MTStoryboardReportDesignerPadOS6.storyboard */,
-				4C0EF6CC178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard */,
-				4C0EF6CE178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard */,
 			);
 			name = iOS6;
 			sourceTree = "<group>";
@@ -3485,7 +3470,6 @@
 		4C1B7A65163E123200E331AA /* ReportDesigner */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */,
 			);
 			name = ReportDesigner;
 			sourceTree = "<group>";
@@ -5675,7 +5659,6 @@
 				4C0E77E5163B5AEC003B951E /* UIImagePatternAqua@2x.png in Resources */,
 				4C0E77E6163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
 				4C0E77E7163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
-				4C3A96A1189F8567007AF476 /* ReportDesignerPad.storyboard in Resources */,
 				4C0E77E8163B5AEC003B951E /* UIImagePatternBlackWeave.png in Resources */,
 				4C95CACB182CB36000160E01 /* zint.h in Resources */,
 				4CB3C23B19235C7D00F3213E /* MTSliderThumbRotate.png in Resources */,
@@ -6063,7 +6046,6 @@
 				4CCD8D99150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
 				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
 				4C6461B418C0E6590069EF8D /* MTActivityProvidence@2x.png in Resources */,
-				4C3A96A2189F8569007AF476 /* ReportDesignerPad.storyboard in Resources */,
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
 				4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */,
@@ -7260,30 +7242,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4C0EF6CC178A96BC007BF2AE /* MTStoryboardReportViewerOS6.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C0EF6CD178A96BC007BF2AE /* en */,
-			);
-			name = MTStoryboardReportViewerOS6.storyboard;
-			sourceTree = "<group>";
-		};
-		4C0EF6CE178A96BC007BF2AE /* MTStoryboardReportViewerPadOS6.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C0EF6CF178A96BC007BF2AE /* en */,
-			);
-			name = MTStoryboardReportViewerPadOS6.storyboard;
-			sourceTree = "<group>";
-		};
-		4C0EF6D0178A96BC007BF2AE /* MTStoryboardReportDesignerOS6.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C0EF6D1178A96BC007BF2AE /* en */,
-			);
-			name = MTStoryboardReportDesignerOS6.storyboard;
-			sourceTree = "<group>";
-		};
 		4C1B7A5B163E0D9400E331AA /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -7314,15 +7272,6 @@
 				4C384E3214B29789007B4F48 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4C384E3D14B29789007B4F48 /* ReportDesignerPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C384E3E14B29789007B4F48 /* en */,
-			);
-			name = ReportDesignerPad.storyboard;
-			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */ = {
@@ -7382,24 +7331,6 @@
 				4C94ADF017C3514200037FCB /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4C94ADFE17C3514200037FCB /* MTStoryboardLaunchImagesOS6.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C94ADFF17C3514200037FCB /* en */,
-			);
-			name = MTStoryboardLaunchImagesOS6.storyboard;
-			path = "MAD Launch Images";
-			sourceTree = "<group>";
-		};
-		4C94AE0117C3514200037FCB /* MTStoryboardLaunchImagesPadOS6.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C94AE0217C3514200037FCB /* en */,
-			);
-			name = MTStoryboardLaunchImagesPadOS6.storyboard;
-			path = "MAD Launch Images";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
