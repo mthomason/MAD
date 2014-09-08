@@ -461,8 +461,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
     RptqQueryField *queryField = [RptqQueryField queryFieldForObjectID:queryFieldId managedObjectContext:managedObjectContext];
     RptqQueryGroup *queryGroup = [RptqQueryGroup createQueryGroupFor:queryField andSort:sortOrder inManagedObjectContext:managedObjectContext];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
     [query addHasQueryGroupsObject: queryGroup];
     [self.document saveContext];
     [self.document quickSave];
@@ -486,8 +486,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     NSManagedObjectContext *managedObjectContext = [reportDocument managedObjectContext];
     RptqDocument *document = [reportDocument activeDocumentModel];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
 
     NSDictionary *oldLayout = [self datamodel];
     NSArray *oldLayoutSectionTypes = oldLayout[MTTableSectionSectionsKey];
@@ -691,35 +691,32 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             static NSString *MyIdentifierUITableViewCellDataSource = @"UITableViewCellDataSource";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellDataSource];
 
-            NSArray *connections = [RptqUserCredentals userCredentalsForManagedObjectContext:[self.document managedObjectContext]];
-            
-            if (connections) {
-                if ([connections count] >= 1) {
-                    RptqUserCredentals *connection = connections[0];
-                    
-                    NSString *databaseType = [NSString stringWithFormat:@"%@", [connection database_driver_type]];
-                    NSString *schemaName = [connection databaseSchemaName];
-                    NSString *localizedMessage = NSLocalizedString(@"You are connecting to a %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@.");
-                    NSString *message = [NSString stringWithFormat:localizedMessage, databaseType, schemaName];
-                    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                    NSDictionary *attributes = @{ NSFontAttributeName : font };
-                    NSRange rangeOfSchemaName = [message rangeOfString:schemaName];
-                    NSRange rangeOfDatabaseTypeName = [message rangeOfString:databaseType];
-                    UIFont *fontItalic = [UIFont italicSystemFontOfSize:[font pointSize]];
-                    NSDictionary *additionalAttributeStroke = @{ NSFontAttributeName : fontItalic };
-                    NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString:message attributes:attributes];
+            RptqDocument *document = [self.document activeDocumentModel];
+            RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
 
-                    [messageAttributed removeAttribute:NSFontAttributeName range:rangeOfDatabaseTypeName];
-                    [messageAttributed removeAttribute:NSFontAttributeName range:rangeOfSchemaName];
-                    [messageAttributed addAttributes:additionalAttributeStroke range:rangeOfDatabaseTypeName];
-                    [messageAttributed addAttributes:additionalAttributeStroke range:rangeOfSchemaName];
-                    
-                    [[result textLabel] setText:message];
-                    [[result textLabel] setAttributedText:messageAttributed];
-                    [[result detailTextLabel] setText:@""];
-                }
+            if (database.ownedByUser) {
+                NSString *databaseType = [NSString stringWithFormat:@"%@", database.ownedByUser.database_driver_type];
+                NSString *schemaName = [database.ownedByUser databaseSchemaName];
+                NSString *localizedMessage = NSLocalizedString(@"You are connecting to a %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@.");
+                NSString *message = [NSString stringWithFormat:localizedMessage, databaseType, schemaName];
+                UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                NSDictionary *attributes = @{ NSFontAttributeName : font };
+                NSRange rangeOfSchemaName = [message rangeOfString:schemaName];
+                NSRange rangeOfDatabaseTypeName = [message rangeOfString:databaseType];
+                UIFont *fontItalic = [UIFont italicSystemFontOfSize:font.pointSize];
+                
+                NSDictionary *additionalAttributeStroke = @{ NSFontAttributeName : fontItalic };
+                NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString:message attributes:attributes];
+                [messageAttributed removeAttribute:NSFontAttributeName range:rangeOfDatabaseTypeName];
+                [messageAttributed removeAttribute:NSFontAttributeName range:rangeOfSchemaName];
+                [messageAttributed addAttributes:additionalAttributeStroke range:rangeOfDatabaseTypeName];
+                [messageAttributed addAttributes:additionalAttributeStroke range:rangeOfSchemaName];
+                
+                result.textLabel.text = message;
+                result.textLabel.attributedText = messageAttributed;
+                result.detailTextLabel.text = @"";
             }
-            [[result textLabel] setNumberOfLines:2];
+            [result.textLabel setNumberOfLines:2];
             break;
         }
 
@@ -727,20 +724,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
         case MTQuerySectionsTables: {
             static NSString *MyIdentifierUITableViewCellTableName = @"UITableViewCellTableName";
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
-            RptqQueryTable *tablea = [self.fetchedResultsControllerTables objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
-            
+            NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
+            RptqQueryTable *tablea = [self.fetchedResultsControllerTables objectAtIndexPath: path];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            NSString *title = [NSString stringWithFormat:@"%@", [tablea alias]];
-            [[result textLabel] setText: title];
-            //[result setAccessoryType:UITableViewCellAccessoryDetailButton];
-            [result setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-            [[result textLabel] setFont: font];
-            [result textLabel].backgroundColor = [UIColor whiteColor];
-            [result setIndentationLevel: 1];
-            [result setTintColor:[UIColor tintColorBlue]];
+            result.textLabel.text = [NSString stringWithFormat:@"%@", tablea.alias];
+            result.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            result.textLabel.font = font;
+            result.textLabel.backgroundColor = [UIColor whiteColor];
+            result.indentationLevel = 1;
+            result.tintColor = [UIColor tintColorBlue];
             result.backgroundColor = [UIColor whiteColor];
-            //[result setSelectionStyle:UITableViewCellSelectionStyleNone];
-            
             break;
         }
         
@@ -760,15 +753,16 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSString *pre = [[links tableleft] capitalizedString];
             NSString *post = [[links fieldleft] capitalizedString];
             NSString *leftString = [NSString stringWithFormat:@"%@.%@", pre, post];
-            pre = [[links tableright] capitalizedString];
-            post = [[links fieldright] capitalizedString];
+            
+            pre = links.tableright.capitalizedString;
+            post = links.fieldright.capitalizedString;
             NSString *rightString = [NSString stringWithFormat:@"%@.%@", pre, post];
 
             [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
-            [[result textLabel] setNumberOfLines:2];
+            [result.textLabel setNumberOfLines:2];
 
             NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-            [paragraphStyle setHeadIndent:20.0000f];
+            paragraphStyle.headIndent = 20.0000f;
             NSString *linksDescription = [links linkDescription];
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
             NSDictionary *attributes = @{ NSFontAttributeName : font, NSParagraphStyleAttributeName : paragraphStyle };
@@ -777,7 +771,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
             [message addAttributes:attributesAlt range:rangeLinkDesc];
-            [[result textLabel] setAttributedText: message];
+            result.textLabel.attributedText = message;
 
             break;
         }
@@ -809,10 +803,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSRange rangeRange = [messageText rangeOfString:sortFieldName];
             [message addAttributes:attributesLeft range:rangeLeft];
             [message addAttributes:attributesRight range:rangeRange];
-            [[result textLabel] setText:messageText];
-            [[result textLabel] setAttributedText:message];
-            [[result textLabel] setNumberOfLines:2];
-            [(UITableViewCellQueryGroup *)result setTableID:[group objectID]];
+            result.textLabel.text = messageText;
+            result.textLabel.attributedText = message;
+            result.textLabel.numberOfLines = 2;
+            [(UITableViewCellQueryGroup *)result setTableID:group.objectID];
             break;
         }
         
@@ -846,10 +840,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
             NSRange rangeMiddle = [messageText rangeOfString:symbol];
-            [[result textLabel] setNumberOfLines:2];
+            result.textLabel.numberOfLines = 2;
             [message addAttributes:attributesCaption range:rangeMiddle];
-            [[result textLabel] setText:messageText];
-            [[result textLabel] setAttributedText:message];
+            result.textLabel.text = messageText;
+            result.textLabel.attributedText = message;
             [(MTTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
             
             break;
@@ -879,7 +873,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     
     if (!result) {
         result = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DefaultCellShouldNotGetHere"];
-        [[result textLabel] setText: @"Err"];
+        [result.textLabel setText: @"Err"];
     }
 
     return result;
@@ -1252,8 +1246,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             
             
             RptqDocument *document = [reportDocument activeDocumentModel];
-            RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-            RptqQuery *query = [[database hasQueries] anyObject];
+            RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+            RptqQuery *query = [database.hasQueries anyObject];
             
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];

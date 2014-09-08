@@ -110,11 +110,12 @@
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    [queryPredicate setHasRightField:   rightField];
-    [queryPredicate setHasLeftField:    leftField];
-    [queryPredicate setFieldrightpred:  nil];
-    [queryPredicate setFieldleftpred:   nil];
-    [queryPredicate setComparson:       @(comparsonOperator)];
+    queryPredicate.hasRightField    = rightField;
+    queryPredicate.hasLeftField     = leftField;
+    queryPredicate.fieldrightpred   = nil;
+    queryPredicate.fieldleftpred    = nil;
+    NSNumber *comparson             = @(comparsonOperator);
+    queryPredicate.comparson        = comparson;
     return queryPredicate;
 }
 
@@ -124,11 +125,12 @@
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    [queryPredicate setHasRightField:   nil];
-    [queryPredicate setHasLeftField:    leftField];
-    [queryPredicate setFieldrightpred:  rightUserValue];
-    [queryPredicate setFieldleftpred:   nil];
-    [queryPredicate setComparson:       @(comparsonOperator)];
+    queryPredicate.hasRightField    = nil;
+    queryPredicate.hasLeftField     = leftField;
+    queryPredicate.fieldrightpred   = rightUserValue;
+    queryPredicate.fieldleftpred    = nil;
+    NSNumber *comparson             = @(comparsonOperator);
+    queryPredicate.comparson        = comparson;
     return queryPredicate;
 }
 
@@ -138,11 +140,12 @@
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    [queryPredicate setHasRightField:   nil];
-    [queryPredicate setHasLeftField:    nil];
-    [queryPredicate setFieldrightpred:  rightUserValue];
-    [queryPredicate setFieldleftpred:   leftUserValue];
-    [queryPredicate setComparson:       @(comparsonOperator)];
+    queryPredicate.hasRightField    = nil;
+    queryPredicate.hasLeftField     = nil;
+    queryPredicate.fieldrightpred   = rightUserValue;
+    queryPredicate.fieldleftpred    = leftUserValue;
+    NSNumber *comparson             = @(comparsonOperator);
+    queryPredicate.comparson        = comparson;
     return queryPredicate;
 }
 
@@ -152,11 +155,12 @@
                       forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryPredicate class]) inManagedObjectContext:managedObjectContext];
     RptqQueryPredicate *queryPredicate = [[RptqQueryPredicate alloc] initWithEntity:ed insertIntoManagedObjectContext:managedObjectContext];
-    [queryPredicate setHasRightField:   rightField];
-    [queryPredicate setHasLeftField:    nil];
-    [queryPredicate setFieldrightpred:  nil];
-    [queryPredicate setFieldleftpred:   leftUserValue];
-    [queryPredicate setComparson:       @(comparsonOperator)];
+    queryPredicate.hasRightField    = rightField;
+    queryPredicate.hasLeftField     = nil;
+    queryPredicate.fieldrightpred   = nil;
+    queryPredicate.fieldleftpred    = leftUserValue;
+    NSNumber *comparson             = @(comparsonOperator);
+    queryPredicate.comparson        = comparson;
     return queryPredicate;
 }
 
@@ -170,24 +174,22 @@
 }
 
 - (NSString *)symbolForDisplay {
-    return MNSPredicateOperatorSymbolsDisplay[[[self comparson] integerValue]];
+    return MNSPredicateOperatorSymbolsDisplay[self.comparson.integerValue];
 }
 
 - (NSString *)symbolForComparson {
-    return MNSPredicateOperatorSymbols[[[self comparson] integerValue]];
+    return MNSPredicateOperatorSymbols[self.comparson.integerValue];
 }
 
 #pragma mark - MTProtocolCompare
 
 - (BOOL)isEqualTo:(id)sender {
-    BOOL result;
+    
     if ([self isEqual:sender]) {
-        result = YES;
+        return YES;
     } else {
-        RptqQueryPredicate *s = sender;
-        result = [[self identifier] isEqualToNumber:[s identifier]];
+        return [self.identifier isEqualToNumber:((RptqQueryPredicate *)sender).identifier];
     }
-    return result;
 }
 
 @end

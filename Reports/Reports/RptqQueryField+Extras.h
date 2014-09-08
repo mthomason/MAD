@@ -12,10 +12,11 @@
 
 @interface RptqQueryField (Extras) <MTProtocolLog, MTProtocolCompare>
 
-- (NSString *)display;
-- (NSString *)tableFieldKey;
 + (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 + (instancetype)queryFieldFactory:(NSManagedObjectContext *)managedObjectContext;
+
+- (NSString *)display;
+- (NSString *)tableFieldKey;
 - (NSString *)toStringReverse;
 
 @end

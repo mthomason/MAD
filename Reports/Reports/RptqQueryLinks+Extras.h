@@ -59,8 +59,6 @@ extern NSString * const MTLinkSqlFullOuterJoin;
                                    rightField:(RptqQueryField *)fieldRight
                                      joinType:(MNSLinkType)joinType;
 
-+ (NSArray *)queriesForDocument:(RptqDocument *)document;
-
 - (NSString *)linkDescription;
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type;

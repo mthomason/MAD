@@ -100,8 +100,8 @@
 
     _openSectionIndex = NSNotFound;
     RptqDocument *document = [self.document activeDocumentModel];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
     NSSet *queryTables = [query hasQueryTables];
 
     NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey:@"alias" ascending:YES];

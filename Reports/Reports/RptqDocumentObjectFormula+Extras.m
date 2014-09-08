@@ -78,8 +78,9 @@
 
     NSEntityDescription *entityDescriptionDocumentObject = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObject class])
                                                                        inManagedObjectContext: [document managedObjectContext]];
+    
     NSEntityDescription *entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentObjectFormula class])
-                                                                                     inManagedObjectContext: [document managedObjectContext]];
+                                                                              inManagedObjectContext: [document managedObjectContext]];
     
     RptqDocumentObject *dataObject = [[RptqDocumentObject alloc] initWithEntity: entityDescriptionDocumentObject
                                                  insertIntoManagedObjectContext: [document managedObjectContext]];
@@ -89,15 +90,14 @@
     RptqDocumentObjectFormula *reportObject = [[RptqDocumentObjectFormula alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
                                                                                insertIntoManagedObjectContext: [document managedObjectContext]];
     
-    [dataObject setIsFormula: reportObject];
-    
-    [[dataObject isFormula] setSource:formulaText];
-    
-    [dataObject setType: @(MTDocumentObjectTypeFormula)];
+    dataObject.isFormula = reportObject;
+    dataObject.isFormula.source = formulaText;
+    NSNumber *typeFormula = @(MTDocumentObjectTypeFormula);
+    dataObject.type = typeFormula;
     
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet:[[[document hasDetailSection] hasRows][0] hasObjects]];
     [hasObjects insertObject:dataObject atIndex:0];
-    [[[document hasDetailSection] hasRows][0] setHasObjects:hasObjects];
+    [document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
     
     return dataObject;
 }
@@ -105,7 +105,7 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [self name];
+    return self.name;
 }
 
 - (NSString *)toString {

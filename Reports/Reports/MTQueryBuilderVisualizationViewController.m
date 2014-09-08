@@ -723,8 +723,8 @@ typedef void(^MTBlockResultVoid)(void);
         [[self controllersForObjectIdsLink] removeAllObjects];
         
         RptqDocument *document = [documentReport activeDocumentModel];
-        RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-        RptqQuery *query = [[database hasQueries] anyObject];
+        RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+        RptqQuery *query = [database.hasQueries anyObject];
         [self displayQuery:query animated:animated];
     }
     
@@ -871,8 +871,8 @@ typedef void(^MTBlockResultVoid)(void);
     NSMutableSet *orphanedQueryTables = [[NSMutableSet alloc] init];
     
     RptqDocument *document = [self.document activeDocumentModel];
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
     
     for (RptqQueryTable *table in [query hasQueryTables]) {
         BOOL orphaned = YES;

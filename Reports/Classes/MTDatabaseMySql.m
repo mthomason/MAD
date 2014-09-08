@@ -20,9 +20,6 @@
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
-#import "RptqQueryCache.h"
-#import "RptqQueryCache+Extras.h"
-
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 

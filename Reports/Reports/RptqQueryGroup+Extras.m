@@ -105,8 +105,8 @@
     NSInteger groupCount = [managedObjectContext countForFetchRequest:request error:&error];
     groupCount = (error) ? 0 : groupCount;
     
-    [queryGroup setHasField:queryField];
-    [queryGroup setSort:@(sortOrder)];
+    queryGroup.hasField = queryField;
+    queryGroup.sort = @(sortOrder);
     NSInteger newWeight = [queryGroup lastWeight] + 1;
     [queryGroup setWeight:@(newWeight)];
 
@@ -116,9 +116,9 @@
     
     RptqDocumentSection *dsHeader = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     NSNumber *HeaderType = @(MNSDocumentSectionTypeGroupHeader);
-    [dsHeader setType: HeaderType];
-    [dsHeader setHasRows:hasRows1];
-    [dsHeader setVisibility:@YES];
+    dsHeader.type = HeaderType;
+    dsHeader.hasRows = hasRows1;
+    dsHeader.visibility = @YES;
     [headerSectionRow setInSection:dsHeader];
     [queryGroup addHasSectionObject:dsHeader];
 
@@ -128,10 +128,10 @@
 
     RptqDocumentSection *dsFooter = [[RptqDocumentSection alloc] initWithEntity:entityDescriptionDocumentSection insertIntoManagedObjectContext:managedObjectContext];
     NSNumber *type = @(MNSDocumentSectionTypeGroupFooter);
-    [dsFooter setType: type];
-    [dsFooter setHasRows:hasRows];
-    [dsFooter setVisibility:@YES];
-    [footerSectionRow setInSection:dsFooter];
+    dsFooter.type = type;
+    dsFooter.hasRows = hasRows;
+    dsFooter.visibility = @YES;
+    footerSectionRow.inSection = dsFooter;
     [queryGroup addHasSectionObject:dsFooter];
 
     return queryGroup;
@@ -145,14 +145,14 @@
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"weight" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
-    [request setSortDescriptors: sortDescriptors];
-    [request setFetchLimit:1];
+    request.sortDescriptors = sortDescriptors;
+    request.fetchLimit = 1;
     NSError *error = nil;
-    NSArray *queryGroupLast = [[self managedObjectContext] executeFetchRequest:request error:&error];
+    NSArray *queryGroupLast = [self.managedObjectContext executeFetchRequest:request error:&error];
     NSInteger weight = 0;
-    if ([queryGroupLast count] > 0) {
+    if (queryGroupLast.count > 0) {
         RptqQueryGroup *lastGroup = queryGroupLast[0];
-        weight = [[lastGroup weight] integerValue];
+        weight = lastGroup.weight.integerValue;
     }
     return weight;
 }
@@ -166,24 +166,24 @@
 }
 
 - (NSString *)sortDisplayNice {
-    NSString *sort;
-    MNSSortOrder sortOrder = [[self sort] integerValue];
-    switch (sortOrder) {
+    switch (self.sort.integerValue) {
+
         case MNSSortOrderAccending:
-            sort = @"accending";
+            return @"accending";
             break;
+        
         case MNSSortOrderDecending:
-            sort = @"decending";
+            return @"decending";
             break;
+        
         default:
-            sort = @"";
+            return @"";
             break;
     }
-    return [sort lowercaseString];
 }
 
 - (NSInteger)location {
-    NSArray *sortedQueryGroups = [[self inQuery] sortedQueryGroups];
+    NSArray *sortedQueryGroups = self.inQuery.sortedQueryGroups;
     NSInteger location = 0;
     for (RptqQueryGroup *queryGroup in sortedQueryGroups) {
         if ([queryGroup isEqual:self]) {

@@ -59,9 +59,6 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "RptqUserCredentals.h"
 #import "RptqUserCredentals+Extras.h"
 
-#import "RptqQueryCache.h"
-#import "RptqQueryCache+Extras.h"
-
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 

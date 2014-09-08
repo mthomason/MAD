@@ -12,7 +12,10 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
+extern const CGFloat MADesignerSectionLabelFontSize;
+
 @protocol DesignerSectionLabelDelegate;
+
 @class RptqDocumentSection;
 
 @interface DesignerSectionLabel : UIView

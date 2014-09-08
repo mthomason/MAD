@@ -12,6 +12,8 @@
 #import "RptqDocumentSection+Extras.h"
 #import <CoreData/CoreData.h>
 
+const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
+
 @interface DesignerSectionLabel ()
     <UIGestureRecognizerDelegate>
 
@@ -33,10 +35,12 @@
 
         UILabel *labelSectionIdentifer = [[UILabel alloc] initWithFrame:frame];
         labelSectionIdentifer.backgroundColor = backgroundColor;
-        labelSectionIdentifer.textAlignment = NSTextAlignmentCenter;
-        labelSectionIdentifer.font = [UIFont systemFontOfSize:10.0000f];
+        labelSectionIdentifer.textAlignment = NSTextAlignmentRight;
+        labelSectionIdentifer.lineBreakMode = NSLineBreakByClipping;
+        labelSectionIdentifer.font = [UIFont systemFontOfSize:MADesignerSectionLabelFontSize];
         
         labelSectionIdentifer.textColor = tintColor;
+        
         labelSectionIdentifer.text = [section localizedDisplayName];
         labelSectionIdentifer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         labelSectionIdentifer.translatesAutoresizingMaskIntoConstraints = YES;
@@ -48,8 +52,10 @@
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.layer.cornerRadius = 0.0000f;
         self.clipsToBounds = YES;
+        
         [self setContentHuggingPriority: UILayoutPriorityDefaultLow
                                 forAxis: UILayoutConstraintAxisHorizontal];
+        
         [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
                                               forAxis: UILayoutConstraintAxisHorizontal];
         
@@ -59,13 +65,19 @@
         tapGestureRecognizer.numberOfTouchesRequired = 1;
         tapGestureRecognizer.delegate = self;
         [self addGestureRecognizer: tapGestureRecognizer];
+        
     }
     return self;
 }
 
+- (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
+    self.labelSectionIdentifer.contentScaleFactor = contentScaleFactor;
+    [super setContentScaleFactor:contentScaleFactor];
+}
+
 - (void)setNeedsDisplay {
-    
     [super setNeedsDisplay];
+    [self.labelSectionIdentifer setNeedsDisplay];
 }
 
 - (void)layoutSubviews {

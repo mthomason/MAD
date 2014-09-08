@@ -177,36 +177,33 @@
     
     MNSLinkType linktype = NSNotFound;
     
-    if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeInnerJoin]]) {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeInnerJoin]) {
         linktype = MNSLinkTypeInnerJoin;
         
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeEquiJoin]]) {
+    } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeEquiJoin]) {
         linktype = MNSLinkTypeEquiJoin;
 
-
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeNaturalJoin]]) {
+    } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeNaturalJoin]) {
         linktype = MNSLinkTypeNaturalJoin;
     
-
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeCrossJoin]]) {
+    } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeCrossJoin]) {
         linktype = MNSLinkTypeCrossJoin;
     
-    
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeLeftOuterJoin]]) {
+    } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeLeftOuterJoin]) {
         linktype = MNSLinkTypeLeftOuterJoin;
 
-
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeRightOuterJoin]]) {
+    } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeRightOuterJoin]) {
         linktype = MNSLinkTypeRightOuterJoin;
     
-
-    } else if ([[[tableView cellForRowAtIndexPath:indexPath] reuseIdentifier] isEqualToString:[RptqQueryLinks ReuseIdForLinkType:MNSLinkTypeFullOuterJoin]]) {
+    } else if ([cell.reuseIdentifier isEqualToString:MNSJoinTypeFullOuterJoin]) {
         linktype = MNSLinkTypeFullOuterJoin;
     }
+    
     if ((NSInteger)linktype != NSNotFound) {
         [self checkLinkType:linktype];
         [self.delegate viewControllerSchemaAddLinkJoinTypeDidFinishWith: linktype
-                                                                     from: self.document];
+                                                                   from: self.document];
     }
 
 }

@@ -40,7 +40,7 @@
 #pragma mark - Overrides
 
 //+ (RptqQuery *)RptqQueryForDocument:(RptqDocument *)document {
-//    return [[[[document hasDatabaseSchemas] anyObject] hasQueries] anyObject];
+//    return [[[document.hasDatabaseSchemas anyObject] hasQueries] anyObject];
 //}
 
 - (void)awakeFromInsert {

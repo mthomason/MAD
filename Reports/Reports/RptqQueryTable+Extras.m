@@ -60,7 +60,7 @@
 + (instancetype)queryTableWithSchemaTable:(RptqDatabaseSchemaTable *)table {
      RptqDatabase *database = [table inDatabase];
      RptqDocument *document = [database ownedByQueryAsStaticResource];
-     RptqQuery *query = [[database hasQueries] anyObject];
+     RptqQuery *query = [database.hasQueries anyObject];
      NSMutableSet *tablesInQuery = [[NSMutableSet alloc] initWithSet:[query hasQueryTables]];
      
      RptqQueryTable *newQueryTable = [RptqQueryTable queryTableFactoryForSchemaTable:table document:document];

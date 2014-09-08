@@ -28,7 +28,6 @@
 #import "RptqQueryField.h"
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
-#import "RptqQueryCache.h"
 #import "MTKeyChain.h"
 
 #import "MTNotificationDidReadRows.h"

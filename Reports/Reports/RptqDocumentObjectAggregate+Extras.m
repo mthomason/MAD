@@ -79,120 +79,111 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 }
 
 - (NSString *)designerRepresentationText {
-    return [NSString stringWithFormat:@"%@(%@)", [self functionNameShort], [[self aggregateField] toStringHumanReadable]];
+    return [NSString stringWithFormat:@"%@(%@)", [self functionNameShort], [self.aggregateField toStringHumanReadable]];
 }
 
 - (NSString *)functionName {
-    return [RptqDocumentObjectAggregate displayStringForType: [[self function] integerValue]];
+    return [RptqDocumentObjectAggregate displayStringForType: self.function.integerValue];
 }
 
 - (NSString *)functionNameShort {
-    return [RptqDocumentObjectAggregate shortDisplayStringForType: [[self function] integerValue]];
+    return [RptqDocumentObjectAggregate shortDisplayStringForType: self.function.integerValue];
 }
 
 + (NSString *)shortDisplayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
     
-    NSString *result = nil;
-    
     switch (aggregateFunctionType) {
             
         case MTAggregateFunctionTypeCount:
-            result = NSLocalizedString(@"Count", @"Count");
+            return NSLocalizedString(@"Count", @"Count");
             break;
             
         case MTAggregateFunctionTypeFirst:
-            result = NSLocalizedString(@"First", @"First");
+            return NSLocalizedString(@"First", @"First");
             break;
             
         case MTAggregateFunctionTypeLast:
-            result = NSLocalizedString(@"Last", @"Last");
+            return NSLocalizedString(@"Last", @"Last");
             break;
             
         case MTAggregateFunctionTypeMax:
-            result = NSLocalizedString(@"Max", @"Max");
+            return NSLocalizedString(@"Max", @"Max");
             break;
             
         case MTAggregateFunctionTypeMean:
-            result = NSLocalizedString(@"Mean", @"Mean");
+            return NSLocalizedString(@"Mean", @"Mean");
             break;
             
         case MTAggregateFunctionTypeMin:
-            result = NSLocalizedString(@"Min", @"Min");
+            return NSLocalizedString(@"Min", @"Min");
             break;
             
         case MTAggregateFunctionTypeSum:
-            result = NSLocalizedString(@"Sum", @"Sum");
+            return NSLocalizedString(@"Sum", @"Sum");
             break;
 
         default:
+            return @"";
             break;
     }
-    return result;
 }
 
 + (NSString *)displayStringForType:(MTAggregateFunctionType)aggregateFunctionType {
-    
-    NSString *result = nil;
-    
+
     switch (aggregateFunctionType) {
 
         case MTAggregateFunctionTypeCount:
-            result = NSLocalizedString(@"Count", @"Count");
+            return NSLocalizedString(@"Count", @"Count");
             break;
         
         case MTAggregateFunctionTypeFirst:
-            result = NSLocalizedString(@"First", @"First");
+            return NSLocalizedString(@"First", @"First");
             break;
         
         case MTAggregateFunctionTypeLast:
-            result = NSLocalizedString(@"Last", @"Last");
+            return NSLocalizedString(@"Last", @"Last");
             break;
         
         case MTAggregateFunctionTypeMax:
-            result = NSLocalizedString(@"Maximum", @"Maximum");
+            return NSLocalizedString(@"Maximum", @"Maximum");
             break;
         
         case MTAggregateFunctionTypeMean:
-            result = NSLocalizedString(@"Mean", @"Mean");
+            return NSLocalizedString(@"Mean", @"Mean");
             break;
         
         case MTAggregateFunctionTypeMin:
-            result = NSLocalizedString(@"Minimum", @"Minimum");
+            return NSLocalizedString(@"Minimum", @"Minimum");
             break;
         
         case MTAggregateFunctionTypeSum:
-            result = NSLocalizedString(@"Sum", @"Sum");
+            return NSLocalizedString(@"Sum", @"Sum");
             break;
         
         default:
+            return @"";
             break;
 
     }
-    
-    return result;
     
 }
 
 + (NSString *)displayStringForGroupByType:(MTAggregateGroupByType)groupByType {
 
-    NSString *result = nil;
-    
     switch (groupByType) {
         case MTAggregateGroupByTypeSection:
-            result = NSLocalizedString(@"Section: %d", @"Section: %d");
+            return NSLocalizedString(@"Section: %d", @"Section: %d");
             break;
         case MTAggregateGroupByTypePage:
-            result = NSLocalizedString(@"Page", @"Page");
+            return NSLocalizedString(@"Page", @"Page");
             break;
         case MTAggregateGroupByTypeReport:
-            result = NSLocalizedString(@"Report", @"Report");
+            return NSLocalizedString(@"Report", @"Report");
             break;
         default:
+            return @"";
             break;
     }
-    
-    return result;
-
 }
 
 - (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
@@ -202,23 +193,23 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
                                     groupNumber:(NSUInteger)groupNumber {
     
     NSNumber *function = @(functionType);
-    [self setFunction: function];
+    self.function = function;
     
     NSNumber *group = @(groupNumber);
-    [self setGroupNumber: group];
+    self.groupNumber = group;
     
     NSNumber *gType = @(groupType);
-    [self setGroupType:gType];
+    self.groupType = gType;
     
     switch (inputType) {
         case MTAggregateFunctionInputTypeField: {
-            [self setAggregateField:(RptqQueryField *)aggregateObject];
-            [self setAggregateFunction:nil];
+            self.aggregateField = (RptqQueryField *)aggregateObject;
+            self.aggregateFunction = nil;
             break;
         }
         case MTAggregateFunctionInputTypeFormula: {
-            [self setAggregateField:nil];
-            [self setAggregateFunction:(RptqDocumentObjectFormula *)aggregateObject];
+            self.aggregateField = nil;
+            self.aggregateFunction = (RptqDocumentObjectFormula *)aggregateObject;
             break;
         }
         default:
@@ -226,7 +217,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
     }
     
     NSError *error = nil;
-    [[self managedObjectContext] save:&error];
+    [self.managedObjectContext save:&error];
     
 }
 

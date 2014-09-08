@@ -46,7 +46,7 @@
 
 - (NSArray *)allObjects {
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
     
     NSInteger current = [self current];
     NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:([self total] - current)];
@@ -61,7 +61,7 @@
 
 - (id)nextObject {
     RptqDatabase *database = [[[self document] hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
+    RptqQuery *query = [database.hasQueries anyObject];
 
     NSInteger current = [self current];
     id result = [query documentSectionForRow: current];

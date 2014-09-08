@@ -86,7 +86,7 @@
                          andConnecitonId:(NSNumber *)connectionId {
     
     RptqDatabase *currentDatabase = nil;
-    for (RptqDatabase *db in [document hasDatabaseSchemas]) {
+    for (RptqDatabase *db in document.hasDatabaseSchemas) {
         if ([[db identifier] integerValue] == [connectionId integerValue]) {
             currentDatabase = db;
             break;

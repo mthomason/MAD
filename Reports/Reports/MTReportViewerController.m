@@ -21,7 +21,6 @@
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
-#import "RptqQueryCache.h"
 #import "NSError+UserInterface.h"
 #import "MTReportFormatter.h"
 #import "MTQuery.h"

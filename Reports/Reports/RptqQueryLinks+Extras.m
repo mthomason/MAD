@@ -65,14 +65,26 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     NSUInteger identifier = 0;
     if (error == nil) {
         RptqQueryLinks *lastObject = [fetchResults lastObject];
-        identifier = [[lastObject identifier] integerValue] + 1;
+        identifier = lastObject.identifier.integerValue + 1;
     }
-    [self setIdentifier:@(identifier)];
-    [self setDesignerOriginX:@(0.0000f)];
-    [self setDesignerOriginY:@(0.0000f)];
-    [self setDesignerSizeHeight:@(0.0000f)];
-    [self setDesignerSizeWidth:@(0.0000f)];
-    [self setDesignerInitalLayout:@(YES)];
+    
+    NSNumber *identifierWrapper = @(identifier);
+    self.identifier = identifierWrapper;
+    
+    NSNumber *designerOriginX = @(CGPointZero.x);
+    self.designerOriginX = designerOriginX;
+    
+    NSNumber *designerOriginY = @(CGPointZero.y);
+    self.designerOriginY = designerOriginY;
+    
+    NSNumber *designerSizeHeight = @(CGSizeZero.height);
+    self.designerSizeHeight = designerSizeHeight;
+
+    NSNumber *designerSizeWidth = @(CGSizeZero.width);
+    self.designerSizeWidth = designerSizeWidth;
+    
+    NSNumber *designerInitalLayout = @(YES);
+    self.designerInitalLayout = designerInitalLayout;
     
 }
 
@@ -102,14 +114,6 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
 
 #pragma mark - Static
 
-+ (NSArray *)queriesForDocument:(RptqDocument *)document {
-    RptqDatabase *database = [[document hasDatabaseSchemas] anyObject];
-    RptqQuery *query = [[database hasQueries] anyObject];
-    NSSet *queryLinks = [query hasQueryLinks];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"identifier" ascending: YES];
-    return [queryLinks sortedArrayUsingDescriptors:@[sortDescriptor]];
-}
-
 + (instancetype)queryLinkFactoryWithLeftField:(RptqQueryField *)fieldLeft
                                    rightField:(RptqQueryField *)fieldRight
                                      joinType:(MNSLinkType)joinType {
@@ -120,52 +124,50 @@ NSString * const MTLinkSqlFullOuterJoin         = @"FULL OUTER JOIN";
     RptqQueryLinks *queryLinks = [[RptqQueryLinks alloc] initWithEntity: rqtEd
                                          insertIntoManagedObjectContext: managedObjectContext];
     
-    [queryLinks setHasLeftField:    fieldLeft];
-    [queryLinks setHasRightField:   fieldRight];
-    
-    [queryLinks setTableleft:       [[fieldLeft inQueryTable] alias]];
-    [queryLinks setFieldleft:       [[fieldLeft databaseSchemaField] name]];
-    [queryLinks setTableright:      [[fieldRight inQueryTable] alias]];
-    [queryLinks setFieldright:      [[fieldRight databaseSchemaField] name]];
-    [queryLinks setJointype:        [RptqQueryLinks ReuseIdForLinkType:joinType]];
-    [queryLinks setJointypeenum:    @(joinType)];
+    queryLinks.hasLeftField     = fieldLeft;
+    queryLinks.hasRightField    = fieldRight;
+    queryLinks.tableleft        = fieldLeft.inQueryTable.alias;
+    queryLinks.fieldleft        = fieldLeft.databaseSchemaField.name;
+    queryLinks.tableright       = fieldRight.inQueryTable.alias;
+    queryLinks.fieldright       = fieldRight.databaseSchemaField.name;
+    queryLinks.jointype         = [RptqQueryLinks ReuseIdForLinkType:joinType];
+    NSNumber *joinTypeSafe      = @(joinType);
+    queryLinks.jointypeenum     = joinTypeSafe;
 
     return queryLinks;
 }
 
 - (NSString *)linkDescription {
-    return [RptqQueryLinks LocalizedNamesForLinkType:[[self jointypeenum] integerValue]];
+    return [RptqQueryLinks LocalizedNamesForLinkType:self.jointypeenum.integerValue];
 }
 
 + (NSString *)ReuseIdForLinkType:(MNSLinkType)type {
-    NSString *reuseId;
     switch (type) {
         case MNSLinkTypeInnerJoin:
-            reuseId = MNSJoinTypeInnerJoin;
+            return MNSJoinTypeInnerJoin;
             break;
         case MNSLinkTypeEquiJoin:
-            reuseId = MNSJoinTypeEquiJoin;
+            return MNSJoinTypeEquiJoin;
             break;
         case MNSLinkTypeNaturalJoin:
-            reuseId = MNSJoinTypeNaturalJoin;
+            return MNSJoinTypeNaturalJoin;
             break;
         case MNSLinkTypeCrossJoin:
-            reuseId = MNSJoinTypeCrossJoin;
+            return MNSJoinTypeCrossJoin;
             break;
         case MNSLinkTypeLeftOuterJoin:
-            reuseId = MNSJoinTypeLeftOuterJoin;
+            return MNSJoinTypeLeftOuterJoin;
             break;
         case MNSLinkTypeRightOuterJoin:
-            reuseId = MNSJoinTypeRightOuterJoin;
+            return MNSJoinTypeRightOuterJoin;
             break;
         case MNSLinkTypeFullOuterJoin:
-            reuseId = MNSJoinTypeFullOuterJoin;
+            return MNSJoinTypeFullOuterJoin;
             break;
         default:
-            reuseId = MNSJoinTypeLeftOuterJoin;
+            return MNSJoinTypeLeftOuterJoin;
             break;
     }
-    return reuseId;
 }
 
 + (NSString *)NamesForLinkType:(MNSLinkType)type {
