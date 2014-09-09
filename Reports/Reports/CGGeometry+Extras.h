@@ -35,6 +35,40 @@ struct CGLineSegment {
 };
 typedef struct CGLineSegment CGLineSegment;
 
+typedef NS_ENUM(NSUInteger, MTDirection) {
+    MTDirectionNorth,       //60˚-120˚
+    MTDirectionNorthWest,   //120˚-150˚
+    MTDirectionNorthEast,
+    MTDirectionSouth,       //240˚-300˚
+    MTDirectionSouthWest,   //210˚-240˚
+    MTDirectionSouthEast,
+    MTDirectionEast,        //330˚-360˚,0-30˚
+    MTDirectionWest,        //210˚-150˚
+};
+
+CG_INLINE MTDirection generalDirectionOfDegrees(CGFloat degrees);
+CG_INLINE MTDirection generalDirectionOfDegrees(CGFloat degrees) {
+    MTDirection direction = MTDirectionNorth;
+    if (degrees > 60.0000f && degrees < 120.0000f) {
+        direction = MTDirectionNorth;
+    } else if (degrees > 30.0000f && degrees < 60.0000f) {
+        direction = MTDirectionNorthEast;
+    } else if ( degrees > 120.0000f && degrees < 150.0000f ) {
+        direction = MTDirectionNorthWest;
+    } else if ( degrees > 240.0000f && degrees < 300.0000f ) {
+        direction = MTDirectionSouth;
+    } else if ( degrees > 300.0000f && degrees < 330.0000f ) {
+        direction = MTDirectionSouthEast;
+    } else if ( degrees > 210.0000f && degrees < 240.0000f ) {
+        direction = MTDirectionSouthWest;
+    } else if ((degrees > 330.0000f && degrees < 360.0000f) || (degrees > 0.0000f && degrees < 30.0000f)) {
+        direction = MTDirectionEast;
+    } else if ( degrees > 150.0000f && degrees < 210.0000f) {
+        direction = MTDirectionWest;
+    }
+    return direction;
+}
+
 CG_INLINE CGSize CGSizeFingerDefault();
 CG_INLINE CGSize
 CGSizeFingerDefault() {

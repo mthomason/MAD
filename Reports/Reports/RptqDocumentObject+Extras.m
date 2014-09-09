@@ -222,8 +222,8 @@ static NSNumberFormatter *currencyNumberFormatter;
 
 - (void)setDropPoint:(CGPoint)drop {
     NSNumber *x = @(drop.x), *y = @(drop.y);
-    [self setDropPointX: x];
-    [self setDropPointY: y];
+    self.dropPointX = x;
+    self.dropPointY = y;
 }
 
 - (CGPoint)dropPoint {
@@ -232,8 +232,8 @@ static NSNumberFormatter *currencyNumberFormatter;
 
 - (void)setOrigin:(CGPoint)origin {
     NSNumber *x = @(origin.x), *y = @(origin.y);
-    [self setOriginx: x];
-    [self setOriginy: y];
+    self.originx = x;
+    self.originy = y;
 }
 
 #pragma mark - Member
@@ -339,6 +339,14 @@ static NSNumberFormatter *currencyNumberFormatter;
 + (instancetype)documentObjectForObjectID:(NSManagedObjectID *)objid managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObject *result = [managedObjectContext objectRegisteredForID:objid];
     return (RptqDocumentObject *)result;
+}
+
+- (void)dropAtRect:(CGRect)rect {
+    CGFloat sizeWidth = nearbyintf(rect.size.width);
+    CGFloat sizeHeight = nearbyintf(rect.size.height);
+    self.sizewidth = @(sizeWidth);
+    self.sizeheight = @(sizeHeight);
+    [self setDropPoint: rect.origin];
 }
 
 #pragma mark - MTProtocolCompare

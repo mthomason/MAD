@@ -55,6 +55,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
 - (CGPoint)dropPoint;
 - (void)setDropPoint:(CGPoint)dropPoint;
 - (void)setOrigin:(CGPoint)origin;
+- (void)dropAtRect:(CGRect)rect;
 
 - (CGFloat)spacingLeft;
 - (CGFloat)spacingTop;

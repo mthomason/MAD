@@ -37,6 +37,7 @@
 + (instancetype)tintColorGold2;
 
 + (instancetype)tintColorAnalogous4;
++ (instancetype)borderColor;
 
 @end
 

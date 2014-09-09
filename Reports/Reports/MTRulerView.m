@@ -9,6 +9,7 @@
 #import "MTRulerView.h"
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
+#import "UIView+Extras.h"
 
 @interface MTRulerView ()
 
@@ -59,12 +60,16 @@
     [self setAttributes:attributes];
     [self setAttributesMetric:attributes2];
     
-    CGFloat thinLineWidth = 1.0000f / [[UIScreen mainScreen] scale];
-    [self setThinLineWidth:thinLineWidth];
-    [self setLineWidth:1.0000f];
+    CGFloat thinLineWidth = 1.0000f / [UIScreen mainScreen].scale;
+    self.thinLineWidth = thinLineWidth;
+    self.lineWidth = 1.0000f;
     
-    [self setEigthInchInPoints: 72.0000f / 8.0000f];
-    [self setCmInPoints:(72.0000f / 1.0000f) / 2.5400f];
+    self.eigthInchInPoints = 72.0000f / 8.0000f;
+    self.cmInPoints = (72.0000f / 1.0000f) / 2.5400f;
+
+    self.layer.borderWidth = [self borderWidthThin];
+    self.layer.borderColor = [UIColor borderColor].CGColor;
+    self.translatesAutoresizingMaskIntoConstraints = NO;
 
 }
 

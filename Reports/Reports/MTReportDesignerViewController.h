@@ -21,17 +21,6 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
     MTToolboxTypeSection = 3,
 };
 
-typedef NS_ENUM(NSUInteger, MTDirection) {
-    MTDirectionNorth,       //60˚-120˚
-    MTDirectionNorthWest,   //120˚-150˚
-    MTDirectionNorthEast,
-    MTDirectionSouth,       //240˚-300˚
-    MTDirectionSouthWest,   //210˚-240˚
-    MTDirectionSouthEast,
-    MTDirectionEast,        //330˚-360˚,0-30˚
-    MTDirectionWest,        //210˚-150˚
-};
-
 @class MADocument;
 
 @interface MTReportDesignerViewController : UIViewController

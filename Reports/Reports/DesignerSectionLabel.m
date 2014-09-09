@@ -29,25 +29,20 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
     self = [super initWithFrame:frame];
     if (self) {
         [self setSelected:NO];
+        
+        self.scale = 1.0000f;
 
-        UIColor *backgroundColor = [UIColor clearColor];
         UIColor *tintColor = [UIColor tintColorBlue];
-
-        UILabel *labelSectionIdentifer = [[UILabel alloc] initWithFrame:frame];
-        labelSectionIdentifer.backgroundColor = backgroundColor;
-        labelSectionIdentifer.textAlignment = NSTextAlignmentRight;
-        labelSectionIdentifer.lineBreakMode = NSLineBreakByClipping;
-        labelSectionIdentifer.font = [UIFont systemFontOfSize:MADesignerSectionLabelFontSize];
+        self.backgroundColor = [UIColor clearColor];
+        self.textAlignment = NSTextAlignmentRight;
+        self.lineBreakMode = NSLineBreakByClipping;
+        self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
         
-        labelSectionIdentifer.textColor = tintColor;
+        self.textColor = tintColor;
         
-        labelSectionIdentifer.text = [section localizedDisplayName];
-        labelSectionIdentifer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        labelSectionIdentifer.translatesAutoresizingMaskIntoConstraints = YES;
-        
-        [self addSubview:labelSectionIdentifer];
-        [self setLabelSectionIdentifer:labelSectionIdentifer];
-
+        self.text = [section localizedDisplayName];
+        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.translatesAutoresizingMaskIntoConstraints = YES;
         self.backgroundColor = [UIColor clearColor];
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.layer.cornerRadius = 0.0000f;
@@ -58,7 +53,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
         
         [self setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh
                                               forAxis: UILayoutConstraintAxisHorizontal];
-        
+        self.userInteractionEnabled = YES;
         UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                                                action: @selector(toggleSectionControlPanel:)];
         tapGestureRecognizer.numberOfTapsRequired = 1;
@@ -71,41 +66,34 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 }
 
 - (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
-    self.labelSectionIdentifer.contentScaleFactor = contentScaleFactor;
     [super setContentScaleFactor:contentScaleFactor];
 }
 
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
-    [self.labelSectionIdentifer setNeedsDisplay];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     UIColor *color = [UIColor tintColorBlue];
-    if ([self selected]) {
-        [[self labelSectionIdentifer] setTextColor:[color colorWithAlphaComponent:0.500f]];
+    if (self.selected) {
+        self.textColor = [color colorWithAlphaComponent:0.5000f];
     } else {
-        [[self labelSectionIdentifer] setTextColor:color];
+        self.textColor = color;
     }
-}
-
-- (CGSize)intrinsicContentSize {
-    CGSize labelIntrinsicContentSize = [[self labelSectionIdentifer] intrinsicContentSize];
-    return CGSizeMake(labelIntrinsicContentSize.width + 2.0000f, labelIntrinsicContentSize.height + 2.0000f);
 }
 
 - (void)dimView {
     UIColor *tintColor = [UIColor tintColorBlue];
-    [[self labelSectionIdentifer] setTextColor:[tintColor colorWithAlphaComponent:0.500f]];
-    [self setSelected:YES];
+    self.textColor = [tintColor colorWithAlphaComponent:0.500f];
+    self.selected = YES;
 }
 
 - (void)normalView {
     
     UIColor *tintColor = [UIColor tintColorBlue];
-    [[self labelSectionIdentifer] setTextColor:tintColor];
-    [self setSelected:NO];
+    self.textColor = tintColor;
+    self.selected = NO;
 }
 
 
@@ -114,7 +102,6 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 }
 
 - (void)toggleSectionControlPanel:(UITapGestureRecognizer *)sender {
-    
     if ([sender state] == UIGestureRecognizerStateEnded) {
         [self.delegate toggleSectionControlPanel:self];
     }

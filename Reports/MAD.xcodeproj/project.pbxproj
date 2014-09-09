@@ -608,6 +608,8 @@
 		4C4C8C821969420A00E80BE6 /* MTQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C8C7F1969420A00E80BE6 /* MTQueryCache.m */; };
 		4C4C8C831969420A00E80BE6 /* MTQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C8C7F1969420A00E80BE6 /* MTQueryCache.m */; };
 		4C4C8C841969420A00E80BE6 /* MTQueryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C8C7F1969420A00E80BE6 /* MTQueryCache.m */; };
+		4C4CAC6B19BF0253000927AC /* MADPromptManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4CAC6A19BF0253000927AC /* MADPromptManager.m */; };
+		4C4CAC6C19BF0253000927AC /* MADPromptManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4CAC6A19BF0253000927AC /* MADPromptManager.m */; };
 		4C4EBFAC17EDEA8D00D10622 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAA17EDEA8D00D10622 /* carat-open.png */; };
 		4C4EBFAD17EDEA8D00D10622 /* carat-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAA17EDEA8D00D10622 /* carat-open.png */; };
 		4C4EBFAE17EDEA8D00D10622 /* carat.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFAB17EDEA8D00D10622 /* carat.png */; };
@@ -2258,6 +2260,8 @@
 		4C4C78D716962944000ADD1D /* UIButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonSelected.png; sourceTree = "<group>"; };
 		4C4C8C7E1969420A00E80BE6 /* MTQueryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCache.h; sourceTree = "<group>"; };
 		4C4C8C7F1969420A00E80BE6 /* MTQueryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCache.m; sourceTree = "<group>"; };
+		4C4CAC6919BF0253000927AC /* MADPromptManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPromptManager.h; sourceTree = "<group>"; };
+		4C4CAC6A19BF0253000927AC /* MADPromptManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPromptManager.m; sourceTree = "<group>"; };
 		4C4EBFAA17EDEA8D00D10622 /* carat-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open.png"; sourceTree = "<group>"; };
 		4C4EBFAB17EDEA8D00D10622 /* carat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carat.png; sourceTree = "<group>"; };
 		4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carat-open@2x.png"; sourceTree = "<group>"; };
@@ -3995,6 +3999,8 @@
 				4C5BED5718E8982400BDDDB8 /* User Interface */,
 				4CBF7B7718EDA9E20035FCB9 /* User */,
 				4C8A648818C7C6C200997D22 /* Document */,
+				4C4CAC6919BF0253000927AC /* MADPromptManager.h */,
+				4C4CAC6A19BF0253000927AC /* MADPromptManager.m */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -6209,6 +6215,7 @@
 				4C02F75B18D5DC9900061A83 /* MTQueryDesigner.m in Sources */,
 				4C0E7722163B5AEC003B951E /* AppDelegate.m in Sources */,
 				4C0E7725163B5AEC003B951E /* MTReportDesignerViewController.m in Sources */,
+				4C4CAC6C19BF0253000927AC /* MADPromptManager.m in Sources */,
 				4C23FBDF18FAE4F7009F234F /* MTPaperGovernmentLegal.m in Sources */,
 				4C0E7727163B5AEC003B951E /* Constants.m in Sources */,
 				4C0E7728163B5AEC003B951E /* MTReportDesignerFontSettingsViewController.m in Sources */,
@@ -6710,6 +6717,7 @@
 				4C23FBA618FAE4F7009F234F /* MTPaperA5.m in Sources */,
 				4C02F75A18D5DC9900061A83 /* MTQueryDesigner.m in Sources */,
 				4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */,
+				4C4CAC6B19BF0253000927AC /* MADPromptManager.m in Sources */,
 				4C23FB3918FADEE2009F234F /* MTTableViewCellBarcodeCompositCode.m in Sources */,
 				4C23FBFA18FAE5DF009F234F /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C76F0B114B4F132005DCE49 /* MTReportDesignerViewController.m in Sources */,

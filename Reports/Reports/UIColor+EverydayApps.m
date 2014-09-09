@@ -40,5 +40,5 @@
 + (instancetype)tintColorAnalogous2 { vendColor(2.0000f, 110.0000f, 238.0000f); };
 + (instancetype)tintColorAnalogous3 { vendColor(2.0000f, 233.0000f, 238.0000f); };
 + (instancetype)tintColorAnalogous4 { vendColor(2.0000f, 228.0000f, 169.0000f); };
-
++ (instancetype)borderColor { return [UIColor lightGrayColor]; }
 @end
