@@ -266,11 +266,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
         [self saveAggregateLabel: action.sourceViewController];
     
-    } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
-        [self saveImageLabel];
-    
     } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
         [self saveBarcodeLabel: action.sourceViewController];
+        
+    } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
+        //Intentionally blank
+        
     }
     [self setDisplayActive];
 }
@@ -3552,27 +3553,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                        groupNumber: groupNumber];
         }
     }
-}
-
-- (void)saveImageLabel {
-   /* __weak MTReportDesignerViewController *reportDesigner = self;
-    block_insertObject insert = ^(UIViewController *action) {
-        if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary]) {
-            UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-            [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-            imagePicker.delegate =  reportDesigner;
-            [[imagePicker navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
-            
-            [reportDesigner.tabBarController presentViewController:imagePicker animated:YES completion:NULL];
-        }
-    };
-    
-    //if ([UIDevice isPad]) {
-        insert(nil);
-    //} else {
-    //    [self dismissViewControllerAnimated:YES completion:^{ insert(nil); }];
-    //}
-    */
 }
 
 - (void)saveBarcodeLabel:(MTViewControllerBarcode *)viewController {
