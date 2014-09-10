@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MADViewDetailSmall.h"
+#import "MADDesignerStatusLabel.h"
 #import "UIColor+EverydayApps.h"
 
 const CGFloat MADViewDetailSmallCornerRadius        =  3.0000f;
@@ -15,13 +15,13 @@ const CGFloat MADAlphaHidden                        =  0.0000f;
 const CGFloat MADAlphaVisable                       =  1.0000f;
 const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 
-@interface MADViewDetailSmall ()
+@interface MADDesignerStatusLabel ()
 
 @property (nonatomic, strong) UILabel *label;
 
 @end
 
-@implementation MADViewDetailSmall
+@implementation MADDesignerStatusLabel
 
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -48,14 +48,14 @@ const CGFloat MADViewDetailSmallAnimationDelay      =  0.6666f;
 }
 
 - (void)show {
-    __weak MADViewDetailSmall *weakself = self;
+    __weak MADDesignerStatusLabel *weakself = self;
     [UIView animateWithDuration:MADViewDetailSmallAnimationDuration animations:^{
         weakself.alpha = MADAlphaVisable;
     }];
 }
 
 - (void)hide {
-    __weak MADViewDetailSmall *weakself = self;
+    __weak MADDesignerStatusLabel *weakself = self;
     [UIView animateWithDuration:MADViewDetailSmallAnimationDuration
                           delay:MADViewDetailSmallAnimationDelay
                         options:UIViewAnimationOptionCurveEaseOut animations:^{

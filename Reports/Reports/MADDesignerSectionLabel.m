@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "DesignerSectionLabel.h"
+#import "MADDesignerSectionLabel.h"
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
 #import "RptqDocumentSection+Extras.h"
@@ -14,7 +14,7 @@
 
 const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
-@interface DesignerSectionLabel ()
+@interface MADDesignerSectionLabel ()
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign, readwrite) BOOL selected;
@@ -22,7 +22,7 @@ const CGFloat MADesignerSectionLabelFontSize = 10.0000f;
 
 @end
 
-@implementation DesignerSectionLabel
+@implementation MADDesignerSectionLabel
 
 - (instancetype)initWithSection:(RptqDocumentSection *)section {
     CGRect frame = CGRectZero;

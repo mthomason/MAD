@@ -16,7 +16,7 @@
 - (void)didUpdateLayout:(id)sender;
 @end
 
-@interface MTDocumentSectionView : UICollectionView
+@interface MADDesignerSectionView : UICollectionView
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) id <MTDocumentSectionViewDelegate> sectionDelegate;
