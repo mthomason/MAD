@@ -38,8 +38,6 @@
 		4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0AFCE616B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0AFCE816B5EC820007964D /* MTViewTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */; };
-		4C0CAB4918FC618F0044D866 /* MTArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C0CAB4A18FC618F0044D866 /* MTArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0CAB571902C14B0044D866 /* MTDataTableFast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB561902C14B0044D866 /* MTDataTableFast.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0CAB581902C14B0044D866 /* MTDataTableFast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB561902C14B0044D866 /* MTDataTableFast.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0CAB5B1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0CAB5A1902D5E50044D866 /* MTQueryCacheAddColumn.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1751,8 +1749,6 @@
 		4C0464791997B5AA00D53D3B /* MADMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacros.h; sourceTree = "<group>"; };
 		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTViewTableHeader.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		4C0CAB4718FC618F0044D866 /* MTArrayCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayCaching.h; sourceTree = "<group>"; };
-		4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayCaching.m; sourceTree = "<group>"; };
 		4C0CAB551902C14B0044D866 /* MTDataTableFast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDataTableFast.h; sourceTree = "<group>"; };
 		4C0CAB561902C14B0044D866 /* MTDataTableFast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDataTableFast.m; sourceTree = "<group>"; };
 		4C0CAB591902D5E50044D866 /* MTQueryCacheAddColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheAddColumn.h; sourceTree = "<group>"; };
@@ -3374,8 +3370,6 @@
 		4C11BCF418DD4DB7001E3D33 /* Formatters */ = {
 			isa = PBXGroup;
 			children = (
-				4C0CAB4718FC618F0044D866 /* MTArrayCaching.h */,
-				4C0CAB4818FC618F0044D866 /* MTArrayCaching.m */,
 				4C11BD1C18E08AEA001E3D33 /* MTDataFormatter.h */,
 				4C11BD1D18E08AEA001E3D33 /* MTDataFormatter.m */,
 				4C11BCF518DD4DE7001E3D33 /* MTTableFormatter.h */,
@@ -6527,7 +6521,6 @@
 				4C77329D190FFD6A005AE7C2 /* MysqlServer.m in Sources */,
 				4C77328F190FFD6A005AE7C2 /* MysqlException.m in Sources */,
 				4CA60E14197044CD00714AFF /* MTNotificationDidFormatPage.m in Sources */,
-				4C0CAB4A18FC618F0044D866 /* MTArrayCaching.m in Sources */,
 				4CA92ADC17DAFF1700D654C7 /* MADDesignerElementPIckerViewController.m in Sources */,
 				4CABE4A41837DF80007EDD9D /* RptqQueryGroup.m in Sources */,
 				4C23FAF518FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m in Sources */,
@@ -7028,7 +7021,6 @@
 				4C77329C190FFD6A005AE7C2 /* MysqlServer.m in Sources */,
 				4C77328E190FFD6A005AE7C2 /* MysqlException.m in Sources */,
 				4CA60E13197044CD00714AFF /* MTNotificationDidFormatPage.m in Sources */,
-				4C0CAB4918FC618F0044D866 /* MTArrayCaching.m in Sources */,
 				4C8155C417009E7000D5330E /* MTAggregateFunctionsViewController.m in Sources */,
 				4C8155C81700C90700D5330E /* MTGroupByViewController.m in Sources */,
 				4C23FBD818FAE4F7009F234F /* MTPaperC8.m in Sources */,
