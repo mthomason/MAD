@@ -108,7 +108,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 - (void)initalizeDatabase {
     
     NSURL *url = [self url];
-    BOOL createDatabase = [[NSFileManager defaultManager] fileExistsAtPath:[url path]] == NO;
+    BOOL createDatabase = [[NSFileManager defaultManager] fileExistsAtPath:url.path] == NO;
     [self reopenDatabaseAtUrl:[self url]];
     if (createDatabase == NO) {
         createDatabase = [self.database tableExist:MTArrayCachedTableName] == NO;

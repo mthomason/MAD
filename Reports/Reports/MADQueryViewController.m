@@ -183,7 +183,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     [self.tableView registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
     
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];

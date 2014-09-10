@@ -11,14 +11,14 @@
 @implementation UIViewController (ui)
 
 - (void)disableTabBarItems {
-    for (UITabBarItem *item in [[[self tabBarController] tabBar] items]) {
-        [item setEnabled:NO];
+    for (UITabBarItem *item in self.tabBarController.tabBar.items) {
+        item.enabled = NO;
     }
 }
 
 - (void)enableTabBarItems {
-    for (UITabBarItem *item in [[[self tabBarController] tabBar] items]) {
-        [item setEnabled:YES];
+    for (UITabBarItem *item in self.tabBarController.tabBar.items) {
+        item.enabled = YES;
     }
 }
 

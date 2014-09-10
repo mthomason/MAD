@@ -920,13 +920,13 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
                                                                                                                    dataTable: [weakdoc mainDataTable]];
         blockViewer.printPageRendererReport = printPageRender;
-        [self ignoreFormatter: weakdoc.reportFormatter];
+        [blockViewer ignoreFormatter: weakdoc.reportFormatter];
 
         __weak MADocument *doc2 = weakdoc;
         __weak MADViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            NSUInteger numberOfPages = [self.document.reportFormatter numberOfPages];
+            NSUInteger numberOfPages = [blockViewer2.document.reportFormatter numberOfPages];
             blockViewer2.numberOfPages = numberOfPages;
             blockViewer2.maxNumberOfPages = numberOfPages > 0 ? (numberOfPages - 1) : 0;
             [blockViewer2 setDisplayActive];

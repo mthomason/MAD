@@ -235,7 +235,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     MTLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, url);
 
     //Unpack files from binary NSData url to NSFileWrapper in tmp folder
-    BOOL success = nil;
+    BOOL success = NO;
     if ([url.pathExtension isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager deleteCoreDataFilesAtDirectory:self.urlGuts];
@@ -437,7 +437,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
                                modelConfiguration:(NSString *)configuration
                                      storeOptions:(NSDictionary *)storeOptions
                                             error:(NSError **)error {
-    NSLog(@"\n\t%s\n\tstore url: %@\n\n", __PRETTY_FUNCTION__, storeURL);
+    MTLog(@"\n\t%s\n\tstore url: %@\n\n", __PRETTY_FUNCTION__, storeURL);
     return [super configurePersistentStoreCoordinatorForURL:storeURL
                                                      ofType:fileType
                                          modelConfiguration:configuration
@@ -446,7 +446,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
-    NSLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
+    MTLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
     
     NSData *imageData = [[NSFileManager defaultManager] dataForUrl:self.urlThumbnail];;
     
