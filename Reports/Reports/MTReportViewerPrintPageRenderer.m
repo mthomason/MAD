@@ -57,7 +57,7 @@
 #import "MTMath.h"
 
 #import "MTReportFormatter.h"
-#import "MTArrayCached.h"
+#import "MTArrayCaching.h"
 #import "MTReportFormatterPageDefinition.h"
 
 #import "UIImage+Border.h"

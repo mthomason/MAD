@@ -34,7 +34,7 @@
 
 #import "MTReportFormatterCache.h"
 
-#import "MTArrayCached.h"
+#import "MTArrayCaching.h"
 
 //Why the fuck!!!
 
@@ -73,8 +73,8 @@ NSString * const MTNullIdentifier = @"(null)";
 
     @property (nonatomic, assign) MTReportFormatterOptions options;
     @property (nonatomic, strong, readwrite) RptqDocument *layout;
-    @property (nonatomic, strong, readwrite) MTArrayCached *reportIndexes;
-    @property (nonatomic, strong, readwrite) MTArrayCached *reportLayout;
+    @property (nonatomic, strong, readwrite) MTArrayCaching *reportIndexes;
+    @property (nonatomic, strong, readwrite) MTArrayCaching *reportLayout;
 
     @property (nonatomic, strong) MTReportFormatterState *machineState; //At some point add the ability to format one page at a time.
 
@@ -328,10 +328,10 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)loadLayoutAndIndexesFromCache {
-    MTArrayCached *ixarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportIndexes]
+    MTArrayCaching *ixarray = [[MTArrayCaching alloc] initWithIdentifier:[self nameCurrentReportIndexes]
                                                         cachedDelegate:self.cachedDelegate];
     [self setReportIndexes:ixarray];
-    MTArrayCached *lyarray = [[MTArrayCached alloc] initWithIdentifier:[self nameCurrentReportLayout]
+    MTArrayCaching *lyarray = [[MTArrayCaching alloc] initWithIdentifier:[self nameCurrentReportLayout]
                                                         cachedDelegate:self.cachedDelegate];
     [self setReportLayout:lyarray];
     [self cleanupTemporaryReportIndexes];

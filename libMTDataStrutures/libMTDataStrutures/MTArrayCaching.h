@@ -13,7 +13,7 @@
 #import "MTCacheProtocol.h"
 #import "Constants.h"
 
-@interface MTArrayCached : NSEnumerator
+@interface MTArrayCaching : NSEnumerator
 
 @property (nonatomic, weak) id <MTCacheProtocol> cachedDelegate;
 @property (nonatomic, strong, readonly) NSString *identifier;

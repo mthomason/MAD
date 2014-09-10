@@ -21,7 +21,7 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
 
 extern NSString * const MTNullIdentifier;
 
-@class RptqDocumentSection, RptqDocument, MTArrayCached, MTReportFormatterPageDefinition;
+@class RptqDocumentSection, RptqDocument, MTArrayCaching, MTReportFormatterPageDefinition;
 
 @protocol MTReportFormatterDataSource <NSObject>
 
@@ -65,8 +65,8 @@ extern NSString * const MTNullIdentifier;
 @property (nonatomic, strong, readwrite) NSArray *sortedQueryGroups;
 @property (nonatomic, strong, readonly) RptqDocument *layout;
 
-@property (nonatomic, strong, readonly) MTArrayCached *reportIndexes;
-@property (nonatomic, strong, readonly) MTArrayCached *reportLayout;
+@property (nonatomic, strong, readonly) MTArrayCaching *reportIndexes;
+@property (nonatomic, strong, readonly) MTArrayCaching *reportLayout;
 
 @property (nonatomic, strong) NSString *overrideIdentifier; //Use this to cache in location other than default.
 

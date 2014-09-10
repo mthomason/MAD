@@ -1165,8 +1165,8 @@
 		4C9E447018D8C7BF00F0F578 /* MTQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E446E18D8C7BF00F0F578 /* MTQuery.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9F400816F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CA14CD81966FBE3006D6F9B /* MTArrayCached.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CD71966FBE3006D6F9B /* MTArrayCached.m */; };
-		4CA14CD91966FBE3006D6F9B /* MTArrayCached.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CD71966FBE3006D6F9B /* MTArrayCached.m */; };
+		4CA14CD81966FBE3006D6F9B /* MTArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CD71966FBE3006D6F9B /* MTArrayCaching.m */; };
+		4CA14CD91966FBE3006D6F9B /* MTArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CD71966FBE3006D6F9B /* MTArrayCaching.m */; };
 		4CA14CE61968ED7E006D6F9B /* MTCachingArrayTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CE51968ED7E006D6F9B /* MTCachingArrayTest.m */; };
 		4CA14CE919693E6D006D6F9B /* MTDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CE819693E6D006D6F9B /* MTDatabaseCache.m */; };
 		4CA14CEA19693E6D006D6F9B /* MTDatabaseCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA14CE819693E6D006D6F9B /* MTDatabaseCache.m */; };
@@ -2668,8 +2668,8 @@
 		4C9F400616F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentObjectFormula+Extras.h"; sourceTree = "<group>"; };
 		4C9F400716F6CC5B004AA4A5 /* RptqDocumentObjectFormula+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentObjectFormula+Extras.m"; sourceTree = "<group>"; };
 		4C9F94BF16423D1800A562B9 /* MUIViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUIViewControllerDelegate.h; sourceTree = "<group>"; };
-		4CA14CD61966FBE3006D6F9B /* MTArrayCached.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayCached.h; sourceTree = "<group>"; };
-		4CA14CD71966FBE3006D6F9B /* MTArrayCached.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayCached.m; sourceTree = "<group>"; };
+		4CA14CD61966FBE3006D6F9B /* MTArrayCaching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTArrayCaching.h; sourceTree = "<group>"; };
+		4CA14CD71966FBE3006D6F9B /* MTArrayCaching.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTArrayCaching.m; sourceTree = "<group>"; };
 		4CA14CE51968ED7E006D6F9B /* MTCachingArrayTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCachingArrayTest.m; sourceTree = "<group>"; };
 		4CA14CE719693E6D006D6F9B /* MTDatabaseCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseCache.h; sourceTree = "<group>"; };
 		4CA14CE819693E6D006D6F9B /* MTDatabaseCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseCache.m; sourceTree = "<group>"; };
@@ -3533,8 +3533,8 @@
 				4C23FADC18FADA40009F234F /* MTDataTableLocation.m */,
 				4C0CAB87190578020044D866 /* MTDataTableFastObjectEnumerator.h */,
 				4C0CAB88190578020044D866 /* MTDataTableFastObjectEnumerator.m */,
-				4CA14CD61966FBE3006D6F9B /* MTArrayCached.h */,
-				4CA14CD71966FBE3006D6F9B /* MTArrayCached.m */,
+				4CA14CD61966FBE3006D6F9B /* MTArrayCaching.h */,
+				4CA14CD71966FBE3006D6F9B /* MTArrayCaching.m */,
 			);
 			name = DataTable;
 			path = ../../libMTDataStrutures/libMTDataStrutures;
@@ -6252,7 +6252,7 @@
 				4C23FBA518FAE4F7009F234F /* MTPaperA4.m in Sources */,
 				4C23FB9B18FAE4F7009F234F /* MTPaper.m in Sources */,
 				4C2F6E6C194C3450009D192B /* MTArrayDataSource.m in Sources */,
-				4CA14CD91966FBE3006D6F9B /* MTArrayCached.m in Sources */,
+				4CA14CD91966FBE3006D6F9B /* MTArrayCaching.m in Sources */,
 				4CABE45C1837DF79007EDD9D /* RptqQueryField.m in Sources */,
 				4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */,
 				4C23FC1918FAE649009F234F /* MTDatabaseField.m in Sources */,
@@ -6751,7 +6751,7 @@
 				4C6CDFC414B85BFD00DABF86 /* MTTableViewCellDocument.m in Sources */,
 				4C5F02EC14BA480400C49BE9 /* MTSettingsViewController.m in Sources */,
 				4C2F6E6B194C3450009D192B /* MTArrayDataSource.m in Sources */,
-				4CA14CD81966FBE3006D6F9B /* MTArrayCached.m in Sources */,
+				4CA14CD81966FBE3006D6F9B /* MTArrayCaching.m in Sources */,
 				4CE8A03914BFF744007C8345 /* MAD.xcdatamodeld in Sources */,
 				4CE8A04314C01ABB007C8345 /* MADOpenFileViewController.m in Sources */,
 				4CABE48B1837DF7E007EDD9D /* RptqDocumentObjectAggregate.m in Sources */,
