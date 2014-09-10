@@ -235,37 +235,39 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 #pragma mark - UIViewController Standard Callbacks
 
+- (NSString *)title {
+    return NSLocalizedString(@"MAD Viewer", "MAD Viewer");
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     
-    [self setEdgesForExtendedLayout: UIRectEdgeNone];
-    [self setTitle:@"MAD Viewer"];
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
     labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
     [labelMadDesigner setAttributedText:attributedString];
-    [self.navigationItem setTitleView:labelMadDesigner];
-    [[self.navigationItem titleView] sizeToFit];
+    self.navigationItem.titleView = labelMadDesigner;
+    [self.navigationItem.titleView sizeToFit];
     
     _timerLabelTimeSinceRefreh = nil;
     
-    [self setIsRefreshing:NO];
-    [self setUpdatingOfTimerIsPaused:NO];
+    self.isRefreshing = NO;
+    self.updatingOfTimerIsPaused = NO;
     
     _lastCacheDate = nil;
     
-    [[self labelDateLastRefreshed] setText:@""];
+    self.labelDateLastRefreshed.text = @"";
 
-    [self setPageIsAnimating:NO];
-    [self setStartedRefresh:NO];
+    self.pageIsAnimating = NO;
+    self.startedRefresh = NO;
     
-    [self view].backgroundColor = [UIColor groupTableViewBackgroundColor];
-    
-    [self setDataSource:self];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.dataSource = self;
     self.delegate = self;
     
     [self setCurrentPageIndex:0];
@@ -285,8 +287,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [toolbarItems insertObject: [self barButtonLabelStatus] atIndex: 0];
     [self setToolbarItems: toolbarItems animated: NO];
     
-    [self setTintColorForToolbar:[[self navigationController] toolbar]];
-    [self setTintColorForSidebar:[self toolbarSideRight]];
+    [self setTintColorForToolbar:self.navigationController.toolbar];
+    [self setTintColorForSidebar:self.toolbarSideRight];
     
 }
 
@@ -294,7 +296,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [[[self navigationController] toolbar] setNeedsLayout];
+    [self.navigationController.toolbar setNeedsLayout];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -327,8 +329,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 #pragma mark - add controls
 
 - (void)addProgressViewToView {
-    [[self view] addSubview:[self progressView]];
-    [[self view] bringSubviewToFront:[self progressView]];
+    [self.view addSubview:[self progressView]];
+    [self.view bringSubviewToFront:[self progressView]];
 }
 
 - (void)removeProgressViewFromView {
@@ -336,8 +338,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 - (void)addPageSliderToView {
-    [[self view] addSubview:[self toolbarSideRight]];
-    [[self view] bringSubviewToFront:[self toolbarSideRight]];
+    [self.view addSubview:self.toolbarSideRight];
+    [self.view bringSubviewToFront:self.toolbarSideRight];
 }
 
 #pragma mark - properties
@@ -369,9 +371,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (NSShadow *)statusLabelShadow {
     NSShadow *shadow = [[NSShadow alloc] init];
-    [shadow setShadowColor:[UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f]];
-    [shadow setShadowOffset:CGSizeMake(0.0000f, 1.0000f)];
-    [shadow setShadowBlurRadius:5.0000f];
+    shadow.shadowColor = [UIColor colorWithRed:0.0000f green:0.00000f blue:0.0000f alpha:0.8000f];
+    shadow.shadowOffset = CGSizeMake(0.0000f, 1.0000f);
+    shadow.shadowBlurRadius = 5.0000f;
     return shadow;
 }
 
@@ -398,15 +400,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
             [UIImage imageNamed:MADImageBarButtonItemMadViewer];
 }
 
-- (NSString *)title {
-    return NSLocalizedString(@"MAD Viewer", "MAD Viewer");
-}
-
 - (void)setTintColorForToolbar:(UIToolbar *)toolbar {
-    UIColor *barTintColor = [UIColor tintColorBlue];
-    UIColor *tintColor = [UIColor tintColorWhite];
-    [toolbar setBarTintColor:barTintColor];
-    [toolbar setTintColor:tintColor];
+    toolbar.barTintColor = [UIColor tintColorBlue];
+    toolbar.tintColor = [UIColor tintColorWhite];
 }
 
 - (void)setTintColorForSidebar:(UIToolbar *)toolbar {
@@ -423,8 +419,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     CGFloat h = self.view.frame.size.height;
     CGRect frame = CGRectMake(x, y, w, h);
     CGRect framePageSlider = CGRectMake(CGPointZero.x, CGPointZero.y, w, h);
-    [[self toolbarSideRight] setFrame:frame];
-    [[self pageSlider] setFrame:framePageSlider];
+    self.toolbarSideRight.frame = frame;
+    self.pageSlider.frame = framePageSlider;
 }
 
 - (void)sliderChangedPage:(id)sender {
@@ -444,11 +440,11 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         [[self view] bringSubviewToFront:[self toolbarSideRight]];
         [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
             if (finished) {
-                [[reportViewer view] bringSubviewToFront:[reportViewer toolbarSideRight]];
-                [[pageOne view] setNeedsDisplay];
-                [[reportViewer labelDateLastRefreshed] setHidden:NO];
-                [reportViewer setUpdatingOfTimerIsPaused:NO];
-                [reportViewer setIsRefreshing:NO];
+                [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];
+                [pageOne.view setNeedsDisplay];
+                [reportViewer.labelDateLastRefreshed setHidden:NO];
+                reportViewer.updatingOfTimerIsPaused = NO;
+                reportViewer.isRefreshing = NO;
                 reportViewer = nil;
             }
         }];
@@ -457,9 +453,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 
 - (IBAction)sliderPageDidFinishDrag:(id)sender {
-    UISlider *slider = (UISlider *)sender;
-    float sliderIndex = lroundf([slider value]); // Rounds float to an integer
-    [slider setValue:sliderIndex];               // Sets your slider to this value
+    ((UISlider *)sender).value = lroundf(((UISlider *)sender).value);               // Sets your slider to this value
 }
 
 - (void)viewWillLayoutSubviews {
@@ -481,19 +475,17 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         counter++;
     }
     CGFloat width = [[[self navigationController] toolbar] frame].size.width - nonSliderButtonsWidth - (itemsMargin * counter + 1);
-    [[self barButtonItemSliderView] setWidth:width];
-    [[self sliderView] setFrame:CGRectMake(self.sliderView.frame.origin.x, self.sliderView.frame.origin.y, width, self.sliderView.frame.size.height)];
-    [[[self navigationController] toolbar] setNeedsLayout];
-    [[self view] bringSubviewToFront:[self toolbarSideRight]];
+    [self.barButtonItemSliderView setWidth:width];
+    [self.sliderView setFrame:CGRectMake(self.sliderView.frame.origin.x, self.sliderView.frame.origin.y, width, self.sliderView.frame.size.height)];
+    [self.navigationController.toolbar setNeedsLayout];
+    [self.view bringSubviewToFront:[self toolbarSideRight]];
     [self addSliderPagination];
-    
-    CGRect bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
-    [[self labelStatus] setBounds:bounds];
+    self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[self.navigationItem titleView] sizeToFit];
+    [self.navigationItem.titleView sizeToFit];
 }
 
 - (IBAction)done:(id)sender {
@@ -776,7 +768,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         __weak MADViewerController *weakself = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [[weakself popoverControllerActivity] dismissPopoverAnimated:YES];
+                [weakself.popoverControllerActivity dismissPopoverAnimated:YES];
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                     dispatch_sync(dispatch_get_main_queue(), ^{
@@ -785,12 +777,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         if (sharedController) {
                             [self.document setActivityDelegate:weakself];
                             UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
-                            [sharedController setPrintPageRenderer:printPageRender];
-                            sharedController.delegate = self.document ;
+                            sharedController.printPageRenderer = printPageRender;
+                            sharedController.delegate = self.document;
                             __weak MADViewerController *weakself2 = weakself;
                             void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                             ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
-                                [weakself2.pageSlider setEnabled:YES];
+                                weakself2.pageSlider.enabled = YES;
                                 [weakself2 enableTabBarItems];
                             };
                             [sharedController presentFromBarButtonItem:weakself.barButtonItemActivity animated:YES
@@ -833,7 +825,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                     if (sharedController) {
                         sharedController.delegate = self;
                         UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
-                        [sharedController setPrintPageRenderer:printPageRender];
+                        sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         __weak MADViewerController *weakself = self;
                         if ([UIDevice isPad] == NO) {
@@ -922,26 +914,25 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [blockViewer watchFormatter: weakdoc.reportFormatter];
         BOOL startedRefresh = blockViewer.startedRefresh;
         
-        [[weakdoc reportFormatter] setDidRefresh:startedRefresh];
-        [[weakdoc reportFormatter] formatForSize:viewBounds contentChanged:startedRefresh];
+        weakdoc.reportFormatter.didRefresh = startedRefresh;
+        [weakdoc.reportFormatter formatForSize:viewBounds contentChanged:startedRefresh];
         
         MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
-                                                                                                                  dataTable: [weakdoc mainDataTable]];
-        [blockViewer setPrintPageRendererReport:printPageRender];
-
+                                                                                                                   dataTable: [weakdoc mainDataTable]];
+        blockViewer.printPageRendererReport = printPageRender;
         [self ignoreFormatter: weakdoc.reportFormatter];
 
         __weak MADocument *doc2 = weakdoc;
         __weak MADViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
-            NSUInteger numberOfPages = [[self.document reportFormatter] numberOfPages];
-            [blockViewer2 setNumberOfPages:numberOfPages];
-            [blockViewer2 setMaxNumberOfPages:numberOfPages > 0 ? (numberOfPages - 1) : 0];
+            NSUInteger numberOfPages = [self.document.reportFormatter numberOfPages];
+            blockViewer2.numberOfPages = numberOfPages;
+            blockViewer2.maxNumberOfPages = numberOfPages > 0 ? (numberOfPages - 1) : 0;
             [blockViewer2 setDisplayActive];
             
             MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                                                                    PageNumber: ([blockViewer2 currentPageIndex] + 1)
+                                                                                                                    PageNumber: (blockViewer2.currentPageIndex + 1)
                                                                                                                        ofPages: numberOfPages];
             [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
             pageOne.delegate = blockViewer2;
@@ -949,12 +940,12 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             
             [blockViewer2 setViewControllers: viewControllers direction:UIPageViewControllerNavigationDirectionForward
                                     animated: NO completion: nil];
-            [blockViewer2 setIsRefreshing:NO];
-            [blockViewer2 setStartedRefresh:NO];
-            [[blockViewer2 barButtonItemDone] setEnabled:YES];
+            blockViewer2.isRefreshing = NO;
+            blockViewer2.startedRefresh = NO;
+            blockViewer2.barButtonItemDone.enabled = YES;
             [blockViewer2 updateRecordsReadStatus];
             
-            [[doc2 reportFormatter] setDidRefresh:NO];
+            doc2.reportFormatter.didRefresh = NO;
             
             if (blockViewer2.backgroundTaskIdRefresh != UIBackgroundTaskInvalid) {
                 
@@ -1005,9 +996,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                                                            PageNumber: visablePageNumber + 1
                                                                               ofPages: [self numberOfPages]];
             result.delegate =  self;
-            [[result view] setFrame:[[self view] bounds]];
-            [result view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-            [result view].translatesAutoresizingMaskIntoConstraints = YES;
+            result.view.frame = self.view.bounds;
+            result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            result.view.translatesAutoresizingMaskIntoConstraints = YES;
         }
     }
     return result;
@@ -1028,9 +1019,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                                                            PageNumber: visablePageNumber - 1
                                                                               ofPages: [self numberOfPages]];
             result.delegate =  self;
-            [[result view] setFrame:[[self view] bounds]];
-            [result view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-            [result view].translatesAutoresizingMaskIntoConstraints = YES;
+            result.view.frame = self.view.bounds;
+            result.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+            result.view.translatesAutoresizingMaskIntoConstraints = YES;
         }
     }
     return result;
