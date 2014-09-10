@@ -90,6 +90,8 @@
 
 #import "MADPromptManager.h"
 
+NSString * const MADImageBarButtonItemMadDesigner8                  = @"UIBarButtonItemMadDesigner8";
+NSString * const MADImageBarButtonItemMadDesigner                   = @"UIBarButtonItemMadDesigner";
 NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
 NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
@@ -3503,7 +3505,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemMadDesigner"];
+    return [UIDevice isModernOS] ?
+            ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemMadDesigner8] :
+                                [UIImage imageNamed:MADImageBarButtonItemMadDesigner8]) :
+            [UIImage imageNamed:MADImageBarButtonItemMadDesigner];
 }
 
 @end

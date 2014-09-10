@@ -78,6 +78,8 @@
 
 #import "UIViewController+ui.h"
 
+NSString * const MADImageBarButtonItemDatabase      = @"UIBarButtonItemDatabase";
+NSString * const MADImageBarButtonItemDatabase8     = @"UIBarButtonItemDatabase8";
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
 NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
 NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
@@ -1122,7 +1124,10 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+    return [UIDevice isModernOS] ?
+                ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemDatabase8] :
+                                    [UIImage imageNamed:MADImageBarButtonItemDatabase8]) :
+                [UIImage imageNamed:MADImageBarButtonItemDatabase];
 }
 
 #pragma mark - Actions

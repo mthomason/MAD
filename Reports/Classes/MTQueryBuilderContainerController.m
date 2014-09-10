@@ -270,7 +270,10 @@
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemDatabase"];
+    return [UIDevice isModernOS] ?
+            ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemDatabase8] :
+                                [UIImage imageNamed:MADImageBarButtonItemDatabase8]) :
+            [UIImage imageNamed:MADImageBarButtonItemDatabase];
 }
 
 

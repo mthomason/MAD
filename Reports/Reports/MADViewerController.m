@@ -39,6 +39,9 @@
 #import "MTNotificationDidFormatPage.h"
 #import "MTNotificationDidReadRows.h"
 
+NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
+NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
+
 @interface MADViewerController ()
     <UIPopoverControllerDelegate,
         MTPrintingProtocol,
@@ -389,7 +392,10 @@
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIImage imageNamed:@"UIBarButtonItemMadViewer"];
+    return [UIDevice isModernOS] ?
+            ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemMadViewer8] :
+                                [UIImage imageNamed:MADImageBarButtonItemMadViewer8]) :
+            [UIImage imageNamed:MADImageBarButtonItemMadViewer];
 }
 
 - (NSString *)title {

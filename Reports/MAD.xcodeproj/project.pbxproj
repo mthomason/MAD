@@ -1569,6 +1569,18 @@
 		4CE9F31C177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE9F31D177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE9F31F177B39A8009F11AF /* MTLicensingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */; };
+		4CF000DC19C0CCD500A24810 /* UIBarButtonItemDatabase8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D619C0CCD500A24810 /* UIBarButtonItemDatabase8.png */; };
+		4CF000DD19C0CCD500A24810 /* UIBarButtonItemDatabase8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D619C0CCD500A24810 /* UIBarButtonItemDatabase8.png */; };
+		4CF000DE19C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D719C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png */; };
+		4CF000DF19C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D719C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png */; };
+		4CF000E019C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D819C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png */; };
+		4CF000E119C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D819C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png */; };
+		4CF000E219C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D919C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png */; };
+		4CF000E319C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000D919C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png */; };
+		4CF000E419C0CCD500A24810 /* UIBarButtonItemMadViewer8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000DA19C0CCD500A24810 /* UIBarButtonItemMadViewer8.png */; };
+		4CF000E519C0CCD500A24810 /* UIBarButtonItemMadViewer8.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000DA19C0CCD500A24810 /* UIBarButtonItemMadViewer8.png */; };
+		4CF000E619C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000DB19C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png */; };
+		4CF000E719C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF000DB19C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png */; };
 		4CF1335516CD1FE400FD0F0B /* MTQueryBuilderVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MTQueryBuilderVisualizationViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CF1335616CD1FE400FD0F0B /* MTQueryBuilderVisualizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1335416CD1FE300FD0F0B /* MTQueryBuilderVisualizationViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CF2F27917564C8200DC34E3 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF2F27817564C8000DC34E3 /* MessageUI.framework */; };
@@ -2979,6 +2991,12 @@
 		4CE9F31A177B39A8009F11AF /* MTLicensingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLicensingViewController.h; sourceTree = "<group>"; };
 		4CE9F31B177B39A8009F11AF /* MTLicensingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTLicensingViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CEBFA321760EF8B00FFA4F4 /* libTdsClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libTdsClient.xcodeproj; path = libTdsClient/libTdsClient.xcodeproj; sourceTree = "<group>"; };
+		4CF000D619C0CCD500A24810 /* UIBarButtonItemDatabase8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemDatabase8.png; sourceTree = "<group>"; };
+		4CF000D719C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemDatabase8@2x.png"; sourceTree = "<group>"; };
+		4CF000D819C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemMadDesigner8.png; sourceTree = "<group>"; };
+		4CF000D919C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadDesigner8@2x.png"; sourceTree = "<group>"; };
+		4CF000DA19C0CCD500A24810 /* UIBarButtonItemMadViewer8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemMadViewer8.png; sourceTree = "<group>"; };
+		4CF000DB19C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadViewer8@2x.png"; sourceTree = "<group>"; };
 		4CF1329716CA27A900FD0F0B /* MTPrintingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTPrintingProtocol.h; path = Reports/MTPrintingProtocol.h; sourceTree = "<group>"; };
 		4CF1335316CD1FE200FD0F0B /* MTQueryBuilderVisualizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryBuilderVisualizationViewController.h; sourceTree = "<group>"; };
 		4CF1335416CD1FE300FD0F0B /* MTQueryBuilderVisualizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTQueryBuilderVisualizationViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -4075,6 +4093,12 @@
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CF000D619C0CCD500A24810 /* UIBarButtonItemDatabase8.png */,
+				4CF000D719C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png */,
+				4CF000D819C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png */,
+				4CF000D919C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png */,
+				4CF000DA19C0CCD500A24810 /* UIBarButtonItemMadViewer8.png */,
+				4CF000DB19C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png */,
 				4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */,
 				4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */,
 				4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */,
@@ -5607,6 +5631,7 @@
 				4C6461BF18C0E6680069EF8D /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C77333619100098005AE7C2 /* mysql_version.h.in in Resources */,
 				4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */,
+				4CF000E319C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
 				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
 				4C0E77BA163B5AEC003B951E /* UIImageArrowDown@2x.png in Resources */,
 				4C13391F17FE9018004F61CA /* UIImageDocumentBlankPad.png in Resources */,
@@ -5655,6 +5680,7 @@
 				4C0E77E3163B5AEC003B951E /* UIImagePatternStationary@2x.png in Resources */,
 				4C0E77E4163B5AEC003B951E /* UIImagePatternAqua.png in Resources */,
 				4C0E77E5163B5AEC003B951E /* UIImagePatternAqua@2x.png in Resources */,
+				4CF000E519C0CCD500A24810 /* UIBarButtonItemMadViewer8.png in Resources */,
 				4C0E77E6163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
 				4C0E77E7163B5AEC003B951E /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
 				4C0E77E8163B5AEC003B951E /* UIImagePatternBlackWeave.png in Resources */,
@@ -5673,6 +5699,7 @@
 				4C0E77F3163B5AEC003B951E /* UIImagePatternBuffTextured@2x.png in Resources */,
 				4C0E77F4163B5AEC003B951E /* UIImagePatternCharcoalFlecks.png in Resources */,
 				4C0E77F5163B5AEC003B951E /* UIImagePatternCharcoalFlecks@2x.png in Resources */,
+				4CF000E119C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png in Resources */,
 				4C0E77F6163B5AEC003B951E /* UIImagePatternCrepe.png in Resources */,
 				4C77332819100098005AE7C2 /* CMakeLists.txt in Resources */,
 				4C0E77F7163B5AEC003B951E /* UIImagePatternCrepe@2x.png in Resources */,
@@ -5697,6 +5724,7 @@
 				4C0E7806163B5AEC003B951E /* UIImagePatternGrayGranite.png in Resources */,
 				4C5CB7C4189E2A7D00BB5AF8 /* cspublic.h in Resources */,
 				4C6461C018C0E6680069EF8D /* MTActivityProvidence@2x.png in Resources */,
+				4CF000E719C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png in Resources */,
 				4C5CB7CE189E2A7D00BB5AF8 /* sqlfront.h in Resources */,
 				4C0E7807163B5AEC003B951E /* UIImagePatternGrayGranite@2x.png in Resources */,
 				4C0E7808163B5AEC003B951E /* UIImagePatternGreenAndBlack.png in Resources */,
@@ -5716,6 +5744,7 @@
 				4C0E7816163B5AEC003B951E /* UIImagePatternKraftWaffle.png in Resources */,
 				4C0E7817163B5AEC003B951E /* UIImagePatternKraftWaffle@2x.png in Resources */,
 				4C0E7818163B5AEC003B951E /* UIImagePatternLeaf.png in Resources */,
+				4CF000DF19C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png in Resources */,
 				4CFD364C18368935000EF14B /* MTBarcodeChannelCode.h in Resources */,
 				4C0E7819163B5AEC003B951E /* UIImagePatternLeaf@2x.png in Resources */,
 				4C0E781A163B5AEC003B951E /* UIImagePatternLined.png in Resources */,
@@ -5756,6 +5785,7 @@
 				4C0E7835163B5AEC003B951E /* UIImagePatternRedVellum@2x.png in Resources */,
 				4C0E7836163B5AEC003B951E /* UIImagePatternSketchPaper.png in Resources */,
 				4C0E7837163B5AEC003B951E /* UIImagePatternSketchPaper@2x.png in Resources */,
+				4CF000DD19C0CCD500A24810 /* UIBarButtonItemDatabase8.png in Resources */,
 				4C0E7838163B5AEC003B951E /* UIImagePatternTextured.png in Resources */,
 				4C0E7839163B5AEC003B951E /* UIImagePatternTextured@2x.png in Resources */,
 				4C0E783A163B5AEC003B951E /* UIImagePatternWhiteColumns.png in Resources */,
@@ -5898,6 +5928,7 @@
 				4C00816214B6C3EA003DF437 /* UIImageAlignRight20.png in Resources */,
 				4C80A6041831F28200242703 /* MTBarcodeMicroPdf417Iso24728.h in Resources */,
 				4C00816314B6C3EA003DF437 /* UIImageJustified20.png in Resources */,
+				4CF000E219C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
 				4C80A5FD1831EDD200242703 /* MTBarcodeMsiPlessey.h in Resources */,
 				4C92957A18C4E0770010AAEF /* MTImageLaunchViewerPadLandscapeRetina.png in Resources */,
 				4C00816A14B6C4EF003DF437 /* UIImageAlignCenter20@2x.png in Resources */,
@@ -5970,6 +6001,7 @@
 				4CCD8D67150385DA002B9E77 /* UIImagePatternCrepe@2x.png in Resources */,
 				4CCD8D68150385DA002B9E77 /* UIImagePatternFiberDarkGray@2x.png in Resources */,
 				4C92957618C4E0770010AAEF /* MTImageLaunchDesignerPadPortraitRetina.png in Resources */,
+				4CF000DE19C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png in Resources */,
 				4C11C71A1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */,
 				4CCD8D69150385DA002B9E77 /* UIImagePatternFibers1.png in Resources */,
 				4CCD8D6A150385DA002B9E77 /* UIImagePatternFibers1@2x.png in Resources */,
@@ -6014,6 +6046,7 @@
 				4CCD8D84150385DA002B9E77 /* UIImagePatternKraftPaperWaffle.png in Resources */,
 				4CCD8D85150385DA002B9E77 /* UIImagePatternKraftPaperWaffle@2x.png in Resources */,
 				4CCD8D86150385DA002B9E77 /* UIImagePatternKraftWaffle.png in Resources */,
+				4CF000E019C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png in Resources */,
 				4C92957218C4E0770010AAEF /* MTImageLaunchViewerPhonePortraitRetina.png in Resources */,
 				4CCD8D87150385DA002B9E77 /* UIImagePatternKraftWaffle@2x.png in Resources */,
 				4CCD8D88150385DA002B9E77 /* UIImagePatternLeaf.png in Resources */,
@@ -6032,6 +6065,7 @@
 				4CCD8D91150385DA002B9E77 /* UIImagePatternMarbled@2x.png in Resources */,
 				4C1BB6E81813D1C70027C508 /* UIBarButtonItemDatabase@2x.png in Resources */,
 				4C92957418C4E0770010AAEF /* MTImageLaunchDesignerPadLandscapeRetina.png in Resources */,
+				4CF000E619C0CCD500A24810 /* UIBarButtonItemMadViewer8@2x.png in Resources */,
 				4CCD8D92150385DA002B9E77 /* UIImagePatternMarbled2.png in Resources */,
 				4CCD8D93150385DA002B9E77 /* UIImagePatternMarbled2@2x.png in Resources */,
 				4CCD8D94150385DA002B9E77 /* UIImagePatternMetallicBlack.png in Resources */,
@@ -6043,6 +6077,7 @@
 				4CCD8D98150385DA002B9E77 /* UIImagePatternMetallicFlecks2.png in Resources */,
 				4CCD8D99150385DA002B9E77 /* UIImagePatternMetallicFlecks2@2x.png in Resources */,
 				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
+				4CF000E419C0CCD500A24810 /* UIBarButtonItemMadViewer8.png in Resources */,
 				4C6461B418C0E6590069EF8D /* MTActivityProvidence@2x.png in Resources */,
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
@@ -6070,6 +6105,7 @@
 				4CCD8DAE150385DA002B9E77 /* UIImagePatternWhiteStationary.png in Resources */,
 				4CCD8DAF150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png in Resources */,
 				4CCD8DB0150385DA002B9E77 /* UIImagePatternWhiteTextured.png in Resources */,
+				4CF000DC19C0CCD500A24810 /* UIBarButtonItemDatabase8.png in Resources */,
 				4CCD8DB1150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png in Resources */,
 				4C6461B518C0E6590069EF8D /* MTActivityProvidence~iPad.png in Resources */,
 				4CCD8DB2150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png in Resources */,

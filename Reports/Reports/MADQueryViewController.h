@@ -14,6 +14,8 @@
 
 @class MADocument;
 
+extern NSString * const MADImageBarButtonItemDatabase;
+extern NSString * const MADImageBarButtonItemDatabase8;
 extern NSString * const NSFetchedResultsCacheName;
 extern NSString * const NSFetchedResultsCacheTables;
 extern NSString * const NSFetchedResultsCacheLinks;
