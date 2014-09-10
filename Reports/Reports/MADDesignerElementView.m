@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTElementView.h"
+#import "MADDesignerElementView.h"
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+NSObjectIdTag.h"
@@ -65,7 +65,7 @@ static size_t const kDashedCount            = (2.0f);
     
     if ([displayObject isKindOfClass:[NSAttributedString class]]) {
         [displayObject drawWithRect: rect
-                            options: [MTElementView drawingOptions]
+                            options: [MADDesignerElementView drawingOptions]
                             context: nil];
     } else {
         [displayObject drawInRect:rect];
@@ -85,14 +85,14 @@ static size_t const kDashedCount            = (2.0f);
 
 #pragma mark - MTElementView
 
-@interface MTElementView ()
+@interface MADDesignerElementView ()
     <MTElementCanvasDelegate>
 
 @property (nonatomic, strong) MTElementCanvas *canvasView;
 
 @end
 
-@implementation MTElementView
+@implementation MADDesignerElementView
 
 #pragma mark - NSObject
 
@@ -276,7 +276,7 @@ static size_t const kDashedCount            = (2.0f);
         CGSize sizeContentView = [documentObject sizeContentView];
         CGRect boundsContentView = [documentObject boundsContentView]; //x1
         CGRect boundingRect = [[self displayStringAttributed] boundingRectWithSize: sizeContentView
-                                                                                  options: [MTElementView drawingOptions]
+                                                                                  options: [MADDesignerElementView drawingOptions]
                                                                                   context: nil];
         CGRect drawingBounds = CGRectIntersection(boundingRect, boundsContentView);
         

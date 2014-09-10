@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="88I-WU-sVr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A343f" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="88I-WU-sVr">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -29,10 +29,10 @@
             </objects>
             <point key="canvasLocation" x="499" y="-1176"/>
         </scene>
-        <!--Report Viewer Controller-->
+        <!--Viewer Controller-->
         <scene sceneID="0fS-g0-LsV">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="Juv-tI-xhU" customClass="MTReportViewerController" sceneMemberID="viewController">
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="Juv-tI-xhU" customClass="MADViewerController" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Jhr-rH-4JW"/>
                         <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="aHE-k8-itw"/>
@@ -341,7 +341,7 @@
         <!--MAD Viewer-->
         <scene sceneID="ybC-n5-sXd">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="WHj-zS-pnY" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="WHj-zS-pnY" customClass="MADOpenFileViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="KE6-pm-tRc">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -525,10 +525,7 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="lightContent"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination">
-            <size key="portraitSize" width="768" height="1024"/>
-            <size key="landscapeSize" width="1024" height="768"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="MG6-C0-uTA"/>

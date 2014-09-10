@@ -14,7 +14,7 @@
 #import <CoreData/CoreData.h>
 
 #import "MTApplicationInstance.h"
-#import "MTReportDesignerViewController.h"
+#import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
 #import "MTQueryBuilderVisualizationViewController.h"
 
@@ -137,10 +137,10 @@
             [self disableTabBarItems];
         }
         if ([segue.identifier isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
-            if ([segue.destinationViewController isKindOfClass: [MTReportDesignerViewController class]]) {
+            if ([segue.destinationViewController isKindOfClass: [MADDesignerViewController class]]) {
                 [segue.destinationViewController setDelegate: self];
             } else if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-                [(MTReportDesignerViewController *)[segue.destinationViewController topViewController] setDelegate:self];
+                [(MADDesignerViewController *)[segue.destinationViewController topViewController] setDelegate:self];
             }
         }
     }

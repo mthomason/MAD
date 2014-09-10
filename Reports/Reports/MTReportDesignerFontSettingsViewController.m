@@ -751,8 +751,8 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeHeight]]) {
-        NSNumber *value = @([[self stepperSizeHeight] value]);
-        CGFloat fontSize = [[[self labelSizeHeight] font] pointSize];
+        NSNumber *value = @(self.stepperSizeWidth.value);
+        CGFloat fontSize = self.labelSizeHeight.font.pointSize;
         NSAttributedString *displayHeight = [self sizeHeightForValue:value andFontSize:fontSize];
         [[self labelSizeHeight] setAttributedText:displayHeight];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
@@ -763,8 +763,8 @@
         }
 
     } else if ([sender isEqual:[self stepperSizeWidth]]) {
-        NSNumber *value = @([[self stepperSizeWidth] value]);
-        CGFloat fontSize = [[[self labelSizeWidth] font] pointSize];
+        NSNumber *value = @(self.stepperSizeWidth.value);
+        CGFloat fontSize = self.labelSizeHeight.font.pointSize;
         NSAttributedString *displayWidth = [self sizeWidthForValue:value andFontSize:fontSize];
         [[self labelSizeWidth] setAttributedText:displayWidth];
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {

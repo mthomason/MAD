@@ -28,7 +28,7 @@
 #import "MTDataFormatter.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
-#import "MTReportDesignerViewController.h"
+#import "MADDesignerViewController.h"
 #import "MTViewTableHeader.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"

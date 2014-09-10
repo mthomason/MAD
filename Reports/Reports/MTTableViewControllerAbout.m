@@ -14,7 +14,7 @@
 #import <MessageUI/MessageUI.h>
 #import "MTApplicationInstance.h"
 #import "UIApplication+Extras.h"
-#import "MTViewControllerOpenDocument.h"
+#import "MADOpenFileViewController.h"
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
 

@@ -12,12 +12,12 @@
 
 #import <MessageUI/MessageUI.h>
 #import "MADocumentState.h"
-#import "MTViewControllerOpenDocument.h"
+#import "MADOpenFileViewController.h"
 #import "MTApplicationInstance.h"
 #import "UAAppReviewManager.h"
-#import "MTReportViewerController.h"
+#import "MADViewerController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "MTReportDesignerViewController.h"
+#import "MADDesignerViewController.h"
 #import "MADWatermarkView.h"
 #import "NSURL+Document.h"
 #import "MTUser.h"
@@ -55,7 +55,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 @end
 
-@interface MTViewControllerOpenDocument()
+@interface MADOpenFileViewController()
     <UIAlertViewDelegate,
         NSFileManagerDelegate,
         UIPopoverControllerDelegate,
@@ -112,7 +112,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @end
 
-@implementation MTViewControllerOpenDocument
+@implementation MADOpenFileViewController
 
 #pragma mark - Exit
 
@@ -310,13 +310,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [MTViewControllerOpenDocument initalizeMenuController];
+    [MADOpenFileViewController initalizeMenuController];
     
-    __weak MTViewControllerOpenDocument *weakSelf = self;
+    __weak MADOpenFileViewController *weakSelf = self;
     
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
-            [MTViewControllerOpenDocument initalizeMenuControllerEmail];
+            [MADOpenFileViewController initalizeMenuControllerEmail];
             [weakSelf addActionItemToToolbar:animated];
         }
     }];
@@ -422,7 +422,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
-    MTReportViewerController *viewControllerReportViewer = (MTReportViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
+    MADViewerController *viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
     viewControllerReportViewer.document = [self currentDocument];
 }
@@ -439,11 +439,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             queryBuilderContainerController.delegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
+            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
             reportDesignerViewController.delegate = self;
             
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
+            MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self ;
             
             MADocument *document = [self currentDocument];
@@ -461,11 +461,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-            MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
+            MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
             reportDesignerViewController.delegate = self;
             
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-            MTReportViewerController *reportViewerViewController = (MTReportViewerController *)[navController3 topViewController];
+            MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self;
             MADocument *document = [self currentDocument];
             queryBuilderViewController.document = document;
@@ -596,8 +596,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     Class queryBuilderClass = [MADQueryViewController class];
     Class queryBuilderContainerClass = [MTQueryBuilderContainerController class];
-    Class reportDesignerClass = [MTReportDesignerViewController class];
-    Class reportViewerClass = [MTReportViewerController class];
+    Class reportDesignerClass = [MADDesignerViewController class];
+    Class reportViewerClass = [MADViewerController class];
     
     if ([sender isKindOfClass: queryBuilderClass] ||
         [sender isKindOfClass: queryBuilderContainerClass] ||
@@ -681,8 +681,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if (menuItems == nil) {
             menuItems = [NSMutableArray new];
         }
-        [menuItems addObject:[MTViewControllerOpenDocument menuItemRename]];
-        [menuItems addObject:[MTViewControllerOpenDocument menuItemDuplicate]];
+        [menuItems addObject:[MADOpenFileViewController menuItemRename]];
+        [menuItems addObject:[MADOpenFileViewController menuItemDuplicate]];
         [menu setMenuItems:menuItems];
     });
 }
@@ -695,7 +695,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         if (menuItems == nil) {
             menuItems = [NSMutableArray new];
         }
-        UIMenuItem *menuItem = [MTViewControllerOpenDocument menuItemEmail];
+        UIMenuItem *menuItem = [MADOpenFileViewController menuItemEmail];
         [menuItems addObject:menuItem];
         [menu setMenuItems:menuItems];
     });
@@ -893,7 +893,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([self isEditing] == NO) {
         [collectionView deselectItemAtIndexPath:indexPath animated:YES];
         
-        __weak MTViewControllerOpenDocument *weakself = self;
+        __weak MADOpenFileViewController *weakself = self;
         [self openReport:fileUrl withCompletionHandler:^(BOOL success) {
             if (success) {
                 if ([MTApplicationInstance isMadDesigner]) {
@@ -1092,7 +1092,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)loadCollectionViewPreviewImageForIndexPath:(NSIndexPath *)indexPath {
     __block __weak NSURL *fileUrl = [self documentForIndexPath:indexPath];
-    __block __weak MTViewControllerOpenDocument *openDocument = self;
+    __block __weak MADOpenFileViewController *openDocument = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         dispatch_sync(dispatch_get_main_queue(), ^(void) {
             
@@ -1167,7 +1167,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         self.labelMadDesigner.alpha = 1.0000f;
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
         self.navigationItem.leftBarButtonItem.enabled = NO;
-        __weak MTViewControllerOpenDocument *weakself = self;
+        __weak MADOpenFileViewController *weakself = self;
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -1190,7 +1190,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         self.labelMadDesigner.alpha = 0.0000f;
         [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
         self.navigationItem.leftBarButtonItem.enabled = YES;
-        __weak MTViewControllerOpenDocument *weakself = self;
+        __weak MADOpenFileViewController *weakself = self;
         [UIView transitionWithView:self.navigationItem.titleView
                           duration:0.2000f
                            options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -1315,7 +1315,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypePostToFacebook, UIActivityTypePostToFlickr, UIActivityTypePostToTwitter, UIActivityTypePostToVimeo]];
     
     
-    MTViewControllerOpenDocument *weakSelf = self;
+    MADOpenFileViewController *weakSelf = self;
     [activityViewController setCompletionHandler: ^(NSString *activityType, BOOL completed) {
         [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
         
@@ -1460,7 +1460,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MADocument *documentReport = [[MADocument alloc] initWithFileURL:fileToAttach];
         
         if ([documentReport documentState] != UIDocumentStateClosed) {
-            __weak MTViewControllerOpenDocument *weakself = self;
+            __weak MADOpenFileViewController *weakself = self;
             [documentReport closeWithCompletionHandler:^(BOOL success) {
                 if (success) {
                     [weakself email:cell];
@@ -1469,7 +1469,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
         } else {
             
-            __weak MTViewControllerOpenDocument *weakself = self;
+            __weak MADOpenFileViewController *weakself = self;
             NSURL *fileUrl = [self urlForDocumentCell:cell];
             NSData *data = [NSData dataWithContentsOfURL:fileUrl];
             
@@ -1511,7 +1511,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
         if (activeDocument.documentState != UIDocumentStateClosed) {
             [activeDocument regenThumbnail];
-            __weak MTViewControllerOpenDocument *blockSelf = self;
+            __weak MADOpenFileViewController *blockSelf = self;
             [activeDocument saveToURL: activeDocument.fileURL
                      forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
                 if (success) {

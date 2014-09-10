@@ -12,13 +12,13 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
-@class MTElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
+@class MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 
 @protocol MTElementViewDelegate
-- (void)didTouchElementView:(MTElementView *)elementView;
+- (void)didTouchElementView:(MADDesignerElementView *)elementView;
 @end
 
-@interface MTElementView : UIView
+@interface MADDesignerElementView : UIView
     <UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) id <MTElementViewDelegate> delegate;

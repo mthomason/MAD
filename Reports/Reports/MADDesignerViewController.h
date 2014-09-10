@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, MTToolboxType) {
 
 @class MADocument;
 
-@interface MTReportDesignerViewController : UIViewController
+@interface MADDesignerViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;

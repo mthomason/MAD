@@ -98,7 +98,7 @@
         <!--MAD Designer-->
         <scene sceneID="Lfd-iY-3rn">
             <objects>
-                <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d6e-CT-kmt" customClass="MTReportDesignerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d6e-CT-kmt" customClass="MADDesignerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QgV-gE-09R"/>
                         <viewControllerLayoutGuide type="bottom" id="1yV-MO-XLd"/>
@@ -193,10 +193,10 @@
             </objects>
             <point key="canvasLocation" x="1072" y="-336"/>
         </scene>
-        <!--Report Viewer Controller-->
+        <!--Viewer Controller-->
         <scene sceneID="5uB-Xd-m7k">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="D89-Nb-LnQ" customClass="MTReportViewerController" sceneMemberID="viewController">
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="D89-Nb-LnQ" customClass="MADViewerController" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="fixedSpace" id="AsL-nl-AtM"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="8RI-IH-kqi"/>
@@ -3424,7 +3424,7 @@
         <!--MAD Objects-->
         <scene sceneID="v4Q-Qd-L31">
             <objects>
-                <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="V4K-tV-Wdf" customClass="MTReportDesignerObjectSelectorViewController" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="V4K-tV-Wdf" customClass="MADDesignerElementPIckerViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="tAp-4x-DRZ">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5511,7 +5511,7 @@
         <!--MAD Designer-->
         <scene sceneID="8fZ-iQ-Ovc">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="F7A-ai-FfA" customClass="MTViewControllerOpenDocument" sceneMemberID="viewController">
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="F7A-ai-FfA" customClass="MADOpenFileViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="aPp-Tw-Ygp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

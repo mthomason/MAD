@@ -1,19 +1,19 @@
 //
-//  FlipsideViewController.h
+//  MADOpenFileViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/2/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTViewControllerOpenDocument_h
-#define Reports_MTViewControllerOpenDocument_h
+#ifndef Reports_MADOpenFileViewController_h
+#define Reports_MADOpenFileViewController_h
 
 #import <UIKit/UIKit.h>
 
 @class MTCollectionViewCellDocument;
 
-@interface MTViewControllerOpenDocument : UICollectionViewController
+@interface MADOpenFileViewController : UICollectionViewController
 
 @property (nonatomic, weak) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 @property (nonatomic, strong, readonly) UIPopoverController *aboutPopoverController;

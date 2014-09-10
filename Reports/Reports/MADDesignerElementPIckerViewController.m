@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportDesignerObjectSelectorViewController.h"
+#import "MADDesignerElementPIckerViewController.h"
 #import <CoreData/CoreData.h>
 #import "UIDevice+Hack.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
@@ -39,7 +39,7 @@ NSInteger const MTViewTagDocumentObjectNewAggregate = 2017;
 NSInteger const MTViewTagDocumentObjectNewLabelStatic = 2027;
 NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
-@interface MTReportDesignerObjectSelectorViewController ()
+@interface MADDesignerElementPIckerViewController ()
     <MTQueryBuilderChooseFieldDelegate,
         MTAggregateFunctionsViewControllerDelegate,
         MTGroupByViewControllerDelegate,
@@ -69,7 +69,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 @end
 
-@implementation MTReportDesignerObjectSelectorViewController
+@implementation MADDesignerElementPIckerViewController
 
 #pragma mark - Exit
 

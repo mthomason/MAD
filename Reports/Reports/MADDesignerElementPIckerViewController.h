@@ -1,16 +1,16 @@
 //
-//  MTReportDesignerObjectSelectorViewController.h
+//  MADDesignerElementPIckerViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/15/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTReportDesignerObjectSelectorViewController_h
-#define Reports_MTReportDesignerObjectSelectorViewController_h
+#ifndef Reports_MADDesignerElementPIckerViewController_h
+#define Reports_MADDesignerElementPIckerViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MTReportDesignerObjectSelectorViewController.h"
+#import "MADDesignerElementPIckerViewController.h"
 #import "Constants.h"
 #import "MUIViewControllerDelegate.h"
 
@@ -22,7 +22,7 @@ extern NSInteger const MTViewTagDocumentObjectNewAggregate;
 extern NSInteger const MTViewTagDocumentObjectNewLabelStatic;
 extern NSInteger const MTViewTagFieldOrFormulaSelector;
 
-@protocol MTReportDesignerObjectSelectorDelegate <MTViewControllerProtocol>
+@protocol MADDesignerElementPickerDelegate <MTViewControllerProtocol>
 - (void)insertDocumentObjectNewLabel:(NSString *)labelText;
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
@@ -33,9 +33,9 @@ extern NSInteger const MTViewTagFieldOrFormulaSelector;
 - (void)viewControllerDidFinish:(id)sender;
 @end
 
-@interface MTReportDesignerObjectSelectorViewController : UICollectionViewController
+@interface MADDesignerElementPIckerViewController : UICollectionViewController
 
-@property (nonatomic, weak) id <MTReportDesignerObjectSelectorDelegate> objectSelectorDelegate;
+@property (nonatomic, weak) id <MADDesignerElementPickerDelegate> objectSelectorDelegate;
 @property (nonatomic, weak) MADocument *document;
 
 @end

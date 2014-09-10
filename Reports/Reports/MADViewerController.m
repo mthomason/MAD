@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportViewerController.h"
+#import "MADViewerController.h"
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -39,7 +39,7 @@
 #import "MTNotificationDidFormatPage.h"
 #import "MTNotificationDidReadRows.h"
 
-@interface MTReportViewerController ()
+@interface MADViewerController ()
     <UIPopoverControllerDelegate,
         MTPrintingProtocol,
         MTActivityReportPrintPreviewDelegate,
@@ -115,7 +115,7 @@
 
 @end
 
-@implementation MTReportViewerController
+@implementation MADViewerController
 
 #pragma mark - Dealloc
 
@@ -434,7 +434,7 @@
         [[pageOne view] setFrame:[[self view] bounds]];
         pageOne.delegate = self;
         
-        __block MTReportViewerController *reportViewer = self;
+        __block MADViewerController *reportViewer = self;
         [[self view] bringSubviewToFront:[self toolbarSideRight]];
         [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
             if (finished) {
@@ -706,7 +706,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (IBAction)refresh:(id)sender {
     self.didRefreshBeforeReaload = YES;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
-    __weak __block MTReportViewerController *weakself = self;
+    __weak __block MADViewerController *weakself = self;
     
     [[weakself barButtonItemDone] setEnabled:NO];
 
@@ -767,7 +767,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)showPrintDialog {
     if ([NSThread isMainThread] == NO) {
-        __weak MTReportViewerController *weakself = self;
+        __weak MADViewerController *weakself = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [[weakself popoverControllerActivity] dismissPopoverAnimated:YES];
@@ -781,7 +781,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                             UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
                             [sharedController setPrintPageRenderer:printPageRender];
                             sharedController.delegate = self.document ;
-                            __weak MTReportViewerController *weakself2 = weakself;
+                            __weak MADViewerController *weakself2 = weakself;
                             void (^completionHandler)(UIPrintInteractionController *, BOOL, NSError *) =
                             ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
                                 [weakself2.pageSlider setEnabled:YES];
@@ -813,7 +813,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems
                                                                                          applicationActivities:applicationActivities];
     
-    __weak __block MTReportViewerController *weakself = self;
+    __weak __block MADViewerController *weakself = self;
     
     UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
         if (completed) {
@@ -829,7 +829,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
                         [sharedController setPrintPageRenderer:printPageRender];
                         sharedController.delegate = self.document;
-                        __weak MTReportViewerController *weakself = self;
+                        __weak MADViewerController *weakself = self;
                         if ([UIDevice isPad] == NO) {
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                                 weakself.pageSlider.enabled = YES;
@@ -861,7 +861,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
     } else {
 
-        __weak MTReportViewerController *weakSelf = self;
+        __weak MADViewerController *weakSelf = self;
         [self presentViewController:activityViewController animated:YES completion:^{
             [[[[weakSelf presentedViewController] navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
         }];
@@ -887,7 +887,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (void)reload {
-    __weak MTReportViewerController *blockself = self;
+    __weak MADViewerController *blockself = self;
     dispatch_queue_t queuePriorityBackground = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(queuePriorityBackground, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -904,7 +904,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [self setDisplayInactive];
     
-    __weak MTReportViewerController *blockViewer = self;
+    __weak MADViewerController *blockViewer = self;
     
     [self.document prepareForQuery];
     
@@ -926,7 +926,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [self ignoreFormatter: weakdoc.reportFormatter];
 
         __weak MADocument *doc2 = weakdoc;
-        __weak MTReportViewerController *blockViewer2 = blockViewer;
+        __weak MADViewerController *blockViewer2 = blockViewer;
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             NSUInteger numberOfPages = [[self.document reportFormatter] numberOfPages];
@@ -986,7 +986,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     
     MTReportViewerReportPageViewController *result = nil;
-    if ([(MTReportViewerController *)pageViewController pageIsAnimating] == NO) {
+    if ([(MADViewerController *)pageViewController pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = 0;
         MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
         [lastPage view].autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -1011,7 +1011,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
     
     MTReportViewerReportPageViewController *result = nil;
-    if ([(MTReportViewerController *)pageViewController pageIsAnimating] == NO) {
+    if ([(MADViewerController *)pageViewController pageIsAnimating] == NO) {
         NSUInteger visablePageNumber = 0;
         MTReportViewerReportPageViewController *lastPage = (MTReportViewerReportPageViewController *)viewController;
         if (lastPage != nil && [lastPage respondsToSelector:@selector(pageNumber)]) {
@@ -1031,11 +1031,11 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 }
 
 - (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController {
-    return [(MTReportViewerController *)pageViewController numberOfPages];
+    return [(MADViewerController *)pageViewController numberOfPages];
 }
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController {
-    return [(MTReportViewerController *)pageViewController currentPageIndex];
+    return [(MADViewerController *)pageViewController currentPageIndex];
 }
 
 #pragma mark - UIPageViewControllerDelegate
@@ -1043,25 +1043,25 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
     
     if (completed || finished) {
-        [(MTReportViewerController *)pageViewController setPageIsAnimating:NO];
-        if ([[(MTReportViewerController *)pageViewController viewControllers] count] > 0) {
+        [(MADViewerController *)pageViewController setPageIsAnimating:NO];
+        if ([[(MADViewerController *)pageViewController viewControllers] count] > 0) {
             MTReportViewerReportPageViewController *viewController = [pageViewController viewControllers][0];
-            [(MTReportViewerController *)pageViewController setCurrentPageIndex:[viewController pageNumber] - 1];
-            [(MTReportViewerController *)pageViewController updatePageStatus];
-            [[(MTReportViewerController *)pageViewController sliderPagination] setValue:[(MTReportViewerController *)pageViewController currentPageIndex] animated:YES];
-            [[(MTReportViewerController *)pageViewController pageSlider] setValue:[(MTReportViewerController *)pageViewController currentPageIndex] animated:YES];
+            [(MADViewerController *)pageViewController setCurrentPageIndex:[viewController pageNumber] - 1];
+            [(MADViewerController *)pageViewController updatePageStatus];
+            [[(MADViewerController *)pageViewController sliderPagination] setValue:[(MADViewerController *)pageViewController currentPageIndex] animated:YES];
+            [[(MADViewerController *)pageViewController pageSlider] setValue:[(MADViewerController *)pageViewController currentPageIndex] animated:YES];
         }
     }
     
 }
 
 - (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation {
-    [(MTReportViewerController *)pageViewController setPageIsAnimating:NO];
+    [(MADViewerController *)pageViewController setPageIsAnimating:NO];
     return UIPageViewControllerSpineLocationMin;
 }
 
 - (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers {
-    [(MTReportViewerController *)pageViewController setPageIsAnimating:YES];
+    [(MADViewerController *)pageViewController setPageIsAnimating:YES];
     
 }
 
@@ -1069,7 +1069,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateStatusWithTime:(NSString *)timeMessage {
     if ([NSThread isMainThread] == NO) {
-        __weak MTReportViewerController *weakSelf = self;
+        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateStatusWithTime:timeMessage];
         });
@@ -1084,7 +1084,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
     if ([NSThread isMainThread] == NO) {
-        __weak MTReportViewerController *weakSelf = self;
+        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateStatusWithRecordsRead:message];
         });
@@ -1098,7 +1098,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
     if ([NSThread isMainThread] == NO) {
-        __weak MTReportViewerController *weakSelf = self;
+        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateStatusWithPageNumber:message];
         });
@@ -1195,7 +1195,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)updateRecordsReadStatus {
     if ([NSThread isMainThread] == NO) {
-        __weak MTReportViewerController *weakSelf = self;
+        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf updateRecordsReadStatus];
         });
@@ -1232,7 +1232,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)setMaxNumberOfPages:(NSUInteger)numberOfPages {
     if ([NSThread isMainThread] == NO) {
-        __weak MTReportViewerController *weakSelf = self;
+        __weak MADViewerController *weakSelf = self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [weakSelf setMaxNumberOfPages:numberOfPages];
         });

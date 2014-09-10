@@ -10,27 +10,27 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportDesignerViewController.h"
+#import "MADDesignerViewController.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "MADDesignerElementView.h"
+#import "MADDesignerSectionView.h"
+#import "MADDesignerSectionLabel.h"
+#import "NSManagedObject+Extras.h"
 #import "MTReportDesigner.h"
 #import "MTSettingsViewController.h"
-#import "MTReportDesignerObjectSelectorViewController.h"
-#import "MTReportViewerController.h"
+#import "MADDesignerElementPIckerViewController.h"
+#import "MADViewerController.h"
 #import "MTCollectionViewCellElement.h"
 #import "UICollectionReusableView+Reuse.h"
 #import "MTCollectionReuseableViewDefault.h"
-#import "MTElementView.h"
 #import "MTReportDesignerSectionViewLayoutLiquid.h"
 #import "MTReportDesignerToolBoxViewController.h"
 #import "MTRulerView.h"
-#import "MADDesignerSectionView.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTReportDesignerSectionBackgroundView.h"
-#import "NSManagedObject+Extras.h"
-#import "MADDesignerSectionLabel.h"
 #import "MTViewControllerBarcode.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
@@ -86,9 +86,9 @@
 #import "UIView+Extras.h"
 
 #import "MADDesignerStatusLabel.h"
+#import "MADBackgroundScrollView.h"
 
 #import "MADPromptManager.h"
-#import "MADBackgroundScrollView.h"
 
 NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
@@ -111,14 +111,14 @@ const CGFloat MADSizeWidthSectionLabel              = 0.2000f;
 
 const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
-@interface MTReportDesignerViewController()
+@interface MADDesignerViewController()
     <MTViewControllerBarcodeDelegate,
         MTViewControllerAggregateDelegate,
         MTReportDesignerToolBoxDelegate,
         MTElementViewDelegate,
         MTCollectionViewCellElementDelegate,
         MTReportDesignerSectionViewLayoutLiquidDelegate,
-        MTReportDesignerObjectSelectorDelegate,
+        MADDesignerElementPickerDelegate,
         MTViewControllerProtocol,
         MTDocumentSectionViewDelegate,
         MTReportDesignerSectionLayoutSettingsDelegate,
@@ -166,7 +166,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, strong) UIPopoverController *popoverControllerEditDataLabel;
 @property (nonatomic, strong) UIPopoverController *popoverControllerEditAggregate;
 
-@property (nonatomic, strong) MTElementView *lastElementViewToShowMenu;
+@property (nonatomic, strong) MADDesignerElementView *lastElementViewToShowMenu;
 
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintContainerWidth;
 @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintDesignerContentViewHeight;
@@ -217,7 +217,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditAggregateFunction;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditBarcode;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditImage;
-
 @property (nonatomic, strong) NSManagedObjectID *objectIdJustDisplayed;
 
 @property (nonatomic, strong) RptqDocumentObjectBarcode *barcodeToEdit;
@@ -237,12 +236,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) UIFont *captionFont;
 
-//@property (nonatomic, strong) NSMutableArray *promptItems;
 @property (nonatomic, strong) MADPromptManager *promptManager;
 
 @end
 
-@implementation MTReportDesignerViewController
+@implementation MADDesignerViewController
 
 #pragma mark - Exit
 
@@ -380,7 +378,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;// [MTReportDesignerViewController tapGestureRecognizerDouble:self];
     tapGestureDoubleTap.delegate =  self;
     
-    UITapGestureRecognizer *tapGestureSingleTap = [MTReportDesignerViewController tapGestureRecognizerSingle:self];
+    UITapGestureRecognizer *tapGestureSingleTap = [MADDesignerViewController tapGestureRecognizerSingle:self];
     tapGestureSingleTap.delegate =  self;
     [tapGestureSingleTap requireGestureRecognizerToFail:tapGestureDoubleTap];
 
@@ -408,24 +406,24 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.layoutConstraintContainerWidth = constraintWidth;
     }
     
-    MTReportDesignerToolBoxViewController *viewControllerToolbox = [MTReportDesignerViewController toolbox];
+    MTReportDesignerToolBoxViewController *viewControllerToolbox = [MADDesignerViewController toolbox];
     viewControllerToolbox.delegate = self;
     viewControllerToolbox.document = self.document;
     self.viewControllerToolbox = viewControllerToolbox;
     
-    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MTReportDesignerViewController toolboxSettings];
+    MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MADDesignerViewController toolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
     viewControllerSectionLayoutSettings.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
     
-    UINavigationController *navigationController = [MTReportDesignerViewController navigationControllerSectionLayoutSettings:self.viewControllerSectionLayoutSettings];
+    UINavigationController *navigationController = [MADDesignerViewController navigationControllerSectionLayoutSettings:self.viewControllerSectionLayoutSettings];
     self.navigationControllerSectionLayoutSettings = navigationController;
     
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
 
     if ([UIDevice isPad] == NO) {
-        UIBarButtonItem *buttonDone = [MTReportDesignerViewController buttonDone:self];
+        UIBarButtonItem *buttonDone = [MADDesignerViewController buttonDone:self];
         [self.viewControllerSectionLayoutSettings.navigationItem setRightBarButtonItem: buttonDone
                                                                               animated: NO];
 
@@ -507,9 +505,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
     NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
     
-    NSArray *rulerConstraints = [MTReportDesignerViewController layoutConstraintsRuler:self.ruler
+    NSArray *rulerConstraints = [MADDesignerViewController layoutConstraintsRuler:self.ruler
                                                                             inDesigner:self.scroller.container];
-    NSArray *rulerSideConstraints = [MTReportDesignerViewController layoutConstraintsRulerSide:self.ruler
+    NSArray *rulerSideConstraints = [MADDesignerViewController layoutConstraintsRulerSide:self.ruler
                                                                                     inDesigner:self.scroller.container];
     
     [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
@@ -531,7 +529,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
 
-            MADDesignerSectionView *sectionView = [MTReportDesignerViewController documentSectionView: reportSection
+            MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection
                                                                                             delegate: self];
             sectionView.delegate = self;
             sectionView.sectionDelegate = self;
@@ -549,13 +547,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             sectionView.showsVerticalScrollIndicator = YES;
             
-            NSLayoutConstraint *lc1a = [MTReportDesignerViewController layoutConstraintSection: sectionView
+            NSLayoutConstraint *lc1a = [MADDesignerViewController layoutConstraintSection: sectionView
                                                                                   toItemBottom: constraintItem];
             [self.layoutConstraintsSectionsVerticalBuffer addObject:lc1a];
             [constraintsContainer addObject:lc1a];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1a];
             
-            NSLayoutConstraint *lc1b = [MTReportDesignerViewController layoutConstraintSection: sectionView
+            NSLayoutConstraint *lc1b = [MADDesignerViewController layoutConstraintSection: sectionView
                                                                                       toHeight: reportSection.height.floatValue];
             NSManagedObjectID *objectId = [sectionView objectIdTag];
             NSString *key = [objectId key];
@@ -564,23 +562,23 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [constraintsContainer addObject:lc1b];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1b];
 
-            NSLayoutConstraint *lc1c = [MTReportDesignerViewController layoutConstraintSection: sectionView
+            NSLayoutConstraint *lc1c = [MADDesignerViewController layoutConstraintSection: sectionView
                                                                                   toLabelRight: sectionViewLabel];
             [constraintsContainer addObject:lc1c];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1c];
             
-            NSLayoutConstraint *lc1d = [MTReportDesignerViewController layoutConstraintSection: sectionView
+            NSLayoutConstraint *lc1d = [MADDesignerViewController layoutConstraintSection: sectionView
                                                                                  toLabelBottom: sectionViewLabel];
             [constraintsContainer addObject:lc1d];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1d];
             
-            NSLayoutConstraint *lc1e = [MTReportDesignerViewController layoutConstraintLabel: sectionViewLabel
+            NSLayoutConstraint *lc1e = [MADDesignerViewController layoutConstraintLabel: sectionViewLabel
                                                                                     toHeight: MTReportDesignerSectionLabelHeight];
             [self.layoutConstraintSectionLabelHeightContainer addObject:lc1e];
             [constraintsContainer addObject:lc1e];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1e];
             
-            NSArray *collectionViewConstraints = [MTReportDesignerViewController layoutConstraintsForSection: sectionView
+            NSArray *collectionViewConstraints = [MADDesignerViewController layoutConstraintsForSection: sectionView
                                                                                                      content: self.scroller.container];
             [constraintsScroller addObjectsFromArray:collectionViewConstraints];
             [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
@@ -613,14 +611,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     sectionHeights += MTReportDesignerBorderPaddingVertical;
 
     
-    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [MTReportDesignerViewController layoutConstraintViewContent: self.scroller.container
+    NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [MADDesignerViewController layoutConstraintViewContent: self.scroller.container
                                                                                                                          height: sectionHeights];
     [constraintsScroller addObject:layoutConstraintDesignerContentViewHeight];
     [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintDesignerContentViewHeight];
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
 
     
-    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [MTReportDesignerViewController layoutConstraintViewContent: self.scroller.container
+    NSLayoutConstraint *layoutConstraintContentToScollerBottom = [MADDesignerViewController layoutConstraintViewContent: self.scroller.container
                                                                                                             toScrollerBottom: self.scroller];
 
     [constraintsScroller addObject:layoutConstraintContentToScollerBottom];
@@ -802,7 +800,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.ruler setNeedsDisplay];
     
     CGFloat toolBarHeight = [self toolbarBottomHeight];
-    __weak MTReportDesignerViewController *reportDesigner = self;
+    __weak MADDesignerViewController *reportDesigner = self;
     [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
         reportDesigner.layoutConstraintToolbarHeight.constant = toolBarHeight;
     } completion:NULL];
@@ -815,7 +813,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if ([UIDevice isPad] == NO) {
         CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
         if (navigationToolbarFrame.size.height != [[self layoutConstraintToolbarHeight] constant]) {
-            __weak MTReportDesignerViewController *reportDesigner = self;
+            __weak MADDesignerViewController *reportDesigner = self;
             [UIView animateWithDuration:0.1000f delay:0.0000f options:UIViewAnimationOptionTransitionNone animations:^{
                 [[reportDesigner layoutConstraintToolbarHeight] setConstant:[reportDesigner toolbarBottomHeight]];
                 [reportDesigner.viewControllerSectionLayoutSettings.tableView setBounds:CGRectMake(CGPointZero.x, CGPointZero.y, reportDesigner.toolbox.bounds.size.width, reportDesigner.toolbox.bounds.size.height)];
@@ -883,6 +881,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [self.ruler setNeedsDisplay];
         CGFloat pointsize = self.captionFont.pointSize;
+        
         UIFont *font = [self.captionFont fontWithSize:(pointsize / scrollView.zoomScale)];
         NSDictionary *attributes = @{NSFontAttributeName : font};
         for (MADDesignerSectionLabel *controlView in [self sectionControlViewsArray]) {
@@ -913,7 +912,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         self.ruler.contentScaleFactor = scaleWithScreen;
         
-        for (MTElementView *elementView in [self elementViews]) {
+        for (MADDesignerElementView *elementView in [self elementViews]) {
             elementView.contentScaleFactor = scaleWithScreen;
         }
         
@@ -1024,7 +1023,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     RptqDocumentSection *documentSection = [query documentSectionForRow: selectedSectionNumber];
     
     UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
-    UIColor *color = [MTReportDesignerViewController sectionBackgroundColor:isVisible];
+    UIColor *color = [MADDesignerViewController sectionBackgroundColor:isVisible];
     documentSectionView.backgroundColor = color;
     [self.document saveContext];
 }
@@ -1188,7 +1187,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
     NSArray *managedObjectsUpdated = [notification userInfo][NSUpdatedObjectsKey];
     for (NSManagedObject *managedObject in managedObjectsUpdated) {
-        MTElementView *elementView = [self elementViewForManagedObject:managedObject];
+        MADDesignerElementView *elementView = [self elementViewForManagedObject:managedObject];
         [elementView updateForManagedObjectContent:managedObject.managedObjectContext];
     }
 }
@@ -1207,7 +1206,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - MTElementViewDelegate
 
-- (void)didTouchElementView:(MTElementView *)elementView {
+- (void)didTouchElementView:(MADDesignerElementView *)elementView {
     [self removeBorderFromSectionViews];
     if ([self elementViewIsSelected:elementView]) {
         [self.promptManager removeString:elementView.displayStringAttributed.string];
@@ -1236,7 +1235,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     
     if (selectedImage != nil) {
-        __weak MTReportDesignerViewController *reportDesigner = self;
+        __weak MADDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
             NSNumber *type = @(MTDocumentObjectTypeImage);
             [reportDesigner insertDocumentObjectWithDefination:
@@ -1333,7 +1332,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)formatDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
     [self deselectAllElementsAnimated:YES];
     self.lastMenuItemSelectRequiresElementView = YES;
-    [self selectElementView:(MTElementView *)[self viewForObjectID:cell.objectIdTag]];
+    [self selectElementView:(MADDesignerElementView *)[self viewForObjectID:cell.objectIdTag]];
 }
 
 - (void)editDocumentObjectRepresentedByCell:(MTCollectionViewCellElement *)cell {
@@ -1676,11 +1675,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 cell.backgroundColor = [UIColor clearColor];
                 cell.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 
-                MTElementView *elementView = [self elementViewForManagedObject:documentObject];
+                MADDesignerElementView *elementView = [self elementViewForManagedObject:documentObject];
                 
                 UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget: self
                                                                                              action: @selector(panPiece:)];
-                panGesture.maximumNumberOfTouches = 1;
+                panGesture.minimumNumberOfTouches = 1;
+                panGesture.maximumNumberOfTouches = 2;
                 panGesture.delegate = self;
                 
                 UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget: self
@@ -1700,7 +1700,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 
                 if (self.objectIdJustDisplayed != nil) {
                     if (self.objectIdJustDisplayed == documentObject.objectID) {
-                        __weak MTReportDesignerViewController *weakself = self;
+                        __weak MADDesignerViewController *weakself = self;
                         [elementView flash:^(BOOL finished) {
                             if (finished) {
                                 weakself.objectIdJustDisplayed = nil;
@@ -1709,7 +1709,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                     }
                 }
                 __weak UICollectionViewCell *blockCell = cell;
-                __weak MTElementView *blockElementView = elementView;
+                __weak MADDesignerElementView *blockElementView = elementView;
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [blockCell setContentScaleFactor:contextScale];
@@ -1803,7 +1803,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
     [self dismissAllPopovers];
     [self deselectAllElementsAnimated:NO];
-    MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
+    MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:collectionView];
     [self applyBorderToView:elementView];
     [self setLastElementViewToShowMenu:elementView];
     return YES;
@@ -1823,14 +1823,14 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     if ([sender isKindOfClass:[MTSettingsViewController class]]) {
         [self.scroller setZoomScale: 1.0000f animated:NO];
-        __weak MTReportDesignerViewController *reportDesigner = self;
+        __weak MADDesignerViewController *reportDesigner = self;
         [self dismissViewControllerAnimated:YES completion:^{
             [reportDesigner.view setNeedsUpdateConstraints];
             [reportDesigner.scroller.container setNeedsLayout];
             [reportDesigner.scroller.container setNeedsDisplay];
         }];
         
-    } else if ([sender isKindOfClass:[MTReportViewerController class]]) {
+    } else if ([sender isKindOfClass:[MADViewerController class]]) {
         if ([UIDevice isPad]) {
             [self dismissViewControllerAnimated:YES completion:^{}];
             [self setDisplayActive];
@@ -1842,7 +1842,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 [self setDisplayActive];
             } else {
                 [self.scroller setZoomScale:1.0000f animated:NO];
-                __weak MTReportDesignerViewController *reportDesigner = self;
+                __weak MADDesignerViewController *reportDesigner = self;
                 [self dismissViewControllerAnimated:YES completion:^{
                     [reportDesigner.view setNeedsUpdateConstraints];
                     [reportDesigner.scroller.container setNeedsLayout];
@@ -1851,7 +1851,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 }];
             }
         } else {
-            __weak MTReportDesignerViewController *reportDesigner = self;
+            __weak MADDesignerViewController *reportDesigner = self;
             [self dismissViewControllerAnimated:YES completion:^{
                 [reportDesigner.scroller.container setNeedsDisplay];
                 [reportDesigner setDisplayActive];
@@ -1860,7 +1860,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
 }
 
-#pragma mark - MTReportDesignerObjectSelectorDelegate
+#pragma mark - MADDesignerElementPickerDelegate
 
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field {
     [self setDisplayActive];
@@ -1910,10 +1910,19 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return YES;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return [gestureRecognizer.view isEqual:[otherGestureRecognizer view]] == NO  &&
-            [gestureRecognizer.view isEqual:self.scroller] == NO &&
-            [[otherGestureRecognizer view] isEqual:self.scroller] == NO;
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+    shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    
+//    BOOL shouldRecognizeSimultaneously = NO;
+    
+    BOOL sameViews = [gestureRecognizer.view isEqual:otherGestureRecognizer.view];
+    BOOL scrollBackgroundAndScroller = [gestureRecognizer.view isEqual:self.scroller] == NO &&
+                                            [otherGestureRecognizer.view isEqual:self.scroller] == NO;
+    
+    return sameViews || scrollBackgroundAndScroller;
+  //  return [gestureRecognizer.view isEqual:[otherGestureRecognizer view]] == NO  &&
+  //          [gestureRecognizer.view isEqual:self.scroller] == NO &&
+  //          [[otherGestureRecognizer view] isEqual:self.scroller] == NO;
 
 }
 
@@ -2014,7 +2023,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return [[self selectedObjectIds] count] > 0;
 }
 
-- (BOOL)elementViewIsSelected:(MTElementView *)elementView {
+- (BOOL)elementViewIsSelected:(MADDesignerElementView *)elementView {
     return [[self selectedObjectIds] containsObject:[elementView objectIdTag]];
 }
 
@@ -2026,7 +2035,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return deselectedSectionViewCounter;
 }
 
-- (void)selectElementView:(MTElementView *)elementView {
+- (void)selectElementView:(MADDesignerElementView *)elementView {
     
     NSInteger numberOfViewsDeselected = [self removeBorderFromAllSectionViews];
     
@@ -2061,7 +2070,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
 }
 
-- (void)deselectElementView:(MTElementView *)elementView animated:(BOOL)animated {
+- (void)deselectElementView:(MADDesignerElementView *)elementView animated:(BOOL)animated {
     
     [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
     [self removeBorderFromView: elementView];
@@ -2137,7 +2146,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self.view layoutIfNeeded];
         self.contentOffsetOnShowToolbox = self.scroller.contentOffset;
         
-        __weak MTReportDesignerViewController *weakSelf = self;
+        __weak MADDesignerViewController *weakSelf = self;
         
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
                          animations: ^{
@@ -2172,7 +2181,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         [self.navigationControllerSectionLayoutSettings setNavigationBarHidden:YES animated:YES];
         
-        __weak MTReportDesignerViewController *weakSelf = self;
+        __weak MADDesignerViewController *weakSelf = self;
         
         MTBlockCompletionNoReturn animations = ^{
             [weakSelf setConstraintsForToolboxHidden];
@@ -2223,7 +2232,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self positionForRectOfInterest: [self rectForSelectedElements]];
 }
 
-- (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MTReportDesignerViewController *)reportDesigner {
+- (void)adjustContentOffsetForLastSelectedSectionControlPanelInDesigner:(MADDesignerViewController *)reportDesigner {
     RptqQuery *query = [[self.document activeDocumentModel] defaultQuery];
     RptqDocumentSection *documentSection = [query documentSectionForRow: reportDesigner.lastSelectedSectionControlPanel];
     UIView *selectedSectionView = [reportDesigner getSectionViewForDocumentSection:documentSection];
@@ -2292,12 +2301,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         gestureRecognizer.state == UIGestureRecognizerStateFailed) {
 
         UICollectionView *collectionView = [self sectionViewFor:gestureRecognizer];
-        __weak MTReportDesignerViewController *weakself = self;
+        __weak MADDesignerViewController *weakself = self;
         __weak UICollectionView *weakCollectionView = collectionView;
         
         [collectionView performBatchUpdates:^(void) {
             
-            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: [(MTElementView *)gestureRecognizer.view objectIdTag]
+            RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: [(MADDesignerElementView *)gestureRecognizer.view objectIdTag]
                                                                           managedObjectContext: weakself.document.managedObjectContext];
             [documentObject dropAtRect:gestureRecognizer.view.frame];
             [documentObject.managedObjectContext save:nil];
@@ -2333,7 +2342,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [self.scroller addSubview: gestureRecognizer.view];
             gestureRecognizer.view.center = newCenter;
             
-            __weak MTReportDesignerViewController *weakself = self;
+            __weak MADDesignerViewController *weakself = self;
             [self removeCollectionViewCellForElementView: [gestureRecognizer.view objectIdTag] completion: ^(BOOL finished) {
                 UICollectionView *sectionView = [weakself sectionViewFor:gestureRecognizer];
                 [weakself relayoutSectionView:sectionView];
@@ -2374,7 +2383,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 __weak RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: sectionId
                                                                                        inManagedObjectContext: managedObjectContext];
                 __weak UICollectionView *weakSectionView = sectionView;
-                __weak MTReportDesignerViewController *weakself = self;
+                __weak MADDesignerViewController *weakself = self;
                 
                 [sectionView performBatchUpdates:^(void) {
                     
@@ -2490,7 +2499,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView {
     for (int i = 0; i < [collectionView numberOfItemsInSection:0]; i++) {
         NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:i inSection:0];
-        MTElementView *elementView = [self elementViewAtIndexPath:insertedPath inCollectionView:collectionView];
+        MADDesignerElementView *elementView = [self elementViewAtIndexPath:insertedPath inCollectionView:collectionView];
         [elementView setNeedsDisplay];
     }
 }
@@ -2529,17 +2538,17 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return result;
 }
 
-- (MTElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
+- (MADDesignerElementView *)elementViewAtIndexPath:(NSIndexPath *)indexPath
                          inCollectionView:(UICollectionView *)collectionView {
     
     return [self elementViewForCollectionViewCell:[collectionView cellForItemAtIndexPath:indexPath]];
 }
 
-- (MTElementView *)elementViewForCollectionViewCell:(UICollectionViewCell *)cell {
-    MTElementView *result = nil;
+- (MADDesignerElementView *)elementViewForCollectionViewCell:(UICollectionViewCell *)cell {
+    MADDesignerElementView *result = nil;
     
     for (id elementView in [cell.contentView subviews]) {
-        if ([elementView isKindOfClass:[MTElementView class]]) {
+        if ([elementView isKindOfClass:[MADDesignerElementView class]]) {
             result = elementView;
             break;
         }
@@ -2555,7 +2564,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     RptqDocumentSection *section = [document hasDetailSection];
     
-    __weak MTReportDesignerViewController *reportDesigner = self;
+    __weak MADDesignerViewController *reportDesigner = self;
     __weak UICollectionView *detailSection = [self getSectionViewForDocumentSection:section];
     
     [detailSection performBatchUpdates:^{
@@ -2594,7 +2603,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSInteger deleteIndex = [sectionRow.hasObjects indexOfObject:documentObject];
     UICollectionView *sectionCollectionView = [self getSectionViewForDocumentSection:section];
     
-    __weak MTReportDesignerViewController *weakself = self;
+    __weak MADDesignerViewController *weakself = self;
     
     __weak UICollectionView *weakSectionCollectionView = sectionCollectionView;
     NSMutableOrderedSet *hasObjects = [[NSMutableOrderedSet alloc] initWithOrderedSet: [sectionRow hasObjects]];
@@ -2738,7 +2747,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             NSInteger numberOfItemsInSection = [documentSectionView numberOfItemsInSection:section];
             
             for (NSUInteger item = 0; item < numberOfItemsInSection; item++) {
-                MTElementView *elementView = [self elementViewAtIndexPath: [NSIndexPath indexPathForItem:item inSection:section]
+                MADDesignerElementView *elementView = [self elementViewAtIndexPath: [NSIndexPath indexPathForItem:item inSection:section]
                                                          inCollectionView: documentSectionView];
                 if (elementView != nil) {
                     [results addObject:elementView];
@@ -2788,7 +2797,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 for (NSUInteger section = 0; section < [documentSectionView numberOfSections]; section++) {
                     for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
-                        MTElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
+                        MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
                         if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
                             [results addObject:elementView];
                         }
@@ -2811,7 +2820,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)deselectAllElementsAnimated:(BOOL)animated {
     
     //Remove border from element views
-    for (MTElementView *elementView in [self selectedElementViews]) {
+    for (MADDesignerElementView *elementView in [self selectedElementViews]) {
         [self deselectElementView:elementView animated:animated];
     }
     
@@ -2867,16 +2876,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return [self.borderAppliedToView[key] boolValue];
 }
 
-- (MTElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
-    MTElementView *elementView = nil;
-    elementView = (MTElementView *)[self viewForObjectID:managedObject.objectID];
+- (MADDesignerElementView *)elementViewForManagedObject:(NSManagedObject *)managedObject {
+    MADDesignerElementView *elementView = nil;
+    elementView = (MADDesignerElementView *)[self viewForObjectID:managedObject.objectID];
     if (!elementView) {
         RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObject:managedObject];
         if (documentObject) {
-            elementView = (MTElementView *)[self.scroller.container viewWithTag:documentObject.objectID.hash];
+            elementView = (MADDesignerElementView *)[self.scroller.container viewWithTag:documentObject.objectID.hash];
             if (!elementView) {
                 
-                elementView = [[MTElementView alloc] initWithObjectId: documentObject.objectID
+                elementView = [[MADDesignerElementView alloc] initWithObjectId: documentObject.objectID
                                                       inObjectContext: documentObject.managedObjectContext];
                 elementView.tag = documentObject.objectID.hash;
                 elementView.delegate = self;
@@ -2888,7 +2897,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return elementView;
 }
 
-- (RptqDocumentObject *)documentObjectForElementView:(MTElementView *)elementView inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (RptqDocumentObject *)documentObjectForElementView:(MADDesignerElementView *)elementView inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
     NSManagedObjectID *objectID = [elementView objectIdTag];
     return (RptqDocumentObject *)[managedObjectContext objectWithID:objectID];
 }
@@ -2918,11 +2927,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self setPopoverControllerObjectSelector:popoverController];
     }
     
-    MTReportDesignerObjectSelectorViewController *viewControllerObjectSelector = nil;
+    MADDesignerElementPIckerViewController *viewControllerObjectSelector = nil;
     if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *d = segue.destinationViewController;
         d.delegate = self;
-        viewControllerObjectSelector = (MTReportDesignerObjectSelectorViewController *)d.topViewController;
+        viewControllerObjectSelector = (MADDesignerElementPIckerViewController *)d.topViewController;
         viewControllerObjectSelector.objectSelectorDelegate = self;
         viewControllerObjectSelector.document = self.document;
     } else {
@@ -2934,9 +2943,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)performSegueShowReportViewer:(UIStoryboardSegue *)segue {
     if ([UIDevice isPad]) {
-        MTReportViewerController *viewControllerReportViewer;
+        MADViewerController *viewControllerReportViewer;
         UINavigationController *d = segue.destinationViewController;
-        viewControllerReportViewer = (MTReportViewerController *)[d topViewController];
+        viewControllerReportViewer = (MADViewerController *)[d topViewController];
         viewControllerReportViewer.viewControllerDelegate = self;
     }
     [self.scroller scrollRectToVisible:CGRectZero animated:NO];
@@ -2985,11 +2994,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark UIPopoverController Helpers
 
 - (void)setupPopoverControllers {
-    UIPopoverController *popoverControllerInformation = [MTReportDesignerViewController popoverWithContoller:self.viewControllerToolbox];
+    UIPopoverController *popoverControllerInformation = [MADDesignerViewController popoverWithContoller:self.viewControllerToolbox];
     popoverControllerInformation.delegate = self;
     self.popoverControllerInformation = popoverControllerInformation;
     
-    UIPopoverController *popoverControllerSectionSettings = [MTReportDesignerViewController popoverWithContoller:self.navigationControllerSectionLayoutSettings];
+    UIPopoverController *popoverControllerSectionSettings = [MADDesignerViewController popoverWithContoller:self.navigationControllerSectionLayoutSettings];
     popoverControllerSectionSettings.delegate = self;
     self.popoverControllerSectionSettings = popoverControllerSectionSettings;
 }
@@ -3120,7 +3129,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [collectionView setObjectIdTag: section.objectID];
     collectionView.tag = section.identifier.integerValue;
     
-    UIColor *bgcolor = [MTReportDesignerViewController sectionBackgroundColor:section.visibility.boolValue];
+    UIColor *bgcolor = [MADDesignerViewController sectionBackgroundColor:section.visibility.boolValue];
     collectionView.backgroundColor = bgcolor;
     
     return collectionView;
@@ -3409,7 +3418,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)saveWhiteSpace {
-    __weak MTReportDesignerViewController *reportDesigner = self;
+    __weak MADDesignerViewController *reportDesigner = self;
     block_insertObject insert = ^(UIViewController *action) {
         NSNumber *type = @(MTDocumentObjectTypeWhtiespace);
         NSDictionary *options = @{MTDocumentObjectDefinationType: type};
@@ -3420,7 +3429,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)saveDynamicLabel:(MTQueryBuilderChooseFieldViewController *)viewController {
     
-    __weak MTReportDesignerViewController *reportDesigner = self;
+    __weak MADDesignerViewController *reportDesigner = self;
     block_insertObject insert = ^(UIViewController *sourceViewController) {
         MTQueryBuilderChooseFieldViewController *dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)sourceViewController;
         RptqQueryField *queryField = [dynamicFieldController queryField];

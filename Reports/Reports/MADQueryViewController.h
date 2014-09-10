@@ -1,13 +1,13 @@
 //
-//  UIViewControllerSchemaTables.h
+//  MADQueryViewController.h
 //  Reports
 //
 //  Created by Michael Thomason on 1/22/12.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MTQueryBuilderViewController_h
-#define Reports_MTQueryBuilderViewController_h
+#ifndef Reports_MADQueryViewController_h
+#define Reports_MADQueryViewController_h
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"

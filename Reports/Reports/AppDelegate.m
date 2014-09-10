@@ -23,7 +23,7 @@
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
 
-#import "MTViewControllerOpenDocument.h"
+#import "MADOpenFileViewController.h"
 #import "UIManagedDocument+FileOperations.h"
 #import "evp.h"
 #import "VerifyStoreReceipt.h"
@@ -206,7 +206,7 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
 
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if ([alertView tag] == MATagNewDocument) {
-        MTViewControllerOpenDocument *openDocumentViewController = (MTViewControllerOpenDocument *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
+        MADOpenFileViewController *openDocumentViewController = (MADOpenFileViewController *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
         if (openDocumentViewController != nil &&
             [openDocumentViewController respondsToSelector:@selector(reloadData)]) {
             [openDocumentViewController reloadData];

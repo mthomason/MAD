@@ -16,7 +16,7 @@
 
 @class MADocument;
 
-@interface MTReportViewerController : UIPageViewController
+@interface MADViewerController : UIPageViewController
     <UIPageViewControllerDelegate, UIPageViewControllerDataSource,
         UIDocumentInteractionControllerDelegate, MADActivityProtocol>
 
