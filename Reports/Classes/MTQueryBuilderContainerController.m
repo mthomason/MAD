@@ -15,7 +15,7 @@
 
 #import "MTApplicationInstance.h"
 #import "MTReportDesignerViewController.h"
-#import "MTQueryBuilderViewController.h"
+#import "MADQueryViewController.h"
 #import "MTQueryBuilderVisualizationViewController.h"
 
 #import "UIDevice+Hack.h"
@@ -245,7 +245,7 @@
     }
 }
 
-- (MTQueryBuilderViewController *)queryBuilderController {
+- (MADQueryViewController *)queryBuilderController {
     return [self rightViewController];
 }
 

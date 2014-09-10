@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 
-@class MTQueryBuilderViewController,
+@class MADQueryViewController,
         MTQueryBuilderVisualizationViewController,
         MADocument;
 
@@ -22,7 +22,7 @@
 @property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;
 
-- (MTQueryBuilderViewController *)queryBuilderController;
+- (MADQueryViewController *)queryBuilderController;
 - (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced;
 
 @end

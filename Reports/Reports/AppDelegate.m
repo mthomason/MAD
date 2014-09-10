@@ -11,7 +11,6 @@
 #endif
 
 #import "AppDelegate.h"
-#import "MTQueryBuilderViewController.h"
 #import "MTApplicationInstance.h"
 #import "MTUser.h"
 

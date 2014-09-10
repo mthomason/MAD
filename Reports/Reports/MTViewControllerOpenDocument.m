@@ -26,7 +26,7 @@
 #import "UIView+Animations.h"
 #import "MTViewControllerAbout.h"
 #import "MTTableViewCellDocument.h"
-#import "MTQueryBuilderViewController.h"
+#import "MADQueryViewController.h"
 #import "MTQueryBuilderVisualizationViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
@@ -458,7 +458,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-            MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[navController topViewController];
+            MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
             MTReportDesignerViewController *reportDesignerViewController = (MTReportDesignerViewController *)[navController2 topViewController];
@@ -476,8 +476,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
     } else if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderContainerController class]]) {
         
-    } else if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderViewController class]]) {
-        MTQueryBuilderViewController *queryBuilderViewController = (MTQueryBuilderViewController *)[segue.destinationViewController topViewController];
+    } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
+        MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
         MADocument *document = [self currentDocument];
         queryBuilderViewController.document = document;
         [queryBuilderViewController reloadDocument:document animated:YES];
@@ -594,7 +594,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
     [self dismissViewControllerAnimated:YES completion:^{ }];
     
-    Class queryBuilderClass = [MTQueryBuilderViewController class];
+    Class queryBuilderClass = [MADQueryViewController class];
     Class queryBuilderContainerClass = [MTQueryBuilderContainerController class];
     Class reportDesignerClass = [MTReportDesignerViewController class];
     Class reportViewerClass = [MTReportViewerController class];

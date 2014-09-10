@@ -12,7 +12,7 @@
 
 #import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>
-#import "MTQueryBuilderViewController.h"
+#import "MADQueryViewController.h"
 
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
@@ -37,9 +37,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.58";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.58";
-NSString * const MTGlobalBundleRev                                  = @"1433";
+NSString * const MTGlobalBundleVersion                              = @"7.0.59";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.59";
+NSString * const MTGlobalBundleRev                                  = @"1434";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";

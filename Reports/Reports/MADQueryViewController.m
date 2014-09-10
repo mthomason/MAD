@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderViewController.h"
+#import "MADQueryViewController.h"
 #import "MTApplicationInstance.h"
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
@@ -87,7 +87,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 #pragma mark - Private Category
 
-@interface MTQueryBuilderViewController()
+@interface MADQueryViewController()
     <UITableViewDataSource,
         UITableViewDelegate,
         NSFetchedResultsControllerDelegate,
@@ -124,7 +124,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 @end
 
-@implementation MTQueryBuilderViewController
+@implementation MADQueryViewController
 
 #pragma mark - Exit
 
@@ -205,7 +205,7 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
     }
 
     if ([self toolbarIconShown] == NO && [self barButtonItemShowSQL] != nil) {   //i.e. iPad version
-        __weak MTQueryBuilderViewController *blockSelf = self;
+        __weak MADQueryViewController *blockSelf = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser) {
                 

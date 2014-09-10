@@ -648,7 +648,7 @@
         <!--MAD Query-->
         <scene sceneID="jeR-GO-JXK">
             <objects>
-                <tableViewController id="joU-Nk-1nv" customClass="MTQueryBuilderViewController" sceneMemberID="viewController">
+                <tableViewController id="joU-Nk-1nv" customClass="MADQueryViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PDy-XC-RW7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

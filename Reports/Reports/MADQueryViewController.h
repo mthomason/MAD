@@ -20,7 +20,7 @@ extern NSString * const NSFetchedResultsCacheLinks;
 extern NSString * const NSFetchedResultsCacheGroups;
 extern NSString * const NSFetchedResultsCachePredicates;
 
-@interface MTQueryBuilderViewController : UITableViewController
+@interface MADQueryViewController : UITableViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;
