@@ -57,7 +57,7 @@
 #import "MTMath.h"
 
 #import "MTReportFormatter.h"
-#import "MTArrayCaching.h"
+#import "MADArrayCaching.h"
 #import "MTReportFormatterPageDefinition.h"
 
 #import "UIImage+Border.h"
@@ -90,19 +90,17 @@
     self = [super init];
     if (self) {
         [self initCommon];
-        [self setDataTable:dataTable];
-        [self setPrintableSize:printableAreaSize];
-        [self setReportFormatter:reportFormatter];
+        self.dataTable = dataTable;
+        self.printableSize = printableAreaSize;
+        self.reportFormatter = reportFormatter;
     }
     return self;
 }
 
 - (void)initCommon {
     
-    BOOL showWatermark = [MTStoreKitController licensedUser] == NO;
-    [self setShowWaterMark: showWatermark];
-    
-    [self setDebugMode:NO];
+    self.showWaterMark = [MTStoreKitController licensedUser] == NO;
+    self.debugMode = NO;
 
     [self setCachedPageSize:CGSizeZero];
     [self setCachedPageRect:CGRectZero];
@@ -124,7 +122,6 @@
                          scale:(CGFloat)scale {
     size = size * scale;
     cornerSize = cornerSize * scale;
-    //CGRect rectSquare = CGRectMake(rect.origin.x, rect.origin.y, maxLenght, maxLenght);
     CGFloat imageSizeWidth = (size * rect.size.width) / rect.size.height;
     CGSize trueSize = CGSizeMake(imageSizeWidth, size);
     CGRect zoomRect = CGRectMake(0.0000f, 0.0000f, trueSize.width, trueSize.height);
@@ -607,14 +604,14 @@
                                     }
                                 }
                                 
-                                CGFloat originPointX        = [[item dropPointX] floatValue] + sectionRect.origin.x;
-                                CGFloat originPointY        = [[item dropPointY] floatValue] + sectionRect.origin.y;
+                                CGFloat originPointX        = item.dropPointX.floatValue + sectionRect.origin.x;
+                                CGFloat originPointY        = item.dropPointY.floatValue + sectionRect.origin.y;
                                 
                                 CGFloat originPointXPadding = originPointX + item.spacingLeft;
                                 CGFloat originPointYPadding = originPointY + item.spacingTop;
                                 
-                                CGFloat sizeWidthPadding = [[item sizewidth] floatValue] + item.spacingRight;
-                                CGFloat sizeHeightPadding = [[item sizeheight] floatValue] + item.spacingBottom;
+                                CGFloat sizeWidthPadding = item.sizewidth.floatValue + item.spacingRight;
+                                CGFloat sizeHeightPadding = item.sizeheight.floatValue + item.spacingBottom;
                                 
                                 CGRect elementCanvasRect = CGRectMake(originPointXPadding, originPointYPadding, sizeWidthPadding, sizeHeightPadding);
                                 
@@ -622,18 +619,9 @@
                                     
                                     NSDictionary *attributes = [item attributesForDrawingText];
                                     
-                                    // FIXME: This hack gets around known iOS7 bug.
-                                    //          Want to draw the fucking rect without
-                                    //          having to do a fucking translation.
-                                    
-                                    CGContextSaveGState(ctx); {
-                                        
-                                        CGContextTranslateCTM(ctx, elementCanvasRect.origin.x, elementCanvasRect.origin.y);
-                                        CGRect drawingRect = CGRectMake(0.0000f, 0.0000f, elementCanvasRect.size.width, elementCanvasRect.size.height);
-                                        NSStringDrawingOptions options = NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin;
-                                        [drawingObject drawWithRect:drawingRect options:options attributes:attributes context:nil];
-                                    }
-                                    CGContextRestoreGState(ctx);
+                                    NSStringDrawingOptions options = NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin;
+                                    [drawingObject drawWithRect:elementCanvasRect options:options attributes:attributes context:nil];
+
                                     attributes = nil;
                                     
                                 } else {
@@ -654,11 +642,7 @@
                 }
             }
             layoutSectionCounter++;
-        } else {
-            //NSAssert(false, @"Error: %s", __PRETTY_FUNCTION__);
         }
-    } else {
-     //   NSAssert(false, @"Error");
     }
 }
 
