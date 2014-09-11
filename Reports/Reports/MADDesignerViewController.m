@@ -300,6 +300,20 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return self;
 }
 
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+ 
+    [super decodeRestorableStateWithCoder:coder];
+}
+
 #pragma mark - UIViewController
 
 - (NSString *)title {
@@ -312,6 +326,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.restorationIdentifier = @"MADIdentifierRestorationDesignerViewController";
     
     MADPromptManager *promptManager = [[MADPromptManager alloc] init];
     self.promptManager = promptManager;

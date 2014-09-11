@@ -552,6 +552,8 @@
 		4C384E3314B29789007B4F48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C384E3114B29789007B4F48 /* InfoPlist.strings */; };
 		4C384E3514B29789007B4F48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3414B29789007B4F48 /* main.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C38E0D019C203B400AB9789 /* MADFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E0CF19C203B400AB9789 /* MADFileManager.m */; };
+		4C38E0D119C203B400AB9789 /* MADFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E0CF19C203B400AB9789 /* MADFileManager.m */; };
 		4C3ACA3F16715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2092,6 +2094,8 @@
 		4C384E3714B29789007B4F48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C384E3814B29789007B4F48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C384E4314B29789007B4F48 /* MADOpenFileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOpenFileViewController.h; sourceTree = "<group>"; };
+		4C38E0CF19C203B400AB9789 /* MADFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileManager.m; sourceTree = "<group>"; };
+		4C38E0D219C203F600AB9789 /* MADFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileManager.h; sourceTree = "<group>"; };
 		4C3ACA3D16715679001BC16D /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C3ACA45167297AA001BC16D /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
@@ -4218,6 +4222,8 @@
 		4C6DF38E16D5F5D500BDC0C1 /* Open Document */ = {
 			isa = PBXGroup;
 			children = (
+				4C38E0D219C203F600AB9789 /* MADFileManager.h */,
+				4C38E0CF19C203B400AB9789 /* MADFileManager.m */,
 				4C384E4314B29789007B4F48 /* MADOpenFileViewController.h */,
 				4CE8A04214C01ABB007C8345 /* MADOpenFileViewController.m */,
 				4C6DF38116D43C1C00BDC0C1 /* MTCollectionViewCellDocument.h */,
@@ -6559,6 +6565,7 @@
 				4C773295190FFD6A005AE7C2 /* MysqlIndex.m in Sources */,
 				4CABE4901837DF7F007EDD9D /* RptqQueryLinks.m in Sources */,
 				4C5BED6218E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
+				4C38E0D119C203B400AB9789 /* MADFileManager.m in Sources */,
 				4CE9F31D177B39A8009F11AF /* MTLicensingViewController.m in Sources */,
 				4CA57A5C179FD46300B58871 /* MADDesignerSectionLabel.m in Sources */,
 				4CABE4701837DF7C007EDD9D /* RptqDocumentObjectImage.m in Sources */,
@@ -7058,6 +7065,7 @@
 				4C773294190FFD6A005AE7C2 /* MysqlIndex.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,
 				4C23FB0418FADCE4009F234F /* MTTableViewControllerBarcodeExtraDataMatrix.m in Sources */,
+				4C38E0D019C203B400AB9789 /* MADFileManager.m in Sources */,
 				4CC39D6C175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C5BED6118E8C46500BDDDB8 /* UIViewController+tabBarItem.m in Sources */,
 				4C23FBC618FAE4F7009F234F /* MTPaperB10.m in Sources */,

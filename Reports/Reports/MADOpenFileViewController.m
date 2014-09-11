@@ -33,27 +33,13 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTAlertView.h"
 #import "NSFileManager+Common.h"
+#import "MADFileManager.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
 
-@interface MTOpenFiles : NSObject
-    @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
-    @property (nonatomic, strong) NSURL *openUrl;
-@end
 
-@implementation MTOpenFiles
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        NSMutableDictionary *openFiles = [NSMutableDictionary new];
-        self.openFiles = openFiles;
-        self.openUrl = nil;
-    }
-    return self;
-}
-@end
 
 @interface MADOpenFileViewController()
     <UIAlertViewDelegate,
@@ -101,8 +87,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible) BOOL savingActivityIndicatorVisible;
 
 @property (nonatomic, strong) NSArray *urls;
-@property (nonatomic, strong) MTOpenFiles *openFiles;
-@property (nonatomic, assign) MTReportState reportState;
 
 @property (nonatomic, strong) UICollectionReusableView *searchView;
 
@@ -121,11 +105,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        [self closeReport];
+        MTApplicationInstance *app = [AppDelegate app];
+        __weak MADOpenFileViewController *weakself = self;
+        [app closeReportWithCompletionHandler:^(BOOL success) {
+            [weakself reenable];
+        }];
     }
-    [self setShouldShowAddDocumentPopover:YES];
-    [[self barButtonItemAddNewDocument] setEnabled:YES];
-    //[self reloadData];
+    self.shouldShowAddDocumentPopover = YES;
+    self.barButtonItemAddNewDocument.enabled = YES;
     
     if ([MTApplicationInstance isMadViewer] && [UIDevice isPad]) {
 
@@ -153,10 +140,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                            withSender: sender];
 }
 
-- (MADocument *)document {
-    return [self currentDocument];
-}
-
 - (void)awakeFromNib {
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
@@ -171,6 +154,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return self;    
 }
 
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -181,17 +165,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)initialize {
     
-    MTOpenFiles *openFiles = [MTOpenFiles new];
-    [self setOpenFiles:openFiles];
-    
-    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
-    [self setBarButtonItemEditDone:barButtonItemEditDone];
+
     
 }
+
+#pragma mark - UIStateRestoration
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+    
+    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
+    [self setBarButtonItemEditDone:barButtonItemEditDone];
 
     [self setEditModeEnabled:NO];
     [self setEditing:NO animated:NO];
@@ -424,7 +409,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)prepareForSegueOpenInViewer:(UIStoryboardSegue *)segue sender:(id)sender {
     MADViewerController *viewControllerReportViewer = (MADViewerController *)[(UINavigationController *)segue.destinationViewController topViewController];
     viewControllerReportViewer.viewControllerDelegate = self;
-    viewControllerReportViewer.document = [self currentDocument];
+    MTApplicationInstance *app = [AppDelegate app];
+    viewControllerReportViewer.document = [app openDocument];
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -446,7 +432,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self ;
             
-            MADocument *document = [self currentDocument];
+            MTApplicationInstance *app = [AppDelegate app];
+            MADocument *document = [app openDocument];
             queryBuilderContainerController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
@@ -467,7 +454,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
             MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
             reportViewerViewController.viewControllerDelegate = self;
-            MADocument *document = [self currentDocument];
+            MTApplicationInstance *app = [AppDelegate app];
+            MADocument *document = [app openDocument];
             queryBuilderViewController.document = document;
             reportDesignerViewController.document = document;
             reportViewerViewController.document = document;
@@ -478,7 +466,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         
     } else if ([segue.destinationViewController isKindOfClass:[MADQueryViewController class]]) {
         MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[segue.destinationViewController topViewController];
-        MADocument *document = [self currentDocument];
+        MTApplicationInstance *app = [AppDelegate app];
+        MADocument *document = [app openDocument];
         queryBuilderViewController.document = document;
         [queryBuilderViewController reloadDocument:document animated:YES];
     }
@@ -499,11 +488,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [self prepareForSegueLicensing:segue];
 
     } else if ([segue.identifier isEqualToString:MTSegueOpenInViewer]) {
-        [[self currentDocument] activeDocumentModel];
+        MTApplicationInstance *app = [AppDelegate app];
+        [[app openDocument] activeDocumentModel];
         [self prepareForSegueOpenInViewer:segue sender:sender];
         
     } else if ([segue.identifier isEqualToString:MTSegueShowOpenDocument]) {
-        [[self currentDocument] activeDocumentModel];
+        MTApplicationInstance *app = [AppDelegate app];
+        [[app openDocument] activeDocumentModel];
         [self prepareForSegueShowOpenDocument:segue sender:sender];
     }
 }
@@ -578,7 +569,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)viewControllerDidFinish:(id)sender {
     [self setShouldShowAddDocumentPopover:YES];
-    [self closeReport];
+    MTApplicationInstance *app = [AppDelegate app];
+    __weak MADOpenFileViewController *weakself = self;
+    [app closeReportWithCompletionHandler:^(BOOL success) {
+        [weakself reenable];
+    }];
     
     if ([self.openDocumentPopoverController isPopoverVisible]) {
         [self.openDocumentPopoverController dismissPopoverAnimated:YES];
@@ -603,7 +598,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [sender isKindOfClass: queryBuilderContainerClass] ||
         [sender isKindOfClass: reportDesignerClass] ||
         [sender isKindOfClass: reportViewerClass]) {
-        [self closeReport];
+        MTApplicationInstance *app = [AppDelegate app];
+        __weak MADOpenFileViewController *weakself = self;
+        [app closeReportWithCompletionHandler:^(BOOL success) {
+            [weakself reenable];
+        }];
     }
     [self setShouldShowAddDocumentPopover:YES];
     [[self barButtonItemAddNewDocument] setEnabled:YES];
@@ -894,7 +893,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [collectionView deselectItemAtIndexPath:indexPath animated:YES];
         
         __weak MADOpenFileViewController *weakself = self;
-        [self openReport:fileUrl withCompletionHandler:^(BOOL success) {
+
+        MTApplicationInstance *app = [AppDelegate app];
+        [app openReport:fileUrl withCompletionHandler:^(BOOL success) {
             if (success) {
                 if ([MTApplicationInstance isMadDesigner]) {
                     [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
@@ -1010,7 +1011,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if (self.isSavingActivityIndicatorVisible == NO) {
         [cell.activityIndicator stopAnimating];
     } else {
-        NSComparisonResult comparionResult = [[self.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
+        
+        MTApplicationInstance *app = [AppDelegate app];
+        NSComparisonResult comparionResult = [[app.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
         if (comparionResult == NSOrderedSame) {
             [cell.activityIndicator startAnimating];
         } else {
@@ -1078,7 +1081,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setSavingActivityIndicatorVisible:YES];
     for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
         NSURL *visibleUrl = [self documentForIndexPath:path];
-        BOOL animate = [self.openFiles.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
+        MTApplicationInstance *app = [AppDelegate app];
+        BOOL animate = [app.openFiles.openUrl.lastPathComponent caseInsensitiveCompare:visibleUrl.lastPathComponent] == NSOrderedSame;
         if (animate) {
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
             if (cell != nil) {
@@ -1419,7 +1423,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
         cellDocument = sender;
     } else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
-        //NSAssert([sender isKindOfClass:[UILabel class]], @"Expects touched label");
         UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
         cellDocument = (MTCollectionViewCellDocument *)contentView.superview;
     }
@@ -1498,63 +1501,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [weakself presentViewController:mailComposer animated:YES completion:nil];
         }
     }
-}
-
-#pragma mark - Document Operations
-
-- (void)closeReport {
-    
-    [self displaySavingReportActivityIndicator];
-    
-    __weak MADocument *activeDocument = [self currentDocument];
-    if (activeDocument) {
-        
-        if (activeDocument.documentState != UIDocumentStateClosed) {
-            [activeDocument regenThumbnail];
-            __weak MADOpenFileViewController *blockSelf = self;
-            [activeDocument saveToURL: activeDocument.fileURL
-                     forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
-                if (success) {
-                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
-                        if (success) {
-                            [blockSelf setReportState:MTReportStateClosed];
-                            NSString *key = [blockSelf.openFiles.openUrl key];
-                            [blockSelf.openFiles.openFiles removeObjectForKey:key];
-                            [blockSelf reenable];
-                        } else {
-                            [blockSelf reenable];
-                        }
-                    }];
-
-                }
-            }];
-        } else {
-            [self reenable];
-        }
-        
-    } else {
-        [self reenable];
-    }
-}
-
-- (MADocument *)currentDocument {
-    MADocument *result = nil;
-    if ([self reportState] == MTReportStateOpen) {
-        NSString *key = [self.openFiles.openUrl key];
-        result = (self.openFiles.openFiles)[key];
-    }
-    return result;
-}
-
-- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
-    self.openFiles.openUrl = url;
-    MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    NSString *key = [url key];
-    (self.openFiles.openFiles)[key] = document;
-    [document openWithCompletionHandler:^(BOOL success) {
-        if (success) [self setReportState:MTReportStateOpen];
-        completionHandler(success);
-    }];
 }
 
 @end

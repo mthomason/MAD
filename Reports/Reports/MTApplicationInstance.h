@@ -34,7 +34,7 @@ extern NSString * const MTStoryboardReportViewerPad;
 extern NSString * const MTStoryboardReportViewerLagacy;
 extern NSString * const MTStoryboardReportViewerPadLagacy;
 
-@class MTReportDesigner, MTReportViewer, MTQueryDesigner, MTUser;
+@class MTReportDesigner, MTReportViewer, MTQueryDesigner, MTUser, MADFileManager;
 
 @interface MTApplicationInstance : NSObject
 
@@ -44,6 +44,8 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 @property (nonatomic, strong, readonly) MTReportDesigner *reportDesigner;
 @property (nonatomic, strong, readonly) MTReportViewer *reportViewer;
 @property (nonatomic, strong, readonly) MTQueryDesigner *queryDesigner;
+
+@property (nonatomic, strong, readonly) MADFileManager *openFiles;
 
 - (MADocument *)currentdocappinst;
 
@@ -66,6 +68,10 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 
 + (void)drawMadWatermarkInRect:(CGRect)rect;
 + (NSString *)bundleDisplayName;
+
+- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler;
+- (MADocument *)openDocument;
 
 @end
 

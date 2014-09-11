@@ -31,15 +31,18 @@
 #import "NSFileManager+Common.h"
 #import "NSParagraphStyle+CommonStyles.h"
 
+#import "MADFileManager.h"
+#import "NSURL+Document.h"
+
 NSString * const MTApplicationIdMadDesigner                          = @"666001433";
 NSString * const MTApplicationIdMadViewer                            = @"666003759";
 
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.70";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.70";
-NSString * const MTGlobalBundleRev                                  = @"1445";
+NSString * const MTGlobalBundleVersion                              = @"7.0.71";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.71";
+NSString * const MTGlobalBundleRev                                  = @"1446";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -54,6 +57,7 @@ NSString * const MTStoryboardReportViewerLagacy                     = @"MTStoryb
 NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryboardReportViewerPadOS6";
 
 @interface MTApplicationInstance ()
+    <NSCoding>
 
 @property (nonatomic, strong) NSURL *currentDocument;           //To support opening multiple documents
                                                                     //change this url to the url of the open
@@ -65,14 +69,36 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 @property (nonatomic, strong, readwrite) MTQueryDesigner *queryDesigner;
 
 @property (nonatomic, strong) NSMutableDictionary *documents;   //MADocument stored by their NSURLS
+@property (nonatomic, strong, readwrite) MADFileManager *openFiles;
+
 
 @end
 
 @implementation MTApplicationInstance
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        //NSNumber *reportState = [aDecoder decodeObjectForKey:@"reportState"];
+        //self.reportState = reportState.unsignedIntegerValue;
+        //self.openFiles = [aDecoder decodeObjectForKey:@"openFiles"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    //NSNumber *reportState = @(self.reportState);
+    //[aCoder encodeObject:reportState forKey:@"reportState"];
+    //[aCoder encodeObject:self.openFiles forKey:@"openFiles"];
+
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
+        
+        MADFileManager *openFiles = [MADFileManager new];
+        self.openFiles = openFiles;
 
         MTUser *user = [[MTUser alloc] init];
         [self setUser:user];
@@ -483,6 +509,53 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
             });
         });
     });
+}
+
+#pragma mark - Document Operations
+
+- (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler {
+    
+    __weak MADocument *activeDocument = [self openDocument];
+    if (activeDocument) {
+        
+        if (activeDocument.documentState != UIDocumentStateClosed) {
+            [activeDocument regenThumbnail];
+            __weak MTApplicationInstance *weakself = self;
+            [activeDocument saveToURL: activeDocument.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
+                if (success) {
+                    [activeDocument closeWithCompletionHandler:^(BOOL success) {
+                        if (success) {
+                            [weakself setReportState:MTReportStateClosed];
+                            NSString *key = [weakself.openFiles.openUrl key];
+                            [weakself.openFiles.openFiles removeObjectForKey:key];
+                        }
+                        completionHandler(success);
+                    }];
+                    
+                }
+            }];
+        }
+    }
+}
+
+- (MADocument *)openDocument {
+    MADocument *result = nil;
+    if ([self reportState] == MTReportStateOpen) {
+        NSString *key = [self.openFiles.openUrl key];
+        result = (self.openFiles.openFiles)[key];
+    }
+    return result;
+}
+
+- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
+    self.openFiles.openUrl = url;
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    NSString *key = [url key];
+    (self.openFiles.openFiles)[key] = document;
+    [document openWithCompletionHandler:^(BOOL success) {
+        if (success) [self setReportState:MTReportStateOpen];
+        completionHandler(success);
+    }];
 }
 
 @end
