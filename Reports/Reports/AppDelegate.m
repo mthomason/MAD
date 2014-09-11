@@ -133,6 +133,26 @@ void uncaughtExceptionHandler(NSException *exception) {
     return [UIDevice isPad] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
+#pragma mark -- State Restoration protocol adopted by UIApplication delegate --
+/*
+- (UIViewController *) application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    
+}
+- (BOOL) application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    
+}
+- (BOOL) application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    
+}
+- (void) application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
+    
+}
+- (void) application:(UIApplication *)application didDecodeRestorableStateWithCoder:(NSCoder *)coder {
+    
+}*/
+
+
+
 /*
 - (void)registerDefaultsFromSettingsBundle {
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);

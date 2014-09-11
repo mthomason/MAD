@@ -19,10 +19,15 @@
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
 
-NSString * const MADUpgradeInstalledChinook = @"MADUpgradeInstalledChinook";
-NSString * const MADUpgradeInstalledSamples = @"MADUpgradeInstalledSamples";
-NSString * const MADUpgradeLastVersionRun = @"MADUpgradeLastVersionRun";
+NSString * const MADUpgradeInstalledChinook         = @"MADUpgradeInstalledChinook";
+NSString * const MADUpgradeInstalledSamples         = @"MADUpgradeInstalledSamples";
+NSString * const MADUpgradeLastVersionRun           = @"MADUpgradeLastVersionRun";
+NSString * const MADIdentifierSegueUpgradeComplete  = @"MTSegueUpgradeComplete";
+NSString * const MADIdentifierSegueUpgradeUnneeded  = @"MTSegueUpgradeUnneeded";
 
+NSString * const MADIdentifierFileChinook           = @"Chinook.mad";
+NSString * const MADIdentifierFileLondonMad         = @"London.mad";
+NSString * const MADIdentifierFileMusicMad          = @"Music.mad";
 
 const NSInteger currentMajorVersion = 2;
 
@@ -55,7 +60,8 @@ const NSInteger currentMajorVersion = 2;
     //lastVersionRun = @(1);
     
     NSURL *chinookUrl = [MADUpgradeViewController applicationSupportSampleDatabaseChinook];
-    BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:[chinookUrl path] isDirectory:NO];
+    BOOL isDirectory;
+    BOOL gotChinook = [[NSFileManager defaultManager] fileExistsAtPath:chinookUrl.path isDirectory:&isDirectory];
     if (gotChinook == NO) {
         self.installChinook = YES;
     } else {
@@ -74,28 +80,95 @@ const NSInteger currentMajorVersion = 2;
     }
     
     if (lastVersionRun == nil) lastVersionRun = @(1);
-    if ([lastVersionRun integerValue] < currentMajorVersion) {
+    if (lastVersionRun.integerValue < currentMajorVersion) {
         
-        if ([lastVersionRun integerValue] == 1) {
-            //Upgrade from version 1
-            
+        if (lastVersionRun.integerValue == 1) {
             upgradeRequired = YES;
             upgradeVersion1 = YES;
-            
         }
         
     }
     NSNumber *majorVersion = @(currentMajorVersion);
     [standardUserDefault setObject:majorVersion forKey:MADUpgradeLastVersionRun];
+    self.upgradeRequired = upgradeRequired;
+    self.upgradeVersion1 = upgradeVersion1;
+    self.upgradeVersion2 = upgradeVersion2;
     
-    if (upgradeRequired == NO && [self installChinook] == NO && [self installSamples] == NO) {
-        [self performSegueWithIdentifier:@"MTSegueUpgradeUnneeded" sender:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+
+    if (self.upgradeRequired == NO && self.installChinook == NO && self.installSamples == NO) {
+        [self performSegueWithIdentifier:MADIdentifierSegueUpgradeUnneeded sender:self];
+
+    } else {
+        
+        NSFileManager *defaultManager = [NSFileManager defaultManager];
+        if ([self installChinook]) {
+            NSURL *fileUrl = [MADUpgradeViewController applicationBundleSampleDatabaseChinook];
+            NSURL *chinookAppSupportUrl = [MADUpgradeViewController applicationSupportSampleDatabaseChinook];
+            
+            if (chinookAppSupportUrl != nil) {
+                NSError *error = nil;
+                [defaultManager copyItemAtURL:fileUrl toURL:chinookAppSupportUrl error:&error];
+                BOOL fileExist = [defaultManager fileExistsAtPath:[chinookAppSupportUrl path]];
+                if (fileExist) {
+                    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+                    [standardUserDefaults setObject:@YES forKey:MADUpgradeInstalledChinook];
+                    [standardUserDefaults synchronize];
+                } else {
+                    [defaultManager copyItemAtPath:[fileUrl path] toPath:[chinookAppSupportUrl path] error:&error]; //Try again?!?!
+                }
+            }
+        
+            
+        }
+        
+        if ([self installSamples]) {
+            NSBundle *mainBundle = [NSBundle mainBundle];
+            NSURL *sampleUrl1 = [mainBundle URLForResource:@"London" withExtension:@"mad"];
+            NSURL *sampleUrl2 = [mainBundle URLForResource:@"Music" withExtension:@"mad"];
+            
+            NSArray *possibleDocumentDirectoryUrls = [defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+            NSURL *documentDirectoryUrl = nil;
+            
+            if ([possibleDocumentDirectoryUrls count] >= 1) {
+                documentDirectoryUrl = possibleDocumentDirectoryUrls[0];
+                NSURL *londonUrl = [documentDirectoryUrl URLByAppendingPathComponent:MADIdentifierFileLondonMad isDirectory:NO];
+                NSURL *musicUrl = [documentDirectoryUrl URLByAppendingPathComponent:MADIdentifierFileMusicMad isDirectory:NO];
+                NSError *error = nil;
+                NSError *error2 = nil;
+                [defaultManager copyItemAtURL:sampleUrl1 toURL:londonUrl error:&error];
+                [defaultManager copyItemAtURL:sampleUrl2 toURL:musicUrl error:&error2];
+                if (error == nil && error2 == nil) {
+                    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+                    [standardUserDefaults setObject:@YES forKey:MADUpgradeInstalledSamples];
+                    [standardUserDefaults synchronize];
+                } else {
+                    BOOL isDirectory1, isDirectory2;
+                    BOOL fileOneExist = [defaultManager fileExistsAtPath:londonUrl.path isDirectory:&isDirectory1];
+                    BOOL fileTwoExist = [defaultManager fileExistsAtPath:musicUrl.path isDirectory:&isDirectory2];
+                    if (fileOneExist && fileTwoExist) {
+                        NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+                        [standardUserDefaults setObject:@YES forKey:MADUpgradeInstalledSamples];
+                        [standardUserDefaults synchronize];
+                    }
+                }
+            }
+        }
+        
+        if ([self upgradeRequired]) {
+            if ([self upgradeVersion1] == YES) {
+                
+            } else if ([self upgradeVersion2] == YES) {
+                //For the future
+            }
+        }
+        NSAssert(chinookInstalling == NO, @"%s", __PRETTY_FUNCTION__);
+        [self performSegueWithIdentifier:MADIdentifierSegueUpgradeComplete sender:self];
     }
-    
-    [self setUpgradeRequired:upgradeRequired];
-    [self setUpgradeVersion1:upgradeVersion1];
-    [self setUpgradeVersion2:upgradeVersion2];
-    
 }
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
@@ -108,100 +181,6 @@ const NSInteger currentMajorVersion = 2;
 + (NSURL *)applicationBundleSampleDatabaseChinook {
     NSBundle *mainBundle = [NSBundle mainBundle];
     return [mainBundle URLForResource:MTSampleDatabaseChinook withExtension:MTDocumentExtentionSqlite3];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    
-    BOOL chinookInstalling = NO;
-    
-    if ([self installChinook]) {
-        NSURL *fileUrl = [MADUpgradeViewController applicationBundleSampleDatabaseChinook];
-        NSURL *chinookAppSupportUrl = [MADUpgradeViewController applicationSupportSampleDatabaseChinook];
-
-        if (chinookAppSupportUrl != nil) {
-            NSError *error = nil;
-            [defaultManager copyItemAtURL:fileUrl toURL:chinookAppSupportUrl error:&error];
-            BOOL fileExist = [defaultManager fileExistsAtPath:[chinookAppSupportUrl path]];
-            if (fileExist) {
-                NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-                [standardUserDefaults setObject:@YES forKey:MADUpgradeInstalledChinook];
-                [standardUserDefaults synchronize];
-            } else {
-                [defaultManager copyItemAtPath:[fileUrl path] toPath:[chinookAppSupportUrl path] error:&error]; //Try again?!?!
-            }
-        }
-        
-#if MADUPGRADE_CREATE_SAMPLE == TRUE
-        chinookInstalling = YES;
-        MTDatabaseConnection *dbDetails =  = [[MTDatabaseConnection databaseConnectionFactoryEmpty:[MTDatabaseSqlite3 identifier]] retain];
-        
-        [dbDetails setDatabaseUrl:chinookAppSupportUrl];
-        NSArray *possibleDocumentDirectoryUrls = [defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-        NSURL *documentDirectoryUrl = nil;
-        NSURL *exampleFileUrl = nil;
-        if ([possibleDocumentDirectoryUrls count] >= 1) {
-            documentDirectoryUrl = [possibleDocumentDirectoryUrls objectAtIndex:0];
-            exampleFileUrl = [documentDirectoryUrl URLByAppendingPathComponent:@"Chinook.mad" isDirectory:NO];
-        }
-        if (exampleFileUrl != nil) {
-            
-            __weak MADUpgradeViewController *blockSelf = self;
-            [MADocument initalSaveUsingUrl:exampleFileUrl andConnection:dbDetails completion:^(BOOL success) {
-                [blockSelf performSegueWithIdentifier:@"MTSegueUpgradeComplete" sender:blockSelf];
-            }];
-        }
-        [dbDetails release];
-#endif
-
-    }
-    
-    if ([self installSamples]) {
-        NSBundle *mainBundle = [NSBundle mainBundle];
-        NSURL *sampleUrl1 = [mainBundle URLForResource:@"London" withExtension:@"mad"];
-        NSURL *sampleUrl2 = [mainBundle URLForResource:@"Music" withExtension:@"mad"];
-        
-        NSArray *possibleDocumentDirectoryUrls = [defaultManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-        NSURL *documentDirectoryUrl = nil;
-
-        if ([possibleDocumentDirectoryUrls count] >= 1) {
-            documentDirectoryUrl = possibleDocumentDirectoryUrls[0];
-            NSURL *londonUrl = [documentDirectoryUrl URLByAppendingPathComponent:@"London.mad" isDirectory:NO];
-            NSURL *musicUrl = [documentDirectoryUrl URLByAppendingPathComponent:@"Music.mad" isDirectory:NO];
-            NSError *error = nil;
-            NSError *error2 = nil;
-            [defaultManager copyItemAtURL:sampleUrl1 toURL:londonUrl error:&error];
-            [defaultManager copyItemAtURL:sampleUrl2 toURL:musicUrl error:&error2];
-            if (error == nil && error2 == nil) {
-                NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-                [standardUserDefaults setObject:@YES forKey:MADUpgradeInstalledSamples];
-                [standardUserDefaults synchronize];
-            } else {
-                NSString *londonPath = [londonUrl path];
-                NSString *musicPath = [musicUrl path];
-                BOOL fileOneExist = [defaultManager fileExistsAtPath:londonPath isDirectory:NO];
-                BOOL fileTwoExist = [defaultManager fileExistsAtPath:musicPath isDirectory:NO];
-                if (fileOneExist && fileTwoExist) {
-                    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-                    [standardUserDefaults setObject:@YES forKey:MADUpgradeInstalledSamples];
-                    [standardUserDefaults synchronize];
-                }
-            }
-        }
-    }
-    
-    if ([self upgradeRequired]) {
-        if ([self upgradeVersion1] == YES) {
-            
-        } else if ([self upgradeVersion2] == YES) {
-            //For the future
-        }
-    }
-    if (chinookInstalling == NO) {
-        [self performSegueWithIdentifier:@"MTSegueUpgradeComplete" sender:self];
-    }
 }
 
 @end
