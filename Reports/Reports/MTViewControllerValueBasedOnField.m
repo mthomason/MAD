@@ -153,7 +153,7 @@
             if (success) {
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
-                    [weakself2 setDataTable:dt];
+                    [weakself2 setDataTable: dt];
                     NSArray *allObjects = [[weakself2 dataTable] allObjects];
                     [weakself2 setPickerData:allObjects];
                     [[weakself2 pickerView] reloadAllComponents];

@@ -10,7 +10,7 @@
 //#define MAD_MTArrayCached_DEBUG
 //#endif
 
-#import "MTArrayCaching.h"
+#import "MADArrayCaching.h"
 #import "NSFileManager+Common.h"
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseCache.h"
@@ -30,7 +30,7 @@ NSString * const MTArrayCachedQuerySelect = @"SELECT %@ FROM %@ WHERE %@ = ? LIM
 NSString * const MTArrayCachedQueryLastId = @"SELECT %@ FROM %@ ORDER BY %@ DESC LIMIT 1 OFFSET 0;";
 NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
-@interface MTArrayCaching ()
+@interface MADArrayCaching ()
 
 @property (nonatomic, strong, readwrite) NSString *identifier;
 @property (nonatomic, strong) MTDatabaseCache *database;
@@ -48,7 +48,7 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
 
 @end
 
-@implementation MTArrayCaching
+@implementation MADArrayCaching
 
 - (void)dealloc {
     sqlite3_finalize(_statementInsert);
@@ -114,8 +114,8 @@ NSString * const MTArrayCachedQueryEnumer = @"SELECT %@ FROM %@ ORDER BY %@;";
         createDatabase = [self.database tableExist:MTArrayCachedTableName] == NO;
     }
     if ([self.database tableExist:MTArrayCachedTableName] == NO) {
-        MTDataColumn *columnKey = [MTArrayCaching columnKey];
-        MTDataColumn *columnValue = [MTArrayCaching columnValue];
+        MTDataColumn *columnKey = [MADArrayCaching columnKey];
+        MTDataColumn *columnValue = [MADArrayCaching columnValue];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnKey identifier] createTable:YES unique:NO];
         [self addColumn:columnKey toTable:MTArrayCachedTableName columnName:[columnValue identifier] createTable:NO unique:NO];
         [self setNumberOrRows:0];

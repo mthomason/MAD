@@ -7,11 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MTArrayCaching.h"
+#import "MADArrayCaching.h"
 
 @interface MTCachingArrayTest : XCTestCase
 
-@property (nonatomic, strong) MTArrayCaching *array;
+@property (nonatomic, strong) MADArrayCaching *array;
 @property (nonatomic, strong) NSMutableArray *arrayControl;
 
 @property (nonatomic, strong) NSString *identifier;
@@ -47,7 +47,7 @@
     [self addObjectsToArray:&arrayControl];
     [self setArrayControl:arrayControl];
     
-    MTArrayCaching *array = [[MTArrayCaching alloc] initWithIdentifier:[self identifier]];
+    MADArrayCaching *array = [[MADArrayCaching alloc] initWithIdentifier:[self identifier]];
     static dispatch_once_t onceToken1;
     dispatch_once(&onceToken1, ^{
         [array beginBulkInserts];
@@ -70,7 +70,7 @@
 }
 
 - (void)removeDatabaseFile {
-    NSURL *urlToCleanup = [MTArrayCaching urlForIdentifier:[self identifier]];
+    NSURL *urlToCleanup = [MADArrayCaching urlForIdentifier:[self identifier]];
     if ([[NSFileManager defaultManager] fileExistsAtPath:[urlToCleanup path]]) {
         NSError *error = nil;
         [[NSFileManager defaultManager] removeItemAtURL:urlToCleanup error:&error];

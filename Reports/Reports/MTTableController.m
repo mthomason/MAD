@@ -54,7 +54,7 @@
         [query database].delegate = self;
         
         MTDataTable *datatable = [MTTableController dataTableWithObjectId:[[query queryObject] objectID]];
-        [self setDatatable:datatable];
+        self.datatable = datatable;
         tableLayout.delegate = self;
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
         [self setTableFormatter:tableFormatter];

@@ -42,7 +42,7 @@
         MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
         db.delegate = self;
         MTDataTable *dataTable = [MTDataTable newDataTableForIdentifier:[[[object objectID] URIRepresentation] absoluteString]];
-        [self setDatatable:dataTable];
+        self.datatable = dataTable;
         [self setDatabase:db];
         [self setQueryObject:object];
         

@@ -41,7 +41,7 @@
                                                                  typeKey : type,
                                                                  objectIdKey : objectIdV}];
         
-        [self setDatatable:datatable];
+        self.datatable = datatable;
     
         MTDatabase *db = [MTDatabase databaseFactory:object];
         [self setDatabase:db];
