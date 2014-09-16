@@ -11,10 +11,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class MADocument;
+
 @interface MADFileManager : NSObject
 
-    @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
-    @property (nonatomic, strong) NSURL *openUrl;
+@property (nonatomic, strong, readonly) NSURL *openUrl;
+@property (nonatomic, strong) UIManagedDocument *openDocument;
+
+- (void)removeDocumentWithUrl:(NSURL *)url;
 
 @end
 

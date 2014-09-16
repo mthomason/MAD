@@ -40,9 +40,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.72";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.72";
-NSString * const MTGlobalBundleRev                                  = @"1447";
+NSString * const MTGlobalBundleVersion                              = @"7.0.73";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.73";
+NSString * const MTGlobalBundleRev                                  = @"1448";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -514,9 +514,8 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
                 if (success) {
                     [activeDocument closeWithCompletionHandler:^(BOOL success) {
                         if (success) {
-                            [weakself setReportState:MTReportStateClosed];
-                            NSString *key = [weakself.openFiles.openUrl key];
-                            [weakself.openFiles.openFiles removeObjectForKey:key];
+                            weakself.reportState = MTReportStateClosed;
+                            [weakself.openFiles removeDocumentWithUrl:weakself.openFiles.openUrl];
                         }
                         completionHandler(success);
                     }];
@@ -530,19 +529,16 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 - (MADocument *)openDocument {
     MADocument *result = nil;
     if ([self reportState] == MTReportStateOpen) {
-        NSString *key = [self.openFiles.openUrl key];
-        result = (self.openFiles.openFiles)[key];
+        result = (MADocument *)self.openFiles.openDocument;
     }
     return result;
 }
 
 - (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
-    self.openFiles.openUrl = url;
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    NSString *key = [url key];
-    (self.openFiles.openFiles)[key] = document;
+    self.openFiles.openDocument = document;
     [document openWithCompletionHandler:^(BOOL success) {
-        if (success) [self setReportState:MTReportStateOpen];
+        if (success) self.reportState = MTReportStateOpen;
         completionHandler(success);
     }];
 }

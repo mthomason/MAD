@@ -251,22 +251,23 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectStaticLabelSaveIdentifer]) {
         [self saveStaticLabel:action.sourceViewController];
 
-    } else if ([[action identifier] isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
+    } else if ([action.identifier isEqualToString:MTSegueChooseWhitespaceSaveIdentifer]) {
         [self saveWhiteSpace];
     
-    } else if ([[action identifier] isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
-        [self tableViewControllerChooseFieldDidFinish:[action sourceViewController] withField:[[action sourceViewController] queryField]];
+    } else if ([action.identifier isEqualToString:@"MTIdentifierSegueEditFieldExit"]) {
+        [self tableViewControllerChooseFieldDidFinish: action.sourceViewController
+                                            withField: [action.sourceViewController queryField]];
     
-    } else if ([[action identifier] isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
+    } else if ([action.identifier isEqualToString:MTSegueNewDocumentObjectDynamicLabelSaveIdentifer]) {
         [self saveDynamicLabel: action.sourceViewController];
     
-    } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
+    } else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
         [self saveAggregateLabel: action.sourceViewController];
     
-    } else if ([[action identifier] isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
+    } else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
         [self saveBarcodeLabel: action.sourceViewController];
         
-    } else if ([[action identifier] isEqualToString:MTSegueChooseImageSaveIdentifer]) {
+    } else if ([action.identifier isEqualToString:MTSegueChooseImageSaveIdentifer]) {
         //Intentionally blank
         
     }
@@ -1932,16 +1933,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
     shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     
-//    BOOL shouldRecognizeSimultaneously = NO;
-    
     BOOL sameViews = [gestureRecognizer.view isEqual:otherGestureRecognizer.view];
     BOOL scrollBackgroundAndScroller = [gestureRecognizer.view isEqual:self.scroller] == NO &&
                                             [otherGestureRecognizer.view isEqual:self.scroller] == NO;
-    
     return sameViews || scrollBackgroundAndScroller;
-  //  return [gestureRecognizer.view isEqual:[otherGestureRecognizer view]] == NO  &&
-  //          [gestureRecognizer.view isEqual:self.scroller] == NO &&
-  //          [[otherGestureRecognizer view] isEqual:self.scroller] == NO;
 
 }
 

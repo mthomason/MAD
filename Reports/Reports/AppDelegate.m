@@ -47,8 +47,15 @@
 
 #import "MADUpgradeManager.h"
 
+NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
+NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
+NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userprefsset";
 
-const NSInteger MATagNewDocument = 3838;
+
+const NSInteger MADTagAlertViewNewDocument = 3838;
+const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it will be enabled,
+                                                    //  load window in willFinishLaunchingWithOptions
+                                                    //  otherwise load window in didFinishLaunchingWithOptions
 
 @interface AppDelegate()
 
@@ -56,17 +63,18 @@ const NSInteger MATagNewDocument = 3838;
 @property (nonatomic, strong) UIStoryboard *storyboard;
 @property (nonatomic, strong) UIApplication *application;
 
-@property (nonatomic, strong) UIFontDescriptor *mainFontDescriptor;
-@property (nonatomic, strong) UIFontDescriptor *detailFontDescriptor;
-
 @end
 
 @implementation AppDelegate
 
-void uncaughtExceptionHandler(NSException *exception);
-void uncaughtExceptionHandler(NSException *exception) {
+#if DEBUG
+
+static void uncaughtExceptionHandler(NSException *exception);
+static void uncaughtExceptionHandler(NSException *exception) {
     MTLogStatic(@"%@", exception);
 }
+
+#endif
 
 + (MTApplicationInstance *)app {
     UIApplication *sharedApplication = [UIApplication sharedApplication];
@@ -85,7 +93,9 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 #pragma mark - Application Lifecycle
 
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (void)loadAndDisplayWindow {
+    
+    
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
     id initViewController = [storyBoard instantiateInitialViewController];
@@ -93,12 +103,26 @@ void uncaughtExceptionHandler(NSException *exception) {
     [window makeKeyAndVisible];
     self.window = window;
     self.storyboard = storyBoard;
+}
+
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    if (MADStateRestorationSupportEnabled) {
+        [self loadAndDisplayWindow];
+    }
     self.application = application;
-    
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+ 
+    if (MADStateRestorationSupportEnabled == NO) {
+        [self loadAndDisplayWindow];
+    }
+    
+#if DEBUG
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+#endif
     
     MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
     self.applicationInstance = appInstance;
@@ -155,7 +179,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                                                             delegate: nil
                                                    cancelButtonTitle: @"Continue"
                                                    otherButtonTitles: nil];
-        alertView.tag = MATagNewDocument;
+        alertView.tag = MADTagAlertViewNewDocument;
         alertView.delegate = self;
         [alertView show];
     } else {
@@ -267,7 +291,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     return save;
 }
 - (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
-    return NO;
+    return MADStateRestorationSupportEnabled;
 }
 
 - (void)application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
@@ -280,44 +304,6 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 
 - (void)application:(UIApplication *)application didDecodeRestorableStateWithCoder:(NSCoder *)coder { }
-
-
-
-/*
-- (void)registerDefaultsFromSettingsBundle {
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(dipatchQueue, ^{
-
-        NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-        [standardUserDefaults synchronize];
-        
-        NSString *pathSettingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
-        NSAssert(pathSettingsBundle, @"Could not find Settings.bundle");
-        NSString *pathRootPlist = [pathSettingsBundle stringByAppendingPathComponent:@"Root.plist"];
-        
-        
-        NSDictionary *rootPlistSettings = [NSDictionary dictionaryWithContentsOfFile:pathRootPlist];
-        NSArray *preferences = [rootPlistSettings objectForKey:@"PreferenceSpecifiers"];
-        NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
-        
-        for (NSDictionary *prefSpecification in preferences)  {
-            NSString *key = [prefSpecification objectForKey:@"Key"];
-            if (key) {
-                
-                id currentObject = [standardUserDefaults objectForKey:key];
-                if (currentObject == nil) {
-
-                    id objectToSet = [prefSpecification objectForKey:@"DefaultValue"];
-                    [defaultsToRegister setObject:objectToSet forKey:key];
-                }
-            }
-        }
-        
-        [standardUserDefaults registerDefaults:defaultsToRegister];
-        [standardUserDefaults synchronize];
-    });
-}
-*/
 
 #pragma mark - Key Value Store Notifications
 
@@ -333,14 +319,10 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:[controller URL] error:&error];
+    [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
 }
 
 #pragma mark - iCloud Shit
-
-NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
-NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
-NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userprefsset";
 
 - (void)storeCurrentUbiquityToken:(id)currentToken {
     // Write the ubquity identity token to NSUserDefaults if it exists.
@@ -355,7 +337,7 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
 }
 
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if ([alertView tag] == MATagNewDocument) {
+    if ([alertView tag] == MADTagAlertViewNewDocument) {
         MADOpenFileViewController *openDocumentViewController = (MADOpenFileViewController *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
         if (openDocumentViewController != nil &&
             [openDocumentViewController respondsToSelector:@selector(reloadData)]) {
@@ -365,33 +347,6 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
 }
 
 #pragma mark - Sigh...
-
-- (UIFont *)mainFont {
-    [self initFonts];
-    return [UIFont fontWithDescriptor:[self mainFontDescriptor] size:18.0000f];
-}
-
-- (UIFont *)detailFont {
-    [self initFonts];
-    return [UIFont fontWithDescriptor:[self detailFontDescriptor] size:12.0000f];
-}
-
-- (void)initFonts {
-
-    __weak AppDelegate *weakself = self;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-
-        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MTCellSkinner"];
-        UIFont *detailFont = [[cell detailTextLabel] font];
-        UIFontDescriptor *detailFontDescriptor = [detailFont fontDescriptor];
-        [weakself setDetailFontDescriptor:detailFontDescriptor];
-        
-        UIFont *mainFont = [[cell textLabel] font];
-        UIFontDescriptor *mainFontDescriptor = [mainFont fontDescriptor];
-        [weakself setMainFontDescriptor:mainFontDescriptor];
-    });
-}
 
 - (void)initalizeICloudKvs {
     //Setup iCloud KVS

@@ -24,9 +24,6 @@
 
 @property (nonatomic, strong) UIWindow *window;
 
-- (UIFont *)mainFont;
-- (UIFont *)detailFont;
-
 @end
 
 #endif

@@ -471,9 +471,8 @@
 }
 
 + (NSAttributedString *)subject:(NSString *)subjectPart withDetail:(NSString *)detailPart {
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    UIFont *boldFont = [appDelegate mainFont];
-    UIFont *systemFont = [appDelegate detailFont];
+    UIFont *boldFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    UIFont *systemFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont, NSForegroundColorAttributeName : [UIColor blackColor]};
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont, NSForegroundColorAttributeName : [UIColor lightGrayColor]};
     
