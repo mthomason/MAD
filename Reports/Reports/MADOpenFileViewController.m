@@ -78,9 +78,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 @property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
-@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
-
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
@@ -185,20 +182,14 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return self;
 }
 
-- (void)initialize {
-    
-    //self.restorationIdentifier  = @"MADIdentifierRestorationViewViewController";
-    
-    
-}
-
+- (void)initialize { }
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     
-    
-    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
+    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                           target:self action:@selector(edit:)];
     [self setBarButtonItemEditDone:barButtonItemEditDone];
 
     [self setEditModeEnabled:NO];
@@ -234,16 +225,18 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     self.navigationItem.hidesBackButton = YES;
     self.editModeEnabled = NO;
     
-    [self initalizeLongPressGestureRecognizer];
-    [self initalizeTapGestureRecognizer];
+    UITapGestureRecognizer *tapGestureRecognizer = [self tapGestureRecognizer];
+    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
     [[self barButtonItemLicensing] setEnabled:[SKPaymentQueue canMakePayments]];
 
     NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
     [toolbarButtons removeObject:self.barButtonItemAction];
-    if ([UIDevice isLagacyOS]) {
-        [toolbarButtons removeObject:self.barButtonItemCloudDown];
-    } else {
+    
+    // FIXME: Remove cloud down button until feature is added.
+    [toolbarButtons removeObject:self.barButtonItemCloudDown];
+
+    if ([UIDevice isLagacyOS] == NO) {
         UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
         searchBar.delegate = self;
         searchBar.showsBookmarkButton = NO;
@@ -255,18 +248,19 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         self.searchBar = searchBar;
         
         if (self.barButtonItemEdit == nil) {
-            UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-                                                                                  target:self
-                                                                                  action:@selector(edit:)];
+            UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                                  target: self
+                                                                                  action: @selector(edit:)];
             self.barButtonItemEdit = edit;
         }
         [toolbarButtons addObject:self.barButtonItemEdit];
     }
     
     UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
-    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage:imageDuplcate style:UIBarButtonItemStyleBordered
-                                                                              target:self
-                                                                              action:@selector(duplicate:)];
+    UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
+                                                                               style: UIBarButtonItemStyleBordered
+                                                                              target: self
+                                                                              action: @selector(duplicate:)];
     barButtonItemDuplicate.enabled = NO;
     [toolbarButtons insertObject:barButtonItemDuplicate atIndex:1];
     self.barButtonItemDuplicate = barButtonItemDuplicate;
@@ -278,11 +272,23 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 }
 
+- (UILongPressGestureRecognizer *)longPressGestureRecognizer {
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                                                             action: @selector(activateEditMode:)];
+    longPressGestureRecognizer.delegate = self;
+    return longPressGestureRecognizer;
+}
+
+- (UITapGestureRecognizer *)tapGestureRecognizer {
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                                           action: @selector(endEditMode:)];
+    tapGestureRecognizer.delegate = self;
+    return tapGestureRecognizer;
+}
+
 #pragma mark - UISearchBarDelegate
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
-    NSLog(@"The default search selected scope button index changed to %ld.", (long)selectedScope);
-}
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if (searchText.length > 0) {
@@ -290,7 +296,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             
             NSRange range = NSMakeRange(0, MIN(searchText.length, ((NSURL *)evaluatedObject).path.lastPathComponent.length));
             return [((NSURL *)evaluatedObject).path.lastPathComponent compare:searchText
-                                                                      options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch
+                                                                      options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
                                                                         range:range] == NSOrderedSame;
         }];
         self.urls = [[[[AppDelegate app] user] hasMadDocuments] filteredArrayUsingPredicate:predicate];
@@ -306,7 +312,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    NSLog(@"The default search bar cancel button was tapped.");
     if (self.searchBar.text.length > 0) {
         self.searchBar.text = @"";
         [self reloadData];
@@ -740,22 +745,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [v setBackgroundView:watermarkView];
 }
 
-- (void)initalizeLongPressGestureRecognizer {
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-                                                                                                             action: @selector(activateEditMode:)];
-    longPressGestureRecognizer.delegate =  self;
-    [self.collectionView addGestureRecognizer:longPressGestureRecognizer];
-    [self setLongPressGestureRecognizer:longPressGestureRecognizer];
-}
-
-- (void)initalizeTapGestureRecognizer {
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                                           action: @selector(endEditMode:)];
-    tapGestureRecognizer.delegate =  self;
-    [self.collectionView addGestureRecognizer:tapGestureRecognizer];
-    [self setTapGestureRecognizer:tapGestureRecognizer];
-}
-
 - (void)initalizeDataSource {
     self.collectionView.dataSource = self;
 }
@@ -861,7 +850,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self alertView:self.renameAlertView clickedButtonAtIndex:1];
-    [[self renameAlertView] dismissWithClickedButtonIndex:1 animated:YES];
+    [self.renameAlertView dismissWithClickedButtonIndex:1 animated:YES];
     return YES;
 }
 
@@ -911,17 +900,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     
     NSURL *fileUrl = [self documentForIndexPath:indexPath];
     NSURL *url = [MADocument thumbnailWithBorderUrlForMadUrl:fileUrl];
-    NSString *path = [url path];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
     if (image == nil) {
         image = [MTTableViewCellDocument defaultThumbnail];
     }
-    [[cell imagePreview] setImage:image];
-
+    [cell normalizeTint];
+    cell.imagePreview.image = image;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
     NSURL *fileUrl = [self documentForIndexPath:indexPath];
     if ([self isEditing] == NO) {
         [collectionView deselectItemAtIndexPath:indexPath animated:YES];
@@ -935,6 +922,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
+    [cell normalizeTint];
     
     NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
     NSString *path = [url path];
@@ -942,11 +930,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if (image == nil) {
         image = [MTTableViewCellDocument defaultThumbnail];
     }
-    [[cell imagePreview] setImage:image];
+    cell.imagePreview.image = image;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     [self selectionsUpdated];
     
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
@@ -959,7 +946,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if (image == nil) {
         image = [MTTableViewCellDocument defaultThumbnail];
     }
-    [[cell imagePreview] setImage:image];
+    cell.imagePreview.image = image;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender { }
@@ -977,9 +964,9 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
-    [cell performSelectionAnimations];
-    return YES;
+//    MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
+//    [cell performSelectionAnimations];
+    return NO;
 }
 
 - (void)openFileWithUrl:(NSURL *)url {
@@ -1040,6 +1027,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         tap.numberOfTouchesRequired = 1;
         [cell.labelTitle addGestureRecognizer:tap];
         cell.labelTitle.userInteractionEnabled = YES;
+        
+        UILongPressGestureRecognizer *longPressGestureRecognizer = [self longPressGestureRecognizer];
+        [cell addGestureRecognizer:longPressGestureRecognizer];
+        
     }
     [cell configureCellForUrl:url];
     if (self.isEditing) {
@@ -1050,7 +1041,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     } else {
         
         MTApplicationInstance *app = [AppDelegate app];
-        NSComparisonResult comparionResult = [[app.openFiles.openUrl lastPathComponent] caseInsensitiveCompare:[url lastPathComponent]];
+        NSComparisonResult comparionResult = [app.openFiles.openUrl.lastPathComponent caseInsensitiveCompare:url.lastPathComponent];
         if (comparionResult == NSOrderedSame) {
             [cell.activityIndicator startAnimating];
         } else {
@@ -1070,7 +1061,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 #pragma mark Edit Mode
 
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
-    if ([sender state] == UIGestureRecognizerStateEnded) {
+    if ([sender state] == UIGestureRecognizerStateBegan) {
         if ([self editModeEnabled] == NO) {
             [self edit:self];
         }
@@ -1124,7 +1115,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:path];
             if (cell != nil) {
                 [cell performDeselectionAnimations];
-                [[cell activityIndicator] startAnimating];
+                [cell.activityIndicator startAnimating];
             }
         }
     }
@@ -1142,10 +1133,10 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             NSString *path = [url path];
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
             if (image) {
-                [[visibleCell imagePreview] setImage: image];
+                visibleCell.imagePreview.image = image;
             } else {
                 UIImage *defaultThumbnail = [MTTableViewCellDocument defaultThumbnail];
-                [[visibleCell imagePreview] setImage: defaultThumbnail];
+                visibleCell.imagePreview.image = defaultThumbnail;
             }
             [visibleCell setNeedsLayout];
             
@@ -1154,7 +1145,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (NSUInteger)numberOfItemsSelected {
-    return [[self.collectionView indexPathsForSelectedItems] count];
+    NSArray *data = [self.collectionView indexPathsForSelectedItems];
+    return data.count;
 }
 
 - (void)selectionsUpdated {
@@ -1256,7 +1248,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         self.barButtonItemAddNewDocument.enabled = NO;
         self.barButtonItemAbout.enabled = NO;
         self.barButtonItemInformation.enabled = NO;
-        //self.barButtonItemDuplicate.enabled = NO;
         self.collectionView.allowsMultipleSelection = YES;
         
         for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
@@ -1269,9 +1260,11 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [items removeObject:self.barButtonItemEdit];
             [items addObject:self.barButtonItemEditDone];
             [self setToolbarItems:items animated:YES];
-            [self.navigationItem setRightBarButtonItem:nil animated:YES];
+            [self.navigationItem setRightBarButtonItem: nil
+                                              animated: YES];
         } else {
-            [self.navigationItem setRightBarButtonItem:self.barButtonItemEditDone animated:YES];
+            [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone
+                                              animated: YES];
         }
 
     } else {
@@ -1348,7 +1341,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     for (NSIndexPath *visibleCellLocations in self.collectionView.indexPathsForVisibleItems) {
         MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:visibleCellLocations];
         if (documentCell != nil) {
-            [documentCell dimTint];
+            [documentCell normalizeTint];
         }
     }
     
@@ -1364,7 +1357,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [UAAppReviewManager userDidSignificantEvent:YES];
         }
         
-        
         for (NSIndexPath *visibleCellLocations in weakSelf.collectionView.indexPathsForVisibleItems) {
             MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[[weakSelf collectionView] cellForItemAtIndexPath:visibleCellLocations];
             if (documentCell != nil) {
@@ -1374,10 +1366,12 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     }];
     
     if ([UIDevice isPad]) {
-        if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
+        if (self.popoverControllerActivity == nil || self.popoverControllerActivity.isPopoverVisible == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             popoverController.delegate = self;
-            [popoverController presentPopoverFromBarButtonItem:[self barButtonItemAction] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+            [popoverController presentPopoverFromBarButtonItem: self.barButtonItemAction
+                                      permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                      animated: YES];
             [self setPopoverControllerActivity:popoverController];
         }
     } else {
@@ -1397,16 +1391,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             NSURL *url = [self documentForIndexPath:selectedItem];
             [urlsToDelete addObject:url];
         }
-        
+
+        NSFileManager *fileManager = [NSFileManager defaultManager];
         for (NSURL *url in urlsToDelete) {
             NSError *error = nil;
             [self removeCachedFileForDocumentUrl:url];
-            MTLog(@"Deleting %@", url.lastPathComponent);
-            [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
-            [error presentErrorToUser];
+            [fileManager removeItemAtURL:url error:&error];
         }
-        [self.collectionView deleteItemsAtIndexPaths:itemsToDelete];
+        [self reloadData];
     }
+    [self selectionsUpdated];
 }
 
 - (void)paste:(id)sender {
@@ -1425,6 +1419,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
     }
     [self reloadData];
+    [self selectionsUpdated];
 }
 
 - (void)duplicate:(id)sender {
@@ -1449,10 +1444,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
         [self reloadData];
     }
-}
-
-- (void)duplicateUrl:(NSURL *)url {
-    
+    [self selectionsUpdated];
 }
 
 - (void)rename:(id)sender {
@@ -1478,8 +1470,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [textField setText:[[cellDocument labelTitle] text]];
     [textField setClearButtonMode:UITextFieldViewModeAlways];
     textField.delegate = self;
-    [self setRenameAlertView:alertView];
-    [[self renameAlertView] show];
+    self.renameAlertView = alertView;
+    [self.renameAlertView show];
 }
 
 - (void)email:(MTCollectionViewCellDocument *)cell {
@@ -1513,26 +1505,28 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             NSURL *fileUrl = [self urlForDocumentCell:cell];
             NSData *data = [NSData dataWithContentsOfURL:fileUrl];
             
-            NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
-                                                                                                     @"The attached document can be opened with MAD Viewer.")];
+            NSString *messageStringStart = NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
+                                                             @"The attached document can be opened with MAD Viewer.");
+            NSMutableString *messageBody = [[NSMutableString alloc] initWithString:messageStringStart];
             
-            NSString *subject = [NSString stringWithFormat:NSLocalizedString(@"MAD Document %@.", @"MAD Document %@."), [documentReport name]];
             [messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
             
             MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
-            [mailComposer setMailComposeDelegate: self];
+            mailComposer.mailComposeDelegate = self;
+            NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
+            NSString *docname = [documentReport name];
+            mailComposer.subject = [NSString stringWithFormat:formatString, docname];
             [mailComposer setMessageBody:messageBody isHTML:NO];
-            [mailComposer setSubject:subject];
             
-            NSString *name = [NSString stringWithFormat:@"%@.%@", [documentReport name], MTDocumentExtentionMobleApplicationDocument];
+            NSString *name = [NSString stringWithFormat:@"%@.%@", docname, MTDocumentExtentionMobleApplicationDocument];
             [mailComposer addAttachmentData:data mimeType:MADMimeType fileName:name];
-            [[[mailComposer navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
+            mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
             
             if ([UIDevice isPad]) {
-                [mailComposer setModalPresentationStyle:UIModalPresentationFormSheet];
-                [mailComposer setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-                [mailComposer setProvidesPresentationContextTransitionStyle:YES];
-                [mailComposer setModalInPopover:NO];
+                mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
+                mailComposer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                mailComposer.providesPresentationContextTransitionStyle = YES;
+                mailComposer.modalInPopover = NO;
             }
             
             [weakself presentViewController:mailComposer animated:YES completion:nil];

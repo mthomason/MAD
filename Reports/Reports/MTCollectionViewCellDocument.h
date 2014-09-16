@@ -24,7 +24,6 @@
 
 - (void)configureCellForUrl:(NSURL *)url;
 
-- (void)dimTint;
 - (void)normalizeTint;
 - (void)performSelectionAnimations;
 - (void)performDeselectionAnimations;
