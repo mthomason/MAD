@@ -22,6 +22,7 @@
 
 - (IBAction)done:(id)sender;
 - (IBAction)edit:(id)sender;
+- (void)openFileWithUrl:(NSURL *)url;
 
 @end
 

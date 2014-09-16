@@ -79,7 +79,7 @@
         <!--MAD Designer-->
         <scene sceneID="w7D-aP-uPq">
             <objects>
-                <navigationController definesPresentationContext="YES" id="rCj-aP-1mR" customClass="MTNavigationController" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="MADIdentifierRestorationDesignerNavigationController" storyboardIdentifier="MADIdentifierStoryboardDesignerNavigationController" definesPresentationContext="YES" id="rCj-aP-1mR" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" tag="2" title="MAD Designer" image="UIBarButtonItemMadDesigner.png" id="MvE-qe-wKQ"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mrR-aO-68b">
@@ -98,7 +98,7 @@
         <!--MAD Designer-->
         <scene sceneID="Lfd-iY-3rn">
             <objects>
-                <viewController storyboardIdentifier="IdReportDesignerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d6e-CT-kmt" customClass="MADDesignerViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="MADIdentifierRestorationDesignerViewController" storyboardIdentifier="MADIdentifierStoryboardDesignerViewController" id="d6e-CT-kmt" customClass="MADDesignerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="QgV-gE-09R"/>
                         <viewControllerLayoutGuide type="bottom" id="1yV-MO-XLd"/>
@@ -172,7 +172,7 @@
         <!--MAD Viewer-->
         <scene sceneID="V9N-EE-e2S">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Owb-NI-G7a" customClass="MTNavigationController" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="MADIdentifierRestorationViewerNavigationController" storyboardIdentifier="MADIdentifierStoryboardViewerNavigationController" definesPresentationContext="YES" toolbarHidden="NO" id="Owb-NI-G7a" customClass="MTNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="3" title="MAD Viewer" image="UIBarButtonItemMadViewer.png" id="HMm-Q7-BON"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -196,7 +196,7 @@
         <!--Viewer Controller-->
         <scene sceneID="5uB-Xd-m7k">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="D89-Nb-LnQ" customClass="MADViewerController" sceneMemberID="viewController">
+                <pageViewController restorationIdentifier="MADIdentifierRestorationViewerViewController" storyboardIdentifier="MADIdentifierStoryboardViewerViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="D89-Nb-LnQ" customClass="MADViewerController" sceneMemberID="viewController">
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="fixedSpace" id="AsL-nl-AtM"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="8RI-IH-kqi"/>
@@ -234,7 +234,7 @@
         <!--Navigation Controller-->
         <scene sceneID="QxZ-Ah-h4y">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="E7v-7q-ygd" customClass="MTNavigationController" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="MADIdentifierRestorationRootNavigationController" storyboardIdentifier="MADIdentifierStoryboardRootNavigationController" definesPresentationContext="YES" toolbarHidden="NO" id="E7v-7q-ygd" customClass="MTNavigationController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -253,7 +253,7 @@
                         <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </toolbar>
                     <connections>
-                        <segue destination="h2v-ej-AlB" kind="relationship" relationship="rootViewController" id="8Ac-8r-0TA"/>
+                        <segue destination="F7A-ai-FfA" kind="relationship" relationship="rootViewController" id="BZb-mQ-tER"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HQU-sr-pjq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -400,7 +400,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Dop-Kn-WJG">
             <objects>
-                <tabBarController definesPresentationContext="YES" id="wbd-ks-ygF" sceneMemberID="viewController">
+                <tabBarController restorationIdentifier="MADIdentifierRestorationMainTabBarController" storyboardIdentifier="MADIdentifierStoryboardMainTabBarController" definesPresentationContext="YES" id="wbd-ks-ygF" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="4zZ-zS-Qoc">
                         <rect key="frame" x="129" y="330" width="163" height="49"/>
@@ -422,7 +422,7 @@
         <!--MAD Query-->
         <scene sceneID="whu-Gh-wLK">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="dE1-Aw-c3W" customClass="MTNavigationControllerHideBottomBarUnlicensed" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="MADIdentifierRestorationQueryNavigationController" storyboardIdentifier="MADIdentifierStoryboardQueryNavigationController" definesPresentationContext="YES" toolbarHidden="NO" id="dE1-Aw-c3W" customClass="MTNavigationControllerHideBottomBarUnlicensed" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="1" title="MAD Query" image="UIBarButtonItemDatabase.png" id="gW1-wS-v8A"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -750,7 +750,7 @@
         <!--MAD Query-->
         <scene sceneID="PdD-eD-j8w">
             <objects>
-                <tableViewController id="UDQ-hu-wqs" customClass="MADQueryViewController" sceneMemberID="viewController">
+                <tableViewController restorationIdentifier="MADIdentifierRestorationQueryViewController" storyboardIdentifier="MADIdentifierStoryboardQueryViewController" id="UDQ-hu-wqs" customClass="MADQueryViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ZQj-sf-zU2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5453,65 +5453,10 @@
             </objects>
             <point key="canvasLocation" x="600" y="3698"/>
         </scene>
-        <!--Upgrade View Controller-->
-        <scene sceneID="ocR-IZ-11w">
-            <objects>
-                <viewController id="h2v-ej-AlB" customClass="MADUpgradeViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="edB-v2-e8Z"/>
-                        <viewControllerLayoutGuide type="bottom" id="KyT-WD-Oto"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="yKH-kY-Ntw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="GAd-PK-vze">
-                                <rect key="frame" x="150" y="274" width="20" height="20"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="centerY" secondItem="GAd-PK-vze" secondAttribute="centerY" id="JTn-qE-aqp"/>
-                            <constraint firstAttribute="centerX" secondItem="GAd-PK-vze" secondAttribute="centerX" id="i3J-5A-mNv"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="aLw-I8-ate"/>
-                    <connections>
-                        <segue destination="oEf-FM-1rV" kind="modal" identifier="MTSegueUpgradeUnneeded" animates="NO" id="ZzJ-In-6cL"/>
-                        <segue destination="F7A-ai-FfA" kind="push" identifier="MTSegueUpgradeComplete" id="tIb-WS-gen"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Q67-bq-hFq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1374" y="393"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="jFa-Fh-FZg">
-            <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="oEf-FM-1rV" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="H8I-sn-IQj">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392839999999" green="0.61960786580000005" blue="0.84313726430000002" alpha="1" colorSpace="calibratedRGB"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="wDr-Qz-W65">
-                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="F7A-ai-FfA" kind="relationship" relationship="rootViewController" id="3KQ-0K-U1O"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aVg-Td-DYn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-938" y="-37"/>
-        </scene>
         <!--MAD Designer-->
         <scene sceneID="8fZ-iQ-Ovc">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="F7A-ai-FfA" customClass="MADOpenFileViewController" sceneMemberID="viewController">
+                <collectionViewController restorationIdentifier="MADIdentifierRestorationOpenFileViewController" storyboardIdentifier="MADIdentifierStoryboardOpenFileViewController" autoresizesArchivedViewToFullSize="NO" id="F7A-ai-FfA" customClass="MADOpenFileViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="aPp-Tw-Ygp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -11121,11 +11066,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="tIb-WS-gen"/>
-        <segue reference="PPx-4T-brk"/>
-        <segue reference="pCi-yT-77G"/>
         <segue reference="FvY-6k-f7g"/>
         <segue reference="pfP-rZ-fVf"/>
+        <segue reference="pCi-yT-77G"/>
+        <segue reference="PPx-4T-brk"/>
         <segue reference="ai5-1j-o6l"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>

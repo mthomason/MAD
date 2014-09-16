@@ -50,7 +50,6 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 - (MADocument *)currentdocappinst;
 
 - (void)initalizeAppearance;
-- (id)mainWindow;
 - (void)deleteCoreDataCache;
 - (void)registerDefaultsFromSettingsBundle;
 

@@ -13,7 +13,7 @@
 @implementation NSURL (Document)
 
 - (NSString *)filenameMinusExtention {
-    return [[self lastPathComponent] stringByDeletingPathExtension];
+    return self.lastPathComponent.stringByDeletingPathExtension;
 }
 
 + (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {

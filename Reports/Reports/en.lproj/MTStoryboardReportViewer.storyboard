@@ -25,7 +25,7 @@
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
-                        <segue destination="Bbf-3Z-bio" kind="relationship" relationship="rootViewController" id="WUV-FT-BEF"/>
+                        <segue destination="cfA-O3-YW7" kind="relationship" relationship="rootViewController" id="T5T-OJ-0e6"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYY-Y2-JSc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -300,63 +300,6 @@
             </objects>
             <point key="canvasLocation" x="47" y="985"/>
         </scene>
-        <!--Upgrade View Controller-->
-        <scene sceneID="Jkq-AN-VuD">
-            <objects>
-                <viewController id="Bbf-3Z-bio" customClass="MADUpgradeViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Pb4-5u-WrE"/>
-                        <viewControllerLayoutGuide type="bottom" id="isM-Pn-35N"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Flx-i4-BPK">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8lE-6j-lZi">
-                                <rect key="frame" x="150" y="274" width="20" height="20"/>
-                            </activityIndicatorView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Updating" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wZx-4n-Zo9">
-                                <rect key="frame" x="110" y="245" width="100" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="jux-qG-dY4"/>
-                    <connections>
-                        <segue destination="Iah-MZ-57m" kind="modal" identifier="MTSegueUpgradeUnneeded" animates="NO" id="MsB-Zd-4F2"/>
-                        <segue destination="cfA-O3-YW7" kind="push" identifier="MTSegueUpgradeComplete" id="gUN-ox-xcz"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mYj-Qg-8cp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1374" y="393"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="zS0-pC-hNb">
-            <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="Iah-MZ-57m" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HnM-dV-WPK">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Xvg-8s-VPe">
-                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="cfA-O3-YW7" kind="relationship" relationship="rootViewController" id="rvN-Us-I2c"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="G0E-PS-LgX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-939" y="-34"/>
-        </scene>
         <!--MAD Viewer-->
         <scene sceneID="DaQ-ET-rRf">
             <objects>
@@ -627,7 +570,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="gUN-ox-xcz"/>
-    </inferredMetricsTieBreakers>
 </document>

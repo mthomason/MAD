@@ -53,3 +53,35 @@ Future
     Expand data model to hold a dashboad type as it now holds a report type.
     Add the ability to save queries for KPI's.
 
+
+
+MADIdentifierRestorationRootNavigationController
+MADIdentifierStoryboardRootNavigationController
+
+MADIdentifierRestorationMainTabBarController
+MADIdentifierStoryboardMainTabBarController
+
+MADIdentifierRestorationOpenFileViewController
+MADIdentifierStoryboardOpenFileViewController
+
+MADIdentifierRestorationQueryNavigationController
+MADIdentifierStoryboardQueryNavigationController
+
+MADIdentifierRestorationQueryViewController
+MADIdentifierStoryboardQueryViewController
+
+MADIdentifierRestorationQueryContainerController
+MADIdentifierStoryboardQueryContainerController
+
+MADIdentifierRestorationViewerNavigationController
+MADIdentifierStoryboardViewerNavigationController
+
+MADIdentifierRestorationViewerViewController
+MADIdentifierStoryboardViewerViewController
+
+MADIdentifierRestorationDesignerNavigationController
+MADIdentifierStoryboardDesignerNavigationController
+
+MADIdentifierRestorationDesignerViewController
+MADIdentifierStoryboardDesignerViewController
+

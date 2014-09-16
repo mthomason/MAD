@@ -34,12 +34,11 @@
 #import "MTAlertView.h"
 #import "NSFileManager+Common.h"
 #import "MADFileManager.h"
+#import "MADUpgradeManager.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
 NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
-
-
 
 @interface MADOpenFileViewController()
     <UIAlertViewDelegate,
@@ -54,7 +53,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         MTDocumentCellProtocol,
         UIDocumentInteractionControllerDelegate,
         UIDocumentPickerDelegate,
-        UISearchBarDelegate>
+        UISearchBarDelegate,
+        UIStateRestoring>
 
 
 @property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
@@ -98,6 +98,27 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 @implementation MADOpenFileViewController
 
+#pragma mark - UIStateRestoring
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+}
+
+
+- (void)applicationFinishedRestoringState {
+    if ([MTApplicationInstance isMadDesigner]) {
+        [self performSegueWithIdentifier:MTSegueShowOpenDocument
+                                      sender:self];
+    } else if ([MTApplicationInstance isMadViewer]) {
+        [self performSegueWithIdentifier:MTSegueOpenInViewer
+                                      sender:self];
+    }
+}
+
 #pragma mark - Exit
 
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
@@ -107,6 +128,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
         MTApplicationInstance *app = [AppDelegate app];
         __weak MADOpenFileViewController *weakself = self;
+        [[app openDocument] regenThumbnail];
         [app closeReportWithCompletionHandler:^(BOOL success) {
             [weakself reenable];
         }];
@@ -165,15 +187,16 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 
 - (void)initialize {
     
-
+    //self.restorationIdentifier  = @"MADIdentifierRestorationViewViewController";
+    
     
 }
 
-#pragma mark - UIStateRestoration
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+    
     
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(edit:)];
     [self setBarButtonItemEditDone:barButtonItemEditDone];
@@ -295,14 +318,23 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [MADOpenFileViewController initalizeMenuController];
+    __weak MADOpenFileViewController *weakself = self;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MADUpgradeManager *upgradeManager = [[MADUpgradeManager alloc] init];
+        [upgradeManager performUpgradeIfRequired:^(BOOL success, NSError *error, BOOL upgradePerfomrmed) {
+            if (upgradePerfomrmed) {
+                [weakself reloadData];
+            }
+        }];
+    });
     
-    __weak MADOpenFileViewController *weakSelf = self;
+    [MADOpenFileViewController initalizeMenuController];
     
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
             [MADOpenFileViewController initalizeMenuControllerEmail];
-            [weakSelf addActionItemToToolbar:animated];
+            [weakself addActionItemToToolbar:animated];
         }
     }];
     [self reenableDataWithSearch];
@@ -571,6 +603,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     [self setShouldShowAddDocumentPopover:YES];
     MTApplicationInstance *app = [AppDelegate app];
     __weak MADOpenFileViewController *weakself = self;
+    [[app openDocument] regenThumbnail];
     [app closeReportWithCompletionHandler:^(BOOL success) {
         [weakself reenable];
     }];
@@ -600,6 +633,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         [sender isKindOfClass: reportViewerClass]) {
         MTApplicationInstance *app = [AppDelegate app];
         __weak MADOpenFileViewController *weakself = self;
+        [[app openDocument] regenThumbnail];
         [app closeReportWithCompletionHandler:^(BOOL success) {
             [weakself reenable];
         }];
@@ -892,20 +926,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([self isEditing] == NO) {
         [collectionView deselectItemAtIndexPath:indexPath animated:YES];
         
-        __weak MADOpenFileViewController *weakself = self;
-
-        MTApplicationInstance *app = [AppDelegate app];
-        [app openReport:fileUrl withCompletionHandler:^(BOOL success) {
-            if (success) {
-                if ([MTApplicationInstance isMadDesigner]) {
-                    [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
-                                                  sender:weakself];
-                } else if ([MTApplicationInstance isMadViewer]) {
-                    [weakself performSegueWithIdentifier:MTSegueOpenInViewer
-                                                  sender:weakself];
-                }
-            }
-        }];
+        [self openFileWithUrl:fileUrl];
 
     } else {
         [collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
@@ -959,6 +980,22 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
     return YES;
+}
+
+- (void)openFileWithUrl:(NSURL *)url {
+    __weak MADOpenFileViewController *weakself = self;
+    MTApplicationInstance *app = [AppDelegate app];
+    [app openReport:url withCompletionHandler:^(BOOL success) {
+        if (success) {
+            if ([MTApplicationInstance isMadDesigner]) {
+                [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
+                                              sender:weakself];
+            } else if ([MTApplicationInstance isMadViewer]) {
+                [weakself performSegueWithIdentifier:MTSegueOpenInViewer
+                                              sender:weakself];
+            }
+        }
+    }];
 }
 
 #pragma mark - Collection View Flow Layout Delegate

@@ -87,12 +87,12 @@
                         <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
-                        <segue destination="f8b-9C-XbG" kind="relationship" relationship="rootViewController" id="XzC-9o-BaC"/>
+                        <segue destination="WHj-zS-pnY" kind="relationship" relationship="rootViewController" id="VZ2-qN-W8E"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LgL-oV-dU3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3537" y="405"/>
+            <point key="canvasLocation" x="-1513" y="405"/>
         </scene>
         <!--Software Licensing-->
         <scene sceneID="sYE-3V-CTb">
@@ -280,63 +280,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mvm-Rf-nPw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="463" y="255"/>
-        </scene>
-        <!--Upgrade View Controller-->
-        <scene sceneID="IQP-mn-Zek">
-            <objects>
-                <viewController id="f8b-9C-XbG" customClass="MADUpgradeViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="OoT-yb-gcd"/>
-                        <viewControllerLayoutGuide type="bottom" id="zcX-mC-1gb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="5N6-Zx-GH8">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Xa1-H6-xF0">
-                                <rect key="frame" x="374" y="516" width="20" height="20"/>
-                            </activityIndicatorView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Updating" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UL6-E5-qld">
-                                <rect key="frame" x="334" y="487" width="100" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="En2-aA-9A5"/>
-                    <connections>
-                        <segue destination="H1x-F3-Wc1" kind="modal" identifier="MTSegueUpgradeUnneeded" animates="NO" id="GmD-LB-2pY"/>
-                        <segue destination="WHj-zS-pnY" kind="push" identifier="MTSegueUpgradeComplete" id="E1y-j2-9ND"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cdp-5u-JL9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2626" y="405"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="KaO-NV-dcS">
-            <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="H1x-F3-Wc1" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fgi-KE-CnM">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="pnh-Qa-xRZ">
-                        <rect key="frame" x="0.0" y="980" width="768" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058824300765991" green="0.14117647707462311" blue="0.28235295414924622" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="WHj-zS-pnY" kind="relationship" relationship="rootViewController" id="MG6-C0-uTA"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="M6C-MV-QPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1558" y="-853"/>
         </scene>
         <!--MAD Viewer-->
         <scene sceneID="ybC-n5-sXd">
@@ -527,7 +470,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="MG6-C0-uTA"/>
-    </inferredMetricsTieBreakers>
 </document>

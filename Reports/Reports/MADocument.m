@@ -917,9 +917,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
             [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
                 [[weakself mainDataTable] cache];
                 [weakself setDidRefresh:success];
-                dispatch_sync(dispatch_get_main_queue(), ^{
+                [NSThread completeOnMainThread:^(BOOL success, id error) {
                     completion(success, error);
-                });
+                } withObject:error andSuccess:success];
             }];
         }
     });

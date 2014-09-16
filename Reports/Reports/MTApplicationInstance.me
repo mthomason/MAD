@@ -40,9 +40,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.71";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.71";
-NSString * const MTGlobalBundleRev                                  = @"1446";
+NSString * const MTGlobalBundleVersion                              = @"7.0.72";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.72";
+NSString * const MTGlobalBundleRev                                  = @"1447";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -445,16 +445,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
 }
 
-- (id)mainWindow {
-    //Dynamically choose which storyboard to run.
-    UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
-    id initViewController = [storyBoard instantiateInitialViewController];
-    [window setRootViewController:initViewController];
-    [window makeKeyAndVisible];
-    return window;
-}
-
 - (void)deleteCoreDataCache {
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(dipatchQueue, ^{
@@ -519,7 +509,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     if (activeDocument) {
         
         if (activeDocument.documentState != UIDocumentStateClosed) {
-            [activeDocument regenThumbnail];
             __weak MTApplicationInstance *weakself = self;
             [activeDocument saveToURL: activeDocument.fileURL forSaveOperation: UIDocumentSaveForOverwriting completionHandler:^(BOOL success) {
                 if (success) {

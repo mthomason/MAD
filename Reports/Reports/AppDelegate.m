@@ -12,6 +12,14 @@
 
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+
+#import "MTNavigationController.h"
+#import "MADQueryViewController.h"
+#import "MADDesignerViewController.h"
+#import "MADViewerController.h"
+#import "MTQueryBuilderContainerController.h"
+
+#import "MADFileManager.h"
 #import "MTUser.h"
 
 #import "MTReportDesigner.h"
@@ -37,11 +45,16 @@
 #import "RptqDocument+Extras.h"
 #import "UIColor+EverydayApps.h"
 
+#import "MADUpgradeManager.h"
+
+
 const NSInteger MATagNewDocument = 3838;
 
 @interface AppDelegate()
 
 @property (nonatomic, strong) MTApplicationInstance *applicationInstance;
+@property (nonatomic, strong) UIStoryboard *storyboard;
+@property (nonatomic, strong) UIApplication *application;
 
 @property (nonatomic, strong) UIFontDescriptor *mainFontDescriptor;
 @property (nonatomic, strong) UIFontDescriptor *detailFontDescriptor;
@@ -56,7 +69,8 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (MTApplicationInstance *)app {
-    return [(AppDelegate *)[[UIApplication sharedApplication] delegate] applicationInstance];
+    UIApplication *sharedApplication = [UIApplication sharedApplication];
+    return [(AppDelegate *)sharedApplication.delegate applicationInstance];
 }
 
 + (UIWindow *)window {
@@ -64,37 +78,58 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSUbiquitousKeyValueStoreDidChangeExternallyNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                                                  object: nil];
 }
 
 #pragma mark - Application Lifecycle
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
+    id initViewController = [storyBoard instantiateInitialViewController];
+    window.rootViewController = initViewController;
+    [window makeKeyAndVisible];
+    self.window = window;
+    self.storyboard = storyBoard;
+    self.application = application;
+    
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //Log uncaught errors.
-    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    [self initalizeApplicationInstance];
+    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
+    self.applicationInstance = appInstance;
+
     [self initalizeICloudKvs];
-    [[self applicationInstance] initalizeAppearance];
-    [[self applicationInstance] deleteCoreDataCache];
-    
-    UIWindow *window = [[self applicationInstance] mainWindow];
-    [self setWindow: window];
+    [self.applicationInstance initalizeAppearance];
+    [self.applicationInstance deleteCoreDataCache];
 
     [MTStoreKitController sharedObject];
     [MACloudManager sharedManager];
-    //[[self applicationInstance] registerDefaultsFromSettingsBundle];
-    
     return YES;
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application { }
 
+- (UIViewController *)viewControllerWithrestorationIdentifier:(NSString *)restorationIdentifier childViewControllers:(NSArray *)viewControllers {
+    id result = nil;
+    for (UIViewController *controller in viewControllers) {
+        if ([controller.restorationIdentifier isEqualToString:restorationIdentifier]) {
+            result = controller;
+        } else {
+            result = [self viewControllerWithrestorationIdentifier:restorationIdentifier
+                                              childViewControllers:controller.childViewControllers];
+        }
+        if (result != nil) {
+            break;
+        }
+    }
+    return result;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application { }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }
 
@@ -105,11 +140,12 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    MADocument *documentReport = [[self applicationInstance] currentdocappinst];
+    MADocument *documentReport = [self.applicationInstance currentdocappinst];
     [documentReport quickSave];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+
     BOOL result;
     NSError *error = nil;
     if ([self.applicationInstance.user addDocument:url error:&error]) {
@@ -134,29 +170,116 @@ void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents
-                                                             coder:(NSCoder *)coder {
-    
+                                                            coder:(NSCoder *)coder {
+    return nil;
 }
+
 #pragma mark -- State Restoration protocol adopted by UIApplication delegate --
 
-- (UIViewController *) application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents
+                            coder:(NSCoder *)coder {
+    
+    self.application = application;
+    if (self.storyboard == nil) {
+        UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
+        self.storyboard = storyBoard;
+    }
+    
+    if ([self.applicationInstance openDocument] == nil) {
+        [application extendStateRestoration];
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *filename = [userDefaults objectForKey:@"MADStateRestorationOpenFileWithExtension"];
+        if (filename.length > 0) {
+            for (NSURL *url in [self.applicationInstance.user hasMadDocuments]) {
+                if ([url.path.lastPathComponent caseInsensitiveCompare:filename] == NSOrderedSame) {
+                    
+                    [self.applicationInstance openReport: url
+                                   withCompletionHandler: ^(BOOL success) {
+                                       [application completeStateRestoration];
+                                   }];
+                    break;
+                }
+            }
+        }
+    }
+    
+    UIViewController *vc = nil;
+    if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationRootNavigationController"]) {
+        vc = self.window.rootViewController;
+
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationMainTabBarController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationOpenFileViewController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardOpenFileViewController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MADOpenFileViewController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryNavigationController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryNavigationController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MTNavigationController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryNavigationController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryViewController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MADQueryViewController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationQueryContainerController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardQueryContainerController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MTQueryBuilderContainerController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationViewerNavigationController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerNavigationController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MTNavigationController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationViewerViewController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardViewerViewController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MADViewerController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationDesignerNavigationController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerNavigationController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MTNavigationController class];
+    
+    } else if ([identifierComponents.lastObject isEqualToString:@"MADIdentifierRestorationDesignerViewController"]) {
+        vc = (UITabBarController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardDesignerViewController"];
+        vc.restorationIdentifier = [identifierComponents lastObject];
+        vc.restorationClass = [MADDesignerViewController class];
+    }
+
+    return vc;
 }
-- (BOOL) application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    BOOL save = self.applicationInstance.reportState != UIDocumentStateClosed;
+    if (save == NO) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject: nil
+                         forKey: @"MADStateRestorationOpenFileWithExtension"];
+        [userDefaults synchronize];
+    }
+    return save;
+}
+- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    return NO;
+}
+
+- (void)application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.applicationInstance.openFiles.openUrl.path.lastPathComponent
+                     forKey:@"MADStateRestorationOpenFileWithExtension"];
+    [userDefaults synchronize];
     
 }
-- (BOOL) application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-}
-- (void) application:(UIApplication *)application willEncodeRestorableStateWithCoder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-}
-- (void) application:(UIApplication *)application didDecodeRestorableStateWithCoder:(NSCoder *)coder {
-    NSLog(@"%s", __PRETTY_FUNCTION__);    
-}
+
+
+- (void)application:(UIApplication *)application didDecodeRestorableStateWithCoder:(NSCoder *)coder { }
 
 
 
@@ -268,11 +391,6 @@ NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userpref
         UIFontDescriptor *mainFontDescriptor = [mainFont fontDescriptor];
         [weakself setMainFontDescriptor:mainFontDescriptor];
     });
-}
-
-- (void)initalizeApplicationInstance {
-    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
-    [self setApplicationInstance:appInstance];
 }
 
 - (void)initalizeICloudKvs {

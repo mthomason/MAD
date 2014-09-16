@@ -48,7 +48,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         MTActivityReportPrintPreviewDelegate,
         MTTabBarImageProtocol,
         UIPrintInteractionControllerDelegate,
-        MTActivityItemProviderDelegate>
+        MTActivityItemProviderDelegate, UIStateRestoring>
 
 @property (nonatomic, strong) MTReportViewerPrintPageRenderer *printPageRendererReport;
 
@@ -137,6 +137,23 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     }
 }
 
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    self.document = [AppDelegate app].openDocument;
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [super decodeRestorableStateWithCoder:coder];
+}
+
+- (void)applicationFinishedRestoringState {
+    [super applicationFinishedRestoringState];
+}
+
 #pragma mark - Initalize
 
 - (instancetype)init {
@@ -172,6 +189,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 - (void)initalize {
+    self.restorationClass = self;
     
     self.activityExporting = NO;
     self.didRefreshBeforeReaload = NO;
@@ -241,6 +259,8 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //self.restorationIdentifier = @"MADIdentifierRestorationViewerViewController";
     
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     

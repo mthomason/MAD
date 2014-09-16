@@ -1625,6 +1625,8 @@
 		4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
 		4CFF3F25164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CFFCBB019C35B2100919440 /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
+		4CFFCBB119C35B2100919440 /* MADUpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3028,6 +3030,8 @@
 		4CFF3F20164D76270070E880 /* NSURL+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+Document.m"; sourceTree = "<group>"; };
 		4CFF3F23164DFF1F0070E880 /* MADocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADocument.h; sourceTree = "<group>"; };
 		4CFF3F24164DFF1F0070E880 /* MADocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADocument.m; sourceTree = "<group>"; };
+		4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUpgradeManager.h; sourceTree = "<group>"; };
+		4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUpgradeManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3258,6 +3262,8 @@
 				4C4A7078197AD68E00AF98EC /* MADDataProtocol.h */,
 				4C31C73019A03DE4007A8D3F /* MTErrorContainer.h */,
 				4C31C73119A03DE4007A8D3F /* MTErrorContainer.m */,
+				4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */,
+				4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */,
 			);
 			name = Model;
 			path = Reports;
@@ -6418,6 +6424,7 @@
 				4C23FBAF18FAE4F7009F234F /* MTPaperA9.m in Sources */,
 				4CABE4881837DF7E007EDD9D /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C11BD0018DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */,
+				4CFFCBB119C35B2100919440 /* MADUpgradeManager.m in Sources */,
 				4C23FB2918FADDE7009F234F /* MTQueryBuilderContainerController.m in Sources */,
 				4C23FB0D18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */,
 				4CA1500118B7F955001AFAD8 /* MTActivityReportPrintPreview.m in Sources */,
@@ -6918,6 +6925,7 @@
 				4CB4A47B183C7290008D52B5 /* RptqDocumentObject.m in Sources */,
 				4C23FBBA18FAE4F7009F234F /* MTPaperB4.m in Sources */,
 				4CA16340167CAE2F00540A14 /* RptqQueryCache+Extras.m in Sources */,
+				4CFFCBB019C35B2100919440 /* MADUpgradeManager.m in Sources */,
 				4C11BCFF18DDE8C0001E3D33 /* MTQuerySampleDataTable.m in Sources */,
 				4CA16346167CAE7600540A14 /* RptqQuerySort+Extras.m in Sources */,
 				4C23FBE218FAE4F7009F234F /* MTPaperLegal.m in Sources */,

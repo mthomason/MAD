@@ -304,7 +304,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    
+    self.document = [AppDelegate app].openDocument;
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -327,7 +327,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.restorationIdentifier = @"MADIdentifierRestorationDesignerViewController";
+    //self.restorationIdentifier = @"MADIdentifierRestorationDesignerViewController";
     
     MADPromptManager *promptManager = [[MADPromptManager alloc] init];
     self.promptManager = promptManager;
@@ -677,7 +677,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (CGRect)detailDisplayFrame {
     return CGRectMake(self.view.frame.size.width - MADSizeWidthViewDetailDisplay - MTReportDesignerBorderPaddingDetail,
                       CGPointZero.y + self.topLayoutGuide.length + MTReportDesignerBorderPaddingDetail,
-                      MADSizeWidthViewDetailDisplay, MADSizeHeightViewDetailDisplay);
+                      MADSizeWidthViewDetailDisplay,
+                      MADSizeHeightViewDetailDisplay);
 }
 
 - (UIEdgeInsets)desiredEdgeInsets {

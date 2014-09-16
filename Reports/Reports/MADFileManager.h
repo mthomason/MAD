@@ -12,7 +12,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MADFileManager : NSObject
-    <NSCoding>
 
     @property (nonatomic, strong) NSMutableDictionary *openFiles;   //MADocument stored by their NSURLS
     @property (nonatomic, strong) NSURL *openUrl;

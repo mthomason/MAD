@@ -23,18 +23,4 @@ NSString * const MADFileManagerOpenFiles    = @"MADFileManagerOpenFiles";
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super init];
-    if (self) {
-        self.openUrl = [aDecoder decodeObjectForKey:MADFileManagerOpenUrl];
-        self.openFiles = [aDecoder decodeObjectForKey:MADFileManagerOpenFiles];
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.openUrl forKey:MADFileManagerOpenUrl];
-    [aCoder encodeObject:self.openFiles forKey:MADFileManagerOpenFiles];
-}
-
 @end

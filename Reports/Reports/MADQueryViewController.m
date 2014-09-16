@@ -128,6 +128,20 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 @implementation MADQueryViewController
 
+#pragma mark - UIStateRestore
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    self.document = [AppDelegate app].openDocument;
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [super decodeRestorableStateWithCoder:coder];
+}
+
 #pragma mark - Exit
 
 - (IBAction)unwindToQueryBuilder:(UIStoryboardSegue *)action { }
@@ -182,6 +196,8 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //self.restorationIdentifier = @"MADIdentifierRestorationQueryViewController";
     
     [self.tableView registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
     
