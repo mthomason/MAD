@@ -142,8 +142,6 @@ typedef void(^MTBlockResultVoid)(void);
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //UIColor *bgColor = [UIColor groupTableViewBackgroundColor];
-    
     if ([UIDevice isPad]) {
         CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
         UIColor *borderColor = [UIColor lightGrayColor];
@@ -159,21 +157,20 @@ typedef void(^MTBlockResultVoid)(void);
     containerView.autoresizesSubviews = NO;
     containerView.translatesAutoresizingMaskIntoConstraints = YES;
     
-    
     MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
     scrollView.showsHorizontalScrollIndicator = YES;
     scrollView.showsVerticalScrollIndicator = YES;
     scrollView.autoresizingMask = autoresizingMask;
-    [scrollView setContentOffset:CGPointZero];
+    scrollView.contentOffset = CGPointZero;
     scrollView.maximumZoomScale = 1.0000f;
-    [scrollView setMinimumZoomScale:1.0000f];
+    scrollView.minimumZoomScale = 1.0000f;
     scrollView.zoomScale = 1.0000f;
-    [scrollView setScrollEnabled:YES];
+    scrollView.scrollEnabled = YES;
     scrollView.bounces = YES;
-    [scrollView setAlwaysBounceHorizontal:YES];
-    [scrollView setAlwaysBounceVertical:YES];
-    [scrollView setBouncesZoom:NO];
-    [scrollView setDelegate:self];
+    scrollView.alwaysBounceHorizontal = YES;
+    scrollView.alwaysBounceVertical = YES;
+    scrollView.bouncesZoom = NO;
+    scrollView.delegate = self;
     scrollView.delaysContentTouches = YES;
     scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [scrollView addSubview:containerView];
@@ -202,11 +199,10 @@ typedef void(^MTBlockResultVoid)(void);
     [collisionBehavior setTranslatesReferenceBoundsIntoBoundary:YES];
     [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
     [collisionBehavior setCollisionDelegate:self];
-    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[]];
-    [gravity setMagnitude:0.2000f];
-    CGVector gravityDirection = CGVectorMake(1, 0);
-    [gravity setGravityDirection:gravityDirection];
-    UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:@[]];
+    UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:emptyArray];
+    gravity.magnitude = 0.2000f;
+    gravity.gravityDirection = CGVectorMake(1, 0);
+    UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
     dynamicItemBehavior.allowsRotation = NO;
     dynamicItemBehavior.elasticity = 0.1000f;
     dynamicItemBehavior.resistance = 0.9000f;
