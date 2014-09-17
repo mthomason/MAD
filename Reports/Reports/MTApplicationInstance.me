@@ -40,9 +40,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.77";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.77";
-NSString * const MTGlobalBundleRev                                  = @"1452";
+NSString * const MTGlobalBundleVersion                              = @"7.0.78";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.78";
+NSString * const MTGlobalBundleRev                                  = @"1453";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -90,7 +90,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
     //NSNumber *reportState = @(self.reportState);
     //[aCoder encodeObject:reportState forKey:@"reportState"];
     //[aCoder encodeObject:self.openFiles forKey:@"openFiles"];
-
 }
 
 - (instancetype)init {
@@ -104,13 +103,13 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         self.user = user;
 
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
-        [self setReportDesigner:reportDesigner];
+        self.reportDesigner = reportDesigner;
 
         MTQueryDesigner *queryDesigner = [[MTQueryDesigner alloc] init];
-        [self setQueryDesigner:queryDesigner];
+        self.queryDesigner = queryDesigner;
         
         MTReportViewer *reportViewer = [[MTReportViewer alloc] init];
-        [self setReportViewer:reportViewer];
+        self.reportViewer = reportViewer;
 
         [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
             return NO;
@@ -125,7 +124,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Bundle version is incorrect.");
         
         NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
-        [self setDocuments:documents];
+        self.documents = documents;
         
         [self setupAppReviewManager:self];
     }

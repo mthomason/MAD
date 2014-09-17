@@ -50,7 +50,8 @@
 }
 
 - (CGFloat)borderWidthThin {
-    return 1.0000f / (self.window ? self.window.screen : [UIScreen mainScreen]).scale;
+    CGFloat result = 1.0000f / (self.window ? self.window.screen : [UIScreen mainScreen]).scale;
+    return 1.0000f;
 }
 
 @end

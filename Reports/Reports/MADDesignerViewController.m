@@ -363,6 +363,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
+    self.ruler.layer.borderWidth = [self.view borderWidthThin];
+    self.ruler.layer.borderColor = [UIColor blackColor].CGColor;
     self.ruler = viewRuler;
     
     self.boundsOnDisappear = CGRectZero;
@@ -650,8 +652,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [self.scroller addConstraints: constraintsScroller];
     [self.scroller.container addConstraints: constraintsContainer];
-    self.scroller.backgroundColor = [UIColor tintColorRed];
-    self.view.backgroundColor = [UIColor tintColorRed];
+    self.scroller.backgroundColor = [UIColor whiteColor];
+    //self.view.backgroundColor = [UIColor darkGrayColor];
     
 }
 
@@ -2858,7 +2860,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     //Remove border from the section views
     [self.sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, UICollectionView *view, BOOL *stop) {
-        view.layer.borderWidth = 0.0000f;
+//        view.layer.borderWidth = 0.0000f;
+        view.layer.borderColor = [UIColor blackColor].CGColor;
+        view.layer.borderWidth = [self.view borderWidthThin];
     }];
 }
 
@@ -2866,7 +2870,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSNumber *key = @([view tag]);
     [self borderAppliedToView][key] = @YES;
     UIColor *tintColor = [UIColor tintColorAnalogous4];
-    view.layer.borderColor = [tintColor CGColor];
+    view.layer.borderColor = tintColor.CGColor;
     view.layer.borderWidth = [view borderWidthThin];
 }
 
@@ -2877,7 +2881,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.borderAppliedToView[key] = @NO;
         result = YES;
         
-        view.layer.borderColor = [[UIColor blackColor] CGColor];
+        view.layer.borderColor = [UIColor blackColor].CGColor;
         view.layer.borderWidth = 0.0000f;
     } else {
         result = NO;

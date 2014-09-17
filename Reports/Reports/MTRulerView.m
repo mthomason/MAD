@@ -131,7 +131,7 @@
     CGContextAddPath(currentContext, pathCmMarks);
     CGContextAddPath(currentContext, pathInchMarks);
     
-    [[UIColor darkGrayColor] setStroke];
+    [[UIColor blackColor] setStroke];
     CGContextDrawPath(currentContext, kCGPathStroke);
 
     CGPathRelease(pathInchMarks);

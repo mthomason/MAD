@@ -28,7 +28,7 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.scrollEnabled = YES;
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor darkGrayColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
         
         UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
