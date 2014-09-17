@@ -453,11 +453,11 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                                                                 PageNumber: self.currentPageIndex + 1
                                                                                                                    ofPages: self.numberOfPages];
-        [[pageOne view] setFrame:[[self view] bounds]];
+        [[pageOne view] setFrame:self.view.bounds];
         pageOne.delegate = self;
         
         __block MADViewerController *reportViewer = self;
-        [[self view] bringSubviewToFront:[self toolbarSideRight]];
+        [self.view bringSubviewToFront:[self toolbarSideRight]];
         [self setViewControllers:@[pageOne] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
             if (finished) {
                 [reportViewer.view bringSubviewToFront:reportViewer.toolbarSideRight];

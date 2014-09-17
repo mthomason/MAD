@@ -134,7 +134,7 @@
         [view setAlpha:0.0000f];
         [view layer].cornerRadius =  6.0000f;
         
-        [[self view] addSubview:view];
+        [self.view addSubview:view];
         __weak UIView *blockView = view;
         [UIView animateWithDuration:0.3000f delay:0.0900f options:UIViewAnimationOptionCurveEaseIn animations:^{
             [blockView setAlpha:1.0000f];
@@ -236,7 +236,7 @@
     [numberView layer].cornerRadius =  6.0000f;
     [numberView addSubview:labelView];
     [numberView setAlpha:0.0000f];
-    [[self view] addSubview:numberView];
+    [self.view addSubview:numberView];
     [self setPageNumberView:numberView];
     
     __weak MTReportViewerReportPageViewController *weakSelf = self;

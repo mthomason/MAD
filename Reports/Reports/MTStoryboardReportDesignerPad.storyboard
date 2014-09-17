@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A343f" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A361c" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
@@ -5433,10 +5433,10 @@
             </objects>
             <point key="canvasLocation" x="5449" y="-1253"/>
         </scene>
-        <!--Query Builder Advanced Schema View Controller-->
+        <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
             <objects>
-                <viewController storyboardIdentifier="MTQueryBuilderAdvancedSchemaViewControllerIdentifier" id="CoD-Op-4qC" customClass="MTQueryBuilderAdvancedSchemaViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MTQueryBuilderAdvancedSchemaViewControllerIdentifier" id="CoD-Op-4qC" customClass="MADQueryVisualizationSchemaViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YJF-Ji-72c"/>
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>
@@ -5670,10 +5670,10 @@
             </objects>
             <point key="canvasLocation" x="2012" y="-3227"/>
         </scene>
-        <!--Query Builder Visualization View Controller-->
+        <!--Query Visualization View Controller-->
         <scene sceneID="inZ-kV-ofv">
             <objects>
-                <viewController id="RJA-Vn-l2B" customClass="MTQueryBuilderVisualizationViewController" sceneMemberID="viewController">
+                <viewController id="RJA-Vn-l2B" customClass="MADQueryVisualizationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VJy-57-K4h"/>
                         <viewControllerLayoutGuide type="bottom" id="Px0-Ye-Vt0"/>

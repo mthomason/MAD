@@ -97,7 +97,7 @@
     
     self.tableView.delegate = self;
 
-    UIColor *tintColor = [[self view] tintColor];
+    UIColor *tintColor = [self.view tintColor];
     self.buttonBold.layer.borderColor = tintColor.CGColor;
     self.buttonBold.layer.cornerRadius = 6.6666f;
     self.buttonBold.layer.borderWidth = 1.0000f;
@@ -169,26 +169,26 @@
         case MTControlStateOn:
             select = NO;
             highlight = YES;
-            backgroundColor = [[self view] tintColor];
+            backgroundColor = [self.view tintColor];
             titleColor = [UIColor whiteColor];
             break;
         case MTControlStateOff:
             select = NO;
             highlight = NO;
             backgroundColor = [UIColor clearColor];
-            titleColor = [[self view] tintColor];
+            titleColor = [self.view tintColor];
             break;
         case MTControlStateAmbiguous:
             select = YES;
             highlight = NO;
-            backgroundColor = [[[self view] tintColor] colorWithAlphaComponent:0.5000f];
+            backgroundColor = [[self.view tintColor] colorWithAlphaComponent:0.5000f];
             titleColor = [UIColor whiteColor];
             break;
         default:
             select = NO;
             highlight = NO;
             backgroundColor = [UIColor clearColor];
-            titleColor = [[self view] tintColor];
+            titleColor = [self.view tintColor];
             break;
     }
     

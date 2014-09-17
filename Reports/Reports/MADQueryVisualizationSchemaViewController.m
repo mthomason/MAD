@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTQueryBuilderAdvancedSchemaViewController.h"
+#import "MADQueryVisualizationSchemaViewController.h"
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
@@ -33,7 +33,7 @@
 
 #import "MTSchemaFieldCell.h"
 
-@interface MTQueryBuilderAdvancedSchemaViewController ()
+@interface MADQueryVisualizationSchemaViewController ()
     <UITableViewDataSource, UITableViewDelegate, MTSchemaFieldCellDelegate>
 
 @property (nonatomic, strong) IBOutlet MTTitleView *titleView;
@@ -41,43 +41,43 @@
 @property (nonatomic, strong) NSMutableArray *hasFieldsObjectIds;
 @property (nonatomic, strong) NSManagedObjectID *cachedTableObjectId;
 @property (nonatomic, strong) IBOutlet UIView *containerView;
+@property (nonatomic, strong) NSArray *sortDescriptorsFields;
 
 @end
 
-@implementation MTQueryBuilderAdvancedSchemaViewController
+@implementation MADQueryVisualizationSchemaViewController
 
 - (void)setCenter:(CGPoint)center {
-    [[self view] setCenter:center];
+    self.view.center = center;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (void)setBounds:(CGRect)bounds {
-    [[self view] setBounds:bounds];
+    self.view.bounds = bounds;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (void)setTransform:(CGAffineTransform)transform {
-    [[self view] setTransform:transform];
+    self.view.transform = transform;
     [self.delegate didMoveFieldRect:self animated:NO];
 }
 
 - (CGPoint)center {
-    return [[self view] center];
+    return self.view.center;
 }
 
 - (CGRect)bounds {
-    return [[self view] bounds];
+    return self.view.bounds;
 }
 
 - (CGAffineTransform)transform {
-    return [[self view] transform];
+    return self.view.transform;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
-        [self setHasFieldsObjectIds:hasFieldsObjectIds];
+        [self commonInit];
     }
     return self;
 }
@@ -85,10 +85,19 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
-        [self setHasFieldsObjectIds:hasFieldsObjectIds];
+        [self commonInit];
     }
     return self;
+}
+
+- (void)commonInit {
+    NSMutableArray *hasFieldsObjectIds = [[NSMutableArray alloc] init];
+    self.hasFieldsObjectIds = hasFieldsObjectIds;
+    
+    NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
+                                                                   ascending: YES];
+    NSArray *fieldsSortDescriptors = @[namesAccending];
+    self.sortDescriptorsFields = fieldsSortDescriptors;
 }
 
 - (void)awakeFromNib {
@@ -97,19 +106,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self schemaTableViewController] setDataSource:self];
-    [self schemaTableViewController].delegate = self;
-    [[self containerView] layer].cornerRadius =  25.0000f;
-    [[self containerView] setClipsToBounds: YES];
-    [[self schemaTableViewController] reloadData];
-    [[[self view] layer] setShadowColor:[[UIColor grayColor] CGColor]];
-    [[[self view] layer] setShadowOpacity:1.0000f];
-    [[[self view] layer] setShadowRadius:5.0000f];
-    [[[self view] layer] setShadowOffset:CGSizeMake(5.0000f, 5.0000f)];
+    self.schemaTableViewController.dataSource = self;
+    self.schemaTableViewController.delegate = self;
+    self.containerView.layer.cornerRadius =  25.0000f;
+    self.containerView.clipsToBounds = YES;
+    self.view.layer.shadowColor = [[UIColor grayColor] CGColor];
+    self.view.layer.shadowOpacity = 1.0000f;
+    self.view.layer.shadowRadius = 5.0000f;
+    self.view.layer.shadowOffset = CGSizeMake(5.0000f, 5.0000f);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.schemaTableViewController reloadData];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -122,16 +131,14 @@
 }
 
 - (void)setTableObjectId:(NSManagedObjectID *)tableObjectId {
-    [[self view] setObjectIdTag:tableObjectId];
-    [self setCachedTableObjectId:tableObjectId];
+    [self.view setObjectIdTag:tableObjectId];
+    self.cachedTableObjectId = tableObjectId;
     
     RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
                                               managedObjectContext: self.document.managedObjectContext];
-    UILabel *titleLabel = [[self titleView] label];
-    [titleLabel setText:[table alias]];
-    [titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
-
-    [[self schemaTableViewController] reloadData];
+    self.titleView.label.text = [table alias];
+    self.titleView.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    [self.schemaTableViewController reloadData];
 }
 
 #pragma mark - Table view delegate
@@ -148,12 +155,11 @@
     static NSString *MyIdentifierMTSchemaFieldCell = @"MTSchemaFieldCellIdentifier";
     MTSchemaFieldCell *result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierMTSchemaFieldCell];
     
-    NSManagedObjectID *fieldObjectId = [self hasFieldsObjectIds][indexPath.row];
+    NSManagedObjectID *fieldObjectId = self.hasFieldsObjectIds[indexPath.row];
     RptqQueryField *field = [RptqQueryField queryFieldForObjectID: fieldObjectId
                                              managedObjectContext: self.document.managedObjectContext];
-    UILabel *detailLabel = [result detailLabel];
-    [detailLabel setText:[[field databaseSchemaField] name]];
-    [detailLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]];
+    result.detailLabel.text = field.databaseSchemaField.name;
+    result.detailLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     return result;
 }
 
@@ -163,52 +169,46 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    NSUInteger result = 0;
     RptqQueryTable *queryTable = [RptqQueryTable queryTableWithObjectID: self.cachedTableObjectId
                                                    managedObjectContext: self.document.managedObjectContext];
     
+    [self.hasFieldsObjectIds removeAllObjects];
     if (queryTable != nil) {
-        [[self hasFieldsObjectIds] removeAllObjects];
         
-        NSSortDescriptor *namesAccending = [[NSSortDescriptor alloc] initWithKey: @"databaseSchemaField.name"
-                                                                       ascending: YES];
-        NSArray *fields = [[NSArray alloc] initWithArray: [[queryTable hasQueryFields]
-                                                           sortedArrayUsingDescriptors:@[namesAccending]]];
+        NSArray *fields = [queryTable.hasQueryFields sortedArrayUsingDescriptors:self.sortDescriptorsFields];
         for (RptqQueryField *field in fields) {
-            [[self hasFieldsObjectIds] addObject:[field objectID]];
+            [self.hasFieldsObjectIds addObject:field.objectID];
         }
         
-        result = [[self hasFieldsObjectIds] count];
     }
-    
-    return result;
+    return self.hasFieldsObjectIds.count;
 }
 
 #pragma mark - Methods
 
 - (MTSchemaFieldCell *)cellForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
-    NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
+    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
-    return (MTSchemaFieldCell *)[[self schemaTableViewController] cellForRowAtIndexPath:cellIndexPath];
+    return (MTSchemaFieldCell *)[self.schemaTableViewController cellForRowAtIndexPath:cellIndexPath];
 }
 
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID {
-    NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
+    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
-    CGRect rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
-    return [[self schemaTableViewController] convertRect:rectForRow toView:[self view]];
+    CGRect rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
+    return [self.schemaTableViewController convertRect:rectForRow toView:self.view];
 }
 
 - (CGRect)rectForFieldWithObjectId:(NSManagedObjectID *)managedObjectID inView:(UIView *)containerView {
-    NSUInteger row = [[self hasFieldsObjectIds] indexOfObject:managedObjectID];
+    NSUInteger row = [self.hasFieldsObjectIds indexOfObject:managedObjectID];
     CGRect rectForRow;
     if (row == NSNotFound) {
         rectForRow = CGRectZero;
     } else {
         NSIndexPath *cellIndexPath = [NSIndexPath indexPathForItem:row inSection:0];
-        rectForRow = [[self schemaTableViewController] rectForRowAtIndexPath:cellIndexPath];
+        rectForRow = [self.schemaTableViewController rectForRowAtIndexPath:cellIndexPath];
     }
-    return [[self schemaTableViewController] convertRect:rectForRow toView:containerView];
+    return [self.schemaTableViewController convertRect:rectForRow toView:containerView];
 }
 
 #pragma mark - UIScrollViewDelegate

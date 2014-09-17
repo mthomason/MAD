@@ -314,7 +314,7 @@ static void uncaughtExceptionHandler(NSException *exception) {
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return [[self window] rootViewController];
+    return self.window.rootViewController;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {

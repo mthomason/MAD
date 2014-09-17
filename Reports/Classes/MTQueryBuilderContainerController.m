@@ -16,7 +16,7 @@
 #import "MTApplicationInstance.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
-#import "MTQueryBuilderVisualizationViewController.h"
+#import "MADQueryVisualizationViewController.h"
 
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
@@ -65,7 +65,7 @@
     
     [self setIsEditing:NO];
     
-    [[self view] removeConstraints:[self bogusConstraints]];
+    [self.view removeConstraints:[self bogusConstraints]];
     
     UIView *leftView = [self leftView];
     UIView *rightView = [self rightView];
@@ -96,13 +96,13 @@
         }
     }];
     
-    [[self view] addConstraints:[self constraintsViewWillAppear]];
+    [self.view addConstraints:[self constraintsViewWillAppear]];
     
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[self view] removeConstraints:[self constraintsViewWillAppear]];
+    [self.view removeConstraints:[self constraintsViewWillAppear]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -249,7 +249,7 @@
     return [self rightViewController];
 }
 
-- (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced {
+- (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
     return [self leftViewController];
 }
 

@@ -125,7 +125,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
                                                                              options:0
                                                                              metrics:nil
                                                                                views:viewsDictionary];
-    [[self view] addConstraints:constraintsVert];
+    [self.view addConstraints:constraintsVert];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

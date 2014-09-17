@@ -13,7 +13,7 @@
 
 @class MADocument;
 
-@interface MTQueryBuilderVisualizationViewController : UIViewController
+@interface MADQueryVisualizationViewController : UIViewController
 
 @property (nonatomic, weak) MADocument *document;
 

@@ -11,17 +11,17 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol MTQueryBuilderAdvancedSchemaDelegate
+@protocol MADQueryVisualizationSchemaDelegate
 - (void)didMoveFieldRect:(id)sender animated:(BOOL)animated;
 @end
 
 @class MTSchemaFieldCell, NSManagedObjectID, MADocument;
 
-@interface MTQueryBuilderAdvancedSchemaViewController : UIViewController
+@interface MADQueryVisualizationSchemaViewController : UIViewController
     <UIDynamicItem>
 
 @property (nonatomic, strong) IBOutlet UITableView *schemaTableViewController;
-@property (nonatomic, weak) id <MTQueryBuilderAdvancedSchemaDelegate> delegate;
+@property (nonatomic, weak) id <MADQueryVisualizationSchemaDelegate> delegate;
 @property (nonatomic, weak) IBOutlet MTSchemaFieldCell *schemaFieldCell;
 @property (nonatomic, weak) MADocument *document;
 

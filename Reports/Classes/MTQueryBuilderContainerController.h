@@ -13,7 +13,7 @@
 #import "MUIViewControllerDelegate.h"
 
 @class MADQueryViewController,
-        MTQueryBuilderVisualizationViewController,
+        MADQueryVisualizationViewController,
         MADocument;
 
 @interface MTQueryBuilderContainerController : UIViewController
@@ -23,7 +23,7 @@
 @property (nonatomic, weak) MADocument *document;
 
 - (MADQueryViewController *)queryBuilderController;
-- (MTQueryBuilderVisualizationViewController *)queryBuilderControllerAdvanced;
+- (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced;
 
 @end
 

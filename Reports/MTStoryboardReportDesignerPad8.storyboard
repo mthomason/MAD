@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A343f" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A361c" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -4869,9 +4869,9 @@
                                 </segue>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="2wM-rP-7Tw">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="2wM-rP-7Tw">
                             <connections>
-                                <action selector="edit:" destination="9ul-yk-EvR" id="G1J-73-WMg"/>
+                                <action selector="search:" destination="9ul-yk-EvR" id="Lmw-cH-S08"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -4882,8 +4882,8 @@
                         <outlet property="barButtonItemAction" destination="B8W-SU-UV0" id="Ev3-Gp-9BW"/>
                         <outlet property="barButtonItemAddNewDocument" destination="YQ8-FP-cM9" id="4Sy-dl-INf"/>
                         <outlet property="barButtonItemCloudDown" destination="TpV-3i-yet" id="Y6q-eR-yJg"/>
-                        <outlet property="barButtonItemEdit" destination="2wM-rP-7Tw" id="g1s-hv-0v1"/>
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
+                        <outlet property="barButtonItemSearch" destination="2wM-rP-7Tw" id="i6k-eQ-lDw"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
                         <outlet property="collectionViewFlowLayout" destination="DM4-DJ-I6a" id="uth-rM-LWr"/>
                         <segue destination="NEH-Kw-MQz" kind="modal" identifier="MADSegueOpenDocument" id="Oc4-uK-0Zg"/>
@@ -5434,10 +5434,10 @@
             </objects>
             <point key="canvasLocation" x="5449" y="-1253"/>
         </scene>
-        <!--Query Builder Advanced Schema View Controller-->
+        <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
             <objects>
-                <viewController storyboardIdentifier="MTQueryBuilderAdvancedSchemaViewControllerIdentifier" id="CoD-Op-4qC" customClass="MTQueryBuilderAdvancedSchemaViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MTQueryBuilderAdvancedSchemaViewControllerIdentifier" id="CoD-Op-4qC" customClass="MADQueryVisualizationSchemaViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YJF-Ji-72c"/>
                         <viewControllerLayoutGuide type="bottom" id="utW-6i-Nqu"/>
@@ -5671,10 +5671,10 @@
             </objects>
             <point key="canvasLocation" x="2012" y="-3227"/>
         </scene>
-        <!--Query Builder Visualization View Controller-->
+        <!--Query Visualization View Controller-->
         <scene sceneID="inZ-kV-ofv">
             <objects>
-                <viewController id="RJA-Vn-l2B" customClass="MTQueryBuilderVisualizationViewController" sceneMemberID="viewController">
+                <viewController id="RJA-Vn-l2B" customClass="MADQueryVisualizationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VJy-57-K4h"/>
                         <viewControllerLayoutGuide type="bottom" id="Px0-Ye-Vt0"/>
