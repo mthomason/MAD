@@ -40,9 +40,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.76";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.76";
-NSString * const MTGlobalBundleRev                                  = @"1450";
+NSString * const MTGlobalBundleVersion                              = @"7.0.77";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.77";
+NSString * const MTGlobalBundleRev                                  = @"1452";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -101,7 +101,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         self.openFiles = openFiles;
 
         MTUser *user = [[MTUser alloc] init];
-        [self setUser:user];
+        self.user = user;
 
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
         [self setReportDesigner:reportDesigner];

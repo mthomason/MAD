@@ -83,14 +83,13 @@ typedef void(^MTBlockResultVoid)(void);
     @property (nonatomic, strong) NSMutableDictionary *attachmentBehaviors;
     @property (nonatomic, strong) NSMutableDictionary *pushBehaviors;
 
+    @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeWidth;
+    @property (nonatomic, strong) NSLayoutConstraint *layoutConstraintSizeHeight;
+
     @property (nonatomic, assign) NSUInteger tableDisplayCounter;
 
-    @property (nonatomic, strong) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
-    @property (nonatomic, strong) IBOutlet NSLayoutConstraint *containerViewWidthConstraint;
-    @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemShowSQL;
-
-    @property (nonatomic, strong) UIPopoverController *showSqlPopoverController;
-    @property (nonatomic, assign) BOOL showSqlIsVisable;    //May be redundent with [showSqlPopoverController isVisable];
+//    @property (nonatomic, strong) UIPopoverController *showSqlPopoverController;
+//    @property (nonatomic, assign) BOOL showSqlIsVisable;    //May be redundent with [showSqlPopoverController isVisable];
 
     @property (nonatomic, strong) UIStoryboard *storyboardDefault;
 
@@ -148,19 +147,16 @@ typedef void(^MTBlockResultVoid)(void);
         self.backgroundContainer.layer.borderWidth = borderWidth;
         self.backgroundContainer.layer.borderColor = [borderColor CGColor];
     }
-    [self setShowSqlIsVisable:NO];
-    UIView *containerView = [[UIView alloc] initWithFrame:[self.backgroundContainer bounds]];
+
+    UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
     
-    UIViewAutoresizing autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    containerView.autoresizingMask = autoresizingMask;
     containerView.contentMode = UIViewContentModeScaleAspectFit;
     containerView.autoresizesSubviews = NO;
-    containerView.translatesAutoresizingMaskIntoConstraints = YES;
+    containerView.translatesAutoresizingMaskIntoConstraints = NO;
     
     MADWatermarkScrollView *scrollView = [[MADWatermarkScrollView alloc] initWithFrame:self.backgroundContainer.bounds];
     scrollView.showsHorizontalScrollIndicator = YES;
     scrollView.showsVerticalScrollIndicator = YES;
-    scrollView.autoresizingMask = autoresizingMask;
     scrollView.contentOffset = CGPointZero;
     scrollView.maximumZoomScale = 1.0000f;
     scrollView.minimumZoomScale = 1.0000f;
@@ -173,25 +169,49 @@ typedef void(^MTBlockResultVoid)(void);
     scrollView.delegate = self;
     scrollView.delaysContentTouches = YES;
     scrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    [scrollView addSubview:containerView];
     scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [scrollView addSubview:containerView];
+
+    [self.backgroundContainer addSubview:scrollView];
+    
+    NSLayoutConstraint *layoutConstraintSizeHeight = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0.0000f constant:self.backgroundContainer.frame.size.height];
+    NSLayoutConstraint *layoutConstraintSizeWidth = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0.0000f constant:self.backgroundContainer.frame.size.width];
+    [containerView addConstraint:layoutConstraintSizeHeight];
+    [containerView addConstraint:layoutConstraintSizeWidth];
+    
+    self.layoutConstraintSizeHeight = layoutConstraintSizeHeight;
+    self.layoutConstraintSizeWidth = layoutConstraintSizeWidth;
+    
+    NSDictionary *viewDictionary = @{@"sv" : scrollView,
+                                     @"cv" : containerView,
+                                     @"bg" : self.backgroundContainer};
+    NSMutableArray *constraints = [NSMutableArray new];
+    NSArray *constraints5 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bg]|" options:0 metrics:0 views:viewDictionary];
+    NSArray *constraints6 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[bg]|" options:0 metrics:0 views:viewDictionary];
+    [constraints addObjectsFromArray:constraints5];
+    [constraints addObjectsFromArray:constraints6];
+    [self.view addConstraints:constraints];
+    [constraints removeAllObjects];
+    
+    NSArray *constraints1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[sv]|" options:0 metrics:0 views:viewDictionary];
+    NSArray *constraints2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[sv]|" options:0 metrics:0 views:viewDictionary];
+    [constraints addObjectsFromArray:constraints1];
+    [constraints addObjectsFromArray:constraints2];
+    [self.backgroundContainer addConstraints:constraints];
+    [constraints removeAllObjects];
+    
+    NSArray *constraints3 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[cv]|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:viewDictionary];
+    NSArray *constraints4 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[cv]|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:viewDictionary];
+    [constraints addObjectsFromArray:constraints3];
+    [constraints addObjectsFromArray:constraints4];
+    [scrollView addConstraints:constraints];
+    [constraints removeAllObjects];
     
     self.scrollView = scrollView;
-
-    [self.backgroundContainer addSubview:self.scrollView];
+    self.contentView = containerView;
+    //self.contentView.backgroundColor = [UIColor purpleColor];
     
-    NSLayoutConstraint *leftBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.backgroundContainer attribute:NSLayoutAttributeLeft multiplier:1.0000f constant:0.0000f];
-    NSLayoutConstraint *rightBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.backgroundContainer attribute:NSLayoutAttributeRight multiplier:1.0000f constant:0.0000f];
-    NSLayoutConstraint *topBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.backgroundContainer attribute:NSLayoutAttributeTop multiplier:1.0000f constant:0.0000f];
-    NSLayoutConstraint *bottomBorder = [NSLayoutConstraint constraintWithItem:scrollView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.backgroundContainer attribute:NSLayoutAttributeBottom multiplier:1.0000f constant:0.0000f];
-    NSArray *constraints = @[leftBorder, rightBorder, topBorder, bottomBorder];
-    [self.backgroundContainer addConstraints:constraints];
-    
-    [self setContentView:containerView];
-    self.contentView.backgroundColor = [UIColor purpleColor];
-    
-    NSMutableArray *toolbarButtons = [[self.toolbarBottom items] mutableCopy];
-    [toolbarButtons removeObject:[self barButtonItemShowSQL]];
+    NSMutableArray *toolbarButtons = [self.toolbarBottom.items mutableCopy];
     [self.toolbarBottom setItems:toolbarButtons animated:NO];
     UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.contentView];
     NSArray *emptyArray = @[];
@@ -200,15 +220,18 @@ typedef void(^MTBlockResultVoid)(void);
     [collisionBehavior setCollisionMode:UICollisionBehaviorModeItems];
     [collisionBehavior setCollisionDelegate:self];
     UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:emptyArray];
-    gravity.magnitude = 0.2000f;
-    gravity.gravityDirection = CGVectorMake(1, 0);
+    gravity.magnitude = 0.3000f;
+    gravity.gravityDirection = CGVectorMake(1.0000f, 0.0000f);
+
     UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
     dynamicItemBehavior.allowsRotation = NO;
     dynamicItemBehavior.elasticity = 0.1000f;
-    dynamicItemBehavior.resistance = 0.9000f;
+    dynamicItemBehavior.resistance = 0.8000f;
+    
     [animator addBehavior:dynamicItemBehavior];
     [animator addBehavior:collisionBehavior];
     [animator addBehavior:gravity];
+    
     self.dynamicItemBehavior = dynamicItemBehavior;
     self.dynamicAnimator = animator;
     self.gravityBeahvior = gravity;
@@ -237,13 +260,11 @@ typedef void(^MTBlockResultVoid)(void);
     [super viewWillLayoutSubviews];
 
     if (self.scrollView.contentSize.height < self.contentView.bounds.size.height) {
-        CGSize contentSize = CGSizeMake(self.scrollView.contentSize.width, self.contentView.bounds.size.height);
-        [self.scrollView setContentSize:contentSize];
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.contentView.bounds.size.height);
     }
     
     if ([self.scrollView contentSize].width < self.contentView.bounds.size.width) {
-        CGSize contentSize = CGSizeMake(self.contentView.bounds.size.width, self.scrollView.contentSize.height);
-        [self.scrollView setContentSize:contentSize];
+        self.scrollView.contentSize = CGSizeMake(self.contentView.bounds.size.width, self.scrollView.contentSize.height);
     }
     
 }
@@ -253,41 +274,10 @@ typedef void(^MTBlockResultVoid)(void);
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    BOOL shouldPerformSegueWithIdentifier = YES;
-    if ([identifier isEqualToString:MNSSegueShowSql]) {
-        if ([UIDevice isPad] && [self showSqlIsVisable]) {
-            shouldPerformSegueWithIdentifier = NO;
-            [[self showSqlPopoverController] dismissPopoverAnimated:YES];
-            [self setShowSqlIsVisable:NO];
-        }
-    }
-    return shouldPerformSegueWithIdentifier;
-    
+    return YES;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
-    if ([segue.identifier isEqualToString:MNSSegueShowSql]) {
-        MTShowSqlViewController *viewController;
-        if ([UIDevice isPad]) {
-            [self setShowSqlIsVisable:YES];
-            UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
-            [popoverController setDelegate:self];
-            [self setShowSqlPopoverController:popoverController];
-            [segue.destinationViewController setDelegate: self];
-        } else {
-            [segue.destinationViewController setDelegate: self];
-        }
-        
-        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-            viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
-        } else {
-            viewController = segue.destinationViewController;
-        }
-        viewController.delegate = self;
-        viewController.query = self.document.defaultQuery;
-    }
-}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -330,9 +320,7 @@ typedef void(^MTBlockResultVoid)(void);
     return YES;
 }
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
-    [self setShowSqlIsVisable:NO];
-}
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController { }
 
 #pragma mark - Setup Notifications
 
@@ -495,12 +483,7 @@ typedef void(^MTBlockResultVoid)(void);
 #pragma mark View Controller Container Custom Handlers
 
 - (void)viewControllerDidFinish:(id)sender {
-    if ([UIDevice isPad] && [self showSqlIsVisable]) {
-        [[self showSqlPopoverController] dismissPopoverAnimated:YES];
-        [self setShowSqlIsVisable:NO];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{ }];
-    }
+    [self dismissViewControllerAnimated:YES completion:^{ }];
 }
 
 #pragma mark - Gesture recognizer actions
@@ -509,7 +492,7 @@ typedef void(^MTBlockResultVoid)(void);
     if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
         UIView *gestureRecognizerView = [gestureRecognizer view];
         [self.contentView bringSubviewToFront:gestureRecognizerView];
-        for (UIView *view in [self.contentView subviews]) {
+        for (UIView *view in self.contentView.subviews) {
             if ([view isKindOfClass:[MTConnectorView class]]) {
                 [self.contentView bringSubviewToFront:view];
             }
@@ -576,13 +559,17 @@ typedef void(^MTBlockResultVoid)(void);
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView { }
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self resizeScrollViewContentArea];
+}
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     [self resizeScrollViewContentArea];
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView { }
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    [self resizeScrollViewContentArea];
+}
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
     [self resizeScrollViewContentArea];
@@ -592,7 +579,9 @@ typedef void(^MTBlockResultVoid)(void);
     [self resizeScrollViewContentArea];
 }
 
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView { }
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    [self resizeScrollViewContentArea];
+}
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView { }
 
@@ -645,7 +634,7 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)clearScreen {
     
-    for (UIViewController *viewController in [self viewControllers]) {
+    for (UIViewController *viewController in self.viewControllers) {
         Class schemaTableClass = [MADQueryVisualizationSchemaViewController class];
         if ([viewController isKindOfClass:schemaTableClass]) {
             UIAttachmentBehavior *attachmentBehaviorForObjectId = self.attachmentBehaviors[[viewController.view objectIdTag]];
@@ -656,7 +645,7 @@ typedef void(^MTBlockResultVoid)(void);
             [self.gravityBeahvior removeItem:controller];
         }
     }
-    [self removeViewControllers:[NSSet setWithArray:[self viewControllers]]];
+    [self removeViewControllers:[NSSet setWithArray:self.viewControllers]];
     
     [self setTableDisplayCounter:0];
     
@@ -712,10 +701,10 @@ typedef void(^MTBlockResultVoid)(void);
         
         [self clearScreen];
         
-        [[self tableStartingPoints] removeAllObjects];
-        [[self pushBehaviors] removeAllObjects];
-        [[self viewControllers] removeAllObjects];  //May track child view controllers since iOS 7.
-        [[self tableIds] removeAllObjects];
+        [self.tableStartingPoints removeAllObjects];
+        [self.pushBehaviors removeAllObjects];
+        [self.viewControllers removeAllObjects];  //May track child view controllers since iOS 7.
+        [self.tableIds removeAllObjects];
         [self.controllersForObjectIds removeAllObjects];     //Tables and links
         [self.controllersForObjectIdsLink removeAllObjects];
         
@@ -847,7 +836,7 @@ typedef void(^MTBlockResultVoid)(void);
     }
     
     if ([deletedQueryTable inQuery] != nil &&
-        [[self tableIds] containsObject: objectId]) {
+        [self.tableIds containsObject: objectId]) {
         
         MADQueryVisualizationSchemaViewController *viewController = self.controllersForObjectIds[objectId];
         // FIXME: do give time for animations... Can't imagine this will work.
@@ -968,11 +957,11 @@ typedef void(^MTBlockResultVoid)(void);
  
     RptqQueryField *leftField = [insertedQueryLinks hasLeftField];
     RptqQueryTable *leftTable = [leftField inQueryTable];
-    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[[leftTable objectID]];
+    MADQueryVisualizationSchemaViewController *leftTableViewController = self.controllersForObjectIds[leftTable.objectID];
     
     RptqQueryField *rightField = [insertedQueryLinks hasRightField];
     RptqQueryTable *rightTable = [rightField inQueryTable];
-    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[[rightTable objectID]];
+    MADQueryVisualizationSchemaViewController *rightTableViewController = self.controllersForObjectIds[rightTable.objectID];
     
     MTLinkedList *tableIds = [self tableObjectIDsSortedTopologicallyForQuery:query];
     
@@ -998,11 +987,10 @@ typedef void(^MTBlockResultVoid)(void);
                 }
             }
             
-            NSDictionary *layout = @{
-                                     MTKeyIsTopLevel : @(topLevel)
-                                     };
+            NSNumber *topLevelWrapper = @(topLevel);
+            NSDictionary *layout = @{ MTKeyIsTopLevel : topLevelWrapper };
             
-            layoutDetails[[table objectID]] = layout;
+            layoutDetails[table.objectID] = layout;
             
             if (topLevel) {
                 numberOfStartingPoints++;
@@ -1203,9 +1191,9 @@ typedef void(^MTBlockResultVoid)(void);
                 maxY = MAX(maxY, tmaxY);
             }
         }
-        self.scrollView.contentSize = CGSizeMake(MAX(maxX, self.view.bounds.size.width),
-                                                 MAX(maxY, self.view.bounds.size.height));
-        //self.contentView.frame = CGRectMake(0, 0, self.scrollView.contentSize.width, self.scrollView.contentSize.height);
+        
+        self.layoutConstraintSizeHeight.constant = MAX(maxY, self.view.bounds.size.height);
+        self.layoutConstraintSizeWidth.constant = MAX(maxX, self.view.bounds.size.width);
     }
 }
 
@@ -1234,9 +1222,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     if ([viewController isKindOfClass:[MADQueryVisualizationSchemaViewController class]]) {
         
-        //UIAttachmentBehavior *attachmentBehaviorForObjectId = [self.attachmentBehaviors objectForKey:[viewController.view objectIdTag]];
-        //[attachmentBehaviorForObjectId release];
-        
         // FIXME: do give time for animations... Can't imagine this will work.
         [viewController willMoveToParentViewController:nil];
         [viewController.view removeFromSuperview];
@@ -1263,46 +1248,64 @@ typedef void(^MTBlockResultVoid)(void);
     UIStoryboard *sb = [MTApplicationInstance storyboard];
     MADQueryVisualizationSchemaViewController *viewController = [sb instantiateViewControllerWithIdentifier:MTQueryBuilderAdvancedSchemaViewControllerIdentifier];
     viewController.document = self.document;
-    [viewController setDelegate:self];
-    [viewController setTableObjectId:[table objectID]];
+    viewController.delegate = self;
+    viewController.tableObjectId = table.objectID;
     
     CGRect subviewRect = CGRectZero;
     
-    [[self tableIds] addObject:[table objectID]];
-    self.controllersForObjectIds[[table objectID]] = viewController;
+    [self.tableIds addObject:table.objectID];
+    self.controllersForObjectIds[table.objectID] = viewController;
     CGFloat originX = 10.0000f + CGPointZero.x;
-    BOOL ud = [[table identifier] integerValue] % 2;
-    CGFloat originY = CGPointZero.y + [self.scrollView frame].size.height - (ud? 200.0000f:-600.0000f) - 20.0000f;
+    BOOL ud = table.identifier.integerValue % 2;
+    CGFloat originY = CGPointZero.y + self.scrollView.frame.size.height - (ud ? 200.0000f : - 600.0000f) - 20.0000f;
     subviewRect = CGRectMake(originX, originY, 180.0000f, 200.0000f);
-    [table setDesignerSizeHeight:@(subviewRect.size.height)];
-    [table setDesignerSizeWidth:@(subviewRect.size.width)];
-    [table setDesignerOriginY:@(subviewRect.origin.x)];
-    [table setDesignerOriginX:@(subviewRect.origin.y)];
-    [table setDesignerInitalLayout:@(NO)];
+
+    NSNumber *sizeHeight = @(subviewRect.size.height);
+    NSNumber *sizeWidth = @(subviewRect.size.width);
+    NSNumber *originXs = @(subviewRect.origin.x);
+    NSNumber *originYs = @(subviewRect.origin.y);
+    NSNumber *designerInitalLayout = @(NO);
+    table.designerSizeHeight = sizeHeight;
+    table.designerSizeWidth = sizeWidth;
+    table.designerOriginY = originYs;
+    table.designerOriginX = originXs;
+    table.designerInitalLayout = designerInitalLayout;
     
     [self.document.managedObjectContext save:nil];
 
-    [viewController.view setFrame: subviewRect];
+    viewController.view.frame = subviewRect;
     
     [self addGesturesToViewController:viewController];
     
     NSArray *constraints = nil;
-    CGRect desiredFrame = CGRectMake(table.designerOriginX.floatValue, table.designerOriginY.floatValue, table.designerSizeWidth.floatValue, table.designerSizeHeight.floatValue);
+    CGRect desiredFrame;
     CGRect viewControllerBounds = self.contentView.bounds;
-    desiredFrame = [MADQueryVisualizationViewController rectForDesiredRect:desiredFrame inBounds:viewControllerBounds];
+    desiredFrame = [MADQueryVisualizationViewController rectForDesiredRect:subviewRect inBounds:viewControllerBounds];
     
-    NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:viewController.view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.width];
-    NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:viewController.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:desiredFrame.size.height];
-    [width setPriority:1000];
-    [height setPriority:1000];
+    NSLayoutConstraint *width = [NSLayoutConstraint constraintWithItem:viewController.view
+                                                             attribute:NSLayoutAttributeWidth
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                            multiplier:1.0000f
+                                                              constant:desiredFrame.size.width];
+    NSLayoutConstraint *height = [NSLayoutConstraint constraintWithItem:viewController.view
+                                                              attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeNotAnAttribute
+                                                             multiplier:1.0000f
+                                                               constant:desiredFrame.size.height];
+    width.priority = UILayoutPriorityDefaultHigh;
+    height.priority = UILayoutPriorityDefaultHigh;
     
     viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     
     constraints = @[width, height];
     
     [self addChildViewController:viewController];
-    if ([[self viewControllers] containsObject:viewController] == NO) {
-        [[self viewControllers] addObject:viewController];
+    if ([self.viewControllers containsObject:viewController] == NO) {
+        [self.viewControllers addObject:viewController];
     }
     
     [self.contentView addSubview:viewController.view];
@@ -1335,9 +1338,9 @@ typedef void(^MTBlockResultVoid)(void);
         [self layoutQueryLinkViewController:link animated:animated];
     }
     
-    CGRect desiredFrame = [[connectorViewController view] frame];
-    CGPoint desiredCenter = [[connectorViewController view] center];
-    CGAffineTransform desiredTransform = [[connectorViewController view] transform];
+    CGRect desiredFrame = [connectorViewController.view frame];
+    CGPoint desiredCenter = [connectorViewController.view center];
+    CGAffineTransform desiredTransform = [connectorViewController.view transform];
     CGAffineTransform swingTransform = CGAffineTransformIdentity;
     if (animated) {
         swingTransform = CGAffineTransformSwing();
@@ -1346,29 +1349,28 @@ typedef void(^MTBlockResultVoid)(void);
     NSArray *constraints = nil;
     NSMutableArray *bufferConstraints = [[NSMutableArray alloc] init];
     
-    [[connectorViewController view] setBounds:CGRectZero];
-    [[connectorViewController view] setCenter:desiredCenter];
+    connectorViewController.view.bounds = CGRectZero;
+    connectorViewController.view.center = desiredCenter;
     if (animated) {
-        [[connectorViewController view] setTransform:swingTransform];
+        connectorViewController.view.transform = swingTransform;
     }
     
     constraints = @[];
     
-    
     [self addChildViewController:connectorViewController];
-    if ([[self viewControllers] containsObject:connectorViewController] == NO) {
-        [[self viewControllers] addObject:connectorViewController];
+    if ([self.viewControllers containsObject:connectorViewController] == NO) {
+        [self.viewControllers addObject:connectorViewController];
     }
     
-    [self.contentView addSubview:[connectorViewController view]];
+    [self.contentView addSubview:connectorViewController.view];
     [connectorViewController didMoveToParentViewController:self];
     
     [bufferConstraints addObjectsFromArray:constraints];
     [self.contentView addConstraints:bufferConstraints];
     
     MTBlockResultVoid animateTwo = ^() {
-        [[connectorViewController view] setFrame:desiredFrame];
-        [[connectorViewController view] setTransform:desiredTransform];
+        [connectorViewController.view setFrame:desiredFrame];
+        [connectorViewController.view setTransform:desiredTransform];
     };
     
     if (animated) {
@@ -1427,7 +1429,6 @@ typedef void(^MTBlockResultVoid)(void);
     
     CGFloat extraInset = 0.0000f;
         
-    MNSConnectorPosition lastConnectorPositionB = connectorView.connectorPositionB;
     if (leftCellFrameInView.origin.x < rightCellFrameInView.origin.x &&
         leftCellFrameInView.origin.x + leftCellFrameInView.size.width < rightCellFrameInView.origin.x) {
         [connectorView setConnectorPositionB:MNSConnectorPositionA];
@@ -1449,13 +1450,13 @@ typedef void(^MTBlockResultVoid)(void);
         rightCellAnchorPoint.x += paddingLeft;
     }
     
-    MNSConnectorPosition lastConnectorPosition = connectorView.connectorPosition;
+    NSNumber *topLeftToBottomRight;
     if (leftCellAnchorPoint.x < rightCellAnchorPoint.x) {
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            connectorView.topLeftToBottomRight = @(YES);
+            topLeftToBottomRight = @(YES);
             connectorView.connectorPosition = MNSConnectorPositionA;
         } else {
-            connectorView.topLeftToBottomRight = @(NO);
+            topLeftToBottomRight = @(NO);
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
             connectorView.connectorPosition = MNSConnectorPositionB;
@@ -1464,41 +1465,24 @@ typedef void(^MTBlockResultVoid)(void);
     } else {
         extraInset = -20.0000f;
         if (leftCellAnchorPoint.y < rightCellAnchorPoint.y) {
-            connectorView.topLeftToBottomRight = @(NO);
+            topLeftToBottomRight = @(NO);
             connectorView.connectorPosition = MNSConnectorPositionC;
         } else {
-            connectorView.topLeftToBottomRight = @(YES);
+            topLeftToBottomRight = @(YES);
             leftCellAnchorPoint.y += leftCellFrameInTable.size.height;
             rightCellAnchorPoint.y -= rightCellFrameInTable.size.height;
             connectorView.connectorPosition = MNSConnectorPositionD;
         }
         connectorView.leftViewIsInital = NO;
     }
+    connectorView.topLeftToBottomRight = topLeftToBottomRight;
+
     connectorFrame = CGRectMake(leftCellAnchorPoint.x - 10.0000f - extraInset,
                                 leftCellAnchorPoint.y - 10.0000f,
                                 rightCellAnchorPoint.x - leftCellAnchorPoint.x + 20.0000f + (extraInset * 2.0000f),
                                 rightCellAnchorPoint.y - leftCellAnchorPoint.y + 20.0000f);
-    if (lastConnectorPosition == connectorView.connectorPosition &&
-        lastConnectorPositionB == connectorView.connectorPositionB) {
-        connectorView.frame = connectorFrame;
-    } else {
-        
-        UIView *blockConnectorView = connectorView;
-        MTBlockResultVoid setFrame = ^() {
-            blockConnectorView.frame = connectorFrame;
-        };
-        
-        if (animated == NO) {
-            setFrame();
-        } else {
-            [UIView animateWithDuration: 0.3000f
-                                  delay: 0.0000f
-                                options: UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut
-                             animations: setFrame
-                             completion: NULL];
-        }
-    }
-    
+    connectorView.frame = connectorFrame;
+    [connectorView setNeedsDisplay];
 }
 
 @end

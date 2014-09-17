@@ -33,7 +33,7 @@
 }
 
 - (NSUInteger)count {
-    return [[self list] count];
+    return self.list.count;
 }
 
 - (bool)isNext {

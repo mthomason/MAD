@@ -43,7 +43,7 @@
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDocumentObjectImage.h"
 
-#import "MTStoreKitController+NonRenewableLicensing.h"
+//#import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIDevice+Hack.h"
 #import "MTPaper.h"
 #import "RptqQuery+Extras.h"
@@ -99,7 +99,7 @@
 
 - (void)initCommon {
     
-    self.showWaterMark = [MTStoreKitController licensedUser] == NO;
+    self.showWaterMark = NO;
     self.debugMode = NO;
 
     [self setCachedPageSize:CGSizeZero];

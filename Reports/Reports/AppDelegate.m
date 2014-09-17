@@ -36,7 +36,6 @@
 #import "evp.h"
 #import "VerifyStoreReceipt.h"
 #import "MACloudManager.h"
-#import "MTStoreKitController.h"
 #import "MTLog.h"
 
 #import "UIApplication+Extras.h"
@@ -46,6 +45,9 @@
 #import "UIColor+EverydayApps.h"
 
 #import "MADUpgradeManager.h"
+#import "NSError+UserInterface.h"
+
+//#import "MTStoreKitController.h"
 
 NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
 NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
@@ -95,7 +97,9 @@ static void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)loadAndDisplayWindow {
     
-    
+    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
+    self.applicationInstance = appInstance;
+
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
     id initViewController = [storyBoard instantiateInitialViewController];
@@ -124,14 +128,11 @@ static void uncaughtExceptionHandler(NSException *exception) {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #endif
     
-    MTApplicationInstance *appInstance = [[MTApplicationInstance alloc] init];
-    self.applicationInstance = appInstance;
-
     [self initalizeICloudKvs];
     [self.applicationInstance initalizeAppearance];
     [self.applicationInstance deleteCoreDataCache];
 
-    [MTStoreKitController sharedObject];
+    //[MTStoreKitController sharedObject];
     [MACloudManager sharedManager];
     return YES;
 }
@@ -281,12 +282,15 @@ static void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
-    BOOL save = self.applicationInstance.reportState != UIDocumentStateClosed;
-    if (save == NO) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject: nil
-                         forKey: @"MADStateRestorationOpenFileWithExtension"];
-        [userDefaults synchronize];
+    BOOL save = MADStateRestorationSupportEnabled;
+    if (save) {
+        save = self.applicationInstance.reportState != UIDocumentStateClosed;
+        if (save == NO) {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setObject: nil
+                             forKey: @"MADStateRestorationOpenFileWithExtension"];
+            [userDefaults synchronize];
+        }
     }
     return save;
 }

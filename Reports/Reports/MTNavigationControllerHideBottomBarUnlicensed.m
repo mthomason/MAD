@@ -7,6 +7,7 @@
 //
 
 #import "MTNavigationControllerHideBottomBarUnlicensed.h"
+#import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 
 @interface MTNavigationControllerHideBottomBarUnlicensed ()
@@ -18,10 +19,11 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        __weak MTNavigationControllerHideBottomBarUnlicensed *weakself = self;
         [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
             if (isLicensedUser == NO) {
-                [self setToolbarHidden:YES];
-                [self setHidesBottomBarWhenPushed:YES];
+                weakself.toolbarHidden = YES;
+                weakself.hidesBottomBarWhenPushed = YES;
             }
         }];
     }

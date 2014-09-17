@@ -170,7 +170,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     __weak id blockSender = sender;
     
-    NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:[[self textFieldReportName] text]
+    NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:self.textFieldReportName.text
                                                                    withExtension:MTDocumentExtentionMobleApplicationDocument];
 
     MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]];

@@ -108,17 +108,14 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:MNSSegueShowSql]) {
-        if ([UIDevice isPad]) {
-            //[self setShowSqlIsVisable:YES];
+        if ([UIDevice isPad]) { //iPhone version handled in MADQueryViewController
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
             [popoverController setDelegate:self];
-            [self setPopover:popoverController];
+            self.popover = popoverController;
             UINavigationController *navController = (UINavigationController *)popoverController.contentViewController;
             MTShowSqlViewController *showSqlViewController = (MTShowSqlViewController *)navController.topViewController;
             showSqlViewController.query = self.document.defaultQuery;
             [self disableTabBarItems];
-        } else {
-            [segue.destinationViewController setDelegate: self];
         }
         
     } else if (sender == self) {
@@ -136,15 +133,7 @@
             [self setPopover:[(UIStoryboardPopoverSegue *)segue popoverController]];
             [self disableTabBarItems];
         }
-        if ([segue.identifier isEqualToString:@"MTSegueIdentifierShowReportDesigerFromSplitView"]) {
-            if ([segue.destinationViewController isKindOfClass: [MADDesignerViewController class]]) {
-                [segue.destinationViewController setDelegate: self];
-            } else if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-                [(MADDesignerViewController *)[segue.destinationViewController topViewController] setDelegate:self];
-            }
-        }
     }
-
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {

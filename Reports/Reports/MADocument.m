@@ -179,9 +179,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         self.urlGuts = destinationUrl;
 
         MADocumentState *documentState = [MADocumentState new];
-        [documentState setSaveInProgress:NO];
-        [documentState setNeedsSave:NO];
-        [documentState setContextChagned:NO];
+        documentState.saveInProgress = NO;
+        documentState.needsSave = NO;
+        documentState.contextChagned = NO;
         [self setDocumentStatus:documentState];
         
         NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];

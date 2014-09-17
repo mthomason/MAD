@@ -11,11 +11,13 @@
 #endif
 
 #import <MessageUI/MessageUI.h>
+#import "AppDelegate.h"
 #import "MADocumentState.h"
 #import "MADOpenFileViewController.h"
 #import "MTApplicationInstance.h"
 #import "UAAppReviewManager.h"
 #import "MADViewerController.h"
+#import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MADDesignerViewController.h"
 #import "MADWatermarkView.h"
@@ -35,6 +37,7 @@
 #import "NSFileManager+Common.h"
 #import "MADFileManager.h"
 #import "MADUpgradeManager.h"
+#import "NSError+UserInterface.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
@@ -342,6 +345,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             [weakself addActionItemToToolbar:animated];
         }
     }];
+
     [self reenableDataWithSearch];
 }
 

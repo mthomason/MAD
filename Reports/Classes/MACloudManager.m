@@ -59,7 +59,8 @@ static MACloudManager *__sharedManager;
                                                      name: NSUbiquityIdentityDidChangeNotification
                                                    object: nil];
         [__sharedManager updateFileStorageContainerURL:nil];
-        __sharedManager.isCloudEnabled = [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
+//        __sharedManager.isCloudEnabled = [[NSFileManager defaultManager] ubiquityIdentityToken] != nil;
+        __sharedManager.isCloudEnabled = NO;
     });
 }
 
@@ -143,7 +144,7 @@ static MACloudManager *__sharedManager;
             [[NSNotificationCenter defaultCenter] postNotificationName:UbiquitousContainerFetchingWillBeginNotification object:nil];
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                NSURL *url = [[[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:MTDocumentTypeUtiMad] retain];
+                NSURL *url = [[[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:@"iCloud.com.everydayapps.mad.designer"/*MTDocumentTypeUtiMad*/] retain];
                 [self setDataDirectoryURL:url];
                 [url release];
                 dispatch_sync(dispatch_get_main_queue(), ^{

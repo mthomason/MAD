@@ -30,7 +30,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        //[self setOpaque:YES];
         self.backgroundColor = [UIColor clearColor];
 
         CGSize shadowSize = CGSizeMake(2.0000f, 2.0000f);
@@ -118,7 +117,7 @@
 
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    [self setNeedsDisplay];
+    //[self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -140,7 +139,7 @@
 
     [[self forgroundColor] set];
 
-    if ([[self topLeftToBottomRight] boolValue]) {
+    if (self.topLeftToBottomRight.boolValue) {
         
         
         origin = CGPointMake(rect.origin.x, rect.origin.y);
@@ -185,7 +184,7 @@
     UIBezierPath *path = [UIBezierPath bezierPath];
     CGPoint pathOrigin = connectorNobRectDestination.origin;
     pathOrigin.y += 3.0000f;
-    if ([[self topLeftToBottomRight] boolValue]) {
+    if (self.topLeftToBottomRight.boolValue) {
         if ([self leftViewIsInital]) {
             pathOrigin.x -= 5.0000f;
             [path moveToPoint:CGPointMake(pathOrigin.x - arrowRadius, pathOrigin.y - arrowRadius)];
