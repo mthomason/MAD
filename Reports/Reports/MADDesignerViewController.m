@@ -71,7 +71,6 @@
 #import "RptqDocumentObjectImage.h"
 #import "RptqDocumentObjectImage+Extras.h"
 
-
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 
@@ -197,14 +196,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) MADDesignerSectionView *reportFooterView;
 
-@property (nonatomic, assign) CGPoint pinchInitalPointA;
-@property (nonatomic, assign) CGPoint pinchInitalPointB;
-@property (nonatomic, assign) CGAffineTransform pinchBeginTransform;
-
-@property (nonatomic, assign) CGPoint currentNewPointA;
-@property (nonatomic, assign) CGPoint currentNewPointB;
-@property (nonatomic, assign) CGSize currentScaleSize;
-
 @property (nonatomic, assign) BOOL toolboxVisible;
 
 @property (nonatomic, assign) UIEdgeInsets edgeInsetsWithToolbar;
@@ -233,6 +224,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, assign) BOOL shownAndHidden;
 @property (nonatomic, assign) BOOL toolboxIsVisible;
 @property (nonatomic, assign) CGPoint contentOffsetOnShowToolbox;
+@property (nonatomic, assign) CGFloat zoomScaleOnShowToolbox;
 
 @property (nonatomic, strong) MADDesignerStatusLabel *detailDisplayView;
 
@@ -328,8 +320,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //self.restorationIdentifier = @"MADIdentifierRestorationDesignerViewController";
-    
     MADPromptManager *promptManager = [[MADPromptManager alloc] init];
     self.promptManager = promptManager;
     
@@ -396,7 +386,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self contentViewRemoveAllConstraints];
     [self scrollerRemoveAllConstraints];
     
-    UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;// [MTReportDesignerViewController tapGestureRecognizerDouble:self];
+    UITapGestureRecognizer *tapGestureDoubleTap = self.scroller.doubleTapToZoom;
     tapGestureDoubleTap.delegate =  self;
     
     UITapGestureRecognizer *tapGestureSingleTap = [MADDesignerViewController tapGestureRecognizerSingle:self];
@@ -584,23 +574,23 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             [viewDidAppearDesignerContentViewConstraints addObject:lc1b];
 
             NSLayoutConstraint *lc1c = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                                  toLabelRight: sectionViewLabel];
+                                                                             toLabelRight: sectionViewLabel];
             [constraintsContainer addObject:lc1c];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1c];
             
             NSLayoutConstraint *lc1d = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                                 toLabelBottom: sectionViewLabel];
+                                                                            toLabelBottom: sectionViewLabel];
             [constraintsContainer addObject:lc1d];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1d];
             
             NSLayoutConstraint *lc1e = [MADDesignerViewController layoutConstraintLabel: sectionViewLabel
-                                                                                    toHeight: MTReportDesignerSectionLabelHeight];
+                                                                               toHeight: MTReportDesignerSectionLabelHeight];
             [self.layoutConstraintSectionLabelHeightContainer addObject:lc1e];
             [constraintsContainer addObject:lc1e];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1e];
             
             NSArray *collectionViewConstraints = [MADDesignerViewController layoutConstraintsForSection: sectionView
-                                                                                                     content: self.scroller.container];
+                                                                                                content: self.scroller.container];
             [constraintsScroller addObjectsFromArray:collectionViewConstraints];
             [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:collectionViewConstraints];
             
@@ -633,15 +623,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     
     NSLayoutConstraint *layoutConstraintDesignerContentViewHeight = [MADDesignerViewController layoutConstraintViewContent: self.scroller.container
-                                                                                                                         height: sectionHeights];
+                                                                                                                    height: sectionHeights];
     [constraintsScroller addObject:layoutConstraintDesignerContentViewHeight];
     [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintDesignerContentViewHeight];
     self.layoutConstraintDesignerContentViewHeight = layoutConstraintDesignerContentViewHeight;
 
     
     NSLayoutConstraint *layoutConstraintContentToScollerBottom = [MADDesignerViewController layoutConstraintViewContent: self.scroller.container
-                                                                                                            toScrollerBottom: self.scroller];
-
+                                                                                                       toScrollerBottom: self.scroller];
+    
     [constraintsScroller addObject:layoutConstraintContentToScollerBottom];
     [viewDidAppearDesignerScrollViewConstraints addObject:layoutConstraintContentToScollerBottom];
     
@@ -653,7 +643,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.scroller addConstraints: constraintsScroller];
     [self.scroller.container addConstraints: constraintsContainer];
     self.scroller.backgroundColor = [UIColor whiteColor];
-    //self.view.backgroundColor = [UIColor darkGrayColor];
     
 }
 
@@ -854,14 +843,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if ([segue.identifier isEqualToString:@"showObjects"]) {
 
         [self performSegueShowObjects:segue];
-
-    } else if ([segue.identifier isEqualToString:@"MTSegueShowReportViewer"]) {
-
-        [self performSegueShowReportViewer:segue];
-
-    } else if ([segue.identifier isEqualToString:@"showReportViewerFromDesign"]) {
-    
-        [self performSegueShowReportViewerFromDesigner:segue];
         
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
         
@@ -870,7 +851,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueDocumentObjectEditAggregate"]) {
         
         [self performSegueEditAggregate:segue.destinationViewController];
-        
+
     }
 
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
@@ -986,7 +967,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)adjustScroller {
     if (self.scroller.contentOffset.x != 0) {
         CGPoint offset = self.scroller.contentOffset;
-        offset.x = 0.0000f;
+        offset.x = CGPointZero.x;
         self.scroller.contentOffset = offset;
         self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
     }
@@ -2036,11 +2017,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark General
 
 - (BOOL)oneOrMoreElementsSelected {
-    return [[self selectedObjectIds] count] > 0;
+    return [self.selectedObjectIds count] > 0;
 }
 
 - (BOOL)elementViewIsSelected:(MADDesignerElementView *)elementView {
-    return [[self selectedObjectIds] containsObject:[elementView objectIdTag]];
+    return [self.selectedObjectIds containsObject:[elementView objectIdTag]];
 }
 
 - (NSInteger)removeBorderFromAllSectionViews {
@@ -2088,7 +2069,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)deselectElementView:(MADDesignerElementView *)elementView animated:(BOOL)animated {
     
-    [[self selectedObjectIds] removeObject:[elementView objectIdTag]];
+    [self.selectedObjectIds removeObject:[elementView objectIdTag]];
     [self removeBorderFromView: elementView];
     
     if ([UIDevice isPad]) {
@@ -2115,7 +2096,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         case MTToolboxTypeElement:
             [self.popoverControllerInformation setPassthroughViews:[[self elementViews] allObjects]];
-            [self.viewControllerToolbox showToolboxWithObjectIds:[self selectedObjectIds]];
+            [self.viewControllerToolbox showToolboxWithObjectIds:self.selectedObjectIds];
             self.viewControllerToolbox.document = self.document;
             viewController = self.viewControllerToolbox;
             break;
@@ -2161,7 +2142,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self removeItemsFromToolbars];
         [self.view layoutIfNeeded];
         self.contentOffsetOnShowToolbox = self.scroller.contentOffset;
-        
+        self.zoomScaleOnShowToolbox = self.scroller.zoomScale;
         __weak MADDesignerViewController *weakSelf = self;
         
         [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
@@ -2216,7 +2197,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                     [weakSelf.viewControllerToolbox.view removeFromSuperview];
                 }
                 [weakSelf.toolbarBottom setItems:weakSelf.toolbarBottomItems animated:YES];
-                
+                [weakSelf.scroller setZoomScale:weakSelf.zoomScaleOnShowToolbox animated:YES];
                 [weakSelf.scroller setContentOffset:weakSelf.contentOffsetOnShowToolbox animated:YES];
                 weakSelf.navigationItem.prompt = nil;
             }
@@ -2256,22 +2237,27 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)positionForRectOfInterest:(CGRect)rectOfInterest {
-    
+    if (self.scroller.zoomScale <= 1.0000f) {
+        [self.scroller setZoomScale:1.0000f animated:YES];
+    }
     CGFloat adjustment = [self heightScrollViewAdjustment];
 
     CGRect visibleRect;
     visibleRect.origin = CGPointMake(self.scroller.contentOffset.x, self.scroller.contentOffset.y);
     visibleRect.size = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height - [self toolboxHeightCalculated]);
     visibleRect = CGRectAdjustForScale(visibleRect, self.scroller.zoomScale);
-
+    CGRect rectOfInterestAdjusted = self.scroller.zoomScale >= 1 ? rectOfInterest : CGRectAdjustForScale(rectOfInterest, self.scroller.zoomScale);
+    
     CGRect visableRectAdjusted = CGRectMake(CGPointZero.x - (CGFLOAT_MAX / 2.0000f),
                                             visibleRect.origin.y + adjustment,
                                             CGFLOAT_MAX,
                                             visibleRect.size.height - adjustment);
     
-    if (CGRectContainsRect(visableRectAdjusted, rectOfInterest) == NO) {
+    if (CGRectContainsRect(visableRectAdjusted, rectOfInterestAdjusted) == NO) {
         CGPoint contentOffset = CGPointContentOffsetBottomOfRect(rectOfInterest, visibleRect);
-        contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.scroller.zoomScale);
+        if (self.scroller.zoomScale > 1) {
+            contentOffset = CGPointMake(contentOffset.x, contentOffset.y * self.scroller.zoomScale);
+        }
         [self.scroller setContentOffset:contentOffset animated:YES];
     }
 }
@@ -2789,10 +2775,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     NSMutableSet *results = [[NSMutableSet alloc] init];
     
-    if ([[self selectedObjectIds] count] > 0) {
+    if ([self.selectedObjectIds count] > 0) {
         //Try quick hash method...
         BOOL quickHashWorks = YES;
-        for (NSManagedObjectID *selectedObjectId in [self selectedObjectIds]) {
+        for (NSManagedObjectID *selectedObjectId in self.selectedObjectIds) {
             UIView *selectedView = [self viewForObjectID:selectedObjectId];
             if (selectedView != nil) {
                 [results addObject:selectedView];
@@ -2814,7 +2800,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                     for (NSUInteger item = 0; item < [documentSectionView numberOfItemsInSection:section]; item++) {
                         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
                         MADDesignerElementView *elementView = [self elementViewAtIndexPath:indexPath inCollectionView:documentSectionView];
-                        if ([[self selectedObjectIds] containsObject: [elementView objectIdTag]]) {
+                        if ([self.selectedObjectIds containsObject: [elementView objectIdTag]]) {
                             [results addObject:elementView];
                         }
                     }
@@ -2957,20 +2943,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         viewControllerObjectSelector.objectSelectorDelegate = self;
         viewControllerObjectSelector.document = self.document;
     }
-}
-
-- (void)performSegueShowReportViewer:(UIStoryboardSegue *)segue {
-    if ([UIDevice isPad]) {
-        MADViewerController *viewControllerReportViewer;
-        UINavigationController *d = segue.destinationViewController;
-        viewControllerReportViewer = (MADViewerController *)[d topViewController];
-        viewControllerReportViewer.viewControllerDelegate = self;
-    }
-    [self.scroller scrollRectToVisible:CGRectZero animated:NO];
-}
-
-- (void)performSegueShowReportViewerFromDesigner:(UIStoryboardSegue *)segue {
-    [self.scroller scrollRectToVisible:CGRectZero animated:NO];
 }
 
 - (void)performSegueEditBarcode:(UIStoryboardSegue *)segue {

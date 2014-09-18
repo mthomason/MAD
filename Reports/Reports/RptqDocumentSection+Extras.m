@@ -181,15 +181,17 @@
     [hasObjects insertObject:documentObject atIndex:[indexInsert item]];
     [sectionRow setHasObjects:hasObjects];
     
-    [[self managedObjectContext] save:nil];
+    [self.managedObjectContext save:nil];
     return indexInsert;
     
 }
 
 - (void)setInterfaceHeight:(CGFloat)height {
-    [self setLayoutHeight:@(height)];
-    [self setHeight:@(height + 44.0000f)];
-    [[self managedObjectContext] save:nil];
+    NSNumber *layoutHeightWrapper = @(height);
+    NSNumber *heightWrapper = @(height + 44.0000f);
+    self.layoutHeight = layoutHeightWrapper;
+    self.height = heightWrapper;
+    [self.managedObjectContext save:nil];
 }
 
 #pragma mark - Static
