@@ -163,6 +163,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, strong) UIPopoverController *popoverControllerInformation;
 @property (nonatomic, strong) UIPopoverController *popoverControllerObjectSelector;
 @property (nonatomic, strong) UIPopoverController *popoverControllerSectionSettings;
+
 @property (nonatomic, strong) UIPopoverController *popoverControllerEditBarcode;
 @property (nonatomic, strong) UIPopoverController *popoverControllerEditDataLabel;
 @property (nonatomic, strong) UIPopoverController *popoverControllerEditAggregate;
@@ -497,16 +498,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSInteger numberOfSections = [sectionEnumerator count];
     
     NSMutableDictionary *layoutConstraintsReportSectionHeight = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    [self setLayoutConstraintsReportSectionHeight:layoutConstraintsReportSectionHeight];
+    self.layoutConstraintsReportSectionHeight = layoutConstraintsReportSectionHeight;
     
     NSMutableDictionary *dictionarySections = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    [self setSectionViews: dictionarySections];
+    self.sectionViews = dictionarySections;
     
     NSMutableDictionary *dictionarySectionControls = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    [self setSectionControlViews:dictionarySectionControls];
+    self.sectionControlViews = dictionarySectionControls;
     
     NSMutableDictionary *collectionViewReuseIdentifiers = [[NSMutableDictionary alloc] initWithCapacity:numberOfSections];
-    [self setCollectionViewReuseIdentifiers:collectionViewReuseIdentifiers];
+    self.collectionViewReuseIdentifiers = collectionViewReuseIdentifiers;
     
     [self.scroller.container addSubview:self.ruler];
     
@@ -516,10 +517,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSMutableArray *viewDidAppearDesignerScrollViewConstraints = [[NSMutableArray alloc] init];
     NSMutableArray *viewDidAppearDesignerContentViewConstraints = [[NSMutableArray alloc] init];
     
-    NSArray *rulerConstraints = [MADDesignerViewController layoutConstraintsRuler:self.ruler
-                                                                            inDesigner:self.scroller.container];
-    NSArray *rulerSideConstraints = [MADDesignerViewController layoutConstraintsRulerSide:self.ruler
-                                                                                    inDesigner:self.scroller.container];
+    NSArray *rulerConstraints = [MADDesignerViewController layoutConstraintsRuler: self.ruler
+                                                                       inDesigner: self.scroller.container];
+    
+    NSArray *rulerSideConstraints = [MADDesignerViewController layoutConstraintsRulerSide: self.ruler
+                                                                               inDesigner: self.scroller.container];
     
     [self.layoutConstraintsSectionsSidesBorder addObjectsFromArray:rulerSideConstraints];
     
@@ -541,7 +543,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             sectionHeights += (MTReportDesignerBufferPaddingVertical + reportSection.height.floatValue);
 
             MADDesignerSectionView *sectionView = [MADDesignerViewController documentSectionView: reportSection
-                                                                                            delegate: self];
+                                                                                        delegate: self];
             sectionView.delegate = self;
             sectionView.sectionDelegate = self;
             sectionView.dataSource = self;
@@ -559,13 +561,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             sectionView.showsVerticalScrollIndicator = YES;
             
             NSLayoutConstraint *lc1a = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                                  toItemBottom: constraintItem];
+                                                                             toItemBottom: constraintItem];
             [self.layoutConstraintsSectionsVerticalBuffer addObject:lc1a];
             [constraintsContainer addObject:lc1a];
             [viewDidAppearDesignerContentViewConstraints addObject:lc1a];
             
             NSLayoutConstraint *lc1b = [MADDesignerViewController layoutConstraintSection: sectionView
-                                                                                      toHeight: reportSection.height.floatValue];
+                                                                                 toHeight: reportSection.height.floatValue];
             NSManagedObjectID *objectId = [sectionView objectIdTag];
             NSString *key = [objectId key];
             self.layoutConstraintsReportSectionHeight[key] = lc1b;
@@ -887,8 +889,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         UIFont *font = [self.captionFont fontWithSize:(pointsize / scrollView.zoomScale)];
         NSDictionary *attributes = @{NSFontAttributeName : font};
+        
         for (MADDesignerSectionLabel *controlView in [self sectionControlViewsArray]) {
-            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size options:-1 attributes:attributes context:nil];
+            CGRect boundingRectWithSize = [controlView.text boundingRectWithSize:controlView.bounds.size
+                                                                         options:-1
+                                                                      attributes:attributes
+                                                                         context:nil];
             controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
             controlView.font = font;
             controlView.scale = self.scroller.zoomScale;
@@ -934,9 +940,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self.view setNeedsLayout];
         
         [self.detailDisplayView hide];
-        
     }
-    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -959,7 +963,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.detailDisplayView setText: [self.numberFormatterPercentage stringFromNumber:number]];
 }
 
-
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.scroller.container;
 }
@@ -972,8 +975,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.scroller.contentSize = CGSizeMake(self.scroller.frame.size.width, self.scroller.contentSize.height);
     }
 }
-
-
 
 #pragma mark - UIDocumentStateChangedNotification
 
@@ -1065,25 +1066,25 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     __weak UICollectionView *documentSectionView = [self getSectionViewForDocumentSection: documentSection];
 
-    if ([[documentSection numberOfRows] integerValue] == numberOfRows) {
+    if (documentSection.numberOfRows.integerValue == numberOfRows) {
         
         //No change
         
-    } else if (numberOfRows > [[documentSection numberOfRows] integerValue]) {
+    } else if (numberOfRows > documentSection.numberOfRows.integerValue) {
         
         //Add row
         RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
                                                                                 inManagedObjectContext: self.document.managedObjectContext];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[[documentSection hasRows] array]];
-        [newRowToAppend setInSection:documentSection];
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
+        newRowToAppend.inSection = documentSection;
         [hasRows addObject:newRowToAppend];
-        [documentSection setHasRows:hasRows];
+        documentSection.hasRows = hasRows;
         
-    } else if (numberOfRows < [[documentSection numberOfRows] integerValue]) {
+    } else if (numberOfRows < documentSection.numberOfRows.integerValue) {
         
         //Remove row
-        RptqDocumentSectionRows *rowToDelete = [[documentSection hasRows] lastObject];
-        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:[documentSection.hasRows array]];
+        RptqDocumentSectionRows *rowToDelete = documentSection.hasRows.lastObject;
+        NSMutableOrderedSet *hasRows = [[NSMutableOrderedSet alloc] initWithArray:documentSection.hasRows.array];
         [[hasRows lastObject] setInSection:nil];
         [hasRows removeObjectAtIndex:hasRows.count - 1];
         [documentSection setHasRows:hasRows];
@@ -1115,8 +1116,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)didUpdateLayout:(id)sender {
     MADDesignerSectionView *documentSectionView = (MADDesignerSectionView *)sender;
-    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID:[documentSectionView objectIdTag] inManagedObjectContext:self.document.managedObjectContext];
-    documentSection.height = @(documentSectionView.bounds.size.height);
+    RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: documentSectionView.objectIdTag
+                                                                    inManagedObjectContext: self.document.managedObjectContext];
+    NSNumber *height = @(documentSectionView.bounds.size.height);
+    documentSection.height = height;
     [self relayoutSectionView:documentSectionView];
     [self.document.managedObjectContext save:nil];
 }
@@ -1124,9 +1127,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - MTReportDesignerToolBoxDelegate
 
 - (void)toolboxHeightChanged:(CGFloat)newHeight {
-    CGSize newSize = CGSizeMake(320.0000f, newHeight);
-    [self.popoverControllerInformation setPopoverContentSize:newSize animated:YES];
-    [[self.popoverControllerInformation contentViewController] setPreferredContentSize:newSize];
+    self.popoverControllerInformation.contentViewController.preferredContentSize = CGSizeMake(320.0000f, newHeight);
+    [self.popoverControllerInformation setPopoverContentSize: self.popoverControllerInformation.contentViewController.preferredContentSize
+                                                    animated: YES];
 }
 
 - (void)hideToolbox {
@@ -1413,9 +1416,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         UIView *viewToEdit = [self viewForObjectID:objectId];
         
         if (viewToEdit != nil) {
-            CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
             UIStoryboard *storyboard = [MTApplicationInstance storyboard];
-            
             UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier];
             MTDocumentObjectNewAggregateViewController *aggregateViewController = [[navigationController viewControllers] firstObject];
             aggregateViewController.delegate = self;
@@ -1426,13 +1427,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                   toView:self.scroller.container];
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
             popoverController.delegate = self;
-            [popoverController setPopoverContentSize:popoverSize animated:NO];
+            popoverController.popoverContentSize = [MADDesignerViewController sizePopoverFonts];
             [popoverController presentPopoverFromRect: popoverRect
                                                inView: self.scroller.container
                              permittedArrowDirections: UIPopoverArrowDirectionAny
                                              animated: YES];
             [self setDisplayInactive];
-            [self setPopoverControllerEditBarcode: popoverController];
+            self.popoverControllerEditBarcode = popoverController;
         } else {
             self.objectIdEditAggregateFunction = object.objectID;
             [self performSegueWithIdentifier: MTIdentifierSegueDocumentObjectEditAggregate
@@ -1448,7 +1449,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)editDocumentObjectBarcode:(RptqDocumentObject *)object {
     if ([UIDevice isPad]) {
         
-        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
         UIView *viewToEdit = [self viewForObjectID:object.objectID];
         
         if (viewToEdit != nil) {
@@ -1460,31 +1460,35 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:object.objectID];
             RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
-            [self setBarcodeToEdit: barcodeObject];
-            [barcodeViewController setBarcodeToEdit: barcodeObject];
+            self.barcodeToEdit = barcodeObject;
+            barcodeViewController.barcodeToEdit = barcodeObject;
             
-            CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:self.scroller.container];
+            CGRect popoverRect = [viewToEdit convertRect: viewToEdit.bounds
+                                                  toView: self.scroller.container];
+            
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:barcodeViewController];
             popoverController.delegate = self;
-            [popoverController setPopoverContentSize:popoverSize animated:NO];
-            [popoverController presentPopoverFromRect:popoverRect
-                                               inView:self.scroller.container
-                             permittedArrowDirections:UIPopoverArrowDirectionAny
-                                             animated:YES];
+            
+            popoverController.popoverContentSize = [MADDesignerViewController sizePopoverFonts];
+            [popoverController presentPopoverFromRect: popoverRect
+                                               inView: self.scroller.container
+                             permittedArrowDirections: UIPopoverArrowDirectionAny
+                                             animated: YES];
             [self setDisplayInactive];
             
-            [self setPopoverControllerEditBarcode: popoverController];
-            
+            self.popoverControllerEditBarcode = popoverController;
         } else {
             self.objectIdEditBarcode = object.objectID;
-            [self performSegueWithIdentifier:MTIdentifierSegueDocumentObjectEditBarcode sender:self];
+            [self performSegueWithIdentifier: MTIdentifierSegueDocumentObjectEditBarcode
+                                      sender: self];
         }
         
         
         
     } else {
         self.objectIdEditBarcode = object.objectID;
-        [self performSegueWithIdentifier:MTIdentifierSegueDocumentObjectEditBarcode sender:self];
+        [self performSegueWithIdentifier: MTIdentifierSegueDocumentObjectEditBarcode
+                                  sender: self];
     }
 }
 
@@ -1493,13 +1497,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)editDocumentObjectLabelDynamic:(RptqDocumentObject *)object {
-    [self setEditDynamicField:YES];
-    
-    [self setObjectIdEditDynamicLabel:[object objectID]];
+
+    self.editDynamicField = YES;
+    self.objectIdEditDynamicLabel = object.objectID;
     if ([UIDevice isPad]) {
         
         CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f);
-        UIView *viewToEdit = [self viewForObjectID:[object objectID]];
+        UIView *viewToEdit = [self viewForObjectID:object.objectID];
         
         if (viewToEdit != nil) {
             
@@ -1508,16 +1512,19 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             chooseFieldViewController.document = self.document;
             chooseFieldViewController.delegate = self;
             
-            CGRect popoverRect = [viewToEdit convertRect:[viewToEdit bounds] toView:self.scroller.container];
+            CGRect popoverRect = [viewToEdit convertRect: viewToEdit.bounds
+                                                  toView: self.scroller.container];
+            
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:chooseFieldViewController];
             popoverController.delegate = self;
-            [popoverController setPopoverContentSize:popoverSize animated:NO];
-            [popoverController presentPopoverFromRect:popoverRect
-                                               inView:self.scroller.container
-                             permittedArrowDirections:UIPopoverArrowDirectionAny
-                                             animated:YES];
+            popoverController.popoverContentSize = [MADDesignerViewController sizePopoverFonts];
+            
+            [popoverController presentPopoverFromRect: popoverRect
+                                               inView: self.scroller.container
+                             permittedArrowDirections: UIPopoverArrowDirectionAny
+                                             animated: YES];
             [self setDisplayInactive];
-            [self setPopoverControllerEditDataLabel: popoverController];
+            self.popoverControllerEditDataLabel = popoverController;
         } else {
             [self performSegueWithIdentifier:@"MTIdentifierSegueEditField" sender:self];
         }
@@ -1563,26 +1570,25 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark -
 #pragma mark - MTViewControllerAggregateDelegate
 
-- (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
-                                inputType:(MTAggregateFunctionInputType)inputType
-                              inputObject:(NSManagedObject *)inputObject
-                                groupType:(MTAggregateGroupByType)groupType
-                              groupNumber:(NSNumber *)groupNumber {
+- (void)didUpdateggregateFunctionWithType: (MTAggregateFunctionType)functionType
+                                inputType: (MTAggregateFunctionInputType)inputType
+                              inputObject: (NSManagedObject *)inputObject
+                                groupType: (MTAggregateGroupByType)groupType
+                              groupNumber: (NSNumber *)groupNumber {
 
-    RptqDocumentObjectAggregate *aggregateToEdit = [self aggregateToEdit];
-    [aggregateToEdit updateAggregateFunctionWithFunctionType:functionType
-                                                   inputType:MTAggregateFunctionInputTypeField
-                                                   groupType:groupType
-                                             aggregateObject:(RptqQueryField *)inputObject
-                                                 groupNumber:labs((long)[groupNumber integerValue])];
+    [self.aggregateToEdit updateAggregateFunctionWithFunctionType: functionType
+                                                        inputType: MTAggregateFunctionInputTypeField
+                                                        groupType: groupType
+                                                  aggregateObject: (RptqQueryField *)inputObject
+                                                      groupNumber: labs((long)[groupNumber integerValue])];
 }
 
 #pragma mark -
 #pragma mark - MTQueryBuilderChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field {
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[[field managedObjectContext] objectWithID:[self objectIdEditDynamicLabel]];
-    [[documentObject isLabelDataField] setReferencesQueryField:field];
+    RptqDocumentObject *documentObject = (RptqDocumentObject *)[field.managedObjectContext objectWithID:self.objectIdEditDynamicLabel];
+    documentObject.isLabelDataField.referencesQueryField = field;
     [field.managedObjectContext save:nil];
 }
 
@@ -1594,9 +1600,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         NSManagedObjectID *objectId = [self objectIdEditStaticLabel];
         RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:objectId];
-
         UITextField *textField = [alertView textFieldAtIndex:0];
-        [documentObject.isLabel setText:textField.text];
+        documentObject.isLabel.text = textField.text;
         [self.document.managedObjectContext save:nil];
     }
 }
@@ -2050,12 +2055,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             }
         } else {
             
-            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[self.popoverControllerInformation passthroughViews]];
+            NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:self.popoverControllerInformation.passthroughViews];
             [passThroughViews addObject:elementView];
             
-            NSArray *allObjects = [self.elementViews allObjects];
-            [self.popoverControllerInformation setPassthroughViews:allObjects];
-            [self.popoverControllerInformation setPopoverContentSize: CGSizeMake(320.0000f, 300.0000f) animated:NO];
+            self.popoverControllerInformation.passthroughViews = self.elementViews.allObjects;
             
             [self repositionPopoverControllerInformationAnimated:YES];
             [self setDisplayInactive];
@@ -2069,12 +2072,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)deselectElementView:(MADDesignerElementView *)elementView animated:(BOOL)animated {
     
-    [self.selectedObjectIds removeObject:[elementView objectIdTag]];
+    [self.selectedObjectIds removeObject:elementView.objectIdTag];
     [self removeBorderFromView: elementView];
     
     if ([UIDevice isPad]) {
         
-        NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:[self.popoverControllerInformation passthroughViews]];
+        NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:self.popoverControllerInformation.passthroughViews];
         [passThroughViews removeObject:elementView];
         
         if ([self.popoverControllerInformation isPopoverVisible]) {
@@ -2095,7 +2098,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     switch (tooboxType) {
             
         case MTToolboxTypeElement:
-            [self.popoverControllerInformation setPassthroughViews:[[self elementViews] allObjects]];
+            [self.popoverControllerInformation setPassthroughViews:self.elementViews.allObjects];
             [self.viewControllerToolbox showToolboxWithObjectIds:self.selectedObjectIds];
             self.viewControllerToolbox.document = self.document;
             viewController = self.viewControllerToolbox;
@@ -2283,10 +2286,21 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)repositionPopoverControllerInformationAnimated:(BOOL)animated {
-    [self.popoverControllerInformation presentPopoverFromRect: self.rectForSelectedElements
-                                                       inView: self.scroller.container
-                                     permittedArrowDirections: UIPopoverArrowDirectionAny
-                                                     animated: animated];
+    if ([self respondsToSelector:@selector(popoverPresentationController)]) {
+        [self.popoverControllerInformation dismissPopoverAnimated: YES];
+        [self.popoverControllerInformation presentPopoverFromRect: self.rectForSelectedElements
+                                                           inView: self.scroller.container
+                                         permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                         animated: YES];
+        self.popoverControllerInformation.popoverContentSize = [MADDesignerViewController sizePopoverStyle];
+    } else {
+        [self.popoverControllerInformation presentPopoverFromRect: self.rectForSelectedElements
+                                                           inView: self.scroller.container
+                                         permittedArrowDirections: UIPopoverArrowDirectionAny
+                                                         animated: animated];
+        self.popoverControllerInformation.popoverContentSize = [MADDesignerViewController sizePopoverStyle];
+    }
+
 }
 
 - (CGPoint)locationOfPointInWindows:(CGPoint)point {
@@ -2482,8 +2496,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             self.viewControllerSectionLayoutSettings.tableView.contentInset = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
             
             if ([UIDevice isPad]) {
-                [self.popoverControllerSectionSettings setPopoverContentSize: CGSizeMake(320.0000f, 260.00000f)
-                                                                    animated: NO];
+                self.popoverControllerSectionSettings.popoverContentSize = [MADDesignerViewController sizePopoverSectionSettings];
                 self.popoverControllerSectionSettings.passthroughViews = @[label];
                 [self.popoverControllerSectionSettings presentPopoverFromRect: label.bounds
                                                                        inView: label
@@ -2501,7 +2514,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)redrawAllElementViewsInCollectionView:(UICollectionView *)collectionView {
     for (int i = 0; i < [collectionView numberOfItemsInSection:0]; i++) {
         NSIndexPath *insertedPath = [NSIndexPath indexPathForItem:i inSection:0];
-        MADDesignerElementView *elementView = [self elementViewAtIndexPath:insertedPath inCollectionView:collectionView];
+        MADDesignerElementView *elementView = [self elementViewAtIndexPath: insertedPath
+                                                          inCollectionView: collectionView];
         [elementView setNeedsDisplay];
     }
 }
@@ -2984,10 +2998,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark UIPopoverController Helpers
 
 - (void)setupPopoverControllers {
+    self.viewControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
     UIPopoverController *popoverControllerInformation = [MADDesignerViewController popoverWithContoller:self.viewControllerToolbox];
     popoverControllerInformation.delegate = self;
     self.popoverControllerInformation = popoverControllerInformation;
     
+    self.navigationControllerSectionLayoutSettings.preferredContentSize = [MADDesignerViewController sizePopoverSectionSettings];
     UIPopoverController *popoverControllerSectionSettings = [MADDesignerViewController popoverWithContoller:self.navigationControllerSectionLayoutSettings];
     popoverControllerSectionSettings.delegate = self;
     self.popoverControllerSectionSettings = popoverControllerSectionSettings;
@@ -3085,9 +3101,29 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return tap;
 }
 
++ (CGSize)sizePopoverDefault {
+    return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
+}
+
++ (CGSize)sizePopoverStyle {
+    return CGSizeMake(MADDefaultsPopooverWidth, 300.0000f);
+}
+
++ (CGSize)sizePopoverLayout {
+    return CGSizeMake(MADDefaultsPopooverWidth, 320.0000f);
+}
+
++ (CGSize)sizePopoverSectionSettings {
+    return CGSizeMake(MADDefaultsPopooverWidth, 100.0000f);
+}
+
++ (CGSize)sizePopoverFonts {
+    return CGSizeMake(MADDefaultsPopooverWidth, MADDefaultsPopooverHeight);
+}
+
 + (UIPopoverController *)popoverWithContoller:(UIViewController *)controller {
     UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:controller];
-    [popover setPopoverContentSize:CGSizeMake(320.0000f, 480.0000f) animated:NO];
+    popover.popoverContentSize = controller.preferredContentSize;
     return popover;
 }
 

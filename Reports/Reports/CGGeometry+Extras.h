@@ -131,12 +131,17 @@ CG_INLINE CGRect CGRectAdjustForScale(CGRect rect, CGFloat zoomScale);
 CG_INLINE CGRect
 CGRectAdjustForScale(CGRect rect, CGFloat zoomScale) {
     CGFloat scale = 1.0000f / zoomScale;
-    //if ( isless(scale, 1.0000f) ) {
+    if ( isless(scale, 1.0000f) ) {
         rect.origin.x *= scale;
         rect.origin.y *= scale;
         rect.size.width *= scale;
         rect.size.height *= scale;
-    //}
+    } else {
+        rect.origin.x *= zoomScale;
+        rect.origin.y *= zoomScale;
+        rect.size.width *= zoomScale;
+        rect.size.height *= zoomScale;
+    }
     return rect;
 }
 

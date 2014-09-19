@@ -21,6 +21,9 @@
 #import "RptqDocumentObject+Extras.h"
 #import "MTFont.h"
 
+const CGFloat MADDefaultsPopooverWidth              = 320.0000f;
+const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
+
 @interface MTReportDesignerToolBoxViewController ()
     <UINavigationBarDelegate, MTReportDesignerFontSettingsDelegate,
         MTReportDesignerFontSelectorDelegate>
@@ -93,15 +96,14 @@
 }
 
 - (CGFloat)contentHeight {
-    CGFloat newHeight = 320.0000f;
-    if ([[self sceneSelector] selectedSegmentIndex] == 0) {
-        if ([[[[self navigationBar] items] lastObject]  isEqual:[self navigationItemFontSelector]]) {
-            newHeight = 580.0000f;
-        }
-    } else if ([[self sceneSelector] selectedSegmentIndex] == 1) {
-        newHeight = 320.0000f;
+    switch (self.sceneSelector.selectedSegmentIndex) {
+        case 0:
+            return [self.navigationBar.items.lastObject isEqual:self.navigationItemFontSelector] ? MADDefaultsPopooverHeight : MADDefaultsPopooverWidth;
+            break;
+        default:
+            return MADDefaultsPopooverWidth;
+            break;
     }
-    return newHeight;
 }
 
 - (void)showToolboxWithObjectIds:(NSSet *)objectIds {

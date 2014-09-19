@@ -11,6 +11,9 @@
 
 #import <UIKit/UIKit.h>
 
+extern const CGFloat MADDefaultsPopooverWidth;
+extern const CGFloat MADDefaultsPopooverHeight;
+
 @class MADocument;
 
 @protocol MTReportDesignerToolBoxDelegate
