@@ -70,13 +70,15 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 }
 
 - (void)initalizeSegmentedControl {
-    UINavigationItem *navigationItem = [[self navigationBar] items][0];
-    [[navigationItem rightBarButtonItem] setTintColor:[UIColor tintColorRed]];
     
-    UISegmentedControl *segmentedControl = (UISegmentedControl *)[[navigationItem leftBarButtonItem] customView];
-    [segmentedControl setTintColor:[UIColor tintColorWhite]];
+    UINavigationItem *navigationItem = self.navigationBar.items[0];
+    navigationItem.rightBarButtonItem.tintColor = [UIColor tintColorRed];
+
+    UISegmentedControl *segmentedControl = (UISegmentedControl *)navigationItem.leftBarButtonItem.customView;
+    segmentedControl.tintColor = [UIColor tintColorWhite];
     [segmentedControl addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self setSceneSelector:segmentedControl];
+    self.sceneSelector = segmentedControl;
+    
 }
 
 - (void)viewDidLoad {

@@ -30,6 +30,7 @@
 
 + (instancetype)tintColorBlue { vendColor(13.0000f, 158.0000f, 215.0000f); }
 + (instancetype)tintColorRed { vendColor(222.0000f, 36.0000f, 72.0000f); }
++ (instancetype)tintColorBackground { vendColor(22.0000f, 106.0000f, 138.0000f); }
 + (instancetype)tintColorWhite { return [UIColor whiteColor]; }
 + (instancetype)tintColorWhiteAlpha { vendColorWithAlpha(255.0000f, 255.0000f, 255.0000f, 0.3333f); }
 + (instancetype)tintColorGold { vendColor(164.0000f, 157.0000f, 26.0000f); }

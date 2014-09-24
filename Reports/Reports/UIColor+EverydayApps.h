@@ -30,6 +30,7 @@
 + (instancetype)tintColorWhiteAlpha;
 + (instancetype)edaBlueLightBackground;
 + (instancetype)edaTableHeaderBackground;
++ (instancetype)tintColorBackground;
 + (instancetype)tintColorBlue;
 + (instancetype)tintColorRed;
 + (instancetype)tintColorWhite;

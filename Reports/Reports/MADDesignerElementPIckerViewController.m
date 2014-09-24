@@ -90,12 +90,30 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                                            withSender: sender];
 }
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    if ([UIDevice isModernOS]) {
+        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        [self.view addSubview: visualEffectsView];
+        self.navigationController.view.backgroundColor = [UIColor clearColor];
+        self.navigationController.view.opaque = NO;
+        self.collectionView.backgroundColor = [UIColor clearColor];
+        self.collectionView.opaque = NO;
+        self.view.backgroundColor = [UIColor clearColor];
+        self.view.opaque = NO;
+    }
     if ([UIDevice isPad]) {
-        CGSize contentSize = CGSizeMake(320.0000f, 420.0000f);
-        [self setPreferredContentSize:contentSize];
+        self.preferredContentSize = CGSizeMake(320.0000f, 420.0000f);
     };
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 #pragma mark - View lifecycle
@@ -131,7 +149,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {
-    [[self objectSelectorDelegate] viewControllerDidFinish: self];
+    [self.objectSelectorDelegate viewControllerDidFinish: self];
 }
 
 #pragma mark - UICollectionViewDataSource

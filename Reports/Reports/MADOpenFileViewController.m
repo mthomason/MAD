@@ -1462,11 +1462,15 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         cellDocument = (MTCollectionViewCellDocument *)contentView.superview;
     }
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Rename Document", @"Rename Document")
-                                                        message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
+    NSString *title = NSLocalizedString(@"Rename Document", @"Rename Document");
+    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
+    NSString *rename = NSLocalizedString(@"Rename", @"Rename");
+    NSString *message = NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.");
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: title
+                                                        message: message
                                                        delegate: self
-                                              cancelButtonTitle: NSLocalizedString(@"Cancel", @"Cancel")
-                                              otherButtonTitles: NSLocalizedString(@"Rename", @"Rename"), nil
+                                              cancelButtonTitle: cancel
+                                              otherButtonTitles: rename, nil
                               ];
     [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
     alertView.delegate = self;
@@ -1484,10 +1488,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     if ([MFMailComposeViewController canSendMail] == NO) {
         
         //Display an alert...
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: NSLocalizedString(@"Warning", @"Heading of a warning alert message.")
-                                                            message: NSLocalizedString(@"Device is not configured for email.", @"Warning that email is not setup.")
+        NSString *title = NSLocalizedString(@"Warning", @"Heading of a warning alert message.");
+        NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Warning that email is not setup.");
+        NSString *cancel = NSLocalizedString(@"OK", @"OK button on an alert message.");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: title
+                                                            message: message
                                                            delegate: nil
-                                                  cancelButtonTitle: NSLocalizedString(@"OK", @"OK button on an alert message.")
+                                                  cancelButtonTitle: cancel
                                                   otherButtonTitles: nil];
         [alertView show];
         

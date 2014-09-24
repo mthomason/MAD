@@ -267,7 +267,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     [super writeContents:contents andAttributes:additionalFileAttributes
              safelyToURL:self.urlGuts forSaveOperation:saveOperation error:outError];
     
-    
     [self wrapFileOverwrite: YES];
     
     NSError *fileWrapperError = nil;
