@@ -341,7 +341,8 @@ static MACloudManager *sharedSingleton;
     return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
 }
 
-+ (void)checkUserICloudPreferenceAndSetupIfNecessary {
++ (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion {
+
     // Check to see whether the user has previously selected the iCloud storage option.
     // If so, check the iCloud storage state from previous launch.
     // If the user has previously chosen to use iCloud and we're still signed in, setup the CloudManager with cloud storage enabled.
@@ -354,18 +355,23 @@ static MACloudManager *sharedSingleton;
     BOOL cloudOptionsDisplayed = [userDefaults boolForKey:MADPreferencesCloudOptionsSelected];
     BOOL cloudDesired = cloudOptionsDisplayed && [userDefaults boolForKey:MADPreferencesCloudDesired];
     BOOL cloudAvailble = ubiquityIdentityTokenCurrent != nil;
-    BOOL cloudPreviousllyAccessedWithDifferentToken = ubiquityIdentityTokenLastLaunch != nil && ![ubiquityIdentityTokenLastLaunch isEqual:ubiquityIdentityTokenCurrent];
+    BOOL cloudPreviousllyAccessedWithDifferentToken = ubiquityIdentityTokenLastLaunch != nil &&
+                                                        ![ubiquityIdentityTokenLastLaunch isEqual:ubiquityIdentityTokenCurrent];
     
     // Step 1: Ask user if they would like to use iCloud
     if (cloudAvailble && cloudOptionsDisplayed == NO) {
         
-        [self promptCloudDesired];
+        [self promptCloudDesired:^(BOOL desired) {
+            completion();
+        }];
         
         // Step 2: Detect switching to another account or deleting iCloud entirely
         
     } else if (cloudDesired && cloudPreviousllyAccessedWithDifferentToken) {
         
-        [self promptCloudSignOut];
+        [self promptCloudSignOut:^{
+            completion();
+        }];
         [[MACloudManager sharedManager] setIsCloudEnabled: cloudAvailble ];
         
     } else {
@@ -376,35 +382,23 @@ static MACloudManager *sharedSingleton;
     }
     
     // Step 4: If logged out of iCloud, reset the promopt that ask them if they would like to use iCloud
-    if (cloudAvailble) {
-        NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:ubiquityIdentityTokenCurrent];
-        [userDefaults setObject:newTokenData forKey:MTICloudUbiquityToken];
-    } else {
+    if (cloudAvailble == NO) {
         [userDefaults removeObjectForKey:MADPreferencesCloudDesired];
         [userDefaults removeObjectForKey:MTICloudUbiquityToken];
+    } else {
+        NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:ubiquityIdentityTokenCurrent];
+        [userDefaults setObject:newTokenData forKey:MTICloudUbiquityToken];
     }
     
 }
 
-+ (void)promptCloudSignOut {
++ (void)promptCloudSignOut:(void (^)(void))completion {
     NSString *title = @"iCloud Sign-Out";
     NSString *message = @"You have signed out of the iCloud account previously used to store documents.  Sign back in to access those documents.";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
                                                                              message: message
                                                                       preferredStyle: UIAlertControllerStyleAlert];
-    [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController presentViewController: alertController
-                                                                                                                                   animated: YES
-                                                                                                                                 completion: nil];
-}
-
-+ (void)promptCloudDesired {
-    NSString *title = @"Choose Storage Option";
-    NSString *message = @"Should documents be stored in iCloud or on just this device?";
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
-    
-    NSString *ok = @"OK";
+    NSString *ok = @"Dismiss";
     UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction *action) {
@@ -412,6 +406,30 @@ static MACloudManager *sharedSingleton;
                                                          [userDefaults setBool:YES forKey:MADPreferencesCloudDesired];
                                                          [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
                                                          [[MACloudManager sharedManager] setIsCloudEnabled:YES];
+                                                         completion();
+                                                     }];
+    [alertController addAction:actionKk];
+    [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController presentViewController: alertController
+                                                                                                                                   animated: YES
+                                                                                                                                 completion: nil];
+}
+
++ (void)promptCloudDesired:(void (^)(BOOL desired))completion {
+    NSString *title = @"Choose Storage Option";
+    NSString *message = @"Should documents be stored in iCloud or on just this device?";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    NSString *ok = @"iCloud";
+    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction *action) {
+                                                         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudDesired];
+                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
+                                                         [[MACloudManager sharedManager] setIsCloudEnabled:YES];
+                                                         completion(NO);
                                                      }];
     
     NSString *localOnly = @"Local only";
@@ -422,6 +440,7 @@ static MACloudManager *sharedSingleton;
                                                              [userDefaults setBool:NO  forKey:MADPreferencesCloudDesired];
                                                              [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
                                                              [[MACloudManager sharedManager] setIsCloudEnabled:NO];
+                                                             completion(YES);
                                                          }];
     
     [alertController addAction:actionKk];
