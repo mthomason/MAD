@@ -501,7 +501,6 @@
 		4C258029192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C258027192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.m */; };
 		4C258034192D017C00BE74EB /* MTDatabaseTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C258033192D017C00BE74EB /* MTDatabaseTest.m */; };
 		4C258035192D017C00BE74EB /* MTDatabaseTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C258033192D017C00BE74EB /* MTDatabaseTest.m */; };
-		4C25803E192D090F00BE74EB /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C258036192D01A000BE74EB /* XCTest.framework */; };
 		4C25803F192D090F00BE74EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C258040192D090F00BE74EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C258046192D090F00BE74EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C258044192D090F00BE74EB /* InfoPlist.strings */; };
@@ -1855,11 +1854,6 @@
 		4C1BB6ED1813D5110027C508 /* UIBarButtonItemMadDesigner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemMadDesigner.png; sourceTree = "<group>"; };
 		4C1BB6EE1813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadDesigner@2x.png"; sourceTree = "<group>"; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		4C202136163DD4090058F869 /* ReportsGeneralTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ReportsGeneralTest-Info.plist"; sourceTree = "<group>"; };
-		4C202138163DD4090058F869 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4C20213A163DD40A0058F869 /* ReportsGeneralTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReportsGeneralTest.h; sourceTree = "<group>"; };
-		4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReportsGeneralTest.m; sourceTree = "<group>"; };
-		4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReportsGeneralTest-Prefix.pch"; sourceTree = "<group>"; };
 		4C2213A317D746C200BD36F5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		4C2213AD17D7947800BD36F5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -2030,7 +2024,6 @@
 		4C258026192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheSelectGroupKeys.h; sourceTree = "<group>"; };
 		4C258027192CD8AF00BE74EB /* MTQueryCacheSelectGroupKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheSelectGroupKeys.m; sourceTree = "<group>"; };
 		4C258033192D017C00BE74EB /* MTDatabaseTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseTest.m; sourceTree = "<group>"; };
-		4C258036192D01A000BE74EB /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4C25803D192D090F00BE74EB /* MAD Designer Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C258043192D090F00BE74EB /* MAD Designer Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Designer Tests-Info.plist"; sourceTree = "<group>"; };
 		4C258045192D090F00BE74EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2559,11 +2552,6 @@
 		4C85C6A914FF72F3003785AC /* MADViewerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MADViewerController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C860AB0167ED98900AC1904 /* NSString+MTProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MTProtocol.h"; sourceTree = "<group>"; };
 		4C860AB1167ED98900AC1904 /* NSString+MTProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MTProtocol.m"; sourceTree = "<group>"; };
-		4C860BB0167EE19B00AC1904 /* MTDataStructuresTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTDataStructuresTest.h; path = MTDataStructuresTest/MTDataStructuresTest.h; sourceTree = SOURCE_ROOT; };
-		4C860BB1167EE19B00AC1904 /* MTDataStructuresTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MTDataStructuresTest-Prefix.pch"; path = "MTDataStructuresTest/MTDataStructuresTest-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		4C860BB2167EE19B00AC1904 /* MTDataStructuresTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTDataStructuresTest.m; path = MTDataStructuresTest/MTDataStructuresTest.m; sourceTree = SOURCE_ROOT; };
-		4C860BB3167EE19B00AC1904 /* MTDataStructuresTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "MTDataStructuresTest-Info.plist"; path = "MTDataStructuresTest/MTDataStructuresTest-Info.plist"; sourceTree = SOURCE_ROOT; };
-		4C860BBE167EE21100AC1904 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		4C87407815052D3D007FC473 /* MTClipboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTClipboardView.h; sourceTree = "<group>"; };
 		4C87407915052D3D007FC473 /* MTClipboardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTClipboardView.m; sourceTree = "<group>"; };
 		4C874084150787EC007FC473 /* RptqQueryGroup+Extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RptqQueryGroup+Extras.h"; sourceTree = "<group>"; };
@@ -3085,7 +3073,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C25803E192D090F00BE74EB /* XCTest.framework in Frameworks */,
 				4C258040192D090F00BE74EB /* UIKit.framework in Frameworks */,
 				4C25803F192D090F00BE74EB /* Foundation.framework in Frameworks */,
 			);
@@ -3502,26 +3489,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		4C202134163DD4090058F869 /* ReportsGeneralTest */ = {
-			isa = PBXGroup;
-			children = (
-				4C20213A163DD40A0058F869 /* ReportsGeneralTest.h */,
-				4C20213B163DD40A0058F869 /* ReportsGeneralTest.m */,
-				4C202135163DD4090058F869 /* Supporting Files */,
-			);
-			name = ReportsGeneralTest;
-			sourceTree = "<group>";
-		};
-		4C202135163DD4090058F869 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4C202136163DD4090058F869 /* ReportsGeneralTest-Info.plist */,
-				4C202137163DD4090058F869 /* InfoPlist.strings */,
-				4C20213D163DD40A0058F869 /* ReportsGeneralTest-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		4C23FAA018FAD672009F234F /* DataTable */ = {
 			isa = PBXGroup;
 			children = (
@@ -3668,9 +3635,7 @@
 		4C384E2714B29789007B4F48 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C0A077019C95EAC0059E1D9 /* StoreKit.framework */,
 				4CC7F6B51962A44000A84FC0 /* libscrimpter */,
-				4C258036192D01A000BE74EB /* XCTest.framework */,
 				4C77324B190FFC51005AE7C2 /* libMySqlClientObjectiveC */,
 				4C25A83D18BC2208002DA271 /* UAAppReviewManager */,
 				4C3A969F189F7E30007AF476 /* libbarcodes */,
@@ -3679,15 +3644,16 @@
 				4C3A969C189F7D51007AF476 /* libmtdatastructures */,
 				4C3A969B189F7D10007AF476 /* libmysqlclient */,
 				4C434AD518B5F3E800750B6B /* openssl */,
+				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
 				4CA54D3D18938801006B301A /* libSystem.dylib */,
 				4CA54D371893830E006B301A /* libsystem_pthread.dylib */,
 				4CA54D35189382FF006B301A /* libpthread.dylib */,
 				4CA54D3218938266006B301A /* libc++.dylib */,
 				4CDA76AF18257E4A00E462F6 /* libz.dylib */,
+				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
 				4C4A68B417E75D3F00FD6A73 /* CoreText.framework */,
 				4C2213AD17D7947800BD36F5 /* Accelerate.framework */,
-				4CD2FC9F17F3FE1E0015458B /* ReceiptModuleAsn1c */,
-				4C8C97B614C5C524007FB629 /* libxml2.dylib */,
+				4C0A077019C95EAC0059E1D9 /* StoreKit.framework */,
 				4C1A586B14E247C700184445 /* QuartzCore.framework */,
 				4CF2F27817564C8000DC34E3 /* MessageUI.framework */,
 				4C8C97B414C5C50B007FB629 /* Security.framework */,
@@ -4421,32 +4387,10 @@
 			isa = PBXGroup;
 			children = (
 				4C258033192D017C00BE74EB /* MTDatabaseTest.m */,
-				4C860AB7167EDD8B00AC1904 /* MTDataStructuresTest */,
-				4C202134163DD4090058F869 /* ReportsGeneralTest */,
 				4C1B7A58163E0D9400E331AA /* MySqlClientTest */,
 			);
 			name = Test;
 			path = ReportsGeneralTest;
-			sourceTree = "<group>";
-		};
-		4C860AB7167EDD8B00AC1904 /* MTDataStructuresTest */ = {
-			isa = PBXGroup;
-			children = (
-				4C860BBB167EE1E400AC1904 /* Supporting Files */,
-				4C860BB0167EE19B00AC1904 /* MTDataStructuresTest.h */,
-				4C860BB2167EE19B00AC1904 /* MTDataStructuresTest.m */,
-			);
-			name = MTDataStructuresTest;
-			sourceTree = "<group>";
-		};
-		4C860BBB167EE1E400AC1904 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4C860BB3167EE19B00AC1904 /* MTDataStructuresTest-Info.plist */,
-				4C860BBD167EE21100AC1904 /* InfoPlist.strings */,
-				4C860BB1167EE19B00AC1904 /* MTDataStructuresTest-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
@@ -7283,14 +7227,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		4C202137163DD4090058F869 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C202138163DD4090058F869 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		4C258044192D090F00BE74EB /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -7329,15 +7265,6 @@
 				4C43F224178C8E680069FD5B /* en */,
 			);
 			name = MTStoryboardReportDesigner.storyboard;
-			sourceTree = "<group>";
-		};
-		4C860BBD167EE21100AC1904 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C860BBE167EE21100AC1904 /* en */,
-			);
-			name = InfoPlist.strings;
-			path = en.lproj;
 			sourceTree = "<group>";
 		};
 		4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */ = {

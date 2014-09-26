@@ -18,12 +18,6 @@
 		4C4C6F151676360A004A3B04 /* MTGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F141676360A004A3B04 /* MTGraph.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C4C6F1816763959004A3B04 /* MTEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1716763959004A3B04 /* MTEdge.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C4C6F1B1676397A004A3B04 /* MTVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C6F1A1676397A004A3B04 /* MTVertex.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C7674B818F2F312007CEBD3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC7C27118F2EE9000784F32 /* XCTest.framework */; };
-		4C7674B918F2F312007CEBD3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
-		4C7674BA18F2F312007CEBD3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
-		4C7674C018F2F312007CEBD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C7674BE18F2F312007CEBD3 /* InfoPlist.strings */; };
-		4C7674C218F2F312007CEBD3 /* MTDataTableTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7674C118F2F312007CEBD3 /* MTDataTableTest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C7674CE18F2F391007CEBD3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC7C27118F2EE9000784F32 /* XCTest.framework */; };
 		4C7674CF18F2F391007CEBD3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C6EFF167635B8004A3B04 /* Foundation.framework */; };
 		4C7674D018F2F391007CEBD3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA16362167EB67C00540A14 /* UIKit.framework */; };
 		4C7674D618F2F391007CEBD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C7674D418F2F391007CEBD3 /* InfoPlist.strings */; };
@@ -43,13 +37,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4C7674C418F2F312007CEBD3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C4C6EF3167635B8004A3B04 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C4C6EFB167635B8004A3B04;
-			remoteInfo = libMTDataStrutures;
-		};
 		4C7674DA18F2F391007CEBD3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C4C6EF3167635B8004A3B04 /* Project object */;
@@ -95,12 +82,6 @@
 		4C4C6F1716763959004A3B04 /* MTEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEdge.m; sourceTree = "<group>"; };
 		4C4C6F191676397A004A3B04 /* MTVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTVertex.h; sourceTree = "<group>"; };
 		4C4C6F1A1676397A004A3B04 /* MTVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTVertex.m; sourceTree = "<group>"; };
-		4C64365418F7B11300C5104F /* libMTDataStrutures.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = libMTDataStrutures.xcodeproj; sourceTree = "<group>"; };
-		4C7674B718F2F312007CEBD3 /* MTDataTableTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MTDataTableTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C7674BD18F2F312007CEBD3 /* MTDataTableTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MTDataTableTest-Info.plist"; sourceTree = "<group>"; };
-		4C7674BF18F2F312007CEBD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4C7674C118F2F312007CEBD3 /* MTDataTableTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTDataTableTest.m; sourceTree = "<group>"; };
-		4C7674C318F2F312007CEBD3 /* MTDataTableTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MTDataTableTest-Prefix.pch"; sourceTree = "<group>"; };
 		4C7674CD18F2F391007CEBD3 /* MTGraphTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MTGraphTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7674D318F2F391007CEBD3 /* MTGraphTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MTGraphTest-Info.plist"; sourceTree = "<group>"; };
 		4C7674D518F2F391007CEBD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -114,11 +95,7 @@
 		4C8ECDDF16BF63E2003D3B30 /* MTProtocolEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolEnumerator.h; sourceTree = "<group>"; };
 		4CA162BB167B8F0600540A14 /* MTProtocolCompare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTProtocolCompare.h; sourceTree = "<group>"; };
 		4CA16362167EB67C00540A14 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		4CC7C25518F2EB4000784F32 /* libMTDataStrutures Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "libMTDataStrutures Tests-Info.plist"; sourceTree = "<group>"; };
-		4CC7C25718F2EB4000784F32 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4CC7C25918F2EB4000784F32 /* libMTDataStrutures_Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libMTDataStrutures_Test.m; sourceTree = "<group>"; };
-		4CC7C25B18F2EB4000784F32 /* libMTDataStrutures Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libMTDataStrutures Tests-Prefix.pch"; sourceTree = "<group>"; };
-		4CC7C27118F2EE9000784F32 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4CFFD94119D5C828001D0B02 /* MTGraphTest copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MTGraphTest copy-Info.plist"; path = "/Users/mthomason/Desktop/Reports/libMTDataStrutures/MTGraphTest copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,21 +107,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C7674B418F2F312007CEBD3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C7674B818F2F312007CEBD3 /* XCTest.framework in Frameworks */,
-				4C7674BA18F2F312007CEBD3 /* UIKit.framework in Frameworks */,
-				4C7674B918F2F312007CEBD3 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C7674CA18F2F391007CEBD3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C7674CE18F2F391007CEBD3 /* XCTest.framework in Frameworks */,
 				4C7674D018F2F391007CEBD3 /* UIKit.framework in Frameworks */,
 				4C7674CF18F2F391007CEBD3 /* Foundation.framework in Frameworks */,
 			);
@@ -157,11 +123,10 @@
 			isa = PBXGroup;
 			children = (
 				4C4C6F01167635B8004A3B04 /* libMTDataStrutures */,
-				4CC7C25318F2EB4000784F32 /* Tests */,
-				4C7674BB18F2F312007CEBD3 /* MTDataTableTest */,
 				4C7674D118F2F391007CEBD3 /* MTGraphTest */,
 				4C4C6EFE167635B8004A3B04 /* Frameworks */,
 				4C4C6EFD167635B8004A3B04 /* Products */,
+				4CFFD94119D5C828001D0B02 /* MTGraphTest copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -169,7 +134,6 @@
 			isa = PBXGroup;
 			children = (
 				4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */,
-				4C7674B718F2F312007CEBD3 /* MTDataTableTest.xctest */,
 				4C7674CD18F2F391007CEBD3 /* MTGraphTest.xctest */,
 			);
 			name = Products;
@@ -178,8 +142,6 @@
 		4C4C6EFE167635B8004A3B04 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C64365418F7B11300C5104F /* libMTDataStrutures.xcodeproj */,
-				4CC7C27118F2EE9000784F32 /* XCTest.framework */,
 				4C4C6EFF167635B8004A3B04 /* Foundation.framework */,
 				4CA16362167EB67C00540A14 /* UIKit.framework */,
 			);
@@ -219,30 +181,6 @@
 			path = libMTDataStrutures;
 			sourceTree = "<group>";
 		};
-		4C64365518F7B11300C5104F /* Products */ = {
-			isa = PBXGroup;
-			name = Products;
-			sourceTree = "<group>";
-		};
-		4C7674BB18F2F312007CEBD3 /* MTDataTableTest */ = {
-			isa = PBXGroup;
-			children = (
-				4C7674C118F2F312007CEBD3 /* MTDataTableTest.m */,
-				4C7674BC18F2F312007CEBD3 /* Supporting Files */,
-			);
-			path = MTDataTableTest;
-			sourceTree = "<group>";
-		};
-		4C7674BC18F2F312007CEBD3 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4C7674BD18F2F312007CEBD3 /* MTDataTableTest-Info.plist */,
-				4C7674BE18F2F312007CEBD3 /* InfoPlist.strings */,
-				4C7674C318F2F312007CEBD3 /* MTDataTableTest-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		4C7674D118F2F391007CEBD3 /* MTGraphTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,26 +196,6 @@
 				4C7674D318F2F391007CEBD3 /* MTGraphTest-Info.plist */,
 				4C7674D418F2F391007CEBD3 /* InfoPlist.strings */,
 				4C7674D918F2F391007CEBD3 /* MTGraphTest-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4CC7C25318F2EB4000784F32 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				4CC7C25918F2EB4000784F32 /* libMTDataStrutures_Test.m */,
-				4CC7C25418F2EB4000784F32 /* Supporting Files */,
-			);
-			name = Tests;
-			path = "libMTDataStrutures Tests";
-			sourceTree = "<group>";
-		};
-		4CC7C25418F2EB4000784F32 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4CC7C25518F2EB4000784F32 /* libMTDataStrutures Tests-Info.plist */,
-				4CC7C25618F2EB4000784F32 /* InfoPlist.strings */,
-				4CC7C25B18F2EB4000784F32 /* libMTDataStrutures Tests-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -301,24 +219,6 @@
 			productName = libMTDataStrutures;
 			productReference = 4C4C6EFC167635B8004A3B04 /* libMTDataStrutures.a */;
 			productType = "com.apple.product-type.library.static";
-		};
-		4C7674B618F2F312007CEBD3 /* MTDataTableTest */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4C7674C818F2F312007CEBD3 /* Build configuration list for PBXNativeTarget "MTDataTableTest" */;
-			buildPhases = (
-				4C7674B318F2F312007CEBD3 /* Sources */,
-				4C7674B418F2F312007CEBD3 /* Frameworks */,
-				4C7674B518F2F312007CEBD3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4C7674C518F2F312007CEBD3 /* PBXTargetDependency */,
-			);
-			name = MTDataTableTest;
-			productName = MTDataTableTest;
-			productReference = 4C7674B718F2F312007CEBD3 /* MTDataTableTest.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		4C7674CC18F2F391007CEBD3 /* MTGraphTest */ = {
 			isa = PBXNativeTarget;
@@ -347,9 +247,6 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Everyday Apps LLC";
 				TargetAttributes = {
-					4C7674B618F2F312007CEBD3 = {
-						TestTargetID = 4C4C6EFB167635B8004A3B04;
-					};
 					4C7674CC18F2F391007CEBD3 = {
 						TestTargetID = 4C4C6EFB167635B8004A3B04;
 					};
@@ -365,30 +262,15 @@
 			mainGroup = 4C4C6EF1167635B8004A3B04;
 			productRefGroup = 4C4C6EFD167635B8004A3B04 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 4C64365518F7B11300C5104F /* Products */;
-					ProjectRef = 4C64365418F7B11300C5104F /* libMTDataStrutures.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */,
-				4C7674B618F2F312007CEBD3 /* MTDataTableTest */,
 				4C7674CC18F2F391007CEBD3 /* MTGraphTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4C7674B518F2F312007CEBD3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C7674C018F2F312007CEBD3 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C7674CB18F2F391007CEBD3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -418,14 +300,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C7674B318F2F312007CEBD3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C7674C218F2F312007CEBD3 /* MTDataTableTest.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4C7674C918F2F391007CEBD3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -447,11 +321,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4C7674C518F2F312007CEBD3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */;
-			targetProxy = 4C7674C418F2F312007CEBD3 /* PBXContainerItemProxy */;
-		};
 		4C7674DB18F2F391007CEBD3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4C4C6EFB167635B8004A3B04 /* libMTDataStrutures */;
@@ -460,26 +329,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4C7674BE18F2F312007CEBD3 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C7674BF18F2F312007CEBD3 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		4C7674D418F2F391007CEBD3 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4C7674D518F2F391007CEBD3 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4CC7C25618F2EB4000784F32 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4CC7C25718F2EB4000784F32 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -577,71 +430,6 @@
 			};
 			name = Release;
 		};
-		4C7674C618F2F312007CEBD3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MTDataTableTest/MTDataTableTest-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "MTDataTableTest/MTDataTableTest-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		4C7674C718F2F312007CEBD3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MTDataTableTest/MTDataTableTest-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "MTDataTableTest/MTDataTableTest-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 		4C7674DD18F2F391007CEBD3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -724,15 +512,6 @@
 			buildConfigurations = (
 				4C4C6F0B167635B8004A3B04 /* Debug */,
 				4C4C6F0C167635B8004A3B04 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4C7674C818F2F312007CEBD3 /* Build configuration list for PBXNativeTarget "MTDataTableTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4C7674C618F2F312007CEBD3 /* Debug */,
-				4C7674C718F2F312007CEBD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -62,7 +62,7 @@
     [*object addObject:self.dog];
     [*object addObject:self.pi];
     [*object addObject:self.yes];
-    [*object addObject:self.rec];
+    //[*object addObject:self.rec];
 }
 
 - (void)tearDown {
@@ -82,7 +82,7 @@
     XCTAssertEqualObjects([[self array] objectAtIndex:1], self.dog, @"Object value check failed.");
     XCTAssertEqualObjects([[self array] objectAtIndex:2], self.pi, @"Object value check failed.");
     XCTAssertEqualObjects([[self array] objectAtIndex:3], self.yes, @"Object value check failed.");
-    XCTAssertEqualObjects([[self array] objectAtIndex:4], self.rec, @"Object value check failed.");
+    //XCTAssertEqualObjects([[self array] objectAtIndex:4], self.rec, @"Object value check failed.");
 }
 
 - (void)testCount {
