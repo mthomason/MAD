@@ -499,11 +499,11 @@
 		4C25803F192D090F00BE74EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C258040192D090F00BE74EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C258046192D090F00BE74EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C258044192D090F00BE74EB /* InfoPlist.strings */; };
-		4C258048192D090F00BE74EB /* MAD_Designer_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C258047192D090F00BE74EB /* MAD_Designer_Tests.m */; };
 		4C25A8CD18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C25A8CE18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22419D5D16800B7A417 /* Test_Cloud.m */; };
 		4C27381B191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1471,6 +1471,13 @@
 			remoteGlobalIDString = 4C7674CD18F2F391007CEBD3;
 			remoteInfo = MTGraphTest;
 		};
+		4C26F22619D5D16800B7A417 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C384E2314B29789007B4F48;
+			remoteInfo = "MAD Designer";
+		};
 		4C4C6F11167635B9004A3B04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
@@ -1491,13 +1498,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4CDA76CC1825E8D400E462F6;
 			remoteInfo = Barcodes;
-		};
-		4CDA76FC1825E8D500E462F6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CDA76F51825E8D400E462F6 /* Barcodes.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4CDA76DC1825E8D400E462F6;
-			remoteInfo = BarcodesTests;
 		};
 		4CEBFA371760EF8C00FFA4F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1840,12 +1840,14 @@
 		4C25803D192D090F00BE74EB /* MAD Designer Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C258043192D090F00BE74EB /* MAD Designer Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MAD Designer Tests-Info.plist"; sourceTree = "<group>"; };
 		4C258045192D090F00BE74EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4C258047192D090F00BE74EB /* MAD_Designer_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Designer_Tests.m; sourceTree = "<group>"; };
 		4C258049192D090F00BE74EB /* MAD Designer Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAD Designer Tests-Prefix.pch"; sourceTree = "<group>"; };
 		4C25A86718BC2209002DA271 /* UAAppReviewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAAppReviewManager.h; sourceTree = "<group>"; };
 		4C25A86818BC2209002DA271 /* UAAppReviewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAAppReviewManager.m; sourceTree = "<group>"; };
 		4C267AA718FA6BA80097D166 /* MTQueryCustomNoResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCustomNoResults.h; sourceTree = "<group>"; };
 		4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCustomNoResults.m; sourceTree = "<group>"; };
+		4C26F22019D5D16800B7A417 /* Test Cloud.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Cloud.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C26F22319D5D16800B7A417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C26F22419D5D16800B7A417 /* Test_Cloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
 		4C273819191AE4E600304A02 /* MTQueryCacheIndexCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexCreate.h; sourceTree = "<group>"; };
 		4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
 		4C273826191AE4FF00304A02 /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
@@ -2872,6 +2874,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4C26F21D19D5D16800B7A417 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C384E2114B29789007B4F48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -3307,13 +3316,13 @@
 			name = Activities;
 			sourceTree = "<group>";
 		};
-		4C258041192D090F00BE74EB /* MAD Designer Tests */ = {
+		4C258041192D090F00BE74EB /* Caching Array Test */ = {
 			isa = PBXGroup;
 			children = (
 				4CA14CE51968ED7E006D6F9B /* MTCachingArrayTest.m */,
-				4C258047192D090F00BE74EB /* MAD_Designer_Tests.m */,
 				4C258042192D090F00BE74EB /* Supporting Files */,
 			);
+			name = "Caching Array Test";
 			path = "MAD Designer Tests";
 			sourceTree = "<group>";
 		};
@@ -3344,6 +3353,32 @@
 				4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */,
 			);
 			name = "Custom SQL";
+			sourceTree = "<group>";
+		};
+		4C26F22119D5D16800B7A417 /* Test Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				4C26F22419D5D16800B7A417 /* Test_Cloud.m */,
+				4C26F22219D5D16800B7A417 /* Supporting Files */,
+			);
+			path = "Test Cloud";
+			sourceTree = "<group>";
+		};
+		4C26F22219D5D16800B7A417 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C26F22319D5D16800B7A417 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C26F22B19D5D1DE00B7A417 /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				4C258041192D090F00BE74EB /* Caching Array Test */,
+				4C26F22119D5D16800B7A417 /* Test Cloud */,
+			);
+			name = Test;
 			sourceTree = "<group>";
 		};
 		4C2F6E80194C9948009D192B /* Data Sources */ = {
@@ -3387,7 +3422,7 @@
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C860AB6167EDD7500AC1904 /* Test */,
 				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
-				4C258041192D090F00BE74EB /* MAD Designer Tests */,
+				4C26F22B19D5D1DE00B7A417 /* Test */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
 				4CFFD9F019D5CC54001D0B02 /* MySqlClientTest copy-Info.plist */,
@@ -3401,6 +3436,7 @@
 				4C0E785B163B5AEC003B951E /* MAD Viewer.app */,
 				4C94ADE817C3514100037FCB /* MAD Launch Images.app */,
 				4C25803D192D090F00BE74EB /* MAD Designer Tests.xctest */,
+				4C26F22019D5D16800B7A417 /* Test Cloud.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4775,7 +4811,6 @@
 			isa = PBXGroup;
 			children = (
 				4CDA76FB1825E8D500E462F6 /* libBarcodes.a */,
-				4CDA76FD1825E8D500E462F6 /* BarcodesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5073,9 +5108,9 @@
 			productReference = 4C0E785B163B5AEC003B951E /* MAD Viewer.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4C25803C192D090F00BE74EB /* MAD Designer Tests */ = {
+		4C25803C192D090F00BE74EB /* Caching Array Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4C25804C192D091000BE74EB /* Build configuration list for PBXNativeTarget "MAD Designer Tests" */;
+			buildConfigurationList = 4C25804C192D091000BE74EB /* Build configuration list for PBXNativeTarget "Caching Array Tests" */;
 			buildPhases = (
 				4C258039192D090F00BE74EB /* Sources */,
 				4C25803A192D090F00BE74EB /* Frameworks */,
@@ -5086,9 +5121,27 @@
 			dependencies = (
 				4C25804B192D090F00BE74EB /* PBXTargetDependency */,
 			);
-			name = "MAD Designer Tests";
+			name = "Caching Array Tests";
 			productName = "MAD Designer Tests";
 			productReference = 4C25803D192D090F00BE74EB /* MAD Designer Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4C26F21F19D5D16800B7A417 /* Test Cloud */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C26F22819D5D16800B7A417 /* Build configuration list for PBXNativeTarget "Test Cloud" */;
+			buildPhases = (
+				4C26F21C19D5D16800B7A417 /* Sources */,
+				4C26F21D19D5D16800B7A417 /* Frameworks */,
+				4C26F21E19D5D16800B7A417 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C26F22719D5D16800B7A417 /* PBXTargetDependency */,
+			);
+			name = "Test Cloud";
+			productName = "Test Cloud";
+			productReference = 4C26F22019D5D16800B7A417 /* Test Cloud.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		4C384E2314B29789007B4F48 /* MAD Designer */ = {
@@ -5145,6 +5198,10 @@
 						};
 					};
 					4C25803C192D090F00BE74EB = {
+						TestTargetID = 4C384E2314B29789007B4F48;
+					};
+					4C26F21F19D5D16800B7A417 = {
+						CreatedOnToolsVersion = 6.0.1;
 						TestTargetID = 4C384E2314B29789007B4F48;
 					};
 					4C384E2314B29789007B4F48 = {
@@ -5229,7 +5286,8 @@
 				4C384E2314B29789007B4F48 /* MAD Designer */,
 				4C0E771F163B5AEC003B951E /* MAD Viewer */,
 				4C94ADE717C3514100037FCB /* MAD Launch Images */,
-				4C25803C192D090F00BE74EB /* MAD Designer Tests */,
+				4C25803C192D090F00BE74EB /* Caching Array Tests */,
+				4C26F21F19D5D16800B7A417 /* Test Cloud */,
 			);
 		};
 /* End PBXProject section */
@@ -5261,13 +5319,6 @@
 			fileType = archive.ar;
 			path = libBarcodes.a;
 			remoteRef = 4CDA76FA1825E8D500E462F6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4CDA76FD1825E8D500E462F6 /* BarcodesTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = BarcodesTests.xctest;
-			remoteRef = 4CDA76FC1825E8D500E462F6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4CEBFA381760EF8C00FFA4F4 /* liblibTdsClient.a */ = {
@@ -5562,6 +5613,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C258046192D090F00BE74EB /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C26F21E19D5D16800B7A417 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6234,7 +6292,14 @@
 				4CA14CE61968ED7E006D6F9B /* MTCachingArrayTest.m in Sources */,
 				4C2DC49419638AE5003A9FB0 /* MTMath.m in Sources */,
 				4CA14CED19693E6D006D6F9B /* MTDatabaseCache.m in Sources */,
-				4C258048192D090F00BE74EB /* MAD_Designer_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C26F21C19D5D16800B7A417 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6772,6 +6837,11 @@
 			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
 			targetProxy = 4C25804A192D090F00BE74EB /* PBXContainerItemProxy */;
 		};
+		4C26F22719D5D16800B7A417 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
+			targetProxy = 4C26F22619D5D16800B7A417 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -6990,6 +7060,57 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+		4C26F22919D5D16800B7A417 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Test Cloud/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer.app/MAD Designer";
+			};
+			name = Debug;
+		};
+		4C26F22A19D5D16800B7A417 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Test Cloud/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer.app/MAD Designer";
 			};
 			name = Release;
 		};
@@ -7217,7 +7338,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4C25804C192D091000BE74EB /* Build configuration list for PBXNativeTarget "MAD Designer Tests" */ = {
+		4C25804C192D091000BE74EB /* Build configuration list for PBXNativeTarget "Caching Array Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4C25804D192D091000BE74EB /* Debug */,
@@ -7225,6 +7346,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		4C26F22819D5D16800B7A417 /* Build configuration list for PBXNativeTarget "Test Cloud" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C26F22919D5D16800B7A417 /* Debug */,
+				4C26F22A19D5D16800B7A417 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		4C384E1E14B29789007B4F48 /* Build configuration list for PBXProject "MAD" */ = {
 			isa = XCConfigurationList;
