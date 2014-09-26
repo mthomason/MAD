@@ -49,9 +49,9 @@
 
 //#import "MTStoreKitController.h"
 
-NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
-NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
-NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userprefsset";
+//NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
+//NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
+//NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userprefsset";
 
 
 const NSInteger MADTagAlertViewNewDocument = 3838;

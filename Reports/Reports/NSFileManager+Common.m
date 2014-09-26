@@ -43,12 +43,13 @@
 }
 
 - (NSSet *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension {
-    NSURL *documentsDataDirectory = [[MACloudManager sharedManager] documentsDataDirectoryURL];
-    return [self contentsOfDirectory:[documentsDataDirectory path] withPathExtension:extension];
+    return [self contentsOfDirectory: [MACloudManager sharedManager].documentsDirectoryURL.path
+                   withPathExtension: extension];
 }
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
-    return [self contentsOfDirectory:[self applicationDocumentsDirectory] withPathExtension:extension];
+    return [self contentsOfDirectory: [self applicationDocumentsDirectory]
+                   withPathExtension: extension];
 }
 
 - (NSSet *)contentsOfDirectory:(NSString *)directory withPathExtension:(NSString *)extension {

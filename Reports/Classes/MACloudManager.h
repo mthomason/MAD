@@ -9,17 +9,41 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
+NSString * const MTICloudUbiquityToken;
+NSString * const MTICloudUserEnabled;
+NSString * const MTICloudUserPrefsSet;
+
+
+NSString * const MADPreferencesCloudDesired;
+NSString * const MADPreferencesCloudOptionsSelected;
+
 NSString * const ICloudStateUpdatedNotification;
 NSString * const UbiquitousContainerFetchingWillBeginNotification;
 NSString * const UbiquitousContainerFetchingDidEndNotification;
 
+@protocol MADCloudManagerProtocol <NSObject>
+
+- (void)ubiquityIdentityDidChange;
+
+@end
+
 @interface MACloudManager : NSObject
 
+@property (nonatomic, weak) id <MADCloudManagerProtocol> delegate;
 @property (nonatomic, assign) BOOL isCloudEnabled;
-@property (nonatomic, retain, readonly) NSURL *dataDirectoryURL;
-@property (nonatomic, retain, readonly) NSURL *documentsDirectoryURL;
+@property (nonatomic, strong, readonly) NSURL *dataDirectoryURL;
+@property (nonatomic, strong, readonly) NSURL *documentsDirectoryURL;
 
-- (NSURL *)documentsDataDirectoryURL;   //Only used in version 1.0 of designer.
+@property (nonatomic, strong, readonly) NSURL *localTemporaryDirectory;
+@property (nonatomic, strong, readonly) NSURL *cachesDirectory;
+@property (nonatomic, strong, readonly) NSURL *applicationSupport;
+
+- (void)updateICloudEnabled:(NSNotification *)notification;
+- (NSURL *)cacheDirectoryNamed:(NSString *)handle;
+- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
+- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
+- (void)activate;
+
 + (MACloudManager *)sharedManager;
 
 @end

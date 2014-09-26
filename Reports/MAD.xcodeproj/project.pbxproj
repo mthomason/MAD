@@ -374,8 +374,8 @@
 		4C23FB0D18FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1018FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1118FADD17009F234F /* objcmad.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB0F18FADD17009F234F /* objcmad.c */; };
-		4C23FB1618FADD4C009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4C23FB1718FADD4D009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4C23FB1618FADD4C009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
+		4C23FB1718FADD4D009F234F /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
 		4C23FB1818FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1918FADD4D009F234F /* MTKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1518FADD4C009F234F /* MTKeyChain.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C23FB1C18FADD67009F234F /* MTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1A18FADD67009F234F /* MTLog.m */; };
@@ -504,6 +504,8 @@
 		4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22419D5D16800B7A417 /* Test_Cloud.m */; };
+		4C26F22F19D5D37D00B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
+		4C26F23019D5D37D00B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
 		4C27381B191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1703,8 +1705,8 @@
 		4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTableViewControllerBarcodeExtraQrCode.m; path = Classes/MTTableViewControllerBarcodeExtraQrCode.m; sourceTree = "<group>"; };
 		4C23FB0E18FADD17009F234F /* objcmad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objcmad.h; path = Classes/objcmad.h; sourceTree = "<group>"; };
 		4C23FB0F18FADD17009F234F /* objcmad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = objcmad.c; path = Classes/objcmad.c; sourceTree = "<group>"; };
-		4C23FB1218FADD4C009F234F /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = Classes/MACloudManager.h; sourceTree = "<group>"; };
-		4C23FB1318FADD4C009F234F /* MACloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MACloudManager.m; path = Classes/MACloudManager.m; sourceTree = "<group>"; };
+		4C23FB1218FADD4C009F234F /* MACloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MACloudManager.h; path = ../Classes/MACloudManager.h; sourceTree = "<group>"; };
+		4C23FB1318FADD4C009F234F /* MACloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MACloudManager.m; path = ../Classes/MACloudManager.m; sourceTree = "<group>"; };
 		4C23FB1418FADD4C009F234F /* MTKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTKeyChain.h; path = Classes/MTKeyChain.h; sourceTree = "<group>"; };
 		4C23FB1518FADD4C009F234F /* MTKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTKeyChain.m; path = Classes/MTKeyChain.m; sourceTree = "<group>"; };
 		4C23FB1A18FADD67009F234F /* MTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTLog.m; path = Classes/MTLog.m; sourceTree = "<group>"; };
@@ -1848,6 +1850,8 @@
 		4C26F22019D5D16800B7A417 /* Test Cloud.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Cloud.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C26F22319D5D16800B7A417 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C26F22419D5D16800B7A417 /* Test_Cloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_Cloud.m; sourceTree = "<group>"; };
+		4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileLocationManager.m; sourceTree = "<group>"; };
+		4C26F22E19D5D37D00B7A417 /* MADFileLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileLocationManager.h; sourceTree = "<group>"; };
 		4C273819191AE4E600304A02 /* MTQueryCacheIndexCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexCreate.h; sourceTree = "<group>"; };
 		4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
 		4C273826191AE4FF00304A02 /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
@@ -3020,6 +3024,7 @@
 		4C00818414B738E9003DF437 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C26F22C19D5D2C600B7A417 /* Cloud */,
 				4CA60E0519703F5300714AFF /* Notifications */,
 				4C2F6E80194C9948009D192B /* Data Sources */,
 				4C23FC2118FC323C009F234F /* Activities */,
@@ -3264,8 +3269,6 @@
 			children = (
 				4C23FB1418FADD4C009F234F /* MTKeyChain.h */,
 				4C23FB1518FADD4C009F234F /* MTKeyChain.m */,
-				4C23FB1218FADD4C009F234F /* MACloudManager.h */,
-				4C23FB1318FADD4C009F234F /* MACloudManager.m */,
 			);
 			name = Singletons;
 			path = ..;
@@ -3379,6 +3382,17 @@
 				4C26F22119D5D16800B7A417 /* Test Cloud */,
 			);
 			name = Test;
+			sourceTree = "<group>";
+		};
+		4C26F22C19D5D2C600B7A417 /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				4C23FB1218FADD4C009F234F /* MACloudManager.h */,
+				4C23FB1318FADD4C009F234F /* MACloudManager.m */,
+				4C26F22E19D5D37D00B7A417 /* MADFileLocationManager.h */,
+				4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */,
+			);
+			name = Cloud;
 			sourceTree = "<group>";
 		};
 		4C2F6E80194C9948009D192B /* Data Sources */ = {
@@ -5992,6 +6006,7 @@
 				4C23FBC318FAE4F7009F234F /* MTPaperB8.m in Sources */,
 				4C0CAB5C1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
 				4C0E775B163B5AEC003B951E /* MTQueryBuilderAddTableViewController.m in Sources */,
+				4C26F23019D5D37D00B7A417 /* MADFileLocationManager.m in Sources */,
 				4C0E775C163B5AEC003B951E /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */,
 				4C2F6E7E194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4C0E775D163B5AEC003B951E /* UITableViewControllerCoreDataResults.m in Sources */,
@@ -6356,6 +6371,7 @@
 				4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */,
 				4C23FB0818FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C0CAB5B1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
+				4C26F22F19D5D37D00B7A417 /* MADFileLocationManager.m in Sources */,
 				4CD0F7D814CD28E1003DA079 /* UITableViewCellOverride.m in Sources */,
 				4C2F6E7D194C38E4009D192B /* MTArrayDataSourceCollectionView.m in Sources */,
 				4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */,
