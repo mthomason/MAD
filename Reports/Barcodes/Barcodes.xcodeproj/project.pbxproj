@@ -260,7 +260,6 @@
 		4CDA76CC1825E8D400E462F6 /* libBarcodes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBarcodes.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA76CF1825E8D400E462F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CDA76D31825E8D400E462F6 /* Barcodes-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Barcodes-Prefix.pch"; sourceTree = "<group>"; };
-		4CDA76DD1825E8D400E462F6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4CDA76E01825E8D400E462F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		4CDA76FE1825EA1F00E462F6 /* 2of5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 2of5.c; sourceTree = "<group>"; };
 		4CDA76FF1825EA1F00E462F6 /* auspost.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = auspost.c; sourceTree = "<group>"; };
@@ -517,7 +516,6 @@
 				4CDA77621825EB0D00E462F6 /* libz.dylib */,
 				4CDA77601825EB0200E462F6 /* libm.dylib */,
 				4CDA76CF1825E8D400E462F6 /* Foundation.framework */,
-				4CDA76DD1825E8D400E462F6 /* XCTest.framework */,
 				4CDA76E01825E8D400E462F6 /* UIKit.framework */,
 			);
 			name = Frameworks;

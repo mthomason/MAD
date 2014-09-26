@@ -56,9 +56,7 @@
 		4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
 		4CF3C59E194F80F600E5705B /* MADScrimpter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CF3C59D194F80F600E5705B /* MADScrimpter.h */; };
 		4CF3C5A0194F80F600E5705B /* MADScrimpter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C59F194F80F600E5705B /* MADScrimpter.m */; };
-		4CF3C5A7194F80F600E5705B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5A6194F80F600E5705B /* XCTest.framework */; };
 		4CF3C5A8194F80F600E5705B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C598194F80F600E5705B /* Foundation.framework */; };
-		4CF3C5AA194F80F600E5705B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C5A9194F80F600E5705B /* UIKit.framework */; };
 		4CF3C5AD194F80F600E5705B /* libScrimpter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF3C595194F80F600E5705B /* libScrimpter.a */; };
 		4CF3C5B3194F80F600E5705B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3C5B1194F80F600E5705B /* InfoPlist.strings */; };
 		4CF3C5B5194F80F600E5705B /* ScrimpterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */; };
@@ -147,8 +145,6 @@
 		4CF3C59D194F80F600E5705B /* MADScrimpter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADScrimpter.h; sourceTree = "<group>"; };
 		4CF3C59F194F80F600E5705B /* MADScrimpter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADScrimpter.m; sourceTree = "<group>"; };
 		4CF3C5A5194F80F600E5705B /* ScrimpterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScrimpterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CF3C5A6194F80F600E5705B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		4CF3C5A9194F80F600E5705B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		4CF3C5B0194F80F600E5705B /* ScrimpterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ScrimpterTests-Info.plist"; sourceTree = "<group>"; };
 		4CF3C5B2194F80F600E5705B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CF3C5B4194F80F600E5705B /* ScrimpterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrimpterTests.m; sourceTree = "<group>"; };
@@ -171,9 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C1044AC1956765A00820EFE /* libMTDataStrutures.a in Frameworks */,
-				4CF3C5A7194F80F600E5705B /* XCTest.framework in Frameworks */,
 				4CF3C5AD194F80F600E5705B /* libScrimpter.a in Frameworks */,
-				4CF3C5AA194F80F600E5705B /* UIKit.framework in Frameworks */,
 				4CF3C5A8194F80F600E5705B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,8 +289,6 @@
 				4C1044AA1956764F00820EFE /* libMTDataStrutures.a */,
 				4CF3C5DA194FE0F300E5705B /* libstdc++.dylib */,
 				4CF3C598194F80F600E5705B /* Foundation.framework */,
-				4CF3C5A6194F80F600E5705B /* XCTest.framework */,
-				4CF3C5A9194F80F600E5705B /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

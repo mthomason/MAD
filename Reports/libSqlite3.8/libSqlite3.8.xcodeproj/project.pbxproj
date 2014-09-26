@@ -32,7 +32,6 @@
 		4C502A091818931D00C88CD4 /* libSqlite3.8-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libSqlite3.8-Prefix.pch"; sourceTree = "<group>"; };
 		4C502A0A1818931D00C88CD4 /* libSqlite3_8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libSqlite3_8.h; sourceTree = "<group>"; };
 		4C502A0C1818931D00C88CD4 /* libSqlite3_8.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libSqlite3_8.m; sourceTree = "<group>"; };
-		4C502A131818931D00C88CD4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4C502A161818931D00C88CD4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C502A341818934300C88CD4 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		4C502A351818934300C88CD4 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
@@ -72,7 +71,6 @@
 			isa = PBXGroup;
 			children = (
 				4C502A051818931D00C88CD4 /* Foundation.framework */,
-				4C502A131818931D00C88CD4 /* XCTest.framework */,
 				4C502A161818931D00C88CD4 /* UIKit.framework */,
 			);
 			name = Frameworks;
