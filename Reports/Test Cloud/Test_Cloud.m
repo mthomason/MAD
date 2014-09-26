@@ -19,7 +19,11 @@
 - (void)setUp {
     [super setUp];
 
+//    [[MACloudManager sharedManager]
     [[MACloudManager sharedManager] activate];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudDesired];
+    [MACloudManager checkUserICloudPreferenceAndSetupIfNecessary];
+    
 }
 
 - (void)tearDown {

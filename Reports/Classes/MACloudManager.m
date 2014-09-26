@@ -7,6 +7,7 @@
 //
 
 #import "MACloudManager.h"
+#import <UIKit/UIKit.h>
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "MADFileLocationManager.h"
@@ -338,6 +339,97 @@ static MACloudManager *sharedSingleton;
 
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
     return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
+}
+
++ (void)checkUserICloudPreferenceAndSetupIfNecessary {
+    // Check to see whether the user has previously selected the iCloud storage option.
+    // If so, check the iCloud storage state from previous launch.
+    // If the user has previously chosen to use iCloud and we're still signed in, setup the CloudManager with cloud storage enabled.
+    // If no user choice is recorded, use a UIAlert to fetch the user's preference.
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    id <NSObject, NSCopying, NSCoding> ubiquityIdentityTokenCurrent = [[NSFileManager defaultManager] ubiquityIdentityToken];
+    NSData *oldTokenData = [userDefaults objectForKey:MTICloudUbiquityToken];
+    id <NSObject, NSCopying, NSCoding> ubiquityIdentityTokenLastLaunch = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
+    
+    BOOL cloudOptionsDisplayed = [userDefaults boolForKey:MADPreferencesCloudOptionsSelected];
+    BOOL cloudDesired = cloudOptionsDisplayed && [userDefaults boolForKey:MADPreferencesCloudDesired];
+    BOOL cloudAvailble = ubiquityIdentityTokenCurrent != nil;
+    BOOL cloudPreviousllyAccessedWithDifferentToken = ubiquityIdentityTokenLastLaunch != nil && ![ubiquityIdentityTokenLastLaunch isEqual:ubiquityIdentityTokenCurrent];
+    
+    // Step 1: Ask user if they would like to use iCloud
+    if (cloudAvailble && cloudOptionsDisplayed == NO) {
+        
+        [self promptCloudDesired];
+        
+        // Step 2: Detect switching to another account or deleting iCloud entirely
+        
+    } else if (cloudDesired && cloudPreviousllyAccessedWithDifferentToken) {
+        
+        [self promptCloudSignOut];
+        [[MACloudManager sharedManager] setIsCloudEnabled: cloudAvailble ];
+        
+    } else {
+        
+        // Step 3: Setup cloud manager based of desire and availability
+        [[MACloudManager sharedManager] setIsCloudEnabled: cloudDesired && cloudAvailble ];
+        
+    }
+    
+    // Step 4: If logged out of iCloud, reset the promopt that ask them if they would like to use iCloud
+    if (cloudAvailble) {
+        NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:ubiquityIdentityTokenCurrent];
+        [userDefaults setObject:newTokenData forKey:MTICloudUbiquityToken];
+    } else {
+        [userDefaults removeObjectForKey:MADPreferencesCloudDesired];
+        [userDefaults removeObjectForKey:MTICloudUbiquityToken];
+    }
+    
+}
+
++ (void)promptCloudSignOut {
+    NSString *title = @"iCloud Sign-Out";
+    NSString *message = @"You have signed out of the iCloud account previously used to store documents.  Sign back in to access those documents.";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController presentViewController: alertController
+                                                                                                                                   animated: YES
+                                                                                                                                 completion: nil];
+}
+
++ (void)promptCloudDesired {
+    NSString *title = @"Choose Storage Option";
+    NSString *message = @"Should documents be stored in iCloud or on just this device?";
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    NSString *ok = @"OK";
+    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction *action) {
+                                                         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudDesired];
+                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
+                                                         [[MACloudManager sharedManager] setIsCloudEnabled:YES];
+                                                     }];
+    
+    NSString *localOnly = @"Local only";
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: localOnly
+                                                           style: UIAlertActionStyleCancel
+                                                         handler: ^(UIAlertAction *action) {
+                                                             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                                                             [userDefaults setBool:NO  forKey:MADPreferencesCloudDesired];
+                                                             [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
+                                                             [[MACloudManager sharedManager] setIsCloudEnabled:NO];
+                                                         }];
+    
+    [alertController addAction:actionKk];
+    [alertController addAction:actionCancel];
+    
+    [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController  presentViewController: alertController
+                                                                                                                                    animated: YES
+                                                                                                                                  completion: nil];
 }
 
 @end

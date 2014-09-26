@@ -51,4 +51,6 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 + (NSString *)filenameId:(NSUInteger)tag;
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
++ (void)checkUserICloudPreferenceAndSetupIfNecessary;
+
 @end
