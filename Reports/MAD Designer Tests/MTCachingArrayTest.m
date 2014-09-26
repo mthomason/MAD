@@ -41,7 +41,6 @@
     [self setDog:@"dog"];
     [self setPi:@3.14];
     [self setYes:@YES];
-    [self setRec:[NSValue valueWithCGSize:CGSizeMake(100.0000f, 300.0000f)]];
     
     NSMutableArray *arrayControl = [[NSMutableArray alloc] init];
     [self addObjectsToArray:&arrayControl];
@@ -62,7 +61,6 @@
     [*object addObject:self.dog];
     [*object addObject:self.pi];
     [*object addObject:self.yes];
-    //[*object addObject:self.rec];
 }
 
 - (void)tearDown {
@@ -86,7 +84,7 @@
 }
 
 - (void)testCount {
-    XCTAssertEqual([[self array] count], 5, @"Object value check failed.");
+    XCTAssertEqual([[self array] count], 4, @"Object value check failed.");
 }
 
 - (void)testEnum {
@@ -123,7 +121,7 @@
 - (void)testLargeEnum {
 
     [self addLotsOfNumbersToArrays];
-    NSUInteger objCtr = 0;
+    NSUInteger objCtr = 4;
     for (id obj in [self array]) {
         XCTAssertEqualObjects(obj, [[self arrayControl] objectAtIndex:objCtr], @"Object value check failed.");
         objCtr++;

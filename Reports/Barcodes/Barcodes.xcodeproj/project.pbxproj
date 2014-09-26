@@ -74,12 +74,6 @@
 		4C95CBD21830107900160E01 /* MTBarcodeAusPostStandardCustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBD11830107900160E01 /* MTBarcodeAusPostStandardCustomer.m */; };
 		4C95CBD51830149E00160E01 /* MTBarcodeCode128Iso15417.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C95CBD41830149E00160E01 /* MTBarcodeCode128Iso15417.m */; };
 		4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CF1825E8D400E462F6 /* Foundation.framework */; };
-		4CDA76DE1825E8D400E462F6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76DD1825E8D400E462F6 /* XCTest.framework */; };
-		4CDA76DF1825E8D400E462F6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CF1825E8D400E462F6 /* Foundation.framework */; };
-		4CDA76E11825E8D400E462F6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76E01825E8D400E462F6 /* UIKit.framework */; };
-		4CDA76E41825E8D400E462F6 /* libBarcodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA76CC1825E8D400E462F6 /* libBarcodes.a */; };
-		4CDA76EA1825E8D400E462F6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA76E81825E8D400E462F6 /* InfoPlist.strings */; };
-		4CDA76EC1825E8D400E462F6 /* BarcodesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA76EB1825E8D400E462F6 /* BarcodesTests.m */; };
 		4CDA77361825EA1F00E462F6 /* 2of5.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA76FE1825EA1F00E462F6 /* 2of5.c */; };
 		4CDA77371825EA1F00E462F6 /* auspost.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA76FF1825EA1F00E462F6 /* auspost.c */; };
 		4CDA77381825EA1F00E462F6 /* aztec.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA77001825EA1F00E462F6 /* aztec.c */; };
@@ -112,16 +106,6 @@
 		4CDA77541825EA1F00E462F6 /* telepen.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA77331825EA1F00E462F6 /* telepen.c */; };
 		4CDA77551825EA1F00E462F6 /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA77341825EA1F00E462F6 /* upcean.c */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4CDA76E21825E8D400E462F6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CDA76C41825E8D400E462F6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4CDA76CB1825E8D400E462F6;
-			remoteInfo = Barcodes;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4CDA76CA1825E8D400E462F6 /* CopyFiles */ = {
@@ -276,12 +260,8 @@
 		4CDA76CC1825E8D400E462F6 /* libBarcodes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBarcodes.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA76CF1825E8D400E462F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CDA76D31825E8D400E462F6 /* Barcodes-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Barcodes-Prefix.pch"; sourceTree = "<group>"; };
-		4CDA76DC1825E8D400E462F6 /* BarcodesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarcodesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA76DD1825E8D400E462F6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4CDA76E01825E8D400E462F6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		4CDA76E71825E8D400E462F6 /* BarcodesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BarcodesTests-Info.plist"; sourceTree = "<group>"; };
-		4CDA76E91825E8D400E462F6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4CDA76EB1825E8D400E462F6 /* BarcodesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BarcodesTests.m; sourceTree = "<group>"; };
 		4CDA76FE1825EA1F00E462F6 /* 2of5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 2of5.c; sourceTree = "<group>"; };
 		4CDA76FF1825EA1F00E462F6 /* auspost.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = auspost.c; sourceTree = "<group>"; };
 		4CDA77001825EA1F00E462F6 /* aztec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aztec.c; sourceTree = "<group>"; };
@@ -346,17 +326,6 @@
 				4C434B2C18B5F60C00750B6B /* MobileCoreServices.framework in Frameworks */,
 				4CDA76D01825E8D400E462F6 /* Foundation.framework in Frameworks */,
 				4C5CB71E189D1A1700BB5AF8 /* libpng.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4CDA76D91825E8D400E462F6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CDA76DE1825E8D400E462F6 /* XCTest.framework in Frameworks */,
-				4CDA76E11825E8D400E462F6 /* UIKit.framework in Frameworks */,
-				4CDA76E41825E8D400E462F6 /* libBarcodes.a in Frameworks */,
-				4CDA76DF1825E8D400E462F6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,7 +496,6 @@
 			isa = PBXGroup;
 			children = (
 				4CDA76D11825E8D400E462F6 /* Barcodes */,
-				4CDA76E51825E8D400E462F6 /* BarcodesTests */,
 				4CDA76CE1825E8D400E462F6 /* Frameworks */,
 				4CDA76CD1825E8D400E462F6 /* Products */,
 			);
@@ -537,7 +505,6 @@
 			isa = PBXGroup;
 			children = (
 				4CDA76CC1825E8D400E462F6 /* libBarcodes.a */,
-				4CDA76DC1825E8D400E462F6 /* BarcodesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -577,24 +544,6 @@
 			isa = PBXGroup;
 			children = (
 				4CDA76D31825E8D400E462F6 /* Barcodes-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4CDA76E51825E8D400E462F6 /* BarcodesTests */ = {
-			isa = PBXGroup;
-			children = (
-				4CDA76EB1825E8D400E462F6 /* BarcodesTests.m */,
-				4CDA76E61825E8D400E462F6 /* Supporting Files */,
-			);
-			path = BarcodesTests;
-			sourceTree = "<group>";
-		};
-		4CDA76E61825E8D400E462F6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4CDA76E71825E8D400E462F6 /* BarcodesTests-Info.plist */,
-				4CDA76E81825E8D400E462F6 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -678,24 +627,6 @@
 			productReference = 4CDA76CC1825E8D400E462F6 /* libBarcodes.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		4CDA76DB1825E8D400E462F6 /* BarcodesTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4CDA76F21825E8D400E462F6 /* Build configuration list for PBXNativeTarget "BarcodesTests" */;
-			buildPhases = (
-				4CDA76D81825E8D400E462F6 /* Sources */,
-				4CDA76D91825E8D400E462F6 /* Frameworks */,
-				4CDA76DA1825E8D400E462F6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4CDA76E31825E8D400E462F6 /* PBXTargetDependency */,
-			);
-			name = BarcodesTests;
-			productName = BarcodesTests;
-			productReference = 4CDA76DC1825E8D400E462F6 /* BarcodesTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -718,21 +649,9 @@
 			projectRoot = "";
 			targets = (
 				4CDA76CB1825E8D400E462F6 /* Barcodes */,
-				4CDA76DB1825E8D400E462F6 /* BarcodesTests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		4CDA76DA1825E8D400E462F6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CDA76EA1825E8D400E462F6 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4CDA76C81825E8D400E462F6 /* Sources */ = {
@@ -837,34 +756,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4CDA76D81825E8D400E462F6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4CDA76EC1825E8D400E462F6 /* BarcodesTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4CDA76E31825E8D400E462F6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4CDA76CB1825E8D400E462F6 /* Barcodes */;
-			targetProxy = 4CDA76E21825E8D400E462F6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		4CDA76E81825E8D400E462F6 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4CDA76E91825E8D400E462F6 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4CDA76ED1825E8D400E462F6 /* Debug */ = {
@@ -977,42 +869,6 @@
 			};
 			name = Release;
 		};
-		4CDA76F31825E8D400E462F6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "BarcodesTests/BarcodesTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		4CDA76F41825E8D400E462F6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Barcodes/Barcodes-Prefix.pch";
-				INFOPLIST_FILE = "BarcodesTests/BarcodesTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1030,15 +886,6 @@
 			buildConfigurations = (
 				4CDA76F01825E8D400E462F6 /* Debug */,
 				4CDA76F11825E8D400E462F6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4CDA76F21825E8D400E462F6 /* Build configuration list for PBXNativeTarget "BarcodesTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4CDA76F31825E8D400E462F6 /* Debug */,
-				4CDA76F41825E8D400E462F6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
