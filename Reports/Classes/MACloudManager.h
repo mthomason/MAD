@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "Constants.h"
+#import <Foundation/Foundation.h>
+
+extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 
 NSString * const MTICloudUbiquityToken;
 NSString * const MTICloudUserEnabled;
@@ -30,10 +31,11 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 @interface MACloudManager : NSObject
 
 @property (nonatomic, weak) id <MADCloudManagerProtocol> delegate;
+
 @property (nonatomic, assign) BOOL isCloudEnabled;
+
 @property (nonatomic, strong, readonly) NSURL *dataDirectoryURL;
 @property (nonatomic, strong, readonly) NSURL *documentsDirectoryURL;
-
 @property (nonatomic, strong, readonly) NSURL *localTemporaryDirectory;
 @property (nonatomic, strong, readonly) NSURL *cachesDirectory;
 @property (nonatomic, strong, readonly) NSURL *applicationSupport;
@@ -43,7 +45,10 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 - (void)activate;
+- (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
 
 + (MACloudManager *)sharedManager;
++ (NSString *)filenameId:(NSUInteger)tag;
++ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
 @end

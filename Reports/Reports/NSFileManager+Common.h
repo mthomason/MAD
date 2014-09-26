@@ -9,11 +9,9 @@
 #ifndef Reports_NSFileManager_Common_h
 #define Reports_NSFileManager_Common_h
 
-#import "Constants.h"
+#import <Foundation/Foundation.h>
 
 @interface NSFileManager (Common)
-
-- (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 
@@ -25,9 +23,6 @@
 - (NSURL *)localTemporaryDirectory;
 + (NSString *)cachedPath;
 + (NSURL *)cacheDirectory;
-
-+ (NSString *)filenameId:(NSUInteger)tag;
-+ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
 
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle;
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;

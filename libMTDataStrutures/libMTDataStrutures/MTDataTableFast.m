@@ -23,7 +23,7 @@
 #import "MTDatabaseSqlite3.h"
 #import "MTPair.h"
 #import "MTDatabaseConnectionSqlite3.h"
-
+#import "MACloudManager.h"
 
 @interface MTDataTableFast ()
 
@@ -191,7 +191,7 @@
 }
 
 - (NSURL *)urlFastCache {
-    NSString *filename = [NSFileManager filenameId:self.tag extention:@"maddb"];
+    NSString *filename = [MACloudManager filenameId:self.tag extention:@"maddb"];
     NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager cacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }

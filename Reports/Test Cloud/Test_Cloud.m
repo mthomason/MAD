@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import "MACloudManager.h"
 
 @interface Test_Cloud : XCTestCase
 
@@ -17,7 +18,8 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+
+    [[MACloudManager sharedManager] activate];
 }
 
 - (void)tearDown {
@@ -26,6 +28,8 @@
 }
 
 - (void)testExample {
+    NSLog(@"%@", [MACloudManager sharedManager].documentsDirectoryURL);
+    NSLog(@"%@", [MACloudManager sharedManager].isCloudEnabled ? @"YES" : @"NO");
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
 }

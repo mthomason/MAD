@@ -226,7 +226,6 @@ extern NSString * const MTPersistentStoreAliasMad;
 extern NSString * const MTPersistentStoreAliasUserPreferences;
 
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
-extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 extern NSString * const MTDocumentExtentionSqlite3;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;

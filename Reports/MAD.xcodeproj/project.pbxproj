@@ -506,6 +506,10 @@
 		4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22419D5D16800B7A417 /* Test_Cloud.m */; };
 		4C26F22F19D5D37D00B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
 		4C26F23019D5D37D00B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
+		4C26F23119D5E25100B7A417 /* MACloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB1318FADD4C009F234F /* MACloudManager.m */; };
+		4C26F23219D5E25C00B7A417 /* NSURL+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F20164D76270070E880 /* NSURL+Document.m */; };
+		4C26F23319D5E27A00B7A417 /* NSFileManager+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00818A14B745C9003DF437 /* NSFileManager+Common.m */; };
+		4C26F23419D5E40300B7A417 /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22D19D5D37D00B7A417 /* MADFileLocationManager.m */; };
 		4C27381B191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -6314,6 +6318,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C26F23419D5E40300B7A417 /* MADFileLocationManager.m in Sources */,
+				4C26F23319D5E27A00B7A417 /* NSFileManager+Common.m in Sources */,
+				4C26F23219D5E25C00B7A417 /* NSURL+Document.m in Sources */,
+				4C26F23119D5E25100B7A417 /* MACloudManager.m in Sources */,
 				4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6946,6 +6954,11 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAD_VIEWER=1",
+					"MAD_DESIGNER=0",
+					"DEBUG=1",
+				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "madview-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -6990,6 +7003,10 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAD_VIEWER=1",
+					"MAD_DESIGNER=0",
+				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "madview-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -7092,7 +7109,7 @@
 					"$(inherited)",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					"MAD_TEST=1",
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -7226,6 +7243,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAD_VIEWER=0",
+					"MAD_DESIGNER=1",
+					"DEBUG=1",
+				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -7269,6 +7291,10 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Reports/Reports-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MAD_VIEWER=0",
+					"MAD_DESIGNER=1",
+				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

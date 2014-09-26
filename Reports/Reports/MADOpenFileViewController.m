@@ -38,6 +38,7 @@
 #import "MADFileManager.h"
 #import "MADUpgradeManager.h"
 #import "NSError+UserInterface.h"
+#import "MACloudManager.h"
 
 NSString * const MTSegueShowAddDocument = @"showAddDocument";
 NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
@@ -1444,9 +1445,8 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
         }
     }
     if (urls.count > 0) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
         for (NSURL *url in urls) {
-            [fileManager duplicateUrl:url];
+            [[MACloudManager sharedManager] duplicateUrl:url];
         }
         [self reloadData];
     }

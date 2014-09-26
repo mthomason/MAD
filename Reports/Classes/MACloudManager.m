@@ -7,11 +7,11 @@
 //
 
 #import "MACloudManager.h"
-#import "MTApplicationInstance.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "MADFileLocationManager.h"
-#import "Constants.h"
+
+NSString * const MTDocumentExtentionMobleApplicationDocumentArchive = @"mada";
 
 NSString * const MTICloudUbiquityToken          = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
 NSString * const MTICloudUserEnabled            = @"com.everydayapps.mad.icloud.userenabled";
@@ -24,8 +24,11 @@ NSString * const ICloudStateUpdatedNotification                     = @"ICloudSt
 NSString * const UbiquitousContainerFetchingWillBeginNotification   = @"UbiquitousContainerFetchingWillBeginNotification";
 NSString * const UbiquitousContainerFetchingDidEndNotification      = @"UbiquitousContainerFetchingDidEndNotification";
 
-NSString * const MADDesignerUbiquityIdentifier                      = @"iCloud.com.everydayapps.mad.designer";
-NSString * const MADViewerUbiquityIdentifier                        = @"iCloud.com.everydayapps.mad.viewer";
+#if MAD_DESIGNER == 1 || MAD_TEST == 1
+NSString * const MADUbiquityIdentifier                              = @"iCloud.com.everydayapps.mad.designer";
+#elif MAD_VIEWER == 1
+NSString * const MADUbiquityIdentifier                              = @"iCloud.com.everydayapps.mad.viewer";
+#endif
 
 @interface MACloudManager ()
 
@@ -63,9 +66,7 @@ static MACloudManager *sharedSingleton;
 
 - (id)init {
     if (self = [super init]) {
-        NSString *ubiquityIdentifier = [MTApplicationInstance isMadDesigner] ?
-        MADDesignerUbiquityIdentifier : MADViewerUbiquityIdentifier;
-        sharedSingleton.ubiquityIdentifier = ubiquityIdentifier;
+        sharedSingleton.ubiquityIdentifier = MADUbiquityIdentifier;
         
         NSString *homeDirectory = NSHomeDirectory();
         NSString *pathTemporaryDirectory = NSTemporaryDirectory();
@@ -228,7 +229,7 @@ static MACloudManager *sharedSingleton;
 
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
     NSString *handle = [fileUrl filenameMinusExtention];
-    NSString *fileNameId = [NSFileManager filenameId:[handle hash]];
+    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
     return [self cacheDirectoryNamed:fileNameId];
 }
 
@@ -238,7 +239,8 @@ static MACloudManager *sharedSingleton;
     
     NSURL *cachedArrayDirectories = [self.cachesDirectory URLByAppendingPathComponent:handle isDirectory:YES];
     BOOL exist, isDirectory;
-    exist = [fileManager fileExistsAtPath:[cachedArrayDirectories path] isDirectory:&isDirectory];
+    exist = [fileManager fileExistsAtPath: cachedArrayDirectories.path
+                              isDirectory: &isDirectory];
     if (exist == NO || isDirectory == NO) {
         NSError *error = nil;
         [fileManager createDirectoryAtURL: cachedArrayDirectories
@@ -305,6 +307,37 @@ static MACloudManager *sharedSingleton;
     }
     
     return result;
+}
+
+- (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
+    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
+    NSString *lastPathComponent = [urlToDupe lastPathComponent];
+    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
+    NSString *extention = [lastPathComponent pathExtension];
+    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
+                                 withDesiredHandle:handle
+                                      andExtension:extention];
+    NSError *error = nil; NSInteger tryCounter = 0;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    while ([fileManager copyItemAtURL:urlToDupe toURL:uniqueUrl error:&error] == NO) {
+        tryCounter++;
+        if (tryCounter > 2) {
+            break;
+        }
+        error = nil;
+    }
+    if (error || tryCounter > 2) {
+        uniqueUrl = nil;
+    }
+    return uniqueUrl;
+}
+
++ (NSString *)filenameId:(NSUInteger)tag {
+    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+}
+
++ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
+    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
 }
 
 @end

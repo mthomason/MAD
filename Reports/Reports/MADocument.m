@@ -69,6 +69,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "RptqQueryField.h"
 
+#import "MACloudManager.h"
+
 /*
  {
  additionalContent =     {
@@ -346,17 +348,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
-    MTLog(@"%s %@\n\n", __PRETTY_FUNCTION__, [error localizedDescription]);
-    
-    if (false) {
-        NSArray *errors = [error userInfo][NSDetailedErrorsKey];
-        if (errors != nil && errors.count > 0) {
-            for (NSError *error in errors) {
-                MTLog(@"  Error: %@", error.userInfo);
-            }
-        }
-    }
-    
+    MTLog([error localizedDescription]);
+    MTLog(@"%s %@", __PRETTY_FUNCTION__, [error userInfo][NSDetailedErrorsKey]);
+
     BOOL showError = NO;
     switch ([error code]) {
         case 260:
@@ -375,7 +369,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
             [err presentErrorToUser];
         } withObject:error andSuccess:YES];
     }
-    MTLog(@"  %@", error.userInfo);
 }
 
 
@@ -754,7 +747,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [NSFileManager filenameId:[filename hash]];
+    NSString *filenameId = [MACloudManager filenameId:[filename hash]];
     return [[NSFileManager defaultManager] cacheDirectoryNamed:filenameId];
 }
 
@@ -943,7 +936,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 + (NSURL *)cachedUrlForHash:(NSUInteger)hash andExtension:(NSString *)extension {
-    NSString *fileName = [NSFileManager filenameId:hash extention:extension];
+    NSString *fileName = [MACloudManager filenameId:hash extention:extension];
     NSURL *cachedDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileName];
     return [cachedDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
@@ -978,7 +971,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSString *fileName = [handle stringByAppendingString:@"1024"];
     fileName = [fileName stringByAppendingPathExtension:@"png"];
     
-    NSString *fileNameId = [NSFileManager filenameId:[handle hash]];
+    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
     
@@ -988,7 +981,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSString *extention = [UIDevice isRetnaDisplay] ? @"@2x.png": @".png";
     NSString *fileName = [handle stringByAppendingString:extention];
     
-    NSString *fileNameId = [NSFileManager filenameId:handle.hash];
+    NSString *fileNameId = [MACloudManager filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }

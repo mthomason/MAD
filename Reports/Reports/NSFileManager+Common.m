@@ -9,37 +9,13 @@
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "MACloudManager.h"
-#import "MTLog.h"
-#import "Constants.h"
 
 @implementation NSFileManager (Common)
 
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
     NSString *handle = [fileUrl filenameMinusExtention];
-    NSString *fileNameId = [NSFileManager filenameId:[handle hash]];
+    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
     return [self cacheDirectoryNamed:fileNameId];
-}
-
-- (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
-    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
-    NSString *lastPathComponent = [urlToDupe lastPathComponent];
-    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
-    NSString *extention = [lastPathComponent pathExtension];
-    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
-                                 withDesiredHandle:handle
-                                      andExtension:extention];
-    NSError *error = nil; NSInteger tryCounter = 0;
-    while ([self copyItemAtURL:urlToDupe toURL:uniqueUrl error:&error] == NO) {
-        tryCounter++;
-        if (tryCounter > 2) {
-            break;
-        }
-        error = nil;
-    }
-    if (error || tryCounter > 2) {
-        uniqueUrl = nil;
-    }
-    return uniqueUrl;
 }
 
 - (NSSet *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension {
@@ -135,14 +111,6 @@
     return [NSURL fileURLWithPath:cachesPath isDirectory:YES];
 }
 
-+ (NSString *)filenameId:(NSUInteger)tag {
-    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-}
-
-+ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
-    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
-}
-
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle {
     NSURL *cachedArrayDirectories = [[NSFileManager cacheDirectory] URLByAppendingPathComponent:handle isDirectory:YES];
     BOOL exist, isDirectory;
@@ -167,7 +135,7 @@
         if (isDirectory) {
             
             BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
-                MTLog(@"Error %@", error);
+                NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
                 return YES;
             };
             NSArray *requestedKeys = @[NSURLIsDirectoryKey];
@@ -180,7 +148,7 @@
                 
                 [self removeItemAtURL:file error:&error];
                 if (error != nil) {
-                    MTLog(@"Error %@", error);
+                    NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
                     [self removeItemAtURL:file error:&error];
                 }
                 
@@ -188,14 +156,14 @@
             
             [self removeItemAtURL:destinationUrl error:&deleteError];
             if (deleteError != nil) {
-                MTLog(@"%@", deleteError);
+                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
                 [self removeItemAtURL:destinationUrl error:&deleteError];
             }
             
         } else {
             [self removeItemAtURL:destinationUrl error:&deleteError];
             if (deleteError != nil) {
-                MTLog(@"%@", deleteError);
+                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
                 [self removeItemAtURL:destinationUrl error:&deleteError];
             }
         }

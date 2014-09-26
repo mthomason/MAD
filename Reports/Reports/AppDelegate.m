@@ -47,13 +47,6 @@
 #import "MADUpgradeManager.h"
 #import "NSError+UserInterface.h"
 
-//#import "MTStoreKitController.h"
-
-//NSString * const MTICloudUbiquityToken  = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
-//NSString * const MTICloudUserEnabled    = @"com.everydayapps.mad.icloud.userenabled";
-//NSString * const MTICloudUserPrefsSet   = @"com.everydayapps.mad.icloud.userprefsset";
-
-
 const NSInteger MADTagAlertViewNewDocument = 3838;
 const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it will be enabled,
                                                     //  load window in willFinishLaunchingWithOptions
@@ -105,6 +98,7 @@ static void uncaughtExceptionHandler(NSException *exception) {
     id initViewController = [storyBoard instantiateInitialViewController];
     window.rootViewController = initViewController;
     [window makeKeyAndVisible];
+    
     self.window = window;
     self.storyboard = storyBoard;
 }
