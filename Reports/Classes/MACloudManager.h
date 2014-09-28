@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
+extern NSString * const MTDocumentExtentionMobleApplicationDocument;
 
 NSString * const MTICloudUbiquityToken;
 NSString * const MTICloudUserEnabled;
@@ -32,25 +33,30 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 
 @property (nonatomic, weak) id <MADCloudManagerProtocol> delegate;
 
-@property (nonatomic, assign) BOOL isCloudEnabled;
-
+@property (nonatomic, assign, getter=isCloudEnabled, readonly) BOOL cloudEnabled;
 @property (nonatomic, strong, readonly) NSURL *dataDirectoryURL;
 @property (nonatomic, strong, readonly) NSURL *documentsDirectoryURL;
 @property (nonatomic, strong, readonly) NSURL *localTemporaryDirectory;
 @property (nonatomic, strong, readonly) NSURL *cachesDirectory;
 @property (nonatomic, strong, readonly) NSURL *applicationSupport;
-
-- (void)updateICloudEnabled:(NSNotification *)notification;
-- (NSURL *)cacheDirectoryNamed:(NSString *)handle;
-- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
-- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
-- (void)activate;
-- (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
+@property (nonatomic, assign, readonly) BOOL cloudDesired;
+@property (nonatomic, assign, readonly) BOOL cloudAvailble;
+@property (nonatomic, assign, readonly) BOOL cloudOptionsPresentedAndSelectedByUser;
 
 + (MACloudManager *)sharedManager;
+
+- (void)activate;
+- (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion;
+
+- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
+
+- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification;
+
+- (NSURL *)cacheDirectoryNamed:(NSString *)handle;
+- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
+- (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
+
 + (NSString *)filenameId:(NSUInteger)tag;
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
-
-+ (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion;
 
 @end

@@ -14,7 +14,7 @@
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
 #import "NSError+UserInterface.h"
-#import "Constants.h"
+#import "MACloudManager.h"
 
 @interface MTUser()
 
@@ -31,8 +31,7 @@
 }
 
 - (NSArray *)hasMadDocuments {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSSet *madFiles = [fileManager contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
+    NSSet *madFiles = [[MACloudManager sharedManager] contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
     SEL selectorPath = @selector(path);
     SEL selectorSort = @selector(localizedStandardCompare:);
     NSString *key = NSStringFromSelector(selectorPath);
@@ -48,7 +47,5 @@
     [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:error];
     return error == nil;
 }
-
-
 
 @end

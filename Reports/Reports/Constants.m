@@ -42,7 +42,6 @@ NSString * const MTDocumentTypeUtiMad                               = @"com.ever
 NSString * const MTSampleDatabaseChinook                            = @"chinook";
 
 NSString * const PDF_PATH_EXTENSION                                 = @"pdf";
-NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
 NSString * const MTDocumentExtentionSqlite3                         = @"sqlite3";
 NSString * const MTDocumentExtentionMobleApplicationDocumentData    = @"madd";
 NSString * const MTDocumentExtentionPoratableNetworkGraphic         = @"png";

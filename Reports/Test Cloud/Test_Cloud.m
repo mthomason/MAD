@@ -18,9 +18,31 @@
 
 - (void)setUp {
 
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter addObserver: [MACloudManager sharedManager]
+                      selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+                          name: NSUbiquityIdentityDidChangeNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationUpdateCloudEnabled:)
+                          name: ICloudStateUpdatedNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
+                          name: UbiquitousContainerFetchingWillBeginNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
+                          name: UbiquitousContainerFetchingDidEndNotification
+                        object: nil];
+    
     [[MACloudManager sharedManager] activate];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudDesired];
-    [MACloudManager checkUserICloudPreferenceAndSetupIfNecessary:^{
+    [[MACloudManager sharedManager] checkUserICloudPreferenceAndSetupIfNecessary:^{
 
         [super setUp];
         
@@ -30,6 +52,29 @@
 
 - (void)tearDown {
     [super tearDown];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter removeObserver: [MACloudManager sharedManager]
+                             name: NSUbiquityIdentityDidChangeNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: ICloudStateUpdatedNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UbiquitousContainerFetchingWillBeginNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UbiquitousContainerFetchingDidEndNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                           object: nil];
+
 }
 
 - (void)testExample {
@@ -37,6 +82,27 @@
     NSLog(@"%@", [MACloudManager sharedManager].isCloudEnabled ? @"YES" : @"NO");
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
+}
+
+- (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Start timer, and display activity indictor if it takes too long
+    //  to bring back a ubiquitous container.
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Remove activity indictor for ubiquitous container.
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
+- (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
+    // FIXME: Implement logic for cloud status enabled change.
+    //  Pop to root view controller / file view controller.
+    //  Reload file view controller, getting docs from new
+    //  cloud container.
+    
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, notification);
+    
 }
 
 @end

@@ -21,6 +21,7 @@
 #import "UIColor+EverydayApps.h"
 #import "UIApplication+Extras.h"
 #import "MTErrorContainer.h"
+#import "MACloudManager.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Set connection settings.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";

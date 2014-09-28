@@ -13,10 +13,6 @@
 
 @interface NSFileManager (Common)
 
-- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
-
-- (NSSet *)contentsOfDocumentsDataDirectoryWithPathExtension:(NSString *)extension;
-
 - (NSURL *)applicationSupportDirectory;
 - (NSString *)applicationDocumentsDirectory;
 

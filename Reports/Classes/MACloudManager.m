@@ -13,6 +13,7 @@
 #import "MADFileLocationManager.h"
 
 NSString * const MTDocumentExtentionMobleApplicationDocumentArchive = @"mada";
+NSString * const MTDocumentExtentionMobleApplicationDocument = @"mad";
 
 NSString * const MTICloudUbiquityToken          = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
 NSString * const MTICloudUserEnabled            = @"com.everydayapps.mad.icloud.userenabled";
@@ -32,7 +33,7 @@ NSString * const MADUbiquityIdentifier                              = @"iCloud.c
 #endif
 
 @interface MACloudManager ()
-
+    <MADFileLocationManagerDelegate>
 @property (nonatomic, strong, readwrite) NSURL *ubiquityContainer;
 @property (nonatomic, strong, readwrite) NSURL *dataDirectoryURL;
 @property (nonatomic, strong, readwrite) NSURL *documentsDirectoryURL;
@@ -50,11 +51,34 @@ NSString * const MADUbiquityIdentifier                              = @"iCloud.c
 
 @property (nonatomic, strong) MADFileLocationManager *fileLocationManager;
 
+@property (atomic, assign) BOOL checkingCloudPreferencesLock;
+
+@property (nonatomic, assign, readwrite) BOOL cloudDesired;
+@property (nonatomic, assign, readwrite) BOOL cloudAvailble;
+@property (nonatomic, assign, readwrite) BOOL cloudOptionsPresentedAndSelectedByUser;
+
+@property (nonatomic, strong) NSMutableSet *madUrls;
+
+@property (nonatomic, strong) NSFileCoordinator *fileCoordinator;
+@property (nonatomic, strong) NSFileManager *fileManager;
+
 @end
 
 @implementation MACloudManager
 
 static MACloudManager *sharedSingleton;
+
+- (id)debugQuickLookObject {
+    NSMutableString *debuggingString = [NSMutableString new];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(isCloudEnabled)), self.isCloudEnabled ? @"YES" : @"NO"];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudDesired)), self.cloudDesired ? @"YES" : @"NO"];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudAvailble)), self.cloudAvailble ? @"YES" : @"NO"];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudOptionsPresentedAndSelectedByUser)), self.cloudOptionsPresentedAndSelectedByUser ? @"YES" : @"NO"];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityContainer)), self.ubiquityContainer];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityIdentifier)), self.ubiquityIdentifier];
+    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(madUrls)), self.madUrls];
+    return debuggingString;
+}
 
 + (void)initialize {
     if (self == [MACloudManager self]) {
@@ -65,9 +89,30 @@ static MACloudManager *sharedSingleton;
 
 + (void)load { }
 
+- (void)resetForDebugging {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudDesired];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MTICloudUbiquityToken];
+}
+
 - (id)init {
     if (self = [super init]) {
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudOptionsSelected];
+            [self resetForDebugging];
+        });
+        
         sharedSingleton.ubiquityIdentifier = MADUbiquityIdentifier;
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+
+        self.fileManager = fileManager;
+        self.fileCoordinator = fileCoordinator;
+        
+        NSMutableSet *madUrls = [NSMutableSet new];
+        self.madUrls = madUrls;
         
         NSString *homeDirectory = NSHomeDirectory();
         NSString *pathTemporaryDirectory = NSTemporaryDirectory();
@@ -82,20 +127,17 @@ static MACloudManager *sharedSingleton;
         NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSURL *docsUrl = [NSURL fileURLWithPath:docPaths.firstObject isDirectory:YES];
         
-        MADFileLocationManager *fileManager = [[MADFileLocationManager alloc] initWithPathExtension:@"mad"];
-        self.fileLocationManager = fileManager;
+        MADFileLocationManager *fileLocationManager = [[MADFileLocationManager alloc] initWithPathExtension:@"mad"];
+        self.fileLocationManager = fileLocationManager;
         self.localHomeDirectory = homeDirectoryUrl;
         self.localTemporaryDirectory = urlTemporaryDirectory;
         self.cachesDirectory = cacheUrl;
         self.localDocumentDirectory = docsUrl;
-        
+        self.checkingCloudPreferencesLock = NO;
+        self.fileLocationManager.delegate = self;
+
     }
     return self;
-}
-
-- (void)activate {
-    [self updateFileStorageContainerURL:nil];
-    [self.fileLocationManager startQuery];
 }
 
 + (instancetype)allocWithZone:(NSZone *)zone {
@@ -110,189 +152,101 @@ static MACloudManager *sharedSingleton;
     return sharedSingleton;
 }
 
-- (void)setIsCloudEnabled:(BOOL)isCloudEnabled {
-    
-    // Asynchronously update our data directory URL and documents directory URL
-    // If we're enabling cloud storage, we move any local documents into the cloud container after the URLs are updated.
-    
-    if (isCloudEnabled != _isCloudEnabled) {    //if changed
-        _isCloudEnabled = isCloudEnabled;
-        NSURL *oldDocumentsDirectoryURL = self.documentsDirectoryURL != nil ? self.documentsDirectoryURL : self.localDocumentDirectory;
-        NSURL *oldDataDirectoryURL = self.dataDirectoryURL != nil ? self.dataDirectoryURL : self.localTemporaryDirectory;
-        
-        __weak MACloudManager *weakself = self;
-        [self updateFileStorageContainerURL:^(void) {
-            if (isCloudEnabled) {
-                
-                //Migrate files...
-                
-                NSDirectoryEnumerationOptions enumerationOptions = NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                NSDirectoryEnumerationSkipsPackageDescendants |
-                NSDirectoryEnumerationSkipsHiddenFiles;
-                
-                NSError *readDocumentsError = nil;
-                NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-                NSArray *localDocuments = [defaultFileManager contentsOfDirectoryAtURL: oldDocumentsDirectoryURL
-                                                            includingPropertiesForKeys: nil
-                                                                               options: enumerationOptions
-                                                                                 error: &readDocumentsError];
-                NSError *readPreviewsError = nil;
-                NSArray *localPreviews = [defaultFileManager contentsOfDirectoryAtURL: oldDataDirectoryURL
-                                                           includingPropertiesForKeys: nil
-                                                                              options: enumerationOptions
-                                                                                error: &readPreviewsError];
-                
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                    
-                    NSFileManager* fileManager = [NSFileManager defaultManager];
-                    NSURL *newDataDirectoryURL = weakself.dataDirectoryURL;
-                    NSURL *newDocumentsDirectoryURL = weakself.documentsDirectoryURL;
-                    
-                    for (NSURL *documentURL in localDocuments) {
-                        if ([documentURL.pathExtension isEqualToString: MTDocumentExtentionMobleApplicationDocumentArchive]) {
-                            NSURL *destinationURL = [newDocumentsDirectoryURL URLByAppendingPathComponent:documentURL.lastPathComponent];
-                            [fileManager setUbiquitous: YES
-                                             itemAtURL: documentURL
-                                        destinationURL: destinationURL
-                                                 error: nil];
-                        }
-                    }
-                    
-                    for (NSURL *previewURL in localPreviews) {
-                        if ([previewURL.pathExtension isEqualToString: @"preview"]) {
-                            NSURL* destinationURL = [newDataDirectoryURL URLByAppendingPathComponent:previewURL.lastPathComponent];
-                            [fileManager setUbiquitous: YES
-                                             itemAtURL: previewURL
-                                        destinationURL: destinationURL
-                                                 error: nil];
-                        }
-                    }
-                    
-                });
-            }
-        }];
-        [[NSNotificationCenter defaultCenter] postNotificationName: ICloudStateUpdatedNotification
-                                                            object: nil];
-    }
-}
+#pragma mark - NSNotification Handlers
 
-- (void)updateFileStorageContainerURL:(void (^)(void))completionHandler {
+- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     
-    @synchronized (self) {
-        
-        self.dataDirectoryURL = nil;
-        if (self.isCloudEnabled) {
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName: UbiquitousContainerFetchingWillBeginNotification
-                                                                object: nil];
-            
-            __weak MACloudManager *weakself = self;
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-                
-                NSURL *url = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier: weakself.ubiquityIdentifier];   //This call may be SLOW, so only do on BACKGROUND thread.
-                [weakself setDataAndDocumentUrlsWithBaseUrl:url];
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    
-                    [[NSNotificationCenter defaultCenter] postNotificationName: UbiquitousContainerFetchingDidEndNotification
-                                                                        object: nil];
-                    
-                    if (completionHandler) {
-                        completionHandler();
-                    }
-                    
-                });
-            });
-        } else {
-            [self setDataAndDocumentUrlsWithBaseUrl:self.localHomeDirectory];
-        }
-    }
-}
-
-- (void)setDataAndDocumentUrlsWithBaseUrl:(NSURL *)url {
-    self.ubiquityContainer = url;
-    
-    if (self.isCloudEnabled) {
-        NSURL *dataDirectory = [url URLByAppendingPathComponent:@"Data"];
-        [self createDirectoryIfDoesNotExist:dataDirectory];
-        self.dataDirectoryURL = dataDirectory;
-    } else {
-        self.dataDirectoryURL = self.localTemporaryDirectory;
-    }
-    
-    NSURL *documentDirectory = [url URLByAppendingPathComponent:@"Documents"];
-    [self createDirectoryIfDoesNotExist:documentDirectory];
-    self.documentsDirectoryURL = documentDirectory;
-    
-}
-
-- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
-    NSString *handle = [fileUrl filenameMinusExtention];
-    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
-    return [self cacheDirectoryNamed:fileNameId];
-}
-
-- (NSURL *)cacheDirectoryNamed:(NSString *)handle {
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSURL *cachedArrayDirectories = [self.cachesDirectory URLByAppendingPathComponent:handle isDirectory:YES];
-    BOOL exist, isDirectory;
-    exist = [fileManager fileExistsAtPath: cachedArrayDirectories.path
-                              isDirectory: &isDirectory];
-    if (exist == NO || isDirectory == NO) {
-        NSError *error = nil;
-        [fileManager createDirectoryAtURL: cachedArrayDirectories
-              withIntermediateDirectories: YES
-                               attributes: @{}
-                                    error: &error];
-        if (error) {
-            error = nil;
-            [fileManager createDirectoryAtURL: cachedArrayDirectories
-                  withIntermediateDirectories: YES
-                                   attributes: @{}
-                                        error: &error];
-        }
-        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
-    }
-    return cachedArrayDirectories;
-}
-
-
-- (void)createDirectoryIfDoesNotExist:(NSURL *)url {
-    NSFileManager *defaultFileManager = [NSFileManager defaultManager];
-    if ([defaultFileManager fileExistsAtPath:url.path] == NO) {
-        NSError *error = nil;
-        [defaultFileManager createDirectoryAtPath: url.path
-                      withIntermediateDirectories: YES
-                                       attributes: nil
-                                            error: &error];
-    }
-}
-
-- (void)updateICloudEnabled:(NSNotification *)notification {
-    
-    if ([[NSFileManager defaultManager] ubiquityIdentityToken]) {
+    if ([self.fileManager ubiquityIdentityToken]) {
         if (self.isCloudEnabled) {
             [[NSNotificationCenter defaultCenter] postNotificationName: ICloudStateUpdatedNotification
                                                                 object: nil];
         }
     }
     else {
-        [self setIsCloudEnabled: NO];
+        [self setCloudEnabled: NO completion:nil];
+    }
+    
+}
+
+#pragma mark - Exposed Methods
+
+- (void)activate {
+    [self updateFileStorageContainerURL:nil];
+    [self.fileLocationManager startQuery];
+}
+
+- (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion {
+    
+    if (self.checkingCloudPreferencesLock == NO) {
+        self.checkingCloudPreferencesLock = YES;    //Set to no on completion
+
+        // Check to see whether the user has previously selected the iCloud storage option.
+        // If so, check the iCloud storage state from previous launch.
+        // If the user has previously chosen to use iCloud and we're still signed in, setup the CloudManager with cloud storage enabled.
+        // If no user choice is recorded, use a UIAlert to fetch the user's preference.
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        id <NSObject, NSCopying, NSCoding> ubiquityIdentityTokenCurrent = [self.fileManager ubiquityIdentityToken];
+        NSData *oldTokenData = [userDefaults objectForKey:MTICloudUbiquityToken];
+        id <NSObject, NSCopying, NSCoding> ubiquityIdentityTokenLastLaunch = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
+        
+        BOOL cloudOptionsDisplayed = [userDefaults boolForKey:MADPreferencesCloudOptionsSelected];
+        BOOL cloudDesired = cloudOptionsDisplayed && [userDefaults boolForKey:MADPreferencesCloudDesired];
+        BOOL cloudAvailble = ubiquityIdentityTokenCurrent != nil;
+        BOOL cloudPreviousllyAccessedWithDifferentToken = ubiquityIdentityTokenLastLaunch != nil &&
+                                                            ![ubiquityIdentityTokenLastLaunch isEqual:ubiquityIdentityTokenCurrent];
+        
+        __weak MACloudManager *weakself = self;
+
+        // Step 1: Ask user if they would like to use iCloud
+        if (cloudAvailble && cloudOptionsDisplayed == NO) {
+            
+            [self promptCloudDesired:^(BOOL desired) {
+                [[MACloudManager sharedManager] setCloudEnabled:desired completion:^{
+                    weakself.checkingCloudPreferencesLock = NO;
+                    if (completion) completion();
+                }];
+            }];
+            
+            // Step 2: Detect switching to another account or deleting iCloud entirely
+            
+        } else if (cloudDesired && cloudPreviousllyAccessedWithDifferentToken) {
+            
+            [self promptCloudSignOut:^{
+                [[MACloudManager sharedManager] setCloudEnabled:NO completion:^{
+                    weakself.checkingCloudPreferencesLock = NO;
+                    if (completion) completion();
+                }];
+            }];
+
+        } else {
+            
+            // Step 3: Setup cloud manager based of desire and availability
+            [self setCloudEnabled: cloudDesired && cloudAvailble completion:^{
+                weakself.checkingCloudPreferencesLock = NO;
+                if (completion) completion();
+            }];
+            
+        }
+        
+        // Step 4: If logged out of iCloud, reset the promopt that ask them if they would like to use iCloud
+        if (cloudAvailble == NO) {
+            [self resetForDebugging];
+        } else {
+            NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:ubiquityIdentityTokenCurrent];
+            [userDefaults setObject:newTokenData forKey:MTICloudUbiquityToken];
+        }
     }
 }
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
+    [self.fileLocationManager startQuery];
     
     NSMutableSet *result = [[NSMutableSet alloc] init];
     if (self.isCloudEnabled) {
         [result addObjectsFromArray:self.fileLocationManager.documents];
     } else {
         NSError *error = nil;
-        NSFileManager *fm = [NSFileManager defaultManager];
+        NSFileManager *fm = self.fileManager;
         NSArray *directoryContents = [fm contentsOfDirectoryAtPath:self.documentsDirectoryURL.path error:&error];
         for (NSString *filename in directoryContents) {
             NSString *fullPath = [self.documentsDirectoryURL.path stringByAppendingPathComponent:filename];
@@ -310,89 +264,161 @@ static MACloudManager *sharedSingleton;
     return result;
 }
 
-- (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
-    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
-    NSString *lastPathComponent = [urlToDupe lastPathComponent];
-    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
-    NSString *extention = [lastPathComponent pathExtension];
-    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
-                                 withDesiredHandle:handle
-                                      andExtension:extention];
-    NSError *error = nil; NSInteger tryCounter = 0;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    while ([fileManager copyItemAtURL:urlToDupe toURL:uniqueUrl error:&error] == NO) {
-        tryCounter++;
-        if (tryCounter > 2) {
-            break;
+#pragma mark - Internal Methods
+
+- (void)updateFileStorageContainerURL:(void (^)(void))completion {
+    
+    @synchronized (self) {
+        
+        self.dataDirectoryURL = nil;
+        if (self.isCloudEnabled) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName: UbiquitousContainerFetchingWillBeginNotification
+                                                                object: nil];
+            
+            __weak MACloudManager *weakself = self;
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                
+                NSURL *url = [self.fileManager URLForUbiquityContainerIdentifier: weakself.ubiquityIdentifier];   //This call may be SLOW, so only do on BACKGROUND thread.
+                [weakself setDataAndDocumentUrlsWithBaseUrl:url];
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName: UbiquitousContainerFetchingDidEndNotification
+                                                                        object: nil];
+                    
+                    if (completion) completion();
+                    
+                });
+            });
+        } else {
+            [self setDataAndDocumentUrlsWithBaseUrl:self.localHomeDirectory];
+            if (completion) completion();
         }
-        error = nil;
     }
-    if (error || tryCounter > 2) {
-        uniqueUrl = nil;
-    }
-    return uniqueUrl;
 }
 
-+ (NSString *)filenameId:(NSUInteger)tag {
-    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
-}
-
-+ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
-    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
-}
-
-+ (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion {
-
-    // Check to see whether the user has previously selected the iCloud storage option.
-    // If so, check the iCloud storage state from previous launch.
-    // If the user has previously chosen to use iCloud and we're still signed in, setup the CloudManager with cloud storage enabled.
-    // If no user choice is recorded, use a UIAlert to fetch the user's preference.
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    id <NSObject, NSCopying, NSCoding> ubiquityIdentityTokenCurrent = [[NSFileManager defaultManager] ubiquityIdentityToken];
-    NSData *oldTokenData = [userDefaults objectForKey:MTICloudUbiquityToken];
-    id <NSObject, NSCopying, NSCoding> ubiquityIdentityTokenLastLaunch = oldTokenData ? [NSKeyedUnarchiver unarchiveObjectWithData:oldTokenData] : nil;
+- (void)setCloudEnabled: (BOOL)isCloudEnabled
+             completion: (void (^)(void))completion {
     
-    BOOL cloudOptionsDisplayed = [userDefaults boolForKey:MADPreferencesCloudOptionsSelected];
-    BOOL cloudDesired = cloudOptionsDisplayed && [userDefaults boolForKey:MADPreferencesCloudDesired];
-    BOOL cloudAvailble = ubiquityIdentityTokenCurrent != nil;
-    BOOL cloudPreviousllyAccessedWithDifferentToken = ubiquityIdentityTokenLastLaunch != nil &&
-                                                        ![ubiquityIdentityTokenLastLaunch isEqual:ubiquityIdentityTokenCurrent];
+    // Asynchronously update our data directory URL and documents directory URL
+    // If we're enabling cloud storage, we move any local documents into the cloud container after the URLs are updated.
     
-    // Step 1: Ask user if they would like to use iCloud
-    if (cloudAvailble && cloudOptionsDisplayed == NO) {
+    if (isCloudEnabled != self.isCloudEnabled) {    //if changed
         
-        [self promptCloudDesired:^(BOOL desired) {
-            completion();
-        }];
-        
-        // Step 2: Detect switching to another account or deleting iCloud entirely
-        
-    } else if (cloudDesired && cloudPreviousllyAccessedWithDifferentToken) {
-        
-        [self promptCloudSignOut:^{
-            completion();
-        }];
-        [[MACloudManager sharedManager] setIsCloudEnabled: cloudAvailble ];
-        
+        if ((self.cloudDesired = isCloudEnabled)) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MADPreferencesCloudDesired];
+            
+            NSURL *oldDocumentsDirectoryURL = self.documentsDirectoryURL != nil ?
+                                                self.documentsDirectoryURL : self.localDocumentDirectory;
+            
+            __weak MACloudManager *weakself = self;
+            [self updateFileStorageContainerURL:^(void) {
+                
+                if (isCloudEnabled) {
+                    
+                    [weakself migrateFilesFromLocalDirectory: oldDocumentsDirectoryURL
+                                           toRemoteDirectory: weakself.documentsDirectoryURL
+                                                  completion: ^{
+                        if (completion) completion();
+                    }];
+                    
+                } else {
+                    if (completion) completion();
+                }
+            }];
+            [[NSNotificationCenter defaultCenter] postNotificationName: ICloudStateUpdatedNotification
+                                                                object: nil];
+        } else {
+            if (completion) completion();
+        }
     } else {
-        
-        // Step 3: Setup cloud manager based of desire and availability
-        [[MACloudManager sharedManager] setIsCloudEnabled: cloudDesired && cloudAvailble ];
-        
+        if (completion) completion();
     }
+}
+
+- (void)migrateFilesFromLocalDirectory: (NSURL *)localDirectory
+                     toRemoteDirectory: (NSURL *)remoteDirectory
+                            completion: (void (^)(void))completion {
     
-    // Step 4: If logged out of iCloud, reset the promopt that ask them if they would like to use iCloud
-    if (cloudAvailble == NO) {
-        [userDefaults removeObjectForKey:MADPreferencesCloudDesired];
-        [userDefaults removeObjectForKey:MTICloudUbiquityToken];
+    if (localDirectory && remoteDirectory) {
+
+        NSDirectoryEnumerationOptions enumerationOptions = NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                                                            NSDirectoryEnumerationSkipsPackageDescendants |
+                                                            NSDirectoryEnumerationSkipsHiddenFiles;
+        
+        NSError *readDocumentsError = nil;
+        
+        NSArray *localDocuments = [self.fileManager contentsOfDirectoryAtURL: localDirectory
+                                                    includingPropertiesForKeys: nil
+                                                                       options: enumerationOptions
+                                                                         error: &readDocumentsError];
+        
+        MACloudManager *weakself = self;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            
+            for (NSURL *documentURL in localDocuments) {
+                if ([documentURL.pathExtension isEqualToString: MTDocumentExtentionMobleApplicationDocument]) { // ???: MAD Files only
+                    NSURL *destinationURL = [remoteDirectory URLByAppendingPathComponent:documentURL.lastPathComponent];
+                    NSError *errorUpload = nil;
+                    [weakself.fileManager setUbiquitous: YES
+                                              itemAtURL: documentURL
+                                         destinationURL: destinationURL
+                                                  error: &errorUpload];
+                    NSAssert(errorUpload != nil, @"%s %@", __PRETTY_FUNCTION__, errorUpload);
+                }
+            }
+            if (completion) completion();
+        });
+
     } else {
-        NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:ubiquityIdentityTokenCurrent];
-        [userDefaults setObject:newTokenData forKey:MTICloudUbiquityToken];
+        if (completion) completion();
     }
+}
+
+#pragma Cloud
+
+- (BOOL)cloudDesired {
+    BOOL result = [[NSUserDefaults standardUserDefaults] boolForKey:MADPreferencesCloudDesired];
+    return [[NSUserDefaults standardUserDefaults] boolForKey:MADPreferencesCloudDesired];
+}
+
+- (BOOL)cloudAvailble {
+    return [self.fileManager ubiquityIdentityToken] != nil;
+}
+
+- (BOOL)isCloudEnabled {
+    return self.cloudAvailble && self.cloudDesired;
+}
+
+- (BOOL)cloudOptionsPresentedAndSelectedByUser {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:MADPreferencesCloudOptionsSelected];
+}
+
+#pragma mark - MADFileLocationManagerDelegate
+
+- (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
+                                             removedURLs:(NSArray *)removedURLs
+                                             updatedURLs:(NSArray *)updatedURLs {
+    [self.madUrls addObjectsFromArray:insertedURLs];
+    [self.madUrls addObjectsFromArray:updatedURLs];
+    for (NSURL *url in removedURLs) {
+        [self.madUrls removeObject:url];
+    }
+}
+
+- (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error {
     
 }
 
-+ (void)promptCloudSignOut:(void (^)(void))completion {
+- (void)listCoordinatorDidFailCreatingListAtURL:(NSURL *)URL withError:(NSError *)error {
+    
+}
+
+#pragma mark Prompts
+
+- (void)promptCloudSignOut:(void (^)(void))completion {
     NSString *title = @"iCloud Sign-Out";
     NSString *message = @"You have signed out of the iCloud account previously used to store documents.  Sign back in to access those documents.";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
@@ -403,10 +429,8 @@ static MACloudManager *sharedSingleton;
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction *action) {
                                                          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudDesired];
                                                          [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
-                                                         [[MACloudManager sharedManager] setIsCloudEnabled:YES];
-                                                         completion();
+                                                         if (completion) completion();
                                                      }];
     [alertController addAction:actionKk];
     [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController presentViewController: alertController
@@ -414,7 +438,7 @@ static MACloudManager *sharedSingleton;
                                                                                                                                  completion: nil];
 }
 
-+ (void)promptCloudDesired:(void (^)(BOOL desired))completion {
+- (void)promptCloudDesired:(void (^)(BOOL desired))completion {
     NSString *title = @"Choose Storage Option";
     NSString *message = @"Should documents be stored in iCloud or on just this device?";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
@@ -426,10 +450,8 @@ static MACloudManager *sharedSingleton;
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction *action) {
                                                          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudDesired];
                                                          [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
-                                                         [[MACloudManager sharedManager] setIsCloudEnabled:YES];
-                                                         completion(NO);
+                                                         completion(YES);
                                                      }];
     
     NSString *localOnly = @"Local only";
@@ -437,10 +459,8 @@ static MACloudManager *sharedSingleton;
                                                            style: UIAlertActionStyleCancel
                                                          handler: ^(UIAlertAction *action) {
                                                              NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                                                             [userDefaults setBool:NO  forKey:MADPreferencesCloudDesired];
                                                              [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
-                                                             [[MACloudManager sharedManager] setIsCloudEnabled:NO];
-                                                             completion(YES);
+                                                             completion(NO);
                                                          }];
     
     [alertController addAction:actionKk];
@@ -449,6 +469,115 @@ static MACloudManager *sharedSingleton;
     [((UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController).visibleViewController  presentViewController: alertController
                                                                                                                                     animated: YES
                                                                                                                                   completion: nil];
+}
+
+#pragma mark File Name
+
++ (NSString *)filenameId:(NSUInteger)tag {
+    return [NSString stringWithFormat:@"%lu", (unsigned long)tag];
+}
+
++ (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention {
+    return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
+}
+
+- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
+    NSString *handle = [fileUrl filenameMinusExtention];
+    NSString *fileNameId = [MACloudManager filenameId:handle.hash];
+    return [self cacheDirectoryNamed:fileNameId];
+}
+
+- (NSURL *)cacheDirectoryNamed:(NSString *)handle {
+    
+    NSURL *cachedArrayDirectories = [self.cachesDirectory URLByAppendingPathComponent:handle isDirectory:YES];
+    BOOL exist, isDirectory;
+    exist = [self.fileManager fileExistsAtPath: cachedArrayDirectories.path
+                                   isDirectory: &isDirectory];
+    if (exist == NO || isDirectory == NO) {
+        NSError *error = nil;
+        [self.fileManager createDirectoryAtURL: cachedArrayDirectories
+                   withIntermediateDirectories: YES
+                                    attributes: @{}
+                                         error: &error];
+        if (error) {
+            error = nil;
+            [self.fileManager createDirectoryAtURL: cachedArrayDirectories
+                       withIntermediateDirectories: YES
+                                        attributes: @{}
+                                             error: &error];
+        }
+        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
+    }
+    return cachedArrayDirectories;
+}
+
+#pragma mark File Helpers
+
+- (void)createDirectoryIfDoesNotExist:(NSURL *)url {
+
+    if ([self.fileManager fileExistsAtPath:url.path] == NO) {
+
+        NSError *error = nil;
+        [self.fileCoordinator coordinateWritingItemAtURL: url
+                                                 options: 0
+                                                   error: &error
+                                              byAccessor: ^(NSURL *newURL) {
+
+                                                  NSError *errorCreateNew = nil;
+                                                  [[NSFileManager defaultManager] createDirectoryAtPath: newURL.path
+                                                                            withIntermediateDirectories: YES
+                                                                                             attributes: nil
+                                                                                                  error: &errorCreateNew];
+                                                  
+                                                  NSAssert(errorCreateNew != nil, @"%s %@", __PRETTY_FUNCTION__, errorCreateNew);
+        }];
+        NSAssert(error != nil, @"%s %@", __PRETTY_FUNCTION__, error);
+    }
+}
+
+- (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
+    // FIXME: Make to work for ubiquity urls
+    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
+    NSString *lastPathComponent = [urlToDupe lastPathComponent];
+    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
+    NSString *extention = [lastPathComponent pathExtension];
+    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
+                                 withDesiredHandle:handle
+                                      andExtension:extention];
+    NSError *error = nil;
+    [self.fileCoordinator coordinateReadingItemAtURL: urlToDupe
+                                             options: NSFileCoordinatorReadingForUploading
+                                    writingItemAtURL: uniqueUrl
+                                             options: NSFileCoordinatorWritingForMoving
+                                               error: &error
+                                          byAccessor: ^(NSURL *newReadingURL, NSURL *newWritingURL) {
+                                            
+                                              NSError *errorCopy = nil;
+                                              [[NSFileManager defaultManager] copyItemAtURL: newReadingURL
+                                                                                      toURL: newWritingURL
+                                                                                      error: &errorCopy];
+                                              NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                          }];
+    
+    
+    return uniqueUrl;
+}
+
+- (void)setDataAndDocumentUrlsWithBaseUrl:(NSURL *)url {
+    self.ubiquityContainer = url;
+    
+    if (self.isCloudEnabled) {
+        NSURL *dataDirectory = [url URLByAppendingPathComponent:@"Data"];
+        [self createDirectoryIfDoesNotExist:dataDirectory];
+        self.dataDirectoryURL = dataDirectory;
+    } else {
+        self.dataDirectoryURL = self.localTemporaryDirectory;
+    }
+    
+    NSURL *documentDirectory = [url URLByAppendingPathComponent:@"Documents"];
+    [self createDirectoryIfDoesNotExist:documentDirectory];
+    self.documentsDirectoryURL = documentDirectory;
+    
 }
 
 @end

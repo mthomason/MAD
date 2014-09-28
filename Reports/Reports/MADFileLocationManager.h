@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol AAPLListCoordinatorDelegate <NSObject>
+@protocol MADFileLocationManagerDelegate <NSObject>
 
 - (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs removedURLs:(NSArray *)removedURLs updatedURLs:(NSArray *)updatedURLs;
 - (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error;
@@ -18,14 +18,11 @@
 
 @interface MADFileLocationManager : NSObject
 
-@property (nonatomic, weak) id<AAPLListCoordinatorDelegate> delegate;
+@property (nonatomic, weak) id<MADFileLocationManagerDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *documents;
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension;
 - (void)startQuery;
 - (void)stopQuery;
-//- (void)removeListAtURL:(NSURL *)URL;                                 //Should be tracked because we use UIDoc
-//- (void)createURLForList:(AAPLList *)list withName:(NSString *)name;  //Should be tracked because we use UIDoc
-//- (BOOL)canCreateDocumentWithName:(NSString *)name;
 
 @end

@@ -77,13 +77,33 @@ static void uncaughtExceptionHandler(NSException *exception) {
 }
 
 + (UIWindow *)window {
-    return [[UIApplication sharedApplication] windows][0];
+    return [UIApplication sharedApplication].keyWindow;
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                                  object: nil];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+
+    [defaultCenter removeObserver: [MACloudManager sharedManager]
+                             name: NSUbiquityIdentityDidChangeNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: ICloudStateUpdatedNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UbiquitousContainerFetchingWillBeginNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: UbiquitousContainerFetchingDidEndNotification
+                           object: nil];
+    
+    [defaultCenter removeObserver: self
+                             name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                           object: nil];
+
 }
 
 #pragma mark - Application Lifecycle
@@ -114,6 +134,28 @@ static void uncaughtExceptionHandler(NSException *exception) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
  
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter addObserver: [MACloudManager sharedManager]
+                      selector: @selector(handleNotificationUbiquityIdentityDidChange:)
+                          name: NSUbiquityIdentityDidChangeNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationUpdateCloudEnabled:)
+                          name: ICloudStateUpdatedNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
+                          name: UbiquitousContainerFetchingWillBeginNotification
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
+                          name: UbiquitousContainerFetchingDidEndNotification
+                        object: nil];
+    
     if (MADStateRestorationSupportEnabled == NO) {
         [self loadAndDisplayWindow];
     }
@@ -131,6 +173,23 @@ static void uncaughtExceptionHandler(NSException *exception) {
     return YES;
 }
 
+- (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Start timer, and display activity indictor if it takes too long
+    //  to bring back a ubiquitous container.
+}
+- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Remove activity indictor for ubiquitous container.
+}
+
+- (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
+    // FIXME: Implement logic for cloud status enabled change.
+    //  Pop to root view controller / file view controller.
+    //  Reload file view controller, getting docs from new
+    //  cloud container.
+    
+    NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
+    
+}
 
 - (UIViewController *)viewControllerWithrestorationIdentifier:(NSString *)restorationIdentifier childViewControllers:(NSArray *)viewControllers {
     id result = nil;
@@ -138,8 +197,8 @@ static void uncaughtExceptionHandler(NSException *exception) {
         if ([controller.restorationIdentifier isEqualToString:restorationIdentifier]) {
             result = controller;
         } else {
-            result = [self viewControllerWithrestorationIdentifier:restorationIdentifier
-                                              childViewControllers:controller.childViewControllers];
+            result = [self viewControllerWithrestorationIdentifier: restorationIdentifier
+                                              childViewControllers: controller.childViewControllers];
         }
         if (result != nil) {
             break;
@@ -148,7 +207,11 @@ static void uncaughtExceptionHandler(NSException *exception) {
     return result;
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application { }
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [[MACloudManager sharedManager] checkUserICloudPreferenceAndSetupIfNecessary:^{
+        
+    }];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application { }
 

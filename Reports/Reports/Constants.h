@@ -225,7 +225,6 @@ extern NSString * const MYSQLDATABASEDATA_FILENAME;
 extern NSString * const MTPersistentStoreAliasMad;
 extern NSString * const MTPersistentStoreAliasUserPreferences;
 
-extern NSString * const MTDocumentExtentionMobleApplicationDocument;
 extern NSString * const MTDocumentExtentionSqlite3;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
 extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;

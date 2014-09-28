@@ -150,12 +150,15 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextObjectsDidChangeNotification
                            object: self.managedObjectContext];
+    
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextDidSaveNotification
                            object: self.managedObjectContext];
+    
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextWillSaveNotification
                            object: self];
+    
     [defaultCenter removeObserver: self
                              name: UIDocumentStateChangedNotification
                            object: self];
