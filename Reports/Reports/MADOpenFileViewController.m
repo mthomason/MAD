@@ -173,7 +173,6 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
     return self;    
 }
 
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -299,7 +298,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
                                                                       options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
                                                                         range:range] == NSOrderedSame;
         }];
-        self.urls = [[[[AppDelegate app] user] hasMadDocuments] filteredArrayUsingPredicate:predicate];
+        self.urls = [[[MACloudManager sharedManager] hasMadDocuments] filteredArrayUsingPredicate:predicate];
         NSIndexSet *set = [NSIndexSet indexSetWithIndex:0];
         
         __weak UICollectionView *weakCollectionView = self.collectionView;
@@ -761,7 +760,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 }
 
 - (void)reloadData {
-    self.urls = [[[AppDelegate app] user] hasMadDocuments];
+    self.urls = [[MACloudManager sharedManager] hasMadDocuments];
     [self.collectionView reloadData];
 }
 
@@ -974,8 +973,13 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)openFileWithUrl:(NSURL *)url {
     __weak MADOpenFileViewController *weakself = self;
     MTApplicationInstance *app = [AppDelegate app];
-    [app openReport:url withCompletionHandler:^(BOOL success) {
+    
+    MADocument *document = [[MADocument alloc] initWithFileURL:url];
+    app.openFiles.openDocument = document;
+    __weak MTApplicationInstance *weakapp = app;
+    [document openWithCompletionHandler:^(BOOL success) {
         if (success) {
+            weakapp.reportState = MTReportStateOpen;
             if ([MTApplicationInstance isMadDesigner]) {
                 [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
                                               sender:weakself];
@@ -985,6 +989,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
             }
         }
     }];
+    
 }
 
 #pragma mark - Collection View Flow Layout Delegate

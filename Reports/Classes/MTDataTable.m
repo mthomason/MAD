@@ -217,7 +217,7 @@
 
 - (NSURL *)url {
     NSString *filename = [MACloudManager filenameId:self.tag extention:@"mdcache"];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager cacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
+    NSURL *cacheDirectory = self.cacheDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

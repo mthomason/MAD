@@ -198,14 +198,14 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 + (NSURL *)urlForIdentifier:(NSString *)identifer {
     
-    NSURL *cachedArrayDirectories = [NSFileManager cacheDirectory];
+    NSURL *cachedArrayDirectories = [[NSFileManager defaultManager] localCacheDirectory];
     NSString *filename = [identifer stringByAppendingPathExtension:@"madac"];
     return [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
 }
 
 - (NSURL *)url {
     NSURL *result = nil;
-    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ? [NSFileManager cacheDirectory] : [self.cachedDelegate cachedFilesDirectory];
+    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectory] : [self.cachedDelegate cachedFilesDirectory];
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
     return result;
@@ -214,20 +214,20 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 + (MTDataColumn *)columnKey {
     MTDataColumn *column = [[MTDataColumn alloc] initWithIdentifier:MTArrayCachedColumnKey];
     NSNumber *columnType = @(MTDataTypeInteger);
-    [column setColumnType:columnType];
-    [column setPrimaryKey:YES];
-    [column setNotNull:YES];
-    [column setAutoIncrement:NO];
+    column.columnType = columnType;
+    column.primaryKey = YES;
+    column.notNull = YES;
+    column.autoIncrement = NO;
     return column;
 }
 
 + (MTDataColumn *)columnValue {
     MTDataColumn *column = [[MTDataColumn alloc] initWithIdentifier:MTArrayCachedColumnValue];
     NSNumber *columnType = @(MTDataTypeBlob);
-    [column setColumnType:columnType];
-    [column setPrimaryKey:NO];
-    [column setNotNull:YES];
-    [column setAutoIncrement:NO];
+    column.columnType = columnType;
+    column.primaryKey = NO;
+    column.notNull = YES;
+    column.autoIncrement = NO;
     return column;
 }
 

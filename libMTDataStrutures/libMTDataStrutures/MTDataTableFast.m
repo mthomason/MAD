@@ -192,7 +192,9 @@
 
 - (NSURL *)urlFastCache {
     NSString *filename = [MACloudManager filenameId:self.tag extention:@"maddb"];
-    NSURL *cacheDirectory = self.cacheDelegate == nil ? [NSFileManager cacheDirectory] : [[self cacheDelegate] cachedFilesDirectory];
+    NSURL *cacheDirectory = self.cacheDelegate == nil ?
+                            [[NSFileManager defaultManager] localCacheDirectory] :
+                                [[self cacheDelegate] cachedFilesDirectory];
     return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

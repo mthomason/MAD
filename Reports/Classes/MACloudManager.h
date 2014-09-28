@@ -47,6 +47,7 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 
 - (void)activate;
 - (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion;
+- (NSArray *)hasMadDocuments;
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 

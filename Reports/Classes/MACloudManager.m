@@ -238,6 +238,16 @@ static MACloudManager *sharedSingleton;
     }
 }
 
+- (NSArray *)hasMadDocuments {
+    NSSet *madFiles = [self contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
+    SEL selectorPath = @selector(path);
+    SEL selectorSort = @selector(localizedStandardCompare:);
+    NSString *key = NSStringFromSelector(selectorPath);
+    NSSortDescriptor *sortByFileName = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:selectorSort];
+    NSArray *sortDescriptors = @[sortByFileName];
+    return [madFiles sortedArrayUsingDescriptors:sortDescriptors];
+}
+
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
     [self.fileLocationManager startQuery];
     

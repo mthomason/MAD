@@ -30,16 +30,6 @@
     return self;
 }
 
-- (NSArray *)hasMadDocuments {
-    NSSet *madFiles = [[MACloudManager sharedManager] contentsOfDocumentsDirectoryWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
-    SEL selectorPath = @selector(path);
-    SEL selectorSort = @selector(localizedStandardCompare:);
-    NSString *key = NSStringFromSelector(selectorPath);
-    NSSortDescriptor *sortByFileName = [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:selectorSort];
-    NSArray *sortDescriptors = @[sortByFileName];
-    return [madFiles sortedArrayUsingDescriptors:sortDescriptors];
-}
-
 - (BOOL)addDocument:(NSURL *)url error:(NSError **)error {
     NSString *openDocumentName = [[url lastPathComponent] stringByDeletingPathExtension];
     NSString *openDocumentExt = [url pathExtension];

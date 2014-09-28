@@ -40,9 +40,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.94";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.94";
-NSString * const MTGlobalBundleRev                                  = @"1469";
+NSString * const MTGlobalBundleVersion                              = @"7.0.95";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.95";
+NSString * const MTGlobalBundleRev                                  = @"1470";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -531,15 +531,6 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
         result = (MADocument *)self.openFiles.openDocument;
     }
     return result;
-}
-
-- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler {
-    MADocument *document = [[MADocument alloc] initWithFileURL:url];
-    self.openFiles.openDocument = document;
-    [document openWithCompletionHandler:^(BOOL success) {
-        if (success) self.reportState = MTReportStateOpen;
-        completionHandler(success);
-    }];
 }
 
 @end

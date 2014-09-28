@@ -32,7 +32,6 @@
 #import "RptqQuery.h"
 
 #import "MADOpenFileViewController.h"
-#import "UIManagedDocument+FileOperations.h"
 #import "evp.h"
 #import "VerifyStoreReceipt.h"
 #import "MACloudManager.h"
@@ -260,6 +259,7 @@ static void uncaughtExceptionHandler(NSException *exception) {
 
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents
                             coder:(NSCoder *)coder {
+    // FIXME: Currently not implemented
     
     self.application = application;
     if (self.storyboard == nil) {
@@ -273,13 +273,13 @@ static void uncaughtExceptionHandler(NSException *exception) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *filename = [userDefaults objectForKey:@"MADStateRestorationOpenFileWithExtension"];
         if (filename.length > 0) {
-            for (NSURL *url in [self.applicationInstance.user hasMadDocuments]) {
+            for (NSURL *url in [[MACloudManager sharedManager] hasMadDocuments]) {
                 if ([url.path.lastPathComponent caseInsensitiveCompare:filename] == NSOrderedSame) {
                     
-                    [self.applicationInstance openReport: url
-                                   withCompletionHandler: ^(BOOL success) {
-                                       [application completeStateRestoration];
-                                   }];
+                    //[self.applicationInstance openReport: url
+                    //               withCompletionHandler: ^(BOOL success) {
+                    //                   [application completeStateRestoration];
+                    //               }];
                     break;
                 }
             }

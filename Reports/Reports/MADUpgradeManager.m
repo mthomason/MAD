@@ -8,7 +8,6 @@
 
 #import "MADUpgradeManager.h"
 #import "NSFileManager+Common.h"
-#import "NSFileManager+Reports.h"
 #import "MACloudManager.h"
 #import "MTLog.h"
 #import "MTApplicationInstance.h"
@@ -145,7 +144,7 @@ const NSInteger currentMajorVersion = 2;
 
 + (NSURL *)applicationSupportSampleDatabaseChinook {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSURL *appSupportDirectory = [fileManager applicationSupportDirectory];
+    NSURL *appSupportDirectory = [fileManager localApplicationSupportDirectory];
     NSString *filename = [NSString stringWithFormat:@"%@.%@", MTSampleDatabaseChinook, MTDocumentExtentionSqlite3];
     return [appSupportDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }

@@ -69,7 +69,6 @@ extern NSString * const MTStoryboardReportViewerPadLagacy;
 + (NSString *)bundleDisplayName;
 
 - (void)closeReportWithCompletionHandler:(void (^)(BOOL))completionHandler;
-- (void)openReport:(NSURL *)url withCompletionHandler:(void (^)(BOOL))completionHandler;
 - (MADocument *)openDocument;
 
 @end

@@ -17,7 +17,6 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "MTLog.h"
 #import "MTPaper.h"
 
-#import "UIManagedDocument+FileOperations.h"
 #import "UIColor+EverydayApps.h"
 #import "UIColor+Gradients.h"
 #import "NSURL+Document.h"
@@ -25,7 +24,6 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 #import "NSError+UserInterface.h"
 #import "NSError+Constructors.h"
 #import "NSFileManager+Common.h"
-#import "NSFileManager+Reports.h"
 #import "NSThread+Extras.h"
 
 #import "MADocumentState.h"
@@ -113,6 +111,8 @@ NSString * const MTReportDetailRowId                    = @"d";
 NSString * const MADUtiType                             = @"com.everydayapps.productivity.mad";
 NSString * const MADMimeType                            = @"application/vnd.everydayapps.mad";
 
+NSString * const MADFileNameMetaPlist                   = @"meta.plist";
+
 @interface MADocument ()
     <MTDatabaseProtocol>
 
@@ -147,6 +147,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     [_mainQuery database].delegate = nil;
 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
     [defaultCenter removeObserver: self
                              name: NSManagedObjectContextObjectsDidChangeNotification
                            object: self.managedObjectContext];
@@ -242,8 +243,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     //Unpack files from binary NSData url to NSFileWrapper in tmp folder
     BOOL success = NO;
     if ([url.pathExtension isEqualToString:MTDocumentExtentionMobleApplicationDocument]) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        [fileManager deleteCoreDataFilesAtDirectory:self.urlGuts];
+        [self deleteCoreDataFilesAtDirectory:self.urlGuts];
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
         NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
         NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
@@ -259,6 +259,50 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         success = [super readFromURL:self.urlGuts error:outError];
     }
     return success;
+}
+
+- (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
+    BOOL isDirectory;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL exists = [fileManager fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
+    if (exists) {
+        NSError *deleteError = nil;
+        if (isDirectory) {
+            
+            BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
+                NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
+                return YES;
+            };
+            NSArray *requestedKeys = @[NSURLIsDirectoryKey];
+            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL: destinationUrl
+                                           includingPropertiesForKeys: requestedKeys
+                                                              options: -1
+                                                         errorHandler: ErrorHandler];
+            for (NSURL *file in enumerator) {
+                NSError *error = nil;
+                
+                [fileManager removeItemAtURL:file error:&error];
+                if (error != nil) {
+                    NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
+                    [fileManager removeItemAtURL:file error:&error];
+                }
+                
+            }
+            
+            [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+            if (deleteError != nil) {
+                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
+                [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+            }
+            
+        } else {
+            [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+            if (deleteError != nil) {
+                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
+                [fileManager removeItemAtURL:destinationUrl error:&deleteError];
+            }
+        }
+    }
 }
 
 - (BOOL)writeContents:(id)contents
@@ -315,29 +359,6 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     [fileManager removeItemAtURL:self.urlGuts error:&deleteError];
     NSAssert(deleteError == nil, @"%@", deleteError);
    
-}
-
-- (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl {
-    NSURL *urlToOpen = nil;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL fileexist = [fileManager fileExistsAtPath:[url path]];
-    if (fileexist) {
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
-        NSError *fileWrittingError = nil;
-        [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-        if (fileWrittingError) {
-            fileWrittingError = nil;
-            [fileWrapper writeToURL:destinationUrl options:writingOptions originalContentsURL:url error:&fileWrittingError];
-        }
-        if (fileWrittingError == nil) {
-            urlToOpen = destinationUrl;
-        }
-    } else {
-        urlToOpen = url;
-    }
-    return urlToOpen;
 }
 
 - (NSURL *)archiveUrlForMadUrl:(NSURL *)madUrl {
@@ -483,7 +504,10 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     return self.extraInformation;
 }
 
-- (BOOL)writeAdditionalContent:(id)content toURL:(NSURL *)absoluteURL originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)error {
+- (BOOL)writeAdditionalContent: (id)content
+                         toURL: (NSURL *)absoluteURL
+           originalContentsURL: (NSURL *)absoluteOriginalContentsURL
+                         error: (NSError **)error {
     MTLog(@"\n\t%s\n\tabsoluteURL: %@\n\tabsoluteOriginalContentsURL%@\n\n", __PRETTY_FUNCTION__, absoluteURL, absoluteOriginalContentsURL);
     BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
     
@@ -528,8 +552,8 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 
 - (void)printInteractionControllerWillPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
 - (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
-- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
-- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController {}
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
+- (void)printInteractionControllerDidDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController { }
 
 - (void)printInteractionControllerWillStartJob:(UIPrintInteractionController *)printInteractionController {
     UIPrintPaper *printPaper = printInteractionController.printPaper;
@@ -621,7 +645,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (NSURL *)urlMetaPlaylist {
-    return [self.urlGuts URLByAppendingPathComponent:@"meta.plist"];
+    return [self.urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
 }
 
 - (NSString *)fileName {
@@ -728,7 +752,8 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     [managedObjectContext reset];//to drop pending changes
     
     //delete the store from the current managedObjectContext
-    BOOL success = [persistentStoreCoordinator removePersistentStore:persistentStore error:&error];
+    BOOL success = [persistentStoreCoordinator removePersistentStore: persistentStore
+                                                               error: &error];
     if (success) {
         
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
@@ -737,7 +762,11 @@ NSString * const MADMimeType                            = @"application/vnd.ever
         NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
                                    NSInferMappingModelAutomaticallyOption : @YES};
         
-        [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error];
+        [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
+                                                 configuration: nil
+                                                           URL: storeURL
+                                                       options: options
+                                                         error: &error];
     }
     [managedObjectContext unlock];
 
@@ -757,6 +786,7 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 - (void)addConnection:(MTDatabaseConnection *)connection
                status:(void (^)(NSString *status, CGFloat progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion {
+    
     RptqDocument *rptqDocument = [self activeDocumentModel];
     MTDatabase *database = [MTDatabase databaseFactory:connection];
     if (database) {
@@ -879,7 +909,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
     NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:pageNumber numberStyle:NSNumberFormatterDecimalStyle];
     NSString *formatString = NSLocalizedString(@"Formatted page %@.", @"Formatted page %@.");
     NSString *readRecords = [NSString stringWithFormat:formatString, decimalString];
-    [[self statusLabel].status performSelectorOnMainThread:@selector(setText:) withObject:readRecords waitUntilDone:NO];
+    [self.statusLabel.status performSelectorOnMainThread: @selector(setText:)
+                                              withObject: readRecords
+                                           waitUntilDone: NO];
 }
 
 - (NSString *)fileNameMinusExtention {
@@ -898,16 +930,17 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
+    
+    MADocument *weakself = self;
     dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(bgQueue, ^{
-        NSString *name = [self fileNameMinusExtention];
-        [self initalizeMainDataTableWithName:name];
-        [self initalizeMainQuery];
-        [self initalizeReportFormatter];
-        MTQuery *fullQuery = [self defaultQuery];
-        [fullQuery database].delegate = self;
-        __weak MADocument *weakself = self;
-        
+        NSString *name = [weakself fileNameMinusExtention];
+        [weakself initalizeMainDataTableWithName:name];
+        [weakself initalizeMainQuery];
+        [weakself initalizeReportFormatter];
+        MTQuery *fullQuery = [weakself defaultQuery];
+        [fullQuery database].delegate = weakself;
+
         @autoreleasepool {
             [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
                 [[weakself mainDataTable] cache];
@@ -918,16 +951,19 @@ NSString * const MADMimeType                            = @"application/vnd.ever
             }];
         }
     });
+    
 }
 
 - (NSURL *)mcacheUrl {
     NSString *fileName = [[NSString stringWithFormat:@"%ld", (unsigned long)[self fileNameHash]] stringByAppendingPathExtension:@"mdcache"];
-    return [[self cachedFilesDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+    return [[self cachedFilesDirectory] URLByAppendingPathComponent: fileName
+                                                        isDirectory: NO];
 }
 
 - (NSURL *)maddbUrl {
     NSString *fileName = [[NSString stringWithFormat:@"%ld", (unsigned long)[self fileNameHash]] stringByAppendingPathExtension:@"maddb"];
-    return [[self cachedFilesDirectory] URLByAppendingPathComponent:fileName isDirectory:NO];
+    return [[self cachedFilesDirectory] URLByAppendingPathComponent: fileName
+                                                        isDirectory: NO];
 }
 
 + (NSURL *)mcacheUrlForFileHandle:(NSString *)filehandle {
@@ -945,19 +981,21 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 - (NSURL *)thumbnailUrl {
-    return [MADocument thumbnailUrlForHandle:[self fileNameMinusExtention] andRetinaDisplay:NO];
+    return [MADocument thumbnailUrlForHandle: [self fileNameMinusExtention]
+                            andRetinaDisplay: NO];
 }
 
 - (NSURL *)thumbnailRetniaUrl {
-    return [MADocument thumbnailUrlForHandle:[self fileNameMinusExtention] andRetinaDisplay:YES];
+    return [MADocument thumbnailUrlForHandle: [self fileNameMinusExtention]
+                            andRetinaDisplay: YES];
 }
 
 - (NSURL *)cachedDataUrl {
-    return [[self mainDataTable] url];
+    return [self.mainDataTable url];
 }
 
 - (NSString *)fileHandle {
-    return [[[self urlThumbnail] path] lastPathComponent];
+    return [self urlThumbnail].path.lastPathComponent;
 }
 
 + (NSString *)fileType {
@@ -965,12 +1003,12 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 }
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    return [MADocument thumbnailUrlForHandle:[madUrl.lastPathComponent stringByDeletingPathExtension]
-                                  andRetinaDisplay:[UIDevice isRetnaDisplay]];
+    return [MADocument thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
+                            andRetinaDisplay: [UIDevice isRetnaDisplay]];
 }
 
 + (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
-    NSString *handle = [madUrl.lastPathComponent stringByDeletingPathExtension];
+    NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension;
     NSString *fileName = [handle stringByAppendingString:@"1024"];
     fileName = [fileName stringByAppendingPathExtension:@"png"];
     
@@ -1000,7 +1038,9 @@ NSString * const MADMimeType                            = @"application/vnd.ever
             [self.managedObjectContext lock];
             [self wrapFileOverwrite:NO];
             [self deleteFromDiskCompletion:^(BOOL success) {
-                [NSThread completeOnMainThread:completion withObject:nil andSuccess:YES];
+                [NSThread completeOnMainThread: completion
+                                    withObject: nil
+                                    andSuccess: YES];
             }];
         }
     }];
@@ -1019,13 +1059,19 @@ NSString * const MADMimeType                            = @"application/vnd.ever
 + (NSError *)errorConnectionProblem {
     NSString *title = NSLocalizedString(@"Connection Problem", @"Connection Problem");
     NSString *message = NSLocalizedString(@"Could not connect to database.", @"Could not connect to database.");
-    return [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
+    return [NSError errorWithDomain: @"MTReportDocument"
+                               code: 36732
+                              title: title
+                         andMessage: message];
 }
 
 + (NSError *)errorFailedToCreateReport {
     NSString *title = NSLocalizedString(MNSInterfaceTitleProblem, MNSInterfaceTitleProblem);
     NSString *message = NSLocalizedString(MNSInterfaceMessageErrorFailedToCreateReport, MNSInterfaceMessageErrorFailedToCreateReport);
-    return [NSError errorWithDomain:@"MTReportDocument" code:36732 title:title andMessage:message];
+    return [NSError errorWithDomain: @"MTReportDocument"
+                               code: 36732
+                              title: title
+                         andMessage: message];
 }
 
 - (void)regenThumbnail {

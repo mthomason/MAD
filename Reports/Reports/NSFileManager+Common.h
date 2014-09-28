@@ -13,17 +13,15 @@
 
 @interface NSFileManager (Common)
 
-- (NSURL *)applicationSupportDirectory;
-- (NSString *)applicationDocumentsDirectory;
-
+- (NSURL *)localApplicationSupportDirectory;
 - (NSURL *)localTemporaryDirectory;
-+ (NSString *)cachedPath;
-+ (NSURL *)cacheDirectory;
+
+- (NSURL *)localDocumentsDirectory;
+
+- (NSURL *)localCacheDirectory;
 
 - (NSURL *)cacheDirectoryNamed:(NSString *)handle;
 - (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
-- (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl;
-- (NSURL *)unpackMadFile:(NSURL *)url toDestinationUrl:(NSURL *)destinationUrl;
 - (NSData *)dataForUrl:(NSURL *)url;
 
 @end
