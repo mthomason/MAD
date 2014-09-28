@@ -784,7 +784,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCell
 - (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
     NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
-    NSURL *cachedDirectory = [defaultManager cachedDirectoryForFileUrl:documentUrl];
+    NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
     for (NSURL *cachedFile in [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error]) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }

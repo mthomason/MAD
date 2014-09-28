@@ -205,7 +205,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSURL *)url {
     NSURL *result = nil;
-    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ? [[NSFileManager defaultManager] localCacheDirectory] : [self.cachedDelegate cachedFilesDirectory];
+    NSURL *cachedArrayDirectories = self.cachedDelegate == nil ?
+                                        [[NSFileManager defaultManager] localCacheDirectory] :
+                                        [self.cachedDelegate cachedFilesDirectory];
     NSString *filename = [self.identifier stringByAppendingPathExtension:@"madac"];
     result = [cachedArrayDirectories URLByAppendingPathComponent:filename isDirectory:NO];
     return result;

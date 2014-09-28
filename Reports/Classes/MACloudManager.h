@@ -53,8 +53,6 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification;
 
-- (NSURL *)cacheDirectoryNamed:(NSString *)handle;
-- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
 - (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
 
 + (NSString *)filenameId:(NSUInteger)tag;

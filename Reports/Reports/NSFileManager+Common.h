@@ -15,14 +15,10 @@
 
 - (NSURL *)localApplicationSupportDirectory;
 - (NSURL *)localTemporaryDirectory;
-
 - (NSURL *)localDocumentsDirectory;
-
 - (NSURL *)localCacheDirectory;
-
-- (NSURL *)cacheDirectoryNamed:(NSString *)handle;
-- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl;
-- (NSData *)dataForUrl:(NSURL *)url;
+- (NSURL *)localCacheDirectoryNamed:(NSString *)handle;
+- (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl;
 
 @end
 

@@ -12,13 +12,13 @@
 
 @implementation NSFileManager (Common)
 
-- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
+- (NSURL *)localCachedDirectoryForFileUrl:(NSURL *)fileUrl {
     NSString *handle = [fileUrl filenameMinusExtention];
     NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
-    return [self cacheDirectoryNamed:fileNameId];
+    return [self localCacheDirectoryNamed:fileNameId];
 }
 
-- (NSURL *)cacheDirectoryNamed:(NSString *)handle {
+- (NSURL *)localCacheDirectoryNamed:(NSString *)handle {
     NSURL *cachedArrayDirectories = [[self localCacheDirectory] URLByAppendingPathComponent:handle isDirectory:YES];
     BOOL exist, isDirectory;
     exist = [self fileExistsAtPath: cachedArrayDirectories.path
@@ -108,61 +108,6 @@
 - (NSURL *)localCacheDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     return [NSURL fileURLWithPath:paths.firstObject isDirectory:YES];
-}
-
-- (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
-    BOOL isDirectory;
-    BOOL exists = [self fileExistsAtPath:[destinationUrl path] isDirectory:&isDirectory];
-    if (exists) {
-        NSError *deleteError = nil;
-        if (isDirectory) {
-            
-            BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
-                NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
-                return YES;
-            };
-            NSArray *requestedKeys = @[NSURLIsDirectoryKey];
-            NSDirectoryEnumerator *enumerator = [self enumeratorAtURL: destinationUrl
-                                           includingPropertiesForKeys: requestedKeys
-                                                              options: -1
-                                                         errorHandler: ErrorHandler];
-            for (NSURL *file in enumerator) {
-                NSError *error = nil;
-                
-                [self removeItemAtURL:file error:&error];
-                if (error != nil) {
-                    NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
-                    [self removeItemAtURL:file error:&error];
-                }
-                
-            }
-            
-            [self removeItemAtURL:destinationUrl error:&deleteError];
-            if (deleteError != nil) {
-                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
-                [self removeItemAtURL:destinationUrl error:&deleteError];
-            }
-            
-        } else {
-            [self removeItemAtURL:destinationUrl error:&deleteError];
-            if (deleteError != nil) {
-                NSAssert(deleteError != nil, @"%s : %@",__PRETTY_FUNCTION__, deleteError);
-                [self removeItemAtURL:destinationUrl error:&deleteError];
-            }
-        }
-    }
-}
-
-- (NSData *)dataForUrl:(NSURL *)url {
-    NSError *readError = nil;
-    NSData *data = nil;
-    if ([self fileExistsAtPath:[url path]]) {
-        data = [NSData dataWithContentsOfURL: url options:NSDataReadingUncached error:&readError];
-        if (readError != nil) {
-            data = [NSData dataWithContentsOfURL: url options:NSDataReadingUncached error:&readError];
-        }
-    }
-    return data;
 }
 
 @end

@@ -83,7 +83,11 @@
         [insertedURLs addObject:insertedURL];
     }
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs removedURLs:@[] updatedURLs:@[]];
+    NSArray *removedUrls = @[];
+    NSArray *updatedUrls = @[];
+    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
+                                                        removedURLs: removedUrls
+                                                        updatedURLs: updatedUrls];
     
     [self.metadataQuery enableUpdates];
 }

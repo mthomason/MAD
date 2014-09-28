@@ -464,8 +464,15 @@ NSString * const MADFileNameMetaPlist                   = @"meta.plist";
 - (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
     MTLog(@"\n\t%s\n\t%@\n\n", __PRETTY_FUNCTION__, absoluteURL);
     
-    NSData *imageData = [[NSFileManager defaultManager] dataForUrl:self.urlThumbnail];;
-    
+    NSError *readError = nil;
+    NSData *imageData = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.urlThumbnail path]]) {
+        imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
+        if (readError != nil) {
+            imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
+        }
+    }
+
     if (imageData != nil) {
         UIImage *image = [UIImage imageWithData: imageData];
         if (image != nil) {
@@ -780,7 +787,7 @@ NSString * const MADFileNameMetaPlist                   = @"meta.plist";
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
     NSString *filenameId = [MACloudManager filenameId:[filename hash]];
-    return [[NSFileManager defaultManager] cacheDirectoryNamed:filenameId];
+    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 
 - (void)addConnection:(MTDatabaseConnection *)connection
@@ -976,7 +983,7 @@ NSString * const MADFileNameMetaPlist                   = @"meta.plist";
 
 + (NSURL *)cachedUrlForHash:(NSUInteger)hash andExtension:(NSString *)extension {
     NSString *fileName = [MACloudManager filenameId:hash extention:extension];
-    NSURL *cachedDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileName];
+    NSURL *cachedDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileName];
     return [cachedDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 
@@ -1013,7 +1020,7 @@ NSString * const MADFileNameMetaPlist                   = @"meta.plist";
     fileName = [fileName stringByAppendingPathExtension:@"png"];
     
     NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
-    NSURL *cacheDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileNameId];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
     
 }
@@ -1023,7 +1030,7 @@ NSString * const MADFileNameMetaPlist                   = @"meta.plist";
     NSString *fileName = [handle stringByAppendingString:extention];
     
     NSString *fileNameId = [MACloudManager filenameId:handle.hash];
-    NSURL *cacheDirectory = [[NSFileManager defaultManager] cacheDirectoryNamed:fileNameId];
+    NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
 }
 

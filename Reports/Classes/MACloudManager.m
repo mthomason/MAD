@@ -491,36 +491,6 @@ static MACloudManager *sharedSingleton;
     return [[self filenameId:tag] stringByAppendingPathExtension:fileExtention];
 }
 
-- (NSURL *)cachedDirectoryForFileUrl:(NSURL *)fileUrl {
-    NSString *handle = [fileUrl filenameMinusExtention];
-    NSString *fileNameId = [MACloudManager filenameId:handle.hash];
-    return [self cacheDirectoryNamed:fileNameId];
-}
-
-- (NSURL *)cacheDirectoryNamed:(NSString *)handle {
-    
-    NSURL *cachedArrayDirectories = [self.cachesDirectory URLByAppendingPathComponent:handle isDirectory:YES];
-    BOOL exist, isDirectory;
-    exist = [self.fileManager fileExistsAtPath: cachedArrayDirectories.path
-                                   isDirectory: &isDirectory];
-    if (exist == NO || isDirectory == NO) {
-        NSError *error = nil;
-        [self.fileManager createDirectoryAtURL: cachedArrayDirectories
-                   withIntermediateDirectories: YES
-                                    attributes: @{}
-                                         error: &error];
-        if (error) {
-            error = nil;
-            [self.fileManager createDirectoryAtURL: cachedArrayDirectories
-                       withIntermediateDirectories: YES
-                                        attributes: @{}
-                                             error: &error];
-        }
-        NSAssert(error == nil, @"Error at %s: %@", __PRETTY_FUNCTION__, error);
-    }
-    return cachedArrayDirectories;
-}
-
 #pragma mark File Helpers
 
 - (void)createDirectoryIfDoesNotExist:(NSURL *)url {
