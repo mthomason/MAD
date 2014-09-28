@@ -97,11 +97,11 @@ static MACloudManager *sharedSingleton;
 - (id)init {
     if (self = [super init]) {
         
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudOptionsSelected];
-            [self resetForDebugging];
-        });
+        //static dispatch_once_t onceToken;
+        //dispatch_once(&onceToken, ^{
+        //    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudOptionsSelected];
+        //    [self resetForDebugging];
+        //});
         
         sharedSingleton.ubiquityIdentifier = MADUbiquityIdentifier;
         
@@ -243,7 +243,7 @@ static MACloudManager *sharedSingleton;
     
     NSMutableSet *result = [[NSMutableSet alloc] init];
     if (self.isCloudEnabled) {
-        [result addObjectsFromArray:self.fileLocationManager.documents];
+        [result addObjectsFromArray:self.madUrls.allObjects];
     } else {
         NSError *error = nil;
         NSFileManager *fm = self.fileManager;
