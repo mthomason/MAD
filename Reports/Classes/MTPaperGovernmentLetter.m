@@ -11,6 +11,7 @@
 #endif
 
 #import "MTPaperGovernmentLetter.h"
+#import "CGGeometry+Extras.h"
 
 @implementation MTPaperGovernemntLetter
 

@@ -10,9 +10,10 @@
 #define Reports_MTDataTable_h
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"
+#import "MTAggregateFunctionType.h"
+#import "MADAggregateGroupByType.h"
 
 typedef NS_ENUM(NSUInteger, MTDataTableType) {
 	MTDataTableTypeVirtual,

@@ -11,7 +11,6 @@
 #endif
 
 #import "MTGroupByViewController.h"
-#import "AppDelegate.h"
 #import "MADocument.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"

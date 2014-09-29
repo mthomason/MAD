@@ -7,12 +7,11 @@
 //
 
 #import "UITableViewCellOverride.h"
-#import "Constants.h"
 
 @implementation UITableViewCellOverride
 
 + (CGFloat)defaultHeight {
-    return MNSTableViewCellOverrideHeightDefault;
+    return 44.0000f;
 }
 
 - (void)layoutSubviews {

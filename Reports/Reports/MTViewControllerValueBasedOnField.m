@@ -12,6 +12,7 @@
 
 #import "MTViewControllerValueBasedOnField.h"
 #import "MTCellEnterText.h"
+#import "MTDatabase.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>

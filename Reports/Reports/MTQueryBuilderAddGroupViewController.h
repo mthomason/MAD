@@ -12,9 +12,8 @@
 #import <UIKit/UIKit.h>
 #import "MTQueryBuilderSortTypeViewController.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
-#import "MUIViewControllerDelegate.h"
 
-@class MTQueryBuilderAddGroupViewController, NSManagedObjectID;
+@class MTQueryBuilderAddGroupViewController, NSManagedObjectID, MADocument;
 
 @protocol MTQueryBuilderAddGroupDelegate
 - (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryField andSortOrder:(MNSSortOrder)sortOrder;

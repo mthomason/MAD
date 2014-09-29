@@ -10,11 +10,8 @@
 #define Reports_MTDatabaseMySql_h
 
 #import "MTDatabase.h"
-
 #import "MTGraph.h"
-
-#import "MTDatabaseTable.h"
-#import "MTDatabaseField.h"
+#import "MTDataType.h"
 
 @class RptqDatabaseSchemaTable;
 

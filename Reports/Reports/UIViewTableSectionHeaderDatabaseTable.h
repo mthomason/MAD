@@ -10,15 +10,9 @@
 #define Reports_UIViewTableSectionHeaderDatabaseTable_h
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
+#import "MADSectionHeaderViewDelegate.h"
 
 @class UIViewTableSectionHeaderDatabaseTable;
-
-@protocol SectionHeaderViewDelegate <NSObject>
-@optional
-- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionOpened:(NSInteger)section;
-- (void)sectionHeaderView:(UIViewTableSectionHeaderDatabaseTable *)sectionHeaderView sectionClosed:(NSInteger)section;
-@end
 
 @interface UIViewTableSectionHeaderDatabaseTable : UIView
 

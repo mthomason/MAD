@@ -17,6 +17,7 @@
 #import "NSFileManager+Common.h"
 #import "MTLog.h"
 #import "MACloudManager.h"
+#import "MTAggregateFunctionType.h"
 
 @interface MTDataTable ()
 

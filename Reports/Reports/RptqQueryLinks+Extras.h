@@ -12,16 +12,7 @@
 #import "RptqQueryLinks.h"
 #import "MTProtocolLog.h"
 #import "MTProtocolCompare.h"
-
-typedef NS_ENUM(NSUInteger, MNSLinkType) {
-	MNSLinkTypeInnerJoin = 0,
-	MNSLinkTypeEquiJoin = 1,
-	MNSLinkTypeNaturalJoin = 2,
-    MNSLinkTypeCrossJoin = 3,
-    MNSLinkTypeLeftOuterJoin = 4,
-    MNSLinkTypeRightOuterJoin = 5,
-    MNSLinkTypeFullOuterJoin = 6,
-};
+#import "MADLinkType.h"
 
 extern NSString * const MNSJoinTypeInnerJoin;
 extern NSString * const MNSJoinTypeEquiJoin;

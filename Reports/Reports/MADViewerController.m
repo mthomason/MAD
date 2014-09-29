@@ -11,6 +11,9 @@
 #endif
 
 #import "MADViewerController.h"
+#import "MTReportViewerPrintPageRenderer.h"
+#import "MTReportViewerReportPageView.h"
+
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
@@ -38,6 +41,7 @@
 
 #import "MTNotificationDidFormatPage.h"
 #import "MTNotificationDidReadRows.h"
+#import "UIColor+EverydayApps.h"
 
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
@@ -451,7 +455,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         [self setCurrentPageIndex:sliderIndex];
         [self updatePageStatus];
         MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                                                                PageNumber: self.currentPageIndex + 1
+                                                                                                                pageNumber: self.currentPageIndex + 1
                                                                                                                    ofPages: self.numberOfPages];
         [[pageOne view] setFrame:self.view.bounds];
         pageOne.delegate = self;
@@ -952,7 +956,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [blockViewer2 setDisplayActive];
             
             MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                                                                    PageNumber: (blockViewer2.currentPageIndex + 1)
+                                                                                                                    pageNumber: (blockViewer2.currentPageIndex + 1)
                                                                                                                        ofPages: numberOfPages];
             [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
             pageOne.delegate = blockViewer2;
@@ -1013,7 +1017,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
         if (visablePageNumber + 1 <= [self numberOfPages]) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                           PageNumber: visablePageNumber + 1
+                                                                           pageNumber: visablePageNumber + 1
                                                                               ofPages: [self numberOfPages]];
             result.delegate =  self;
             result.view.frame = self.view.bounds;
@@ -1036,7 +1040,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
         if (visablePageNumber - 1 > 0) {
             result = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
-                                                                           PageNumber: visablePageNumber - 1
+                                                                           pageNumber: visablePageNumber - 1
                                                                               ofPages: [self numberOfPages]];
             result.delegate =  self;
             result.view.frame = self.view.bounds;

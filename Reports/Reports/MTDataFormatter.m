@@ -12,22 +12,6 @@
 
 #import "MTDataFormatter.h"
 
-#import "SectionEnumerator.h"
-#import "MTQuery.h"
-#import "MTQueryFull.h"
-
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqQueryGroup.h"
-#import "RptqQuery.h"
-
-#import "RptqQuery+Extras.h"
-#import "MTDataTable.h"
-
-#import "AppDelegate.h"
-#import "MTApplicationInstance.h"
-
-
 @interface MTDataFormatter ()
 
 @end

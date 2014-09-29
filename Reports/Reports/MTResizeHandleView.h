@@ -10,7 +10,6 @@
 #define Reports_MTResizeHandleView_h
 
 #import <UIKit/UIKit.h>
-#import "Constants.h"
 
 typedef NS_ENUM(NSUInteger, MNSCompusPosition) {
 	north = 1,

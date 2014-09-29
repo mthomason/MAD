@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryBuilderChooseFieldViewController.h"
+#import "MADocument.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "RptqFieldSelectorManager.h"

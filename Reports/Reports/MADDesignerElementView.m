@@ -10,9 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+NSObjectIdTag.h"
-#import "Constants.h"
-#import "MTTextView.h"
-#import "UIDevice+Hack.h"
+#import "MTAlignment.h"
 #import "UIColor+EverydayApps.h"
 #import "MTBarcode.h"
 #import "RptqDocumentObject.h"

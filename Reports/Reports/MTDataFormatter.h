@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTDataFormatter_h
+#define MAD_MTDataFormatter_h
+
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 @class RptqQuery, MTQuery, MTDataTable;
 
@@ -20,3 +22,5 @@
 - (BOOL)format;
 
 @end
+
+#endif

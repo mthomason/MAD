@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryCacheAddRow_h
+#define Reports_MTQueryCacheAddRow_h
+
 #import <Foundation/Foundation.h>
 #import "MTQuery.h"
 
@@ -13,3 +16,5 @@
 
 
 @end
+
+#endif

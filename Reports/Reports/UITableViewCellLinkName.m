@@ -7,12 +7,11 @@
 //
 
 #import "UITableViewCellLinkName.h"
-#import "Constants.h"
 
 @implementation UITableViewCellLinkName
 
 + (CGFloat)defaultHeight {
-    return MNSTableViewCellInkNameHeightDefault;
+    return 0.0000f;
 }
 
 - (void)layoutSubviews {

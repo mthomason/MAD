@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeAusPostStandardCustomer_h
+#define Barcodes_MTBarcodeAusPostStandardCustomer_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeAusPostStandardCustomer : MTBarcode
 
 @end
+
+#endif

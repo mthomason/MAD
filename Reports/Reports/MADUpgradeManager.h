@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MADUpgradeManager_h
+#define MAD_MADUpgradeManager_h
+
 #import <Foundation/Foundation.h>
 
 @interface MADUpgradeManager : NSObject
@@ -13,3 +16,5 @@
 - (void)performUpgradeIfRequired:(void(^)(BOOL success, NSError *error, BOOL upgradePerformed))completion;
 
 @end
+
+#endif

@@ -7,16 +7,19 @@
 //
 
 #import "MTReportDesignerDocumentObjectFormat.h"
-#import "UIDevice+Hack.h"
-#import "AppDelegate.h"
-#import "MTApplicationInstance.h"
-#import "MADocument.h"
 #import <CoreData/CoreData.h>
+#import "MADocument.h"
+
+#import "MTDatabaseField.h"
 #import "MTToolboxViewControllerProtocol.h"
-#import "RptqDocumentObject+Extras.h"
+
 #import "RptqQueryField.h"
 #import "RptqDocumentObjectLabelDataField.h"
 #import "RptqDatabaseSchemaField.h"
+
+#import "RptqDocumentObject+Extras.h"
+
+#import "UIDevice+Hack.h"
 
 @interface MTReportDesignerDocumentObjectFormat ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
@@ -62,14 +65,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if ([UIDevice isModernOS]) {
-        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        self.tableView.backgroundView = visualEffectsView;
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.view.opaque = NO;
-    }
+    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    self.tableView.backgroundView = visualEffectsView;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.view.opaque = NO;
 
 }
 
@@ -238,10 +239,8 @@
 #pragma mark Table View Delegate Protocol
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([UIDevice isModernOS]) {
-        cell.backgroundColor = [UIColor clearColor];
-        cell.contentView.backgroundColor = [UIColor clearColor];
-    }
+    cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {

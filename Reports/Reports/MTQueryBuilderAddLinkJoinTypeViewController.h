@@ -10,13 +10,16 @@
 #define Reports_MTQueryBuilderAddLinkJoinTypeViewController_h
 
 #import <UIKit/UIKit.h>
-#import "RptqQueryLinks+Extras.h"
+#import "MADLinkType.h"
 
 @class MTQueryBuilderAddLinkJoinTypeViewController, MADocument;
 
 @protocol MTQueryBuilderAddLinkJoinTypeDelegate
+
 - (MNSLinkType)initalLinktype;
-- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith:(MNSLinkType)result from:(MADocument *)document;
+- (void)viewControllerSchemaAddLinkJoinTypeDidFinishWith: (MNSLinkType)result
+                                                    from: (MADocument *)document;
+
 @end
 
 @interface MTQueryBuilderAddLinkJoinTypeViewController : UITableViewController

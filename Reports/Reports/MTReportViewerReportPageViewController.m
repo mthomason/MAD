@@ -11,10 +11,14 @@
 #endif
 
 #import "MTReportViewerReportPageViewController.h"
+#import "MADocument.h"
+#import "MTReportViewerReportPageView.h"
 #import "AppDelegate.h"
 #import "NSDate+Extras.h"
 #import "MTApplicationInstance.h"
 #import "MTPair.h"
+#import "UIColor+EverydayApps.h"
+
 @interface MTReportViewerReportPageViewController ()
 
 @property (nonatomic, assign) NSUInteger pageNumber;
@@ -48,7 +52,7 @@
     _delegate = nil;
 }
 
-- (instancetype)initWithDocument:(MADocument *)document PageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
+- (instancetype)initWithDocument:(MADocument *)document pageNumber:(NSUInteger)pageNumber ofPages:(NSUInteger)numberOfPages {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         [self setDocument:document];

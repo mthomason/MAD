@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTQueryBuilderChooseFieldViewController.h"
+#import "MTQueryBuilderChooseFieldDelegate.h"
 
 @protocol MTTableViewControllerBarcodeExtraMaxicodeDelegate
 - (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode;
@@ -17,6 +17,8 @@
 - (NSInteger)initalEncodingMode;
 - (NSString *)initalPrimaryData;
 @end
+
+@class MADocument;
 
 @interface MTTableViewControllerBarcodeExtraMaxicode : UITableViewController
     <MTQueryBuilderChooseFieldDelegate>

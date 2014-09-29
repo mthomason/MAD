@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQuerySampleDataTable_h
+#define Reports_MTQuerySampleDataTable_h
+
 #import "MTQuery.h"
 
 @interface MTQuerySampleDataTable : MTQuery
@@ -13,3 +16,5 @@
 - (NSString *)getSqlWithError:(NSError **)error;
 
 @end
+
+#endif

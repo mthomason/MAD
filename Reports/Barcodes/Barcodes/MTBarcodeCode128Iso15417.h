@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeCode128Iso15417_h
+#define Barcodes_MTBarcodeCode128Iso15417_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeCode128Iso15417 : MTBarcode
@@ -31,3 +34,5 @@
 @interface MTBarcodeCode128Ean128 : MTBarcode
 
 @end
+
+#endif

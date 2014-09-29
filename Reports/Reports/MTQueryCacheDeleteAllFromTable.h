@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryCacheDeleteAllFromTable_h
+#define Reports_MTQueryCacheDeleteAllFromTable_h
+
 #import "MTQuery.h"
 
 @interface MTQueryCacheDeleteAllFromTable : MTQuery
 
 @end
+
+#endif

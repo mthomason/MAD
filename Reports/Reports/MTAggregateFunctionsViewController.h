@@ -10,8 +10,7 @@
 #define Reports_MTAggregateFunctionsViewController_h
 
 #import <UIKit/UIKit.h>
-#import "RptqDocumentObject+Extras.h"
-#import "Constants.h"
+#import "MTAggregateFunctionType.h"
 
 extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 
@@ -22,8 +21,8 @@ extern NSString * const MTAggregateFunctionsViewControllerIdentifier;
 @interface MTAggregateFunctionsViewController : UITableViewController
 
 @property (nonatomic, assign) id <MTAggregateFunctionsViewControllerDelegate> delegate;
-
 @property (nonatomic, readonly) MTAggregateFunctionType selectedFunctionType;
+
 - (void)setSelectedFunctionType:(MTAggregateFunctionType)selectedFunctionType;
 
 @end

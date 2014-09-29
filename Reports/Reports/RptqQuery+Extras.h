@@ -12,7 +12,7 @@
 #import "RptqQuery.h"
 #import "MTProtocolCompare.h"
 
-@class RptqDocument, MTDatabase;
+@class RptqDocument, MTDatabase, RptqDocumentSection;
 
 @interface RptqQuery (Extras) <MTProtocolCompare>
 

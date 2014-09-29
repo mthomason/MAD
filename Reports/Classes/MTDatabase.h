@@ -12,7 +12,6 @@
 #define Reports_MTDatabase_h
 
 #import <Foundation/Foundation.h>
-#import "MTDatabaseField.h"
 
 extern NSString * const MTSqlFrom;
 

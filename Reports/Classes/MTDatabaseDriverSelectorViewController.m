@@ -13,13 +13,17 @@
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTConnectionViewController.h"
 #import "UIDevice+Hack.h"
-#import "Constants.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 
-NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt = @"Select a database type.";
-NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle = @"Supported Databases";
+NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select a database type.";
+NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"Supported Databases";
+
+NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier            = @"MTSegueShowSetUpDatasourceSqlite3Identifier";
+NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSegueShowSetUpDatasourceSalesForceIdentifier";
+NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
 @interface MTDatabaseDriverSelectorViewController ()
     <MTViewControllerProtocol>

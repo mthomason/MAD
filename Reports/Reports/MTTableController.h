@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTTableController_h
+#define MAD_MTTableController_h
+
 #import <UIKit/UIKit.h>
-#import "Constants.h"
 
 @class MTDataFormatter, MTQuery;
 
@@ -20,3 +22,5 @@
 - (NSUInteger)columnCount;
 
 @end
+
+#endif

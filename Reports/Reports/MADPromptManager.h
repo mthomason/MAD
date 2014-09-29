@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADPromptManager_h
+#define Reports_MADPromptManager_h
+
 #import <Foundation/Foundation.h>
 
 @interface MADPromptManager : NSObject
@@ -17,3 +20,5 @@
 - (void)removeAll;
 
 @end
+
+#endif

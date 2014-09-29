@@ -7,11 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MTBarcode.h"
+#import "MTViewControllerBarcodePreviewDelegate.h"
 
-@protocol MTViewControllerBarcodePreviewDelegate
-- (void)didChangeBarcodeType:(MTBarcodeType)type;
-@end
+@class MTBarcode;
 
 @interface MTViewControllerBarcodePreview : UIViewController
 

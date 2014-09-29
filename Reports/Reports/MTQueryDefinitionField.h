@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryDefinitionField_h
+#define Reports_MTQueryDefinitionField_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTQueryDefinitionField : NSObject

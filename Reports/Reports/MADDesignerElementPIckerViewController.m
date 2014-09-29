@@ -12,16 +12,25 @@
 
 #import "MADDesignerElementPIckerViewController.h"
 #import <CoreData/CoreData.h>
+
+#import "MTAggregateFunctionsViewController.h"
+
 #import "UIDevice+Hack.h"
+
+#import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTGroupByViewController.h"
 
+#import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
+
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 
 #import "UIColor+EverydayApps.h"
+#import "MADDocumentObjectType.h"
 
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";

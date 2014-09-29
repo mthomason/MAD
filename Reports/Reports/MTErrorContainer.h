@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTErrorContainer_h
+#define MAD_MTErrorContainer_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTErrorContainer : NSObject
@@ -16,3 +19,5 @@
 - (NSUInteger)count;
 
 @end
+
+#endif

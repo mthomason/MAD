@@ -13,6 +13,8 @@
 #import "MADQueryVisualizationSchemaViewController.h"
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
+#import "MADocument.h"
+
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTConnectorView.h"

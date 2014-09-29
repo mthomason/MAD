@@ -14,7 +14,6 @@
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "MTDatabase.h"
-#import "Constants.h"
 #import "MTDataTable.h"
 #import "RptqDatabase.h"
 #import "MTDatabaseConnection.h"

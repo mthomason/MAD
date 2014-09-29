@@ -12,12 +12,8 @@
 #define Reports_MADocument_h
 
 #import <Foundation/Foundation.h>
+#import "MTReportFormatterDataSource.h"
 #import "MTCacheProtocol.h"
-#import "Constants.h"
-#import "MADocument.h"
-#import "MTDatabase.h"
-#import "MTDatabaseConnection.h"
-#import "MTReportFormatter.h"
 #import "MADDataProtocol.h"
 #import "MADActivityProtocol.h"
 
@@ -28,7 +24,7 @@ extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
-@class MADocumentState, MTErrorContainer;
+@class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter, MTDataTable, MTQuery;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,

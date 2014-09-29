@@ -11,7 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MTAutoLayoutTableViewCell.h"
-#import "Constants.h"
+
+extern CGFloat const MNSTableViewCellHeightDefault;
 
 @interface UITableViewCellInstruction : MTAutoLayoutTableViewCell
 

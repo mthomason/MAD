@@ -10,7 +10,6 @@
 #define Reports_DesignerSectionLabel_h
 
 #import <UIKit/UIKit.h>
-#import "Constants.h"
 
 extern const CGFloat MADesignerSectionLabelFontSize;
 

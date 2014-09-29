@@ -29,9 +29,6 @@
 #define FALSE 0
 #define TRUE  1
 
-typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
-
-
 struct MTMargin {
     CGFloat left;
     CGFloat right;
@@ -96,91 +93,15 @@ typedef NS_ENUM(NSUInteger, MTTabBarItemTag) {
     MTTabBarItemTagViewer = 3
 };
 
-typedef NS_ENUM(NSUInteger, MNSSortOrder) {
-	MNSSortOrderAccending = 0,
-	MNSSortOrderDecending
-};
-
-typedef NS_ENUM(NSUInteger, MTAggregateGroupByType) {
-    MTAggregateGroupByTypePage = 2,
-    MTAggregateGroupByTypeReport = 3,
-    MTAggregateGroupByTypeSection = 5,
-};
-
-/*
-typedef NS_ENUM(NSUInteger, MTAggregateGroupType) {
-	MTAggregateGroupTypeField = 1,
-	MTAggregateGroupTypeFormula = 2
-};*/
-
-typedef NS_ENUM(NSUInteger, MTAggregateFunctionType) {
-    MTAggregateFunctionTypeSum = 2,
-    MTAggregateFunctionTypeMean = 3,
-    MTAggregateFunctionTypeFirst = 5,
-    MTAggregateFunctionTypeLast = 7,
-    MTAggregateFunctionTypeCount = 11,
-    MTAggregateFunctionTypeMin = 13,
-    MTAggregateFunctionTypeMax = 17,
-    MTAggregateFunctionTypeNotSet = 55,
-};
-
-typedef NS_ENUM(NSUInteger, MTAggregateFunctionInputType) {
-    MTAggregateFunctionInputTypeField = 0,
-    MTAggregateFunctionInputTypeFormula
-};
-
 typedef NS_ENUM(NSUInteger, MTDocumentObjectBuilder) {
     MTDocumentObjectBuilderType,
     MTDocumentObjectBuilderValue
 };
 
-typedef NS_ENUM(NSUInteger, MTQuerySections) {
-	MTQuerySectionsDocumentGroups = 0,
-    MTQuerySectionsDatasource = 1,
-	MTQuerySectionsTables = 2,
-	MTQuerySectionsLinks = 3,
-	MTQuerySectionsGroups = 4,
-	MTQuerySectionsPredicate = 5,
-    MTQuerySectionsSql = 6
-};
-
-typedef NS_ENUM(NSUInteger, MTControlState) {
-	MTControlStateOff = 0,
-	MTControlStateOn,
-    MTControlStateAmbiguous
-};
-
-typedef NS_ENUM(NSUInteger, MTVerticalAlignment) {
-	MTVerticalAlignmentTop = 0,
-	MTVerticalAlignmentCenter = 1,
-	MTVerticalAlignmentBottom = 2
-};
-
-typedef NS_ENUM(NSUInteger, MTHorizontalAlignment) {
-	MTHorizontalAlignmentLeft = 0,
-	MTHorizontalAlignmentCenter = 1,
-	MTHorizontalAlignmentRight = 2,
-	MTHorizontalAlignmentJustified = 3,
-	MTHorizontalAlignmentNatrual = 4
-};
-
-extern const CGFloat MTDefaultFingerSizeWidth;
-extern const CGFloat MTDefaultFingerSizeHeight;
-
-
 extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionYear1;
 extern NSString * const MTStoreKitProductIdentifierDesignerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionMonth1;
 extern NSString * const MTStoreKitProductIdentifierViewerSubscriptionYear1;
-
-extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
-extern NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier;
-extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
-extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
-extern NSString * const MTSegueLicensing;
-extern NSString * const MTBundleDisplayName;
-
-extern NSString * const MTDocumentTypeUtiMad;
 
 extern NSString * const MTCollectionElementKindSectionLabel;
 
@@ -194,63 +115,40 @@ extern NSString * const MNSStringInterfaceButtonTitleAbortDesc;
 // MARK: Storyboard Identifiers
 
 extern CGFloat const MNSAnimationDurationShowFromBottom;
-extern CGFloat const MNSAnimationDurationShowFromBottomHalf;
 extern CGFloat const MNSAnimationDurationShowFromSide;
 extern CGFloat const MNSAnimationDurationSlow;
 extern CGFloat const MNSAnimationDurationFast;
 extern CGFloat const MNSAnimationDurationNormal;
 extern CGFloat const MNSAnimationDurationNone;
 
-extern CGFloat const MNSTableViewCellHeightDefault;
-extern CGFloat const MNSTableViewCellTableNameHeightDefault;
 extern CGFloat const MNSTableViewCellQueryInputHeightDefault;
 extern CGFloat const MNSTableViewCellInstructionHeightDefault;
-extern CGFloat const MNSTableViewCellInkNameHeightDefault;
 extern CGFloat const MNSTableViewCellOverrideHeightDefault;
 extern CGFloat const MNSTableViewCellQueryLinkHeightDefault;
 
 extern CGFloat const MNSDocumentHeight;
 
-extern NSString * const MTSampleDatabaseChinook;
-
 extern NSString * const MNSInterfaceButtonDismiss;
-extern NSString * const MNSInterfaceTitleProblem;
 extern NSString * const MNSInterfaceTitleError;
 extern NSString * const MNSInterfaceMessageErrorDataSourceCreation;
-extern NSString * const MNSInterfaceMessageErrorFailedToCreateReport;
 
 extern NSString * const UIIMAGEDOCUMENTBLANK;
 extern NSString * const APPLICATIONDATA_FILENAME;
 extern NSString * const MYSQLDATABASEDATA_FILENAME;
-extern NSString * const MTPersistentStoreAliasMad;
 extern NSString * const MTPersistentStoreAliasUserPreferences;
 
-extern NSString * const MTDocumentExtentionSqlite3;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentData;
-extern NSString * const MTDocumentExtentionPoratableNetworkGraphic;
 extern NSString * const TEMPLATE_PATH_EXTENSION;
 extern NSString * const TEMPLATES;
 
 extern NSString * const NSDATABASE_SF_OAUTH_KEY;
 extern NSString * const NSDATATBASE_SF_OAUTH_CALLBACK_URL;
 
-extern NSString * const MTTableHeaderSectionKey;
-extern NSString * const MTTableSectionRowKey;
-extern NSString * const MTTableSectionRowHeightKey;
-extern NSString * const MTTableSectionSectionsKey;
 extern NSString * const PDF_PATH_EXTENSION;
 
 extern NSString * const KEY_DB_TYPE_SF;
 extern NSString * const KEY_DB_TYPE_DB;
 
 // MARK: Segue Identifiers
-extern NSString * const MTSegueOpenInViewer;
-extern NSString * const MNSIdentifierSegueShowLayoutSettings;
-extern NSString * const MNSIdentifierSegueShowAddDatabaseDrivers;
-extern NSString * const MNSIdentifierSegueShowAddTableViewController;
-extern NSString * const MNSIdentifierSegueShowAddLinkViewController;
-extern NSString * const MNSIdentifierSegueShowAddPredicateViewController;
-extern NSString * const MNSIdentifierSegueShowAddGroupViewController;
-extern NSString * const MNSSegueShowSql;
 
 #endif

@@ -12,27 +12,22 @@
 
 #import "MTApplicationInstance.h"
 #import <CoreData/CoreData.h>
+
 #import "MADQueryViewController.h"
 
-#import "UIColor+EverydayApps.h"
-#import "UIDevice+Hack.h"
 #import "MADocument.h"
-#import "NSFileManager+Common.h"
 #import "UAAppReviewManager.h"
 
 #import "MTUser.h"
 #import "MTReportDesigner.h"
-#import "MTReportViewer.h"
-#import "MTQueryDesigner.h"
-#import "MADocument.h"
-#import "MTUser.h"
-#import "MADocumentState.h"
 
+#import "UIColor+EverydayApps.h"
+#import "UIDevice+Hack.h"
 #import "NSFileManager+Common.h"
 #import "NSParagraphStyle+CommonStyles.h"
+#import "NSURL+Document.h"
 
 #import "MADFileManager.h"
-#import "NSURL+Document.h"
 
 NSString * const MTApplicationIdMadDesigner                          = @"666001433";
 NSString * const MTApplicationIdMadViewer                            = @"666003759";
@@ -40,9 +35,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.96";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.96";
-NSString * const MTGlobalBundleRev                                  = @"1471";
+NSString * const MTGlobalBundleVersion                              = @"7.0.97";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.97";
+NSString * const MTGlobalBundleRev                                  = @"1472";
 
 NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
@@ -55,6 +50,7 @@ NSString * const MTStoryboardReportViewer                           = @"MTStoryb
 NSString * const MTStoryboardReportViewerPad                        = @"MTStoryboardReportViewerPad";
 NSString * const MTStoryboardReportViewerLagacy                     = @"MTStoryboardReportViewerOS6";
 NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryboardReportViewerPadOS6";
+NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
 @interface MTApplicationInstance ()
     <NSCoding>
@@ -104,13 +100,7 @@ NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryb
 
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
         self.reportDesigner = reportDesigner;
-
-        MTQueryDesigner *queryDesigner = [[MTQueryDesigner alloc] init];
-        self.queryDesigner = queryDesigner;
         
-        MTReportViewer *reportViewer = [[MTReportViewer alloc] init];
-        self.reportViewer = reportViewer;
-
         [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
             return NO;
         }];

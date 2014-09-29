@@ -9,7 +9,6 @@
 #import "MADUpgradeManager.h"
 #import "NSFileManager+Common.h"
 #import "MACloudManager.h"
-#import "MTLog.h"
 #import "MTApplicationInstance.h"
 
 #define MADUPGRADE_CREATE_SAMPLE FALSE       //Not for production use.
@@ -22,6 +21,8 @@ NSString * const MADIdentifierSegueUpgradeUnneeded  = @"MTSegueUpgradeUnneeded";
 
 NSString * const MADIdentifierFileLondon            = @"London";
 NSString * const MADIdentifierFileMusic             = @"Music";
+NSString * const MTSampleDatabaseChinook            = @"chinook";
+NSString * const MTDocumentExtentionSqlite3         = @"sqlite3";
 
 const NSInteger currentMajorVersion = 2;
 

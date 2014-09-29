@@ -7,7 +7,8 @@
 //
 
 #import "UITableViewCellInstruction.h"
-#import "Constants.h"
+
+CGFloat const MNSTableViewCellHeightDefault = 44.0000f;
 
 @implementation UITableViewCellInstruction
 

@@ -10,7 +10,6 @@
 #define Reports_MTDataTableFastObjectEnumerator_h
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 @class MTDatabaseConnection, MTQuery;
 

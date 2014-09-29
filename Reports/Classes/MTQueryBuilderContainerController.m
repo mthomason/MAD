@@ -12,6 +12,7 @@
 
 #import "MTQueryBuilderContainerController.h"
 #import <CoreData/CoreData.h>
+#import "MADocument.h"
 
 #import "MTApplicationInstance.h"
 #import "MADDesignerViewController.h"

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeGridMatrix_h
+#define Barcodes_MTBarcodeGridMatrix_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeGridMatrix : MTBarcode
@@ -19,3 +22,5 @@
 - (NSInteger)errorCorrection;
 
 @end
+
+#endif

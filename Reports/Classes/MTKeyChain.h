@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_MTKeyChain_h
+#define MAD_MTKeyChain_h
+
 #import <Foundation/Foundation.h>
 
 @interface MTKeyChain : NSObject
@@ -17,3 +20,5 @@
 - (void)deleteKey:(NSString *)key;
 
 @end
+
+#endif

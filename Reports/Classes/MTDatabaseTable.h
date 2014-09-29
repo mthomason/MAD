@@ -10,7 +10,6 @@
 #define Reports_MTDatabaseTable_h
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 @interface MTDatabaseTable : NSObject
 

@@ -13,8 +13,8 @@
 #import "MADDesignerViewController.h"
 #include <math.h>
 #import <CoreData/CoreData.h>
+#import "MADocument.h"
 #import "AppDelegate.h"
-#import "MTApplicationInstance.h"
 #import "MADDesignerElementView.h"
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
@@ -35,13 +35,13 @@
 #import "MTDocumentObjectNewAggregateViewController.h"
 #import "MTDocumentObjectNewStaticLabelViewController.h"
 #import "MTCollectionViewLayoutLiquidAttributes.h"
-#import "MTLog.h"
+#import "SectionEnumerator.h"
+#import "MTFont.h"
+
 #import "UIColor+EverydayApps.h"
 #import "UIView+NSObjectIdTag.h"
 #import "CGGeometry+Extras.h"
 #import "UIDevice+Hack.h"
-#import "SectionEnumerator.h"
-#import "MTFont.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -74,8 +74,6 @@
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 
-#import "Constants.h"
-
 #import "UIViewController+ui.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIScrollView+Extras.h"
@@ -89,12 +87,17 @@
 
 #import "MADPromptManager.h"
 
+#import "MTQueryBuilderChooseFieldDelegate.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
+
 NSString * const MADImageBarButtonItemMadDesigner8                  = @"UIBarButtonItemMadDesigner8";
 NSString * const MADImageBarButtonItemMadDesigner                   = @"UIBarButtonItemMadDesigner";
 NSString * const MTSegueNewDocumentObjectStaticLabelSaveIdentifer   = @"MTSegueNewDocumentObjectStaticLabelSaveIdentifer";
 NSString * const MTSegueNewDocumentObjectDynamicLabelSaveIdentifer  = @"MTSegueNewDocumentObjectDynamicLabelSaveIdentifer";
 NSString * const MTSegueChooseWhitespaceSaveIdentifer               = @"MTSegueChooseWhitespaceSaveIdentifer";
 NSString * const MTSegueChooseImageSaveIdentifer                    = @"MTSegueChooseImageSaveIdentifer";
+
+const CGFloat MNSAnimationDurationShowFromBottomHalf = 0.3500f;
 
 const CGFloat MADSizeWidthViewDetailDisplay         = 32.0000f;
 const CGFloat MADSizeHeightViewDetailDisplay        = 20.0000f;

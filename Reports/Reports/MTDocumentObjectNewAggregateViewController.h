@@ -11,9 +11,10 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import "MTAggregateFunctionsViewController.h"
-#import "Constants.h"
 #import "MTUnwindProtocol.h"
+#import "MTAggregateFunctionInputType.h"
+#import "MADAggregateGroupByType.h"
+#import "MTAggregateFunctionType.h"
 
 extern NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier;

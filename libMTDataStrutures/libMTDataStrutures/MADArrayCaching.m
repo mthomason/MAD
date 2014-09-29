@@ -17,8 +17,8 @@
 #import "MTDataColumn.h"
 #import "MTQuery.h"
 #import "libSqlite3_8.h"
-#import "MTLog.h"
 #import "MTPair.h"
+#import "MTDatabaseField.h"
 
 NSString * const MTArrayCachedTableName = @"ac";
 NSString * const MTArrayCachedColumnKey = @"ci";

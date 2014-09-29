@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTPaperA10_h
+#define Reports_MTPaperA10_h
+
 #import "MTPaper.h"
 
 @interface MTPaperA10 : MTPaper
 
 @end
+
+#endif

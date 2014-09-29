@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTStoreKitController_h
+#define Reports_MTStoreKitController_h
+
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
-#import "MTLog.h"
-#import "NSError+UserInterface.h"
-#import "MTVerificationController.h"
 
 extern NSString * const MTStoreKitTransactionReceipt;
 extern NSString * const MTStoreKitTransactionDate;
@@ -65,3 +65,5 @@ typedef void (^MTBlockCompletion)(BOOL success, NSError *error);
 @property (nonatomic, retain) NSDate *verifiedExperationDate;
 
 @end
+
+#endif

@@ -7,7 +7,8 @@
 //
 
 #import "MTQueryCacheAggregateFunction.h"
-#import "Constants.h"
+#import "MTAggregateFunctionType.h"
+#import "MADAggregateGroupByType.h"
 
 @interface MTQueryCacheAggregateFunction ()
 
@@ -18,8 +19,6 @@
 @property (nonatomic, strong) NSArray *rowids;
 @property (nonatomic, assign) MTAggregateGroupByType groupByType;
 @property (nonatomic, assign) MTAggregateFunctionType functionType;
-
-//- (instancetype)initWithObject:(id)object NS_DESIGNATED_INITIALIZER;
 
 @end
 

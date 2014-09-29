@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeMicroQrCode_h
+#define Barcodes_MTBarcodeMicroQrCode_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeMicroQrCode : MTBarcode
@@ -19,3 +22,5 @@
 - (NSInteger)errorCorrection;
 
 @end
+
+#endif

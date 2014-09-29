@@ -17,6 +17,8 @@
 
 #import "MTQuery.h"
 
+#import "MTDatabaseField.h"
+
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
@@ -44,6 +46,8 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
+#import "MTDatabaseTable.h"
+
 
 @interface MTDatabaseMySql ()
     <MysqlFetchDelegate>

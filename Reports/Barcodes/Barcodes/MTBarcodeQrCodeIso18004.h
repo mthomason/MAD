@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeQrCodeIso18004_h
+#define Barcodes_MTBarcodeQrCodeIso18004_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeQrCodeIso18004 : MTBarcode
@@ -19,3 +22,5 @@
 - (NSInteger)errorCorrection;
 
 @end
+
+#endif

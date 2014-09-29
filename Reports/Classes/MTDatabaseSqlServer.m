@@ -7,26 +7,31 @@
 //
 
 #import "MTDatabaseSqlServer.h"
-#import "MTDatabaseConnectionSqlServer.h"
+
+#import "MTDatabaseConnection.h"
+
 #import "MTDatabaseTable.h"
+#import "MTDatabaseField.h"
+
 #import "MTQuery.h"
 #import "MTKeyChain.h"
 
 #import "RptqDatabaseSchemaTable.h"
+
 #import "RptqDatabaseSchemaField.h"
 
 #import "RptqQueryTable.H"
 #import "RptqQueryTable+Extras.h"
+
 #import "RptqQueryField.h"
+
 #import "sybdb.h"
 
 #import "MTDatabaseProcessSqlServer.h"
 
-#import "NSError+UserInterface.h"
-
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
-#import "UIApplication+Extras.h"
+#import "NSError+UserInterface.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";

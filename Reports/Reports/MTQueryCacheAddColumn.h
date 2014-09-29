@@ -6,10 +6,14 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryCacheAddColumn_h
+#define Reports_MTQueryCacheAddColumn_h
+
 #import <Foundation/Foundation.h>
-#import "MTQuery.h"
 #import "MTQueryCache.h"
 
 @interface MTQueryCacheAddColumn : MTQueryCache
 
 @end
+
+#endif

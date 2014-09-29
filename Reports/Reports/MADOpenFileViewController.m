@@ -12,6 +12,7 @@
 
 #import <MessageUI/MessageUI.h>
 #import "AppDelegate.h"
+#import "MADocument.h"
 #import "MADocumentState.h"
 #import "MADOpenFileViewController.h"
 #import "MTApplicationInstance.h"
@@ -40,9 +41,12 @@
 #import "NSError+UserInterface.h"
 #import "MACloudManager.h"
 
-NSString * const MTSegueShowAddDocument = @"showAddDocument";
-NSString * const MTSegueShowOpenDocument = @"MADSegueOpenDocument";
-NSString * const MTCollectionViewCellDocumentIdentifier = @"MTCollectionViewCellDocumentIdentifier";
+NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
+NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
+NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpenDocument";
+NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
+NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
+NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 
 @interface MADOpenFileViewController()
     <UIAlertViewDelegate,

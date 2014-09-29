@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryCacheJournalModeOverride_h
+#define Reports_MTQueryCacheJournalModeOverride_h
+
 #import "MTQuery.h"
 
 @interface MTQueryCacheJournalModeOverride : MTQuery
 
 @end
+
+#endif

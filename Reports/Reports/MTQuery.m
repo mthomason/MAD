@@ -37,8 +37,6 @@
 #import "MTQueryCacheSelectRowIds.h"
 #import "MTQueryCacheAggregateFunction.h"
 
-#import "MTDatabase.h"
-#import "MTDatabaseField.h"
 #import "MTDataColumn.h"
 
 #import "MTGraph.h"
@@ -54,16 +52,6 @@
 #import "RptqQueryField.h"
 #import "RptqQueryPredicate.h"
 #import "RptqQueryPredicate+Extras.h"
-
-#import "NSError+UserInterface.h"
-
-#import "MTDatabaseConnection.h"
-#import "MTDatabaseConnectionMySql.h"
-#import "MTDatabaseConnectionSqlite3.h"
-#import "MTDatabaseConnectionSqlServer.h"
-
-#import "RptqDatabase.h"
-#import "RptqUserCredentals.h"
 
 #import "MTDataTable.h"
 

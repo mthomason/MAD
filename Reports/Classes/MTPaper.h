@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTPaper_h
+#define Reports_MTPaper_h
+
 #import <Foundation/Foundation.h>
-#import "CGGeometry+Extras.h"
 
 typedef NS_ENUM(NSUInteger, MTPaperType) {
     MTPaperTypeLetter = 2,
@@ -107,3 +109,4 @@ typedef NS_ENUM(NSUInteger, MTPaperType) {
 
 @end
 
+#endif

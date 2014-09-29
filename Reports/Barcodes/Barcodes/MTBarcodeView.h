@@ -10,7 +10,8 @@
 #define Barcodes_MTBarcodeView_h
 
 #import <UIKit/UIKit.h>
-#import "MTBarcode.h"
+
+@class MTBarcode;
 
 @interface MTBarcodeView : UIView
 

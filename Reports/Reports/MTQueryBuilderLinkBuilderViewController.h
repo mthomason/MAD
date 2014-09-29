@@ -10,15 +10,14 @@
 #define Reports_MTQueryBuilderLinkBuilderViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MADLinkType.h"
+
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
-#import "MTQueryBuilderAddLinkFirstTableViewController.h"
-#import "MTQueryBuilderAddLinkSecondTableViewController.h"
-#import "MTQueryBuilderAddLinkFirstFieldViewController.h"
-#import "MTQueryBuilderAddLinkSecondFieldViewController.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
+
+#import "MTQueryBuilderChooseFieldDelegate.h"
 #import "MUIViewControllerDelegate.h"
 
-@class MTQueryBuilderLinkBuilderViewController;
+@class MTQueryBuilderLinkBuilderViewController, RptqQueryLinks;
 
 typedef NS_ENUM(NSUInteger, MNSLinkPart) {
 	MNSLinkLeft = 0,

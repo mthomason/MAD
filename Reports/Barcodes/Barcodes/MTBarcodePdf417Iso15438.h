@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodePdf417Iso15438_h
+#define Barcodes_MTBarcodePdf417Iso15438_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodePdf417Iso15438 : MTBarcode
@@ -17,3 +20,5 @@
 - (NSInteger)codewordLength;
 
 @end
+
+#endif

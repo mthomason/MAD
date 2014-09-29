@@ -21,6 +21,7 @@ extern NSString * const NSFetchedResultsCacheTables;
 extern NSString * const NSFetchedResultsCacheLinks;
 extern NSString * const NSFetchedResultsCacheGroups;
 extern NSString * const NSFetchedResultsCachePredicates;
+extern NSString * const MNSSegueShowSql;
 
 @interface MADQueryViewController : UITableViewController
 

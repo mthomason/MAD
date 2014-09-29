@@ -10,7 +10,6 @@
 #define Reports_MTElementView_h
 
 #import <UIKit/UIKit.h>
-#import "Constants.h"
 
 @class MADDesignerElementView, MTBarcode, NSManagedObjectID, NSManagedObjectContext;
 

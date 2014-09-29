@@ -11,8 +11,9 @@
 #endif
 
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
-#import "AppDelegate.h"
-#import "MTApplicationInstance.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
+
+#import "MTDatabase.h"
 #import "MTQuery.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryField.h"
@@ -29,13 +30,14 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSInteger row = [self.delegate initalEncodingMode];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
-    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    [segue.destinationViewController setDelegate:self];
     if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderChooseFieldViewController class]]) {
+        [(MTQueryBuilderChooseFieldViewController *)segue.destinationViewController setDelegate:self];
         [segue.destinationViewController setDocument:self.document];
     }
 }
@@ -45,7 +47,7 @@
 - (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
                                       withField: (RptqQueryField *)field {
     
-    [[self navigationController] popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
     
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
     MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:[schemaField objectID]];
@@ -63,8 +65,7 @@
 }
 
 + (MTDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-    NSUInteger hash = [[[objectID URIRepresentation] absoluteString] hash];
-    
+    NSUInteger hash = objectID.URIRepresentation.absoluteString.hash;
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);

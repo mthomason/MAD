@@ -12,7 +12,7 @@
 @implementation UITableViewCellTableName
 
 + (CGFloat)defaultHeight {
-    return MNSTableViewCellTableNameHeightDefault;
+    return 44.0000f;
 }
 
 - (void)layoutSubviews {

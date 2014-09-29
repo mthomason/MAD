@@ -11,6 +11,7 @@
 #endif
 
 #import "MTConnectionViewController.h"
+#import "MTDatabaseConnection.h"
 #import "MADocument.h"
 #import "UIDevice+Hack.h"
 #import "MTDatabaseSqlServer.h"

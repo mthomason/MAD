@@ -13,9 +13,10 @@
 #import "RptqDocumentObject+Extras.h"
 
 #import <CoreData/CoreData.h>
+#import "MTAlignment.h"
 
 #import "MTFont.h"
-#import "Constants.h"
+
 #import "MTBarcode.h"
 #import "RptqDocument.h"
 #import "RptqDatabaseSchemaField.h"

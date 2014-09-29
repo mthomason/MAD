@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MADocumentState_h
+#define Reports_MADocumentState_h
+
 #import <Foundation/Foundation.h>
 
 @interface MADocumentState : NSObject
@@ -17,3 +20,5 @@
 @property (nonatomic, assign, readwrite) BOOL contextChagned;
 
 @end
+
+#endif

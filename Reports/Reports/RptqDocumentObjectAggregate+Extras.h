@@ -7,9 +7,10 @@
 //
 
 #import "RptqDocumentObjectAggregate.h"
-#import "MTDatabaseField.h"
-#import "Constants.h"
-
+#import "MTAggregateFunctionInputType.h"
+#import "MTAggregateFunctionType.h"
+#import "MADAggregateGroupByType.h"
+#import "MTDataType.h"
 extern NSString * const MTAggregateTypeKeyGroupType;
 extern NSString * const MTAggregateTypeKeyFunctionType;
 extern NSString * const MTAggregateTypeKeyGroupNumber;

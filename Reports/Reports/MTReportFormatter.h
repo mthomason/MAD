@@ -13,6 +13,7 @@
 #import "MTTableFormatter.h"
 #import "MTCacheProtocol.h"
 #import "MADDataProtocol.h"
+#import "MTReportFormatterDataSource.h"
 
 typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
     MTReportFormatterOptionsNone    = 0,
@@ -22,14 +23,6 @@ typedef NS_OPTIONS(NSUInteger, MTReportFormatterOptions) {
 extern NSString * const MTNullIdentifier;
 
 @class RptqDocumentSection, RptqDocument, MADArrayCaching, MTReportFormatterPageDefinition;
-
-@protocol MTReportFormatterDataSource <NSObject>
-
-- (BOOL)cacheExist;
-- (NSEnumerator *)enumeratorForReportData;
-- (NSDictionary *)dataForCacheId:(NSNumber *)cachedID;
-
-@end
 
 @interface MTReportFormatter : MTTableFormatter
 

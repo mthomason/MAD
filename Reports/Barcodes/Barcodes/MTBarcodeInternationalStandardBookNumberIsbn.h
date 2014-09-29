@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeInternationalStandardBookNumberIsbn_h
+#define Barcodes_MTBarcodeInternationalStandardBookNumberIsbn_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeInternationalStandardBookNumberIsbn : MTBarcode
 
 @end
+
+#endif

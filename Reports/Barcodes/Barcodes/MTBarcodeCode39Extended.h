@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeCode39Extended_h
+#define Barcodes_MTBarcodeCode39Extended_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeCode39Extended : MTBarcode
@@ -14,3 +17,5 @@
 - (BOOL)mod43CheckDigitEnabled;
 
 @end
+
+#endif

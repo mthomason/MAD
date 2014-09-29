@@ -1,3 +1,7 @@
+
+#ifndef MAD_MADVerifyStoreReceipt_h
+#define MAD_MADVerifyStoreReceipt_h
+
 //
 //  VerifyStoreReceipt.h
 //
@@ -33,3 +37,5 @@
 NSDictionary *dictionaryWithAppStoreReceipt(NSString *receiptPath);
 NSArray *obtainInAppPurchases(NSString *receiptPath);
 BOOL verifyReceiptAtPath(NSString *receiptPath);
+
+#endif

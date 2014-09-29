@@ -12,6 +12,8 @@
 #import <Foundation/Foundation.h>
 #import "MTDataFormatter.h"
 
+@class MTQuery;
+
 @interface MTTableFormatter : MTDataFormatter
 
 @property (nonatomic, assign) BOOL didRefresh;

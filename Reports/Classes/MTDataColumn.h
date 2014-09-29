@@ -10,7 +10,6 @@
 #define Reports_MTDataColumn_h
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 @interface MTDataColumn : NSObject
     <NSCoding>

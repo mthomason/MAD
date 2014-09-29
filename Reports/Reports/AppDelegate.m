@@ -11,8 +11,8 @@
 #endif
 
 #import "AppDelegate.h"
-#import "MTApplicationInstance.h"
 
+#import "MTApplicationInstance.h"
 #import "MTNavigationController.h"
 #import "MADQueryViewController.h"
 #import "MADDesignerViewController.h"
@@ -22,28 +22,13 @@
 #import "MADFileManager.h"
 #import "MTUser.h"
 
-#import "MTReportDesigner.h"
-#import "MTReportViewer.h"
-#import "MTQueryDesigner.h"
 #import "MADocument.h"
 
-#import "RptqDocument.h"
-#import "RptqDatabase.h"
-#import "RptqQuery.h"
-
 #import "MADOpenFileViewController.h"
-#import "evp.h"
-#import "VerifyStoreReceipt.h"
 #import "MACloudManager.h"
 #import "MTLog.h"
 
-#import "UIApplication+Extras.h"
 #import "UIDevice+Hack.h"
-#import "NSURL+Document.h"
-#import "RptqDocument+Extras.h"
-#import "UIColor+EverydayApps.h"
-
-#import "MADUpgradeManager.h"
 #import "NSError+UserInterface.h"
 
 const NSInteger MADTagAlertViewNewDocument = 3838;

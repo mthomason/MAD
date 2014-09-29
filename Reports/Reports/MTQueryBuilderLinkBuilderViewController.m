@@ -12,6 +12,9 @@
 
 #import "MTQueryBuilderLinkBuilderViewController.h"
 #import "AppDelegate.h"
+
+#import "MTQueryBuilderChooseFieldViewController.h"
+
 #import "RptqQuery.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryField.h"

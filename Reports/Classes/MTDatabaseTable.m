@@ -17,9 +17,9 @@
 - (instancetype)initWithTableName:(NSString *)tableName {
     self = [super init];
     if (self) {
-        [self setName: tableName];
-        [self setLabel: tableName];
-        [self setLabelPlural: tableName];   // TODO: Add porter steamer.
+        self.name = tableName;
+        self.label = tableName;
+        self.labelPlural = tableName;
     }
     return self;
 }

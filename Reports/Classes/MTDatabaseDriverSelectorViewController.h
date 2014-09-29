@@ -9,6 +9,11 @@
 #ifndef Reports_MTDatabaseDriverSelectorViewController_h
 #define Reports_MTDatabaseDriverSelectorViewController_h
 
+extern NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier;
+extern NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier;
+extern NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier;
+extern NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier;
+
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 

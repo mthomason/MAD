@@ -12,6 +12,7 @@
 
 #import "MTViewControllerBarcodeOptions.h"
 #import <CoreData/CoreData.h>
+#import "MTDatabase.h"
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMicroQrCode.h"

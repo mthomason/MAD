@@ -10,7 +10,6 @@
 #define Reports_RptqDatabaseSchemaFieldSelectorManager_h
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
 
 @class RptqQueryTable, UIViewTableSectionHeaderDatabaseTable;
 

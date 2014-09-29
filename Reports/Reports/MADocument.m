@@ -69,6 +69,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MACloudManager.h"
 
+#import "MTDatabaseConnection.h"
+
 /*
  {
  additionalContent =     {
@@ -80,6 +82,8 @@ typedef void (^MTCompletionHandlerSuccess)(BOOL success);
  parentContext = "<NSManagedObjectContext: 0xffffffff>";
  }
  */
+
+typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 
 NSString * const MTDocumentAdditionalContentKey         = @"additionalContent";
 NSString * const MTDocumentFileTypeKey                  = @"fileType";
@@ -112,6 +116,12 @@ NSString * const MADUtiType                             = @"com.everydayapps.pro
 NSString * const MADMimeType                            = @"application/vnd.everydayapps.mad";
 
 NSString * const MADFileNameMetaPlist                   = @"meta.plist";
+
+NSString * const MTPersistentStoreAliasMad              = @"analyitics";
+NSString * const MTDocumentTypeUtiMad                   = @"com.everydayapps.productivity.mad";
+
+NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed to create report document.";
+NSString * const MNSInterfaceTitleProblem                           = @"Problem";
 
 @interface MADocument ()
     <MTDatabaseProtocol>

@@ -11,7 +11,9 @@
 #endif
 
 #import "MTReportDesignerToolBoxViewController.h"
-#import "AppDelegate.h"
+
+#import "MADocument.h"
+
 #import "MTApplicationInstance.h"
 #import "UIColor+EverydayApps.h"
 #import "MTReportDesignerFontSettingsViewController.h"

@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTQueryCache_h
+#define Reports_MTQueryCache_h
+
 #import "MTQuery.h"
 #import "MTDatabaseCache.h"
 
@@ -16,3 +19,5 @@
 @property (nonatomic, strong, readwrite) MTDatabaseCache *database;
 
 @end
+
+#endif

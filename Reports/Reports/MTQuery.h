@@ -139,8 +139,6 @@ extern NSString * const MTQueryKeyPredicateValue;
 
 @class MTDatabase, MTDataTable, RptqQuery;
 
-
-
 #import "MADocument.h"
 #import "MADDataProtocol.h"
 

@@ -12,7 +12,6 @@
 
 #import "MTTableFormatter.h"
 #import "MTQuery.h"
-#import "MTDataTable.h"
 
 @implementation MTTableFormatter
 
@@ -20,8 +19,8 @@
     self = [super initWithQuery:query];
     if (self) {
 
-        [self setQuery:query];
-        [self setDidRefresh:NO];
+        self.query = query;
+        self.didRefresh = NO;
     }
     return self;
 }

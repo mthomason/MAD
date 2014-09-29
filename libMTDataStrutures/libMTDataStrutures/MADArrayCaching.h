@@ -11,7 +11,6 @@
 
 #import <Foundation/Foundation.h>
 #import "MTCacheProtocol.h"
-#import "Constants.h"
 
 @interface MADArrayCaching : NSEnumerator
 

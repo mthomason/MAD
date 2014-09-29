@@ -19,35 +19,25 @@
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
-#import "RptqDatabase.h"
 #import "RptqQueryGroup.h"
+
 #import "RptqQuery.h"
-#import "RptqQueryField.h"
+#import "RptqQuery+Extras.h"
+
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
-#import "RptqDatabaseSchemaTable.h"
-#import "RptqDatabaseSchemaField.h"
-#import "RptqDatabaseSchemaField+Extras.h"
+
 #import "MTDatabaseField.h"
-#import "RptqQuery+Extras.h"
-#import "MTDataTable.h"
 
 #import "MTReportFormatterCache.h"
 
 #import "MADArrayCaching.h"
 
-//Why the fuck!!!
-
-#import "MTDatabaseConnection.h"
-#import "MTDatabase.h"
-
-#import "MTPageCaching.h"
-
-#import "MTLog.h"
 #import "NSData+Comparson.h"
 
 #import "MTNotificationDidFormatPage.h"
 #import "MTReportFormatterPageDefinition.h"
+
 #import "CGGeometry+Extras.h"
 
 NSString * const MTNullIdentifier = @"(null)";
@@ -110,7 +100,9 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)dealloc { }
 
-- (instancetype)initWithQuery:(MTQueryFull *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options  {
+- (instancetype)initWithQuery: (MTQueryFull *)query
+                       layout: (RptqDocument *)layout
+                      options: (MTReportFormatterOptions)options  {
     self = [super initWithQuery:query];
     if (self) {
         [self setOptions:options];
@@ -119,7 +111,9 @@ NSString * const MTNullIdentifier = @"(null)";
     return self;
 }
 
-+ (instancetype)reportFormatterWithQuery:(MTQuery *)query layout:(RptqDocument *)layout options:(MTReportFormatterOptions)options {
++ (instancetype)reportFormatterWithQuery: (MTQuery *)query
+                                  layout: (RptqDocument *)layout
+                                 options: (MTReportFormatterOptions)options {
     MTReportFormatter *result = [[MTReportFormatter alloc] initWithQuery:query layout:layout options:options];
     return result;
 }

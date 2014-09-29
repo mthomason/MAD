@@ -15,6 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MTApplicationInstance.h"
 #import "MADocument.h"
+#import "MTDatabaseConnection.h"
 #import "MTDatabaseField.h"
 
 #import "RptqDocument.h"
@@ -50,6 +51,7 @@
 
 #import "MTReportFormatter.h"
 #import "MTQuery.h"
+#import "MTDatabase.h"
 #import "MTDataTable.h"
 
 #import "MTBarcode.h"

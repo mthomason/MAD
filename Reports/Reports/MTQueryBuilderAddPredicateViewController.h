@@ -11,9 +11,10 @@
 
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
-#import "MTQueryBuilderChooseFieldViewController.h"
 #import "MTViewControllerValueBasedOnField.h"
 #import "UITableViewControllerOpperators.h"
+
+#import "MTQueryBuilderChooseFieldDelegate.h"
 
 typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 	MNSPredicateLeft = 0,

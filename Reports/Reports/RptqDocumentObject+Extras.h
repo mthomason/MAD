@@ -10,23 +10,11 @@
 #define Reports_RptqDocumentObject_Extras_h
 
 #import "RptqDocumentObject.h"
+#import "RptqDocumentObjectFactory.h"
 #import "MTProtocolCompare.h"
 #import "MTProtocolLog.h"
-#import "RptqDocumentObjectFactory.h"
-#import "MTDatabaseField.h"
-
-typedef NS_ENUM(NSUInteger, MTDocumentObjectType) {
-	MTDocumentObjectTypeLabelDynamic = 0,
-	MTDocumentObjectTypeLabelStatic = 1,
-	MTDocumentObjectTypeImage = 2,
-    MTDocumentObjectTypeChart = 3,
-    MTDocumentObjectTypeFormula = 4,
-    MTDocumentObjectTypeAggregate = 5,
-    MTDocumentObjectTypeGroupKey = 6,
-    MTDocumentObjectTypeAggregateFunctionList = 7,
-    MTDocumentObjectTypeWhtiespace = 8,
-    MTDocumentObjectTypeBarcode = 9
-};
+#import "MTDataType.h"
+#import "MADDocumentObjectType.h"
 
 extern NSString * const MTDocumentObjectDefinationType;
 extern NSString * const MTDocumentObjectDefinationObject;

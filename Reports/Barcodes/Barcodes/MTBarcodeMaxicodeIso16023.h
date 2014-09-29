@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeMaxicodeIso16023_h
+#define Barcodes_MTBarcodeMaxicodeIso16023_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeMaxicodeIso16023 : MTBarcode
@@ -15,3 +18,5 @@
 - (NSInteger)encodingMode;
 
 @end
+
+#endif

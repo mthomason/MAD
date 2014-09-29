@@ -11,12 +11,15 @@
 #endif
 
 #import "MTReportDesignerFontSettingsViewController.h"
+#import "MADocument.h"
 #import "RptqDocumentObject+Extras.h"
 #import "AppDelegate.h"
 #import "UIDevice+Hack.h"
 #import "MTApplicationInstance.h"
 #import "MTFont.h"
 #import "NSManagedObject+Extras.h"
+#import "MADControlState.h"
+#import "MTAlignment.h"
 
 @interface MTReportDesignerFontSettingsViewController()
     <UITableViewDelegate>

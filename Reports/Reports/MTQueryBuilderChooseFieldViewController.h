@@ -12,13 +12,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "UIViewTableSectionHeaderDatabaseTable.h"
+
 #import "MTUnwindProtocol.h"
+#import "MTQueryBuilderChooseFieldDelegate.h"
 
 @class MTQueryBuilderChooseFieldViewController, RptqQueryField, MADocument;
-
-@protocol MTQueryBuilderChooseFieldDelegate
-- (void)tableViewControllerChooseFieldDidFinish:(MTQueryBuilderChooseFieldViewController *)controller withField:(RptqQueryField *)field;
-@end
 
 @interface MTQueryBuilderChooseFieldViewController : UITableViewController
     <UITableViewDataSource,

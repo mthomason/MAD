@@ -48,6 +48,10 @@
     return self;
 }
 
+- (id)itemAtIndex:(NSUInteger)index {
+    return [self.items objectAtIndex:index];
+}
+
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath {
     return [self itemAtIndex:indexPath.row];
 }

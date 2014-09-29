@@ -11,6 +11,7 @@
 #endif
 
 #import "MTQueryBuilderAddLinkJoinTypeViewController.h"
+#import "MADocument.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "RptqUserCredentals.h"

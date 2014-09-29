@@ -12,11 +12,13 @@
 
 #import "MTQueryBuilderAddPredicateViewController.h"
 #import "AppDelegate.h"
+#import "MADocument.h"
 #import <CoreData/CoreData.h>
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
 #import "MTApplicationInstance.h"
 #import "RptqDatabaseSchemaField.h"
+#import "MTQueryBuilderChooseFieldViewController.h"
 
 @implementation MTQueryBuilderAddPredicateViewController
 

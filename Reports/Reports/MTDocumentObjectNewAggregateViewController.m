@@ -18,6 +18,8 @@
 #import "RptqQueryField+Extras.h"
 
 #import "RptqDocumentObjectAggregate.h"
+#import "RptqDocumentObjectAggregate+Extras.h"
+
 #import "MTAggregateFunctionsViewController.h"
 
 NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";

@@ -10,6 +10,11 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+
+#import "RptqQuery+Extras.h"
+
+#import "MTDatabaseField.h"
+#import "MTDatabase.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSection.h"
@@ -17,9 +22,6 @@
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqQuery.h"
-#import "RptqQuery+Extras.h"
-#import "MTGraph.h"
-#import "MTPair.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
@@ -29,11 +31,9 @@
 #import "RptqQueryLinks.h"
 #import "RptqQueryLinks+Extras.h"
 #import "RptqDatabase.h"
-#import "MTDatabase.h"
-#import "MTGraph.h"
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
-
+#import "MADSortOrder.h"
 
 @implementation RptqQuery (Extras)
 

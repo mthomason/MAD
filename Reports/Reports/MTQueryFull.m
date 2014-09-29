@@ -12,8 +12,6 @@
 
 #import "MTQueryFull.h"
 
-#import "Constants.h"
-
 #import "MTGraph.h"
 
 #import "RptqQuery.h"

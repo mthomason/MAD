@@ -8,6 +8,11 @@
 
 #import "MTPaper.h"
 
+#ifndef Reports_MTPaperA1_h
+#define Reports_MTPaperA1_h
+
 @interface MTPaperA1 : MTPaper
 
 @end
+
+#endif

@@ -10,7 +10,6 @@
 #define Reports_MTTableLayout_h
 
 #import <UIKit/UIKit.h>
-#import "Constants.h"
 
 typedef void (^block_enumerateObjectsUsingBlock)(id obj, NSUInteger idx, BOOL *stop);
 

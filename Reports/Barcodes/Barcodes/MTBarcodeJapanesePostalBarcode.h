@@ -6,8 +6,13 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeJapanesePostalBarcode_h
+#define Barcodes_MTBarcodeJapanesePostalBarcode_h
+
 #import "MTBarcode.h"
 
 @interface MTBarcodeJapanesePostalBarcode : MTBarcode
 
 @end
+
+#endif

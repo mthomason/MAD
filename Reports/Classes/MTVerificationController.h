@@ -1,3 +1,7 @@
+
+#ifndef MAD_MTVerificationController_h
+#define MAD_MTVerificationController_h
+
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 #import "NSData+Base64.h"
@@ -31,3 +35,5 @@ typedef void (^MTVerificationControllerVerifyPurchaseCompletion)(BOOL success, N
 - (void)iOS7VerifyReceipt;
 
 @end
+
+#endif

@@ -11,11 +11,12 @@
 #endif
 
 #import "RptqDocumentObjectAggregate+Extras.h"
+
 #import "RptqDocument.h"
 #import "RptqDocumentObject+Extras.h"
+
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
-#import "Constants.h"
 
 NSString * const MTAggregateTypeKeyGroupType = @"MTAggregateTypeKeyGroupType";
 NSString * const MTAggregateTypeKeyFunctionType = @"MTAggregateTypeKeyFunctionType";

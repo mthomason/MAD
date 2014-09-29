@@ -6,10 +6,12 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTViewControllerBarcode_h
+#define Barcodes_MTViewControllerBarcode_h
+
 #import <UIKit/UIKit.h>
 #import "MTViewControllerBarcodePreview.h"
 #import "MTViewControllerBarcodeOptions.h"
-#import "MTApplicationInstance.h"
 #import "MTUnwindProtocol.h"
 
 extern NSString * const MTIdentifierSegueDocumentObjectEditBarcode;
@@ -41,3 +43,5 @@ extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 - (void)setBarcodeToEdit:(RptqDocumentObjectBarcode *)barcodeDocumentObject;
 
 @end
+
+#endif

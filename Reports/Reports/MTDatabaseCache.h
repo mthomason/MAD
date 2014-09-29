@@ -6,7 +6,11 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Reports_MTDatabaseCache_h
+#define Reports_MTDatabaseCache_h
+
 #import "MTDatabase.h"
+#import "MTDataType.h"
 
 @interface MTDatabaseCache : MTDatabase
 
@@ -17,3 +21,5 @@
 - (void)endBulkInsert;
 
 @end
+
+#endif

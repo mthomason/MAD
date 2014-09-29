@@ -15,6 +15,7 @@
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
+#import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "MTQueryBuilderPredicateFormatViewController.h"
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
@@ -48,6 +49,9 @@
 #import "RptqQuery.h"
 #import "RptqQuery+Extras.h"
 
+#import "RptqQueryLinks.h"
+#import "RptqQueryLinks+Extras.h"
+
 #import "RptqQueryTable.h"
 #import "RptqQueryTable+Extras.h"
 
@@ -78,6 +82,17 @@
 
 #import "UIViewController+ui.h"
 
+typedef NS_ENUM(NSUInteger, MTQuerySections) {
+    MTQuerySectionsDocumentGroups = 0,
+    MTQuerySectionsDatasource = 1,
+    MTQuerySectionsTables = 2,
+    MTQuerySectionsLinks = 3,
+    MTQuerySectionsGroups = 4,
+    MTQuerySectionsPredicate = 5,
+    MTQuerySectionsSql = 6
+};
+
+NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
 NSString * const MADImageBarButtonItemDatabase      = @"UIBarButtonItemDatabase";
 NSString * const MADImageBarButtonItemDatabase8     = @"UIBarButtonItemDatabase8";
 NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
@@ -86,6 +101,16 @@ NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTab
 NSString * const NSFetchedResultsCacheLinks         = @"NSFetchedResultsCacheLinks";
 NSString * const NSFetchedResultsCacheGroups        = @"NSFetchedResultsCacheGroups";
 NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePredicates";
+NSString * const MNSSegueShowSql                    = @"MNSSegueShowSql";
+NSString * const MTTableHeaderSectionKey                            = @"MTTableHeaderSectionKey";
+NSString * const MTTableSectionRowKey                               = @"MTTableSectionRowKey";
+NSString * const MTTableSectionRowHeightKey                         = @"MTTableSectionRowHeightKey";
+NSString * const MTTableSectionSectionsKey                          = @"MTTableSectionSectionsKey";
+NSString * const MNSIdentifierSegueShowAddLinkViewController        = @"showAddLinkViewController";
+NSString * const MNSIdentifierSegueShowAddPredicateViewController   = @"showAddPredicateViewController";
+NSString * const MNSIdentifierSegueShowAddGroupViewController       = @"showAddGroupViewController";
+NSString * const MNSIdentifierSegueShowLayoutSettings               = @"showLayoutSettings";
+NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdentifierSegueShowAddDatabaseDrivers";
 
 #pragma mark - Private Category
 
@@ -681,8 +706,6 @@ NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePre
             NSError *error = nil;
             [[[self fetchedResultsControllerGroups] managedObjectContext] save:&error];
             [self performFetchGroups];
-
-            MTLog(@"%@->%@", fromIndexPath, toIndexPath);
             break;
         }
         default:

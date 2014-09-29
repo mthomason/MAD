@@ -127,7 +127,9 @@
     removedURLs = removedURLs ?: @[];
     updatedURLs = updatedURLs ?: @[];
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs removedURLs:removedURLs updatedURLs:updatedURLs];
+    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs
+                                                        removedURLs:removedURLs
+                                                        updatedURLs:updatedURLs];
     
     [self.metadataQuery enableUpdates];
 }

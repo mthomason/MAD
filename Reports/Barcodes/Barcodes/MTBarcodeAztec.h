@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef Barcodes_MTBarcodeAztec_h
+#define Barcodes_MTBarcodeAztec_h
+
 #import "MTBarcode.h"
 
 typedef NS_ENUM(NSUInteger, MTBarcodeAztecSizingMode) {
@@ -71,3 +74,5 @@ typedef NS_ENUM(NSUInteger, MTBarcodeAztecErrorCorrection) {
 - (NSInteger)errorCorrection;
 
 @end
+
+#endif

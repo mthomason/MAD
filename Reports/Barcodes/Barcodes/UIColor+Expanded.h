@@ -224,4 +224,5 @@ void HSPtoRGB(CGFloat  H, CGFloat  S, CGFloat  P, CGFloat *R, CGFloat *G, CGFloa
 @property (nonatomic, readonly) CGColorSpaceRef colorSpace;
 @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
 @property (nonatomic, readonly) NSString *colorSpaceString;
+
 @end

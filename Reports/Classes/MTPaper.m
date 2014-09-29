@@ -49,6 +49,7 @@
 #import "MTPaperC9.h"
 #import "MTPaperC10.h"
 
+#import "CGGeometry+Extras.h"
 
 @implementation MTPaper
 

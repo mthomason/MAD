@@ -11,10 +11,7 @@
 #endif
 
 #import "MTUser.h"
-#import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
-#import "NSError+UserInterface.h"
-#import "MACloudManager.h"
 
 @interface MTUser()
 

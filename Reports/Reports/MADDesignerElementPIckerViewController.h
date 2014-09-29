@@ -10,9 +10,10 @@
 #define Reports_MADDesignerElementPIckerViewController_h
 
 #import <UIKit/UIKit.h>
-#import "MADDesignerElementPIckerViewController.h"
-#import "Constants.h"
 #import "MUIViewControllerDelegate.h"
+#import "MADAggregateGroupByType.h"
+#import "MTAggregateFunctionType.h"
+#import "MTAggregateFunctionInputType.h"
 
 @class MADocument, NSManagedObjectID, RptqQueryField;
 

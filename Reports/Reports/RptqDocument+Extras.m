@@ -11,7 +11,7 @@
 #endif
 
 #import <CoreData/CoreData.h>
-
+#import "MTDatabaseConnection.h"
 #import "RptqDocument+Extras.h"
 #import "MTDatabaseMySql.h"
 #import "MTDatabaseSqlServer.h"
@@ -58,6 +58,9 @@
 #import "UIApplication+Extras.h"
 
 #import "MTErrorContainer.h"
+#import "MTDatabaseTable.h"
+
+#import "MTAggregateFunctionInputType.h"
 
 @implementation RptqDocument (Extras)
 
@@ -592,13 +595,15 @@
             
             switch (functionType) {
                 case MTAggregateFunctionInputTypeField: {
-                    RptqQueryField *field = [RptqQueryField queryFieldForObjectID:objectId managedObjectContext:mangedObjectContext];
+                    RptqQueryField *field = [RptqQueryField queryFieldForObjectID: objectId
+                                                             managedObjectContext: mangedObjectContext];
                     [reportObject setAggregateField:field];
                     [reportObject setAggregateFunction:nil];
                     break;
                 }
                 case MTAggregateFunctionInputTypeFormula: {
-                    RptqDocumentObjectFormula *formula =  [RptqDocumentObjectFormula documentObjectForObjectID:objectId managedObjectContext:mangedObjectContext];
+                    RptqDocumentObjectFormula *formula =  [RptqDocumentObjectFormula documentObjectForObjectID: objectId
+                                                                                          managedObjectContext: mangedObjectContext];
                     [reportObject setAggregateField:nil];
                     [reportObject setAggregateFunction:formula];
                     break;
