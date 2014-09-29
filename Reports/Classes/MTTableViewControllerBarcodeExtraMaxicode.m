@@ -50,9 +50,10 @@
     [self.navigationController popViewControllerAnimated:YES];
     
     RptqDatabaseSchemaField *schemaField = [field databaseSchemaField];
-    MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:[schemaField objectID]];
+    MTDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
     [self setDataTableSampleData:dataTable];
-    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataField object:schemaField];
+    MTQuery *querySampleDataField = [[MTQuery alloc] initWithQueryType: MTQueryTypeSampleDataField
+                                                                object: schemaField];
     [querySampleDataField performQuery:^(BOOL success, NSError *error) {
         if (success) {
             MTDataTable *dt = [[[querySampleDataField database] delegate] dataTableForQuery:querySampleDataField];
@@ -70,9 +71,10 @@
     NSNumber *type = @(MTDataTableTypeVirtual);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
     NSNumber *objectIdV =  @(hash);
-    return [MTDataTable dataTableFactory:@{
-                                           typeKey : type,
-                                           objectIdKey : objectIdV}];
+    NSDictionary *options = @{typeKey : type,
+                              objectIdKey : objectIdV};
+    MTDataTable *dataTable = [MTDataTable dataTableFactory:options];
+    return dataTable;
 }
 
 #pragma mark - Table view delegate
