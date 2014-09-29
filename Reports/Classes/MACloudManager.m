@@ -8,23 +8,22 @@
 
 #import "MACloudManager.h"
 #import <UIKit/UIKit.h>
+#import "MADFileLocationManager.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
-#import "MADFileLocationManager.h"
 
 NSString * const MTDocumentExtentionMobleApplicationDocumentArchive = @"mada";
 NSString * const MTDocumentExtentionMobleApplicationDocument = @"mad";
 
-NSString * const MTICloudUbiquityToken          = @"com.everydayapps.mad.icloud.ubiquityIdentityToken";
-NSString * const MTICloudUserEnabled            = @"com.everydayapps.mad.icloud.userenabled";
-NSString * const MTICloudUserPrefsSet           = @"com.everydayapps.mad.icloud.userprefsset";
+NSString * const MTICloudUbiquityToken                              = @"com.everydayapps.mad.designer.cloud.ubiquityIdentityToken";
+NSString * const MADPreferencesCloudDesired                         = @"com.everydayapps.mad.designer.cloud.desired";
+NSString * const MADPreferencesCloudOptionsSelected                 = @"com.everydayapps.mad.designer.cloud.options.selected";
 
+NSString * const MADNotificationFileManagerDidUpdateFileLocations   = @"MADNotificationFileManagerDidUpdateFileLocations";
 
-NSString * const MADPreferencesCloudDesired                         = @"com.everydayapps.mad_designer.cloud.desired";
-NSString * const MADPreferencesCloudOptionsSelected                 = @"com.everydayapps.mad_designer.cloud.options.selected";
-NSString * const ICloudStateUpdatedNotification                     = @"ICloudStateUpdatedNotification";
-NSString * const UbiquitousContainerFetchingWillBeginNotification   = @"UbiquitousContainerFetchingWillBeginNotification";
-NSString * const UbiquitousContainerFetchingDidEndNotification      = @"UbiquitousContainerFetchingDidEndNotification";
+NSString * const MADNotificationCloudStateUpdated                     = @"ICloudStateUpdatedNotification";
+NSString * const MADNotificationUbiquitousContainerFetchingWillBegin  = @"UbiquitousContainerFetchingWillBeginNotification";
+NSString * const MADNotificationUbiquitousContainerFetchingDidEnd     = @"UbiquitousContainerFetchingDidEndNotification";
 
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
 NSString * const MADUbiquityIdentifier                              = @"iCloud.com.everydayapps.mad.designer";
@@ -34,6 +33,7 @@ NSString * const MADUbiquityIdentifier                              = @"iCloud.c
 
 @interface MACloudManager ()
     <MADFileLocationManagerDelegate>
+
 @property (nonatomic, strong, readwrite) NSURL *ubiquityContainer;
 @property (nonatomic, strong, readwrite) NSURL *dataDirectoryURL;
 @property (nonatomic, strong, readwrite) NSURL *documentsDirectoryURL;
@@ -49,7 +49,7 @@ NSString * const MADUbiquityIdentifier                              = @"iCloud.c
 
 @property (nonatomic, strong, readwrite) id <NSObject, NSCopying, NSCoding> ubiquityIdentityToken;
 
-@property (nonatomic, strong) MADFileLocationManager *fileLocationManager;
+@property (nonatomic, strong, readwrite) MADFileLocationManager *fileLocationManager;
 
 @property (atomic, assign) BOOL checkingCloudPreferencesLock;
 
@@ -59,7 +59,7 @@ NSString * const MADUbiquityIdentifier                              = @"iCloud.c
 
 @property (nonatomic, strong) NSMutableSet *madUrls;
 
-@property (nonatomic, strong) NSFileCoordinator *fileCoordinator;
+@property (nonatomic, strong, readwrite) NSFileCoordinator *fileCoordinator;
 @property (nonatomic, strong) NSFileManager *fileManager;
 
 @end
@@ -117,17 +117,21 @@ static MACloudManager *sharedSingleton;
         NSString *homeDirectory = NSHomeDirectory();
         NSString *pathTemporaryDirectory = NSTemporaryDirectory();
         
-        NSURL *homeDirectoryUrl = [NSURL fileURLWithPath:homeDirectory isDirectory:YES];
+        NSURL *homeDirectoryUrl = [NSURL fileURLWithPath: homeDirectory
+                                             isDirectory: YES];
         
-        NSURL *urlTemporaryDirectory = [NSURL fileURLWithPath:pathTemporaryDirectory isDirectory:YES];
+        NSURL *urlTemporaryDirectory = [NSURL fileURLWithPath: pathTemporaryDirectory
+                                                  isDirectory: YES];
         
         NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSURL *cacheUrl = [NSURL fileURLWithPath:cachePaths.firstObject isDirectory:YES];
+        NSURL *cacheUrl = [NSURL fileURLWithPath: cachePaths.firstObject
+                                     isDirectory: YES];
         
         NSArray *docPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSURL *docsUrl = [NSURL fileURLWithPath:docPaths.firstObject isDirectory:YES];
+        NSURL *docsUrl = [NSURL fileURLWithPath: docPaths.firstObject
+                                    isDirectory: YES];
         
-        MADFileLocationManager *fileLocationManager = [[MADFileLocationManager alloc] initWithPathExtension:@"mad"];
+        MADFileLocationManager *fileLocationManager = [[MADFileLocationManager alloc] initWithPathExtension: MTDocumentExtentionMobleApplicationDocument];
         self.fileLocationManager = fileLocationManager;
         self.localHomeDirectory = homeDirectoryUrl;
         self.localTemporaryDirectory = urlTemporaryDirectory;
@@ -158,7 +162,7 @@ static MACloudManager *sharedSingleton;
     
     if ([self.fileManager ubiquityIdentityToken]) {
         if (self.isCloudEnabled) {
-            [[NSNotificationCenter defaultCenter] postNotificationName: ICloudStateUpdatedNotification
+            [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudStateUpdated
                                                                 object: nil];
         }
     }
@@ -172,7 +176,9 @@ static MACloudManager *sharedSingleton;
 
 - (void)activate {
     [self updateFileStorageContainerURL:nil];
-    [self.fileLocationManager startQuery];
+    if ([self isCloudEnabled]) {
+        [self.fileLocationManager startQuery];
+    }
 }
 
 - (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion {
@@ -233,7 +239,8 @@ static MACloudManager *sharedSingleton;
             [self resetForDebugging];
         } else {
             NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:ubiquityIdentityTokenCurrent];
-            [userDefaults setObject:newTokenData forKey:MTICloudUbiquityToken];
+            [userDefaults setObject: newTokenData
+                             forKey: MTICloudUbiquityToken];
         }
     }
 }
@@ -283,7 +290,7 @@ static MACloudManager *sharedSingleton;
         self.dataDirectoryURL = nil;
         if (self.isCloudEnabled) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName: UbiquitousContainerFetchingWillBeginNotification
+            [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationUbiquitousContainerFetchingWillBegin
                                                                 object: nil];
             
             __weak MACloudManager *weakself = self;
@@ -295,7 +302,7 @@ static MACloudManager *sharedSingleton;
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     
-                    [[NSNotificationCenter defaultCenter] postNotificationName: UbiquitousContainerFetchingDidEndNotification
+                    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationUbiquitousContainerFetchingDidEnd
                                                                         object: nil];
                     
                     if (completion) completion();
@@ -303,7 +310,7 @@ static MACloudManager *sharedSingleton;
                 });
             });
         } else {
-            [self setDataAndDocumentUrlsWithBaseUrl:self.localHomeDirectory];
+            [self setDataAndDocumentUrlsWithBaseUrl: self.localHomeDirectory];
             if (completion) completion();
         }
     }
@@ -318,7 +325,8 @@ static MACloudManager *sharedSingleton;
     if (isCloudEnabled != self.isCloudEnabled) {    //if changed
         
         if ((self.cloudDesired = isCloudEnabled)) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:MADPreferencesCloudDesired];
+            [[NSUserDefaults standardUserDefaults] setBool: YES
+                                                    forKey: MADPreferencesCloudDesired];
             
             NSURL *oldDocumentsDirectoryURL = self.documentsDirectoryURL != nil ?
                                                 self.documentsDirectoryURL : self.localDocumentDirectory;
@@ -338,7 +346,7 @@ static MACloudManager *sharedSingleton;
                     if (completion) completion();
                 }
             }];
-            [[NSNotificationCenter defaultCenter] postNotificationName: ICloudStateUpdatedNotification
+            [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudStateUpdated
                                                                 object: nil];
         } else {
             if (completion) completion();
@@ -390,7 +398,6 @@ static MACloudManager *sharedSingleton;
 #pragma Cloud
 
 - (BOOL)cloudDesired {
-    BOOL result = [[NSUserDefaults standardUserDefaults] boolForKey:MADPreferencesCloudDesired];
     return [[NSUserDefaults standardUserDefaults] boolForKey:MADPreferencesCloudDesired];
 }
 
@@ -411,11 +418,17 @@ static MACloudManager *sharedSingleton;
 - (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
                                              removedURLs:(NSArray *)removedURLs
                                              updatedURLs:(NSArray *)updatedURLs {
-    [self.madUrls addObjectsFromArray:insertedURLs];
-    [self.madUrls addObjectsFromArray:updatedURLs];
-    for (NSURL *url in removedURLs) {
-        [self.madUrls removeObject:url];
+    if ([updatedURLs count] > 0) {
+        NSMutableSet *urls = [NSMutableSet setWithArray:[self.fileLocationManager calculatedUrls]];
+        self.madUrls = urls;
+    } else {
+        [self.madUrls addObjectsFromArray:insertedURLs];
+        for (NSURL *url in removedURLs) {
+            [self.madUrls removeObject:url];
+        }
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
+                                                        object: nil];
 }
 
 - (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error {

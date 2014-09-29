@@ -42,6 +42,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 @property (nonatomic, strong) UIStoryboard *storyboard;
 @property (nonatomic, strong) UIApplication *application;
 
+@property (nonatomic, strong) MTNavigationController *navigationController;
+@property (nonatomic, strong) MADOpenFileViewController *openFileViewController;
+
 @end
 
 @implementation AppDelegate
@@ -72,16 +75,18 @@ static void uncaughtExceptionHandler(NSException *exception) {
                              name: NSUbiquityIdentityDidChangeNotification
                            object: nil];
     
+    [defaultCenter removeObserver:self name:MADNotificationFileManagerDidUpdateFileLocations object:nil];
+    
     [defaultCenter removeObserver: self
-                             name: ICloudStateUpdatedNotification
+                             name: MADNotificationCloudStateUpdated
                            object: nil];
     
     [defaultCenter removeObserver: self
-                             name: UbiquitousContainerFetchingWillBeginNotification
+                             name: MADNotificationUbiquitousContainerFetchingWillBegin
                            object: nil];
     
     [defaultCenter removeObserver: self
-                             name: UbiquitousContainerFetchingDidEndNotification
+                             name: MADNotificationUbiquitousContainerFetchingDidEnd
                            object: nil];
     
     [defaultCenter removeObserver: self
@@ -100,9 +105,18 @@ static void uncaughtExceptionHandler(NSException *exception) {
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
     id initViewController = [storyBoard instantiateInitialViewController];
+    
+    NSAssert([initViewController isKindOfClass:@class([MTNavigationController class])] == NO, @"%s Can't find MTNavigationController.", __PRETTY_FUNCTION__);
+
     window.rootViewController = initViewController;
+    self.navigationController = initViewController;
+    
+    NSAssert([self.navigationController.topViewController isKindOfClass:@class([MADOpenFileViewController class])] == NO, @"%s Can't find MADOpenFileViewController.", __PRETTY_FUNCTION__);
+
+    self.openFileViewController = (MADOpenFileViewController *)self.navigationController.topViewController;
     [window makeKeyAndVisible];
     
+
     self.window = window;
     self.storyboard = storyBoard;
 }
@@ -120,6 +134,16 @@ static void uncaughtExceptionHandler(NSException *exception) {
  
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
+    [defaultCenter addObserver: self
+                      selector: @selector(handleNotificationFileManagerDidUpdateFileLocations:)
+                          name: MADNotificationFileManagerDidUpdateFileLocations
+                        object: nil];
+    
+    [defaultCenter addObserver: self
+                      selector: @selector(keyValueStoreDidChange:)
+                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
+                        object: nil];
+    
     [defaultCenter addObserver: [MACloudManager sharedManager]
                       selector: @selector(handleNotificationUbiquityIdentityDidChange:)
                           name: NSUbiquityIdentityDidChangeNotification
@@ -127,17 +151,17 @@ static void uncaughtExceptionHandler(NSException *exception) {
     
     [defaultCenter addObserver: self
                       selector: @selector(handleNotificationUpdateCloudEnabled:)
-                          name: ICloudStateUpdatedNotification
+                          name: MADNotificationCloudStateUpdated
                         object: nil];
     
     [defaultCenter addObserver: self
                       selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
-                          name: UbiquitousContainerFetchingWillBeginNotification
+                          name: MADNotificationUbiquitousContainerFetchingWillBegin
                         object: nil];
     
     [defaultCenter addObserver: self
                       selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
-                          name: UbiquitousContainerFetchingDidEndNotification
+                          name: MADNotificationUbiquitousContainerFetchingDidEnd
                         object: nil];
     
     if (MADStateRestorationSupportEnabled == NO) {
@@ -148,7 +172,8 @@ static void uncaughtExceptionHandler(NSException *exception) {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #endif
     
-    [self initalizeICloudKvs];
+    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
+
     [self.applicationInstance initalizeAppearance];
     [self.applicationInstance deleteCoreDataCache];
 
@@ -157,12 +182,17 @@ static void uncaughtExceptionHandler(NSException *exception) {
     return YES;
 }
 
+- (void)handleNotificationFileManagerDidUpdateFileLocations:(NSNotification *)notification {
+    [self.openFileViewController reloadData];
+}
+
 - (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Start timer, and display activity indictor if it takes too long
     //  to bring back a ubiquitous container.
 }
 - (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Remove activity indictor for ubiquitous container.
+    [self.openFileViewController reloadData];
 }
 
 - (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
@@ -170,6 +200,8 @@ static void uncaughtExceptionHandler(NSException *exception) {
     //  Pop to root view controller / file view controller.
     //  Reload file view controller, getting docs from new
     //  cloud container.
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.openFileViewController reloadData];
     
     NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
     
@@ -192,6 +224,7 @@ static void uncaughtExceptionHandler(NSException *exception) {
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    [[MACloudManager sharedManager] activate];
     [[MACloudManager sharedManager] checkUserICloudPreferenceAndSetupIfNecessary:^{
         
     }];
@@ -368,20 +401,6 @@ static void uncaughtExceptionHandler(NSException *exception) {
     [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
 }
 
-#pragma mark - iCloud Shit
-
-- (void)storeCurrentUbiquityToken:(id)currentToken {
-    // Write the ubquity identity token to NSUserDefaults if it exists.
-    // Otherwise, remove the key.
-    
-    if (currentToken) {
-        NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject:currentToken];
-        [[NSUserDefaults standardUserDefaults] setObject:newTokenData forKey:MTICloudUbiquityToken];
-    } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:MTICloudUbiquityToken];
-    }
-}
-
 - (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if ([alertView tag] == MADTagAlertViewNewDocument) {
         MADOpenFileViewController *openDocumentViewController = (MADOpenFileViewController *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
@@ -390,20 +409,6 @@ static void uncaughtExceptionHandler(NSException *exception) {
             [openDocumentViewController reloadData];
         }
     }
-}
-
-#pragma mark - Sigh...
-
-- (void)initalizeICloudKvs {
-    //Setup iCloud KVS
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter addObserver: self
-                      selector: @selector(keyValueStoreDidChange:)
-                          name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                        object: nil];
-    
-    NSUbiquitousKeyValueStore *defaultStore = [NSUbiquitousKeyValueStore defaultStore];
-    [defaultStore synchronize];
 }
 
 @end

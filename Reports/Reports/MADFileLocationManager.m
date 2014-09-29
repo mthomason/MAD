@@ -10,7 +10,7 @@
 
 @interface MADFileLocationManager ()
 
-@property (nonatomic, strong) NSMetadataQuery *metadataQuery;
+@property (nonatomic, strong, readwrite) NSMetadataQuery *metadataQuery;
 @property (nonatomic, strong) NSURL *documentsDirectory;
 
 @end
@@ -90,6 +90,11 @@
                                                         updatedURLs: updatedUrls];
     
     [self.metadataQuery enableUpdates];
+}
+
+- (NSArray *)calculatedUrls {
+    NSArray *urls = [NSArray arrayWithArray:[self URLsByMappingMetadataItems:self.metadataQuery.results]];
+    return urls;
 }
 
 - (void)metadataQueryDidUpdate:(NSNotification *)notification {

@@ -22,11 +22,12 @@
 @interface MADFileLocationManager : NSObject
 
 @property (nonatomic, weak) id<MADFileLocationManagerDelegate> delegate;
-@property (nonatomic, strong) NSMutableArray *documents;
+@property (nonatomic, strong, readonly) NSMetadataQuery *metadataQuery;
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension;
 - (void)startQuery;
 - (void)stopQuery;
+- (NSArray *)calculatedUrls;
 
 @end
 

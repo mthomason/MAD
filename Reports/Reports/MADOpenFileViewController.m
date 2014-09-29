@@ -10,11 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import <MessageUI/MessageUI.h>
-#import "AppDelegate.h"
-#import "MADocument.h"
-#import "MADocumentState.h"
 #import "MADOpenFileViewController.h"
+#import <MessageUI/MessageUI.h>
+#import "MACloudManager.h"
+#import "MADocument.h"
 #import "MTApplicationInstance.h"
 #import "UAAppReviewManager.h"
 #import "MADViewerController.h"
@@ -22,15 +21,12 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MADDesignerViewController.h"
 #import "MADWatermarkView.h"
-#import "NSURL+Document.h"
-#import "MTUser.h"
 #import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
 #import "UIView+Animations.h"
 #import "MTViewControllerAbout.h"
 #import "MTTableViewCellDocument.h"
 #import "MADQueryViewController.h"
-#import "MADQueryVisualizationViewController.h"
 #import "UIColor+EverydayApps.h"
 #import "UIDevice+Hack.h"
 #import "MTDatabaseDriverSelectorViewController.h"
@@ -39,7 +35,8 @@
 #import "MADFileManager.h"
 #import "MADUpgradeManager.h"
 #import "NSError+UserInterface.h"
-#import "MACloudManager.h"
+
+#import "NSURL+Document.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -231,7 +228,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     UITapGestureRecognizer *tapGestureRecognizer = [self tapGestureRecognizer];
     [self.collectionView addGestureRecognizer:tapGestureRecognizer];
     
-    [[self barButtonItemLicensing] setEnabled:[SKPaymentQueue canMakePayments]];
+    self.barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 
     NSMutableArray *toolbarButtons = [NSMutableArray arrayWithArray: self.toolbarItems];
     [toolbarButtons removeObject:self.barButtonItemAction];
@@ -239,25 +236,23 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     // FIXME: Remove cloud down button until feature is added.
     [toolbarButtons removeObject:self.barButtonItemCloudDown];
 
-    if ([UIDevice isLagacyOS] == NO) {
-        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
-        searchBar.delegate = self;
-        searchBar.showsBookmarkButton = NO;
-        searchBar.showsCancelButton = YES;
-        searchBar.showsScopeBar = NO;
-        searchBar.showsSearchResultsButton = NO;
-        searchBar.hidden = YES;
-        [searchBar sizeToFit];
-        self.searchBar = searchBar;
-        
-        if (self.barButtonItemEdit == nil) {
-            UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
-                                                                                  target: self
-                                                                                  action: @selector(edit:)];
-            self.barButtonItemEdit = edit;
-        }
-        [toolbarButtons addObject:self.barButtonItemEdit];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+    searchBar.delegate = self;
+    searchBar.showsBookmarkButton = NO;
+    searchBar.showsCancelButton = YES;
+    searchBar.showsScopeBar = NO;
+    searchBar.showsSearchResultsButton = NO;
+    searchBar.hidden = YES;
+    [searchBar sizeToFit];
+    self.searchBar = searchBar;
+    
+    if (self.barButtonItemEdit == nil) {
+        UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemEdit
+                                                                              target: self
+                                                                              action: @selector(edit:)];
+        self.barButtonItemEdit = edit;
     }
+    [toolbarButtons addObject:self.barButtonItemEdit];
     
     UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
     UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
@@ -314,9 +309,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     }
 }
 
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    
-}
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     if (self.searchBar.text.length > 0) {
@@ -463,7 +456,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         
         if ([UIDevice isPad]) {
             UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
-            [[tabBarController view] setTintColor:[UIColor tintColorRed]];
+            tabBarController.view.tintColor = [UIColor tintColorRed];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
             MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];

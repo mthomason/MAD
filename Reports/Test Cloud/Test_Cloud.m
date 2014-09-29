@@ -27,21 +27,20 @@
     
     [defaultCenter addObserver: self
                       selector: @selector(handleNotificationUpdateCloudEnabled:)
-                          name: ICloudStateUpdatedNotification
+                          name: MADNotificationCloudStateUpdated
                         object: nil];
     
     [defaultCenter addObserver: self
                       selector: @selector(handleNotificationWillBeginFetchingUbiquitousContainer:)
-                          name: UbiquitousContainerFetchingWillBeginNotification
+                          name: MADNotificationUbiquitousContainerFetchingWillBegin
                         object: nil];
     
     [defaultCenter addObserver: self
                       selector: @selector(handleNotificationDidEndFetchingUbiquitousContainer:)
-                          name: UbiquitousContainerFetchingDidEndNotification
+                          name: MADNotificationUbiquitousContainerFetchingDidEnd
                         object: nil];
     
     [[MACloudManager sharedManager] activate];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudDesired];
     [[MACloudManager sharedManager] checkUserICloudPreferenceAndSetupIfNecessary:^{
 
         [super setUp];
@@ -60,15 +59,15 @@
                            object: nil];
     
     [defaultCenter removeObserver: self
-                             name: ICloudStateUpdatedNotification
+                             name: MADNotificationCloudStateUpdated
                            object: nil];
     
     [defaultCenter removeObserver: self
-                             name: UbiquitousContainerFetchingWillBeginNotification
+                             name: MADNotificationUbiquitousContainerFetchingWillBegin
                            object: nil];
     
     [defaultCenter removeObserver: self
-                             name: UbiquitousContainerFetchingDidEndNotification
+                             name: MADNotificationUbiquitousContainerFetchingDidEnd
                            object: nil];
     
     [defaultCenter removeObserver: self

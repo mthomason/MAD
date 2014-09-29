@@ -6,31 +6,25 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#ifndef Reports_MACloudManager_h
-#define Reports_MACloudManager_h
+#ifndef MAD_MACloudManager_h
+#define MAD_MACloudManager_h
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
-
-NSString * const MTICloudUbiquityToken;
-NSString * const MTICloudUserEnabled;
-NSString * const MTICloudUserPrefsSet;
-
-
-NSString * const MADPreferencesCloudDesired;
-NSString * const MADPreferencesCloudOptionsSelected;
-
-NSString * const ICloudStateUpdatedNotification;
-NSString * const UbiquitousContainerFetchingWillBeginNotification;
-NSString * const UbiquitousContainerFetchingDidEndNotification;
+extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
+extern NSString * const MADNotificationFileManagerDidUpdateFileLocations;
+extern NSString * const MADNotificationCloudStateUpdated;
+extern NSString * const MADNotificationUbiquitousContainerFetchingWillBegin;
+extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @protocol MADCloudManagerProtocol <NSObject>
 
 - (void)ubiquityIdentityDidChange;
 
 @end
+
+@class MADFileLocationManager;
 
 @interface MACloudManager : NSObject
 
@@ -46,10 +40,13 @@ NSString * const UbiquitousContainerFetchingDidEndNotification;
 @property (nonatomic, assign, readonly) BOOL cloudAvailble;
 @property (nonatomic, assign, readonly) BOOL cloudOptionsPresentedAndSelectedByUser;
 
+@property (nonatomic, strong, readonly) MADFileLocationManager *fileLocationManager;
+
 + (MACloudManager *)sharedManager;
 
 - (void)activate;
 - (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion;
+
 - (NSArray *)hasMadDocuments;
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;

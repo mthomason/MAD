@@ -716,8 +716,8 @@ NSString * const MNSInterfaceTitleProblem                           = @"Problem"
             success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
         } else {
             NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-            resultUrl = [NSURL uniqueUrlForDocumentWithName:fileName
-                                              withExtension:MTDocumentExtentionMobleApplicationDocument];
+            resultUrl = [NSURL uniqueUrlForDocumentWithName: fileName
+                                              withExtension: MTDocumentExtentionMobleApplicationDocument];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
         }
