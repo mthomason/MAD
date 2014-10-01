@@ -24,7 +24,8 @@ extern NSString * const MTReportDetailRowId;
 extern NSString * const MTReportGroupLevel;
 extern NSString * const MTDocumentInfoKeyThumbnail;
 
-@class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter, MTDataTable, MTQuery;
+@class MADocumentState, MTErrorContainer, MTDatabaseConnection, RptqDocument, MTReportFormatter,
+        MTDataTable, MTQuery, MTActivityIndicator;
 
 @interface MADocument : UIManagedDocument
 <MTReportFormatterDataSource,
@@ -33,11 +34,16 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
     UIPrintInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTReportFormatter *reportFormatter;
+@property (nonatomic, strong, readonly) RptqDocument *document;
 @property (nonatomic, strong, readonly) MTDataTable *mainDataTable;
+@property (nonatomic, strong, readonly) MTQuery *mainQuery;
 @property (nonatomic, strong, readonly) MTDatabase *mainDatabase;
-@property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
+
 @property (nonatomic, strong, readonly) NSURL *urlGuts;
+
+@property (nonatomic, strong) MTActivityIndicator *statusLabel;
+@property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
 - (void)quickSave;
@@ -49,7 +55,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
                status:(void (^)(NSString *status, CGFloat progress))status
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 - (void)regenThumbnail;
-- (void)writeToPdf:(NSURL *)filepath withViewController:(UIViewController *)window;
 
 - (void)close:(void(^)(BOOL success, NSError *error))completion;
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
@@ -57,7 +62,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (UIPrintPageRenderer *)printerPrintPageRender;
 
 - (RptqDocument *)activeDocumentModel;
-+ (NSString *)fileType;
 
 - (NSString *)name;
 - (NSString *)fileName;
@@ -76,6 +80,8 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (void)initalizeMainQuery;
 - (void)prepareForQuery;
 - (MTQuery *)defaultQuery;
+
+- (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
 @end
 

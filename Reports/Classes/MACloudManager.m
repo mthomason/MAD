@@ -13,7 +13,7 @@
 #import "NSURL+Document.h"
 
 NSString * const MTDocumentExtentionMobleApplicationDocumentArchive = @"mada";
-NSString * const MTDocumentExtentionMobleApplicationDocument = @"mad";
+NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
 
 NSString * const MTICloudUbiquityToken                              = @"com.everydayapps.mad.designer.cloud.ubiquityIdentityToken";
 NSString * const MADPreferencesCloudDesired                         = @"com.everydayapps.mad.designer.cloud.desired";
@@ -45,8 +45,6 @@ NSString * const MADUbiquityIdentifier                              = @"iCloud.c
 @property (nonatomic, strong, readwrite) NSURL *cachesDirectory;
 @property (nonatomic, strong, readwrite) NSURL *applicationSupport;
 
-@property (nonatomic, strong, readwrite) NSString *ubiquityIdentifier;
-
 @property (nonatomic, strong, readwrite) id <NSObject, NSCopying, NSCoding> ubiquityIdentityToken;
 
 @property (nonatomic, strong, readwrite) MADFileLocationManager *fileLocationManager;
@@ -75,7 +73,6 @@ static MACloudManager *sharedSingleton;
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudAvailble)), self.cloudAvailble ? @"YES" : @"NO"];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(cloudOptionsPresentedAndSelectedByUser)), self.cloudOptionsPresentedAndSelectedByUser ? @"YES" : @"NO"];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityContainer)), self.ubiquityContainer];
-    [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(ubiquityIdentifier)), self.ubiquityIdentifier];
     [debuggingString appendFormat:@"%@:\t%@\n", NSStringFromSelector(@selector(madUrls)), self.madUrls];
     return debuggingString;
 }
@@ -102,8 +99,6 @@ static MACloudManager *sharedSingleton;
         //    [[NSUserDefaults standardUserDefaults] removeObjectForKey:MADPreferencesCloudOptionsSelected];
         //    [self resetForDebugging];
         //});
-        
-        sharedSingleton.ubiquityIdentifier = MADUbiquityIdentifier;
         
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
@@ -297,7 +292,8 @@ static MACloudManager *sharedSingleton;
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
                 
-                NSURL *url = [self.fileManager URLForUbiquityContainerIdentifier: weakself.ubiquityIdentifier];   //This call may be SLOW, so only do on BACKGROUND thread.
+                //This call may be SLOW, so only do on BACKGROUND thread.
+                NSURL *url = [self.fileManager URLForUbiquityContainerIdentifier: MADUbiquityIdentifier];
                 [weakself setDataAndDocumentUrlsWithBaseUrl:url];
                 
                 dispatch_sync(dispatch_get_main_queue(), ^{

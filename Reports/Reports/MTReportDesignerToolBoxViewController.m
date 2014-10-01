@@ -131,12 +131,12 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
     if ([sender selectedSegmentIndex] == 0) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
         [newViewController setDocument: self.document];
-        [newViewController setDelegate:self];
+        [(MTReportDesignerFontSettingsViewController *)newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 1) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
         [newViewController setDocument: self.document];
-        [newViewController setDelegate:self];
+        [(MTReportDesignerFontSettingsViewController *)newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 2) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
@@ -150,15 +150,18 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
     
     [newViewController setSelectedDocumentObjects:[self selectedObjectIds]];
     
-    [[newViewController tableView] setBounds: [self.contentView bounds]];
-    [[newViewController tableView] setFrame: CGRectMake(CGPointZero.x, CGPointZero.y, [self.contentView bounds].size.width, [self.contentView bounds].size.height)];
+    ((UITableViewController *)newViewController).tableView.bounds = self.contentView.bounds;
+    ((UITableViewController *)newViewController).tableView.frame = CGRectMake(CGPointZero.x,
+                                                                              CGPointZero.y,
+                                                                              self.contentView.bounds.size.width,
+                                                                              self.contentView.bounds.size.height);
 
     __weak MTReportDesignerToolBoxViewController *weakSelf = self;
     [UIView animateWithDuration:0.3000f animations:^{
 
-        [[[weakSelf tableViewControllerTextLayoutSettings] view] removeFromSuperview];
+        [weakSelf.tableViewControllerTextLayoutSettings.view removeFromSuperview];
         [weakSelf setTableViewControllerTextLayoutSettings:newViewController];
-        [[weakSelf contentView] addSubview:[[weakSelf tableViewControllerTextLayoutSettings] view]];
+        [weakSelf.contentView addSubview:weakSelf.tableViewControllerTextLayoutSettings.view];
     
     } completion:^(BOOL finished) {
     

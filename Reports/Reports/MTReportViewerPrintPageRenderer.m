@@ -60,7 +60,6 @@
 
 #import "MTReportFormatter.h"
 #import "MADArrayCaching.h"
-#import "MTReportFormatterPageDefinition.h"
 
 #import "UIImage+Border.h"
 

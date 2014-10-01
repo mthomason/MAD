@@ -7,3 +7,6 @@
 //
 
 #import "CGGeometry+Extras.h"
+
+const CGFloat MTDefaultFingerSizeWidth = 44.0000f;
+const CGFloat MTDefaultFingerSizeHeight = 44.0000f;

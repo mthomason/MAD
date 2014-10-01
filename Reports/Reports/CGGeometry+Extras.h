@@ -20,9 +20,7 @@
 #define            RADTODEG(rad)         (((rad) * 360.0) / (2.0 * PI))
 
 extern const CGFloat MTDefaultFingerSizeWidth;
-const CGFloat MTDefaultFingerSizeWidth = 44.0000f;
 extern const CGFloat MTDefaultFingerSizeHeight;
-const CGFloat MTDefaultFingerSizeHeight = 44.0000f;
 
 /* Lines. */
 

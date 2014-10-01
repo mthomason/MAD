@@ -54,13 +54,12 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
         UITextFieldDelegate,
-        MTViewControllerProtocol,
-        MTDocumentCellProtocol,
         UIDocumentInteractionControllerDelegate,
         UIDocumentPickerDelegate,
         UISearchBarDelegate,
-        UIStateRestoring>
-
+        UIStateRestoring,
+        MTViewControllerProtocol,
+        MTDocumentCellProtocol>
 
 @property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
 
@@ -109,11 +108,11 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 
 - (void)applicationFinishedRestoringState {
     if ([MTApplicationInstance isMadDesigner]) {
-        [self performSegueWithIdentifier:MTSegueShowOpenDocument
-                                      sender:self];
+        [self performSegueWithIdentifier: MTSegueShowOpenDocument
+                                  sender: self];
     } else if ([MTApplicationInstance isMadViewer]) {
-        [self performSegueWithIdentifier:MTSegueOpenInViewer
-                                      sender:self];
+        [self performSegueWithIdentifier: MTSegueOpenInViewer
+                                  sender: self];
     }
 }
 
@@ -1417,8 +1416,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
     NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:name
-                                                  withExtension:MTDocumentExtentionMobleApplicationDocumentArchive];
+    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName: name
+                                                  withExtension: MTDocumentExtentionMobleApplicationDocument];
     
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
     NSError* fileWrittingError = nil;

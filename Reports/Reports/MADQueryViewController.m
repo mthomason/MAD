@@ -216,7 +216,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[self.navigationItem titleView] sizeToFit];
+    [self.navigationItem.titleView sizeToFit];
 }
 
 - (void)viewDidLoad {
@@ -255,13 +255,18 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 
                 NSMutableArray *toolbarButtons = [[blockSelf toolbarItems] mutableCopy];
                 NSInteger index = [toolbarButtons count] - 1;
-                UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:nil];
+                UIBarButtonItem *barButtonItemFixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace
+                                                                                                         target: self
+                                                                                                         action: nil];
                 [barButtonItemFixedSpace setWidth:20.0000f];
-                [toolbarButtons insertObject:[blockSelf barButtonItemShowSQL] atIndex:index+1];
-                [toolbarButtons insertObject:barButtonItemFixedSpace atIndex:index+1];
+                [toolbarButtons insertObject: [blockSelf barButtonItemShowSQL]
+                                     atIndex: index+1];
+                [toolbarButtons insertObject: barButtonItemFixedSpace
+                                     atIndex: index+1];
                 
                 
-                [blockSelf setToolbarItems:toolbarButtons animated:animated];
+                [blockSelf setToolbarItems: toolbarButtons
+                                  animated: animated];
             }
         }];
     }
@@ -279,12 +284,12 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
         [labelMadDesigner setAttributedText:attributedString];
-        [self.navigationItem setTitleView:labelMadDesigner];
-        [[self.navigationItem titleView] sizeToFit];
+        self.navigationItem.titleView = labelMadDesigner;
+        [self.navigationItem.titleView sizeToFit];
     }
     
     [self enableTabBarItems];
-    [[self.navigationItem titleView] sizeToFit];
+    [self.navigationItem.titleView sizeToFit];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -297,7 +302,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([segue.identifier isEqualToString: MNSSegueShowSql]) {                                 // MARK:
+    if ([segue.identifier isEqualToString: MNSSegueShowSql]) {
         MTShowSqlViewController *viewController;
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
             viewController = (MTShowSqlViewController *)[segue.destinationViewController topViewController];
@@ -308,7 +313,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         viewController.query = self.document.defaultQuery;
         [self disableTabBarItems];
         
-    } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {    // MARK: Prepair to show database drivers.
+    } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
         
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
@@ -394,10 +399,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     BOOL shouldPerformSegueWithIdentifier = [super shouldPerformSegueWithIdentifier:identifier sender:sender];
     if ([identifier isEqualToString:MTSegueCloseDesigner]) {
         NSError *error = nil;
-        [[self.document managedObjectContext] save:&error];
-        if (error != nil) {
-            [[self.document managedObjectContext] save:&error];
-        }
+        [self.document.managedObjectContext save:&error];
     }
     return shouldPerformSegueWithIdentifier;
 }
@@ -486,7 +488,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     MTQuerySections tableSection = [self tableSectionTypeForIndexPathSection: suspectedSection];
     if (tableSection == MTQuerySectionsLinks) {
         NSIndexSet *linksSection = [NSIndexSet indexSetWithIndex:suspectedSection];
-        [self.tableView reloadSections:linksSection withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections: linksSection
+                      withRowAnimation: UITableViewRowAnimationAutomatic];
     }
     [self.document quickSave];
 }
@@ -746,17 +749,21 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 UIFont *fontItalic = [UIFont italicSystemFontOfSize:font.pointSize];
                 
                 NSDictionary *additionalAttributeStroke = @{ NSFontAttributeName : fontItalic };
-                NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString:message attributes:attributes];
-                [messageAttributed removeAttribute:NSFontAttributeName range:rangeOfDatabaseTypeName];
-                [messageAttributed removeAttribute:NSFontAttributeName range:rangeOfSchemaName];
-                [messageAttributed addAttributes:additionalAttributeStroke range:rangeOfDatabaseTypeName];
-                [messageAttributed addAttributes:additionalAttributeStroke range:rangeOfSchemaName];
-                
+                NSMutableAttributedString *messageAttributed = [[NSMutableAttributedString alloc] initWithString: message
+                                                                                                      attributes: attributes];
+                [messageAttributed removeAttribute: NSFontAttributeName
+                                             range: rangeOfDatabaseTypeName];
+                [messageAttributed removeAttribute: NSFontAttributeName
+                                             range: rangeOfSchemaName];
+                [messageAttributed addAttributes: additionalAttributeStroke
+                                           range: rangeOfDatabaseTypeName];
+                [messageAttributed addAttributes: additionalAttributeStroke
+                                           range: rangeOfSchemaName];
                 result.textLabel.text = message;
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
             }
-            [result.textLabel setNumberOfLines:2];
+            result.textLabel.numberOfLines = 2;
             break;
         }
 
@@ -805,12 +812,16 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             paragraphStyle.headIndent = 20.0000f;
             NSString *linksDescription = [links linkDescription];
             messageText = [NSString stringWithFormat:messageText, leftString, linksDescription, rightString];
-            NSDictionary *attributes = @{ NSFontAttributeName : font, NSParagraphStyleAttributeName : paragraphStyle };
+            NSDictionary *attributes = @{ NSFontAttributeName : font,
+                                          NSParagraphStyleAttributeName : paragraphStyle };
             UIColor *color = [UIColor tintColorBlue];
-            NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption, NSForegroundColorAttributeName :  color};
+            NSDictionary *attributesAlt = @{ NSFontAttributeName : fontCaption,
+                                             NSForegroundColorAttributeName :  color};
             NSRange rangeLinkDesc = [messageText rangeOfString:linksDescription];
-            NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
-            [message addAttributes:attributesAlt range:rangeLinkDesc];
+            NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText
+                                                                                        attributes: attributes];
+            [message addAttributes:attributesAlt
+                             range:rangeLinkDesc];
             result.textLabel.attributedText = message;
 
             break;
@@ -827,8 +838,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             
             NSMutableParagraphStyle *paragraphStyleLeft = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
             NSMutableParagraphStyle *paragraphStyleRight = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-            [paragraphStyleLeft setAlignment:NSTextAlignmentLeft];
-            [paragraphStyleRight setAlignment:NSTextAlignmentRight];
+            paragraphStyleLeft.alignment = NSTextAlignmentLeft;
+            paragraphStyleRight.alignment = NSTextAlignmentRight;
 
             NSString *formatString = @"%1$@ %2$@";
             NSString *fieldName = [group fieldNameNice];
@@ -878,10 +889,12 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             UIColor *color = [UIColor tintColorBlue];
             NSDictionary *attributesCaption = @{ NSForegroundColorAttributeName :  color };
 
-            NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:messageText attributes:attributes];
+            NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText
+                                                                                        attributes: attributes];
             NSRange rangeMiddle = [messageText rangeOfString:symbol];
             result.textLabel.numberOfLines = 2;
-            [message addAttributes:attributesCaption range:rangeMiddle];
+            [message addAttributes: attributesCaption
+                             range: rangeMiddle];
             result.textLabel.text = messageText;
             result.textLabel.attributedText = message;
             [(MTTableViewCellQueryPredicate *)result setTableID:[predicate objectID]];
@@ -1054,15 +1067,20 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
             MTQuerySections updateSection = [section integerValue];
             switch(type) {
-                case NSFetchedResultsChangeInsert:
-                    [self.tableView insertSections: [NSIndexSet indexSetWithIndex:updateSection]
+                case NSFetchedResultsChangeInsert: {
+                    NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
+                    [self.tableView insertSections: updatedIndex
                                     withRowAnimation: UITableViewRowAnimationFade];
                     break;
+                }
                     
-                case NSFetchedResultsChangeDelete:
-                    [self.tableView deleteSections:
-                     [NSIndexSet indexSetWithIndex:updateSection] withRowAnimation:UITableViewRowAnimationFade];
+                case NSFetchedResultsChangeDelete: {
+                    NSIndexSet *updatedIndex = [NSIndexSet indexSetWithIndex: updateSection];
+                    [self.tableView deleteSections: updatedIndex
+                                  withRowAnimation: UITableViewRowAnimationFade];
                     break;
+                }
+                    
                 case NSFetchedResultsChangeMove:
                     break;
                 case NSFetchedResultsChangeUpdate:
@@ -1090,27 +1108,28 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                inSection: updateSection];
         if (path) {
             if ([self suspendAutomaticTrackingOfChangesInManagedObjectContext] == NO) {
+                NSArray *indexPaths = @[path];
                 switch(type) {
                     case NSFetchedResultsChangeInsert: {
-                        [self.tableView insertRowsAtIndexPaths: @[path]
-                                                withRowAnimation: UITableViewRowAnimationFade];
+                        [self.tableView insertRowsAtIndexPaths: indexPaths
+                                              withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeDelete: {
-                        [self.tableView deleteRowsAtIndexPaths: @[path]
-                                                withRowAnimation: UITableViewRowAnimationFade];
+                        [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                              withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeUpdate: {
-                        [self.tableView reloadRowsAtIndexPaths: @[path]
-                                                withRowAnimation: UITableViewRowAnimationFade];
+                        [self.tableView reloadRowsAtIndexPaths: indexPaths
+                                              withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                     case NSFetchedResultsChangeMove: {
-                        [self.tableView deleteRowsAtIndexPaths: @[path]
-                                                withRowAnimation: UITableViewRowAnimationFade];
-                        [self.tableView insertRowsAtIndexPaths: @[path]
-                                                withRowAnimation: UITableViewRowAnimationFade];
+                        [self.tableView deleteRowsAtIndexPaths: indexPaths
+                                              withRowAnimation: UITableViewRowAnimationFade];
+                        [self.tableView insertRowsAtIndexPaths: indexPaths
+                                              withRowAnimation: UITableViewRowAnimationFade];
                         break;
                     }
                 }
@@ -1162,10 +1181,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIDevice isModernOS] ?
-                ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemDatabase8] :
-                                    [UIImage imageNamed:MADImageBarButtonItemDatabase8]) :
-                [UIImage imageNamed:MADImageBarButtonItemDatabase];
+    return ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemDatabase8] :
+                                [UIImage imageNamed:MADImageBarButtonItemDatabase8]);
 }
 
 #pragma mark - Actions
@@ -1190,27 +1207,32 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (void)addConnection:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddDatabaseDrivers
+                              sender: sender];
     [self disableTabBarItems];
 }
 
 - (void)addTable:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddTableViewController
+                              sender: sender];
     [self disableTabBarItems];
 }
 
 - (void)addLink:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddLinkViewController
+                              sender: sender];
     [self disableTabBarItems];
 }
 
 - (void)addPredicate:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddPredicateViewController
+                              sender: sender];
     [self disableTabBarItems];
 }
 
 - (void)addGroup:(id)sender {
-    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController sender: sender];
+    [self performSegueWithIdentifier: MNSIdentifierSegueShowAddGroupViewController
+                              sender: sender];
     [self disableTabBarItems];
 }
 
@@ -1218,8 +1240,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)documentStateChanged {
     
-    UIDocumentState state = [self.document documentState];
-    switch (state) {
+    switch (self.document.documentState) {
         case UIDocumentStateClosed:
             [self disableUserInteraction];
             break;
@@ -1265,17 +1286,17 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         //Reweight Groups
         NSString *weight = NSStringFromSelector(@selector(weight));
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        NSArray *sortDescriptors = @[sortDescriptor];
+        NSArray *sortedQueryGroups = [[query hasQueryGroups] sortedArrayUsingDescriptors:sortDescriptors];
         NSUInteger counter = 0;
         for (RptqQueryGroup *group in sortedQueryGroups) {
-            [group setWeight:@(counter)];
+            NSNumber *counterWrapper = @(counter);
+            group.weight = counterWrapper;
             counter++;
         }
         NSError *error = nil;
         [managedObjectContext save:&error];
-        if (error) {
-            NSLog(@"%s, %@", __PRETTY_FUNCTION__, error);
-        }
+        NSAssert(error == nil, @"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 
@@ -1380,18 +1401,24 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     switch (numberOfTables) {
         case 0: { //There are three configurations for the table.  These configurations depend on the number of schemas in the query: zero, one, or more than one.
             
-            NSArray *sections = @[@(MTQuerySectionsDatasource),
-                                  @(MTQuerySectionsTables)];
+            NSNumber *datasource = @(MTQuerySectionsDatasource);
+            NSNumber *tables = @(MTQuerySectionsTables);
+            NSArray *sections = @[datasource, tables];
             
-            NSArray *countRowsForSection = @[@(1), @(-1)];
-            NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            NSNumber *count1 = @(1);
+            NSNumber *count2 = @(-1);
+            NSArray *countRowsForSection = @[count1, count2];
+            NSDictionary *countRowsForSectionDictionary =  [NSDictionary dictionaryWithObjects: countRowsForSection
+                                                                                       forKeys: sections];
             
             NSArray *headersSection = @[h2, h3];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection forKeys: sections];
-            
-            NSArray *heightRowsForSection = @[@(50.0000f), @([UITableViewCellTableName defaultHeight])];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
-            
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
+                                                                                 forKeys: sections];
+            NSNumber *height1 = @(50.0000f);
+            NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
+            NSArray *heightRowsForSection = @[height1, height2];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
+                                                                                                 forKeys: sections];
             result = @{MTTableSectionSectionsKey : sections,
                        MTTableHeaderSectionKey : headersSectionDictionary,
                        MTTableSectionRowKey : countRowsForSectionDictionary,
@@ -1402,20 +1429,28 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         }
         case 1: {   //Only one table in query.  No ability to add links.
             
-            NSArray *sections = @[@(MTQuerySectionsDatasource),
-                                  @(MTQuerySectionsTables),
-                                  @(MTQuerySectionsGroups),
-                                  @(MTQuerySectionsPredicate)];
+            NSNumber *datasource = @(MTQuerySectionsDatasource);
+            NSNumber *tables = @(MTQuerySectionsTables);
+            NSNumber *groups = @(MTQuerySectionsGroups);
+            NSNumber *predicate = @(MTQuerySectionsPredicate);
+
+            NSArray *sections = @[datasource, tables, groups, predicate];
             
             NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1)];
-            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects: countRowsForSection
+                                                                                      forKeys: sections];
             
             NSArray *headersSection = @[h2, h3, h5, h6];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
+                                                                                 forKeys: sections];
             
-            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]),
-                                              @(44.0000f), @(44.0000f)];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            NSNumber *height1 = @(44.0000f);
+            NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
+            NSNumber *height3 = @(44.0000f);
+            NSNumber *height4 = @(44.0000f);
+            NSArray *heightRowsForSection = @[height1, height2, height3, height4];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects: heightRowsForSection
+                                                                                                 forKeys: sections];
             
             result = @{MTTableSectionSectionsKey : sections,
                        MTTableHeaderSectionKey : headersSectionDictionary,
@@ -1426,22 +1461,33 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         }
         default: {   //Two more more tables in query.  All features available.
             
-            NSArray *sections = @[@(MTQuerySectionsDatasource),
-                                  @(MTQuerySectionsTables),
-                                  @(MTQuerySectionsLinks),
-                                  @(MTQuerySectionsGroups),
-                                  @(MTQuerySectionsPredicate)];
+            NSNumber *datasource = @(MTQuerySectionsDatasource);
+            NSNumber *tables = @(MTQuerySectionsTables);
+            NSNumber *links = @(MTQuerySectionsLinks);
+            NSNumber *groups = @(MTQuerySectionsGroups);
+            NSNumber *predicate = @(MTQuerySectionsPredicate);
+            NSArray *sections = @[datasource, tables, links, groups, predicate];
             
-            NSArray *countRowsForSection = @[@(1), @(-1), @(-1), @(-1), @(-1)];
-            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects:countRowsForSection forKeys:sections];
+            NSNumber *count1 = @(1);
+            NSNumber *count2 = @(-1);
+            NSNumber *count3 = @(-1);
+            NSNumber *count4 = @(-1);
+            NSNumber *count5 = @(-1);
+            NSArray *countRowsForSection = @[count1, count2, count3, count4, count5];
+            NSDictionary *countRowsForSectionDictionary = [NSDictionary dictionaryWithObjects: countRowsForSection
+                                                                                      forKeys: sections];
             
             NSArray *headersSection = @[h2, h3, h4, h5, h6];
-            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects:headersSection forKeys: sections];
-            
-            
-            NSArray *heightRowsForSection = @[@(44.0000f), @([UITableViewCellTableName defaultHeight]), @([UITableViewCellQueryLink defaultHeight]),
-                                              @(44.0000f), @(44.0000f)];
-            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection forKeys:sections];
+            NSDictionary *headersSectionDictionary = [NSDictionary dictionaryWithObjects: headersSection
+                                                                                 forKeys: sections];
+            NSNumber *height1 = @(44.0000f);
+            NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
+            NSNumber *height3 = @([UITableViewCellQueryLink defaultHeight]);
+            NSNumber *height4 = @(44.0000f);
+            NSNumber *height5 = @(44.0000f);
+            NSArray *heightRowsForSection = @[height1, height2, height3, height4, height5];
+            NSDictionary *heightRowsForSectionDictionaryDictionary = [NSDictionary dictionaryWithObjects:heightRowsForSection
+                                                                                                 forKeys:sections];
             
             result = @{MTTableSectionSectionsKey : sections,
                        MTTableHeaderSectionKey : headersSectionDictionary,
@@ -1457,24 +1503,28 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (MTViewTableHeader *)tableHeaderDatabaseInfo {
     NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
     MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] setHidden:YES];
+    header.labelTitle.text = title;
+    header.buttonAdd.hidden = YES;
     return header;
 }
 
 - (MTViewTableHeader *)tableHeaderTablesToSelect {
     NSString *title = NSLocalizedString(@"Tables to Select", @"Tables to Select");
     MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:@selector(addTable:) forControlEvents:UIControlEventTouchUpInside];
+    header.labelTitle.text = title;
+    [header.buttonAdd addTarget: self
+                         action: @selector(addTable:)
+               forControlEvents: UIControlEventTouchUpInside];
     return header;
 }
 
 - (MTViewTableHeader *)tableHeaderTableJoins {
     NSString *title = NSLocalizedString(@"Table Joins", @"Table Joins");
     MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:@selector(addLink:) forControlEvents:UIControlEventTouchUpInside];
+    header.labelTitle.text = title;
+    [header.buttonAdd addTarget: self
+                         action: @selector(addLink:)
+               forControlEvents: UIControlEventTouchUpInside];
     return header;
 }
 
@@ -1482,8 +1532,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     SEL selector = @selector(addGroup:);
     NSString *title = NSLocalizedString(@"Grouped By", @"Grouped By");
     MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    header.labelTitle.text = title;
+    [header.buttonAdd addTarget: self
+                         action: selector
+               forControlEvents: UIControlEventTouchUpInside];
     return header;
 }
 
@@ -1491,8 +1543,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     SEL selector = @selector(addPredicate:);
     NSString *title = NSLocalizedString(@"Having Specified Criteria", @"Next to the button to add database tables.");
     MTViewTableHeader *header = [self tableHeader];
-    [[header labelTitle] setText:title];
-    [[header buttonAdd] addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    header.labelTitle.text = title;
+    [header.buttonAdd addTarget: self
+                         action: selector
+               forControlEvents: UIControlEventTouchUpInside];
     return header;
 }
 
@@ -1509,7 +1563,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
     sampleDataTitleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName:[schemaTable name]];
+    NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName: schemaTable.name];
     [sampleDataTitleView setAttributedText:titleViewText];
     
     [[tableController navigationItem] setTitle:[schemaTable name]];
@@ -1524,11 +1578,13 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSString *firstPart = @"Data Sample";
     NSString *titleString = [NSString stringWithFormat:@"%1@ %2@", firstPart, tableName];
     
-    NSRange rangeFirstPart = NSMakeRange(0, [firstPart length]);
-    NSRange rangeSecondPart = NSMakeRange([firstPart length], [titleString length] - [firstPart length]);
+    NSRange rangeFirstPart = NSMakeRange(0, firstPart.length);
+    NSRange rangeSecondPart = NSMakeRange(firstPart.length, titleString.length - firstPart.length);
     
-    UIFont *fontb = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0000f];
-    UIFont *fonti = [UIFont fontWithName:@"HelveticaNeue-LightItalic" size:18.0000f];
+    UIFont *fontb = [UIFont fontWithName: @"HelveticaNeue-Light"
+                                    size: 20.0000f];
+    UIFont *fonti = [UIFont fontWithName: @"HelveticaNeue-LightItalic"
+                                    size: 18.0000f];
     
     UIColor *foregroundColor = [UIColor whiteColor];
     NSDictionary *attributes = @{NSParagraphStyleAttributeName: paragraphStyle,
@@ -1605,6 +1661,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 NSIndexPath *testLinkIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
                 object = [fetchedLinkes objectAtIndexPath:testLinkIndexPath];
             }
+            
         }
         if (!error && object && [object isKindOfClass:[RptqQueryLinks class]]) {
             RptqQueryLinks *queryLink = (RptqQueryLinks *)object;

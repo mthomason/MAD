@@ -206,8 +206,8 @@ NSString * const MTQueryKeyPredicateValue = @"v";
         
         NSMutableArray *fieldKeys = [[NSMutableArray alloc] init];
 
-        [self setFields:fieldInfo];
-        [self setFieldKeys:fieldKeys];
+        self.fields = fieldInfo;
+        self.fieldKeys = fieldKeys;
 
     }
     return self;
@@ -215,7 +215,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
 
 - (void)performQuery:(void (^)(BOOL success, NSError *error))completion {
     @autoreleasepool {
-        [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
+        [self.database executeQuery:self completion:^(BOOL success, NSError *error) {
             completion(success, error);
         }];
     }
@@ -224,15 +224,15 @@ NSString * const MTQueryKeyPredicateValue = @"v";
 - (void)performQueryWithDatabase:(MTDatabase *)database completion:(void (^)(BOOL success, NSError *error))completion {
     [self setDatabase:database];
     @autoreleasepool {
-        [[self database] executeQuery:self completion:^(BOOL success, NSError *error) {
+        [self.database executeQuery:self completion:^(BOOL success, NSError *error) {
             completion(success, error);
         }];
     }
 }
 
 - (NSString *)getSqlWithError:(NSError **)error {
-    [[self fields] removeAllObjects];
-    [[self fieldKeys] removeAllObjects];
+    [self.fields removeAllObjects];
+    [self.fieldKeys removeAllObjects];
     return @"";
 }
 
@@ -274,8 +274,8 @@ NSString * const MTQueryKeyPredicateValue = @"v";
                                                                         value: columnValue];
             } else {
                 databinding = [[MTDatabaseDataBinding alloc] initWithDataType: [self columnTypeForColumnHanle:columnHandle]
-                                                                                          fieldIndex: counterBinings
-                                                                                               value: columnValue];
+                                                                   fieldIndex: counterBinings
+                                                                        value: columnValue];
             }
             [[self binaryBindings] addObject:databinding];
             [sql appendFormat:@"%@ = ?", columnHandle];
@@ -299,8 +299,9 @@ NSString * const MTQueryKeyPredicateValue = @"v";
                 dataColumn = [self columns][[sortDescriptor key]];
             }
             NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType:[[dataColumn nativeColumnType] integerValue] ascending:[sortDescriptor ascending]];
-            [sql appendFormat:@"%@ %@", [sortDescriptor key], sortDirection];
+            NSString *sortDirection = [MTDatabaseSqlite3 sortDescForColumnType: dataColumn.nativeColumnType.integerValue
+                                                                     ascending: sortDescriptor.ascending];
+            [sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
             sortCounter++;
         }
     }
@@ -318,7 +319,7 @@ NSString * const MTQueryKeyPredicateValue = @"v";
             } else {
                 [sql appendString: @" WHERE "];
             }
-            [sql appendFormat:@"rowid = %d", rowid];
+            [sql appendFormat:@"rowid = %lu", (unsigned long)rowid];
             firstTime = NO;
         }
     } else {

@@ -221,7 +221,7 @@ NSString * const MTNullIdentifier = @"(null)";
 //  Data is cached by group, page, and report.
 
 - (BOOL)cachedIndexesExist {
-    return [[self reportIndexes] count] > 0 && [[self reportLayout] count] > 0;
+    return [self.reportIndexes count] > 0 && [[self reportLayout] count] > 0;
 }
 
 - (BOOL)format {
@@ -231,7 +231,7 @@ NSString * const MTNullIdentifier = @"(null)";
     
     if ([self didRefresh] ||
         [self cachedIndexesExist] == NO ||
-        [[self datasource] cacheExist] == NO) {
+        [self.datasource cacheExist] == NO) {
         updatedData = YES;
     }
     return updatedData;
@@ -242,7 +242,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)setLayoutSize:(CGSize)layoutSize {
-    [[self page] setLayoutSize:layoutSize];
+    [self.page setLayoutSize:layoutSize];
 }
 
 - (void)reformatForSize:(CGSize)printableSize {
@@ -290,20 +290,20 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self reportLayout] addObject:tlfp];
     
     NSArray *tdfp = [NSArray arrayWithArray:[self pageIndexesTemporary]];
-    [[self reportIndexes] addObject:tdfp];
+    [self.reportIndexes addObject:tdfp];
     
     [self endBulkInserts];
     
     [self cleanupTemporaryReportIndexes];
     
     [[self reportFormatterCache] setLayout:[[self reportLayout] identifier]
-                                andIndexes:[[self reportIndexes] identifier]
+                                andIndexes:[self.reportIndexes identifier]
                                    forSize:self.page.layoutSize];
     
 }
 
 - (void)dropIndexes {
-    [[self reportIndexes] removeAllObjects];
+    [self.reportIndexes removeAllObjects];
     [[self reportLayout] removeAllObjects];
 }
 
@@ -312,13 +312,13 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (void)beginBulkInserts {
-    [[self reportIndexes] beginBulkInserts];
+    [self.reportIndexes beginBulkInserts];
     [[self reportLayout] beginBulkInserts];
 }
 
 - (void)endBulkInserts {
     [[self reportLayout] endBulkInserts];
-    [[self reportIndexes] endBulkInserts];
+    [self.reportIndexes endBulkInserts];
 }
 
 - (void)loadLayoutAndIndexesFromCache {
@@ -333,7 +333,7 @@ NSString * const MTNullIdentifier = @"(null)";
 
 - (void)initReportLayoutContainers {
     [[self reportLayout] removeAllObjects];
-    [[self reportIndexes] removeAllObjects];
+    [self.reportIndexes removeAllObjects];
     [self setLastResultRowComparsonValues:nil];
 }
 
@@ -607,7 +607,7 @@ NSString * const MTNullIdentifier = @"(null)";
     [[self reportLayout] addObject:pageInfo];
     
     NSArray *rowids = [self pageIndexesTemporary] != nil ? [NSArray arrayWithArray: [self pageIndexesTemporary]] : @[];
-    [[self reportIndexes] addObject:rowids];
+    [self.reportIndexes addObject:rowids];
     
     [self cleanupTemporaryPageIndexes];
     
