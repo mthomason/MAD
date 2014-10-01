@@ -115,7 +115,7 @@
             self.popover = popoverController;
             UINavigationController *navController = (UINavigationController *)popoverController.contentViewController;
             MTShowSqlViewController *showSqlViewController = (MTShowSqlViewController *)navController.topViewController;
-            showSqlViewController.query = self.document.defaultQuery;
+            showSqlViewController.query = self.document.mainQuery;
             [self disableTabBarItems];
         }
         

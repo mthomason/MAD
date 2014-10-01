@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTQueue_h
+#define MAD_DataStructures_MTQueue_h
+
 #import <Foundation/Foundation.h>
 #import "MTProtocolLog.h"
 
@@ -26,3 +29,5 @@
 - (NSUInteger)count;
 
 @end
+
+#endif

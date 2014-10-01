@@ -15,8 +15,7 @@
 #import "MTLinkedList.h"
 #import "MTPair.h"
 
-#import "NSNumber+Extras.h"
-#import "NSNumber+MTProtocol.h"
+//#import "NSNumber+MTProtocol.h"
 
 @interface MTGraph : MTObject <MTProtocolLog>
 

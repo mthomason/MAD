@@ -48,7 +48,8 @@
     return nil;
 }
 
-- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel withKeys:(NSArray *)keys accending:(BOOL)accending {
+- (NSEnumerator *)enumeratorForGroupLevel:(NSUInteger)groupLevel
+                                 withKeys:(NSArray *)keys accending:(BOOL)accending {
     NSAssert(false, @"Not implemented: %s", __PRETTY_FUNCTION__);
     return nil;
 }
@@ -223,7 +224,7 @@
 }
 
 - (void)loadFromCache {
-    NSString *path = [[self url] path];
+    NSString *path = [self url].path;
     NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath: path];
     [inputStream open];
     switch ([inputStream streamStatus]) {
@@ -234,7 +235,10 @@
     }
     NSPropertyListFormat format;
     NSError *error = nil;
-    id plist = [NSPropertyListSerialization propertyListWithStream:inputStream options:0 format:&format error:&error];
+    id plist = [NSPropertyListSerialization propertyListWithStream: inputStream
+                                                           options: 0
+                                                            format: &format
+                                                             error: &error];
     if (plist) {
         [self loadWithPlist:plist];
     }
@@ -263,15 +267,15 @@
 
 - (void)cachePlist:(id)data {
     NSError *error = nil;
-    NSData *cache = [NSPropertyListSerialization dataWithPropertyList:data format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+    NSData *cache = [NSPropertyListSerialization dataWithPropertyList: data
+                                                               format: NSPropertyListBinaryFormat_v1_0
+                                                              options: 0
+                                                                error: &error];
     if ([self url]) {
-        NSDataWritingOptions mask = NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen;
-        [cache writeToURL:[self url] options:mask error:&error];
-        if (error) {
-            MTLog(@"Error: %@", error);
-            error = nil;
-            [cache writeToURL:[self url] options:mask error:&error];
-        }
+        [cache writeToURL:[self url]
+                  options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen
+                    error:&error];
+        NSAssert(@"%s %@", __PRETTY_FUNCTION__, error);
     }
 }
 

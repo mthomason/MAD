@@ -240,7 +240,8 @@ static void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     MADocument *documentReport = [self.applicationInstance currentdocappinst];
-    [documentReport quickSave];
+    [documentReport saveToURL: documentReport.fileURL
+             forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {

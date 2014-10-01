@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTPair_h
+#define MAD_DataStructures_MTPair_h
+
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
 #import "MTProtocolLog.h"
@@ -34,3 +37,5 @@
 - (id)right;
 
 @end
+
+#endif

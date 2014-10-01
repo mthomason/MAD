@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTEdge_h
+#define MAD_DataStructures_MTEdge_h
+
 #import <Foundation/Foundation.h>
 #import "MTObject.h"
 #import "MTProtocolLog.h"
@@ -42,3 +45,5 @@ typedef NS_ENUM(NSUInteger, MTEdgeType) {
 - (MTVertex *)destination;
 
 @end
+
+#endif

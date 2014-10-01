@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
+#ifndef MAD_DataStructures_MTLinkedList_h
+#define MAD_DataStructures_MTLinkedList_h
+
 #import <Foundation/Foundation.h>
 #import "MTProtocolLog.h"
 
@@ -36,3 +39,5 @@
 - (NSArray *)toArray;
 
 @end
+
+#endif
