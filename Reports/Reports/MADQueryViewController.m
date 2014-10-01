@@ -310,7 +310,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             viewController = segue.destinationViewController;
         }
         viewController.delegate = self;
-        viewController.query = self.document.defaultQuery;
+        viewController.query = self.document.mainQuery;
         [self disableTabBarItems];
         
     } else if ([segue.identifier isEqualToString: MNSIdentifierSegueShowAddTableViewController]) {
@@ -421,7 +421,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     
     [[self.document activeDocumentModel] addPredicate:predicate];
     [self.document saveContext];
-    [self.document quickSave];
 }
 
 #pragma mark - MTReportDesignerSectionLayoutSettingsDelegate
@@ -491,7 +490,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         [self.tableView reloadSections: linksSection
                       withRowAnimation: UITableViewRowAnimationAutomatic];
     }
-    [self.document quickSave];
+    [self.document saveToURL: self.document.fileURL
+            forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
 #pragma mark - MTQueryBuilderAddGroupDelegate
@@ -510,7 +510,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     RptqQuery *query = [database.hasQueries anyObject];
     [query addHasQueryGroupsObject: queryGroup];
     [self.document saveContext];
-    [self.document quickSave];
     
     [self performFetchGroups];
 }
@@ -606,7 +605,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     }
     [self setSuspendAutomaticTrackingOfChangesInManagedObjectContext: NO];
 
-    [self.document quickSave];
     [self performFetchTables];
 }
 

@@ -737,7 +737,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [weakself setIsRefreshing:YES];
         [weakself setDisplayInactive];
         
-        MTDatabase *database = [[self.document defaultQuery] database];
+        MTDatabase *database = [self.document.mainQuery database];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver: weakself

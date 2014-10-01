@@ -129,6 +129,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 @property (nonatomic, strong) UIImage *thumbnail;
 
+@property (nonatomic, strong) NSMutableDictionary *extraInformation;        //Structure for extra info
 @property (nonatomic, strong, readwrite) RptqDocument *document;
 @property (nonatomic, strong, readwrite) MTDatabase *mainDatabase;
 @property (nonatomic, strong, readwrite) MTQuery *mainQuery;
@@ -139,6 +140,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 @property (nonatomic, strong) MTReportFormatter *printingReportFormatter;   //Used only when printing
 
 @property (nonatomic, strong, readwrite) NSURL *urlGuts;
+@property (nonatomic, strong, readwrite) NSURL *urlThumbnail;
+@property (nonatomic, strong, readwrite) NSURL *urlCachedFilesDirectory;
+
+@property (nonatomic, strong, readwrite) NSString *fileName;
 
 @end
 
@@ -187,9 +192,21 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         
         NSURL *destinationUrl = [self archiveUrlForMadUrl:url];
         self.urlGuts = destinationUrl;
+        
+        NSURL *urlThumbnail = [MADocument thumbnailUrlForMadUrl:url];
+        self.urlThumbnail = urlThumbnail;
 
+        NSString *filename = [MADocument fileNameForMadUrl:url];
+        NSURL *urlCachedFilesDirectory = [MADocument cacheFilesDirectoryForFilename:filename];
+        self.urlCachedFilesDirectory = urlCachedFilesDirectory;
+        [self initalizeMainDataTableWithName:filename];
+        self.fileName = filename;
+        
         MADocumentState *documentState = [MADocumentState new];
         self.documentStatus = documentState;
+        
+        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
+        self.extraInformation = extraInfo;
         
         NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
         [defaultCenter addObserver: self
@@ -214,8 +231,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
         self.didRefresh = NO;
         
-        NSString *name = [self fileNameMinusExtention];
-        [self initalizeMainDataTableWithName:name];
         
     }
     return self;
@@ -243,11 +258,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
 
         NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-        [fileWrapper writeToURL: self.urlGuts
+        NSError *error = nil;
+        success = [fileWrapper writeToURL: self.urlGuts
                         options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
             originalContentsURL: url
                           error: outError];
-        success = outError == nil;
+        success = error == nil;
     }
     if (success) {
         success = [super readFromURL:self.urlGuts error:outError];
@@ -287,12 +303,37 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return YES;
 }
 
+- (void)wrapFileOverwrite:(BOOL)overwrite {
+    NSError *fileWrapperError = nil;
+    BOOL success = NO;
+    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
+                                                            options: NSFileWrapperReadingImmediate
+                                                              error: &fileWrapperError];
+    
+    NSURL *resultUrl;
+    if (fileWrapperError == nil) {
+        if (overwrite) {
+            NSData *data = [fileWrapper serializedRepresentation];
+            NSError *errorWriting = nil;
+            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
+        } else {
+            NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
+            resultUrl = [NSURL uniqueUrlForDocumentWithName: fileName
+                                              withExtension: MTDocumentExtentionMobleApplicationDocument];
+            NSData *data = [fileWrapper serializedRepresentation];
+            success = [data writeToURL:resultUrl atomically:YES];
+        }
+    }
+}
+
 - (void)handleError:(NSError *)error userInteractionPermitted:(BOOL)userInteractionPermitted {
+    [super handleError:error userInteractionPermitted:userInteractionPermitted];
     if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
             [err presentErrorToUser];
         } else {
+            NSLog(@"Error: %@", error);
             [error presentErrorToUser];
         }
     }
@@ -360,6 +401,84 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 + (NSString *)persistentStoreName {
     return MTPersistentStoreAliasMad;
+}
+
+- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL error:(NSError **)error {
+
+    NSError *readError = nil;
+    NSData *imageData = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[self.urlThumbnail path]]) {
+        imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
+        if (readError != nil) {
+            imageData = [NSData dataWithContentsOfURL: self.urlThumbnail options:NSDataReadingUncached error:&readError];
+        }
+    }
+    
+    if (imageData != nil) {
+        UIImage *image = [UIImage imageWithData: imageData];
+        if (image != nil) {
+            UIImage *extraImage = [UIImage imageWithData:imageData];
+            NSString *key = [UIDevice isRetnaDisplay] ? MTDocumentInfoKeyThumbnailRetna : MTDocumentInfoKeyThumbnailStandard;
+            self.extraInformation[key] = extraImage;
+        }
+    }
+    
+    NSURL *metaUrl = [self urlMetaPlaylist];
+    
+    NSDictionary *dicionary = [NSDictionary dictionaryWithContentsOfURL:metaUrl];
+    NSString *lastGenerator = dicionary[MTDocumentInfoKeyGenerator];
+    NSNumber *lastVersion = dicionary[MTDocumentInfoKeyGenerator];
+    
+    if (lastGenerator == nil) lastGenerator = @"MAD Designer";
+    if (lastVersion == nil) lastVersion = @(1.0);
+    
+    self.extraInformation[MTDocumentInfoKeyGenerator] = lastGenerator;
+    
+    self.extraInformation[MTDocumentInfoKeyVersion] = lastVersion;
+    
+    return YES;
+}
+
+- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError **)error {
+
+    if (self.extraInformation == nil) {
+        NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] init];
+        [self setExtraInformation:extraInfo];
+    }
+    NSNumber *dataVersion = @(1.0);
+    self.extraInformation[MTDocumentInfoKeyVersion] = dataVersion;
+    self.extraInformation[MTDocumentInfoKeyGenerator] = @"MAD Designer";
+    return self.extraInformation;
+}
+
+- (BOOL)writeAdditionalContent: (id)content
+                         toURL: (NSURL *)absoluteURL
+           originalContentsURL: (NSURL *)absoluteOriginalContentsURL
+                         error: (NSError **)error {
+    BOOL writeAdditionalContent = [super writeAdditionalContent:content toURL:absoluteURL originalContentsURL:absoluteOriginalContentsURL error:error];
+    
+    
+    if (content == [NSNull null] || self.documentStatus.isSuspended) {
+        
+        writeAdditionalContent  = NO;
+        
+    } else if (content != nil) {
+        
+        writeAdditionalContent  = YES;
+        
+        NSURL *metaUrl = [self urlMetaPlaylist];
+        id version = content[MTDocumentInfoKeyVersion];
+        id generator = content[MTDocumentInfoKeyGenerator];
+        
+        NSDictionary *additionalContent = @{MTDocumentInfoKeyVersion:version, MTDocumentInfoKeyGenerator:generator};
+        [additionalContent writeToURL:metaUrl atomically:NO];
+        
+    } else {
+        
+        writeAdditionalContent = NO;
+        
+    }
+    return writeAdditionalContent;
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate
@@ -444,26 +563,20 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
+#pragma mark - MTCacheProtocol
+
+- (NSURL *)cachedFilesDirectory {
+    return self.urlCachedFilesDirectory;
+}
+
 #pragma mark - Helpers
 
 - (NSString *)name {
     return [self.fileURL.lastPathComponent stringByDeletingPathExtension];
 }
 
-+ (NSString *)thumbnailSaveName {
-    return [UIDevice isRetnaDisplay] ? MTDocumentInfoKeyThumbnailRetna : MTDocumentInfoKeyThumbnailStandard;
-}
-
-- (NSURL *)urlThumbnail {
-    return [MADocument thumbnailUrlForMadUrl:self.fileURL];
-}
-
 - (NSURL *)urlMetaPlaylist {
     return [self.urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
-}
-
-- (NSString *)fileName {
-    return [MADocument fileNameForMadUrl:self.fileURL];
 }
 
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl {
@@ -474,48 +587,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSError *error;
     if (self.managedObjectContext != nil) {
         if ([self.managedObjectContext hasChanges] && ![self.managedObjectContext save:&error]) {
-            [self.managedObjectContext save:nil]; //Try again!?!?!?!
-        }
-    }
-}
-
-- (void)quickSave {
-    if ([self.documentStatus saveInProgressLock] == NO) {
-        [self.documentStatus setSaveInProgressLock:YES];
-
-        __block MADocument *blockSelf = self;
-        [blockSelf saveToURL: self.fileURL
-            forSaveOperation: UIDocumentSaveForOverwriting
-           completionHandler: ^(BOOL success) {
-            
-            blockSelf.documentStatus.suspended = YES;
-            [blockSelf wrapFileOverwrite:YES];
-            blockSelf.documentStatus.suspended = NO;
-            blockSelf.documentStatus.saveInProgressLock = NO;
-            blockSelf = nil;
-        }];
-    }
-}
-
-- (void)wrapFileOverwrite:(BOOL)overwrite {
-    NSError *fileWrapperError = nil;
-    BOOL success = NO;
-    NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithURL: self.urlGuts
-                                                            options: NSFileWrapperReadingImmediate
-                                                              error: &fileWrapperError];
-    
-    NSURL *resultUrl;
-    if (fileWrapperError == nil) {
-        if (overwrite) {
-            NSData *data = [fileWrapper serializedRepresentation];
-            NSError *errorWriting = nil;
-            success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
-        } else {
-            NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-            resultUrl = [NSURL uniqueUrlForDocumentWithName: fileName
-                                              withExtension: MTDocumentExtentionMobleApplicationDocument];
-            NSData *data = [fileWrapper serializedRepresentation];
-            success = [data writeToURL:resultUrl atomically:YES];
+            [self.managedObjectContext save:nil];
         }
     }
 }
@@ -526,10 +598,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSPersistentStore * lastPersistentStoreCoordinator = [persistentStores lastObject];
     NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:lastPersistentStoreCoordinator];
     return storeURL;
-}
-
-- (NSURL *)cachedFilesDirectory {
-    return [MADocument cacheFilesDirectoryForFilename:[self fileName]];
 }
 
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
@@ -556,7 +624,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (RptqDocument *)activeDocumentModel {
-    if ([self document] == nil) {
+    if (self.document == nil) {
         NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
         RptqDocument *document = [RptqDocument documentForManagedObjectContext: managedObjectContext];
         if (document == nil) {
@@ -565,6 +633,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
         [self setDocument:document];
         
         if (self.reportFormatter == nil) {
+            [self initalizeMainQuery];
             [self initalizeReportFormatter];
         }
         
@@ -572,7 +641,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             [self initalizeMainDatabase];
         }
     }
-    return [self document];
+    return self.document;
 }
 
 - (MTDatabase *)database {
@@ -580,13 +649,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeMainQuery {
-    RptqDatabase *database = [[self document] defaultDatabase];
+    RptqDatabase *database = [self.document defaultDatabase];
     if (database) {
         RptqQuery *rquery = [database defaultQuery];
         
         NSDictionary *parameters = [MTQuery queryDefinitionFull:rquery];
-        MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull object:parameters];
-        [defaultQuery setDataDelegate:self];
+        MTQuery *defaultQuery = [[MTQuery alloc] initWithQueryType:MTQueryTypeFull
+                                                            object:parameters];
+        defaultQuery.dataDelegate = self;
         
         [self.mainDataTable sortUsingDescriptors:[self sortDescriptors]];
         [self setMainQuery:defaultQuery];
@@ -594,25 +664,24 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)initalizeMainDataTableWithName:(NSString *)name {
-    NSUInteger hash = [name hash];
     NSNumber *typeKey = @(MTDataTableTypeOfTable);
     NSNumber *type = @(MTDataTableTypePhysical);
     NSNumber *objectIdKey = @(MTDataTableObjectId);
-    NSNumber *objectIdV =  @(hash);
+    NSNumber *objectIdV =  @(name.hash);
     NSDictionary *parameters = @{typeKey : type, objectIdKey : objectIdV};
     MTDataTable *datatable = [MTDataTable dataTableFactory:parameters];
-    [datatable setCacheDelegate:self];
-    [self setMainDataTable:datatable];
+    datatable.cacheDelegate = self;
+    self.mainDataTable = datatable;
 }
 
 - (void)initalizeReportFormatter {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
-                                                                              layout: [self activeDocumentModel]
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
+                                                                              layout: self.document
                                                                              options: MTReportFormatterOptionsNone];
-    [reportFormatter setDataDelegate:self];
-    [reportFormatter setCachedDelegate:self];
-    [reportFormatter setDatasource:self];
-    [self setReportFormatter:reportFormatter];
+    reportFormatter.dataDelegate = self;
+    reportFormatter.cachedDelegate = self;
+    reportFormatter.datasource = self;
+    self.reportFormatter = reportFormatter;
 }
 
 - (void)initalizeMainDatabase {
@@ -622,7 +691,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *db = [MTDatabase databaseFactory:databaseConnection];
     db.delegate = self;
-    [self setMainDatabase:db];
+    self.mainDatabase = db;
 }
 
 - (void)prepareForQuery {
@@ -635,7 +704,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 - (BOOL)cacheExist {
     NSURL *url = [self.mainDataTable url];
-    return [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+    return [[NSFileManager defaultManager] fileExistsAtPath:url.path];
 }
 
 - (NSDictionary *)dataForCacheId:(NSNumber *)cachedID {
@@ -654,14 +723,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSUInteger)fileNameHash {
-    return [[self fileNameMinusExtention] hash];
-}
-
-- (MTQuery *)defaultQuery {
-    if ([self mainQuery] == nil) {
-        [self initalizeMainQuery];
-    }
-    return [self mainQuery];
+    return [self.fileName hash];
 }
 
 - (void)refresh:(void (^)(BOOL success, NSError *error))completion {
@@ -669,17 +731,16 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     MADocument *weakself = self;
     dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
     dispatch_async(bgQueue, ^{
-        NSString *name = [weakself fileNameMinusExtention];
-        [weakself initalizeMainDataTableWithName:name];
+        [weakself initalizeMainDataTableWithName:weakself.fileName];
         [weakself initalizeMainQuery];
         [weakself initalizeReportFormatter];
-        MTQuery *fullQuery = [weakself defaultQuery];
+        MTQuery *fullQuery = weakself.mainQuery;
         [fullQuery database].delegate = weakself;
 
         @autoreleasepool {
-            [[self database] executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
-                [[weakself mainDataTable] cache];
-                [weakself setDidRefresh:success];
+            [self.database executeQuery:fullQuery completion:^(BOOL success, NSError *error) {
+                [weakself.mainDataTable cache];
+                weakself.didRefresh = success;
                 [NSThread completeOnMainThread:^(BOOL success, id error) {
                     completion(success, error);
                 } withObject:error andSuccess:success];
@@ -697,17 +758,12 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [self urlThumbnail].path.lastPathComponent;
 }
 
-+ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
-    return [MADocument thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
-                            andRetinaDisplay: [UIDevice isRetnaDisplay]];
-}
-
 + (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
     NSString *handle = madUrl.lastPathComponent.stringByDeletingPathExtension;
     NSString *fileName = [handle stringByAppendingString:@"1024"];
     fileName = [fileName stringByAppendingPathExtension:@"png"];
     
-    NSString *fileNameId = [MACloudManager filenameId:[handle hash]];
+    NSString *fileNameId = [MACloudManager filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
     
@@ -720,6 +776,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSString *fileNameId = [MACloudManager filenameId:handle.hash];
     NSURL *cacheDirectory = [[NSFileManager defaultManager] localCacheDirectoryNamed:fileNameId];
     return [cacheDirectory URLByAppendingPathComponent:fileName isDirectory:NO];
+}
+
++ (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl {
+    return [MADocument thumbnailUrlForHandle: madUrl.lastPathComponent.stringByDeletingPathExtension
+                            andRetinaDisplay: [UIDevice isRetnaDisplay]];
 }
 
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl {
@@ -792,7 +853,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (UIPrintPageRenderer *)printerPrintPageRender {
-    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: [self defaultQuery]
+    MTReportFormatter *reportFormatter = [MTReportFormatter reportFormatterWithQuery: self.mainQuery
                                                                               layout: [self activeDocumentModel]
                                                                              options: MTReportFormatterOptionsMargin];
     reportFormatter.cachedDelegate = self;
@@ -941,10 +1002,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [directories lastObject];
     return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
                                                     isDirectory: YES];
-}
-
-- (NSString *)fileNameMinusExtention {
-    return [self.fileURL filenameMinusExtention];
 }
 
 @end

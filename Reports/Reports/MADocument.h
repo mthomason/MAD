@@ -46,7 +46,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
 
 - (instancetype)initWithFileURL:(NSURL *)url;
-- (void)quickSave;
 - (void)saveContext;
 - (void)deleteFromDiskCompletion:(void (^)(BOOL success))completion;
 
@@ -60,26 +59,19 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;
-
 - (RptqDocument *)activeDocumentModel;
 
 - (NSString *)name;
-- (NSString *)fileName;
-+ (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
-+ (NSString *)thumbnailSaveName;
-
-- (NSURL *)urlThumbnail;
-
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
-- (void)wrapFileOverwrite:(BOOL)overwrite;
+- (NSURL *)cachedDataUrl;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
++ (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;
 
-- (NSURL *)cachedDataUrl;
 - (void)initalizeMainQuery;
 - (void)prepareForQuery;
-- (MTQuery *)defaultQuery;
+//- (MTQuery *)defaultQuery;
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 

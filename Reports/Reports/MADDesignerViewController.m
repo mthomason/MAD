@@ -2604,7 +2604,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         documentSection.height = @([detailSection intrinsicContentSize].height);
         [reportDesigner.scroller.container setNeedsUpdateConstraints];
         [reportDesigner.document saveContext];
-        [reportDesigner.document quickSave];
         
     }];
 }
