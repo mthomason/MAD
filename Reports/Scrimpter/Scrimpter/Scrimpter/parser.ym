@@ -47,10 +47,10 @@
     char *filename;
     
     typedef struct YYLTYPE {
-        int first_line;
-        int first_column;
-        int last_line;
-        int last_column;
+        NSInteger first_line;
+        NSInteger first_column;
+        NSInteger last_line;
+        NSInteger last_column;
         char *filename;
     } YYLTYPE;
     # define YYLTYPE_IS_DECLARED 1

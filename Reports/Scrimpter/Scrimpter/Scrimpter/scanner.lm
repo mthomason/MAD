@@ -11,7 +11,7 @@ MADSymbolReference *sc_symbolize(char *symbol, char *filename, NSInteger flags, 
 NSString *stripFirstAndLastFromString(NSString *s);
 
 /* handle locations */
-int yycolumn = 1;
+NSInteger yycolumn = 1;
 
 #define YY_USER_ACTION yylloc.filename = filename; \
     yylloc.first_line = yylloc.last_line = yylineno; \
@@ -74,8 +74,8 @@ int yycolumn = 1;
                             NSString *sv = stripFirstAndLastFromString([NSString stringWithUTF8String:strval]);
                             yylval.strval = sv; free(strval); return STRING; }
 
-'(\\.|[^'\n])*$	        { char *f = "Unterminated string %s."; int l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
-\"(\\.|[^"\n])*$	{ char *f = "Unterminated string %s."; int l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
+'(\\.|[^'\n])*$	        { char *f = "Unterminated string %s."; NSInteger l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
+\"(\\.|[^"\n])*$	{ char *f = "Unterminated string %s."; NSInteger l = strlen(f)+strlen(yytext); char buffer[l]; sprintf(buffer, f, yytext); yyerror(buffer); }
 
 [a-zA-Z]+ {
             MADSymbolReference *sr = sc_symbolize(yytext, yylloc.filename, 0, yylloc.first_line, yylloc.first_column);
@@ -116,7 +116,7 @@ void yyerror(char *s, ...)  {
         NSString *display = nil;
         if (yylloc.first_line) {
             char loc[40];
-            sprintf(loc, "(%d %d %d %d)", yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
+            sprintf(loc, "(%ld %ld %ld %ld)", (long)yylloc.first_line, (long)yylloc.first_column, (long)yylloc.last_line, (long)yylloc.last_column);
             display = [NSString stringWithFormat:@"%@ at location %s.", errorMessage, loc];
         } else {
             display = [NSString stringWithFormat: @"%@ at line %d.", errorMessage, yylineno];
