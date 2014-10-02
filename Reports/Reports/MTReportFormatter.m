@@ -82,7 +82,7 @@ NSString * const MTNullIdentifier = @"(null)";
 @implementation MTReportFormatter
 
 - (void)initalizeStateMachine {
-    NSArray *sortDescriptors = [NSArray arrayWithArray:[[self dataDelegate] sortDescriptors]];
+    NSArray *sortDescriptors = [NSArray arrayWithArray:[self.dataDelegate sortDescriptors]];
 
     self.machineState.rowCounter = 0;
     self.machineState.groupCounter = 0;
@@ -94,7 +94,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSArray *)keysForCachedID:(NSNumber *)rowid {
-    NSDictionary *row = [[self datasource] dataForCacheId: rowid];
+    NSDictionary *row = [self.datasource dataForCacheId: rowid];
     return [NSArray arrayWithArray:[self keyValuesForResultRow:row]];
 }
 

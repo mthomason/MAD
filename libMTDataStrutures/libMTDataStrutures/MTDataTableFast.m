@@ -332,9 +332,8 @@
 }
 
 - (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
-//    [[self sortDescriptors] setArray: sortDescriptors];
+
     [[self groupKeys] removeAllObjects];
-  //  [self initalizeGroupKeys];
     if ([[self columnKeys] count] > 0 && [[self columns] count] > 0) {
         
         if ([sortDescriptors count] > 0 /*&& self.sortDescriptorsSet == NO*/) {
