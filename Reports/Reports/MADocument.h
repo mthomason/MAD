@@ -56,7 +56,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
            completion:(void(^)(BOOL success, MTErrorContainer *error))completion;
 - (void)regenThumbnail;
 
-- (void)close:(void(^)(BOOL success, NSError *error))completion;
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion;
 
 - (UIPrintPageRenderer *)printerPrintPageRender;

@@ -765,22 +765,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return [self thumbnailUrlForMadUrl:madUrl];
 }
 
-// FIXME: Never called.....
-- (void)close:(void(^)(BOOL success, NSError *error))completion {
-    [self closeWithCompletionHandler:^(BOOL success) {
-        if (success) {
-            self.documentStatus.suspended = YES;
-            [self.managedObjectContext lock];
-            [self wrapFileOverwrite:NO];
-            [self deleteFromDiskCompletion:^(BOOL success) {
-                [NSThread completeOnMainThread: completion
-                                    withObject: nil
-                                    andSuccess: YES];
-            }];
-        }
-    }];
-}
-
 // FIXME: Only ever called when creating of report failes
 - (void)closeAndDelete:(void(^)(BOOL successAddingDatasource, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL successClosingReport) {
