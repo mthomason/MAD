@@ -584,6 +584,8 @@
 		4C49DA0819DCE32E00CB4DB8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C49DA0719DCE32E00CB4DB8 /* Images.xcassets */; };
 		4C49DA0B19DCE32E00CB4DB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C49DA0919DCE32E00CB4DB8 /* Main.storyboard */; };
 		4C49DA1719DCE32E00CB4DB8 /* MAD_Viewer_XTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA1619DCE32E00CB4DB8 /* MAD_Viewer_XTests.m */; };
+		4C49DA5C19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA5B19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */; };
+		4C49DA5D19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA5B19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BD17E945C800FD6A73 /* MTBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A68BC17E945C800FD6A73 /* MTBlurView.m */; };
@@ -2084,6 +2086,8 @@
 		4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Viewer XTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C49DA1519DCE32E00CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C49DA1619DCE32E00CB4DB8 /* MAD_Viewer_XTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Viewer_XTests.m; sourceTree = "<group>"; };
+		4C49DA5A19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTableViewControllerBarcodeExtraPdf417Iso24728.h; path = Classes/MTTableViewControllerBarcodeExtraPdf417Iso24728.h; sourceTree = "<group>"; };
+		4C49DA5B19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTableViewControllerBarcodeExtraPdf417Iso24728.m; path = Classes/MTTableViewControllerBarcodeExtraPdf417Iso24728.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4A68BB17E945C800FD6A73 /* MTBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBlurView.h; sourceTree = "<group>"; };
 		4C4A68BC17E945C800FD6A73 /* MTBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBlurView.m; sourceTree = "<group>"; };
@@ -4634,6 +4638,8 @@
 		4C95CABF182B6D1F00160E01 /* Barcode */ = {
 			isa = PBXGroup;
 			children = (
+				4C49DA5A19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */,
+				4C49DA5B19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */,
 				4CC2BE7919D8EEA5006AAB24 /* MTViewControllerBarcodePreviewDelegate.h */,
 				4C95CAD3182F0D0E00160E01 /* Table View Cells */,
 				4C80A5DE183145F600242703 /* MTBarcodeAztec.h */,
@@ -6303,6 +6309,7 @@
 				4C0CAB581902C14B0044D866 /* MTDataTableFast.m in Sources */,
 				4C23FC1D18FAEB0B009F234F /* MTDataColumn.m in Sources */,
 				4CAE00CD1815BC3900670272 /* MTNavigationControllerHideBottomBarUnlicensed.m in Sources */,
+				4C49DA5D19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4C23FBC318FAE4F7009F234F /* MTPaperB8.m in Sources */,
 				4C0CAB5C1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,
 				4C0E775B163B5AEC003B951E /* MTQueryBuilderAddTableViewController.m in Sources */,
@@ -6666,6 +6673,7 @@
 				4CD0F7D414CD2068003DA079 /* UITableViewCellInstruction.m in Sources */,
 				4C0CAB571902C14B0044D866 /* MTDataTableFast.m in Sources */,
 				4C23FC1018FAE610009F234F /* MTDatabaseSqlServer.m in Sources */,
+				4C49DA5C19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4C23FC1818FAE649009F234F /* MTDatabaseField.m in Sources */,
 				4C23FB0818FADCE4009F234F /* MTTableViewControllerBarcodeExtraMaxicode.m in Sources */,
 				4C0CAB5B1902D5E50044D866 /* MTQueryCacheAddColumn.m in Sources */,

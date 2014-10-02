@@ -46,12 +46,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self tableViewCellRightSide] setUserInteractionEnabled: ([self fieldLeft] == nil) == NO];
+    [self.tableViewCellRightSide setUserInteractionEnabled: (self.fieldLeft == nil) == NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[self tableViewCellRightSide] setUserInteractionEnabled: ([self fieldLeft] == nil) == NO];
+    [self.tableViewCellRightSide setUserInteractionEnabled: (self.fieldLeft == nil) == NO];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -61,39 +61,41 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showAddPredicateFovOperator"] ||
         [segue.identifier isEqualToString:@"showAddPredicateFofOperator"]) {
+        
         [self setCurrentlyEditingPart: MNSPredicateCenter];
+        
         if ([segue.destinationViewController isKindOfClass: [UITableViewControllerOpperators class]]) {
-            [segue.destinationViewController setDelegate:self];
+            ((UITableViewControllerOpperators *)segue.destinationViewController).delegate = self;
         }
+        
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFovLeftSide"] ||
                [segue.identifier isEqualToString:@"showAddPredicateFofLeftSide"]) {
+        
         [self setCurrentlyEditingPart: MNSPredicateLeft];
+  
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
 
-            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
-            if (dvc != nil) {
-                dvc.excludeTables = @[];
-                dvc.delegate = self;
-                dvc.document = self.document;
-            }
-
+            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).excludeTables = @[];
+            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = self.document;
         }
+        
     } else if ([segue.identifier isEqualToString:@"showAddPredicateFovRightSide"] ||
                [segue.identifier isEqualToString:@"showAddPredicateFofRightSide"]) {
+        
         [self setCurrentlyEditingPart: MNSPredicateRight];
         
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
-            MTQueryBuilderChooseFieldViewController *dvc = segue.destinationViewController;
-            if (dvc != nil) {
-                dvc.excludeTables = @[];
-                dvc.delegate = self;
-                dvc.document = self.document;
-            }
+            
+            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).excludeTables = @[];
+            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
+            ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = self.document;
+        
         } else if ([segue.destinationViewController isKindOfClass: [MTViewControllerValueBasedOnField class]]) {
-            MTViewControllerValueBasedOnField *tvcEnterString = segue.destinationViewController;
-            tvcEnterString.enterStringDelegate = self;
-            tvcEnterString.document = self.document;
-            tvcEnterString.schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID;
+
+            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).enterStringDelegate = self;
+            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).document = self.document;
+            ((MTViewControllerValueBasedOnField *)segue.destinationViewController).schemaFieldObjectId = self.fieldLeft.databaseSchemaField.objectID;
         }
     }
 }
@@ -102,7 +104,12 @@
 
 - (IBAction)save:(id)sender {
     
-    RptqQueryPredicate *queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField:self.fieldLeft leftValue:self.leftValue comparsonOperator:self.predicateOperator rightField:self.fieldRight rightValue:self.rightValue forManagedObjectContext:self.document.managedObjectContext];
+    RptqQueryPredicate *queryPredicate = [RptqQueryPredicate predicateFactoryWithLeftField: self.fieldLeft
+                                                                                 leftValue: self.leftValue
+                                                                         comparsonOperator: self.predicateOperator
+                                                                                rightField: self.fieldRight
+                                                                                rightValue: self.rightValue
+                                                                   forManagedObjectContext: self.document.managedObjectContext];
     [self.delegate uITableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
     
 }

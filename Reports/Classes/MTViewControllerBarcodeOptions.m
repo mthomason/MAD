@@ -34,8 +34,14 @@
 #import "MTDataTable.h"
 #import "MTQueryBuilderChooseFieldViewController.h"
 
+#import "MTTableViewControllerBarcodeExtraAztec.h"
+#import "MTTableViewControllerStaticSelectRow.h"
+#import "MTTableViewControllerBarcodeExtraGridMatrix.h"
+#import "MTTableViewControllerBarcodeExtraQrCode.h"
+
+
 @interface MTViewControllerBarcodeOptions ()
-    <MTDatabaseProtocol>
+    <MTDatabaseProtocol, MTTableViewControllerStaticSelectRowDelegate>
 
 @property (nonatomic, assign) NSUInteger sampleBarcodeIndex;
 @property (nonatomic, assign) NSUInteger sampleBarcodeDataMaxicodeIndex;
@@ -165,19 +171,21 @@
         [barcodeTypeViewController setDelegate:self];
 
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerBarcodeExtraAztec *)segue.destinationViewController).delegate = self;
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasCodeOne"]) {
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrix"]) {
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerBarcodeExtraGridMatrix *)segue.destinationViewController).delegate = self;
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCode"]) {
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerBarcodeExtraQrCode *)segue.destinationViewController).delegate = self;
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasPdf417"]) {
+        
         [segue.destinationViewController setDelegate:self];
+        
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
         [segue.destinationViewController setDelegate:self];
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
         [segue.destinationViewController setDelegate:self];
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {

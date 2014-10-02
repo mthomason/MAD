@@ -75,9 +75,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showGroupSortOrders"]) {
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {
-            MTQueryBuilderSortTypeViewController *dvc = segue.destinationViewController;
-            [dvc setInitalSortOrder:[self sortOrder]];
-            [segue.destinationViewController setDelegate:self];
+            ((MTQueryBuilderSortTypeViewController *)segue.destinationViewController).initalSortOrder = self.sortOrder;
+            ((MTQueryBuilderSortTypeViewController *)segue.destinationViewController).delegate = self;
         }
     } else if ([segue.identifier isEqualToString:@"showAddGroupByField"]) {
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderChooseFieldViewController class]]) {
