@@ -16,6 +16,7 @@
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
 #import "MTTableViewControllerBarcodeExtraMaxicode.h"
 #import "MTTableViewControllerBarcodeExtraDataMatrix.h"
+#import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 #import "MTBarcodeCode39Extended.h"
 #import "MTBarcodeCode39Iso16388.h"
 #import "MTApplicationInstance.h"
@@ -55,6 +56,10 @@
 - (void)barcode2dComponentSetType:(NSInteger)type;
 - (void)barcode2dComponentsetSampleData:(NSArray *)sampleData;
 
+- (void)barcodePDF417DidSetColumns:(NSInteger)columns;
+- (void)barcodePDF417DidSetFormat:(NSInteger)format;
+- (void)barcodePDF417DidSetErrorCorrection:(NSInteger)errorCorrection;
+
 - (void)didSetField1:(RptqQueryField *)field;
 - (void)didSetField2:(RptqQueryField *)field;
 
@@ -71,7 +76,8 @@
         MTTableViewControllerBarcodeExtraMicroQrCodeDelegate,
         MTTableViewControllerBarcodeExtraQrCodeDelegate,
         MTTableViewControllerBarcodeExtraMaxicodeDelegate,
-        MTTableViewControllerBarcodeExtraDataMatrixDelegate>
+        MTTableViewControllerBarcodeExtraDataMatrixDelegate,
+        MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate>
 
 @property (nonatomic, weak) id <MTViewControllerBarcodeOptionsDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;

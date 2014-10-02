@@ -8,6 +8,10 @@
 
 #import "MTBarcodePdf417Iso15438.h"
 
+NSString * const MADStringDisplayPdf417 = @"PDF417 (ISO 15438)";
+NSString * const MADStringDisplayPdfTrunc = @"PDF417 Trunc";
+NSString * const MADStringDisplayPdfHibc = @"HIBC PDF";
+
 @interface MTBarcode ()
 
 @property (nonatomic, retain, readwrite) NSString *name;
@@ -26,7 +30,7 @@
         
         [self setBarcodeType:[MTBarcodePdf417Iso15438 type]];
         [self setDetailsSegueIdentifer:@"MTIdentiferSegueBarcodeExtrasPdf417"];
-        [self setName: @"PDF417 (ISO 15438)"];
+        [self setName: MADStringDisplayPdf417];
         [self setHas2dComponent: NO];
         [self setHasOptionalInput: YES];
         
@@ -38,28 +42,47 @@
     return MTBarcodeTypePdf417;
 }
 
-- (void)setNumberOfColumns:(NSInteger)numberOfColumns {
-    [self setOption2:numberOfColumns];
+- (NSInteger)format {
+    return self.barcodeType;
 }
 
-- (void)setErrorCorrectionCapacity:(NSInteger)errorCorrectionCapacity {
-    [self setOption1:errorCorrectionCapacity];
+- (void)setFormat:(NSInteger)format {
+    switch (format) {
+        case 1:
+            self.barcodeType = MTBarcodeTypePdf417;
+            self.name = MADStringDisplayPdf417;
+            break;
+        case 2:
+            self.barcodeType = MTBarcodeTypePdf417Trunc;
+            self.name = MADStringDisplayPdfTrunc;
+            break;
+        case 3:
+            self.barcodeType = MTBarcodeTypeHibcPdf;
+            self.name = MADStringDisplayPdfHibc;
+            break;
+        default:
+            break;
+    }
+}
+
+- (NSInteger)numberOfColumns {
+    return [self option2];
+}
+
+- (void)setNumberOfColumns:(NSInteger)numberOfColumns {
+    [self setOption2:numberOfColumns];
 }
 
 - (NSInteger)errorCorrectionCapacity {
     return [self option1];
 }
 
-- (void)setMaximumCodewordLength:(NSInteger)codewordLength {
-    [self setOption3:codewordLength];
-}
-
-- (NSInteger)codewordLength {
-    return [self option3];
+- (void)setErrorCorrectionCapacity:(NSInteger)errorCorrectionCapacity {
+    [self setOption1:errorCorrectionCapacity];
 }
 
 - (void)initSampleData {
-    [self setInput:              [self name]];
+    [self setInput:              self.name];
     [self setPrimaryData:        @""];
 }
 

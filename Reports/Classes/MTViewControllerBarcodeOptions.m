@@ -13,6 +13,7 @@
 #import "MTViewControllerBarcodeOptions.h"
 #import <CoreData/CoreData.h>
 #import "MTDatabase.h"
+
 #import "MTBarcodeAztec.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMicroQrCode.h"
@@ -26,6 +27,8 @@
 #import "MTBarcodeCode39Iso16388.h"
 #import "MTBarcodeCode39Extended.h"
 #import "MTBarcodeDataMatrixIso16022.h"
+#import "MTBarcodePdf417Iso15438.h"
+
 #import "MTQuery.h"
 #import "RptqQueryField.h"
 #import "RptqQueryField+Extras.h"
@@ -38,7 +41,7 @@
 #import "MTTableViewControllerStaticSelectRow.h"
 #import "MTTableViewControllerBarcodeExtraGridMatrix.h"
 #import "MTTableViewControllerBarcodeExtraQrCode.h"
-
+#import "MTTableViewControllerBarcodeExtraPdf417Iso24728.h"
 
 @interface MTViewControllerBarcodeOptions ()
     <MTDatabaseProtocol, MTTableViewControllerStaticSelectRowDelegate>
@@ -171,30 +174,50 @@
         [barcodeTypeViewController setDelegate:self];
 
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasAztec"]) {
+
         ((MTTableViewControllerBarcodeExtraAztec *)segue.destinationViewController).delegate = self;
+    
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasCodeOne"]) {
+    
         ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
+    
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasGridMatrix"]) {
+    
         ((MTTableViewControllerBarcodeExtraGridMatrix *)segue.destinationViewController).delegate = self;
+
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCode"]) {
+        
         ((MTTableViewControllerBarcodeExtraQrCode *)segue.destinationViewController).delegate = self;
+
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasPdf417"]) {
         
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerBarcodeExtraPdf417Iso24728 *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
+        
         [segue.destinationViewController setDelegate:self];
+        
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
+        
         ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
+        
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
+        
         [segue.destinationViewController setDelegate:self];
+        
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
+        
         [segue.destinationViewController setDelegate:self];
         [segue.destinationViewController setDocument:self.document];
+        
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
+        
         [segue.destinationViewController setDelegate:self];
+        
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"]) {
+        
         [segue.destinationViewController setDelegate:self];
+        
     }
 
 }
@@ -937,6 +960,35 @@
     MTBarcodeQrCodeIso18004 *qrCode = (MTBarcodeQrCodeIso18004 *)[self.delegate barcodeToDisplay];
     NSInteger errorCorrection = [qrCode errorCorrection];
     return errorCorrection;
+}
+
+#pragma mark - MTTableViewControllerBarcodeExtraPdf417Iso24728Delegate
+
+- (void)barcodePDF417DidSetColumns:(NSInteger)columns {
+    [self.delegate barcodePDF417DidSetColumns:columns];
+}
+
+- (void)barcodePDF417DidSetFormat:(NSInteger)format {
+    [self.delegate barcodePDF417DidSetFormat:format];
+}
+
+- (void)barcodePDF417DidSetErrorCorrection:(NSInteger)errorCorrection {
+    [self.delegate barcodePDF417DidSetErrorCorrection:errorCorrection];
+}
+
+- (NSInteger)barcodePDF417Columns {
+    MTBarcodePdf417Iso15438 *barcode = (MTBarcodePdf417Iso15438 *)[self.delegate barcodeToDisplay];
+    return [barcode numberOfColumns];
+}
+
+- (NSInteger)barcodePDF417Format {
+    MTBarcodePdf417Iso15438 *barcode = (MTBarcodePdf417Iso15438 *)[self.delegate barcodeToDisplay];
+    return [barcode format];
+}
+
+- (NSInteger)barcodePDF417ErrorCorrection {
+    MTBarcodePdf417Iso15438 *barcode = (MTBarcodePdf417Iso15438 *)[self.delegate barcodeToDisplay];
+    return [barcode errorCorrectionCapacity];
 }
 
 @end

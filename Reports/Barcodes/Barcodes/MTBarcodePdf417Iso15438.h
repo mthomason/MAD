@@ -15,9 +15,10 @@
 
 - (void)setNumberOfColumns:(NSInteger)numberOfColumns;
 - (void)setErrorCorrectionCapacity:(NSInteger)errorCorrectionCapacity;
+- (void)setFormat:(NSInteger)format;
 - (NSInteger)errorCorrectionCapacity;
-- (void)setMaximumCodewordLength:(NSInteger)codewordLength;
-- (NSInteger)codewordLength;
+- (NSInteger)format;
+- (NSInteger)numberOfColumns;
 
 @end
 

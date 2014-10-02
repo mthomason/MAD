@@ -139,7 +139,7 @@
     [encoder encodeObject:  objid                   forKey: @"objid"];
     [encoder encodeObject:  [self sortDescriptors]  forKey: [MTDataTable keySortDescriptors]];
     [encoder encodeObject:  [self url]              forKey: [MTDataTable keyUrl]];
-    [encoder encodeObject:  [self name]             forKey: [MTDataTable keyName]];
+    [encoder encodeObject:  self.name             forKey: [MTDataTable keyName]];
     [encoder encodeObject:  [self columnKeys]       forKey: [MTDataTable keyColumnKeys]];
     [encoder encodeObject:  [self columns]          forKey: [MTDataTable keyColumns]];
     [encoder encodeInteger: [self rowCounter]       forKey: [MTDataTable keyRowCounter]];
@@ -296,7 +296,7 @@
     NSDictionary *columnsPlist = [NSDictionary dictionaryWithDictionary:[self columnsPlist]];
     
     return @{
-             keyName        : [self name],
+             keyName        : self.name,
              keyColumnKeys  : columnKeys,
              keyColumns     : columnsPlist,
              keyRowCounter  : rowCounter,

@@ -23,16 +23,6 @@ extern NSString * const MTGlobalBundleVersion;
 extern NSString * const MTGlobalBundleShortVersion;
 extern NSString * const MTGlobalBundleRev;
 
-extern NSString * const MTStoryboardReportDesigner;
-extern NSString * const MTStoryboardReportDesignerPad;
-extern NSString * const MTStoryboardReportDesignerLagacy;
-extern NSString * const MTStoryboardReportDesignerPadLagacy;
-
-extern NSString * const MTStoryboardReportViewer;
-extern NSString * const MTStoryboardReportViewerPad;
-extern NSString * const MTStoryboardReportViewerLagacy;
-extern NSString * const MTStoryboardReportViewerPadLagacy;
-
 @class MADocument, MTReportDesigner, MTReportViewer, MTQueryDesigner, MTUser, MADFileManager;
 
 @interface MTApplicationInstance : NSObject

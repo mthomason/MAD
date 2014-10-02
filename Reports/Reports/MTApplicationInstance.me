@@ -35,21 +35,15 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.108";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.108";
-NSString * const MTGlobalBundleRev                                  = @"1483";
+NSString * const MTGlobalBundleVersion                              = @"7.0.115";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.115";
+NSString * const MTGlobalBundleRev                                  = @"1490";
 
-NSString * const MTStoryboardReportDesigner                         = @"MTStoryboardReportDesigner";
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
-NSString * const MTStoryboardReportDesignerPad                      = @"MTStoryboardReportDesignerPad";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
-NSString * const MTStoryboardReportDesignerLagacy                   = @"MTStoryboardReportDesignerOS6";
-NSString * const MTStoryboardReportDesignerPadLagacy                = @"MTStoryboardReportDesignerPadOS6";
 
 NSString * const MTStoryboardReportViewer                           = @"MTStoryboardReportViewer";
 NSString * const MTStoryboardReportViewerPad                        = @"MTStoryboardReportViewerPad";
-NSString * const MTStoryboardReportViewerLagacy                     = @"MTStoryboardReportViewerOS6";
-NSString * const MTStoryboardReportViewerPadLagacy                  = @"MTStoryboardReportViewerPadOS6";
 NSString * const MTBundleDisplayName                                = @"CFBundleDisplayName";
 
 @interface MTApplicationInstance ()
@@ -305,11 +299,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 }
 
 + (NSString *)storyboardName {
-    if ([UIDevice isModernOS]) {
-        return [UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
-    } else {
-        return [UIDevice isPad] ? MTStoryboardReportDesignerPad : MTStoryboardReportDesigner;
-    }
+    return [UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
 }
 
 + (UIStoryboard *)storyboard {

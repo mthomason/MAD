@@ -21,6 +21,7 @@
 - (NSInteger)barcodePDF417Columns;
 - (NSInteger)barcodePDF417Format;
 - (NSInteger)barcodePDF417ErrorCorrection;
+
 @end
 
 @interface MTTableViewControllerBarcodeExtraPdf417Iso24728 : UITableViewController

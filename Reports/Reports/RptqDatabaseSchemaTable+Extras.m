@@ -131,15 +131,15 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [self name];
+    return self.name;
 }
 
 - (NSString *)toString {
-    return [self name];
+    return self.name;
 }
 
 - (NSString *)toStringDebug {
-    return [self name];
+    return self.name;
 }
 
 @end

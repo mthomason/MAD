@@ -25,7 +25,7 @@
     <MTTableViewControllerStaticSelectRowDelegate>
 
 @property (nonatomic, assign) BOOL displayingWidth;
-@property (nonatomic, assign) BOOL displayingSize;
+@property (nonatomic, assign) BOOL displayingFormat;
 @property (nonatomic, assign) BOOL displayingErrorCorrection;
 
 @end
@@ -61,8 +61,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setDisplayingSize:NO];
-    [self setDisplayingErrorCorrection:NO];
+    self.displayingWidth = NO;
+    self.displayingErrorCorrection = NO;
+    self.displayingFormat = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -75,6 +76,58 @@
 }
 
 - (void)updateCells {
+    
+    NSIndexPath *pathSize = [NSIndexPath indexPathForRow:0 inSection:0];
+    NSIndexPath *pathError = [NSIndexPath indexPathForRow:1 inSection:0];
+    NSIndexPath *pathFormat = [NSIndexPath indexPathForRow:2 inSection:0];
+
+    UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:pathSize];
+    UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:pathError];
+    UITableViewCell *cellFormat = [self.tableView cellForRowAtIndexPath:pathFormat];
+
+    NSString *localziedSize, *localizedError, *localizedFormat;
+    
+    NSInteger width = [self.delegate barcodePDF417Columns];
+    NSInteger errorCorrection = [self.delegate barcodePDF417ErrorCorrection];
+    NSInteger format = [self.delegate barcodePDF417Format];
+    
+    if (width == 0) {
+        
+        localziedSize = NSLocalizedString(@"Automatic", @"Automatic");
+        
+    } else if (width > 0 && width <= 30) {
+        
+        localziedSize = [NSString stringWithFormat:@"%ld", (long)width];
+        
+    } else {
+        width = 1;
+        localziedSize = @"1";
+    }
+    
+    if (errorCorrection == 0) {
+        localizedError = NSLocalizedString(@"Automatic", @"Automatic");
+    } else if (errorCorrection > 1 && errorCorrection <= 9) {
+        errorCorrection = errorCorrection - 1;
+        localizedError = [NSString stringWithFormat:@"%ld", (long)errorCorrection];
+    } else {
+        errorCorrection = 0;
+        localizedError = NSLocalizedString(@"Automatic", @"Automatic");
+    }
+    
+    if (format == 0) {
+        
+    } else if (format == 1) {
+        
+    } else if (format == 2) {
+        
+    } else {
+        
+    }
+
+    cellSize.detailTextLabel.text = @"";
+    cellError.detailTextLabel.text = @"";
+    cellFormat.detailTextLabel.text = @"";
+
     /*
     BOOL autoresize = [self.delegate barcodeGridMatrixAutomaticResizing];
     UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
@@ -119,25 +172,30 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-/*    NSInteger section = indexPath.section;
+    NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     switch (section) {
         case 0:
             
             switch (row) {
                 case 0:
-                    
-                    [self.delegate barcodeGridMatrixDidEnableAutomaticResizing];
+                    self.displayingWidth = YES;
+                    self.displayingErrorCorrection = NO;
+                    self.displayingFormat = NO;
                     break;
                     
                 case 1:
-                    [self setDisplayingSize:YES];
-                    [self setDisplayingErrorCorrection:NO];
+                    self.displayingWidth = NO;
+                    self.displayingErrorCorrection = YES;
+                    self.displayingFormat = NO;
                     break;
+                    
                 case 2:
-                    [self setDisplayingSize:NO];
-                    [self setDisplayingErrorCorrection:YES];
+                    self.displayingWidth = NO;
+                    self.displayingErrorCorrection = NO;
+                    self.displayingFormat = YES;
                     break;
+                    
                 default:
                     break;
             }
@@ -145,21 +203,32 @@
             
         default:
             break;
-    }*/
+    }
     [self updateCells];
 }
 
 - (NSInteger)initalRow {
-    return 0;// [self displayingSize] ? [self.delegate barcodeGridMatrixInitalSize] : [self.delegate barcodeGridMatrixInitalErrorCorrection];
+    return 0;
+    // [self displayingSize] ? [self.delegate barcodeGridMatrixInitalSize] : [self.delegate barcodeGridMatrixInitalErrorCorrection];
 }
 
 - (void)didSelectTag:(NSInteger)tag {
-/*    if ([self displayingSize]) {
-        [self.delegate barcodeGridMatrixDidSetSize:tag];
-    } else {
-        [self.delegate barcodeGridMatrixDidSetErrorCorrection:tag];
+    
+    if (self.displayingWidth) {
+        
+        [self.delegate barcodePDF417DidSetColumns:tag];
+        
+    } else if (self.displayingErrorCorrection) {
+        
+        [self.delegate barcodePDF417DidSetErrorCorrection:tag];
+        
+    } else if (self.displayingFormat) {
+        
+        [self.delegate barcodePDF417DidSetFormat:tag];
+        
     }
-    [self updateCells];*/
+    
+    [self updateCells];
 }
 
 @end

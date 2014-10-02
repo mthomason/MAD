@@ -693,8 +693,6 @@
 		4C6461C018C0E6680069EF8D /* MTActivityProvidence@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6461B018C0E6590069EF8D /* MTActivityProvidence@2x.png */; };
 		4C6461C118C0E6680069EF8D /* MTActivityProvidence~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6461B118C0E6590069EF8D /* MTActivityProvidence~iPad.png */; };
 		4C6461C218C0E6680069EF8D /* MTActivityProvidence.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6461B218C0E6590069EF8D /* MTActivityProvidence.png */; };
-		4C66355517D5C6F6004AC646 /* MTStoryboardReportDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */; };
-		4C66355717D5C721004AC646 /* MTStoryboardReportDesignerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */; };
 		4C66355817D5C73B004AC646 /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
 		4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
 		4C67B74419474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */; };
@@ -2009,8 +2007,6 @@
 		4C434B2418B5F3E800750B6B /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		4C43F218178C8E430069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewer.storyboard; sourceTree = "<group>"; };
 		4C43F21A178C8E430069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewerPad.storyboard; sourceTree = "<group>"; };
-		4C43F224178C8E680069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportDesigner.storyboard; sourceTree = "<group>"; };
-		4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesignerPad.storyboard; path = Reports/MTStoryboardReportDesignerPad.storyboard; sourceTree = "<group>"; };
 		4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageToolbarDuplicate.png; path = Resources/Images/MADImageToolbarDuplicate.png; sourceTree = "<group>"; };
 		4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarDuplicate@2x.png"; path = "Resources/Images/MADImageToolbarDuplicate@2x.png"; sourceTree = "<group>"; };
 		4C44DC5719B93E500050BBDD /* MADDesignerStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerStatusLabel.h; sourceTree = "<group>"; };
@@ -3227,8 +3223,6 @@
 		4C0EF6CB178A9690007BF2AE /* iOS7 */ = {
 			isa = PBXGroup;
 			children = (
-				4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */,
-				4C43F225178C8E680069FD5B /* MTStoryboardReportDesignerPad.storyboard */,
 				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
 				4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */,
 				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
@@ -4637,8 +4631,6 @@
 		4C95CABF182B6D1F00160E01 /* Barcode */ = {
 			isa = PBXGroup;
 			children = (
-				4C49DA5A19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */,
-				4C49DA5B19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */,
 				4CC2BE7919D8EEA5006AAB24 /* MTViewControllerBarcodePreviewDelegate.h */,
 				4C95CAD3182F0D0E00160E01 /* Table View Cells */,
 				4C80A5DE183145F600242703 /* MTBarcodeAztec.h */,
@@ -4677,6 +4669,8 @@
 				4C23FAFF18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMicroQrCode.m */,
 				4C23FB0018FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.h */,
 				4C23FB0118FADCE4009F234F /* MTTableViewControllerBarcodeExtraQrCode.m */,
+				4C49DA5A19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.h */,
+				4C49DA5B19DD031700CB4DB8 /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m */,
 			);
 			name = Barcode;
 			path = ..;
@@ -6031,14 +6025,12 @@
 				4CCD8D76150385DA002B9E77 /* UIImagePatternGrayGranite.png in Resources */,
 				4C1BB6EC1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png in Resources */,
 				4CCD8D77150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png in Resources */,
-				4C66355717D5C721004AC646 /* MTStoryboardReportDesignerPad.storyboard in Resources */,
 				4CCD8D78150385DA002B9E77 /* UIImagePatternGreenAndBlack.png in Resources */,
 				4CCD8D79150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png in Resources */,
 				4C5CB7D5189E2A7D00BB5AF8 /* tds_sysdep_public.h in Resources */,
 				4CCD8D7A150385DA002B9E77 /* UIImagePatternGreenWithFibers.png in Resources */,
 				4CCD8D7B150385DA002B9E77 /* UIImagePatternGreenWithFibers@2x.png in Resources */,
 				4CCD8D7C150385DA002B9E77 /* UIImagePatternGreyVellum.png in Resources */,
-				4C66355517D5C6F6004AC646 /* MTStoryboardReportDesigner.storyboard in Resources */,
 				4CCD8D7D150385DA002B9E77 /* UIImagePatternGreyVellum@2x.png in Resources */,
 				4CCD8D7E150385DA002B9E77 /* UIImagePatternHomemadePaper.png in Resources */,
 				4CCD8D7F150385DA002B9E77 /* UIImagePatternHomemadePaper@2x.png in Resources */,
@@ -7236,14 +7228,6 @@
 			name = MTStoryboardReportViewerPad.storyboard;
 			sourceTree = "<group>";
 		};
-		4C43F223178C8E680069FD5B /* MTStoryboardReportDesigner.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C43F224178C8E680069FD5B /* en */,
-			);
-			name = MTStoryboardReportDesigner.storyboard;
-			sourceTree = "<group>";
-		};
 		4C49D9DA19DCE31400CB4DB8 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -8012,6 +7996,7 @@
 				4C49D9EA19DCE31400CB4DB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */ = {
 			isa = XCConfigurationList;
@@ -8020,6 +8005,7 @@
 				4C49D9EC19DCE31400CB4DB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C49DA1819DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer X" */ = {
 			isa = XCConfigurationList;
@@ -8028,6 +8014,7 @@
 				4C49DA1A19DCE32E00CB4DB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer XTests" */ = {
 			isa = XCConfigurationList;
@@ -8036,6 +8023,7 @@
 				4C49DA1D19DCE32E00CB4DB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Launch Images" */ = {
 			isa = XCConfigurationList;

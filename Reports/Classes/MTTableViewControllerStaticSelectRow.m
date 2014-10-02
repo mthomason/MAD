@@ -17,8 +17,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSInteger row = [self.delegate initalRow];
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
-    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
 #pragma mark - Table view delegate
@@ -29,11 +30,13 @@
 
     NSInteger numberOfRows = [tableView numberOfRowsInSection:0];
     for (NSInteger i = 0; i < numberOfRows; i++) {
-        UITableViewCell *c = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        [c setAccessoryType:UITableViewCellAccessoryNone];
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+        UITableViewCell *c = [tableView cellForRowAtIndexPath:path];
+        c.accessoryType = UITableViewCellAccessoryNone;
     }
-    [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-    [self.delegate didSelectTag:[cell tag]];
+    
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    [self.delegate didSelectTag:cell.tag];
 }
 
 @end

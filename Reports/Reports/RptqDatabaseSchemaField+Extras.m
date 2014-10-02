@@ -80,7 +80,7 @@
 - (MTDatabaseField *)databaseFieldWrapper {
     MTDatabaseField *result = [[MTDatabaseField alloc] init];
     [result setLabel:[self label]];
-    [result setName:[self name]];
+    [result setName:self.name];
     [result setFieldType:(MTDataType)[[self dataType] integerValue]];
     [result setFieldTypeNative:[[self dataTypeNative] integerValue]];
     [result setDecimals:[[self decimals] integerValue]];
@@ -94,7 +94,7 @@
 }
 
 - (NSString *)display {
-    return [[NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]] lowercaseString];
+    return [[NSString stringWithFormat:@"%@.%@", [[self inTable] name], self.name] lowercaseString];
 }
 
 - (SEL)selectorForSorting {
@@ -104,7 +104,7 @@
 #pragma mark - MTProtocolLog
 
 - (NSString *)toStringHumanReadable {
-    return [NSString stringWithFormat:@"%@.%@", [[self inTable] name], [self name]];
+    return [NSString stringWithFormat:@"%@.%@", [[self inTable] name], self.name];
 }
 
 - (NSString *)toString {

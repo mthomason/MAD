@@ -16,6 +16,8 @@
 #import "MTBarcodeMicroQrCode.h"
 #import "MTBarcodeGridMatrix.h"
 #import "MTBarcodeMaxicodeIso16023.h"
+#import "MTBarcodePdf417Iso15438.h"
+
 #import "UIDevice+Hack.h"
 #import "AppDelegate.h"
 #import "MTQuery.h"
@@ -401,6 +403,23 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 - (void)barcodeGridMatrixDidSetErrorCorrection:(NSInteger)errorCorrection {
     MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)[self barcode];
     [barcode setMinmumErrorCorrection:errorCorrection];
+    [self updateBarcode];
+}
+
+#pragma mark PDF 417
+
+- (void)barcodePDF417DidSetColumns:(NSInteger)columns {
+    ((MTBarcodePdf417Iso15438 *)self.barcode).width = columns;
+    [self updateBarcode];
+}
+
+- (void)barcodePDF417DidSetFormat:(NSInteger)format {
+    ((MTBarcodePdf417Iso15438 *)self.barcode).format = format;
+    [self updateBarcode];
+}
+
+- (void)barcodePDF417DidSetErrorCorrection:(NSInteger)errorCorrection {
+    ((MTBarcodePdf417Iso15438 *)self.barcode).errorCorrectionCapacity = errorCorrection;
     [self updateBarcode];
 }
 

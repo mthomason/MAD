@@ -328,7 +328,7 @@
 - (void)encodeWithCoder:(NSCoder *)coder {
     
     [coder encodeFloat:[self rotate]                forKey:@""];
-    [coder encodeObject:[self name]                 forKey:@""];
+    [coder encodeObject:self.name                 forKey:@""];
     [coder encodeInteger:[self barcodeType]         forKey:@""];
     [coder encodeBool:[self has2dComponent]         forKey:@""];
     [coder encodeBool:[self hasOptionalInput]       forKey:@""];
