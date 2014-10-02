@@ -572,6 +572,18 @@
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
+		4C49D9D219DCE31400CB4DB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D119DCE31400CB4DB8 /* AppDelegate.m */; };
+		4C49D9D419DCE31400CB4DB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D319DCE31400CB4DB8 /* main.m */; };
+		4C49D9D719DCE31400CB4DB8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D619DCE31400CB4DB8 /* ViewController.m */; };
+		4C49D9D919DCE31400CB4DB8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C49D9D819DCE31400CB4DB8 /* Images.xcassets */; };
+		4C49D9DC19DCE31400CB4DB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C49D9DA19DCE31400CB4DB8 /* Main.storyboard */; };
+		4C49D9E819DCE31400CB4DB8 /* MAD_Designer_XTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9E719DCE31400CB4DB8 /* MAD_Designer_XTests.m */; };
+		4C49DA0119DCE32E00CB4DB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA0019DCE32E00CB4DB8 /* AppDelegate.m */; };
+		4C49DA0319DCE32E00CB4DB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA0219DCE32E00CB4DB8 /* main.m */; };
+		4C49DA0619DCE32E00CB4DB8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA0519DCE32E00CB4DB8 /* ViewController.m */; };
+		4C49DA0819DCE32E00CB4DB8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C49DA0719DCE32E00CB4DB8 /* Images.xcassets */; };
+		4C49DA0B19DCE32E00CB4DB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C49DA0919DCE32E00CB4DB8 /* Main.storyboard */; };
+		4C49DA1719DCE32E00CB4DB8 /* MAD_Viewer_XTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49DA1619DCE32E00CB4DB8 /* MAD_Viewer_XTests.m */; };
 		4C4A68B517E75D3F00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BA17E75D4A00FD6A73 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4A68B417E75D3F00FD6A73 /* CoreText.framework */; };
 		4C4A68BD17E945C800FD6A73 /* MTBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4A68BC17E945C800FD6A73 /* MTBlurView.m */; };
@@ -606,8 +618,6 @@
 		4C4EBFB717EDEB9500D10622 /* carat-open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB417EDEB9500D10622 /* carat-open@2x.png */; };
 		4C4EBFB817EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
 		4C4EBFB917EDEB9500D10622 /* carat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFB517EDEB9500D10622 /* carat@2x.png */; };
-		4C4EBFC217EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
-		4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C4EBFBF17EFC2C500D10622 /* CarbonBlock.ttf */; };
 		4C5029F518185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */; };
 		4C502A4418189CBD00C88CD4 /* liblibSqlite3.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C502A311818931E00C88CD4 /* liblibSqlite3.8.a */; };
@@ -1469,6 +1479,20 @@
 			remoteGlobalIDString = 4C384E2314B29789007B4F48;
 			remoteInfo = "MAD Designer";
 		};
+		4C49D9E219DCE31400CB4DB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C49D9CB19DCE31400CB4DB8;
+			remoteInfo = "MAD Designer X";
+		};
+		4C49DA1119DCE32E00CB4DB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C384E1B14B29789007B4F48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C49D9FA19DCE32E00CB4DB8;
+			remoteInfo = "MAD Viewer X";
+		};
 		4C4C6F11167635B9004A3B04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C4C6F0D167635B8004A3B04 /* libMTDataStrutures.xcodeproj */;
@@ -2036,6 +2060,30 @@
 		4C47574317B4096600530CAF /* iTunesArtwork-Viewer-Lagacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Viewer-Lagacy@2x.png"; sourceTree = "<group>"; };
 		4C47574417B4096600530CAF /* iTunesArtwork-Viewer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Viewer-Modern.png"; sourceTree = "<group>"; };
 		4C47574517B4096600530CAF /* iTunesArtwork-Viewer-Modern@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork-Viewer-Modern@2x.png"; sourceTree = "<group>"; };
+		4C49D9CC19DCE31400CB4DB8 /* MAD Designer X.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer X.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49D9CF19DCE31400CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C49D9D019DCE31400CB4DB8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4C49D9D119DCE31400CB4DB8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4C49D9D319DCE31400CB4DB8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C49D9D519DCE31400CB4DB8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4C49D9D619DCE31400CB4DB8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4C49D9D819DCE31400CB4DB8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4C49D9DB19DCE31400CB4DB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Designer XTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49D9E619DCE31400CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C49D9E719DCE31400CB4DB8 /* MAD_Designer_XTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Designer_XTests.m; sourceTree = "<group>"; };
+		4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Viewer X.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49D9FE19DCE32E00CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C49D9FF19DCE32E00CB4DB8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4C49DA0019DCE32E00CB4DB8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4C49DA0219DCE32E00CB4DB8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C49DA0419DCE32E00CB4DB8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4C49DA0519DCE32E00CB4DB8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4C49DA0719DCE32E00CB4DB8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4C49DA0A19DCE32E00CB4DB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MAD Viewer XTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49DA1519DCE32E00CB4DB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C49DA1619DCE32E00CB4DB8 /* MAD_Viewer_XTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAD_Viewer_XTests.m; sourceTree = "<group>"; };
 		4C4A68B417E75D3F00FD6A73 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C4A68BB17E945C800FD6A73 /* MTBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTBlurView.h; sourceTree = "<group>"; };
 		4C4A68BC17E945C800FD6A73 /* MTBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBlurView.m; sourceTree = "<group>"; };
@@ -2827,7 +2875,6 @@
 		4CFF3F24164DFF1F0070E880 /* MADocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADocument.m; sourceTree = "<group>"; };
 		4CFFCBAE19C35B2100919440 /* MADUpgradeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADUpgradeManager.h; sourceTree = "<group>"; };
 		4CFFCBAF19C35B2100919440 /* MADUpgradeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADUpgradeManager.m; sourceTree = "<group>"; };
-		4CFFD9F019D5CC54001D0B02 /* MySqlClientTest copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MySqlClientTest copy-Info.plist"; path = "/Users/mthomason/Desktop/Reports/Reports/MySqlClientTest copy-Info.plist"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2907,6 +2954,34 @@
 				4C384E2914B29789007B4F48 /* UIKit.framework in Frameworks */,
 				4C384E2B14B29789007B4F48 /* Foundation.framework in Frameworks */,
 				4C384E2D14B29789007B4F48 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9C919DCE31400CB4DB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9DE19DCE31400CB4DB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9F819DCE32E00CB4DB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49DA0D19DCE32E00CB4DB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3105,20 +3180,11 @@
 		4C0E785F163B5C51003B951E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4C384E3014B29789007B4F48 /* mad-Info.plist */,
-				4C0E785D163B5AEC003B951E /* madview-Info.plist */,
 				4C5CD3D81821A0AA005FC6DD /* SampleReports */,
-				4C0EF6C5178A9681007BF2AE /* Storyboards */,
-				4C9514F915126311004AF941 /* Reports.entitlements */,
-				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
-				4CE9F2B61778CDBB009F11AF /* MAD Designer.entitlements */,
 				4CE8A03714BFF744007C8345 /* MAD.xcdatamodeld */,
 				4C5029F418185A8B00C88CD4 /* chinook.sqlite3 */,
 				4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */,
 				4C4EBFBE17EFC2B700D10622 /* Fonts */,
-				4C94AA3717DCB88A000F6FCF /* Images.xcassets */,
-				4C94AA1117DCB3C9000F6FCF /* Images.xcassets */,
-				4C1B7A65163E123200E331AA /* ReportDesigner */,
 				4C0E7860163B5C8D003B951E /* Images */,
 				4C5BED5818E8999D00BDDDB8 /* Settings.bundle */,
 			);
@@ -3258,13 +3324,6 @@
 				4CCD243C193BC03700E44D47 /* MTQueryCacheAggregateFunction.m */,
 			);
 			name = MTQueryCache;
-			sourceTree = "<group>";
-		};
-		4C1B7A65163E123200E331AA /* ReportDesigner */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ReportDesigner;
 			sourceTree = "<group>";
 		};
 		4C1E27C018C5B4650007B2BB /* Singletons */ = {
@@ -3428,21 +3487,17 @@
 			children = (
 				4C752E0C16EA3A0C001FDAA3 /* README.md */,
 				4C23FC1A18FAEA24009F234F /* TODO.txt */,
+				4C49DA5319DCE77700CB4DB8 /* MAD iOS */,
+				4C49DA5919DCE99F00CB4DB8 /* MAD OS X */,
+				4C00818414B738E9003DF437 /* Model */,
+				4C00815914B6BDB6003DF437 /* Views */,
 				4C3A969A189F7CB6007AF476 /* Scripts */,
+				4C5CD3D7181ED424005FC6DD /* Macros */,
 				4C5BED6318E8DFC900BDDDB8 /* ObjectiveC */,
 				4C5BED6818E9081F00BDDDB8 /* Protocols */,
-				4C5CD3D7181ED424005FC6DD /* Macros */,
-				4CDB624614E38B9600A5389E /* Controllers */,
-				4C00815914B6BDB6003DF437 /* Views */,
-				4C00818414B738E9003DF437 /* Model */,
 				4C0E785F163B5C51003B951E /* Resources */,
-				4C384E2F14B29789007B4F48 /* Supporting Files */,
-				4C860AB6167EDD7500AC1904 /* Test */,
-				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
-				4C26F22B19D5D1DE00B7A417 /* Test */,
 				4C384E2714B29789007B4F48 /* Frameworks */,
 				4C384E2514B29789007B4F48 /* Products */,
-				4CFFD9F019D5CC54001D0B02 /* MySqlClientTest copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3454,6 +3509,10 @@
 				4C94ADE817C3514100037FCB /* MAD Launch Images.app */,
 				4C25803D192D090F00BE74EB /* Caching Array Tests.xctest */,
 				4C26F22019D5D16800B7A417 /* Test Cloud.xctest */,
+				4C49D9CC19DCE31400CB4DB8 /* MAD Designer X.app */,
+				4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */,
+				4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */,
+				4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3735,6 +3794,140 @@
 				4C47574517B4096600530CAF /* iTunesArtwork-Viewer-Modern@2x.png */,
 			);
 			name = Icons;
+			sourceTree = "<group>";
+		};
+		4C49D9CD19DCE31400CB4DB8 /* MAD Designer X */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9D019DCE31400CB4DB8 /* AppDelegate.h */,
+				4C49D9D119DCE31400CB4DB8 /* AppDelegate.m */,
+				4C49D9D519DCE31400CB4DB8 /* ViewController.h */,
+				4C49D9D619DCE31400CB4DB8 /* ViewController.m */,
+				4C49D9D819DCE31400CB4DB8 /* Images.xcassets */,
+				4C49D9DA19DCE31400CB4DB8 /* Main.storyboard */,
+				4C49D9CE19DCE31400CB4DB8 /* Supporting Files */,
+			);
+			path = "MAD Designer X";
+			sourceTree = "<group>";
+		};
+		4C49D9CE19DCE31400CB4DB8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9CF19DCE31400CB4DB8 /* Info.plist */,
+				4C49D9D319DCE31400CB4DB8 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C49D9E419DCE31400CB4DB8 /* MAD Designer XTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9E719DCE31400CB4DB8 /* MAD_Designer_XTests.m */,
+				4C49D9E519DCE31400CB4DB8 /* Supporting Files */,
+			);
+			path = "MAD Designer XTests";
+			sourceTree = "<group>";
+		};
+		4C49D9E519DCE31400CB4DB8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9E619DCE31400CB4DB8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C49D9FC19DCE32E00CB4DB8 /* MAD Viewer X */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9FF19DCE32E00CB4DB8 /* AppDelegate.h */,
+				4C49DA0019DCE32E00CB4DB8 /* AppDelegate.m */,
+				4C49DA0419DCE32E00CB4DB8 /* ViewController.h */,
+				4C49DA0519DCE32E00CB4DB8 /* ViewController.m */,
+				4C49DA0719DCE32E00CB4DB8 /* Images.xcassets */,
+				4C49DA0919DCE32E00CB4DB8 /* Main.storyboard */,
+				4C49D9FD19DCE32E00CB4DB8 /* Supporting Files */,
+			);
+			path = "MAD Viewer X";
+			sourceTree = "<group>";
+		};
+		4C49D9FD19DCE32E00CB4DB8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9FE19DCE32E00CB4DB8 /* Info.plist */,
+				4C49DA0219DCE32E00CB4DB8 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C49DA1319DCE32E00CB4DB8 /* MAD Viewer XTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C49DA1619DCE32E00CB4DB8 /* MAD_Viewer_XTests.m */,
+				4C49DA1419DCE32E00CB4DB8 /* Supporting Files */,
+			);
+			path = "MAD Viewer XTests";
+			sourceTree = "<group>";
+		};
+		4C49DA1419DCE32E00CB4DB8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C49DA1519DCE32E00CB4DB8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C49DA5319DCE77700CB4DB8 /* MAD iOS */ = {
+			isa = PBXGroup;
+			children = (
+				4CDB624614E38B9600A5389E /* Controllers */,
+				4C0EF6C5178A9681007BF2AE /* Storyboards */,
+				4C26F22B19D5D1DE00B7A417 /* Test */,
+				4C49DA5619DCE82200CB4DB8 /* Resources */,
+				4C384E2F14B29789007B4F48 /* Supporting Files */,
+				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
+			);
+			name = "MAD iOS";
+			sourceTree = "<group>";
+		};
+		4C49DA5619DCE82200CB4DB8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C49DA5819DCE8CF00CB4DB8 /* Designer */,
+				4C49DA5719DCE8C800CB4DB8 /* Viewer */,
+				4C9514F915126311004AF941 /* Reports.entitlements */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4C49DA5719DCE8C800CB4DB8 /* Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				4CE9F2B71778CE73009F11AF /* MAD Viewer.entitlements */,
+				4C0E785D163B5AEC003B951E /* madview-Info.plist */,
+				4C94AA3717DCB88A000F6FCF /* Images.xcassets */,
+			);
+			name = Viewer;
+			sourceTree = "<group>";
+		};
+		4C49DA5819DCE8CF00CB4DB8 /* Designer */ = {
+			isa = PBXGroup;
+			children = (
+				4CE9F2B61778CDBB009F11AF /* MAD Designer.entitlements */,
+				4C384E3014B29789007B4F48 /* mad-Info.plist */,
+				4C94AA1117DCB3C9000F6FCF /* Images.xcassets */,
+			);
+			name = Designer;
+			sourceTree = "<group>";
+		};
+		4C49DA5919DCE99F00CB4DB8 /* MAD OS X */ = {
+			isa = PBXGroup;
+			children = (
+				4C49D9CD19DCE31400CB4DB8 /* MAD Designer X */,
+				4C49D9E419DCE31400CB4DB8 /* MAD Designer XTests */,
+				4C49D9FC19DCE32E00CB4DB8 /* MAD Viewer X */,
+				4C49DA1319DCE32E00CB4DB8 /* MAD Viewer XTests */,
+			);
+			name = "MAD OS X";
 			sourceTree = "<group>";
 		};
 		4C4C6F0E167635B8004A3B04 /* Products */ = {
@@ -4202,14 +4395,6 @@
 				4C77330419100098005AE7C2 /* psi_memory.h */,
 			);
 			path = psi;
-			sourceTree = "<group>";
-		};
-		4C860AB6167EDD7500AC1904 /* Test */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Test;
-			path = ReportsGeneralTest;
 			sourceTree = "<group>";
 		};
 		4C8779CC14CA9605005CBE6F /* Auto Generated */ = {
@@ -5173,6 +5358,76 @@
 			productReference = 4C384E2414B29789007B4F48 /* MAD Designer.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4C49D9CB19DCE31400CB4DB8 /* MAD Designer X */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C49D9F519DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer X" */;
+			buildPhases = (
+				4C49D9C819DCE31400CB4DB8 /* Sources */,
+				4C49D9C919DCE31400CB4DB8 /* Frameworks */,
+				4C49D9CA19DCE31400CB4DB8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MAD Designer X";
+			productName = "MAD Designer X";
+			productReference = 4C49D9CC19DCE31400CB4DB8 /* MAD Designer X.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C49D9E019DCE31400CB4DB8 /* MAD Designer XTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */;
+			buildPhases = (
+				4C49D9DD19DCE31400CB4DB8 /* Sources */,
+				4C49D9DE19DCE31400CB4DB8 /* Frameworks */,
+				4C49D9DF19DCE31400CB4DB8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C49D9E319DCE31400CB4DB8 /* PBXTargetDependency */,
+			);
+			name = "MAD Designer XTests";
+			productName = "MAD Designer XTests";
+			productReference = 4C49D9E119DCE31400CB4DB8 /* MAD Designer XTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C49DA1819DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer X" */;
+			buildPhases = (
+				4C49D9F719DCE32E00CB4DB8 /* Sources */,
+				4C49D9F819DCE32E00CB4DB8 /* Frameworks */,
+				4C49D9F919DCE32E00CB4DB8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MAD Viewer X";
+			productName = "MAD Viewer X";
+			productReference = 4C49D9FB19DCE32E00CB4DB8 /* MAD Viewer X.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C49DA0F19DCE32E00CB4DB8 /* MAD Viewer XTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer XTests" */;
+			buildPhases = (
+				4C49DA0C19DCE32E00CB4DB8 /* Sources */,
+				4C49DA0D19DCE32E00CB4DB8 /* Frameworks */,
+				4C49DA0E19DCE32E00CB4DB8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C49DA1219DCE32E00CB4DB8 /* PBXTargetDependency */,
+			);
+			name = "MAD Viewer XTests";
+			productName = "MAD Viewer XTests";
+			productReference = 4C49DA1019DCE32E00CB4DB8 /* MAD Viewer XTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		4C94ADE717C3514100037FCB /* MAD Launch Images */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Launch Images" */;
@@ -5227,6 +5482,20 @@
 								enabled = 1;
 							};
 						};
+					};
+					4C49D9CB19DCE31400CB4DB8 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					4C49D9E019DCE31400CB4DB8 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = 4C49D9CB19DCE31400CB4DB8;
+					};
+					4C49D9FA19DCE32E00CB4DB8 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					4C49DA0F19DCE32E00CB4DB8 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = 4C49D9FA19DCE32E00CB4DB8;
 					};
 				};
 			};
@@ -5301,6 +5570,10 @@
 				4C94ADE717C3514100037FCB /* MAD Launch Images */,
 				4C25803C192D090F00BE74EB /* Caching Array Tests */,
 				4C26F21F19D5D16800B7A417 /* Test Cloud */,
+				4C49D9CB19DCE31400CB4DB8 /* MAD Designer X */,
+				4C49D9E019DCE31400CB4DB8 /* MAD Designer XTests */,
+				4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */,
+				4C49DA0F19DCE32E00CB4DB8 /* MAD Viewer XTests */,
 			);
 		};
 /* End PBXProject section */
@@ -5416,7 +5689,6 @@
 				4C0E77DD163B5AEC003B951E /* UIImageBolt20@2x.png in Resources */,
 				4C6461C118C0E6680069EF8D /* MTActivityProvidence~iPad.png in Resources */,
 				4C92956F18C4E0770010AAEF /* MTImageLaunchDesignerPhone35PortraitRetina.png in Resources */,
-				4C4EBFC317EFC2C500D10622 /* CarbonBlock.ttf in Resources */,
 				4C0E77DE163B5AEC003B951E /* UIImageDocument20.png in Resources */,
 				4C0E77DF163B5AEC003B951E /* UIImageDocument20@2x.png in Resources */,
 				4C0E77E0163B5AEC003B951E /* UIImagePatternPebbled.png in Resources */,
@@ -5887,7 +6159,6 @@
 				4CE314301694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4C5CB7C9189E2A7D00BB5AF8 /* odbcss.h in Resources */,
 				4C80A5DF183145F600242703 /* MTBarcodeAztec.h in Resources */,
-				4C4EBFC217EFC2C500D10622 /* CarbonBlock.ttf in Resources */,
 				4C6DAA931761AF7500FF770A /* MTTdsClient.h in Resources */,
 				4C76B6F5177648EB004AA7F9 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
@@ -5903,6 +6174,38 @@
 				4CFA64EC17B930090025BE1E /* MADIcon64x64.png in Resources */,
 				4CFA64EE17B930090025BE1E /* MADIcon320x320.png in Resources */,
 				4C94ADE217C33C3100037FCB /* UIImageJustified@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9CA19DCE31400CB4DB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49D9D919DCE31400CB4DB8 /* Images.xcassets in Resources */,
+				4C49D9DC19DCE31400CB4DB8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9DF19DCE31400CB4DB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9F919DCE32E00CB4DB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49DA0819DCE32E00CB4DB8 /* Images.xcassets in Resources */,
+				4C49DA0B19DCE32E00CB4DB8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49DA0E19DCE32E00CB4DB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6655,6 +6958,42 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4C49D9C819DCE31400CB4DB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49D9D719DCE31400CB4DB8 /* ViewController.m in Sources */,
+				4C49D9D419DCE31400CB4DB8 /* main.m in Sources */,
+				4C49D9D219DCE31400CB4DB8 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9DD19DCE31400CB4DB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49D9E819DCE31400CB4DB8 /* MAD_Designer_XTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49D9F719DCE32E00CB4DB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49DA0619DCE32E00CB4DB8 /* ViewController.m in Sources */,
+				4C49DA0319DCE32E00CB4DB8 /* main.m in Sources */,
+				4C49DA0119DCE32E00CB4DB8 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C49DA0C19DCE32E00CB4DB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49DA1719DCE32E00CB4DB8 /* MAD_Viewer_XTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C94ADE417C3514100037FCB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6846,6 +7185,16 @@
 			target = 4C384E2314B29789007B4F48 /* MAD Designer */;
 			targetProxy = 4C26F22619D5D16800B7A417 /* PBXContainerItemProxy */;
 		};
+		4C49D9E319DCE31400CB4DB8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C49D9CB19DCE31400CB4DB8 /* MAD Designer X */;
+			targetProxy = 4C49D9E219DCE31400CB4DB8 /* PBXContainerItemProxy */;
+		};
+		4C49DA1219DCE32E00CB4DB8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C49D9FA19DCE32E00CB4DB8 /* MAD Viewer X */;
+			targetProxy = 4C49DA1119DCE32E00CB4DB8 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -6887,6 +7236,22 @@
 				4C43F224178C8E680069FD5B /* en */,
 			);
 			name = MTStoryboardReportDesigner.storyboard;
+			sourceTree = "<group>";
+		};
+		4C49D9DA19DCE31400CB4DB8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C49D9DB19DCE31400CB4DB8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4C49DA0919DCE32E00CB4DB8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C49DA0A19DCE32E00CB4DB8 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */ = {
@@ -7311,6 +7676,232 @@
 			};
 			name = Release;
 		};
+		4C49D9E919DCE31400CB4DB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Designer X/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		4C49D9EA19DCE31400CB4DB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Designer X/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+		4C49D9EB19DCE31400CB4DB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Designer XTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer X.app/Contents/MacOS/MAD Designer X";
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		4C49D9EC19DCE31400CB4DB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Designer XTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Designer X.app/Contents/MacOS/MAD Designer X";
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+		4C49DA1919DCE32E00CB4DB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Viewer X/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		4C49DA1A19DCE32E00CB4DB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Viewer X/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+		4C49DA1C19DCE32E00CB4DB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Viewer XTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Viewer X.app/Contents/MacOS/MAD Viewer X";
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		4C49DA1D19DCE32E00CB4DB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "MAD Viewer XTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MAD Viewer X.app/Contents/MacOS/MAD Viewer X";
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
 		4C94AE0817C3514200037FCB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -7407,6 +7998,38 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		4C49D9F519DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer X" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C49D9E919DCE31400CB4DB8 /* Debug */,
+				4C49D9EA19DCE31400CB4DB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C49D9F619DCE31400CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Designer XTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C49D9EB19DCE31400CB4DB8 /* Debug */,
+				4C49D9EC19DCE31400CB4DB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C49DA1819DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer X" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C49DA1919DCE32E00CB4DB8 /* Debug */,
+				4C49DA1A19DCE32E00CB4DB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C49DA1B19DCE32E00CB4DB8 /* Build configuration list for PBXNativeTarget "MAD Viewer XTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C49DA1C19DCE32E00CB4DB8 /* Debug */,
+				4C49DA1D19DCE32E00CB4DB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		4C94AE0717C3514200037FCB /* Build configuration list for PBXNativeTarget "MAD Launch Images" */ = {
 			isa = XCConfigurationList;

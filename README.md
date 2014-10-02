@@ -2,4 +2,4 @@
 
 Copyright Everyday Apps LLC 2014.  All rights reserved.
 
-Target iOS7.
+Target iOS8.
