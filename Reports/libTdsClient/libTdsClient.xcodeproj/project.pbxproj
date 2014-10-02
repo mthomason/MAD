@@ -353,6 +353,7 @@
 				DSTROOT = /tmp/libTdsClient.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "libTdsClient/libTdsClient-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/../../StaticLibraries/freetds/Fat/lib\\\"",
@@ -372,6 +373,7 @@
 				DSTROOT = /tmp/libTdsClient.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "libTdsClient/libTdsClient-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/../../StaticLibraries/freetds/Fat/lib\\\"",
@@ -479,6 +481,7 @@
 				4CFFD92219D5C5E4001D0B02 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

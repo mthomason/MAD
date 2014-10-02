@@ -865,7 +865,6 @@
 		4C8F7CE714CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE614CEC144006171A7 /* MTQueryBuilderAddLinkFirstTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C8F7CEA14CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8F7CE914CEFBAE006171A7 /* UITableViewControllerCoreDataResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C92945618C4CB6D0010AAEF /* MTApplicationInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */; };
-		4C92946118C4CB930010AAEF /* MADocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF3F24164DFF1F0070E880 /* MADocument.m */; };
 		4C92946418C4CBA70010AAEF /* MTConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04814C01EA0007C8345 /* MTConnectionViewController.m */; };
 		4C92946518C4CBAA0010AAEF /* MADOpenFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8A04214C01ABB007C8345 /* MADOpenFileViewController.m */; };
 		4C92947618C4CBE60010AAEF /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C76F0F914B5E746005DCE49 /* Constants.m */; };
@@ -7157,7 +7156,6 @@
 				4C92950518C4CC7F0010AAEF /* RptqDocumentObjectFormula+Extras.m in Sources */,
 				4C92949618C4CBF90010AAEF /* MTCollectionViewLayoutLiquidAttributes.m in Sources */,
 				4C92948618C4CBF40010AAEF /* MTQueryBuilderAddLinkSecondTableViewController.m in Sources */,
-				4C92946118C4CB930010AAEF /* MADocument.m in Sources */,
 				4C92951E18C4CC890010AAEF /* UIImage+ImageEffects.m in Sources */,
 				4C92948A18C4CBF40010AAEF /* MTQueryBuilderLinkBuilderViewController.m in Sources */,
 				4C92950A18C4CC7F0010AAEF /* RptqDocumentObjectLabelLink+Extras.m in Sources */,
@@ -7314,7 +7312,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "madview-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
@@ -7362,7 +7360,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "madview-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
@@ -7613,7 +7611,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/system",
 					/Users/mthomason/Desktop/Reports/Compressor/library,
@@ -7660,7 +7658,7 @@
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Reports/mad-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/system",
 					/Users/mthomason/Desktop/Reports/Compressor/library,
