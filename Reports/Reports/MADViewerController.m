@@ -193,7 +193,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 - (void)initalize {
-    self.restorationClass = self;
+    //self.restorationClass = self;
     
     self.activityExporting = NO;
     self.didRefreshBeforeReaload = NO;
@@ -840,8 +840,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                                                                          applicationActivities:applicationActivities];
     
     __weak __block MADViewerController *weakself = self;
-    
-    UIActivityViewControllerCompletionHandler activityViewControllerCompletionHandler = ^(NSString *activityType, BOOL completed) {
+    UIActivityViewControllerCompletionWithItemsHandler activityViewControllerCompletionWithItemsHandler =
+                ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        
         if (completed) {
             [weakself.pageSlider setEnabled:YES];
             weakself.activityExporting = NO;
@@ -851,8 +852,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
                     UIPrintInteractionController *sharedController = [UIPrintInteractionController sharedPrintController];
                     if (sharedController) {
-                        sharedController.delegate = self;
-                        UIPrintPageRenderer *printPageRender = [self.document printerPrintPageRender];
+                        sharedController.delegate = weakself;
+                        UIPrintPageRenderer *printPageRender = [weakself.document printerPrintPageRender];
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         __weak MADViewerController *weakself = self;
@@ -872,9 +873,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             }
         }
     };
-    
-    [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
-    
+    activityViewController.completionWithItemsHandler = activityViewControllerCompletionWithItemsHandler;
+
     if ([UIDevice isPad]) {
         if ([self popoverControllerActivity] == nil || [self popoverControllerActivity].isPopoverVisible == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
