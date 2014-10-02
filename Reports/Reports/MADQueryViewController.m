@@ -11,6 +11,7 @@
 #endif
 
 #import "MADQueryViewController.h"
+#import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"

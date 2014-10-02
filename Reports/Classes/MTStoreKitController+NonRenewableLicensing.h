@@ -10,7 +10,6 @@
 #define Reports_MTStoreKitController_NonRenewableLicensing_h
 
 #import "MTStoreKitController.h"
-#import "AppDelegate.h"
 
 typedef void (^MTStoreKitNonRenewableLicensedUser)(BOOL isLicensedUser, NSDate *experationDate);
 extern const NSTimeInterval MTTimeIntervalHour;

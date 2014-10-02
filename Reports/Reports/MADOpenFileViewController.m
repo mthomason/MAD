@@ -12,6 +12,7 @@
 
 #import "MADOpenFileViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "AppDelegate.h"
 #import "MACloudManager.h"
 #import "MADocument.h"
 #import "MTApplicationInstance.h"
