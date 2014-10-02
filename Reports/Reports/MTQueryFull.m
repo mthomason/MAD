@@ -511,13 +511,12 @@
                     }
                     [result appendString:tableFactor];
                     
-                    if (NO) {   //I would think to group these in parentheses, but some databases don't like that.
-                        [result insertString:@"\t(" atIndex:0];
-                        [result appendString:@")\n\t"];
-                    } else {
+                    // FIXME: I would think to group these in parentheses, but some databases don't like that.
+                    //          Maybe make this optional based on DB type.
+                    //    [result insertString:@"\t(" atIndex:0];
+                    //    [result appendString:@")\n\t"];
                         [result insertString:@"\t" atIndex:0];
                         [result appendString:@"\n\t"];
-                    }
 
                 }
                 
