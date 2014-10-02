@@ -195,8 +195,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
             [weakdoc1 saveToURL: weakdoc1.fileURL forSaveOperation: UIDocumentSaveForCreating
           completionHandler:^(BOOL success) {
 
-              NSString *name = [NSString stringWithString:[doc name]];
               if (success) {
+                  NSString *name = [NSString stringWithString:doc.fileName];
                   __weak __block MADocument *weakdoc = weakdoc1;
                   [weakdoc addConnection:weakConnection status:^(NSString *readStatus, CGFloat progress) {
                       self.navigationItem.prompt = readStatus;

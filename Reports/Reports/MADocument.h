@@ -41,6 +41,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 @property (nonatomic, strong, readwrite) MADocumentState *documentStatus;
 
 @property (nonatomic, strong, readonly) NSURL *urlGuts;
+@property (nonatomic, strong, readonly) NSString *fileName;
 
 @property (nonatomic, strong) MTActivityIndicator *statusLabel;
 @property (nonatomic, weak) id <MADActivityProtocol> activityDelegate;
@@ -61,7 +62,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (UIPrintPageRenderer *)printerPrintPageRender;
 - (RptqDocument *)activeDocumentModel;
 
-- (NSString *)name;
 - (NSURL *)cachedDataUrl;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
@@ -71,7 +71,6 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 
 - (void)initalizeMainQuery;
 - (void)prepareForQuery;
-//- (MTQuery *)defaultQuery;
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 

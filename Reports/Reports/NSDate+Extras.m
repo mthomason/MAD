@@ -69,10 +69,10 @@
         includedComponetsCounter++;
     }
     
-    if ((forceInclude && [aDateComponents week] != 0) || (forceInclude && printedOne)) {
+    if ((forceInclude && [aDateComponents weekOfMonth] != 0) || (forceInclude && printedOne)) {
         if (includedComponetsCounter < permittedComponents) {
             
-            NSInteger week = ABS([aDateComponents week]);
+            NSInteger week = ABS([aDateComponents weekOfMonth]);
             NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber: @(week)
                                                                     numberStyle: NSNumberFormatterSpellOutStyle];
             if (week == 1) {

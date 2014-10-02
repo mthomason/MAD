@@ -704,7 +704,7 @@ NSString * const MTNullIdentifier = @"(null)";
 }
 
 - (NSUInteger)numberOfPages {
-    return [[self reportLayout] count];
+    return [self.reportLayout count];
 }
 
 

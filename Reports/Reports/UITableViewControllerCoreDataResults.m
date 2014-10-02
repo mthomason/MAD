@@ -87,7 +87,9 @@
   didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
 		   atIndex:(NSUInteger)sectionIndex
 	 forChangeType:(NSFetchedResultsChangeType)type {
+
     if (!self.suspendAutomaticTrackingOfChangesInManagedObjectContext) {
+
         switch(type) {
             case NSFetchedResultsChangeInsert:
                 [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
@@ -96,6 +98,13 @@
             case NSFetchedResultsChangeDelete:
                 [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
                 break;
+                
+            case NSFetchedResultsChangeMove:
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                break;
+                
         }
     }
 }

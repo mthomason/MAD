@@ -398,11 +398,11 @@
 }
 
 - (NSString *)cacheTableNameForGroupLevel:(NSInteger)groupLevel {
-    return [NSString stringWithFormat:@"s%d", groupLevel];
+    return [NSString stringWithFormat:@"s%ld", (long)groupLevel];
 }
 
 - (NSString *)indexNameForGroupLevel:(NSInteger)groupLevel andIndex:(NSInteger)index {
-    return [NSString stringWithFormat:@"i%d%d", groupLevel, index];
+    return [NSString stringWithFormat:@"i%ld%ld", (long)groupLevel, (long)index];
 }
 
 - (NSDictionary *)createIndexParametersForIndexName:(NSString *)indexName tableName:(NSString *)tableName andSortDescriptors:(NSArray *)sortDescriptors {

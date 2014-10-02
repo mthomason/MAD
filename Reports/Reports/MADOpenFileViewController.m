@@ -1528,11 +1528,9 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
             MFMailComposeViewController	*mailComposer = [[MFMailComposeViewController alloc] init];
             mailComposer.mailComposeDelegate = self;
             NSString *formatString = NSLocalizedString(@"MAD Document %@.", @"MAD Document %@.");
-            NSString *docname = [documentReport name];
-            mailComposer.subject = [NSString stringWithFormat:formatString, docname];
+            mailComposer.subject = [NSString stringWithFormat:formatString, documentReport.fileName];
             [mailComposer setMessageBody:messageBody isHTML:NO];
-            
-            NSString *name = [NSString stringWithFormat:@"%@.%@", docname, MTDocumentExtentionMobleApplicationDocument];
+            NSString *name = [NSString stringWithFormat:@"%@.%@", documentReport.fileName, MTDocumentExtentionMobleApplicationDocument];
             [mailComposer addAttachmentData:data mimeType:MADMimeType fileName:name];
             mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
             

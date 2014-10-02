@@ -87,10 +87,9 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCodeError"]) {
-        [segue.destinationViewController setDelegate:self];
-    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCodeSize"]) {
-        [segue.destinationViewController setDelegate:self];
+    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCodeError"] ||
+        [segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasQrCodeSize"]) {
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     }
 }
 

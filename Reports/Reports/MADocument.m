@@ -378,7 +378,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     return MTDocumentExtentionMobleApplicationDocument;
 }
 
-#pragma mark - UIManagedDocument
+#pragma mark UIManagedDocument
 
 - (BOOL)configurePersistentStoreCoordinatorForURL:(NSURL *)storeURL
                                            ofType:(NSString *)fileType
@@ -571,10 +571,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark - Helpers
 
-- (NSString *)name {
-    return [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-}
-
 - (NSURL *)urlMetaPlaylist {
     return [self.urlGuts URLByAppendingPathComponent:MADFileNameMetaPlist];
 }
@@ -590,19 +586,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             [self.managedObjectContext save:nil];
         }
     }
-}
-
-- (NSURL *)storeUrlForContext:(NSManagedObjectContext *)managedObjectContext {
-    NSPersistentStoreCoordinator *persistentStoreCoordinator = [managedObjectContext persistentStoreCoordinator];
-    NSArray *persistentStores = [persistentStoreCoordinator persistentStores];
-    NSPersistentStore * lastPersistentStoreCoordinator = [persistentStores lastObject];
-    NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:lastPersistentStoreCoordinator];
-    return storeURL;
-}
-
-+ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
-    NSString *filenameId = [MACloudManager filenameId:[filename hash]];
-    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 
 - (void)addConnection:(MTDatabaseConnection *)connection
@@ -755,7 +738,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSString *)fileHandle {
-    return [self urlThumbnail].path.lastPathComponent;
+    return self.urlThumbnail.path.lastPathComponent;
 }
 
 + (NSURL *)thumbnail1024UrlForMadUrl:(NSURL *)madUrl {
@@ -791,7 +774,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 - (void)close:(void(^)(BOOL success, NSError *error))completion {
     [self closeWithCompletionHandler:^(BOOL success) {
         if (success) {
-            [self.documentStatus setSuspended:YES];
+            self.documentStatus.suspended = YES;
             [self.managedObjectContext lock];
             [self wrapFileOverwrite:NO];
             [self deleteFromDiskCompletion:^(BOOL success) {
@@ -833,14 +816,14 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (void)regenThumbnail {
-    [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]];
-    BOOL contentChanged = [self activeDocumentModel] != nil && ([self.documentStatus contextChagned] == YES || [self didRefresh]) && [[self reportFormatter] numberOfPages] > 0;
-    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:[[self urlThumbnail] path]] == NO) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:[self reportFormatter]
+    [[NSFileManager defaultManager] fileExistsAtPath: self.urlThumbnail.path];
+    BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned == YES || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
+    if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.urlThumbnail.path] == NO) {
+        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:self.reportFormatter
                                                                                                                   dataTable:self.mainDataTable];
         UIImage *thumbnail = [printPageRender thumbnail];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
-        [pngImage writeToURL:[self urlThumbnail] atomically:YES];
+        [pngImage writeToURL:self.urlThumbnail atomically:YES];
     }
 }
 
@@ -1002,6 +985,11 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [directories lastObject];
     return [destinationDirectoryUrl URLByAppendingPathComponent: destinationName
                                                     isDirectory: YES];
+}
+
++ (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename {
+    NSString *filenameId = [MACloudManager filenameId:[filename hash]];
+    return [[NSFileManager defaultManager] localCacheDirectoryNamed:filenameId];
 }
 
 @end

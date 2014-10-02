@@ -224,8 +224,8 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
             NSString *fieldNameNice = [queryGroup fieldNameNice];
             NSInteger groupLevel = [queryGroup location];
             NSString *textLabel = fieldNameNice == nil ?
-                    [NSString stringWithFormat:@"Group %d", groupLevel] :
-                    [NSString stringWithFormat:@"Group %d (%@)", groupLevel, fieldNameNice];
+                    [NSString stringWithFormat:@"Group %ld", (long)groupLevel] :
+                    [NSString stringWithFormat:@"Group %ld (%@)", (long)groupLevel, fieldNameNice];
             [[cell textLabel] setText:textLabel];
             if ([self aggregateGroupType] == MTAggregateGroupByTypeSection && indexPath.row - 2 == [self aggregateGroupNumber]) {
                 [cell setAccessoryType:UITableViewCellAccessoryCheckmark];

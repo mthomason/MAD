@@ -374,7 +374,7 @@ static NSNumberFormatter *currencyNumberFormatter;
             if ([value isKindOfClass:[NSString class]]) {
                 result = value;
             } else if ([value isKindOfClass:[NSNumber class]]) {
-                result = [NSString stringWithFormat:@"%d", [(NSNumber *)value integerValue]];
+                result = [NSString stringWithFormat:@"%ld", (long)[(NSNumber *)value integerValue]];
             } else {
                 result = [NSString stringWithFormat:@"%@", value];
             }

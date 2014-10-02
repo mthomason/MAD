@@ -76,10 +76,10 @@
     NSUInteger columnCounter = 0;
 
     char colCtrBuf[19];
-    for (id object in [self row]) {
+    for (id object in self.row) {
         
-        NSString *fieldName = [self columnKeys][columnCounter];
-        MTDataColumn *column = [self columns][fieldName];
+        NSString *fieldName = self.columnKeys[columnCounter];
+        MTDataColumn *column = self.columns[fieldName];
         MTDataType type = [[column columnType] integerValue];
         NSString *safeFieldName = [[self database] safeIdentifier:fieldName];
         
@@ -95,7 +95,7 @@
                                                                                        value: object];
         [[self binaryBindings] addObject:databinding];
         
-        snprintf(colCtrBuf, 19, "?%u", columnCounter + 1);
+        snprintf(colCtrBuf, 19, "?%u", (unsigned int)columnCounter + 1);
         NSString *columnValue = @(colCtrBuf);
         [values appendString:columnValue];
         

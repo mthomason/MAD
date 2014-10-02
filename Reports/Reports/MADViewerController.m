@@ -675,20 +675,20 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [item setEnabled:YES];
     }
     
-    [[self barButtonItemRefresh] setEnabled:YES];
-    [[self barButtonItemDone] setEnabled:YES];
-    [[self barButtonItemPrint] setEnabled:YES];
-    [[self barButtonItemSendToPdf] setEnabled:YES];
-    [[self barButtonItemActivity] setEnabled:YES];
+    [self.barButtonItemRefresh setEnabled:YES];
+    [self.barButtonItemDone setEnabled:YES];
+    [self.barButtonItemPrint setEnabled:YES];
+    [self.barButtonItemSendToPdf setEnabled:YES];
+    [self.barButtonItemActivity setEnabled:YES];
     
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
-    [[self barButtonItemRefresh] setEnabled:YES];
+    [self.barButtonItemRefresh setEnabled:YES];
     [[self labelDateLastRefreshed] setHidden:NO];
     [[self labelDateLastRefreshed] setText:@""];
     [[self labelDateLastRefreshed] setNeedsDisplay];
 
-    [self.navigationItem setRightBarButtonItem:[self barButtonItemRefresh] animated:YES];
+    [self.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
 
 }
 
@@ -705,47 +705,49 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     }
 
     [self setIsRefreshing:YES];
-    [[self barButtonItemRefresh] setEnabled:NO];
-    [[self barButtonItemDone] setEnabled:NO];
-    [[self barButtonItemPrint] setEnabled:NO];
-    [[self barButtonItemSendToPdf] setEnabled:NO];
-    [[self barButtonItemActivity] setEnabled:NO];
+    [self.barButtonItemRefresh setEnabled:NO];
+    [self.barButtonItemDone setEnabled:NO];
+    [self.barButtonItemPrint setEnabled:NO];
+    [self.barButtonItemSendToPdf setEnabled:NO];
+    [self.barButtonItemActivity setEnabled:NO];
     [self setUpdatingOfTimerIsPaused:YES];
     NSString *refreshing = NSLocalizedString(@"Refreshing data.", @"Refreshing data.");
     [[self labelDateLastRefreshed] setText:refreshing];
     [[self labelDateLastRefreshed] setNeedsDisplay];
-    [[self barButtonItemDone] setEnabled:NO];
+    [self.barButtonItemDone setEnabled:NO];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
-    [activityIndicator setHidden:NO];
-    [activityIndicator setHidesWhenStopped:NO];
+    activityIndicator.hidden = NO;
+    activityIndicator.hidesWhenStopped = NO;
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
 }
 
 - (IBAction)refresh:(id)sender {
+
     self.didRefreshBeforeReaload = YES;
     self.backgroundTaskIdRefresh = [[UIApplication sharedApplication] requestBackgroundTask];
-    __weak __block MADViewerController *weakself = self;
     
-    [[weakself barButtonItemDone] setEnabled:NO];
+    self.barButtonItemDone.enabled = NO;
 
-    if ([weakself isRefreshing] == NO) {
-        [weakself setStartedRefresh:YES];
-        [weakself setIsRefreshing:YES];
-        [weakself setDisplayInactive];
+    if (self.isRefreshing == NO) {
+        self.startedRefresh = YES;
+        self.isRefreshing = YES;
+        [self setDisplayInactive];
         
         MTDatabase *database = [self.document.mainQuery database];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver: weakself
+        
+        [notificationCenter addObserver: self
                                selector: @selector(reportDocumentDidReadRows:)
                                    name: MTNotificationDidReadRowsName
                                  object: database];
         
         
+        __weak __block MADViewerController *weakself = self;
         [weakself.document refresh:^(BOOL success, NSError *error) {
 
             if (!success) {
@@ -790,8 +792,10 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)showPrintDialog {
     if ([NSThread isMainThread] == NO) {
         __weak MADViewerController *weakself = self;
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             dispatch_sync(dispatch_get_main_queue(), ^{
+                
                 [weakself.popoverControllerActivity dismissPopoverAnimated:YES];
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -872,20 +876,20 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [activityViewController setCompletionHandler:activityViewControllerCompletionHandler];
     
     if ([UIDevice isPad]) {
-        if ([self popoverControllerActivity] == nil || [[self popoverControllerActivity] isPopoverVisible] == NO) {
+        if ([self popoverControllerActivity] == nil || [self popoverControllerActivity].isPopoverVisible == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             popoverController.delegate = self;
             [popoverController presentPopoverFromBarButtonItem: self.barButtonItemActivity
                                       permittedArrowDirections: UIPopoverArrowDirectionAny
                                                       animated: YES];
-            [self setPopoverControllerActivity:popoverController];
+            self.popoverControllerActivity = popoverController;
             [self disableTabBarItems];
         }
     } else {
 
         __weak MADViewerController *weakSelf = self;
         [self presentViewController:activityViewController animated:YES completion:^{
-            [[[[weakSelf presentedViewController] navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
+            weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
         }];
     }
 }
