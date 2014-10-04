@@ -17,10 +17,10 @@
     NSMutableString *result = [[NSMutableString alloc] initWithString:@"Updated "];
     NSDate *now = [NSDate date];
     NSCalendar *aCalender = [NSCalendar currentCalendar];
-    NSDateComponents *aDateComponents = [aCalender components: (NSYearCalendarUnit | NSMonthCalendarUnit |
-                                                                NSWeekCalendarUnit | NSDayCalendarUnit |
-                                                                NSHourCalendarUnit | NSMinuteCalendarUnit |
-                                                                NSSecondCalendarUnit)
+    NSDateComponents *aDateComponents = [aCalender components: (NSCalendarUnitYear | NSCalendarUnitMonth |
+                                                                NSCalendarUnitWeekOfMonth | NSCalendarUnitDay |
+                                                                NSCalendarUnitHour | NSCalendarUnitMinute |
+                                                                NSCalendarUnitSecond)
                                                      fromDate: now
                                                        toDate: lastDate
                                                       options: 0];
