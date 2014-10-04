@@ -23,6 +23,7 @@
 #import "UIApplication+Extras.h"
 #import "MTErrorContainer.h"
 #import "MACloudManager.h"
+#import "MADBarButtonItem.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Set connection settings.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
@@ -150,11 +151,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     [self disableNavigation];
     
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [activityIndicator startAnimating];
-    [activityIndicator setHidden:NO];
-    [activityIndicator setHidesWhenStopped:NO];
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    MADBarButtonItem *barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem:MADBarButtonSystemItemActivity target:nil action:nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
     __weak MTConnectionViewController *blockSelf = self;
@@ -172,8 +169,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     __weak id blockSender = sender;
     
-    NSURL *applicationFileUrlWithExtention = [NSURL uniqueUrlForDocumentWithName:self.textFieldReportName.text
-                                                                   withExtension:MTDocumentExtentionMobleApplicationDocument];
+    NSURL *applicationFileUrlWithExtention = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: self.textFieldReportName.text
+                                                                                            withExtension: MTDocumentExtentionMobleApplicationDocument];
 
     MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:[self databaseType]];
     [dbDetails setServer:                  blockServer];

@@ -11,7 +11,7 @@
 #endif
 
 #import "MTUser.h"
-#import "NSURL+Document.h"
+#import "MACloudManager.h"
 
 @interface MTUser()
 
@@ -28,9 +28,8 @@
 }
 
 - (BOOL)addDocument:(NSURL *)url error:(NSError **)error {
-    NSString *openDocumentName = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSString *openDocumentExt = [url pathExtension];
-    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName:openDocumentName withExtension:openDocumentExt];
+    NSURL *destinationUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: url.lastPathComponent.stringByDeletingPathExtension
+                                                                           withExtension: url.pathExtension];
     [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:error];
     return error == nil;
 }

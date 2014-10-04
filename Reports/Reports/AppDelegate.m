@@ -189,9 +189,23 @@ static void uncaughtExceptionHandler(NSException *exception) {
 - (void)handleNotificationWillBeginFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Start timer, and display activity indictor if it takes too long
     //  to bring back a ubiquitous container.
+
+    [NSTimer timerWithTimeInterval:0.5000f target:self selector:@selector(displayActivityIndictor:) userInfo:nil repeats:NO];
 }
+
+- (void)displayActivityIndictor:(id)sender {
+    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:YES
+                                                                      animated:YES];
+}
+
+- (void)hideActivityIndictor:(id)sender {
+    [self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO
+                                                                      animated:YES];
+}
+
 - (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
     // FIXME: Remove activity indictor for ubiquitous container.
+    [self hideActivityIndictor:nil];
     [self.openFileViewController reloadData];
 }
 
@@ -244,7 +258,8 @@ static void uncaughtExceptionHandler(NSException *exception) {
              forSaveOperation: UIDocumentSaveForOverwriting completionHandler:nil];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 
     BOOL result;
     NSError *error = nil;

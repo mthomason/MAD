@@ -31,6 +31,8 @@
 		4C02F74E18D5DC8800061A83 /* MTReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F74D18D5DC8800061A83 /* MTReportDesigner.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C0358FD14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C05FD3119DE47D9003B2076 /* MADBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */; };
+		4C05FD3219DE47D9003B2076 /* MADBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */; };
 		4C0A077119C95EAD0059E1D9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0A077019C95EAC0059E1D9 /* StoreKit.framework */; };
 		4C0A077219C95F350059E1D9 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3C18FAE0CA009F234F /* MTStoreKitController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C0A077319C95F360059E1D9 /* MTStoreKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23FB3C18FAE0CA009F234F /* MTStoreKitController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -1574,6 +1576,8 @@
 		4C0358FB14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionLayoutSettingsViewController.h; sourceTree = "<group>"; };
 		4C0358FC14E612B500943CD1 /* MTReportDesignerSectionLayoutSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionLayoutSettingsViewController.m; sourceTree = "<group>"; };
 		4C0464791997B5AA00D53D3B /* MADMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacros.h; sourceTree = "<group>"; };
+		4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADBarButtonItem.h; sourceTree = "<group>"; };
+		4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBarButtonItem.m; sourceTree = "<group>"; };
 		4C0A077019C95EAC0059E1D9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C0AFCE316B5EC800007964D /* MTViewTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewTableHeader.h; sourceTree = "<group>"; };
 		4C0AFCE416B5EC810007964D /* MTViewTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MTViewTableHeader.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -3093,11 +3097,13 @@
 			children = (
 				4CC2BE6E19D8BBCF006AAB24 /* MTDataType.h */,
 				4CC2BE7719D8E908006AAB24 /* MADLinkType.h */,
+				4C5BED5718E8982400BDDDB8 /* User Interface */,
+				4CBF7B7718EDA9E20035FCB9 /* User */,
+				4C8A648818C7C6C200997D22 /* Document */,
 				4C26F22C19D5D2C600B7A417 /* Cloud */,
 				4CA60E0519703F5300714AFF /* Notifications */,
 				4C2F6E80194C9948009D192B /* Data Sources */,
 				4C23FC2118FC323C009F234F /* Activities */,
-				4C5BED4E18E897FE00BDDDB8 /* App */,
 				4C8A649418C7C73B00997D22 /* DatabaseConnection */,
 				4C11BCF418DD4DB7001E3D33 /* Formatters */,
 				4C23FAA018FAD672009F234F /* DataTable */,
@@ -3876,6 +3882,7 @@
 		4C49DA5319DCE77700CB4DB8 /* MAD iOS */ = {
 			isa = PBXGroup;
 			children = (
+				4C5BED4E18E897FE00BDDDB8 /* App */,
 				4CDB624614E38B9600A5389E /* Controllers */,
 				4C0EF6C5178A9681007BF2AE /* Storyboards */,
 				4C26F22B19D5D1DE00B7A417 /* Test */,
@@ -3989,13 +3996,11 @@
 				4C384E3814B29789007B4F48 /* AppDelegate.m */,
 				4C174CDC18B13760007A88B3 /* MTApplicationInstance.h */,
 				4C174CDD18B13760007A88B3 /* MTApplicationInstance.m */,
-				4C5BED5718E8982400BDDDB8 /* User Interface */,
-				4CBF7B7718EDA9E20035FCB9 /* User */,
-				4C8A648818C7C6C200997D22 /* Document */,
 				4C4CAC6919BF0253000927AC /* MADPromptManager.h */,
 				4C4CAC6A19BF0253000927AC /* MADPromptManager.m */,
 			);
 			name = App;
+			path = Reports;
 			sourceTree = "<group>";
 		};
 		4C5BED5718E8982400BDDDB8 /* User Interface */ = {
@@ -5126,6 +5131,8 @@
 				4C113C9019A3D6BB00D1A3B0 /* UIScrollView+Extras.m */,
 				4C8BAFE019AB113600A55780 /* UIView+Extras.h */,
 				4C8BAFE119AB113600A55780 /* UIView+Extras.m */,
+				4C05FD2F19DE47D9003B2076 /* MADBarButtonItem.h */,
+				4C05FD3019DE47D9003B2076 /* MADBarButtonItem.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -6477,6 +6484,7 @@
 				4C95C43018DB6B6D003DFB11 /* MTReportFormatter.m in Sources */,
 				4C23FBB918FAE4F7009F234F /* MTPaperB3.m in Sources */,
 				4C23FAF118FADC68009F234F /* MTViewControllerBarcode.m in Sources */,
+				4C05FD3219DE47D9003B2076 /* MADBarButtonItem.m in Sources */,
 				4C9E445818D88D7000F0F578 /* MTTableLayout.m in Sources */,
 				4CF1335616CD1FE400FD0F0B /* MADQueryVisualizationViewController.m in Sources */,
 				4C12293116CE12DB00B69763 /* MADQueryVisualizationSchemaViewController.m in Sources */,
@@ -6841,6 +6849,7 @@
 				4CC6BA5016A13D3B000A69A1 /* MTBorderedView.m in Sources */,
 				4C1680921907AB3B00980D8D /* MTQueryCacheEndTransaction.m in Sources */,
 				4C773288190FFD6A005AE7C2 /* MysqlCommitException.m in Sources */,
+				4C05FD3119DE47D9003B2076 /* MADBarButtonItem.m in Sources */,
 				4C0AFCE516B5EC820007964D /* MTViewTableHeader.m in Sources */,
 				4C23FBC818FAE4F7009F234F /* MTPaperC0.m in Sources */,
 				4C95C42F18DB6B6D003DFB11 /* MTReportFormatter.m in Sources */,

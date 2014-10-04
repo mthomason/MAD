@@ -414,17 +414,21 @@ static MACloudManager *sharedSingleton;
 - (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs
                                              removedURLs:(NSArray *)removedURLs
                                              updatedURLs:(NSArray *)updatedURLs {
-    if ([updatedURLs count] > 0) {
-        NSMutableSet *urls = [NSMutableSet setWithArray:[self.fileLocationManager calculatedUrls]];
-        self.madUrls = urls;
-    } else {
+    // FIXME: Don't think this should run if cloud is not desired by the user, but it is, so short
+    //          it, but we can do better!!!
+    if (self.isCloudEnabled) {
+        
         [self.madUrls addObjectsFromArray:insertedURLs];
+        
         for (NSURL *url in removedURLs) {
             [self.madUrls removeObject:url];
         }
+
+        if (insertedURLs.count > 0 || removedURLs.count > 0) {
+            [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
+                                                                object: nil];
+        }
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
-                                                        object: nil];
 }
 
 - (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error {
@@ -448,7 +452,7 @@ static MACloudManager *sharedSingleton;
                                                        style: UIAlertActionStyleDefault
                                                      handler: ^(UIAlertAction *action) {
                                                          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                                                         [userDefaults setBool:YES forKey:MADPreferencesCloudOptionsSelected];
+                                                         [userDefaults setBool:NO forKey:MADPreferencesCloudOptionsSelected];
                                                          if (completion) completion();
                                                      }];
     [alertController addAction:actionKk];
@@ -539,17 +543,65 @@ static MACloudManager *sharedSingleton;
                                     writingItemAtURL: uniqueUrl
                                              options: NSFileCoordinatorWritingForMoving
                                                error: &error
-                                          byAccessor: ^(NSURL *newReadingURL, NSURL *newWritingURL) {
+                                          byAccessor: ^(NSURL *source, NSURL *destinaion) {
                                             
                                               NSError *errorCopy = nil;
-                                              [[NSFileManager defaultManager] copyItemAtURL: newReadingURL
-                                                                                      toURL: newWritingURL
+                                              [[NSFileManager defaultManager] copyItemAtURL: source
+                                                                                      toURL: destinaion
                                                                                       error: &errorCopy];
                                               NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
                                           }];
     
     
     return uniqueUrl;
+}
+
+- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
+    return [NSURL uniqueUrlInDirectory: self.documentsDirectoryURL
+                     withDesiredHandle: name
+                          andExtension: extension];
+}
+
+- (void)moveDocument:(NSURL *)source
+          toLocation:(NSURL *)destination
+          completion:(void (^)(BOOL success, NSError *error))completion {
+
+    NSError *coordinatorError = nil;
+    
+    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+    [coordinator coordinateWritingItemAtURL:source
+                                    options:NSFileCoordinatorWritingForMoving
+                           writingItemAtURL:destination
+                                    options:NSFileCoordinatorWritingForReplacing
+                                      error:&coordinatorError
+                                 byAccessor:^(NSURL *coordinatedSource, NSURL *coordinatedDestination) {
+                                     
+                                     if ([[NSFileManager defaultManager] fileExistsAtPath: coordinatedDestination.path] == NO) {
+                                         
+                                         NSError *fileManagerError = nil;
+                                         BOOL success = [[NSFileManager defaultManager] moveItemAtURL: coordinatedSource
+                                                                                                toURL: coordinatedDestination
+                                                                                                error: &fileManagerError];
+                                         completion(success, fileManagerError);
+                                     } else {
+                                         completion(NO, nil);
+                                     }
+
+                                 }];
+    if (coordinatorError != nil) {
+        completion(NO, coordinatorError);
+    }
+}
+
+- (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
+    NSError *error = nil;
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
+    NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
+    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error];
+    for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
+        [defaultManager removeItemAtURL:cachedFile error:&error];
+    }
+    [defaultManager removeItemAtURL:cachedDirectory error:&error];
 }
 
 - (void)setDataAndDocumentUrlsWithBaseUrl:(NSURL *)url {

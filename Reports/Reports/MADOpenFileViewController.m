@@ -34,9 +34,10 @@
 #import "MTAlertView.h"
 #import "NSFileManager+Common.h"
 #import "MADFileManager.h"
+#import "MADFileLocationManager.h"
 #import "MADUpgradeManager.h"
+#import "MADBarButtonItem.h"
 #import "NSError+UserInterface.h"
-
 #import "NSURL+Document.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
@@ -86,15 +87,43 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 @property (nonatomic, assign) BOOL shouldShowAddDocumentPopover;
 @property (nonatomic, assign) BOOL editModeEnabled;
 @property (nonatomic, assign) BOOL bothContentControllersDisplayed;
-@property (nonatomic, assign, getter = isSavingActivityIndicatorVisible) BOOL savingActivityIndicatorVisible;
+
+@property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readwrite) BOOL savingActivityIndicatorVisible;
+@property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readwrite) BOOL rightBarButtonItemActivityIndicatorVisible;
 
 @property (nonatomic, strong) NSArray *urls;
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UILabel *labelMadDesigner;
 
+@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
+
+@property (nonatomic, assign) BOOL firstViewWillAppear;
+
 @end
 
 @implementation MADOpenFileViewController
+
+- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible animated:(BOOL)animated {
+    
+    if (self.rightBarButtonItemActivityIndicatorVisible != rightBarButtonItemActivityIndicatorVisible) {
+
+        UIBarButtonItem *barButtonItem;
+        if ((self.rightBarButtonItemActivityIndicatorVisible = rightBarButtonItemActivityIndicatorVisible)) {
+            
+            self.rightBarButtonItemHolderWhileActivity = self.navigationItem.rightBarButtonItem;
+            barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
+                                                                           target: nil
+                                                                           action: nil];
+            
+        } else {
+            
+            barButtonItem = (UIBarButtonItem *)self.rightBarButtonItemHolderWhileActivity;
+            
+        }
+        [self.navigationItem setRightBarButtonItem:barButtonItem animated:animated];
+    }
+}
+
 
 #pragma mark - UIStateRestoring
 
@@ -182,7 +211,10 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     return self;
 }
 
-- (void)initialize { }
+- (void)initialize {
+    self.firstViewWillAppear = YES;
+    self.rightBarButtonItemActivityIndicatorVisible = NO;
+}
 
 #pragma mark - UIViewController
 
@@ -343,7 +375,11 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         }
     }];
 
-    [self reenableDataWithSearch];
+    if (self.firstViewWillAppear == NO) {
+        [self reenableDataWithSearch];
+    }
+    
+    self.firstViewWillAppear = NO;
 }
 
 - (void)reenableDataWithSearch {
@@ -757,6 +793,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 }
 
 - (void)reloadData {
+    NSLog(@"Reload Data");
     self.urls = [[MACloudManager sharedManager] hasMadDocuments];
     [self.collectionView reloadData];
 }
@@ -782,7 +819,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
     NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
-    for (NSURL *cachedFile in [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error]) {
+    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error];
+    for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }
     [defaultManager removeItemAtURL:cachedDirectory error:&error];
@@ -835,13 +873,17 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
                 NSIndexPath *path = [NSIndexPath indexPathForItem:alertView.tag inSection:0];
                 urlToRename = [self documentForIndexPath:path];
                 NSString *fileName = [textField text];
-                NSString *filenameWithExtention = [fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
-                NSURL *newUrl = [[urlToRename URLByDeletingLastPathComponent] URLByAppendingPathComponent:filenameWithExtention isDirectory:NO];
-                NSError *error = nil;
-                [[NSFileManager defaultManager] moveItemAtURL:urlToRename toURL:newUrl error:&error];
-                [self removeCachedFileForDocumentUrl:urlToRename];
-                [self reloadData];
-                [error presentErrorToUser];
+                
+                NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: fileName
+                                                                               withExtension: MTDocumentExtentionMobleApplicationDocument];
+                
+                __weak MADOpenFileViewController *weakself = self;
+                [[MACloudManager sharedManager] moveDocument:urlToRename
+                                                  toLocation:newUrl
+                                                  completion:^(BOOL success, NSError *error) {
+                    [error presentErrorToUser];
+                }];
+                [weakself removeCachedFileForDocumentUrl:urlToRename];
             }
         }
     }
@@ -1265,17 +1307,12 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
             [cell startWobble];
         }
         
-        if ([UIDevice isModernOS]) {
-            NSMutableArray *items = [self.toolbarItems mutableCopy];
-            [items removeObject:self.barButtonItemEdit];
-            [items addObject:self.barButtonItemEditDone];
-            [self setToolbarItems:items animated:YES];
-            [self.navigationItem setRightBarButtonItem: nil
-                                              animated: YES];
-        } else {
-            [self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone
-                                              animated: YES];
-        }
+        NSMutableArray *items = [self.toolbarItems mutableCopy];
+        [items removeObject:self.barButtonItemEdit];
+        [items addObject:self.barButtonItemEditDone];
+        [self setToolbarItems:items animated:YES];
+        [self.navigationItem setRightBarButtonItem: nil
+                                          animated: YES];
 
     } else {
         self.editModeEnabled = NO;
@@ -1291,16 +1328,12 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         self.collectionView.allowsMultipleSelection = NO;
         
         
-        if ([UIDevice isLagacyOS]) {
-            [self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
-        } else {
-            [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
-            
-            NSMutableArray *items = [self.toolbarItems mutableCopy];
-            [items removeObject:self.barButtonItemEditDone];
-            [items addObject:self.barButtonItemEdit];
-            [self setToolbarItems:items animated:YES];
-        }
+        [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
+        
+        NSMutableArray *items = [self.toolbarItems mutableCopy];
+        [items removeObject:self.barButtonItemEditDone];
+        [items addObject:self.barButtonItemEdit];
+        [self setToolbarItems:items animated:YES];
 
         for (NSIndexPath *path in self.collectionView.indexPathsForVisibleItems) {
             [self.collectionView deselectItemAtIndexPath:path animated:YES];
@@ -1417,8 +1450,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
     NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSURL *destinationUrl = [NSURL uniqueUrlForDocumentWithName: name
-                                                  withExtension: MTDocumentExtentionMobleApplicationDocument];
+    NSURL *destinationUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: name
+                                                                           withExtension: MTDocumentExtentionMobleApplicationDocument];
     
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
     NSError* fileWrittingError = nil;

@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const MADUtiType;
+
 @protocol MADFileLocationManagerDelegate <NSObject>
 
 - (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs removedURLs:(NSArray *)removedURLs updatedURLs:(NSArray *)updatedURLs;

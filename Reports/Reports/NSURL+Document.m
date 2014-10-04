@@ -16,12 +16,6 @@
     return self.lastPathComponent.stringByDeletingPathExtension;
 }
 
-+ (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
-    return [NSURL uniqueUrlInDirectory:[[MACloudManager sharedManager] documentsDirectoryURL]
-                     withDesiredHandle:name
-                          andExtension:extension];
-}
-
 + (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension {
 
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];

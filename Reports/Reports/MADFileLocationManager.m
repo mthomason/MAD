@@ -8,6 +8,10 @@
 
 #import "MADFileLocationManager.h"
 
+NSString * const MADUtiType                             = @"com.everydayapps.productivity.mad";
+NSString * const MADUtiPublicData                       = @"public.data";
+NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == %@ && %K == %@";
+
 @interface MADFileLocationManager ()
 
 @property (nonatomic, strong, readwrite) NSMetadataQuery *metadataQuery;
@@ -20,8 +24,22 @@
 - (void)dealloc {
     // Stop observing the query.
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidFinishGatheringNotification object:_metadataQuery];
-    [notificationCenter removeObserver:self name:NSMetadataQueryDidUpdateNotification object:_metadataQuery];
+    
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryDidFinishGatheringNotification
+                                object: _metadataQuery];
+    
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryDidUpdateNotification
+                                object: _metadataQuery];
+    
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryDidStartGatheringNotification
+                                object: _metadataQuery];
+    [notificationCenter removeObserver: self
+                                  name: NSMetadataQueryGatheringProgressNotification
+                                object: _metadataQuery];
+
 }
 
 - (instancetype)initWithPredicate:(NSPredicate *)predicate {
@@ -30,19 +48,34 @@
     if (self) {
     
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
-        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope, NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope, NSMetadataQueryUbiquitousDataScope];
+        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope,
+                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
+                                       NSMetadataQueryUbiquitousDataScope];
         metadataQuery.predicate = predicate;
         
         // Observe the query.
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver: self
-                               selector: @selector(metadataQueryDidFinishGathering:)
-                                   name: NSMetadataQueryDidFinishGatheringNotification
-                                 object: metadataQuery];
-        [notificationCenter addObserver: self
-                               selector: @selector(metadataQueryDidUpdate:)
+                               selector: @selector(handleMetadataQueryDidUpdateNotification:)
                                    name: NSMetadataQueryDidUpdateNotification
                                  object: metadataQuery];
+        
+        [notificationCenter addObserver: self
+                               selector: @selector(handleMetadataQueryDidStartGatheringNotification:)
+                                   name: NSMetadataQueryDidStartGatheringNotification
+                                 object: metadataQuery];
+        
+        [notificationCenter addObserver: self
+                               selector: @selector(handleMetadataQueryGatheringProgressNotification:)
+                                   name: NSMetadataQueryGatheringProgressNotification
+                                 object: metadataQuery];
+        
+        [notificationCenter addObserver: self
+                               selector: @selector(handleMetadataQueryDidFinishGatheringNotification:)
+                                   name: NSMetadataQueryDidFinishGatheringNotification
+                                 object: metadataQuery];
+
+        
         self.metadataQuery = metadataQuery;
     }
     
@@ -50,14 +83,11 @@
 }
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K.pathExtension = %@)", NSMetadataItemURLKey, pathExtension];
     
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K.pathExtension == %@ && %K == %@",
+                                NSMetadataItemURLKey, pathExtension,
+                                NSMetadataItemContentTypeKey, MADUtiType];
     self = [self initWithPredicate:predicate];
-    
-    if (self) {
-        // No need for additional initialization.
-    }
-    
     return self;
 }
 
@@ -73,7 +103,20 @@
 
 #pragma mark - NSMetadataQuery Notifications
 
-- (void)metadataQueryDidFinishGathering:(NSNotification *)notification {
+- (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
+    NSLog(@"\n%@\n", NSMetadataQueryDidStartGatheringNotification);
+    
+}
+
+- (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
+    NSLog(@"\n%@ %@\n", NSMetadataQueryGatheringProgressNotification, notification);
+    
+}
+
+- (void)handleMetadataQueryDidFinishGatheringNotification:(NSNotification *)notification {
+    
+    NSLog(@"\n%@\n", NSMetadataQueryDidFinishGatheringNotification);
+    
     [self.metadataQuery disableUpdates];
     
     NSMutableArray *insertedURLs = [NSMutableArray arrayWithCapacity:self.metadataQuery.results.count];
@@ -97,7 +140,10 @@
     return urls;
 }
 
-- (void)metadataQueryDidUpdate:(NSNotification *)notification {
+- (void)handleMetadataQueryDidUpdateNotification:(NSNotification *)notification {
+    
+    NSLog(@"\n%@\n", NSMetadataQueryDidUpdateNotification);
+    
     [self.metadataQuery disableUpdates];
     
     NSArray *insertedURLs;
@@ -146,7 +192,6 @@
     
     for (NSMetadataItem *metadataItem in metadataItems) {
         NSURL *URL = [metadataItem valueForAttribute:NSMetadataItemURLKey];
-        
         [URLs addObject:URL];
     }
     

@@ -14,7 +14,6 @@
 @interface NSURL (Document)
 
 - (NSString *)filenameMinusExtention;
-+ (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension;
 + (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension;
 - (NSString *)key;
 

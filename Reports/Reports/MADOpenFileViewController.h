@@ -17,7 +17,10 @@
 
 @property (nonatomic, weak) IBOutlet MTCollectionViewCellDocument *collectionViewCellDocument;
 @property (nonatomic, strong, readonly) UIPopoverController *aboutPopoverController;
+@property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readonly) BOOL savingActivityIndicatorVisible;
+@property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
 
+- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible animated:(BOOL)animated;
 - (void)reloadData;
 
 - (IBAction)done:(id)sender;

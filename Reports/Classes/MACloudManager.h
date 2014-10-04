@@ -54,9 +54,14 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification;
 
 - (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
+- (void)moveDocument:(NSURL*)source
+          toLocation:(NSURL*)destination
+          completion:(void (^)(BOOL success, NSError *error))completion;
+- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension;
 
 + (NSString *)filenameId:(NSUInteger)tag;
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
+
 
 @end
 

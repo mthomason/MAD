@@ -107,7 +107,6 @@ NSString * const MTReportSectionType                    = @"a";
 NSString * const MTReportGroupLevel                     = @"b";
 NSString * const MTReportDetailRowId                    = @"d";
 
-NSString * const MADUtiType                             = @"com.everydayapps.productivity.mad";
 NSString * const MADMimeType                            = @"application/vnd.everydayapps.mad";
 
 NSString * const MADFileNameMetaPlist                   = @"meta.plist";
@@ -322,8 +321,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
         } else {
             NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-            resultUrl = [NSURL uniqueUrlForDocumentWithName: fileName
-                                              withExtension: MTDocumentExtentionMobleApplicationDocument];
+            resultUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: fileName
+                                                                       withExtension: MTDocumentExtentionMobleApplicationDocument];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
         }
@@ -822,9 +821,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     reportFormatter.overrideIdentifier = @"madprinter";
     reportFormatter.datasource = self;
     
-    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:reportFormatter
-                                                                                                              dataTable:self.mainDataTable];
-    [self setPrintingReportFormatter:reportFormatter];
+    MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: reportFormatter
+                                                                                                              dataTable: self.mainDataTable];
+    self.printingReportFormatter = reportFormatter;
     return printPageRender;
     
 }
