@@ -225,7 +225,7 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return sql;
 }
 
-- (void)cleanupBulkInsert {}
+- (BOOL)cleanupBulkInsert { return  YES; }
 
 - (NSString *)nativeTypeForDataType:(MTDataType)dataType {
     return @"";

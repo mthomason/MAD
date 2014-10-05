@@ -680,12 +680,13 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
     return columnValue;
 }
 
-- (void)cleanupBulkInsert {
+- (BOOL)cleanupBulkInsert {
     BOOL success = SQLITE_OK == sqlite3_finalize(_bulkStatement);
-    _bulkStatement = NULL;
     NSAssert(success, @"Bulk insert sqlite3_finalize failed (%s).", (char *)sqlite3_errmsg(_database));
+    _bulkStatement = NULL;
     sqlite3_close(_database);
     _database = NULL;
+    return success;
 }
 
 - (void)executeQuery:(MTQuery *)query withStatement:(sqlite3_stmt *)statement completion:(void (^)(BOOL, NSError *))completion {

@@ -82,7 +82,7 @@ typedef NS_ENUM(NSUInteger, MTDatabaseQueryType) {
 - (void)removeCredentalsBecauseOfError:(NSError *)error;
 
 
-- (void)cleanupBulkInsert;
+- (BOOL)cleanupBulkInsert;
 
 - (void)readRow:(NSUInteger)row;
 
