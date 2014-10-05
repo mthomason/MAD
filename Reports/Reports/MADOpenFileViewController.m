@@ -12,33 +12,42 @@
 
 #import "MADOpenFileViewController.h"
 #import <MessageUI/MessageUI.h>
+
 #import "AppDelegate.h"
-#import "MACloudManager.h"
-#import "MADocument.h"
 #import "MTApplicationInstance.h"
+
+#import "MADocument.h"
+#import "MACloudManager.h"
+
 #import "UAAppReviewManager.h"
+
 #import "MADViewerController.h"
+
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
+
 #import "MADDesignerViewController.h"
 #import "MADWatermarkView.h"
+
 #import "MTQueryBuilderContainerController.h"
 #import "MTCollectionViewCellDocument.h"
-#import "UIView+Animations.h"
 #import "MTViewControllerAbout.h"
 #import "MTTableViewCellDocument.h"
 #import "MADQueryViewController.h"
-#import "UIColor+EverydayApps.h"
-#import "UIDevice+Hack.h"
 #import "MTDatabaseDriverSelectorViewController.h"
-#import "MTAlertView.h"
-#import "NSFileManager+Common.h"
+
 #import "MADFileManager.h"
 #import "MADFileLocationManager.h"
 #import "MADUpgradeManager.h"
 #import "MADBarButtonItem.h"
+
+#import "UIColor+EverydayApps.h"
+#import "UIView+Animations.h"
+#import "UIDevice+Hack.h"
+#import "NSFileManager+Common.h"
 #import "NSError+UserInterface.h"
 #import "NSURL+Document.h"
+#import "UIAlertController+CommonAlerts.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -48,8 +57,7 @@ NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 
 @interface MADOpenFileViewController()
-    <UIAlertViewDelegate,
-        NSFileManagerDelegate,
+    <NSFileManagerDelegate,
         UIPopoverControllerDelegate,
         UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
@@ -76,8 +84,6 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemCloudDown;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSearch;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
-
-@property (nonatomic, strong) UIAlertView *renameAlertView;
 
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
 @property (nonatomic, strong) UIPopoverController *aboutPopoverController;
@@ -288,7 +294,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     
     UIImage *imageDuplcate = [UIImage imageNamed:@"MADImageToolbarDuplicate"];
     UIBarButtonItem *barButtonItemDuplicate = [[UIBarButtonItem alloc] initWithImage: imageDuplcate
-                                                                               style: UIBarButtonItemStyleBordered
+                                                                               style: UIBarButtonItemStylePlain
                                                                               target: self
                                                                               action: @selector(duplicate:)];
     barButtonItemDuplicate.enabled = NO;
@@ -516,7 +522,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
             
             UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
             [[tabBarController view] setTintColor:[UIColor greenColor]];
-            [[UITabBar appearance] setSelectedImageTintColor:[UIColor redColor]];
+            [[UITabBar appearance] setTintColor:[UIColor redColor]];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
             MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
@@ -705,15 +711,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         [[[mFMailComposeViewController navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
         [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
     } else {
-        NSString *title = NSLocalizedString(@"Alert", @"Alert title");
-        NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
-        NSString *dismiss = NSLocalizedString(@"Continue", @"Continue");
-        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:title
-                                                              message:message
-                                                             delegate:self
-                                                    cancelButtonTitle:dismiss
-                                                    otherButtonTitles:nil];
-        [uIAlertView show];
+        UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -811,7 +810,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     [self removeCachedFileForDocumentUrl:documentUrl];
     [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:error];
     if (*error != nil) {
-        [*error presentErrorToUser];
+        [*error presentErrorOnViewController:self];
     }
 }
 
@@ -833,7 +832,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         [UAAppReviewManager userDidSignificantEvent:YES];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
-    [error presentErrorToUser];
+    [error presentErrorOnViewController:self];
 }
 
 #pragma mark -  NSFileManager delegate protocol
@@ -848,52 +847,9 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     return [dstURL.pathExtension.lowercaseString isEqualToString:MTDocumentExtentionPoratableNetworkGraphic];
 }
 
-#pragma mark -
-#pragma mark - UIAlertView delegate protocol
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView cancelButtonIndex] != buttonIndex) {
-        
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
-        [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
-        [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        NSString *text = [[[textField text] componentsSeparatedByCharactersInSet:[characterSet invertedSet]] componentsJoinedByString:@""];
-        if ([text length] == 0) {
-            UIAlertView *validFileName = [[UIAlertView alloc] initWithTitle:@"Validation Error"
-                                                                    message:@"Filename not valid."
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"Dismiss"
-                                                          otherButtonTitles: nil];
-            [validFileName show];
-        } else {
-            NSURL *urlToRename = nil;
-            if ([alertView tag] < [self dataSourceCount]) {
-                NSIndexPath *path = [NSIndexPath indexPathForItem:alertView.tag inSection:0];
-                urlToRename = [self documentForIndexPath:path];
-                NSString *fileName = [textField text];
-                
-                NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: fileName
-                                                                               withExtension: MTDocumentExtentionMobleApplicationDocument];
-                
-                __weak MADOpenFileViewController *weakself = self;
-                [[MACloudManager sharedManager] moveDocument:urlToRename
-                                                  toLocation:newUrl
-                                                  completion:^(BOOL success, NSError *error) {
-                    [error presentErrorToUser];
-                }];
-                [weakself removeCachedFileForDocumentUrl:urlToRename];
-            }
-        }
-    }
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self alertView:self.renameAlertView clickedButtonAtIndex:1];
-    [self.renameAlertView dismissWithClickedButtonIndex:1 animated:YES];
     return YES;
 }
 
@@ -1360,11 +1316,18 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
                                           @"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.");
     NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
     
-    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: title
-                                                        message: message
-                                              cancelButtonTitle: buttonTitle
-                                               otherButtonTitle: nil onDismiss:nil onCancel:nil];
-    [alertView show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: buttonTitle
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction *action) {}];
+    [alertController addAction:actionKk];
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
+    
+    
 }
 
 - (void)cut:(id)sender {
@@ -1393,7 +1356,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     
     
     MADOpenFileViewController *weakSelf = self;
-    [activityViewController setCompletionHandler: ^(NSString *activityType, BOOL completed) {
+    
+    [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
         
         if (completed) {
@@ -1501,37 +1465,82 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
     NSString *rename = NSLocalizedString(@"Rename", @"Rename");
     NSString *message = NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.");
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: title
-                                                        message: message
-                                                       delegate: self
-                                              cancelButtonTitle: cancel
-                                              otherButtonTitles: rename, nil
-                              ];
-    [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
-    alertView.delegate = self;
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
+                                                                   message: message
+                                                            preferredStyle: UIAlertControllerStyleAlert];
+    
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    [alertView setTag:[indexPath item]];
-    UITextField *textField = [alertView textFieldAtIndex:0];
-    [textField setText:[[cellDocument labelTitle] text]];
-    [textField setClearButtonMode:UITextFieldViewModeAlways];
-    textField.delegate = self;
-    self.renameAlertView = alertView;
-    [self.renameAlertView show];
+    NSInteger itemIndex = indexPath.item;
+    __weak MADOpenFileViewController *weakself = self;
+    UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: rename
+                                                            style: UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *action) {
+                                                              
+                                                              UITextField *textField = alert.textFields.firstObject;
+                                                              NSString *text = [weakself renameFilter:textField.text];
+                                                              
+                                                              if (text.length > 0) {
+                                                                  
+                                                                  NSURL *urlToRename = nil;
+                                                                  if (itemIndex < [weakself dataSourceCount]) {
+                                                                      NSIndexPath *pathToMove = [NSIndexPath indexPathForItem:itemIndex inSection:0];
+                                                                      urlToRename = [weakself documentForIndexPath:pathToMove];
+                                                                      NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: textField.text
+                                                                                                                                     withExtension: MTDocumentExtentionMobleApplicationDocument];
+                                                                      [[MACloudManager sharedManager] moveDocument:urlToRename
+                                                                                                        toLocation:newUrl
+                                                                                                        completion:^(BOOL success, NSError *error) {
+                                                                                                            NSAssert(success, @"%s %@", __PRETTY_FUNCTION__, error);
+                                                                                                        }];
+                                                                      [weakself removeCachedFileForDocumentUrl:urlToRename];
+                                                                  }
+                                                                  
+                                                              } else {
+                                                                  [weakself validationError];
+                                                              }
+
+                                                          }];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
+                                                           style: UIAlertActionStyleCancel
+                                                         handler: nil];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.text = cellDocument.labelTitle.text;
+        textField.clearButtonMode = UITextFieldViewModeAlways;
+        textField.delegate = weakself;
+    }];
+    [alert addAction:actionDefault];
+    [alert addAction:actionCancel];
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (NSString *)renameFilter:(NSString *)text {
+    NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
+    [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
+    [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    return [[text componentsSeparatedByCharactersInSet:[characterSet invertedSet]] componentsJoinedByString:@""];
+}
+
+- (void)validationError {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Validation Error"
+                                                                   message: @"Filename not valid."
+                                                            preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Dismiss"
+                                                 style: UIAlertActionStyleDefault
+                                               handler: nil];
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)email:(MTCollectionViewCellDocument *)cell {
     if ([MFMailComposeViewController canSendMail] == NO) {
         
-        //Display an alert...
-        NSString *title = NSLocalizedString(@"Warning", @"Heading of a warning alert message.");
-        NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Warning that email is not setup.");
-        NSString *cancel = NSLocalizedString(@"OK", @"OK button on an alert message.");
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: title
-                                                            message: message
-                                                           delegate: nil
-                                                  cancelButtonTitle: cancel
-                                                  otherButtonTitles: nil];
-        [alertView show];
+        UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
+        [self presentViewController:alert animated:YES completion:nil];
         
     } else {
         

@@ -196,10 +196,11 @@ NSString * const MTSqlFrom = @"\nFROM\n";
     return (limit > 0 && limit != NSNotFound) ? [NSString stringWithFormat: @"\nLIMIT %ld", (long)limit] : @"";
 }
 
+// FIXME: Please make this MVC... shouldn't have view controller here
 - (void)removeCredentalsBecauseOfError:(NSError *)error {
     NSString *key = [[self databaseConnection] connectionString];
     [[MTKeyChain sharedObject] deleteKey:key];
-    [error presentErrorToUser];
+    [error presentErrorOnViewController:nil];
 }
 
 - (NSString *)sqlAggregateFunctionLength {

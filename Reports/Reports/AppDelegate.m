@@ -37,6 +37,7 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                     //  otherwise load window in didFinishLaunchingWithOptions
 
 @interface AppDelegate()
+    <UIDocumentInteractionControllerDelegate>
 
 @property (nonatomic, strong) MTApplicationInstance *applicationInstance;
 @property (nonatomic, strong) UIStoryboard *storyboard;
@@ -264,18 +265,28 @@ static void uncaughtExceptionHandler(NSException *exception) {
     BOOL result;
     NSError *error = nil;
     if ([self.applicationInstance.user addDocument:url error:&error]) {
+        
         result = YES;
-        UIAlertView *alertView = [[UIAlertView alloc]  initWithTitle: @"New Document"
-                                                             message: @"Added document."
-                                                            delegate: nil
-                                                   cancelButtonTitle: @"Continue"
-                                                   otherButtonTitles: nil];
-        alertView.tag = MADTagAlertViewNewDocument;
-        alertView.delegate = self;
-        [alertView show];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"New Document"
+                                                                       message: @"Added document."
+                                                                preferredStyle: UIAlertControllerStyleAlert];
+        
+        UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue"
+                                                     style: UIAlertActionStyleDefault
+                                                   handler: nil];
+        [alert addAction:ok];
+        
+        __weak AppDelegate *weakself = self;
+        [self.openFileViewController presentViewController:alert animated:YES completion:^{
+                [weakself.openFileViewController reloadData];
+        }];
+        
     } else {
+
         result = NO;
-        [error presentErrorToUser];
+        [error presentErrorOnViewController:self.openFileViewController];
+
     }
     return result;
 }
@@ -415,16 +426,6 @@ static void uncaughtExceptionHandler(NSException *exception) {
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
-}
-
-- (void)alertView:(UIAlertView*)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if ([alertView tag] == MADTagAlertViewNewDocument) {
-        MADOpenFileViewController *openDocumentViewController = (MADOpenFileViewController *)[(UINavigationController *)[[self window] rootViewController] visibleViewController];
-        if (openDocumentViewController != nil &&
-            [openDocumentViewController respondsToSelector:@selector(reloadData)]) {
-            [openDocumentViewController reloadData];
-        }
-    }
 }
 
 @end

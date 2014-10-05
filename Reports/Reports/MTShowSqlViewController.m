@@ -17,7 +17,6 @@
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
 #import "MTDatabase.h"
-#import "MTAlertView.h"
 #import "MTQuery.h"
 
 @implementation MTShowSqlViewController
@@ -31,23 +30,36 @@
     
     NSError *error = nil;
     NSString *sqlStatement = [self.query getSqlOnlyActiveFields:NO error:&error];
+    
     if (error) {
         sqlStatement = [error localizedDescription];
     }
+
     if ([sqlStatement length] > 0) {
-        [[self textView] setText:sqlStatement];
+
+        self.textView.text = sqlStatement;
+
     } else {
-        [[self textView] setText:@""];
+
+        self.textView.text = @"";
+        
         NSString *title = NSLocalizedString(@"Empty Query", @"Empty Query");
-        NSString *message = NSLocalizedString(@"Add tables to the query and data fields to the designer to generate a query.", @"Add tables to the query and data fields to the designer to generate a query.");
-        NSString *cancel = NSLocalizedString(@"Continue", @"Continue");
-        MTAlertView *alert = [[MTAlertView alloc] initWithTitle: title
-                                                        message: message
-                                              cancelButtonTitle: cancel
-                                               otherButtonTitle: @[]
-                                                      onDismiss: ^(NSInteger buttonIndex) { }
-                                                       onCancel: ^{ }];
-        [alert show];
+        NSString *message = NSLocalizedString(@"Add tables to the query and data fields to the designer to generate a query.",
+                                              @"Add tables to the query and data fields to the designer to generate a query.");
+        NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                                 message: message
+                                                                          preferredStyle: UIAlertControllerStyleAlert];
+        UIAlertAction *actionKk = [UIAlertAction actionWithTitle: buttonTitle
+                                                           style: UIAlertActionStyleDefault
+                                                         handler: nil];
+        [alertController addAction: actionKk];
+        [self presentViewController: alertController
+                           animated: YES
+                         completion: nil];
+        
+
     }
 }
 

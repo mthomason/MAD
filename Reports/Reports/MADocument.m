@@ -334,10 +334,10 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     if (userInteractionPermitted) {
         if (error.code == 260) {
             NSError *err = [MADocument errorFailedToOpenDocument];
-            [err presentErrorToUser];
+            [err presentErrorOnViewController:nil];
         } else {
             NSLog(@"Error: %@", error);
-            [error presentErrorToUser];
+            [error presentErrorOnViewController:nil];
         }
     }
 }
@@ -383,16 +383,17 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 
 #pragma mark UIManagedDocument
 
-- (BOOL)configurePersistentStoreCoordinatorForURL:(NSURL *)storeURL
-                                           ofType:(NSString *)fileType
-                               modelConfiguration:(NSString *)configuration
-                                     storeOptions:(NSDictionary *)storeOptions
-                                            error:(NSError **)error {
-    return [super configurePersistentStoreCoordinatorForURL:storeURL
-                                                     ofType:fileType
-                                         modelConfiguration:configuration
-                                               storeOptions:storeOptions
-                                                      error:error];
+- (BOOL)configurePersistentStoreCoordinatorForURL: (NSURL *)storeURL
+                                           ofType: (NSString *)fileType
+                               modelConfiguration: (NSString *)configuration
+                                     storeOptions: (NSDictionary *)storeOptions
+                                            error: (NSError **)error {
+    
+    return [super configurePersistentStoreCoordinatorForURL: storeURL
+                                                     ofType: fileType
+                                         modelConfiguration: configuration
+                                               storeOptions: storeOptions
+                                                      error: error];
 }
 
 - (NSManagedObjectModel *)managedObjectModel {

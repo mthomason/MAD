@@ -17,7 +17,7 @@
 #import "MADOpenFileViewController.h"
 #import "UIDevice+Hack.h"
 #import "NSError+UserInterface.h"
-
+#import "UIAlertController+CommonAlerts.h"
 #import "UIColor+EverydayApps.h"
 #import <CoreText/CoreText.h>
 
@@ -115,15 +115,8 @@
             [mFMailComposeViewController setSubject:@"MAD Designer"];
             [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
         } else {
-            NSString *title = NSLocalizedString(@"Alert", @"Alert title");
-            NSString *message = NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.");
-            NSString *dismiss = NSLocalizedString(@"Continue", @"Continue");
-            UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:title
-                                                                  message:message
-                                                                 delegate:self
-                                                        cancelButtonTitle:dismiss
-                                                        otherButtonTitles:nil];
-            [uIAlertView show];
+            UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }
 }
@@ -131,7 +124,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [error presentErrorToUser];
+    [error presentErrorOnViewController:self];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

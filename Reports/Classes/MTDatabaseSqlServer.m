@@ -31,6 +31,7 @@
 
 #import "MTDataTable.h"
 #import "MTDataColumn.h"
+#import "UIApplication+Extras.h"
 #import "NSError+UserInterface.h"
 
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
@@ -1441,8 +1442,20 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
         __block BOOL continueToGo = YES;
         dispatch_semaphore_t showError = dispatch_semaphore_create(0);
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [error presentErrorToUserWithContinue:^(BOOL success) {
-                continueToGo = success;
+            
+            
+                NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
+
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle: error.localizedDescription
+                                                                           message: error.localizedFailureReason
+                                                                    preferredStyle: UIAlertControllerStyleAlert];
+            
+            UIAlertAction *ok = [UIAlertAction actionWithTitle: continueButtonTitle
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: nil];
+            [alert addAction:ok];
+            [[UIApplication topViewController] presentViewController:alert animated:YES completion:^{
+                continueToGo = YES;
                 dispatch_semaphore_signal(showError);
             }];
         });
@@ -1463,8 +1476,6 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
     DBPROCESS *dbconn = NULL;
     BOOL connected = NO;
-    //*error = nil;
-    
     
     LOGINREC *login;
     char hostname[30];

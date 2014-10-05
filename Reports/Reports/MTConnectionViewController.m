@@ -259,12 +259,16 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
                       
                       if (errorContainer && [errorContainer count] > 0) {
                           NSString *errorText = [errorContainer errorLogCompact];
-                          UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: @"Issues Encounterd"
-                                                                              message: errorText
-                                                                             delegate: nil
-                                                                    cancelButtonTitle: @"Continue"
-                                                                    otherButtonTitles: nil];
-                          [alertView show];
+                          
+                          UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Issues Encounterd"
+                                                                                         message: errorText
+                                                                                  preferredStyle: UIAlertControllerStyleAlert];
+                          
+                          UIAlertAction *ok = [UIAlertAction actionWithTitle: @"Continue"
+                                                                       style: UIAlertActionStyleDefault
+                                                                     handler: nil];
+                          [alert addAction:ok];
+                          [self presentViewController:alert animated:YES completion:nil];
                       }
                       
                       [progressView removeFromSuperview];
@@ -318,12 +322,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
 
 - (IBAction)portDidEndOnExit:(id)sender {
     [[self textFieldPort] resignFirstResponder];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
 }
 
 #pragma mark - Table view delegate

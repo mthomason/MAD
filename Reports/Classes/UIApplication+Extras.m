@@ -15,6 +15,17 @@
 
 @implementation UIApplication (Extras)
 
++ (id)topViewController {
+    id viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([viewController isKindOfClass:([UINavigationController  class])]) {
+        id vvc = ((UINavigationController *)viewController).visibleViewController;
+        if (vvc != nil) {
+            viewController = vvc;
+        }
+    }
+    return viewController;
+}
+
 + (NSString *)version {
     static NSString *version;
     static dispatch_once_t onceToken;

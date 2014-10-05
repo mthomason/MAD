@@ -136,8 +136,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         UINavigationControllerDelegate,
         UIScrollViewDelegate,
         UIImagePickerControllerDelegate,
-        UITabBarControllerDelegate,
-        UITextFieldDelegate>
+        UITabBarControllerDelegate>
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatterPercentage;
 
@@ -204,8 +203,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, assign) UIEdgeInsets edgeInsetsWithoutToolbar;
 
 @property (nonatomic, assign) BOOL insetsSetup;
-
-@property (nonatomic, strong) UIAlertView *alertViewEdit;
 
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditStaticLabel;
 @property (nonatomic, strong) NSManagedObjectID *objectIdEditDynamicLabel;
@@ -1415,7 +1412,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         if (viewToEdit != nil) {
             UIStoryboard *storyboard = [MTApplicationInstance storyboard];
             UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier];
-            MTDocumentObjectNewAggregateViewController *aggregateViewController = [[navigationController viewControllers] firstObject];
+            MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
             aggregateViewController.delegate = self;
             aggregateViewController.document = self.document;
             [aggregateViewController setAggregateObjectToEdit:self.aggregateToEdit];
@@ -1533,26 +1530,44 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [self setObjectIdEditStaticLabel:[object objectID]];
     
+    
     NSString *title = NSLocalizedString(@"Edit Label", @"Edit Label");
     NSString *message = NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.");
     NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
     NSString *change = NSLocalizedString(@"Change", @"Change");
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle: title
-                                                        message: message
-                                                       delegate: self
-                                              cancelButtonTitle: cancel
-                                              otherButtonTitles: change, nil
-                              ];
-    [alertView setAlertViewStyle: UIAlertViewStylePlainTextInput];
-    alertView.delegate = self;
-    UITextField *textField = [alertView textFieldAtIndex:0];
-    [textField setClearButtonMode:UITextFieldViewModeAlways];
-    textField.delegate = self;
-    NSString *textFieldText = object.isLabel.text;
-    textField.text = textFieldText;
-    alertView.tag = MTDocumentObjectTypeLabelStatic;
-    self.alertViewEdit = alertView;
-    [self.alertViewEdit show];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: title
+                                                                   message: message
+                                                            preferredStyle: UIAlertControllerStyleAlert];
+
+    __weak MADDesignerViewController *weakself = self;
+
+    UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: change
+                                                            style: UIAlertActionStyleDefault
+                                                          handler: ^(UIAlertAction *action) {
+    
+                                                              NSManagedObjectID *objectId = [weakself objectIdEditStaticLabel];
+                                                              RptqDocumentObject *documentObject = (RptqDocumentObject *)[weakself.document.managedObjectContext objectWithID:objectId];
+                                                              UITextField *textField = alert.textFields.firstObject;
+                                                              documentObject.isLabel.text = textField.text;
+                                                              [weakself.document.managedObjectContext save:nil];
+
+                                                          }];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
+                                                           style: UIAlertActionStyleCancel
+                                                         handler: nil];
+
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.text = object.isLabel.text;
+        textField.clearButtonMode = UITextFieldViewModeAlways;
+    }];
+    
+    [alert addAction:actionDefault];
+    [alert addAction:actionCancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 #pragma mark -
@@ -1562,7 +1577,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
              andFieldTwo:(RptqQueryField *)fieldTwo {
 
     if (self.barcodeToEdit != nil) {
-        [self.barcodeToEdit updateWithBarcode:barcode fieldOne:fieldOne fieldTwo:fieldTwo];
+        [self.barcodeToEdit updateWithBarcode: barcode
+                                     fieldOne: fieldOne
+                                     fieldTwo: fieldTwo];
     }
 }
 
@@ -1591,30 +1608,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     documentObject.isLabelDataField.referencesQueryField = field;
     [field.managedObjectContext save:nil];
 }
-
-#pragma mark -
-#pragma mark - UIAlertView delegate protocol
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView cancelButtonIndex] != buttonIndex) {
-        
-        NSManagedObjectID *objectId = [self objectIdEditStaticLabel];
-        RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:objectId];
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        documentObject.isLabel.text = textField.text;
-        [self.document.managedObjectContext save:nil];
-    }
-}
-
-#pragma mark -
-#pragma mark Text Field Delegate Protocol
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self alertView:self.alertViewEdit clickedButtonAtIndex:1];
-    [self.alertViewEdit dismissWithClickedButtonIndex:1 animated:YES];
-    return YES;
-}
-
 
 #pragma mark -
 #pragma mark Collection View Layout Delegate
@@ -1956,9 +1949,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         CGSize documentObjectSize = documentObject.size;
         [result setFrame:CGRectMake(result.dropPoint.x, result.dropPoint.y, documentObjectSize.width, documentObjectSize.height)];
         
-        [result setLastTouchPoint: result.dropPoint];
-        [result setDropIndex: [[documentObject dropIndex] integerValue]];
-        [result setLayoutDescription:[documentObject toStringHumanReadable]];
+        result.lastTouchPoint = result.dropPoint;
+        result.dropIndex = documentObject.dropIndex.integerValue;
+        result.layoutDescription = [documentObject toStringHumanReadable];
     } else {
         result.dropPoint = CGPointZero;
         result.lastTouchPoint = CGPointZero;

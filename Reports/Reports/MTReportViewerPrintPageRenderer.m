@@ -617,9 +617,10 @@
                                     
                                     NSDictionary *attributes = [item attributesForDrawingText];
                                     
-                                    NSStringDrawingOptions options = NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin;
-                                    [drawingObject drawWithRect:elementCanvasRect options:options attributes:attributes context:nil];
-
+                                    [drawingObject drawWithRect: elementCanvasRect
+                                                        options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin
+                                                     attributes: attributes
+                                                        context: nil];
                                     attributes = nil;
                                     
                                 } else {

@@ -13,11 +13,7 @@
 
 @interface NSError (UserInterface)
 
-- (void)presentErrorToUser;
-- (void)presentErrorToUserWithContinue:(void (^)(BOOL success))tryAgain;
-- (void)presentErrorToUserWithTryAgain:(void (^)(BOOL success))tryAgain andCompletion:(void (^)(BOOL success))completion;
-- (void)presentErrorToUserWithCompletion:(void (^)(BOOL success))completion;
-
+- (void)presentErrorOnViewController:(UIViewController *)viewController;
 + (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message;
 
 @end

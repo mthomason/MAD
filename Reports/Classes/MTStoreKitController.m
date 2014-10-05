@@ -7,8 +7,8 @@
 //
 
 #import "MTStoreKitController.h"
-#import "MTAlertView.h"
 #import "MTVerificationController.h"
+#import "UIApplication+Extras.h"
 
 NSString * const MTStoreKitTransactionReceipt                           = @"MTStoreKitTransactionReceipt";
 NSString * const MTStoreKitTransactionDate                              = @"MTStoreKitTransactionDate";
@@ -205,12 +205,21 @@ static MTStoreKitController *sharedSingleton = nil;
                 MTVerificationController *verificationController = [MTVerificationController sharedInstance];
                 [verificationController iOS7VerifyReceipt];
                 
-                MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Transaction Complete", @"Title for a completed purchase.")
-                                                                    message: NSLocalizedString(@"Software activated.", @"Software activated.")
-                                                          cancelButtonTitle:nil otherButtonTitle:@[NSLocalizedString(@"Continue", @"Continue")] onDismiss:nil onCancel:nil];
-                [alertView show];
-                [alertView autorelease];
                 
+                NSString *title = NSLocalizedString(@"Transaction Complete", @"Title for a completed purchase.");
+                NSString *message = NSLocalizedString(@"Software activated.", @"Software activated.");
+                NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
+                
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                                         message: message
+                                                                                  preferredStyle: UIAlertControllerStyleAlert];
+                UIAlertAction *actionKk = [UIAlertAction actionWithTitle: buttonTitle
+                                                                   style: UIAlertActionStyleDefault
+                                                                 handler: nil];
+                [alertController addAction: actionKk];
+                [[UIApplication topViewController] presentViewController: alertController
+                                                                animated: YES
+                                                              completion: nil];
                 
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 

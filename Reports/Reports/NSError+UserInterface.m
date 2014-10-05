@@ -11,16 +11,19 @@
 #endif
 
 #import "NSError+UserInterface.h"
-#import "Constants.h"
-#import "MTAlertView.h"
+#import "UIApplication+Extras.h"
 
 typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
 @implementation NSError (UserInterface)
 
-- (void)presentErrorToUser {
+- (void)presentErrorOnViewController:(UIViewController *)viewController {
     
-    NSString *cancelButtonTitle = NSLocalizedString(@"Dismiss", @"Cancel button title");
+    if (viewController == nil) {
+        viewController = [UIApplication topViewController];
+    }
+    
+    NSString *dismissButtonTitle = NSLocalizedString(@"Dismiss", @"Dismiss");
     NSString *localizedDescription = [self localizedDescription];
     NSString *localizedFailureReason = [self localizedFailureReason];
     NSError *underlyingError = [self userInfo][NSUnderlyingErrorKey];
@@ -31,103 +34,17 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
         localizedFailureReason = underlyingLocalizedFailureReason;
     }
     
-    MTBlockErrorDismiss dismissBlock = ^(NSInteger buttonIndex) {
-        
-        switch (buttonIndex) {
-            case 0:
-                break;
-            case 1:
-                exit(0);
-                break;
-            default:
-                break;
-        }
-        
-    };
-
-    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: localizedFailureReason
-                                                        message: localizedDescription
-                                              cancelButtonTitle: cancelButtonTitle
-                                               otherButtonTitle: nil
-                                                      onDismiss: dismissBlock
-                                                       onCancel: nil];
-    [alertView show];
-}
-
-- (void)presentErrorToUserWithContinue:(void (^)(BOOL tryagain))completion {
-    NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
-    NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleTryAgain, MNSStringInterfaceButtonTitleTryAgainDesc)];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: localizedFailureReason
+                                                                   message: localizedDescription
+                                                            preferredStyle: UIAlertControllerStyleAlert];
     
-    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: [self localizedDescription]
-                                                        message: [self localizedFailureReason]
-                                              cancelButtonTitle: continueButtonTitle
-                                               otherButtonTitle: otherButtonTitles onDismiss:^(NSInteger buttonIndex) {
-                                                   switch (buttonIndex) {
-                                                       case 0:
-                                                           completion(YES);
-                                                           break;
-                                                       case 1:             //Abort applicaiton
-                                                           completion(NO);
-                                                           exit(0);
-                                                           break;
-                                                       default:
-                                                           completion(NO);
-                                                           break;
-                                                   }
-                                               } onCancel:^{
-                                                   completion(NO);
-                                               }];
-    [alertView show];
-}
-
-- (void)presentErrorToUserWithTryAgain:(void (^)(BOOL tryagain))tryAgain andCompletion:(void (^)(BOOL success))completion {
+    UIAlertAction *ok = [UIAlertAction actionWithTitle: dismissButtonTitle
+                                                 style: UIAlertActionStyleDefault
+                                               handler: nil];
+    [alert addAction:ok];
     
-    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel button title");
-    NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
-    NSArray *otherButtonTitles = @[continueButtonTitle, NSLocalizedString(MNSStringInterfaceButtonTitleTryAgain, MNSStringInterfaceButtonTitleTryAgainDesc)];
     
-    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: [self localizedDescription]
-                                                        message: [self localizedFailureReason]
-                                              cancelButtonTitle: cancelButtonTitle
-                                               otherButtonTitle: otherButtonTitles onDismiss:^(NSInteger buttonIndex) {
 
-                                                   switch (buttonIndex) {
-                                                       case 0:
-                                                           break;
-                                                       case 1:
-                                                           tryAgain(YES);
-                                                           break;
-                                                       case 2:             //Abort applicaiton
-                                                           exit(0);
-                                                           break;
-                                                       default:
-                                                           break;
-                                                   }
-
-                                               } onCancel:^(){
-                                                   completion(YES);
-                                               }];
-    [alertView show];
-}
-
-- (void)presentErrorToUserWithCompletion:(void (^)(BOOL success))completion {
-    
-    NSString *continueButtonTitle = NSLocalizedString(MNSStringInterfaceButtonTitleContinue, MNSStringInterfaceContinueButtonTitleDescription);
-    //NSArray *otherButtonTitles = @[NSLocalizedString(MNSStringInterfaceButtonTitleAbort, MNSStringInterfaceButtonTitleAbortDesc)];
-    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: [self localizedDescription]
-                                                        message: [self localizedFailureReason]
-                                              cancelButtonTitle: continueButtonTitle
-                                               otherButtonTitle: nil
-                                                      onDismiss:^(NSInteger buttonIndex) {
-
-                                                          //exit(0);
-                                                          completion(NO);
-                                                      } onCancel:^(){
-
-                                                          completion(YES);
-
-                                                      }];
-    [alertView show];
 }
 
 + (NSDictionary *)userInfoWithTitle:(NSString *)title andMessage:(NSString *)message {

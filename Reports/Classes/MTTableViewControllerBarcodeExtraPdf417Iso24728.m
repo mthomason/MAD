@@ -114,49 +114,23 @@
         localizedError = NSLocalizedString(@"Automatic", @"Automatic");
     }
     
-    if (format == 0) {
-        
-    } else if (format == 1) {
-        
-    } else if (format == 2) {
-        
-    } else {
-        
+    switch (format) {
+        case 0:
+            localizedFormat = @"";
+            break;
+        case 1:
+            localizedFormat = @"";
+            break;
+        case 2:
+            localizedFormat = @"";
+            break;
+        default:
+            break;
     }
-
+    
     cellSize.detailTextLabel.text = @"";
     cellError.detailTextLabel.text = @"";
     cellFormat.detailTextLabel.text = @"";
-
-    /*
-    BOOL autoresize = [self.delegate barcodeGridMatrixAutomaticResizing];
-    UITableViewCell *cellSize = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    UITableViewCell *cellError = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-    UITableViewCell *cellAuto = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    NSString *automatic = NSLocalizedString(@"Automatic", @"Automatic");
-    if (autoresize) {
-        [cellAuto setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [[cellSize detailTextLabel] setText:automatic];
-        [[cellError detailTextLabel] setText:automatic];
-    } else {
-        [cellAuto setAccessoryType:UITableViewCellAccessoryNone];
-        NSInteger initalErrorCorrecion = [self.delegate barcodeGridMatrixInitalErrorCorrection];
-        if (initalErrorCorrecion == 0) {
-            [[cellError detailTextLabel] setText:automatic];
-            [[cellSize detailTextLabel] setText:@"Custom"];
-        }
-        NSInteger initalSize = [self.delegate barcodeGridMatrixInitalSize];
-        if (initalSize == 0) {
-            [[cellSize detailTextLabel] setText:automatic];
-            [[cellError detailTextLabel] setText:@"Custom"];
-        }
-    }
-    [cellSize setNeedsLayout];
-    [cellError setNeedsLayout];
-    [cellSize setNeedsDisplay];
-    [cellError setNeedsDisplay];
-    [cellAuto setNeedsDisplay];
-    */
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

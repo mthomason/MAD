@@ -46,7 +46,7 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
         NSError *error = nil;
         [[self fetchedResultsControllerGroups] performFetch:&error];
         if (error != nil) {
-            [error presentErrorToUser];
+            [error presentErrorOnViewController:self];
         }
         frc = nil;
         

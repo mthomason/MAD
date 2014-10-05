@@ -118,7 +118,6 @@
     NSError *error = nil;
     NSArray *fetchResults = [objectContext executeFetchRequest:request error:&error];
     NSArray *results = [[NSArray alloc] initWithArray:fetchResults];
-    if (error) [error presentErrorToUser];
     return results;
 }
 

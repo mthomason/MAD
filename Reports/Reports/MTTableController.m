@@ -11,18 +11,21 @@
 #endif
 
 #import "MTTableController.h"
+#import <CoreData/CoreData.h>
+
 #import "MTTableLayout.h"
 #import "MTDataFormatter.h"
+
 #import "MTQuery.h"
 #import "MTTableCell.h"
 #import "MTTableCellHeader.h"
+
+#import "MTDatabase.h"
+#import "MTDataTable.h"
 #import "MTDatabaseField.h"
+
 #import "NSError+UserInterface.h"
 #import "UIColor+EverydayApps.h"
-
-#import "MTDataTable.h"
-#import "MTDatabase.h"
-#import <CoreData/CoreData.h>
 
 @interface MTTableController ()
     <UICollectionViewDataSource, MTTableLayoutDelegate, MTDatabaseProtocol>
@@ -46,19 +49,22 @@
 }
 
 - (instancetype)initWithQuery:(MTQuery *)query {
+    
     NSUInteger rowCount = 0;
     NSUInteger columnCount = 0;
     MTTableLayout *tableLayout = [[MTTableLayout alloc] initWithColumnCount:columnCount andRowCount:rowCount];
+    
     self = [super initWithCollectionViewLayout:tableLayout];
     if (self) {
-        [query database].delegate = self;
         
+        [query database].delegate = self;
         MTDataTable *datatable = [MTTableController dataTableWithObjectId:[[query queryObject] objectID]];
         self.datatable = datatable;
         tableLayout.delegate = self;
         MTDataFormatter *tableFormatter = [[MTDataFormatter alloc] initWithQuery:query];
-        [self setTableFormatter:tableFormatter];
-        [self setQuery:query];
+        self.tableFormatter = tableFormatter;
+        self.query = query;
+        
     }
     return self;
 }
@@ -67,21 +73,20 @@
     [super viewDidLoad];
     [self initalize];
     self.collectionView.backgroundColor = [UIColor tintColorBlue];
-    [self.collectionView setAlwaysBounceHorizontal:YES];
-    [self.collectionView setAlwaysBounceVertical:YES];
+    self.collectionView.alwaysBounceHorizontal = YES;
+    self.collectionView.alwaysBounceVertical = YES;
     
     UINavigationItem *navitagionItem = self.navigationItem;
     UIBarButtonItem *barButtonItemDone = [navitagionItem rightBarButtonItem];
-    [barButtonItemDone setTintColor:[UIColor tintColorWhite]];
+    barButtonItemDone.tintColor = [UIColor tintColorWhite];
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
-    [activityIndicator setHidden:NO];
-    [activityIndicator setHidesWhenStopped:NO];
-    [activityIndicator startAnimating];
-    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    activityIndicator.hidden = NO;
+    activityIndicator.hidesWhenStopped = NO;
 
-    [navitagionItem setRightBarButtonItem:barButtonItemActive];
+    UIBarButtonItem *barButtonItemActive = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    [navitagionItem setRightBarButtonItem: barButtonItemActive animated: NO];
     
     __weak MTTableController *weakSelf = self;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -92,7 +97,7 @@
             
             [navitagionItem performSelectorOnMainThread:@selector(setRightBarButtonItem:) withObject:barButtonItemDone waitUntilDone:NO];
             [activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
-            [error performSelectorOnMainThread:@selector(presentErrorToUser) withObject:nil waitUntilDone:NO];
+            [error performSelectorOnMainThread:@selector(presentErrorOnViewController:) withObject:self waitUntilDone:NO];
             [weakSelf2 performSelectorOnMainThread:@selector(invalidateLayout) withObject:weakSelf2 waitUntilDone:NO];
 
         }];
@@ -142,9 +147,15 @@
     for (NSInteger i=0; i<self.columnCount; i++) {
 
         __unsafe_unretained Class classCollectionViewCell = [MTTableCell class];
-        [self.collectionView registerClass:classCollectionViewCell forCellWithReuseIdentifier:[self reuseIdForColumn:i]];
+        NSString *reuseId = [self reuseIdForColumn:i];
+        [self.collectionView registerClass: classCollectionViewCell
+                forCellWithReuseIdentifier: reuseId];
+        
         __unsafe_unretained Class classCollectionViewCellHeader = [MTTableCellHeader class];
-        [self.collectionView registerClass:classCollectionViewCellHeader forSupplementaryViewOfKind:@"MTTableCellHeader" withReuseIdentifier:[self reuseIdSupplementForColumn:i]];
+        NSString *reuseIdHeader = [self reuseIdSupplementForColumn:i];
+        [self.collectionView registerClass: classCollectionViewCellHeader
+                forSupplementaryViewOfKind: @"MTTableCellHeader"
+                       withReuseIdentifier: reuseIdHeader];
 
     }
 
@@ -152,7 +163,7 @@
 
 - (void)initalize {
     self.collectionView.delegate = self;
-    [self.collectionView setDataSource:self];
+    self.collectionView.dataSource = self;
 }
 
 #pragma mark - Methods
@@ -217,8 +228,7 @@
     NSDictionary *rowData = [[self datatable] objectAtRow:row];
     NSString *fieldKey = [[self query] fieldKeyForIndex:column];
     id fieldValue = rowData[fieldKey];
-    NSString *fieldString = [NSString stringWithFormat:@"%@", fieldValue];
-    [[cell label] setText:fieldString];
+    cell.label.text = [NSString stringWithFormat:@"%@", fieldValue];
     return cell;
 }
 

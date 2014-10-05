@@ -14,6 +14,7 @@
 #import <MessageUI/MessageUI.h>
 #import "NSError+UserInterface.h"
 #import "UIColor+EverydayApps.h"
+#import "UIAlertController+CommonAlerts.h"
 
 @interface MTViewControllerAbout ()
     <MFMailComposeViewControllerDelegate>
@@ -38,25 +39,22 @@
 
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mFMailComposeViewController setMailComposeDelegate:self];
-        [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
-        [mFMailComposeViewController setSubject:@"MAD Designer"];
-        [[[mFMailComposeViewController navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
+        mFMailComposeViewController.mailComposeDelegate = self;
+        mFMailComposeViewController.toRecipients = @[@"admin@everydayapps.com"];
+        mFMailComposeViewController.subject = @"MAD Designer";
+        mFMailComposeViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
         [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
     } else {
-        UIAlertView *uIAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", @"Alert title")
-                                                              message:NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.")
-                                                             delegate:self
-                                                    cancelButtonTitle:NSLocalizedString(@"Continue", @"Continue")
-                                                    otherButtonTitles:nil];
-        [uIAlertView show];
+        
+        UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [error presentErrorToUser];
+    [error presentErrorOnViewController:self];
 }
 
 @end

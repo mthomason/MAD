@@ -15,7 +15,7 @@
 @interface MTConnectionViewController : UITableViewController
     <UITableViewDelegate, UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,
-        UITextFieldDelegate, UIAlertViewDelegate>
+        UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
 

@@ -17,7 +17,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MTStoreKitController.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "MTAlertView.h"
 
 @interface MTLicensingViewController ()
 
@@ -196,7 +195,7 @@
         [weakViewController enableUserInterface];
         [[MTStoreKitController sharedObject] licensedUser:[self licenseUserCompletion]];
         if (success == NO) {
-            [error presentErrorToUser];
+            [error presentErrorOnViewController: self];
         }
     };
     [self setStandardCompletion:completion];
@@ -321,14 +320,6 @@
     } else {
         [self enableUserInterface];
     }
-}
-
-- (IBAction)restoreAllTransactions:(id)sender {
-    
-    MTAlertView *alertView = [[MTAlertView alloc] initWithTitle: NSLocalizedString(@"Note", @"Title to message to customer.")
-                                                        message: NSLocalizedString(@"Transactions are tied to your iCloud account.", @"Transactions are tied to your iCloud account.")
-                                              cancelButtonTitle: NSLocalizedString(@"Continue", @"Continue") otherButtonTitle:nil onDismiss:^(NSInteger buttonIndex) { } onCancel:^{ }];
-    [alertView show];
 }
 
 @end
