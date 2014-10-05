@@ -195,7 +195,7 @@
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMsiPlessey"]) {
         
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroPdf417"]) {
         
@@ -203,20 +203,20 @@
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCode"]) {
         
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerBarcodeExtraMicroQrCode *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMaxicode"]) {
         
-        [segue.destinationViewController setDelegate:self];
-        [segue.destinationViewController setDocument:self.document];
+        ((MTTableViewControllerBarcodeExtraMaxicode *)segue.destinationViewController).delegate = self;
+        ((MTTableViewControllerBarcodeExtraMaxicode *)segue.destinationViewController).document = self.document;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataMatrix"]) {
         
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerBarcodeExtraDataMatrix *)segue.destinationViewController).delegate = self;
         
     } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked"]) {
         
-        [segue.destinationViewController setDelegate:self];
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
         
     }
 

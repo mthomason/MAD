@@ -898,8 +898,6 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     
     NSAssert([self documentState] == UIDocumentStateClosed, @"Document must be closed to call this!");
     
-    NSError *error;
-    
     // retrieve the store URL
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [managedObjectContext persistentStoreCoordinator];
@@ -907,29 +905,33 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     NSPersistentStore *persistentStore = [persistentStores lastObject];
     NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
     
-    [managedObjectContext lock];
-    [managedObjectContext reset];//to drop pending changes
-    
-    //delete the store from the current managedObjectContext
-    BOOL success = [persistentStoreCoordinator removePersistentStore: persistentStore
-                                                               error: &error];
-    if (success) {
+    [managedObjectContext performBlockAndWait:^{
         
-        [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
-        //recreate the store like in the  appDelegate method
+        [managedObjectContext reset];//to drop pending changes
         
-        NSDictionary *options = @{//NSPersistentStoreUbiquitousContentNameKey: @"MADCloudStore",
-                                  NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                  NSInferMappingModelAutomaticallyOption : @YES};
+        NSError *error = nil;
         
-        [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
-                                                 configuration: nil
-                                                           URL: storeURL
-                                                       options: options
-                                                         error: &error];
-    }
-    [managedObjectContext unlock];
-    
+        //delete the store from the current managedObjectContext
+        BOOL success = [persistentStoreCoordinator removePersistentStore: persistentStore
+                                                                   error: &error];
+        if (success) {
+            
+            [[NSFileManager defaultManager] removeItemAtURL:storeURL error:&error];
+            //recreate the store like in the  appDelegate method
+            
+            NSDictionary *options = @{//NSPersistentStoreUbiquitousContentNameKey: @"MADCloudStore",
+                                      NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                      NSInferMappingModelAutomaticallyOption : @YES};
+            
+            [persistentStoreCoordinator addPersistentStoreWithType: NSSQLiteStoreType
+                                                     configuration: nil
+                                                               URL: storeURL
+                                                           options: options
+                                                             error: &error];
+        }
+        
+    }];
+
     
     [self performAsynchronousFileAccessUsingBlock:asyncBlock];
 }

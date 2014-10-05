@@ -97,17 +97,15 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeError"]) {
-        [segue.destinationViewController setDelegate:self];
-    } else if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeSize"]) {
-        [segue.destinationViewController setDelegate:self];
+    if ([segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeError"] ||
+        [segue.identifier isEqualToString:@"MTIdentiferSegueBarcodeExtrasMicroQrCodeSize"]) {
+        ((MTTableViewControllerStaticSelectRow *)segue.destinationViewController).delegate = self;
     }
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSInteger section = indexPath.section;

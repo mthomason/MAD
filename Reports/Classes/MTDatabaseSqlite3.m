@@ -534,11 +534,8 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
                 
             }
         } else {
-            int result = sqlite3_step(statement);
-            //BOOL primaryKeyError = result == SQLITE_CONSTRAINT_PRIMARYKEY;
-            //BOOL duplicateColumn = result == 21;
-            NSAssert(result == 21 || result == SQLITE_CONSTRAINT_PRIMARYKEY || SQLITE_ROW == result || SQLITE_DONE == result || SQLITE_OK == result, @"%s with result code: %d", (char *)sqlite3_errmsg(_database), result);
-            NSAssert(success || result == 21 || result == SQLITE_CONSTRAINT_PRIMARYKEY, @"%s", (char *)sqlite3_errmsg(_database));
+            // FIXME: Handle failures.
+            sqlite3_step(statement);
         }
         if ([query partOfTransactionSet] == NO) {
             success = SQLITE_OK == sqlite3_finalize(statement);

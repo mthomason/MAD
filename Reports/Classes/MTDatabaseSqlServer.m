@@ -511,15 +511,15 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
         
         if ([sql length] > 0 && error == nil) {
 
-            NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+            NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
             
             NSDateComponents *janFirst1990Components = [[NSDateComponents alloc] init];
-            [janFirst1990Components setYear:    1900];
-            [janFirst1990Components setMonth:   1];
-            [janFirst1990Components setDay:     0];
-            [janFirst1990Components setHour:    0];
-            [janFirst1990Components setMinute:  0];
-            [janFirst1990Components setSecond:  0];
+            janFirst1990Components.year =    1900;
+            janFirst1990Components.month =   1;
+            janFirst1990Components.day =     0;
+            janFirst1990Components.hour =    0;
+            janFirst1990Components.minute =  0;
+            janFirst1990Components.second =  0;
             
             NSDate *janFirst1990 = [gregorian dateFromComponents:janFirst1990Components];
             
@@ -1206,22 +1206,21 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     NSDate *object = [gregorian dateByAddingComponents:offsetCompsDays toDate:janFirst1990 options:0];
                                                     
                                                     
-                                                    NSDateComponents *smallDaysComponentsPart1 = [gregorian components:(NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit)
+                                                    NSDateComponents *smallDaysComponentsPart1 = [gregorian components:(NSCalendarUnitYear | NSCalendarUnitMonth |  NSCalendarUnitDay)
                                                                                                               fromDate:object];
                                                     
                                                     NSDateComponents *offsetCompsWithMinutes = [[NSDateComponents alloc] init];
                                                     
                                                     NSInteger hours = smallDate.minutes / 60;
                                                     NSInteger minutes = smallDate.minutes - (hours * 60);
-                                                    [offsetCompsWithMinutes setHour:    hours];
-                                                    [offsetCompsWithMinutes setMinute:  minutes];
-                                                    [offsetCompsWithMinutes setYear:    smallDaysComponentsPart1.year];
-                                                    [offsetCompsWithMinutes setMonth:   smallDaysComponentsPart1.month];
-                                                    [offsetCompsWithMinutes setDay:     smallDaysComponentsPart1.day];
-                                                    [offsetCompsWithMinutes setSecond:  0];
+                                                    offsetCompsWithMinutes.hour =    hours;
+                                                    offsetCompsWithMinutes.minute =  minutes;
+                                                    offsetCompsWithMinutes.year =    smallDaysComponentsPart1.year;
+                                                    offsetCompsWithMinutes.month =   smallDaysComponentsPart1.month;
+                                                    offsetCompsWithMinutes.day =     smallDaysComponentsPart1.day;
+                                                    offsetCompsWithMinutes.second =  0;
                                                     
                                                     NSDate *newDate = [gregorian dateFromComponents:offsetCompsWithMinutes];
-                                                    
                                                     resultsForRow[fieldName] = newDate;
                                                 }
                                                 break;
@@ -1264,7 +1263,7 @@ NSString * const MTDatabaseConnectionAppName    = @"MTDatabaseConnectionAppName"
                                                     [comps setSecond:     dateinfo.datesecond];
                                                     [comps setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:(60*60*dateinfo.datetzone)]];
                                                     NSCalendar *gregorian = [[NSCalendar alloc]
-                                                                             initWithCalendarIdentifier:NSGregorianCalendar];
+                                                                             initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
                                                     NSDate *date = [gregorian dateFromComponents:comps];
                                                     resultsForRow[fieldName] = date;
                                                 } else {

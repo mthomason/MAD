@@ -32,6 +32,8 @@
 #import "UIColor+EverydayApps.h"
 #import "MADDocumentObjectType.h"
 
+#import "MADDesignerViewController.h"
+
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectChartCollectionViewCell = @"MTIdentiferDocumentObjectChartCollectionViewCell";
