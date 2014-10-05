@@ -11,6 +11,8 @@
 #endif
 
 #import "MTKeyChain.h"
+#import "UIApplication+Extras.h"
+#import "NSThread+Extras.h"
 
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
 typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);
@@ -19,7 +21,6 @@ NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 
 @interface MTKeyChain()
-    <UIAlertViewDelegate>
 
 @property (copy) MTKeyChainCredentialsCompletion credentialsCompletion;
 @property (nonatomic, strong) NSString *credentialsUsername;
@@ -29,8 +30,6 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 @property (nonatomic, strong) NSString *saveUsername;
 @property (nonatomic, strong) NSString *savePassword;
 @property (nonatomic, strong) NSString *saveKey;
-
-@property (nonatomic, strong) UIAlertView *firstAlertView;
 
 @property (nonatomic, strong) UITextField *textFieldOne;
 @property (nonatomic, strong) UITextField *textFieldTwo;
@@ -42,18 +41,16 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 static MTKeyChain *sharedSingleton = nil;
 
 const NSUInteger tagAlertViewRemovePassword = 888;
-const NSUInteger tagAlertViewSave           = 777;
-const NSUInteger tagAlertViewAquire         = 666;
 
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedSingleton = [[super allocWithZone:NULL] init];
-        [sharedSingleton setCredentialsUsername:@""];
-        [sharedSingleton setCredentialsKey:@""];
-        [sharedSingleton setSaveKey:@""];
-        [sharedSingleton setSavePassword:@""];
-        [sharedSingleton setSaveUsername:@""];
+        sharedSingleton.credentialsUsername = @"";
+        sharedSingleton.credentialsKey = @"";
+        sharedSingleton.saveKey = @"";
+        sharedSingleton.savePassword = @"";
+        sharedSingleton.saveUsername = @"";
     });
 }
 
@@ -76,49 +73,152 @@ const NSUInteger tagAlertViewAquire         = 666;
     return [NSString stringWithFormat:@"p:%@", key];
 }
 
-- (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+- (void)saveUsername:(NSString *)username
+         andPassword:(NSString *)password
+              forKey:(NSString *)key
+        shortCircuit:(BOOL)shortCircuit completion:(void(^)(BOOL success, NSError *error, NSString *username, NSString *password))completion {
+    
     if (shortCircuit == NO) {
-        [self setSaveCompletion:completion];
-        [self setSaveUsername:username];
-        [self setSavePassword:password];
-        [self setSaveKey:key];
         
-        NSString *keyUsername = [[NSString alloc] initWithString:[MTKeyChain keyForUsernameWithMainKey: key]];
-        NSString *keyPassword = [[NSString alloc] initWithString:[MTKeyChain keyForPasswordWithMainKey: key]];
+        self.saveCompletion = completion;
+        self.saveUsername = username;
+        self.savePassword = password;
+        self.saveKey = key;
+        
+        NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
+        NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: key];
         if (keyUsername == nil || keyPassword == nil || ![username isEqualToString:keyUsername] || ![password isEqualToString:keyPassword]) {
             
             NSString *title = NSLocalizedString(@"Save Credentials", @"Save Credentials");
             NSString *message = NSLocalizedString(@"Would you like to save the credentials to your key chain?", @"Would you like to save the credentials to your key chain?");
-            NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel");
+            
+            __weak MTKeyChain *weakself = self;
+
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                                     message: message
+                                                                              preferredStyle: UIAlertControllerStyleAlert];
+            
             NSString *continueButtonTitle = NSLocalizedString(@"Continue", @"Continue");
-            UIAlertView *alertViewSaveToKeyChain = [[UIAlertView alloc] initWithTitle:title
-                                                                              message:message
-                                                                             delegate:self
-                                                                    cancelButtonTitle:cancelButtonTitle
-                                                                    otherButtonTitles:continueButtonTitle, nil];
-            [alertViewSaveToKeyChain setTag:tagAlertViewSave];
-            [alertViewSaveToKeyChain show];
-            [self setFirstAlertView:alertViewSaveToKeyChain];
+            UIAlertAction *actionKk = [UIAlertAction actionWithTitle: continueButtonTitle
+                                                               style: UIAlertActionStyleDefault
+                                                             handler: ^(UIAlertAction *action) {
+                                                                 
+                                                                 [weakself saveUsername: weakself.saveUsername
+                                                                            andPassword: weakself.savePassword
+                                                                                 forKey: weakself.saveKey];
+                                                                 weakself.saveCompletion(NO, nil, weakself.saveUsername, weakself.savePassword);
+                                                                 
+                                                             }];
+            
+            NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel");
+            UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancelButtonTitle
+                                                                   style: UIAlertActionStyleCancel
+                                                                 handler: ^(UIAlertAction *action) {
+                                                                     
+                                                                     weakself.saveCompletion(NO, nil, nil, nil);
+                                                                     
+                                                                 }];
+            
+            [alertController addAction:actionKk];
+            [alertController addAction:actionCancel];
+            
+            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                [weakself configureTextFieldForUsername: &textField];
+            }];
+            
+            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                [weakself configureTextFieldForPassword: &textField];
+            }];
+            
+            [NSThread safeSwitchToMainThread:^{
+                [[UIApplication topViewController]  presentViewController: alertController
+                                                                 animated: YES
+                                                               completion: nil];
+            }];
         }
+        
     } else {
+        
         completion(YES, nil, username, password);
+        
     }
     
 }
 
 - (void)deleteKey:(NSString *)key {
-    [self setCredentialsKey:key];
+    self.credentialsKey = key;
+
+    NSString *title = NSLocalizedString(@"Remove Saved Password", @"Remove Saved Password");
+    NSString *message = NSLocalizedString(@"Should we remove the password saved in your keychain?", @"Should we remove the password saved in your keychain?");
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove Saved Password"
-                                                        message:@"Should we remove the password saved in your keychain?"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Keep"
-                                              otherButtonTitles:@"Remove", nil];
+    __weak MTKeyChain *weakself = self;
     
-    [alertView setAlertViewStyle:UIAlertViewStyleDefault];
-    [alertView setTag:tagAlertViewRemovePassword];
-    [self setFirstAlertView:alertView];
-    [alertView performSelector:@selector(show) onThread:[NSThread mainThread] withObject:nil waitUntilDone:NO];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    NSString *continueButtonTitle = NSLocalizedString(@"Keep", @"Keep");
+    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: continueButtonTitle
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: nil];
+    
+    NSString *cancelButtonTitle = NSLocalizedString(@"Remove", @"Remove");
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancelButtonTitle
+                                                           style: UIAlertActionStyleDestructive
+                                                         handler: ^(UIAlertAction *action) {
+                                                             
+                                                             [weakself deleteSavedPassword];
+
+                                                         }];
+    
+    [alertController addAction:actionKk];
+    [alertController addAction:actionCancel];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        [weakself configureTextFieldForUsername:&textField];
+    }];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        [weakself configureTextFieldForPassword:&textField];
+    }];
+    
+    [NSThread safeSwitchToMainThread:^{
+        [[UIApplication topViewController]  presentViewController: alertController
+                                                         animated: YES
+                                                       completion: nil];
+    }];
+
+
+}
+
+- (void)deleteSavedPassword {
+    
+    NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: [self credentialsKey]];
+    NSDictionary *queryUsername = @{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+                                    (__bridge id)kSecAttrService : keyUsername,
+                                    (__bridge id)kSecAttrAccount : MTKeyChainUsernameAccountDesc,
+                                    (__bridge id)kSecReturnData : @YES};
+    CFDataRef queryUsernameData = NULL;
+    OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+    if (deleteStatus == errSecSuccess) {
+        
+        deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
+        
+        
+    }
+    
+    CFDataRef queryPasswordData = NULL;
+    NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: [self credentialsKey]];
+    NSDictionary *queryPassword = @{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+                                    (__bridge id)kSecAttrService : keyPassword,
+                                    (__bridge id)kSecAttrAccount : MTKeyChainPasswordAccountDesc,
+                                    (__bridge id)kSecReturnData : @YES};
+    deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
+    
+    if (deleteStatus == errSecSuccess) {
+        deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryPassword);
+    }
+
 }
 
 - (void)saveUsername:(NSString *)username andPassword:(NSString *)password forKey:(NSString *)key {
@@ -188,6 +288,7 @@ const NSUInteger tagAlertViewAquire         = 666;
     const NSInteger stateGetPassword = 1;
     const NSInteger stateGetUsernameAndPassword = 2;
     const NSInteger stateGetNothing = 3;
+    
     NSInteger status;
     
     NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: key];
@@ -266,142 +367,122 @@ const NSUInteger tagAlertViewAquire         = 666;
 }
 
 - (void)promptForPasswordGivenUsername:(NSString *)username {
-    [self setCredentialsUsername:username];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password"
-                                                        message:@"Please enter your password."
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Continue", nil];
-    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-    [alertView setTag:tagAlertViewAquire];
-    alertView.delegate = self;
-    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
-    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
-    [alertView show];
-    [self setFirstAlertView:alertView];
+    self.credentialsUsername = username;
+
+    __weak MTKeyChain *weakself = self;
+    
+    NSString *title = NSLocalizedString(@"Password", @"Password");;
+    NSString *message = NSLocalizedString(@"Please enter your password.", @"Please enter your password.");
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    NSString *ok = NSLocalizedString(@"Continue", @"Continue");
+    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction *action) {
+                                                         
+                                                         weakself.credentialsCompletion(YES,
+                                                                                        nil,
+                                                                                        username,
+                                                                                        ((UITextField *)alertController.textFields.firstObject).text,
+                                                                                        NO);
+                                                         
+                                                     }];
+    
+    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
+                                                           style: UIAlertActionStyleCancel
+                                                         handler: ^(UIAlertAction *action) {
+                                                             weakself.credentialsCompletion(NO, nil, nil, nil, NO);
+                                                         }];
+    [alertController addAction:actionKk];
+    [alertController addAction:actionCancel];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        [weakself configureTextFieldForPassword:&textField];
+    }];
+    
+    [NSThread safeSwitchToMainThread:^{
+        [[UIApplication topViewController]  presentViewController: alertController
+                                                         animated: YES
+                                                       completion: nil];
+    }];
+    
 }
 
 - (void)promptForUsernameAndPassword {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Credentials"
-                                                        message:@"Please enter your credentials."
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Continue", nil];
-    [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-    alertView.delegate = self;
-    [alertView setTag:tagAlertViewAquire];
-    [self setTextFieldOne:[alertView textFieldAtIndex:0]];
-    [self setTextFieldTwo:[alertView textFieldAtIndex:1]];
-    [alertView show];
-    [self setFirstAlertView:alertView];
+    
+    __weak MTKeyChain *weakself = self;
+    
+    NSString *title = NSLocalizedString(@"Credentials", @"Credentials");
+    NSString *message = NSLocalizedString(@"Please enter your credentials.", @"Please enter your credentials.");
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
+                                                                             message: message
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    NSString *ok = NSLocalizedString(@"Continue", @"Continue");
+    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: ok
+                                                       style: UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction *action) {
+                                                         
+                                                         weakself.credentialsCompletion(YES,
+                                                                                        nil,
+                                                                                        ((UITextField *)alertController.textFields.firstObject).text,
+                                                                                        ((UITextField *)[alertController.textFields objectAtIndex:1]).text,
+                                                                                        NO);
+                                                         
+                                                     }];
+
+    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
+                                                           style: UIAlertActionStyleCancel
+                                                         handler: ^(UIAlertAction *action) {
+                                                             self.credentialsCompletion(NO, nil, nil, nil, NO);
+                                                         }];
+
+    [alertController addAction:actionKk];
+    [alertController addAction:actionCancel];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        [weakself configureTextFieldForUsername:&textField];
+    }];
+
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        [weakself configureTextFieldForPassword:&textField];
+    }];
+    
+    [NSThread safeSwitchToMainThread:^{
+        [[UIApplication topViewController]  presentViewController: alertController
+                                                         animated: YES
+                                                       completion: nil];
+    }];
+    
 }
 
-- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView {
-    return YES;
+- (void)configureTextFieldForPassword:(UITextField **)textField {
+    UILabel *password = [[UILabel alloc] init];
+    password.text = NSLocalizedString(@"Password", @"Password");
+    [password sizeToFit];
+    (*textField).leftView = password;
+    (*textField).secureTextEntry = YES;
+    (*textField).leftViewMode = UITextFieldViewModeAlways;
+    (*textField).text = @"";
+    (*textField).autocapitalizationType = UITextAutocapitalizationTypeNone;
+    (*textField).clearButtonMode = UITextFieldViewModeAlways;
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    BOOL success = NO;
-    BOOL canceled = [alertView cancelButtonIndex] == buttonIndex;
-    switch ([alertView tag]) {
-            
-        case tagAlertViewAquire: {
-            NSString *username = nil;
-            NSString *password = nil;
-            if (canceled == NO) {
-                switch ([alertView alertViewStyle]) {
-                    case UIAlertViewStyleSecureTextInput:
-                        success = YES;
-                        username = [self credentialsUsername];
-                        password = [[alertView textFieldAtIndex:0] text];
-                        break;
-                    case UIAlertViewStyleLoginAndPasswordInput:
-                        success = YES;
-                        username = [[alertView textFieldAtIndex:0] text];
-                        password = [[alertView textFieldAtIndex:1] text];
-                        if (username == nil) {
-                            username = @"";
-                        }
-                        if (password == nil) {
-                            password = @"";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            
-            [self credentialsCompletion](success, nil, username, password, NO);
-            break;
-        }
-            
-        case tagAlertViewSave: {
-            if (canceled == NO) {
-                [self saveUsername:[self saveUsername]
-                       andPassword:[self savePassword]
-                            forKey:[self saveKey]];
-            }
-            NSString *u = [[NSString alloc] initWithString:[self saveUsername]];
-            NSString *p = [[NSString alloc] initWithString:[self savePassword]];
-            [self saveCompletion](!canceled, nil, u, p);
-            break;
-        }
-            
-        case tagAlertViewRemovePassword: {
-            
-            if (canceled == NO) {
-            
-                NSString *keyUsername = [MTKeyChain keyForUsernameWithMainKey: [self credentialsKey]];
-                NSDictionary *queryUsername = @{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
-                                                (__bridge id)kSecAttrService : keyUsername,
-                                                (__bridge id)kSecAttrAccount : MTKeyChainUsernameAccountDesc,
-                                                (__bridge id)kSecReturnData : @YES};
-                CFDataRef queryUsernameData = NULL;
-                OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
-                if (deleteStatus == errSecSuccess) {
-                    
-                    deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
-                    
-                    
-                }
-                
-                CFDataRef queryPasswordData = NULL;
-                NSString *keyPassword = [MTKeyChain keyForPasswordWithMainKey: [self credentialsKey]];
-                NSDictionary *queryPassword = @{(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
-                                                (__bridge id)kSecAttrService : keyPassword,
-                                                (__bridge id)kSecAttrAccount : MTKeyChainPasswordAccountDesc,
-                                                (__bridge id)kSecReturnData : @YES};
-                deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword, (CFTypeRef *)&queryPasswordData);
-                
-                if (deleteStatus == errSecSuccess) {
-                    deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryPassword);
-                }
-            }
-            break;
-        }
-            
-        default:
-            break;
-    }
-    [self setTextFieldOne:nil];
-    [self setTextFieldTwo:nil];
-
-}
-
-- (void)alertViewCancel:(UIAlertView *)alertView {
-    switch ([alertView tag]) {
-        case tagAlertViewAquire: {
-            [self credentialsCompletion](NO, nil, nil, nil, NO);
-            break;
-        }
-        case tagAlertViewSave: {
-            [self saveCompletion](NO, nil, nil, nil);
-            break;
-        }
-            default:
-            break;
-    }
+- (void)configureTextFieldForUsername:(UITextField **)textField {
+    UILabel *username = [[UILabel alloc] init];
+    username.text = NSLocalizedString(@"Username", @"Username");
+    [username sizeToFit];
+    (*textField).leftView = username;
+    (*textField).secureTextEntry = NO;
+    (*textField).leftViewMode = UITextFieldViewModeAlways;
+    (*textField).text = @"";
+    (*textField).autocapitalizationType = UITextAutocapitalizationTypeNone;
+    (*textField).clearButtonMode = UITextFieldViewModeAlways;
 }
 
 @end

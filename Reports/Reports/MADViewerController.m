@@ -20,7 +20,6 @@
 #import "UIApplication+Extras.h"
 #import "MADocument.h"
 #import "MTActivityItemProviderPdf.h"
-#import "UAAppReviewManager.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
 #import "RptqQuery.h"
@@ -846,7 +845,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         if (completed) {
             [weakself.pageSlider setEnabled:YES];
             weakself.activityExporting = NO;
-            [UAAppReviewManager userDidSignificantEvent:YES];
         } else {
             if ([activityType length] > 0) {
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {

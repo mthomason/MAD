@@ -10,6 +10,16 @@
 
 @implementation NSThread (Extras)
 
++ (void)safeSwitchToMainThread:(void(^)())completion {
+    if ([NSThread isMainThread]) {
+        completion();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion();
+        });
+    }
+}
+
 + (void)completeOnMainThread:(void(^)(BOOL success, id obj))completion withObject:(id)obj andSuccess:(BOOL)success {
     if ([NSThread isMainThread]) {
         completion(success, obj);

@@ -16,7 +16,6 @@
 #import "MADQueryViewController.h"
 
 #import "MADocument.h"
-#import "UAAppReviewManager.h"
 
 #import "MTUser.h"
 #import "MTReportDesigner.h"
@@ -35,9 +34,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.118";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.118";
-NSString * const MTGlobalBundleRev                                  = @"1493";
+NSString * const MTGlobalBundleVersion                              = @"7.0.119";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.119";
+NSString * const MTGlobalBundleRev                                  = @"1494";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -95,10 +94,6 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
         MTReportDesigner *reportDesigner = [[MTReportDesigner alloc] init];
         self.reportDesigner = reportDesigner;
         
-        [UAAppReviewManager showPromptWithShouldPromptBlock:^(NSDictionary *trackingInfo) {
-            return NO;
-        }];
-                
         // FIXME: Run these checks on app instance start...
         NSCAssert([MTGlobalBundleShortVersion isEqualToString:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"Whoa! CFBundleShortVersionString, bra.");
         NSCAssert([[MTApplicationInstance bundleId] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]], @"Whoops! check the hard-coded bundle identifier!");
@@ -110,52 +105,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
         NSMutableDictionary *documents = [[NSMutableDictionary alloc] init];
         self.documents = documents;
         
-        [self setupAppReviewManager:self];
     }
     return self;
-}
-
-#pragma mark - UAAppReviewManager
-
-- (void)setupAppReviewManager:(id)sender {
-    
-    NSString *appId = [MTApplicationInstance applicationId];
-    NSString *appName = [MTApplicationInstance applicationName];
-
-	[UAAppReviewManager setAppID:appId];
-	
-    BOOL debug = NO;
-    [UAAppReviewManager setDebug:debug];
-    [UAAppReviewManager userDidSignificantEvent:NO];    //Launch is significant, but not for display of prompt
-    [UAAppReviewManager setAppName:appName];
-
-    NSString *formatString = NSLocalizedString(@"Do you find %@ useful?", @"Do you find %@ useful?");
-    NSString *reviewTitle = [NSString stringWithFormat:formatString, appName];
-	[UAAppReviewManager setReviewTitle:reviewTitle];
-    
-	// This overrides the default value, read from the UAAppReviewManager bundle plist
-    NSString *plea = NSLocalizedString(@"Continued development relies on this softwares success.  If you find this software useful, then please take the time to show your support. Leaving a review.", @"Continued development relies on this softwares success.  If you find this software useful, then please take the time to show your support. Leaving a review.");
-	[UAAppReviewManager setReviewMessage:plea];
-    
-    NSString *buttonTitleNever = NSLocalizedString(@"Never", @"Never");
-    NSString *buttonTitleRate = NSLocalizedString(@"Lets Do It", @"Lets Do It");
-    NSString *buttonTitleLater = NSLocalizedString(@"Maybe... later", @"Maybe... later");
-	[UAAppReviewManager setCancelButtonTitle:   buttonTitleNever];
-	[UAAppReviewManager setRateButtonTitle:     buttonTitleRate];
-	[UAAppReviewManager setRemindButtonTitle:   buttonTitleLater];
-	[UAAppReviewManager setDaysUntilPrompt:28];
-	[UAAppReviewManager setDaysBeforeReminding:13];
-	[UAAppReviewManager setShouldPromptIfRated:NO];
-	[UAAppReviewManager setSignificantEventsUntilPrompt:20];
-	[UAAppReviewManager setUseMainAppBundleForLocalizations:YES];
-    [UAAppReviewManager setAffiliateCode:@""];                      // FIXME: Add this affiliate code.
-	[UAAppReviewManager setAffiliateCampaignCode:@""];              // FIXME: Add this affiliate code.
-	[UAAppReviewManager setOnDeclineToRate:^() {}];
-	[UAAppReviewManager setOnDidDisplayAlert:^() {}];
-	[UAAppReviewManager setOnDidOptToRate:^() {}];
-	[UAAppReviewManager setOnDidOptToRemindLater:^() {}];
-	[UAAppReviewManager setKey:@"kSettingsSignificantEventTally" forUAAppReviewManagerKeyType:UAAppReviewManagerKeySignificantEventCount];
-    
 }
 
 #pragma mark - App settings

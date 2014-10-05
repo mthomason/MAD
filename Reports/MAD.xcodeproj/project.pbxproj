@@ -494,8 +494,6 @@
 		4C25803F192D090F00BE74EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2A14B29789007B4F48 /* Foundation.framework */; };
 		4C258040192D090F00BE74EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2814B29789007B4F48 /* UIKit.framework */; };
 		4C258046192D090F00BE74EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C258044192D090F00BE74EB /* InfoPlist.strings */; };
-		4C25A8CD18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4C25A8CE18BC2209002DA271 /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AA918FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C267AAA18FA6BA80097D166 /* MTQueryCustomNoResults.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C267AA818FA6BA80097D166 /* MTQueryCustomNoResults.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C26F22519D5D16800B7A417 /* Test_Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26F22419D5D16800B7A417 /* Test_Cloud.m */; };
@@ -1026,7 +1024,6 @@
 		4C92953718C4CC890010AAEF /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5626021759865A00433E88 /* NSData+AES256.m */; };
 		4C92953818C4CC890010AAEF /* UIImage+Border.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84EEB4178B43F20028BF49 /* UIImage+Border.m */; };
 		4C92953918C4CC890010AAEF /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
-		4C92953D18C4CCC10010AAEF /* UAAppReviewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C25A86818BC2209002DA271 /* UAAppReviewManager.m */; };
 		4C92953E18C4CD390010AAEF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6CDFD114B8E9B600DABF86 /* CoreData.framework */; };
 		4C92953F18C4CD3F0010AAEF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97AE14C5C4B1007FB629 /* CFNetwork.framework */; };
 		4C92954018C4CD4F0010AAEF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8C97B014C5C4C4007FB629 /* MobileCoreServices.framework */; };
@@ -6572,7 +6569,6 @@
 				4C23FB1D18FADD67009F234F /* MTLog.m in Sources */,
 				4C0CAB641902FAD10044D866 /* MTDatabaseDataBinding.m in Sources */,
 				4C5625F61759730200433E88 /* UIImage+RoundedCorner.m in Sources */,
-				4C25A8CE18BC2209002DA271 /* UAAppReviewManager.m in Sources */,
 				4C5626041759865A00433E88 /* NSData+AES256.m in Sources */,
 				4CC39D6D175FEBFA00865CCA /* NSDate+Extras.m in Sources */,
 				4C23FB9D18FAE4F7009F234F /* MTPaperA0.m in Sources */,
@@ -6654,7 +6650,6 @@
 				4C23FB1818FADD4D009F234F /* MTKeyChain.m in Sources */,
 				4CABE48F1837DF7F007EDD9D /* RptqQueryLinks.m in Sources */,
 				4CABE47F1837DF7D007EDD9D /* RptqDocument.m in Sources */,
-				4C25A8CD18BC2209002DA271 /* UAAppReviewManager.m in Sources */,
 				4CABE4BB1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */,
 				4CBABC1418C8945B00EE5768 /* MTUser.m in Sources */,
 				4C23FADD18FADA40009F234F /* MTDataTable.m in Sources */,
@@ -7020,7 +7015,6 @@
 				4C9294EE18C4CC7A0010AAEF /* RptqDocumentObjectAggregate.m in Sources */,
 				4C9294EF18C4CC7A0010AAEF /* RptqDocumentObjectLabelDataField.m in Sources */,
 				4C92951718C4CC7F0010AAEF /* RptqQueryTable+Extras.m in Sources */,
-				4C92953D18C4CCC10010AAEF /* UAAppReviewManager.m in Sources */,
 				4C92953418C4CC890010AAEF /* UIGestureRecognizer+AnchorPoint.m in Sources */,
 				4C9294A418C4CBFF0010AAEF /* MTReportViewerReportPageView.m in Sources */,
 				4C92950F18C4CC7F0010AAEF /* RptqQueryCache+Extras.m in Sources */,

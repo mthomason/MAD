@@ -19,8 +19,6 @@
 #import "MADocument.h"
 #import "MACloudManager.h"
 
-#import "UAAppReviewManager.h"
-
 #import "MADViewerController.h"
 
 #import "MTStoreKitController.h"
@@ -828,9 +826,6 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 #pragma mark - MFMailComposeViewController delegate protocol
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    if (result == MFMailComposeResultSent) {
-        [UAAppReviewManager userDidSignificantEvent:YES];
-    }
     [self dismissViewControllerAnimated:YES completion:nil];
     [error presentErrorOnViewController:self];
 }
@@ -1359,10 +1354,6 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     
     [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
-        
-        if (completed) {
-            [UAAppReviewManager userDidSignificantEvent:YES];
-        }
         
         for (NSIndexPath *visibleCellLocations in weakSelf.collectionView.indexPathsForVisibleItems) {
             MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[[weakSelf collectionView] cellForItemAtIndexPath:visibleCellLocations];
