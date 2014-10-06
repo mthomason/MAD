@@ -359,6 +359,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    [[MACloudManager sharedManager] startQuery];
+    
     __weak MADOpenFileViewController *weakself = self;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -388,8 +390,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 
 - (void)reenableDataWithSearch {
     if (self.searchBar) {
-        [self searchBar:self.searchBar
-          textDidChange:self.searchBar.text];
+        [self searchBar: self.searchBar
+          textDidChange: self.searchBar.text];
     } else {
         [self reloadData];
     }
@@ -397,6 +399,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
         [cell performDeselectionAnimations];
@@ -405,6 +408,11 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
     }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[MACloudManager sharedManager] stopQuery];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -967,17 +975,37 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     MADocument *document = [[MADocument alloc] initWithFileURL:url];
     app.openFiles.openDocument = document;
     __weak MTApplicationInstance *weakapp = app;
+    [self displaySavingReportActivityIndicator];
+    
+    [[MACloudManager sharedManager] stopQuery];
+
     [document openWithCompletionHandler:^(BOOL success) {
+        
         if (success) {
+            
+            
             weakapp.reportState = MTReportStateOpen;
+            
             if ([MTApplicationInstance isMadDesigner]) {
-                [weakself performSegueWithIdentifier:MTSegueShowOpenDocument
-                                              sender:weakself];
+
+                [weakself performSegueWithIdentifier: MTSegueShowOpenDocument
+                                              sender: weakself];
+                
             } else if ([MTApplicationInstance isMadViewer]) {
-                [weakself performSegueWithIdentifier:MTSegueOpenInViewer
-                                              sender:weakself];
+                
+                [weakself performSegueWithIdentifier: MTSegueOpenInViewer
+                                              sender: weakself];
+                
             }
+            
+        } else {
+            
+            [[MACloudManager sharedManager] startQuery];
+
         }
+        
+        [weakself reenable];
+
     }];
     
 }
@@ -1011,7 +1039,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     return self.urls.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
                                                                                    forIndexPath:indexPath];
     
@@ -1049,7 +1078,9 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind:(NSString *)kind
+                                 atIndexPath:(NSIndexPath *)indexPath {
     return nil;
 }
 
@@ -1480,10 +1511,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
                                                                       NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: textField.text
                                                                                                                                      withExtension: MTDocumentExtentionMobleApplicationDocument];
                                                                       [[MACloudManager sharedManager] moveDocument:urlToRename
-                                                                                                        toLocation:newUrl
-                                                                                                        completion:^(BOOL success, NSError *error) {
-                                                                                                            NSAssert(success, @"%s %@", __PRETTY_FUNCTION__, error);
-                                                                                                        }];
+                                                                                                        toLocation:newUrl];
                                                                       [weakself removeCachedFileForDocumentUrl:urlToRename];
                                                                   }
                                                                   

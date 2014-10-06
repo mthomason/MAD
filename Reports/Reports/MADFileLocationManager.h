@@ -27,7 +27,7 @@ extern NSString * const MADUtiType;
 @property (nonatomic, strong, readonly) NSMetadataQuery *metadataQuery;
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension;
-- (void)startQuery;
+- (BOOL)startQuery;
 - (void)stopQuery;
 - (NSArray *)calculatedUrls;
 

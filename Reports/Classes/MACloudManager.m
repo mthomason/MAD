@@ -11,6 +11,7 @@
 #import "MADFileLocationManager.h"
 #import "NSFileManager+Common.h"
 #import "NSURL+Document.h"
+#import "NSThread+Extras.h"
 
 NSString * const MTDocumentExtentionMobleApplicationDocumentArchive = @"mada";
 NSString * const MTDocumentExtentionMobleApplicationDocument        = @"mad";
@@ -171,8 +172,23 @@ static MACloudManager *sharedSingleton;
 
 - (void)activate {
     [self updateFileStorageContainerURL:nil];
-    if ([self isCloudEnabled]) {
-        [self.fileLocationManager startQuery];
+    [self startQuery];
+}
+
+- (void)stopQuery {
+    if (self.isCloudEnabled) {
+        [self.fileLocationManager stopQuery];
+    }
+}
+
+- (void)startQuery {
+    if (self.isCloudEnabled) {
+        
+        __weak MACloudManager *weakself = self;
+        [NSThread safeSwitchToMainThread:^{
+            [weakself.fileLocationManager startQuery];
+        }];
+        
     }
 }
 
@@ -563,12 +579,12 @@ static MACloudManager *sharedSingleton;
 }
 
 - (void)moveDocument:(NSURL *)source
-          toLocation:(NSURL *)destination
-          completion:(void (^)(BOOL success, NSError *error))completion {
+          toLocation:(NSURL *)destination {
 
     NSError *coordinatorError = nil;
     
     NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+    __block BOOL success = NO;
     [coordinator coordinateWritingItemAtURL:source
                                     options:NSFileCoordinatorWritingForMoving
                            writingItemAtURL:destination
@@ -579,18 +595,13 @@ static MACloudManager *sharedSingleton;
                                      if ([[NSFileManager defaultManager] fileExistsAtPath: coordinatedDestination.path] == NO) {
                                          
                                          NSError *fileManagerError = nil;
-                                         BOOL success = [[NSFileManager defaultManager] moveItemAtURL: coordinatedSource
+                                         success = [[NSFileManager defaultManager] moveItemAtURL: coordinatedSource
                                                                                                 toURL: coordinatedDestination
                                                                                                 error: &fileManagerError];
-                                         completion(success, fileManagerError);
-                                     } else {
-                                         completion(NO, nil);
+                                         
                                      }
 
                                  }];
-    if (coordinatorError != nil) {
-        completion(NO, coordinatorError);
-    }
 }
 
 - (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {

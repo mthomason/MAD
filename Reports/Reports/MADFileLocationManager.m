@@ -93,11 +93,18 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
 
 #pragma mark - MADFileLocationManager
 
-- (void)startQuery {
-    [self.metadataQuery startQuery];
+- (BOOL)startQuery {
+    BOOL success = YES;
+    [self.metadataQuery enableUpdates];
+    if (self.metadataQuery.started == NO) {
+        success = [self.metadataQuery startQuery];
+        NSAssert(success, @"%s\n\tFailed to start query.", __PRETTY_FUNCTION__);
+    }
+    return success;
 }
 
 - (void)stopQuery {
+    [self.metadataQuery disableUpdates];
     [self.metadataQuery stopQuery];
 }
 
