@@ -13,6 +13,8 @@
 #import "MTKeyChain.h"
 #import "UIApplication+Extras.h"
 #import "NSThread+Extras.h"
+#import "UIColor+EverydayApps.h"
+#import "NSError+Constructors.h"
 
 typedef void (^MTKeyChainCredentialsCompletion)(BOOL success, NSError *error, NSString *username, NSString *password, BOOL fromKeyChain);
 typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString *username, NSString *password);
@@ -20,7 +22,10 @@ typedef void (^MTKeyChainSaveCompletion)(BOOL success, NSError *error, NSString 
 NSString * const MTKeyChainUsernameAccountDesc = @"Client Database Username";
 NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 
+NSInteger const MTKeyErrorUserCanceled = 393920;
+
 @interface MTKeyChain()
+    <UITextFieldDelegate>
 
 @property (copy) MTKeyChainCredentialsCompletion credentialsCompletion;
 @property (nonatomic, strong) NSString *credentialsUsername;
@@ -39,8 +44,6 @@ NSString * const MTKeyChainPasswordAccountDesc = @"Client Database Password";
 @implementation MTKeyChain
 
 static MTKeyChain *sharedSingleton = nil;
-
-const NSUInteger tagAlertViewRemovePassword = 888;
 
 + (void)initialize {
     static dispatch_once_t onceToken;
@@ -122,14 +125,6 @@ const NSUInteger tagAlertViewRemovePassword = 888;
             [alertController addAction:actionKk];
             [alertController addAction:actionCancel];
             
-            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                [weakself configureTextFieldForUsername: &textField];
-            }];
-            
-            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-                [weakself configureTextFieldForPassword: &textField];
-            }];
-            
             [NSThread safeSwitchToMainThread:^{
                 [[UIApplication topViewController]  presentViewController: alertController
                                                                  animated: YES
@@ -173,15 +168,7 @@ const NSUInteger tagAlertViewRemovePassword = 888;
     
     [alertController addAction:actionKk];
     [alertController addAction:actionCancel];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        [weakself configureTextFieldForUsername:&textField];
-    }];
-    
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        [weakself configureTextFieldForPassword:&textField];
-    }];
-    
+
     [NSThread safeSwitchToMainThread:^{
         [[UIApplication topViewController]  presentViewController: alertController
                                                          animated: YES
@@ -439,7 +426,8 @@ const NSUInteger tagAlertViewRemovePassword = 888;
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
                                                            style: UIAlertActionStyleCancel
                                                          handler: ^(UIAlertAction *action) {
-                                                             self.credentialsCompletion(NO, nil, nil, nil, NO);
+                                                             NSError *error = [MTKeyChain errorUserCanceled];
+                                                             weakself.credentialsCompletion(NO, error, nil, nil, NO);
                                                          }];
 
     [alertController addAction:actionKk];
@@ -460,10 +448,21 @@ const NSUInteger tagAlertViewRemovePassword = 888;
     }];
     
 }
++ (NSError *)errorUserCanceled {
+    NSString *title = NSLocalizedString(@"User Canceled", @"User Cancled");
+    NSString *message = NSLocalizedString(@"User canceled save.", @"User canceled save.");
+    return [NSError errorWithDomain: @"MTKeyChain"
+                               code: MTKeyErrorUserCanceled
+                              title: title
+                         andMessage: message];
+}
 
 - (void)configureTextFieldForPassword:(UITextField **)textField {
+    (*textField).delegate = self;
     UILabel *password = [[UILabel alloc] init];
-    password.text = NSLocalizedString(@"Password", @"Password");
+    password.textColor = [UIColor lightGrayColor];
+    password.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    password.text = NSLocalizedString(@"Password: ", @"Password: ");
     [password sizeToFit];
     (*textField).leftView = password;
     (*textField).secureTextEntry = YES;
@@ -474,8 +473,11 @@ const NSUInteger tagAlertViewRemovePassword = 888;
 }
 
 - (void)configureTextFieldForUsername:(UITextField **)textField {
+    (*textField).delegate = self;
     UILabel *username = [[UILabel alloc] init];
-    username.text = NSLocalizedString(@"Username", @"Username");
+    username.textColor = [UIColor lightGrayColor];
+    username.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    username.text = NSLocalizedString(@"Username: ", @"Username: ");
     [username sizeToFit];
     (*textField).leftView = username;
     (*textField).secureTextEntry = NO;
@@ -483,6 +485,14 @@ const NSUInteger tagAlertViewRemovePassword = 888;
     (*textField).text = @"";
     (*textField).autocapitalizationType = UITextAutocapitalizationTypeNone;
     (*textField).clearButtonMode = UITextFieldViewModeAlways;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    ((UILabel *)textField.leftView).textColor = [UIColor darkGrayColor];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    ((UILabel *)textField.leftView).textColor = [UIColor lightGrayColor];
 }
 
 @end

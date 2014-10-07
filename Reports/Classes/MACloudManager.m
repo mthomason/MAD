@@ -171,8 +171,10 @@ static MACloudManager *sharedSingleton;
 #pragma mark - Exposed Methods
 
 - (void)activate {
-    [self updateFileStorageContainerURL:nil];
-    [self startQuery];
+    __weak MACloudManager *weakself = self;
+    [self updateFileStorageContainerURL:^{
+        [weakself startQuery];
+    }];
 }
 
 - (void)stopQuery {
@@ -267,7 +269,7 @@ static MACloudManager *sharedSingleton;
 }
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
-    [self.fileLocationManager startQuery];
+    //[self.fileLocationManager startQuery];
     
     NSMutableSet *result = [[NSMutableSet alloc] init];
     if (self.isCloudEnabled) {

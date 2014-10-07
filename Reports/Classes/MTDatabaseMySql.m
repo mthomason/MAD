@@ -68,45 +68,98 @@
     
     [self getCredentalsWithConnection:connection completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
 
-        NSError *connError = nil;
-        
-        MysqlServer *serv = [[MysqlServer alloc] init];
-        
-        [serv setHost:      [connection server]];
-        [serv setSchema:    [connection database]];
-        [serv setPort:      (unsigned int)[connection port]];
-        [serv setUser:      username];
-        [serv setPassword:  password];
-        
-        MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
-
-        success = (conn && connError == nil);
-        completion(conn, success, connError);
+        if (success) {
+            NSError *connError = nil;
+            
+            MysqlServer *serv = [[MysqlServer alloc] init];
+            
+            [serv setHost:      [connection server]];
+            [serv setSchema:    [connection database]];
+            [serv setPort:      (unsigned int)[connection port]];
+            [serv setUser:      username];
+            [serv setPassword:  password];
+            
+            MysqlConnection *conn = [MysqlConnection connectToServer: serv error:&connError];
+            
+            success = (conn && connError == nil);
+            completion(conn, success, connError);
+        } else if (error !=  nil) {
+            completion(nil, NO, error);
+        } else {
+            NSError *error = [MTDatabaseMySql errorCouldNotGetCredientals];
+            completion(nil, NO, error);
+        }
         
     }];
 }
 
 - (void)executeQuery:(MTQuery *)query completion:(void (^)(BOOL, NSError *))completion {
     MTDatabaseConnection *connectionSettings = [self databaseConnection];
-    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
-        [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
-            MysqlConnection *conn = dbconn;
-            if (conn && error == nil) {
-                @autoreleasepool {
-                    MysqlFetch *myFetch = [[MysqlFetch alloc] init];
-                    myFetch.delegate = self;
-                    [myFetch performQuery: query
-                             onConnection: conn];
-                    completion(YES, nil);
-                }
-                
-            } else {
-                SEL removeCredentalsBecauseOfError = @selector(removeCredentalsBecauseOfError:);
-                [self performSelectorOnMainThread:removeCredentalsBecauseOfError withObject:error waitUntilDone:NO];
-                completion(NO, error);
+    [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+        MysqlConnection *conn = dbconn;
+        if (conn && error == nil) {
+            @autoreleasepool {
+                MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+                myFetch.delegate = self;
+                [myFetch performQuery: query
+                         onConnection: conn];
+                completion(YES, nil);
             }
-        }];
+            
+        } else {
+            if (error.code != MTKeyErrorUserCanceled) {
+                [self performSelectorOnMainThread: @selector(removeCredentalsBecauseOfError:)
+                                       withObject: error waitUntilDone: NO];
+            }
+            completion(NO, error);
+            
+        }
     }];
+    
+    /*
+    
+    [self getCredentalsWithConnection:connectionSettings completion:^(BOOL success, NSError *error, NSString *username, NSString *password) {
+        if (success) {
+            
+            [self connectWithCredentals:connectionSettings completion:^(id dbconn, BOOL success, NSError *error) {
+                MysqlConnection *conn = dbconn;
+                if (conn && error == nil) {
+                    @autoreleasepool {
+                        MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+                        myFetch.delegate = self;
+                        [myFetch performQuery: query
+                                 onConnection: conn];
+                        completion(YES, nil);
+                    }
+                    
+                } else {
+
+                    [self performSelectorOnMainThread: @selector(removeCredentalsBecauseOfError:)
+                                           withObject: error waitUntilDone: NO];
+                    completion(NO, error);
+                    
+                }
+            }];
+
+        } else {
+            NSString *title = NSLocalizedString(@"Notice", @"Notice");
+            NSString *failureReason = NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.");
+            NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title,
+                                        NSLocalizedFailureReasonErrorKey : failureReason};
+            NSError *error = [NSError errorWithDomain:@"MTDatabase" code:43421 userInfo:errorInfo];
+            completion(NO, error);
+            
+        }
+    }];*/
+}
+
++ (NSError *)errorCouldNotGetCredientals {
+    NSString *title = NSLocalizedString(@"Notice", @"Notice");
+    NSString *failureReason = NSLocalizedString(@"Could not get credentials.", @"Could not get credentials.");
+    NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : title,
+                                NSLocalizedFailureReasonErrorKey : failureReason};
+    NSError *error = [NSError errorWithDomain:@"MTDatabase" code:43421 userInfo:errorInfo];
+    return error;
 }
 
 - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {

@@ -11,6 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSInteger const MTKeyErrorUserCanceled;
+
 @interface MTKeyChain : NSObject
 
 + (MTKeyChain *)sharedObject;
