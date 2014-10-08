@@ -52,10 +52,10 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 #if DEBUG
 
-static void uncaughtExceptionHandler(NSException *exception);
-static void uncaughtExceptionHandler(NSException *exception) {
-    MTLogStatic(@"%@", exception);
-}
+//static void uncaughtExceptionHandler(NSException *exception);
+//static void uncaughtExceptionHandler(NSException *exception) {
+//    MTLogStatic(@"%@", exception);
+//}
 
 #endif
 
@@ -170,7 +170,7 @@ static void uncaughtExceptionHandler(NSException *exception) {
     }
     
 #if DEBUG
-    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    //NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #endif
     
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];

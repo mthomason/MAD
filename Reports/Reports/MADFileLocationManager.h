@@ -15,7 +15,9 @@ extern NSString * const MADUtiType;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 
-- (void)listCoordinatorDidUpdateContentsWithInsertedURLs:(NSArray *)insertedURLs removedURLs:(NSArray *)removedURLs updatedURLs:(NSArray *)updatedURLs;
+- (void)listCoordinatorDidUpdateContentsWithInsertedItems:(NSIndexSet *)insertedItems
+                                             removedItems:(NSIndexSet *)removedItems
+                                             updatedItems:(NSIndexSet *)updatedItems;
 - (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error;
 - (void)listCoordinatorDidFailCreatingListAtURL:(NSURL *)URL withError:(NSError *)error;
 
@@ -25,6 +27,7 @@ extern NSString * const MADUtiType;
 
 @property (nonatomic, weak) id<MADFileLocationManagerDelegate> delegate;
 @property (nonatomic, strong, readonly) NSMetadataQuery *metadataQuery;
+@property (nonatomic, strong, readonly) NSMutableDictionary *results;
 
 - (instancetype)initWithPathExtension:(NSString *)pathExtension;
 - (BOOL)startQuery;

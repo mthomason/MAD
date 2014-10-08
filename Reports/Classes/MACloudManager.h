@@ -11,6 +11,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
+    MACloudManagerSectionLocal,
+    MACloudManagerSectionCloud,
+    MACloudManagerSectionCombined
+};
+
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
 extern NSString * const MADNotificationFileManagerDidUpdateFileLocations;
@@ -24,7 +30,7 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @end
 
-@class MADFileLocationManager;
+@class MADFileLocationManager, MADMetaData;
 
 @interface MACloudManager : NSObject
 
@@ -39,6 +45,8 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 @property (nonatomic, assign, readonly) BOOL cloudDesired;
 @property (nonatomic, assign, readonly) BOOL cloudAvailble;
 @property (nonatomic, assign, readonly) BOOL cloudOptionsPresentedAndSelectedByUser;
+
+@property (nonatomic, strong) NSString *searchString;
 
 @property (nonatomic, strong, readonly) MADFileLocationManager *fileLocationManager;
 
@@ -63,6 +71,11 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 - (void)stopQuery;
 - (void)startQuery;
+
+// Managing the cache
+- (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;
+- (NSUInteger)numberOfDocuments:(MACloudManagerSection)section;
+- (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location inSection:(MACloudManagerSection)section;
 
 @end
 

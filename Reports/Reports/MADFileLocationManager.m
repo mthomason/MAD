@@ -7,6 +7,7 @@
 //
 
 #import "MADFileLocationManager.h"
+#import "MADMetaData.h"
 
 NSString * const MADUtiType                             = @"com.everydayapps.productivity.mad";
 NSString * const MADUtiPublicData                       = @"public.data";
@@ -15,16 +16,19 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
 @interface MADFileLocationManager ()
 
 @property (nonatomic, strong, readwrite) NSMetadataQuery *metadataQuery;
-@property (nonatomic, strong) NSURL *documentsDirectory;
+@property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
+
+@property (nonatomic, strong, readwrite) NSMutableDictionary *results;
+//@property (nonatomic, strong, readwrite) NSMutableArray *resultsArray;
+
 
 @end
 
 @implementation MADFileLocationManager
 
 - (void)dealloc {
-    // Stop observing the query.
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver: self
                                   name: NSMetadataQueryDidFinishGatheringNotification
                                 object: _metadataQuery];
@@ -42,18 +46,25 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
 
 }
 
-- (instancetype)initWithPredicate:(NSPredicate *)predicate {
-    self = [super init];
+- (instancetype)initWithPathExtension:(NSString *)pathExtension {
     
-    if (self) {
-    
+    if (self = [super init]) {
+        
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
-        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDocumentsScope,
-                                       NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
-                                       NSMetadataQueryUbiquitousDataScope];
+        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDataScope,
+                                       NSMetadataQueryUbiquitousDocumentsScope];
+
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K.pathExtension == %@ && %K == %@",
+                                  NSMetadataItemURLKey, pathExtension,
+                                  NSMetadataItemContentTypeKey, MADUtiType];
         metadataQuery.predicate = predicate;
         
-        // Observe the query.
+        NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
+        self.results = results;
+        
+        //NSMutableArray *resultsArray = [[NSMutableArray alloc] init];
+        //self.resultsArray = resultsArray;
+        
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver: self
                                selector: @selector(handleMetadataQueryDidUpdateNotification:)
@@ -75,37 +86,28 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
                                    name: NSMetadataQueryDidFinishGatheringNotification
                                  object: metadataQuery];
 
-        
         self.metadataQuery = metadataQuery;
-    }
-    
-    return self;
-}
 
-- (instancetype)initWithPathExtension:(NSString *)pathExtension {
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K.pathExtension == %@ && %K == %@",
-                                NSMetadataItemURLKey, pathExtension,
-                                NSMetadataItemContentTypeKey, MADUtiType];
-    self = [self initWithPredicate:predicate];
+    }
+
     return self;
 }
 
 #pragma mark - MADFileLocationManager
 
 - (BOOL)startQuery {
-    BOOL success = YES;
-    [self.metadataQuery enableUpdates];
-    if (self.metadataQuery.started == NO) {
-        success = [self.metadataQuery startQuery];
-        NSAssert(success, @"%s\n\tFailed to start query.", __PRETTY_FUNCTION__);
-    }
-    return success;
+    //BOOL success = YES;
+    //if (self.metadataQuery.started == NO) {
+//        [self.metadataQuery enableUpdates];
+        //success = [self.metadataQuery startQuery];
+    //    NSAssert(success, @"%s\n\tFailed to start query.", __PRETTY_FUNCTION__);
+    //}
+    return YES;
 }
 
 - (void)stopQuery {
-    [self.metadataQuery disableUpdates];
-    [self.metadataQuery stopQuery];
+    //[self.metadataQuery disableUpdates];
+    //[self.metadataQuery stopQuery];
 }
 
 #pragma mark - NSMetadataQuery Notifications
@@ -113,11 +115,12 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
 - (void)handleMetadataQueryDidStartGatheringNotification:(NSNotification *)notification {
     NSLog(@"\n%@\n", NSMetadataQueryDidStartGatheringNotification);
     
+    [self.results removeAllObjects];
+
 }
 
 - (void)handleMetadataQueryGatheringProgressNotification:(NSNotification *)notification {
     NSLog(@"\n%@ %@\n", NSMetadataQueryGatheringProgressNotification, notification);
-    
 }
 
 - (void)handleMetadataQueryDidFinishGatheringNotification:(NSNotification *)notification {
@@ -125,26 +128,30 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
     NSLog(@"\n%@\n", NSMetadataQueryDidFinishGatheringNotification);
     
     [self.metadataQuery disableUpdates];
+    [self.results removeAllObjects];
     
-    NSMutableArray *insertedURLs = [NSMutableArray arrayWithCapacity:self.metadataQuery.results.count];
     for (NSMetadataItem *metadataItem in self.metadataQuery.results) {
-        NSURL *insertedURL = [metadataItem valueForAttribute:NSMetadataItemURLKey];
         
-        [insertedURLs addObject:insertedURL];
+        MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+        NSNumber *key = @(metadataItem.hash);
+        [self.results setObject:metaData forKey:key];
     }
     
-    NSArray *removedUrls = @[];
-    NSArray *updatedUrls = @[];
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs: insertedURLs
-                                                        removedURLs: removedUrls
-                                                        updatedURLs: updatedUrls];
+    
+    NSRange range = NSMakeRange(0, self.metadataQuery.resultCount);
+    NSIndexSet *inserted = [NSIndexSet indexSetWithIndexesInRange:range];
+    NSIndexSet *removed = [NSIndexSet indexSet];
+    NSIndexSet *updated = [NSIndexSet indexSet];
+    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems: inserted
+                                                        removedItems: removed
+                                                        updatedItems: updated];
     
     [self.metadataQuery enableUpdates];
 }
 
 - (NSArray *)calculatedUrls {
-    NSArray *urls = [NSArray arrayWithArray:[self URLsByMappingMetadataItems:self.metadataQuery.results]];
-    return urls;
+    NSArray *urlsByMappingMetadataItems = [self URLsByMappingMetadataItems:self.metadataQuery.results];
+    return [NSArray arrayWithArray:urlsByMappingMetadataItems];
 }
 
 - (void)handleMetadataQueryDidUpdateNotification:(NSNotification *)notification {
@@ -153,41 +160,58 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
     
     [self.metadataQuery disableUpdates];
     
-    NSArray *insertedURLs;
-    NSArray *removedURLs;
-    NSArray *updatedURLs;
+    //NSArray *updatedURLs;
     
     NSArray *insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey];
-    if (insertedMetadataItemsOrNil) {
-        insertedURLs = [self URLsByMappingMetadataItems:insertedMetadataItemsOrNil];
-    }
-    
     NSArray *removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey];
-    if (removedMetadataItemsOrNil) {
-        removedURLs = [self URLsByMappingMetadataItems:removedMetadataItemsOrNil];
-    }
-    
     NSArray *updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
-    if (updatedMetadataItemsOrNil) {
-        NSIndexSet *indexesOfCompletelyDownloadedUpdatedMetadataItems = [updatedMetadataItemsOrNil indexesOfObjectsPassingTest:^BOOL(NSMetadataItem *updatedMetadataItem, NSUInteger idx, BOOL *stop) {
-            NSString *downloadStatus = [updatedMetadataItem valueForAttribute:NSMetadataUbiquitousItemDownloadingStatusKey];
-            
-            return [downloadStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent];
-        }];
+
+    //NSMutableArray *insertedURLs = [NSMutableArray arrayWithCapacity:insertedMetadataItemsOrNil.count + updatedMetadataItemsOrNil.count];
+    //NSMutableArray *removedURLs = [NSMutableArray arrayWithCapacity:removedMetadataItemsOrNil.count + updatedMetadataItemsOrNil.count];
+
+    // Handle's updating old results metadata with new metadata
+    NSMutableIndexSet *updatedItems = [[NSMutableIndexSet alloc] init];
+    for (NSMetadataItem *metadataItem in updatedMetadataItemsOrNil) {
         
-        NSArray *completelyDownloadedUpdatedMetadataItems = [updatedMetadataItemsOrNil objectsAtIndexes:indexesOfCompletelyDownloadedUpdatedMetadataItems];
+        NSUInteger index = [self.metadataQuery.results indexOfObjectIdenticalTo:metadataItem];
+        NSAssert(index!=NSNotFound, @"%s Not found.", __PRETTY_FUNCTION__);
+        if (index != NSNotFound) {
+            [updatedItems addIndex:index];
+        }
         
-        updatedURLs = [self URLsByMappingMetadataItems:completelyDownloadedUpdatedMetadataItems];
+        MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+        NSNumber *key = @(metadataItem.hash);
+        [self.results setObject:metaData forKey:key];
     }
     
-    // Make sure that the arrays are all initialized before calling the didUpdateContents method.
-    insertedURLs = insertedURLs ?: @[];
-    removedURLs = removedURLs ?: @[];
-    updatedURLs = updatedURLs ?: @[];
+    // Get metadata for new items
+    NSMutableIndexSet *insertedItems = [[NSMutableIndexSet alloc] init];
+    for (NSMetadataItem *metadataItem in insertedMetadataItemsOrNil) {
+        
+        NSUInteger index = [self.metadataQuery.results indexOfObjectIdenticalTo:metadataItem];
+        NSAssert(index!=NSNotFound, @"%s Not found.", __PRETTY_FUNCTION__);
+        if (index != NSNotFound) {
+            [insertedItems addIndex:index];
+        }
+        
+        MADMetaData *metaData = [[MADMetaData alloc] initWithMetadataItem:metadataItem];
+        NSNumber *key = @(metadataItem.hash);
+        [self.results setObject:metaData forKey:key];
+        
+    }
     
-    [self.delegate listCoordinatorDidUpdateContentsWithInsertedURLs:insertedURLs
-                                                        removedURLs:removedURLs
-                                                        updatedURLs:updatedURLs];
+    // Remove existing meta data
+    NSIndexSet *removedItems = [[NSIndexSet alloc] init];
+    for (NSMetadataItem *metadataItem in removedMetadataItemsOrNil) {
+        
+        NSNumber *key = @(metadataItem.hash);
+        [self.results removeObjectForKey:key];
+        
+    }
+    
+    [self.delegate listCoordinatorDidUpdateContentsWithInsertedItems:insertedItems
+                                                        removedItems:removedItems
+                                                        updatedItems:updatedItems];
     
     [self.metadataQuery enableUpdates];
 }

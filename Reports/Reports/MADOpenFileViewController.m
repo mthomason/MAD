@@ -18,6 +18,7 @@
 
 #import "MADocument.h"
 #import "MACloudManager.h"
+#import "MADMetaData.h"
 
 #import "MADViewerController.h"
 
@@ -95,13 +96,16 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readwrite) BOOL savingActivityIndicatorVisible;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readwrite) BOOL rightBarButtonItemActivityIndicatorVisible;
 
-@property (nonatomic, strong) NSArray *urls;
+//@property (nonatomic, strong) NSArray *urls;
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UILabel *labelMadDesigner;
 
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
 @property (nonatomic, assign) BOOL firstViewWillAppear;
+
+@property (nonatomic, assign) NSUInteger numberOfDocumentsLocal;
+@property (nonatomic, assign) NSUInteger numberOfDocumentsCloud;
 
 @end
 
@@ -325,6 +329,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [[MACloudManager sharedManager] reloadDocumentCacheWithSearchString:searchText];
+    /*
     if (searchText.length > 0) {
         NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             
@@ -333,7 +339,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
                                                                       options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
                                                                         range:range] == NSOrderedSame;
         }];
-        self.urls = [[[MACloudManager sharedManager] hasMadDocuments] filteredArrayUsingPredicate:predicate];
+    //    self.urls = [[[MACloudManager sharedManager] hasMadDocuments] filteredArrayUsingPredicate:predicate];
         NSIndexSet *set = [NSIndexSet indexSetWithIndex:0];
         
         __weak UICollectionView *weakCollectionView = self.collectionView;
@@ -343,6 +349,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     } else {
         [self reloadData];
     }
+     */
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
@@ -792,23 +799,25 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 }
 
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
-    NSInteger row = [[self.collectionView indexPathForCell:cellDocument] row];
-    return [self.urls objectAtIndex:row];
-    
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
+    return [self documentForIndexPath:indexPath];
 }
 
 - (void)reloadData {
     NSLog(@"Reload Data");
-    self.urls = [[MACloudManager sharedManager] hasMadDocuments];
+    
+    self.numberOfDocumentsLocal = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionLocal];
+    self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
+    
+//    self.urls = [[MACloudManager sharedManager] hasMadDocuments];
     [self.collectionView reloadData];
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
-    return [self.urls objectAtIndex:indexPath.item];
-}
-
-- (NSUInteger)dataSourceCount {
-    return self.urls.count;
+    MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
+                                                                            inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
+    
+    return metadata.url;
 }
 
 - (void)deleteDocumentAtIndexPath:(NSIndexPath *)index error:(NSError **)error {
@@ -1032,23 +1041,63 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.urls.count;
+    
+    switch (section) {
+        
+        case 0:
+            return self.numberOfDocumentsLocal;
+            break;
+
+        case 1:
+            return self.numberOfDocumentsCloud;
+            break;
+            
+        default:
+            return 0;
+            break;
+    }
+}
+
+- (NSUInteger)dataSourceCount {
+    return self.numberOfDocumentsLocal + self.numberOfDocumentsCloud;
+}
+
+static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection);
+static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection) {
+    switch (displaySection) {
+            
+        case 0:
+            return MACloudManagerSectionLocal;
+            break;
+            
+        case 1:
+            return MACloudManagerSectionCloud;
+            break;
+            
+        default:
+            return MACloudManagerSectionLocal;
+            break;
+    }
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
     MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
                                                                                    forIndexPath:indexPath];
     
-    NSURL *url = [self.urls objectAtIndex:indexPath.item];
+    MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
+                                                                            inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
+    NSURL *url = metadata.url;
     
     if (cell.delegate == nil) {
         cell.delegate =  self;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rename:)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                              action: @selector(rename:)];
         tap.numberOfTapsRequired = 1;
         tap.numberOfTouchesRequired = 1;
         [cell.labelTitle addGestureRecognizer:tap];
