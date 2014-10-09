@@ -890,11 +890,15 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 #pragma mark - UICollectionViewDelegate
 
-- (BOOL)collectionView:(UICollectionView *)collectionView
-      canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath
-            withSender:(id)sender {
+- (BOOL)collectionView: (UICollectionView *)collectionView
+      canPerformAction: (SEL)action
+    forItemAtIndexPath: (NSIndexPath *)indexPath
+            withSender: (id)sender {
 
-    [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+    [super collectionView: collectionView
+         canPerformAction: action
+       forItemAtIndexPath: indexPath
+               withSender: sender];
     
     return YES;
 
@@ -928,9 +932,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     return headerView;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-
-}
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
     
@@ -948,11 +950,10 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    
-}
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     [self selectionsUpdated];
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performSelectionAnimations];
@@ -968,6 +969,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell performDeselectionAnimations];
     
@@ -979,6 +981,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     }
     [cell normalizeTint];
     cell.imagePreview.image = image;
+
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1007,6 +1010,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     [self selectionsUpdated];
     
     MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
@@ -1224,9 +1228,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
 
     if ([sender state] == UIGestureRecognizerStateBegan) {
+
         if ([self editModeEnabled] == NO) {
             [self edit:self];
         }
+        
+        NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
+        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        
     }
 
 }
@@ -1528,7 +1537,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
         
         for (NSIndexPath *visibleCellLocations in weakSelf.collectionView.indexPathsForVisibleItems) {
-            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[[weakSelf collectionView] cellForItemAtIndexPath:visibleCellLocations];
+            MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[weakSelf.collectionView cellForItemAtIndexPath:visibleCellLocations];
             if (documentCell != nil) {
                 [documentCell normalizeTint];
             }
