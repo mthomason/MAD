@@ -62,8 +62,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 @property (nonatomic, strong, readwrite) NSFileCoordinator *fileCoordinator;
 @property (nonatomic, strong) NSFileManager *fileManager;
 
-
-
 @property (nonatomic, assign) NSUInteger    documentCacheCloudCount;
 @property (nonatomic, assign) NSUInteger    documentCacheLocalCount;
 
@@ -751,6 +749,5 @@ static MACloudManager *sharedSingleton;
     }
     return metatdata;
 }
-
 
 @end

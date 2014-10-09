@@ -20,7 +20,8 @@
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readonly) BOOL savingActivityIndicatorVisible;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readonly) BOOL rightBarButtonItemActivityIndicatorVisible;
 
-- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible animated:(BOOL)animated;
+- (void)setRightBarButtonItemActivityIndicatorVisible:(BOOL)rightBarButtonItemActivityIndicatorVisible
+                                             animated:(BOOL)animated;
 - (void)reloadData;
 
 - (IBAction)done:(id)sender;

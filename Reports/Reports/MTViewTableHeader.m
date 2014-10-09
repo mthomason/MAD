@@ -24,9 +24,12 @@
 
         UIColor *color = [UIColor whiteColor];
         UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10.0000f, 3.0000f, 215.0000f, 24.0000f)];
+        
         label.backgroundColor = [UIColor clearColor];
         [label setTextColor:[UIColor blackColor]];
+        
         label.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [label setFont:font];
         [label setTextColor:color];
@@ -35,6 +38,7 @@
         [button setFrame:CGRectMake(274.0000f, 0.0000f, 29.0000f, 29.0000f)];
         button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [button setTintColor:[UIColor whiteColor]];
+        
         [self setButtonAdd:button];
         [self setLabelTitle:label];
 

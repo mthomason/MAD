@@ -1210,6 +1210,8 @@
 		4CB3C23D19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */; };
 		4CB42DC8166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
 		4CB42DC9166A339400CE1876 /* NSString+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB42DC7166A339300CE1876 /* NSString+Extras.m */; };
+		4CB43ADE19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB43ADD19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m */; };
+		4CB43ADF19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB43ADD19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m */; };
 		4CB4574A1705F6DB005269B7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457491705F6DB005269B7 /* RptqRelationship.m */; };
 		4CB4574B1705F6DB005269B7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457491705F6DB005269B7 /* RptqRelationship.m */; };
 		4CB4575E1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2615,6 +2617,8 @@
 		4CB3C23919235C7D00F3213E /* MTSliderThumbRotate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MTSliderThumbRotate@2x.png"; sourceTree = "<group>"; };
 		4CB42DC6166A339300CE1876 /* NSString+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extras.h"; sourceTree = "<group>"; };
 		4CB42DC7166A339300CE1876 /* NSString+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extras.m"; sourceTree = "<group>"; };
+		4CB43ADC19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOpenFileSectionHeaderView.h; sourceTree = "<group>"; };
+		4CB43ADD19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOpenFileSectionHeaderView.m; sourceTree = "<group>"; };
 		4CB457481705F6DB005269B7 /* RptqRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqRelationship.h; sourceTree = "<group>"; };
 		4CB457491705F6DB005269B7 /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqRelationship.m; sourceTree = "<group>"; };
 		4CB4575C1705F735005269B7 /* RptqDocumentSectionRows+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentSectionRows+Extras.h"; sourceTree = "<group>"; };
@@ -3024,6 +3028,8 @@
 		4C00815914B6BDB6003DF437 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4CB43ADC19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.h */,
+				4CB43ADD19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m */,
 				4CDC60AE16E48F9C00924676 /* Table View Cells */,
 				4C23FB2A18FADE46009F234F /* MADWatermarkView.h */,
 				4C23FB2B18FADE46009F234F /* MADWatermarkView.m */,
@@ -6304,6 +6310,7 @@
 				4C0E7756163B5AEC003B951E /* UITableViewCellLinkName.m in Sources */,
 				4C0E7757163B5AEC003B951E /* UITableViewCellQueryInput.m in Sources */,
 				4C0E7758163B5AEC003B951E /* UITableViewCellInstruction.m in Sources */,
+				4CB43ADF19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m in Sources */,
 				4C0E7759163B5AEC003B951E /* UITableViewCellOverride.m in Sources */,
 				4C0E775A163B5AEC003B951E /* UITableViewCellQueryLink.m in Sources */,
 				4C773291190FFD6A005AE7C2 /* MysqlFetch.m in Sources */,
@@ -6670,6 +6677,7 @@
 				4CD0F7CA14CD201F003DA079 /* UITableViewCellTableName.m in Sources */,
 				4CD0F7CE14CD2036003DA079 /* UITableViewCellLinkName.m in Sources */,
 				4CABE4A31837DF80007EDD9D /* RptqQueryGroup.m in Sources */,
+				4CB43ADE19E6170900E3A6E3 /* MADOpenFileSectionHeaderView.m in Sources */,
 				4CD0F7D114CD2051003DA079 /* UITableViewCellQueryInput.m in Sources */,
 				4C773290190FFD6A005AE7C2 /* MysqlFetch.m in Sources */,
 				4CD0F7D414CD2068003DA079 /* UITableViewCellInstruction.m in Sources */,

@@ -20,6 +20,9 @@
 #import "MACloudManager.h"
 #import "MADMetaData.h"
 
+#import "MTCollectionViewCellDocument.h"
+#import "MADOpenFileSectionHeaderView.h"
+
 #import "MADViewerController.h"
 
 #import "MTStoreKitController.h"
@@ -29,7 +32,7 @@
 #import "MADWatermarkView.h"
 
 #import "MTQueryBuilderContainerController.h"
-#import "MTCollectionViewCellDocument.h"
+
 #import "MTViewControllerAbout.h"
 #import "MTTableViewCellDocument.h"
 #import "MADQueryViewController.h"
@@ -54,6 +57,7 @@ NSString * const MTSegueShowOpenDocument                        = @"MADSegueOpen
 NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollectionViewCellDocumentIdentifier";
 NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
+NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
@@ -220,16 +224,24 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 }
 
 - (void)initialize {
+
     self.firstViewWillAppear = YES;
     self.rightBarButtonItemActivityIndicatorVisible = NO;
+
 }
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     
-    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                           target:self action:@selector(edit:)];
+    [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
+            forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+                   withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
+    
+
+    UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                                           target: self
+                                                                                           action: @selector(edit:)];
     [self setBarButtonItemEditDone:barButtonItemEditDone];
 
     [self setEditModeEnabled:NO];
@@ -237,9 +249,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 
     UIColor *barTintColor = [UIColor tintColorBlue];
     UIColor *tintColor = [UIColor tintColorWhite];
-    UIToolbar *toolbar = [[self navigationController] toolbar];
-    [toolbar setBarTintColor:barTintColor];
-    [toolbar setTintColor:tintColor];
+    self.navigationController.toolbar.barTintColor = barTintColor;
+    self.navigationController.toolbar.tintColor = tintColor;
 
     [self initalizeBackground];
 
@@ -644,7 +655,7 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     return YES;
 }
 
-#pragma mark - UIDocumentInteractionControllerDelegate
+#pragma mark - UIDocumentInteractionControllerDelegatex
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
     return self.navigationController;
@@ -877,17 +888,69 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
 
-#pragma mark - Collection View Delegate Protocol
+#pragma mark - UICollectionViewDelegate
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+- (BOOL)collectionView:(UICollectionView *)collectionView
+      canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath
+            withSender:(id)sender {
+
     [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+    
     return YES;
+
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind:(NSString *)kind
+                                 atIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    MADOpenFileSectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind: kind
+                                                                                  withReuseIdentifier: MADIdentifierOpenFileSectionHeader
+                                                                                         forIndexPath: indexPath];
+    
+    switch (indexPath.section) {
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath { }
+        case 0:
+            headerView.sectionType = MACloudManagerSectionLocal;
+            break;
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
+        case 1:
+            headerView.sectionType = MACloudManagerSectionCloud;
+            break;
+
+        default:
+            headerView.sectionType = MACloudManagerSectionLocal;
+            break;
+
+    }
+    
+    return headerView;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+    
+    switch (indexPath.section) {
+        case 0:
+            ((MADOpenFileSectionHeaderView *)view).sectionType = MACloudManagerSectionLocal;
+            break;
+        case 1:
+            ((MADOpenFileSectionHeaderView *)view).sectionType = MACloudManagerSectionCloud;
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
+    
+}
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     [self selectionsUpdated];
@@ -1019,24 +1082,45 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     
 }
 
-#pragma mark - Collection View Flow Layout Delegate
+#pragma mark - UICollectionViewFlowLayoutDelegate
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
+                        layout:(UICollectionViewLayout*)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section {
+
     return [UIDevice isPad] ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
                                 UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    
     return [UIDevice isPad] ? 50.0000f : 5.0000f;
+    
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+
     return [UIDevice isPad] ? 50.0000f : 5.0000f;
+
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeZero;
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+referenceSizeForHeaderInSection:(NSInteger)section {
+    
+    return CGSizeMake(collectionView.bounds.size.width, 24.0000f);
+    
 }
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
+
 
 #pragma mark - UICollectionViewDataSource
 
@@ -1044,7 +1128,8 @@ NSString * const MTSegueLicensing                               = @"MTSegueLicen
     return 2;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView
+    numberOfItemsInSection:(NSInteger)section {
     
     switch (section) {
         
@@ -1107,12 +1192,16 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         [cell addGestureRecognizer:longPressGestureRecognizer];
         
     }
+    
     [cell configureCellForUrl:url];
     if (self.isEditing) {
         [cell startWobble];
     }
+    
     if (self.isSavingActivityIndicatorVisible == NO) {
+
         [cell.activityIndicator stopAnimating];
+
     } else {
         
         MTApplicationInstance *app = [AppDelegate app];
@@ -1122,15 +1211,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         } else {
             [cell.activityIndicator stopAnimating];
         }
+    
     }
     
     return cell;
-}
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
-           viewForSupplementaryElementOfKind:(NSString *)kind
-                                 atIndexPath:(NSIndexPath *)indexPath {
-    return nil;
 }
 
 #pragma mark - Misc
@@ -1138,25 +1222,31 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 #pragma mark Edit Mode
 
 - (void)activateEditMode:(UILongPressGestureRecognizer *)sender {
+
     if ([sender state] == UIGestureRecognizerStateBegan) {
         if ([self editModeEnabled] == NO) {
             [self edit:self];
         }
     }
+
 }
 
 - (void)endEditMode:(UITapGestureRecognizer *)sender {
+
     [self.searchBar resignFirstResponder];
     if ([self editModeEnabled]) {
         [self edit:self];
     }
+
 }
 
 #pragma mark UI Helpers
 
 - (BOOL)dismissAllPopovers {
+
     BOOL result = NO;
     if ([UIDevice isPad]) {
+
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
         if (self.openDocumentPopoverController != nil)
             [allpopovers addObject:self.openDocumentPopoverController];
@@ -1171,8 +1261,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                 result = YES;
             }
         }
+
     }
     return result;
+
 }
 
 - (void)reenable {
@@ -1561,6 +1653,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                                                                                      withExtension: MTDocumentExtentionMobleApplicationDocument];
                                                                       [[MACloudManager sharedManager] moveDocument:urlToRename
                                                                                                         toLocation:newUrl];
+                                                                      
                                                                       [weakself removeCachedFileForDocumentUrl:urlToRename];
                                                                   }
                                                                   
@@ -1573,26 +1666,34 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: cancel
                                                            style: UIAlertActionStyleCancel
                                                          handler: nil];
+    
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+
         textField.text = cellDocument.labelTitle.text;
         textField.clearButtonMode = UITextFieldViewModeAlways;
         textField.delegate = weakself;
+
     }];
+
     [alert addAction:actionDefault];
     [alert addAction:actionCancel];
+
     [self presentViewController:alert animated:YES completion:nil];
     
 }
 
 - (NSString *)renameFilter:(NSString *)text {
+
     NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
     [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
     [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
     
     return [[text componentsSeparatedByCharactersInSet:[characterSet invertedSet]] componentsJoinedByString:@""];
+
 }
 
 - (void)validationError {
+
     UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Validation Error"
                                                                    message: @"Filename not valid."
                                                             preferredStyle: UIAlertControllerStyleAlert];
@@ -1601,10 +1702,13 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                  style: UIAlertActionStyleDefault
                                                handler: nil];
     [alert addAction:ok];
+
     [self presentViewController:alert animated:YES completion:nil];
+
 }
 
 - (void)email:(MTCollectionViewCellDocument *)cell {
+    
     if ([MFMailComposeViewController canSendMail] == NO) {
         
         UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
@@ -1653,8 +1757,10 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             }
             
             [weakself presentViewController:mailComposer animated:YES completion:nil];
+            
         }
     }
+
 }
 
 @end
