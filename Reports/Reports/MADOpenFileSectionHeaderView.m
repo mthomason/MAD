@@ -18,6 +18,8 @@ NSString * const MADTextLocal = @"Local";
 
 @property (nonatomic, strong) NSString *localizedTextCloud;
 @property (nonatomic, strong) NSString *localizedTextLocal;
+@property (nonatomic, strong) NSAttributedString *localizedAttrbiutedTextCloud;
+@property (nonatomic, strong) NSAttributedString *localizedAttrbiutedTextLocal;
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 
@@ -61,8 +63,23 @@ NSString * const MADTextLocal = @"Local";
         [self addSubview: activityView];
 
         self.activityIndicatorView = activityView;
-
-        self.backgroundColor = [UIColor edaBlackFiftyPercent];
+        
+        UIColor *strokeColor = [UIColor tintColorWhite];
+        UIColor *foregroundColor = [UIColor tintColorRed];
+        NSNumber *strokeWidth = @(3.0000f);
+        NSDictionary *attributes = @{NSForegroundColorAttributeName : foregroundColor};
+        
+        NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
+                                                                                    attributes: attributes];
+        self.localizedAttrbiutedTextLocal = attributedStringLocal;
+        
+        NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
+                                                                                    attributes: attributes];
+        self.localizedAttrbiutedTextCloud = attributedStringCloud;
+        
+        UIColor *blueColor = [[UIColor edaBlueLightBackground] colorWithAlphaComponent:0.20000f];
+        self.backgroundColor = blueColor;
+        //self.alpha = 2.0000f;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
         
@@ -93,18 +110,22 @@ NSString * const MADTextLocal = @"Local";
         switch (self.sectionType) {
                 
             case MACloudManagerSectionCloud:
-                self.label.text = self.localizedTextCloud;
+                self.label.attributedText = self.localizedAttrbiutedTextCloud;
+//                self.label.text = self.localizedTextCloud;
                 break;
                 
             case MACloudManagerSectionLocal:
-                self.label.text = self.localizedTextLocal;
+                self.label.attributedText = self.localizedAttrbiutedTextLocal;
+//                self.label.text = self.localizedTextLocal;
                 break;
                 
             case MACloudManagerSectionCombined:
+                self.label.attributedText = nil;
                 self.label.text = @"";
                 break;
                 
             default:
+                self.label.attributedText = nil;
                 self.label.text = @"";
                 break;
         }

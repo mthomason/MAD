@@ -772,15 +772,21 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         [[self aboutPopoverController] dismissPopoverAnimated:animated];
     }
     if ([MFMailComposeViewController canSendMail]) {
+        
         MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mFMailComposeViewController setMailComposeDelegate:self];
-        [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
-        [mFMailComposeViewController setSubject:@"MAD Designer"];
-        [[[mFMailComposeViewController navigationController] navigationBar] setBarTintColor:[UIColor tintColorAnalogous4]];
-        [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
+        mFMailComposeViewController.mailComposeDelegate = self;
+        mFMailComposeViewController.toRecipients = @[@"admin@everydayapps.com"];
+        mFMailComposeViewController.subject = @"MAD Designer";
+        mFMailComposeViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+        [self presentViewController: mFMailComposeViewController
+                           animated: YES
+                         completion: nil];
+        
     } else {
         UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self presentViewController: alert
+                           animated: YES
+                         completion: nil];
     }
 }
 
@@ -845,8 +851,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 - (void)initalizeBackground {
     UICollectionView *v = (UICollectionView *)self.collectionView;
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame:[v bounds]];
-    [v setBackgroundView:watermarkView];
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: v.bounds];
+    v.backgroundView = watermarkView;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView

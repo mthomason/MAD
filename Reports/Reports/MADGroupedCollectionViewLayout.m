@@ -56,16 +56,14 @@ CGFloat const MADAlpha = 0.9000f;
             NSIndexPath *header1 = [NSIndexPath indexPathForItem:0 inSection:0];
             attributesHeader1 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                                                withIndexPath:header1];
-            [results addObject:attributesHeader1];
         }
         
         if (gotHeader2 == NO) {
             NSIndexPath *header2 = [NSIndexPath indexPathForItem:0 inSection:1];
             attributesHeader2 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                                                withIndexPath:header2];
-            [results addObject:attributesHeader2];
         }
-        
+
         [self updateAttributes:&attributesHeader1];
         [self updateAttributes:&attributesHeader2];
         
@@ -75,21 +73,31 @@ CGFloat const MADAlpha = 0.9000f;
                                                  attributesHeader1.frame.size.width,
                                                  attributesHeader1.frame.size.height);
         }
+        
+        if (gotHeader1 == NO) {
+            [results addObject:attributesHeader1];
+        }
+        if (gotHeader2 == NO) {
+            [results addObject:attributesHeader2];
+        }
+
     }
     
     return results;
 }
 
 - (void)updateAttributes:(UICollectionViewLayoutAttributes **)attributes {
-
     (*attributes).alpha = MADAlpha;
     (*attributes).zIndex = MADzIndexOffset + (*attributes).indexPath.section;
     
     CGFloat y = (*attributes).frame.origin.y;
-    if (y < self.collectionView.contentOffset.y + self.collectionView.contentInset.top)
-        y = self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
-    
-    (*attributes).frame = CGRectMake(CGPointZero.x, y, (*attributes).frame.size.width, (*attributes).frame.size.height);
+    CGFloat border = self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
+    if (y < border)
+        y = border;
+    CGSize size = [((id<UICollectionViewDelegateFlowLayout>)self.collectionView.delegate) collectionView:self.collectionView
+                                                                                                  layout:self.collectionView.collectionViewLayout
+                                                                         referenceSizeForHeaderInSection:(*attributes).indexPath.section];
+    (*attributes).frame = CGRectMake(CGPointZero.x, y, size.width, size.height);
 }
 
  @end
