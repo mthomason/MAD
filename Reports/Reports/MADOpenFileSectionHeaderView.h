@@ -13,4 +13,7 @@
 
 @property (nonatomic, assign) MACloudManagerSection sectionType;
 
+- (void)startAnimating;
+- (void)stopAnimating;
+
 @end

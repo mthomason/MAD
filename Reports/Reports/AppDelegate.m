@@ -11,6 +11,7 @@
 #endif
 
 #import "AppDelegate.h"
+#import <CoreData/CoreData.h>
 
 #import "MTApplicationInstance.h"
 #import "MTNavigationController.h"
@@ -176,11 +177,27 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 
     [self.applicationInstance initalizeAppearance];
-    [self.applicationInstance deleteCoreDataCache];
 
     //[MTStoreKitController sharedObject];
     [MACloudManager sharedManager];
     return YES;
+}
+
++ (void)deleteCoreDataCache {
+    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(dipatchQueue, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            dispatch_async(dipatchQueueBg, ^{
+                
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
+                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+            });
+        });
+    });
 }
 
 - (void)handleNotificationFileManagerDidUpdateFileLocations:(NSNotification *)notification {
@@ -191,7 +208,17 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
     // FIXME: Start timer, and display activity indictor if it takes too long
     //  to bring back a ubiquitous container.
 
-    [NSTimer timerWithTimeInterval:0.5000f target:self selector:@selector(displayActivityIndictor:) userInfo:nil repeats:NO];
+    [NSTimer timerWithTimeInterval: 0.5000f
+                            target: self
+                          selector: @selector(displayActivityIndictor:)
+                          userInfo: nil
+                           repeats: NO];
+}
+
+- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
+    // FIXME: Remove activity indictor for ubiquitous container.
+    [self hideActivityIndictor:nil];
+    [self.openFileViewController reloadData];
 }
 
 - (void)displayActivityIndictor:(id)sender {
@@ -204,18 +231,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
                                                                       animated:YES];
 }
 
-- (void)handleNotificationDidEndFetchingUbiquitousContainer:(NSNotification *)notification {
-    // FIXME: Remove activity indictor for ubiquitous container.
-    [self hideActivityIndictor:nil];
-    [self.openFileViewController reloadData];
-}
-
 - (void)handleNotificationUpdateCloudEnabled:(NSNotification *)notification {
-    // FIXME: Implement logic for cloud status enabled change.
-    //  Pop to root view controller / file view controller.
-    //  Reload file view controller, getting docs from new
-    //  cloud container.
-    [self.navigationController popToRootViewControllerAnimated:NO];
+
     [self.openFileViewController reloadData];
     
     NSAssert(false, @"Not implemented: %s %@", __PRETTY_FUNCTION__, notification);
@@ -239,10 +256,8 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    [AppDelegate deleteCoreDataCache];
     [[MACloudManager sharedManager] activate];
-    [[MACloudManager sharedManager] checkUserICloudPreferenceAndSetupIfNecessary:^{
-        
-    }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application { }
@@ -304,31 +319,13 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents
                             coder:(NSCoder *)coder {
-    // FIXME: Currently not implemented
+    
+    // FIXME: Currently not implemented... working
     
     self.application = application;
     if (self.storyboard == nil) {
         UIStoryboard *storyBoard = [MTApplicationInstance storyboard];
         self.storyboard = storyBoard;
-    }
-    
-    if ([self.applicationInstance openDocument] == nil) {
-        [application extendStateRestoration];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *filename = [userDefaults objectForKey:@"MADStateRestorationOpenFileWithExtension"];
-        if (filename.length > 0) {
-            for (NSURL *url in [[MACloudManager sharedManager] hasMadDocuments]) {
-                if ([url.path.lastPathComponent caseInsensitiveCompare:filename] == NSOrderedSame) {
-                    
-                    //[self.applicationInstance openReport: url
-                    //               withCompletionHandler: ^(BOOL success) {
-                    //                   [application completeStateRestoration];
-                    //               }];
-                    break;
-                }
-            }
-        }
     }
     
     UIViewController *vc = nil;

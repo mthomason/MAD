@@ -16,6 +16,8 @@
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
 
+#import "MADGroupedCollectionViewLayout.h"
+
 #import "MADocument.h"
 #import "MACloudManager.h"
 #import "MADMetaData.h"
@@ -59,10 +61,11 @@ NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
 
+CGFloat const MADSectionHeaderHeight = 32.0000f;
+
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
         UIPopoverControllerDelegate,
-        UICollectionViewDelegate,
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
@@ -74,7 +77,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
         MTViewControllerProtocol,
         MTDocumentCellProtocol>
 
-@property (nonatomic, weak) IBOutlet UICollectionViewFlowLayout *collectionViewFlowLayout;
+@property (nonatomic, weak) IBOutlet MADGroupedCollectionViewLayout *collectionViewFlowLayout;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
@@ -110,6 +113,12 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 @property (nonatomic, assign) NSUInteger numberOfDocumentsLocal;
 @property (nonatomic, assign) NSUInteger numberOfDocumentsCloud;
+
+@property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
+
+@property (nonatomic, assign) BOOL cloudActivityRunning;
+@property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
+
 
 @end
 
@@ -202,8 +211,8 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 }
 
 - (void)awakeFromNib {
-    [self setShouldShowAddDocumentPopover:YES];
-    [[self barButtonItemAddNewDocument] setEnabled:YES];
+    self.shouldShowAddDocumentPopover = YES;
+    [self.barButtonItemAddNewDocument setEnabled:YES];
     [super awakeFromNib];
 }
 
@@ -213,6 +222,14 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
         [self initialize];
     }
     return self;    
+}
+
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout {
+    self = [super initWithCollectionViewLayout:layout];
+    if (self) {
+        [self initialize];
+    }
+    return self;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -225,20 +242,72 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 - (void)initialize {
 
+    self.cloudActivityRunning = NO;
+    self.cloudActivityRunningDisplay = NO;
     self.firstViewWillAppear = YES;
     self.rightBarButtonItemActivityIndicatorVisible = NO;
 
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationCloudActivityStarted
+                                                  object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationCloudActivityCompleted
+                                                  object: nil];
+}
+
 #pragma mark - UIViewController
+- (void)handleCloudActivityStarted:(NSNotification *)notification {
+    self.cloudActivityRunning = YES;
+    NSTimer *timer = [NSTimer timerWithTimeInterval: 0.5000f
+                                             target: self
+                                           selector: @selector(displayActivityIndictor)
+                                           userInfo: nil
+                                            repeats: NO];
+    [timer fire];
+}
+- (void)displayActivityIndictor {
+    if (self.cloudActivityRunning) {
+        self.cloudActivityRunningDisplay = YES;
+        [self.headerCloud startAnimating];
+    }
+}
+
+
+- (void)handleCloudActivityCompleted:(NSNotification *)notification {
+    self.cloudActivityRunning = NO;
+    self.cloudActivityRunningDisplay = NO;
+    [self.headerCloud stopAnimating];
+}
+
+
 
 - (void)viewDidLoad {
+
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager sharedManager].cloudAvailble ? MADSectionHeaderHeight : CGSizeZero.height),
+                                                                 self.collectionView.contentInset.left,
+                                                                 self.collectionView.contentInset.bottom,
+                                                                 self.collectionView.contentInset.right);
+    
     
     [self.collectionView registerClass: [MADOpenFileSectionHeaderView class]
             forSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                    withReuseIdentifier: MADIdentifierOpenFileSectionHeader];
+  
     
-
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleCloudActivityStarted:)
+                                                 name: MADNotificationCloudActivityStarted
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleCloudActivityCompleted:)
+                                                 name: MADNotificationCloudActivityCompleted
+                                               object: nil];
+    
     UIBarButtonItem *barButtonItemEditDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
                                                                                            target: self
                                                                                            action: @selector(edit:)];
@@ -316,9 +385,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     
     [self setToolbarItems:toolbarButtons animated:NO];
     
-    self.collectionView.delegate = self;
-    [self initalizeDataSource];
-
 }
 
 - (UILongPressGestureRecognizer *)longPressGestureRecognizer {
@@ -341,26 +407,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     [[MACloudManager sharedManager] reloadDocumentCacheWithSearchString:searchText];
-    /*
-    if (searchText.length > 0) {
-        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-            
-            NSRange range = NSMakeRange(0, MIN(searchText.length, ((NSURL *)evaluatedObject).path.lastPathComponent.length));
-            return [((NSURL *)evaluatedObject).path.lastPathComponent compare:searchText
-                                                                      options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
-                                                                        range:range] == NSOrderedSame;
-        }];
-    //    self.urls = [[[MACloudManager sharedManager] hasMadDocuments] filteredArrayUsingPredicate:predicate];
-        NSIndexSet *set = [NSIndexSet indexSetWithIndex:0];
-        
-        __weak UICollectionView *weakCollectionView = self.collectionView;
-        [self.collectionView performBatchUpdates:^{
-            [weakCollectionView reloadSections:set];
-        } completion:nil];
-    } else {
-        [self reloadData];
-    }
-     */
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
@@ -377,8 +423,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[MACloudManager sharedManager] startQuery];
-    
     __weak MADOpenFileViewController *weakself = self;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -404,6 +448,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     }
     
     self.firstViewWillAppear = NO;
+
 }
 
 - (void)reenableDataWithSearch {
@@ -430,7 +475,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[MACloudManager sharedManager] stopQuery];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -636,7 +680,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self setShouldShowAddDocumentPopover:YES];
-    [[self barButtonItemAddNewDocument] setEnabled:YES];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -685,7 +729,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     } else {
         [self dismissViewControllerAnimated:YES completion:^{ }];
     }
-    [[self barButtonItemAddNewDocument] setEnabled:YES];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
     if ([UIDevice isPad]) {
         [self reloadData];
     }
@@ -711,7 +755,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
         }];
     }
     [self setShouldShowAddDocumentPopover:YES];
-    [[self barButtonItemAddNewDocument] setEnabled:YES];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
 }
@@ -720,7 +764,7 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     [self setShouldShowAddDocumentPopover:YES];
-    [[self barButtonItemAddNewDocument] setEnabled:YES];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
 - (void)viewControllerDidRequestComposeEmail:(id)sender animated:(BOOL)animated {
@@ -805,8 +849,41 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     [v setBackgroundView:watermarkView];
 }
 
-- (void)initalizeDataSource {
-    self.collectionView.dataSource = self;
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
+                        layout:(UICollectionViewLayout*)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section {
+    
+    return [UIDevice isPad] ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
+    UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    CGFloat r = [UIDevice isPad] ? 50.0000f : 5.0000f;
+    return r;
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    
+    return [UIDevice isPad] ? 50.0000f : 5.0000f;
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(140.0000f, 168.0000f);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+                    referenceSizeForHeaderInSection:(NSInteger)section {
+    
+    return [MACloudManager sharedManager].cloudAvailble ? CGSizeMake(collectionView.bounds.size.width, MADSectionHeaderHeight) : CGSizeZero;
+    
 }
 
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
@@ -820,7 +897,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     self.numberOfDocumentsLocal = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionLocal];
     self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
     
-//    self.urls = [[MACloudManager sharedManager] hasMadDocuments];
     [self.collectionView reloadData];
 }
 
@@ -886,7 +962,11 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     return NO;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView { }
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
+    [((UICollectionView *)scrollView).collectionViewLayout invalidateLayout];
+
+}
 
 #pragma mark - UICollectionViewDelegate
 
@@ -908,27 +988,27 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
            viewForSupplementaryElementOfKind:(NSString *)kind
                                  atIndexPath:(NSIndexPath *)indexPath {
     
-    
     MADOpenFileSectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind: kind
-                                                                                  withReuseIdentifier: MADIdentifierOpenFileSectionHeader
-                                                                                         forIndexPath: indexPath];
-    
+                                                        withReuseIdentifier: MADIdentifierOpenFileSectionHeader
+                                                               forIndexPath: indexPath];
+        
     switch (indexPath.section) {
-
+            
         case 0:
+            [headerView stopAnimating];
             headerView.sectionType = MACloudManagerSectionLocal;
             break;
-
+            
         case 1:
+            self.cloudActivityRunningDisplay ? [headerView startAnimating] : [headerView stopAnimating];
             headerView.sectionType = MACloudManagerSectionCloud;
             break;
-
+            
         default:
             headerView.sectionType = MACloudManagerSectionLocal;
             break;
-
+            
     }
-    
     return headerView;
 }
 
@@ -941,6 +1021,11 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
             ((MADOpenFileSectionHeaderView *)view).sectionType = MACloudManagerSectionLocal;
             break;
         case 1:
+            
+            if ([elementKind isEqualToString:UICollectionElementKindSectionHeader]) {
+                self.headerCloud = (MADOpenFileSectionHeaderView *)view;
+            }
+
             ((MADOpenFileSectionHeaderView *)view).sectionType = MACloudManagerSectionCloud;
             break;
             
@@ -1053,8 +1138,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
     __weak MTApplicationInstance *weakapp = app;
     [self displaySavingReportActivityIndicator];
     
-    [[MACloudManager sharedManager] stopQuery];
-
     [document openWithCompletionHandler:^(BOOL success) {
         
         if (success) {
@@ -1073,11 +1156,6 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
                                               sender: weakself];
                 
             }
-            
-        } else {
-            
-            [[MACloudManager sharedManager] startQuery];
-
         }
         
         [weakself reenable];
@@ -1090,37 +1168,18 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 
 //- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {}
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout*)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
 
-    return [UIDevice isPad] ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
-                                UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
 
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
+                                                                     atIndexPath:(NSIndexPath *)indexPath {
     
-    return [UIDevice isPad] ? 50.0000f : 5.0000f;
-    
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-
-    return [UIDevice isPad] ? 50.0000f : 5.0000f;
-
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-referenceSizeForHeaderInSection:(NSInteger)section {
-    
-    return CGSizeMake(collectionView.bounds.size.width, 24.0000f);
-    
+    UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
+   // CGRect frame = [self locationOfHeaderAtColumn:column];
+  //  [supplementalAttributes setFrame:frame];
+    supplementalAttributes.hidden = NO;
+    supplementalAttributes.zIndex = 999;
+    supplementalAttributes.alpha = 0.2000f;
+    return supplementalAttributes;
 }
 
 //- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
@@ -1129,7 +1188,7 @@ referenceSizeForHeaderInSection:(NSInteger)section {
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 2;
+    return [MACloudManager sharedManager].cloudAvailble ? 2 : 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView

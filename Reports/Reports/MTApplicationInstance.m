@@ -34,9 +34,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.127";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.127";
-NSString * const MTGlobalBundleRev                                  = @"1502";
+NSString * const MTGlobalBundleVersion                              = @"7.0.128";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.128";
+NSString * const MTGlobalBundleRev                                  = @"1503";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -370,26 +370,10 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     
     [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil]                 setColor: edaGreen];
     [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil]    setColor: edaGreen];
-    
+    //[[UIActivityIndicatorView appearanceWhenContainedIn:[UICollectionReusableView class], nil]  setColor: [UIColor whiteColor]];
+      
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes                      forState: UIControlStateNormal];
 
-}
-
-- (void)deleteCoreDataCache {
-    dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(dipatchQueue, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            dispatch_async(dipatchQueueBg, ^{
-                
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheName];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheTables];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
-                [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
-            });
-        });
-    });
 }
 
 - (void)registerDefaultsFromSettingsBundle {

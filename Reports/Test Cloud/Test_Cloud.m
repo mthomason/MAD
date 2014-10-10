@@ -41,11 +41,8 @@
                         object: nil];
     
     [[MACloudManager sharedManager] activate];
-    [[MACloudManager sharedManager] checkUserICloudPreferenceAndSetupIfNecessary:^{
 
         [super setUp];
-        
-    }];
     
 }
 
@@ -77,8 +74,8 @@
 }
 
 - (void)testExample {
-    NSLog(@"%@", [MACloudManager sharedManager].documentsDirectoryURL);
-    NSLog(@"%@", [MACloudManager sharedManager].isCloudEnabled ? @"YES" : @"NO");
+    NSLog(@"%@", [MACloudManager sharedManager].ubiquitousDocumentsDirectory);
+    //NSLog(@"%@", [MACloudManager sharedManager].isCloudEnabled ? @"YES" : @"NO");
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
 }

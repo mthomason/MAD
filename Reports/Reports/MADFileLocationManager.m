@@ -13,14 +13,15 @@ NSString * const MADUtiType                             = @"com.everydayapps.pro
 NSString * const MADUtiPublicData                       = @"public.data";
 NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == %@ && %K == %@";
 
+NSString * const MADNotificationCloudActivityStarted    = @"MADNotificationCloudActivityStarted";
+NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloudActivityCompleted";
+
 @interface MADFileLocationManager ()
 
 @property (nonatomic, strong, readwrite) NSMetadataQuery *metadataQuery;
 @property (nonatomic, strong, readwrite) NSURL *documentsDirectory;
 
 @property (nonatomic, strong, readwrite) NSMutableDictionary *results;
-//@property (nonatomic, strong, readwrite) NSMutableArray *resultsArray;
-
 
 @end
 
@@ -95,20 +96,9 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
 
 #pragma mark - MADFileLocationManager
 
-- (BOOL)startQuery {
-    //BOOL success = YES;
-    //if (self.metadataQuery.started == NO) {
-//        [self.metadataQuery enableUpdates];
-        //success = [self.metadataQuery startQuery];
-    //    NSAssert(success, @"%s\n\tFailed to start query.", __PRETTY_FUNCTION__);
-    //}
-    return YES;
-}
+- (BOOL)startQuery { return YES; }
 
-- (void)stopQuery {
-    //[self.metadataQuery disableUpdates];
-    //[self.metadataQuery stopQuery];
-}
+- (void)stopQuery { }
 
 #pragma mark - NSMetadataQuery Notifications
 
@@ -116,6 +106,10 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
     NSLog(@"\n%@\n", NSMetadataQueryDidStartGatheringNotification);
     
     [self.results removeAllObjects];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityStarted
+                                                        object: nil];
+
 
 }
 
@@ -125,6 +119,9 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
 
 - (void)handleMetadataQueryDidFinishGatheringNotification:(NSNotification *)notification {
     
+    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudActivityCompleted
+                                                        object: nil];
+
     NSLog(@"\n%@\n", NSMetadataQueryDidFinishGatheringNotification);
     
     [self.metadataQuery disableUpdates];
@@ -149,9 +146,12 @@ NSString * const MADPredicateFormatDocument             = @"%K.pathExtension == 
     [self.metadataQuery enableUpdates];
 }
 
-- (NSArray *)calculatedUrls {
-    NSArray *urlsByMappingMetadataItems = [self URLsByMappingMetadataItems:self.metadataQuery.results];
-    return [NSArray arrayWithArray:urlsByMappingMetadataItems];
+- (NSMutableArray *)calculatedUrls {
+    NSMutableArray *calculatedUrls = [[NSMutableArray alloc] initWithCapacity:self.results.count];
+    for (MADMetaData *metadata in self.results) {
+        [calculatedUrls addObject: metadata.url];
+    }
+    return calculatedUrls;
 }
 
 - (void)handleMetadataQueryDidUpdateNotification:(NSNotification *)notification {

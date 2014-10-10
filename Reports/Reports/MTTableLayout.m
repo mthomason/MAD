@@ -288,8 +288,8 @@ typedef struct _ColumnWidth {
 - (CGRect)locationOfHeaderAtColumn:(NSUInteger)column {
     CGFloat x = [self originXColumn:column];
     CGFloat y = (self.collectionView.contentOffset.y < - self.collectionView.contentInset.top) ?
-        CGPointZero.y :
-        CGPointZero.y + self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
+                    CGPointZero.y :
+                    CGPointZero.y + self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
     CGFloat w = [self widthColumn:column];
     CGFloat h = self.heightHeader;
     return CGRectMake(x, y, w, h);

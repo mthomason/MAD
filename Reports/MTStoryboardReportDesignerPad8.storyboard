@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6249" systemVersion="14A379a" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6249" systemVersion="14A386a" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6243"/>
@@ -4492,12 +4492,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="DM4-DJ-I6a">
-                            <size key="itemSize" width="280" height="325"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
+                        <collectionViewLayout key="collectionViewLayout" id="GVO-6R-WrF" customClass="MADGroupedCollectionViewLayout"/>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="HXO-EB-fZN" customClass="MTCollectionViewCellDocument">
                                 <rect key="frame" x="0.0" y="64" width="320" height="325"/>
@@ -4596,7 +4591,7 @@
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
                         <outlet property="barButtonItemSearch" destination="2wM-rP-7Tw" id="i6k-eQ-lDw"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
-                        <outlet property="collectionViewFlowLayout" destination="DM4-DJ-I6a" id="uth-rM-LWr"/>
+                        <outlet property="collectionViewFlowLayout" destination="GVO-6R-WrF" id="3hU-kk-wwB"/>
                         <segue destination="NEH-Kw-MQz" kind="modal" identifier="MADSegueOpenDocument" id="Oc4-uK-0Zg"/>
                     </connections>
                 </collectionViewController>

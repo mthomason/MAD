@@ -19,8 +19,10 @@ typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
 
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
 extern NSString * const MTDocumentExtentionMobleApplicationDocumentArchive;
+
 extern NSString * const MADNotificationFileManagerDidUpdateFileLocations;
 extern NSString * const MADNotificationCloudStateUpdated;
+
 extern NSString * const MADNotificationUbiquitousContainerFetchingWillBegin;
 extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
@@ -36,15 +38,17 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @property (nonatomic, weak) id <MADCloudManagerProtocol> delegate;
 
-@property (nonatomic, assign, getter=isCloudEnabled, readonly) BOOL cloudEnabled;
-@property (nonatomic, strong, readonly) NSURL *dataDirectoryURL;
-@property (nonatomic, strong, readonly) NSURL *documentsDirectoryURL;
 @property (nonatomic, strong, readonly) NSURL *localTemporaryDirectory;
-@property (nonatomic, strong, readonly) NSURL *cachesDirectory;
-@property (nonatomic, strong, readonly) NSURL *applicationSupport;
-@property (nonatomic, assign, readonly) BOOL cloudDesired;
+@property (nonatomic, strong, readonly) NSURL *localCachesDirectory;
+@property (nonatomic, strong, readonly) NSURL *localApplicationSupportDirectory;
+
+@property (nonatomic, strong, readonly) NSURL *localDataDirectory;
+@property (nonatomic, strong, readonly) NSURL *localDocumentDirectory;
+
+@property (nonatomic, strong, readonly) NSURL *ubiquitousDocumentsDirectory;
+@property (nonatomic, strong, readonly) NSURL *ubiquityContainer;
+
 @property (nonatomic, assign, readonly) BOOL cloudAvailble;
-@property (nonatomic, assign, readonly) BOOL cloudOptionsPresentedAndSelectedByUser;
 
 @property (nonatomic, strong) NSString *searchString;
 
@@ -53,24 +57,24 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 + (MACloudManager *)sharedManager;
 
 - (void)activate;
-- (void)checkUserICloudPreferenceAndSetupIfNecessary:(void (^)(void))completion;
 
-- (NSArray *)hasMadDocuments;
-
-- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
+// Notification hooks
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification;
+
+// File operations
+
+- (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 
 - (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
 - (void)moveDocument:(NSURL*)source
           toLocation:(NSURL*)destination;
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension;
 
+// File name helpers
+
 + (NSString *)filenameId:(NSUInteger)tag;
 + (NSString *)filenameId:(NSUInteger)tag extention:(NSString *)fileExtention;
-
-- (void)stopQuery;
-- (void)startQuery;
 
 // Managing the cache
 - (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;

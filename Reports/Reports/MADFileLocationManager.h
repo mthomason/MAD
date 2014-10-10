@@ -12,6 +12,8 @@
 #import <Foundation/Foundation.h>
 
 extern NSString * const MADUtiType;
+extern NSString * const MADNotificationCloudActivityStarted;
+extern NSString * const MADNotificationCloudActivityCompleted;
 
 @protocol MADFileLocationManagerDelegate <NSObject>
 
@@ -32,7 +34,7 @@ extern NSString * const MADUtiType;
 - (instancetype)initWithPathExtension:(NSString *)pathExtension;
 - (BOOL)startQuery;
 - (void)stopQuery;
-- (NSArray *)calculatedUrls;
+- (NSMutableArray *)calculatedUrls;
 
 @end
 
