@@ -727,6 +727,8 @@
 		4C6DF38A16D4C6C400BDC0C1 /* UIView+Animations.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */; };
 		4C6FDB6418A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
 		4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */; };
+		4C70C17519E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */; };
+		4C70C17619E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */; };
 		4C712E6819E068EC00808779 /* UIAlertController+CommonAlerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */; };
 		4C712E6919E068EC00808779 /* UIAlertController+CommonAlerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */; };
 		4C75C9F218E20306006E8526 /* MTTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C75C9F118E20306006E8526 /* MTTableCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2210,6 +2212,7 @@
 		4C6DF38816D4C6C400BDC0C1 /* UIView+Animations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animations.m"; sourceTree = "<group>"; };
 		4C6FDB6218A5685600374417 /* CGAffineTransform+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CGAffineTransform+Common.h"; sourceTree = "<group>"; };
 		4C6FDB6318A5685600374417 /* CGAffineTransform+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGAffineTransform+Common.m"; sourceTree = "<group>"; };
+		4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTViewTableHeader.xib; sourceTree = "<group>"; };
 		4C712E6619E068EC00808779 /* UIAlertController+CommonAlerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+CommonAlerts.h"; sourceTree = "<group>"; };
 		4C712E6719E068EC00808779 /* UIAlertController+CommonAlerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+CommonAlerts.m"; sourceTree = "<group>"; };
 		4C752E0C16EA3A0C001FDAA3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -3096,6 +3099,7 @@
 				4C44DC5819B93E500050BBDD /* MADDesignerStatusLabel.m */,
 				4CAD103019C009C000983B9E /* MADBackgroundScrollView.h */,
 				4CAD103119C009C000983B9E /* MADBackgroundScrollView.m */,
+				4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */,
 			);
 			name = Views;
 			path = Reports;
@@ -5823,6 +5827,7 @@
 				4C0E7833163B5AEC003B951E /* UIImagePatternRedTextured@2x.png in Resources */,
 				4C0E7834163B5AEC003B951E /* UIImagePatternRedVellum.png in Resources */,
 				4C0E7835163B5AEC003B951E /* UIImagePatternRedVellum@2x.png in Resources */,
+				4C70C17619E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */,
 				4C0E7836163B5AEC003B951E /* UIImagePatternSketchPaper.png in Resources */,
 				4C0E7837163B5AEC003B951E /* UIImagePatternSketchPaper@2x.png in Resources */,
 				4CF000DD19C0CCD500A24810 /* UIBarButtonItemDatabase8.png in Resources */,
@@ -6135,6 +6140,7 @@
 				4CB3C23A19235C7D00F3213E /* MTSliderThumbRotate.png in Resources */,
 				4CCD8DB5150385DA002B9E77 /* UIImagePatternYellowLined@2x.png in Resources */,
 				4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */,
+				4C70C17519E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */,
 				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,
 				4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */,
 				4C2AC30315358DA600738091 /* UIImageExportTypeCSV@2x.png in Resources */,

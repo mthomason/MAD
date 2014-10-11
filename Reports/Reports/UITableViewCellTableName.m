@@ -11,6 +11,21 @@
 
 @implementation UITableViewCellTableName
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
+        self.textLabel.numberOfLines = 0;
+    }
+    return self;
+}
+
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
+        self.textLabel.numberOfLines = 0;
+    }
+    return self;
+}
+
 + (CGFloat)defaultHeight {
     return 44.0000f;
 }

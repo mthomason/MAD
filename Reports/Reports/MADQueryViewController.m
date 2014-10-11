@@ -145,7 +145,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 @property (nonatomic, assign) BOOL beganUpdates;
 @property (nonatomic, assign) BOOL toolbarIconShown;
 
-@property (assign) NSInteger lastSelectedRowNumber;
+@property (atomic, assign) NSInteger lastSelectedRowNumber;
+
+@property (nonatomic, assign) CGFloat headerSectionHeight;
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
@@ -197,6 +199,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheLinks];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCacheGroups];
     [NSFetchedResultsController deleteCacheWithName: NSFetchedResultsCachePredicates];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
+                                                  object: nil];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -207,6 +213,58 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         
     }
     return self;
+}
+
+#pragma mark - NSNotificationCenter
+
+- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
+    NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
+    [self updateInterfaceForPerferedContentSizeCategory:contentSize];
+    [self.view setNeedsLayout];
+}
+
+- (void)updateInterfaceForPerferedContentSizeCategory:(NSString *)preferredContentSizeCategory {
+    
+    if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraSmall]) {
+        self.headerSectionHeight = 24.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategorySmall]) {
+        self.headerSectionHeight = 26.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryMedium]) {
+        self.headerSectionHeight = 29.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryLarge]) {
+        self.headerSectionHeight = 32.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraLarge]) {
+        self.headerSectionHeight = 34.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraExtraLarge]) {
+        self.headerSectionHeight = 36.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge]) {
+        self.headerSectionHeight = 38.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityMedium]) {
+        self.headerSectionHeight = 40.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityLarge]) {
+        self.headerSectionHeight = 42.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityExtraLarge]) {
+        self.headerSectionHeight = 44.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
+        self.headerSectionHeight = 46.0000f;
+        
+    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
+        self.headerSectionHeight = 48.0000f;
+        
+    } else {
+        self.headerSectionHeight = 29.0000f;
+    }
+
 }
 
 #pragma mark - UIViewController
@@ -222,10 +280,19 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
+                                                 name: UIContentSizeCategoryDidChangeNotification
+                                               object: nil];
     
     //self.restorationIdentifier = @"MADIdentifierRestorationQueryViewController";
     
     [self.tableView registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
+    
+    self.tableView.estimatedRowHeight = 44.0000f;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
     
@@ -741,7 +808,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 NSString *schemaName = [database.ownedByUser databaseSchemaName];
                 NSString *localizedMessage = NSLocalizedString(@"You are connecting to a %1$@ datasource named %2$@.", @"You are connecting to %1$@ datasource named %2$@.");
                 NSString *message = [NSString stringWithFormat:localizedMessage, databaseType, schemaName];
-                UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
                 NSDictionary *attributes = @{ NSFontAttributeName : font };
                 NSRange rangeOfSchemaName = [message rangeOfString:schemaName];
                 NSRange rangeOfDatabaseTypeName = [message rangeOfString:databaseType];
@@ -762,7 +829,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                 result.textLabel.attributedText = messageAttributed;
                 result.detailTextLabel.text = @"";
             }
-            result.textLabel.numberOfLines = 2;
+            result.textLabel.numberOfLines = 0;
             break;
         }
 
@@ -772,7 +839,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellTableName];
             NSIndexPath *path = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryTable *tablea = [self.fetchedResultsControllerTables objectAtIndexPath: path];
-            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             result.textLabel.text = [NSString stringWithFormat:@"%@", tablea.alias];
             result.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             result.textLabel.font = font;
@@ -791,7 +858,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: 0];
             RptqQueryLinks *links = [[self fetchedResultsControllerLinks] objectAtIndexPath: indexPath];
             
-            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             
             NSString *messageText = @"%@ %@ %@";
@@ -805,7 +872,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             NSString *rightString = [NSString stringWithFormat:@"%@.%@", pre, post];
 
             [(UITableViewCellQueryLink *)result setTableID: [links objectID]];
-            [result.textLabel setNumberOfLines:2];
+            result.textLabel.numberOfLines = 0;
 
             NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
             paragraphStyle.headIndent = 20.0000f;
@@ -832,7 +899,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             result = [tableView dequeueReusableCellWithIdentifier: MyIdentifierUITableViewCellInstruction];
             RptqQueryGroup *group = [[self fetchedResultsControllerGroups] objectAtIndexPath: [NSIndexPath indexPathForRow: row inSection: 0]];
             [result backgroundView].backgroundColor = [UIColor whiteColor];
-            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             UIFont *fontCaption = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             
             NSMutableParagraphStyle *paragraphStyleLeft = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -855,7 +922,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             [message addAttributes:attributesRight range:rangeRange];
             result.textLabel.text = messageText;
             result.textLabel.attributedText = message;
-            result.textLabel.numberOfLines = 2;
+            result.textLabel.numberOfLines = 0;
             [(UITableViewCellQueryGroup *)result setTableID:group.objectID];
             break;
         }
@@ -879,7 +946,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             } else {
                 rightFieldDisplay = [[predicate hasRightField] toString];
             }
-            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             
             NSString *formatString = @"%1$@ %2$@ %3$@";
             NSString *symbol = [predicate symbolForDisplay];
@@ -891,7 +958,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString: messageText
                                                                                         attributes: attributes];
             NSRange rangeMiddle = [messageText rangeOfString:symbol];
-            result.textLabel.numberOfLines = 2;
+            result.textLabel.numberOfLines = 0;
             [message addAttributes: attributesCaption
                              range: rangeMiddle];
             result.textLabel.text = messageText;
@@ -974,6 +1041,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return self.headerSectionHeight;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
     if ([self tableSectionTypeForIndexPathSection: indexPath.section] == MTQuerySectionsTables) {
@@ -989,10 +1060,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 29.0000f;
-}
-
+/*
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat result = MNSTableViewCellHeightDefault;
     MTQuerySections section = [self tableSectionTypeForIndexPathSection: indexPath.section];
@@ -1005,7 +1073,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     }
     return result;
 }
-
+*/
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
     return NSLocalizedString(@"Remove", @"Remove button title.");
  }
@@ -1503,6 +1571,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
     MTViewTableHeader *header = [self tableHeader];
     header.labelTitle.text = title;
+    header.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     header.buttonAdd.hidden = YES;
     return header;
 }
@@ -1546,11 +1615,12 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [header.buttonAdd addTarget: self
                          action: selector
                forControlEvents: UIControlEventTouchUpInside];
+    [header.labelTitle sizeToFit];
     return header;
 }
 
 - (MTViewTableHeader *)tableHeader {
-    CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, 29.0000f);
+    CGRect rect = CGRectMake(0.0000f, 0.0000f, 320.0000f, self.headerSectionHeight);
     MTViewTableHeader *tableHeader = [[MTViewTableHeader alloc] initWithFrame:rect];
     return tableHeader;
 }
