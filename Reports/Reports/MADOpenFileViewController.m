@@ -61,6 +61,7 @@ NSString * const MTCollectionViewCellDocumentIdentifier         = @"MTCollection
 NSString * const MTDocumentExtentionPoratableNetworkGraphic     = @"png";
 NSString * const MTSegueLicensing                               = @"MTSegueLicensing";
 NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifierOpenFileSectionHeader";
+NSString * const MADNotificationReloadSectionLocal              = @"MADNotificationReloadSectionLocal";
 
 CGFloat const MADSectionHeaderHeight = 32.0000f;
 
@@ -266,6 +267,10 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationCloudActivityCompleted
                                                   object: nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MADNotificationReloadSectionLocal
+                                                  object: nil];
 }
 
 #pragma mark - NSNotificationCenter
@@ -311,6 +316,11 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 - (void)viewDidLoad {
 
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(reloadSectionLocal)
+                                                 name: MADNotificationReloadSectionLocal
+                                               object: nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(handleContentSizeCategoryDidChangeNotification:)
                                                  name: UIContentSizeCategoryDidChangeNotification
@@ -897,6 +907,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 - (void)reloadData {
     NSLog(@"Reload Data");
     
+    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
     self.numberOfDocumentsLocal = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionLocal];
     self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
     
@@ -1742,11 +1754,12 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                                                             switch (indexPath.section) {
                                                                                                                     
                                                                                                                 case 0:
-                                                                                                                    [weakself2 reloadSectionLocal];
+                                                                                                                    [[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationReloadSectionLocal object:nil];
+                                                                                                                    //[weakself2 reloadSectionLocal];
                                                                                                                     break;
                                                                                                                     
                                                                                                                 case 1:
-                                                                                                                    [weakself2 reloadSectionCloud];
+                                                                                                                    //[weakself2 reloadSectionCloud];
 
                                                                                                                     break;
                                                                                                                     

@@ -473,20 +473,31 @@ static MACloudManager *sharedSingleton;
                            writingItemAtURL: destination
                                     options: NSFileCoordinatorWritingForReplacing
                                       error: &coordinatorError
-                                 byAccessor: ^(NSURL *coordinatedSource, NSURL *coordinatedDestination) {
+                                 byAccessor: ^(NSURL *newUrl1, NSURL *newUrl2) {
                                      
-                                     if ([[NSFileManager defaultManager] fileExistsAtPath: coordinatedDestination.path] == NO) {
+                                     // ???: Why get two accessors???
+                                    // NSURL *coordinatedDestination = [newUrl1.pathExtension isEqualToString:@"mad"] ?
+                                      //                                  newUrl1 : newUrl2;
+                                     
+                                     //if ([[NSFileManager defaultManager] fileExistsAtPath: coordinatedDestination.path] == NO) {
+                                         
+                                         [coordinator itemAtURL:source didMoveToURL:destination];
                                          
                                          NSError *fileManagerError = nil;
-                                         success = [[NSFileManager defaultManager] moveItemAtURL: coordinatedSource
-                                                                                           toURL: coordinatedDestination
+                                         success = [[NSFileManager defaultManager] moveItemAtURL: newUrl1
+                                                                                           toURL: newUrl2
                                                                                            error: &fileManagerError];
+                                         if (success) {
+                                             [coordinator itemAtURL:source didMoveToURL:destination];
+                                         } else {
+                                             NSLog(@"%@", fileManagerError);
+                                         }
                                          completion(success, fileManagerError);
-                                     } else {
-                                         NSDictionary *userinfo = @{};
-                                         NSError *error = [NSError errorWithDomain:@"MADCloudManager" code:43789 userInfo:userinfo];
-                                         completion(NO, error);
-                                     }
+                                     //} else {
+                                     //    NSDictionary *userinfo = @{};
+                                     //    NSError *error = [NSError errorWithDomain:@"MADCloudManager" code:43789 userInfo:userinfo];
+                                     //    completion(NO, error);
+                                     //}
 
                                  }];
 }
