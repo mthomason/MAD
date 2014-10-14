@@ -89,10 +89,6 @@ CGFloat const MADAlpha = 0.9000f;
     
     if (displayHeaders) {
         
-        
-        //[self.collectionView.delegate collectionView:self.collectionView
-        //BOOL displayHeaderTwo = !(gotHeader1 && gotHeader2 == NO);
-        
         if (gotHeader1 == NO) {
             NSIndexPath *header1 = [NSIndexPath indexPathForItem: 0
                                                        inSection: 0];

@@ -422,8 +422,8 @@ static MACloudManager *sharedSingleton;
     }
 }
 
-- (NSURL *)duplicateUrl: (NSURL *)urlToDupe
-             completion: (void (^)(BOOL, NSURL *, NSError *))completion {
+- (void)duplicateUrl: (NSURL *)urlToDupe
+          completion: (void (^)(BOOL, NSURL *, NSError *))completion {
     
     // FIXME: Make to work for ubiquity urls
     NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
@@ -457,9 +457,33 @@ static MACloudManager *sharedSingleton;
                                      }
                                      completion(success, uniqueUrl, error);
                                  }];
-    
-    
-    return uniqueUrl;
+}
+
+- (void)deleteDocument:(NSURL *)fileUrl completion:(void (^)(BOOL, NSError *))completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        
+        NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        [fileCoordinator coordinateWritingItemAtURL: fileUrl
+                                            options: NSFileCoordinatorWritingForDeleting
+                                              error: nil
+                                         byAccessor: ^(NSURL* writingURL) {
+            NSError *error = nil;
+            NSFileManager* fileManager = [[NSFileManager alloc] init];
+            if ([fileManager fileExistsAtPath:writingURL.path]) {
+                [fileManager removeItemAtURL:writingURL error:&error];
+                BOOL success = error ? NO : YES;
+                if (completion) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        completion(success, error);
+                    });
+                }
+            } else if (completion) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    completion(YES, nil);
+                });
+            }
+        }];
+    });
 }
 
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name

@@ -925,9 +925,14 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 - (void)deleteDocumentAtIndexPath:(NSIndexPath *)index error:(NSError **)error {
     NSURL *documentUrl = [self documentForIndexPath:index];
     [self removeCachedFileForDocumentUrl:documentUrl];
-    [[NSFileManager defaultManager] removeItemAtURL:documentUrl error:error];
+    __weak MADOpenFileViewController *weakself = self;
+    [[MACloudManager sharedManager] deleteDocument:documentUrl completion:^(BOOL success, NSError *error) {
+        if (success == NO) {
+            [error presentErrorOnViewController:weakself];
+        }
+        [weakself reloadData];
+    }];
     if (*error != nil) {
-        [*error presentErrorOnViewController:self];
     }
 }
 
@@ -935,7 +940,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     NSError *error = nil;
     NSFileManager *defaultManager = [NSFileManager defaultManager];
     NSURL *cachedDirectory = [defaultManager localCachedDirectoryForFileUrl:documentUrl];
-    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory includingPropertiesForKeys:nil options:0 error:&error];
+    NSArray *contentsOfDirectoryAtUrlCachedDirectory = [defaultManager contentsOfDirectoryAtURL:cachedDirectory
+                                                                     includingPropertiesForKeys:nil options:0 error:&error];
     for (NSURL *cachedFile in contentsOfDirectoryAtUrlCachedDirectory) {
         [defaultManager removeItemAtURL:cachedFile error:&error];
     }
@@ -944,9 +950,12 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 #pragma mark - MFMailComposeViewController delegate protocol
 
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+
     [self dismissViewControllerAnimated:YES completion:nil];
     [error presentErrorOnViewController:self];
+
 }
 
 #pragma mark -  NSFileManager delegate protocol
@@ -1315,6 +1324,11 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         NSIndexPath *indexPath = [self.collectionView indexPathForCell:((MTCollectionViewCellDocument *)sender.view)];
         [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         
+        [self selectionsUpdated];
+        
+        MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        [cell performSelectionAnimations];
+        [cell normalizeTint];
     }
 
 }
@@ -1640,26 +1654,20 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 }
 
 - (IBAction)delete:(id)sender {
+
     if (self.collectionView != nil) {
-        NSMutableArray *itemsToDelete = [[NSMutableArray alloc] init];
-        NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
         for (NSIndexPath *selectedItem in [self.collectionView indexPathsForSelectedItems]) {
-            [itemsToDelete addObject:selectedItem];
-            NSURL *url = [self documentForIndexPath:selectedItem];
-            [urlsToDelete addObject:url];
+            NSError *error = nil;
+            [self deleteDocumentAtIndexPath:selectedItem error:&error];
         }
 
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        for (NSURL *url in urlsToDelete) {
-            NSError *error = nil;
-            [self removeCachedFileForDocumentUrl:url];
-            [fileManager removeItemAtURL:url error:&error];
-        }
         [self reloadData];
     }
     [self selectionsUpdated];
+    
 }
 
+// FIXME: Not updated with file coordnation... but likely unused
 - (void)paste:(id)sender {
     NSURL *url = [[UIPasteboard generalPasteboard] URL];
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];

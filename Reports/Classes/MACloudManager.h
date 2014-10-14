@@ -65,14 +65,15 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 
-- (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
-
 - (void)moveDocument: (NSURL *)source
           toLocation: (NSURL *)destination
           completion: (void (^)(BOOL, NSError *))completion;
 
-- (NSURL *)duplicateUrl: (NSURL *)urlToDupe
-             completion: (void (^)(BOOL, NSURL *, NSError *))completion;
+- (void)duplicateUrl: (NSURL *)urlToDupe
+          completion: (void (^)(BOOL, NSURL *, NSError *))completion;
+
+- (void)deleteDocument: (NSURL *)fileUrl
+            completion: (void (^)(BOOL, NSError *))completion;
 
 - (NSURL *)uniqueUrlForDocumentWithName: (NSString *)name
                           withExtension: (NSString *)extension
