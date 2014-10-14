@@ -109,7 +109,7 @@ static MTKeyChain *sharedSingleton = nil;
                                                                  [weakself saveUsername: weakself.saveUsername
                                                                             andPassword: weakself.savePassword
                                                                                  forKey: weakself.saveKey];
-                                                                 weakself.saveCompletion(NO, nil, weakself.saveUsername, weakself.savePassword);
+                                                                 weakself.saveCompletion(YES, nil, weakself.saveUsername, weakself.savePassword);
                                                                  
                                                              }];
             
