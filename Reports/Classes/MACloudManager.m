@@ -422,29 +422,41 @@ static MACloudManager *sharedSingleton;
     }
 }
 
-- (NSURL *)duplicateUrl:(NSURL *)urlToDupe {
+- (NSURL *)duplicateUrl: (NSURL *)urlToDupe
+             completion: (void (^)(BOOL, NSURL *, NSError *))completion {
+    
     // FIXME: Make to work for ubiquity urls
     NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
     NSString *lastPathComponent = [urlToDupe lastPathComponent];
     NSString *handle = [lastPathComponent stringByDeletingPathExtension];
     NSString *extention = [lastPathComponent pathExtension];
     NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
-                                 withDesiredHandle:handle
-                                      andExtension:extention];
+                                   withDesiredHandle:handle
+                                        andExtension:extention];
     NSError *error = nil;
-    [self.fileCoordinator coordinateReadingItemAtURL: urlToDupe
-                                             options: NSFileCoordinatorReadingForUploading
-                                    writingItemAtURL: uniqueUrl
-                                             options: NSFileCoordinatorWritingForMoving
-                                               error: &error
-                                          byAccessor: ^(NSURL *source, NSURL *destinaion) {
-                                            
-                                              NSError *errorCopy = nil;
-                                              [[NSFileManager defaultManager] copyItemAtURL: source
-                                                                                      toURL: destinaion
-                                                                                      error: &errorCopy];
-                                              NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
-                                          }];
+    NSFileCoordinator *coordinator = self.fileCoordinator;
+    [coordinator coordinateReadingItemAtURL: urlToDupe
+                                    options: NSFileCoordinatorReadingForUploading
+                           writingItemAtURL: uniqueUrl
+                                    options: NSFileCoordinatorWritingForMoving
+                                      error: &error
+                                 byAccessor: ^(NSURL *source, NSURL *destinaion) {
+                                     
+                                     NSError *errorCopy = nil;
+                                     [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
+                                     
+                                     BOOL success = [[NSFileManager defaultManager] copyItemAtURL: source
+                                                                                            toURL: destinaion
+                                                                                            error: &errorCopy];
+                                     NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                     
+                                     if (success) {
+                                         [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
+                                     } else {
+                                         NSLog(@"%@", error);
+                                     }
+                                     completion(success, uniqueUrl, error);
+                                 }];
     
     
     return uniqueUrl;
@@ -475,30 +487,18 @@ static MACloudManager *sharedSingleton;
                                       error: &coordinatorError
                                  byAccessor: ^(NSURL *newUrl1, NSURL *newUrl2) {
                                      
-                                     // ???: Why get two accessors???
-                                    // NSURL *coordinatedDestination = [newUrl1.pathExtension isEqualToString:@"mad"] ?
-                                      //                                  newUrl1 : newUrl2;
+                                     [coordinator itemAtURL:source didMoveToURL:destination];
                                      
-                                     //if ([[NSFileManager defaultManager] fileExistsAtPath: coordinatedDestination.path] == NO) {
-                                         
+                                     NSError *fileManagerError = nil;
+                                     success = [[NSFileManager defaultManager] moveItemAtURL: newUrl1
+                                                                                       toURL: newUrl2
+                                                                                       error: &fileManagerError];
+                                     if (success) {
                                          [coordinator itemAtURL:source didMoveToURL:destination];
-                                         
-                                         NSError *fileManagerError = nil;
-                                         success = [[NSFileManager defaultManager] moveItemAtURL: newUrl1
-                                                                                           toURL: newUrl2
-                                                                                           error: &fileManagerError];
-                                         if (success) {
-                                             [coordinator itemAtURL:source didMoveToURL:destination];
-                                         } else {
-                                             NSLog(@"%@", fileManagerError);
-                                         }
-                                         completion(success, fileManagerError);
-                                     //} else {
-                                     //    NSDictionary *userinfo = @{};
-                                     //    NSError *error = [NSError errorWithDomain:@"MADCloudManager" code:43789 userInfo:userinfo];
-                                     //    completion(NO, error);
-                                     //}
-
+                                     } else {
+                                         NSLog(@"%@", fileManagerError);
+                                     }
+                                     completion(success, fileManagerError);
                                  }];
 }
 

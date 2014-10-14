@@ -71,9 +71,12 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
           toLocation: (NSURL *)destination
           completion: (void (^)(BOOL, NSError *))completion;
 
-- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
-                          withExtension:(NSString *)extension
-                            inContainer:(MACloudManagerSection)container;
+- (NSURL *)duplicateUrl: (NSURL *)urlToDupe
+             completion: (void (^)(BOOL, NSURL *, NSError *))completion;
+
+- (NSURL *)uniqueUrlForDocumentWithName: (NSString *)name
+                          withExtension: (NSString *)extension
+                            inContainer: (MACloudManagerSection)container;
 
 // File name helpers
 

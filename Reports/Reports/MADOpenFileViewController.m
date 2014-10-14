@@ -1679,22 +1679,19 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 - (void)duplicate:(id)sender {
     NSMutableArray *urls = [NSMutableArray new];
-    MTCollectionViewCellDocument *cellDocument;
-    if ([sender isKindOfClass:[MTCollectionViewCellDocument class]]) {
-        cellDocument = sender;
-        NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
-        NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-        NSURL *url = [self documentForIndexPath:indexPath];
-        [urls addObject:url];
-    } else if ([sender isKindOfClass:[UIBarButtonItem class]]) {
-        for (NSIndexPath *path in [self.collectionView indexPathsForSelectedItems]) {
+    if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+        NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
+        for (NSIndexPath *path in selectedItems) {
             NSURL *url = [self documentForIndexPath:path];
             [urls addObject:url];
         }
     }
+    
     if (urls.count > 0) {
         for (NSURL *url in urls) {
-            [[MACloudManager sharedManager] duplicateUrl:url];
+            [[MACloudManager sharedManager] duplicateUrl:url completion:^(BOOL success, NSURL *duplicateUrl, NSError *error) {
+                // FIXME: Handled error yo.
+            }];
         }
         [self reloadData];
     }
