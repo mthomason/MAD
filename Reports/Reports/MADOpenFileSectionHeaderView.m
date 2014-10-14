@@ -125,12 +125,7 @@ NSString * const MADTextLocal = @"Local";
             case MACloudManagerSectionLocal:
                 self.label.attributedText = self.localizedAttrbiutedTextLocal;
                 break;
-                
-            case MACloudManagerSectionCombined:
-                self.label.attributedText = nil;
-                self.label.text = @"";
-                break;
-                
+                                
             default:
                 self.label.attributedText = nil;
                 self.label.text = @"";

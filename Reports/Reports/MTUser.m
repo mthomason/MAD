@@ -29,7 +29,8 @@
 
 - (BOOL)addDocument:(NSURL *)url error:(NSError **)error {
     NSURL *destinationUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: url.lastPathComponent.stringByDeletingPathExtension
-                                                                           withExtension: url.pathExtension];
+                                                                           withExtension: url.pathExtension
+                                                                             inContainer: MACloudManagerSectionLocal];
     [[NSFileManager defaultManager] moveItemAtURL:url toURL:destinationUrl error:error];
     return error == nil;
 }

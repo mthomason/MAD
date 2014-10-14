@@ -39,8 +39,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     
     CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
     
-  //  self.paragraphStyle = paragraphStyle;
-    
     self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 1.0000f;
@@ -82,11 +80,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self = [super initWithCoder:aDecoder];
     if (self) {
         
-        
-        //NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: @""
-        //                                                                                     attributes: attributes];
-        //self.attributedString = attributedString;
-
         UIColor *colorTextNormal = [UIColor tintColorBlue];
         UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
         self.bgColor = bgColor;
@@ -107,14 +100,13 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
         
-
     }
     return self;
 }
 
 + (UIActivityIndicatorView *)activityIndicatorView {
 
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleGray];
     [activityIndicatorView stopAnimating];
     activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
                                                 UIViewAutoresizingFlexibleRightMargin |

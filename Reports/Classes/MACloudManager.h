@@ -12,9 +12,8 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, MACloudManagerSection) {
-    MACloudManagerSectionLocal,
-    MACloudManagerSectionCloud,
-    MACloudManagerSectionCombined
+    MACloudManagerSectionLocal = 0,
+    MACloudManagerSectionCloud = 1,
 };
 
 extern NSString * const MTDocumentExtentionMobleApplicationDocument;
@@ -67,9 +66,14 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 - (NSSet *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension;
 
 - (NSURL *)duplicateUrl:(NSURL *)urlToDupe;
-- (void)moveDocument:(NSURL*)source
-          toLocation:(NSURL*)destination;
-- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension;
+
+- (void)moveDocument: (NSURL *)source
+          toLocation: (NSURL *)destination
+          completion: (void (^)(BOOL, NSError *))completion;
+
+- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
+                          withExtension:(NSString *)extension
+                            inContainer:(MACloudManagerSection)container;
 
 // File name helpers
 
@@ -80,6 +84,9 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 - (void)reloadDocumentCacheWithSearchString:(NSString *)searchString;
 - (NSUInteger)numberOfDocuments:(MACloudManagerSection)section;
 - (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location inSection:(MACloudManagerSection)section;
+
+- (void)reloadCacheCloud:(NSString *)searchString;
+- (void)reloadCacheLocal:(NSString *)searchString;
 
 @end
 

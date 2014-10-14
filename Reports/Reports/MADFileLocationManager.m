@@ -172,14 +172,9 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     
     [self.metadataQuery disableUpdates];
     
-    //NSArray *updatedURLs;
-    
     NSArray *insertedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateAddedItemsKey];
     NSArray *removedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateRemovedItemsKey];
     NSArray *updatedMetadataItemsOrNil = notification.userInfo[NSMetadataQueryUpdateChangedItemsKey];
-
-    //NSMutableArray *insertedURLs = [NSMutableArray arrayWithCapacity:insertedMetadataItemsOrNil.count + updatedMetadataItemsOrNil.count];
-    //NSMutableArray *removedURLs = [NSMutableArray arrayWithCapacity:removedMetadataItemsOrNil.count + updatedMetadataItemsOrNil.count];
 
     // Handle's updating old results metadata with new metadata
     NSMutableIndexSet *updatedItems = [[NSMutableIndexSet alloc] init];

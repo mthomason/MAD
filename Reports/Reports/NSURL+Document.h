@@ -15,6 +15,7 @@
 
 - (NSString *)filenameMinusExtention;
 + (NSURL *)uniqueUrlInDirectory:(NSURL *)directory withDesiredHandle:(NSString *)desiredFileHandle andExtension:(NSString *)extension;
+- (NSURL *)uniqueUrl;
 - (NSString *)key;
 
 @end

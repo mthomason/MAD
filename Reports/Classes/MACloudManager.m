@@ -453,25 +453,30 @@ static MACloudManager *sharedSingleton;
     return uniqueUrl;
 }
 
-- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name withExtension:(NSString *)extension {
-    return [NSURL uniqueUrlInDirectory: self.ubiquitousDocumentsDirectory
+- (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
+                          withExtension:(NSString *)extension
+                            inContainer:(MACloudManagerSection)container {
+    
+    return [NSURL uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
                      withDesiredHandle: name
                           andExtension: extension];
+    
 }
 
-- (void)moveDocument:(NSURL *)source
-          toLocation:(NSURL *)destination {
+- (void)moveDocument: (NSURL *)source
+          toLocation: (NSURL *)destination
+          completion: (void (^)(BOOL, NSError *))completion {
 
     NSError *coordinatorError = nil;
     
     NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
     __block BOOL success = NO;
-    [coordinator coordinateWritingItemAtURL:source
-                                    options:NSFileCoordinatorWritingForMoving
-                           writingItemAtURL:destination
-                                    options:NSFileCoordinatorWritingForReplacing
-                                      error:&coordinatorError
-                                 byAccessor:^(NSURL *coordinatedSource, NSURL *coordinatedDestination) {
+    [coordinator coordinateWritingItemAtURL: source
+                                    options: NSFileCoordinatorWritingForMoving
+                           writingItemAtURL: destination
+                                    options: NSFileCoordinatorWritingForReplacing
+                                      error: &coordinatorError
+                                 byAccessor: ^(NSURL *coordinatedSource, NSURL *coordinatedDestination) {
                                      
                                      if ([[NSFileManager defaultManager] fileExistsAtPath: coordinatedDestination.path] == NO) {
                                          
@@ -479,7 +484,11 @@ static MACloudManager *sharedSingleton;
                                          success = [[NSFileManager defaultManager] moveItemAtURL: coordinatedSource
                                                                                            toURL: coordinatedDestination
                                                                                            error: &fileManagerError];
-                                         
+                                         completion(success, fileManagerError);
+                                     } else {
+                                         NSDictionary *userinfo = @{};
+                                         NSError *error = [NSError errorWithDomain:@"MADCloudManager" code:43789 userInfo:userinfo];
+                                         completion(NO, error);
                                      }
 
                                  }];
@@ -514,22 +523,30 @@ static MACloudManager *sharedSingleton;
 
 - (void)reloadDocumentCacheWithSearchString:(NSString *)searchString {
 
+    [self reloadCacheCloud: searchString];
+    [self reloadCacheLocal: searchString];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
+                                                        object: nil];
+}
+
+- (void)reloadCacheCloud:(NSString *)searchString {
     NSDictionary *documentCacheCloudMetaData = [NSDictionary dictionaryWithDictionary: self.fileLocationManager.results];
     
     NSArray *filteredDocumentCacheCloudMetaData;
-
+    
     if (searchString.length > 0) {
         
         NSPredicate *predicateMetadata = [NSPredicate predicateWithBlock:^BOOL(MADMetaData *metadata, NSDictionary *bindings) {
             
             NSRange range = NSMakeRange(0, MIN(searchString.length, metadata.displayName.length));
-            return [metadata.displayName compare:searchString
+            return [metadata.displayName compare: searchString
                                          options: NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch
-                                           range:range] == NSOrderedSame;
+                                           range: range] == NSOrderedSame;
         }];
-
+        
         filteredDocumentCacheCloudMetaData = [documentCacheCloudMetaData.allValues filteredArrayUsingPredicate:predicateMetadata];
-
+        
     } else {
         
         filteredDocumentCacheCloudMetaData = documentCacheCloudMetaData.allValues;
@@ -537,14 +554,14 @@ static MACloudManager *sharedSingleton;
     
     self.documentCacheCloudMetaDataItems = filteredDocumentCacheCloudMetaData;
     self.documentCacheCloudCount = filteredDocumentCacheCloudMetaData.count;
-    
-    
+}
 
+- (void)reloadCacheLocal:(NSString *)searchString {
     // Setup local cache
     NSArray *documentCacheLocalUrls = [self contentOfLocalDocumentsDirectoryWithExtention: MTDocumentExtentionMobleApplicationDocument];
-
+    
     NSArray *filteredDocumentCacheLocalUrls;
-
+    
     if (searchString.length > 0) {
         
         NSPredicate *predicateUrlSearch = [NSPredicate predicateWithBlock:^BOOL(NSURL *url, NSDictionary *bindings) {
@@ -561,29 +578,30 @@ static MACloudManager *sharedSingleton;
         
         filteredDocumentCacheLocalUrls = documentCacheLocalUrls;
     }
-
+    
     
     self.documentCacheLocalUrls = filteredDocumentCacheLocalUrls;
     self.documentCacheLocalCount = filteredDocumentCacheLocalUrls.count;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationFileManagerDidUpdateFileLocations object:nil];
+
 }
 
 - (NSUInteger)numberOfDocuments:(MACloudManagerSection)section {
+
     switch (section) {
+
         case MACloudManagerSectionCloud:
             return self.documentCacheCloudCount;
             break;
+        
         case MACloudManagerSectionLocal:
             return self.documentCacheLocalCount;
             break;
-        case MACloudManagerSectionCombined:
-            return self.documentCacheLocalCount + self.documentCacheCloudCount;
-            break;
+        
         default:
             return 0;
             break;
     }
+    
 }
 
 - (MADMetaData *)metadataForItemAtLocation:(NSUInteger)location inSection:(MACloudManagerSection)section {
@@ -600,12 +618,6 @@ static MACloudManager *sharedSingleton;
         case MACloudManagerSectionLocal:
             item = self.documentCacheLocalUrls[location];
             metatdata = [[MADMetaData alloc] initWithLocalUrl:item];
-            break;
-
-        case MACloudManagerSectionCombined:
-            // FIXME: Not supported :(
-            // Need to create a shared and sorted index to use
-            metatdata = nil;
             break;
         
         default:

@@ -877,6 +877,23 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 }
 
+
+- (void)reloadSectionLocal {
+    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+    self.numberOfDocumentsLocal = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionLocal];
+    
+    NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
+    [self.collectionView reloadSections:local];
+}
+
+- (void)reloadSectionCloud {
+    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+    self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
+
+    NSIndexSet *local = [NSIndexSet indexSetWithIndex:1];
+    [self.collectionView reloadSections:local];
+}
+
 - (void)reloadData {
     NSLog(@"Reload Data");
     
@@ -1033,12 +1050,11 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
     NSURL *fileUrl = [self documentForIndexPath:indexPath];
     NSURL *url = [MADocument thumbnailUrlForMadUrl:fileUrl];
-    NSString *path = [url path];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile:url.path];
     if (image == nil) {
         image = [MTTableViewCellDocument defaultThumbnail];
     }
-    [[cell imagePreview] setImage:image];
+    cell.imagePreview.image = image;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -1178,23 +1194,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
     return CGSizeMake(140.0000f, 128 + ceil(self.testLabel.frame.size.height) + 20);
 }
-
-
-/*
-- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
-                                                                     atIndexPath:(NSIndexPath *)indexPath {
-    
-    UICollectionViewLayoutAttributes *supplementalAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
-   // CGRect frame = [self locationOfHeaderAtColumn:column];
-  //  [supplementalAttributes setFrame:frame];
-    supplementalAttributes.hidden = NO;
-    supplementalAttributes.zIndex = 999;
-    supplementalAttributes.alpha = 0.2000f;
-    return supplementalAttributes;
-}
-*/
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
-
 
 #pragma mark - UICollectionViewDataSource
 
@@ -1653,9 +1652,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSURL *url = [[UIPasteboard generalPasteboard] URL];
     NSData *data = [[NSData alloc] initWithContentsOfURL:url];
     NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-    NSString *name = [[url lastPathComponent] stringByDeletingPathExtension];
-    NSURL *destinationUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: name
-                                                                           withExtension: MTDocumentExtentionMobleApplicationDocument];
+    NSURL *destinationUrl = [url uniqueUrl];
     
     NSFileWrapperWritingOptions writingOptions = NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating;
     NSError* fileWrittingError = nil;
@@ -1700,6 +1697,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
         cellDocument = (MTCollectionViewCellDocument *)contentView.superview;
     }
+    
     NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
     NSString *title = NSLocalizedString(@"Rename Document", @"Rename Document");
     NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel");
@@ -1712,10 +1710,15 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
     NSInteger itemIndex = indexPath.item;
+    
+    [self setRightBarButtonItemActivityIndicatorVisible:YES];
+
     __weak MADOpenFileViewController *weakself = self;
     UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: rename
                                                             style: UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction *action) {
+                                                          handler: ^(UIAlertAction *action) {
+                                                              
+                                                              __strong MADOpenFileViewController *strongself = weakself;
                                                               
                                                               UITextField *textField = alert.textFields.firstObject;
                                                               NSString *text = [weakself renameFilter:textField.text];
@@ -1727,14 +1730,38 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                       NSIndexPath *pathToMove = [NSIndexPath indexPathForItem:itemIndex inSection:0];
                                                                       urlToRename = [weakself documentForIndexPath:pathToMove];
                                                                       NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: textField.text
-                                                                                                                                     withExtension: MTDocumentExtentionMobleApplicationDocument];
-                                                                      [[MACloudManager sharedManager] moveDocument:urlToRename
-                                                                                                        toLocation:newUrl];
+                                                                                                                                     withExtension: MTDocumentExtentionMobleApplicationDocument
+                                                                                                                                       inContainer: indexPath.section == 0 ? MACloudManagerSectionLocal : MACloudManagerSectionCloud];
+                                                                      __weak MADOpenFileViewController *weakself2 = strongself;
+                                                                      [[MACloudManager sharedManager] moveDocument: urlToRename
+                                                                                                        toLocation: newUrl
+                                                                                                        completion: ^(BOOL success, NSError *error) {
+                                                                                                            
+                                                                                                            [weakself2 setRightBarButtonItemActivityIndicatorVisible: NO];
+                                                                                                            
+                                                                                                            switch (indexPath.section) {
+                                                                                                                    
+                                                                                                                case 0:
+                                                                                                                    [weakself2 reloadSectionLocal];
+                                                                                                                    break;
+                                                                                                                    
+                                                                                                                case 1:
+                                                                                                                    [weakself2 reloadSectionCloud];
+
+                                                                                                                    break;
+                                                                                                                    
+                                                                                                                default:
+                                                                                                                    break;
+                                                                                                                    
+                                                                                                            }
+                                                                                                            
+                                                                                                        }];
                                                                       
                                                                       [weakself removeCachedFileForDocumentUrl:urlToRename];
                                                                   }
                                                                   
                                                               } else {
+                                                                  [weakself setRightBarButtonItemActivityIndicatorVisible:NO];
                                                                   [weakself validationError];
                                                               }
 

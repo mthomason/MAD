@@ -21,8 +21,8 @@
     NSFileManager *defaultFileManager = [NSFileManager defaultManager];
     NSURL *baseUrl = [directory URLByAppendingPathComponent: desiredFileHandle];
     NSURL *applicationFileUrlWithExtention = [extension length] > 0 ?
-    [baseUrl URLByAppendingPathExtension: extension] :
-    baseUrl;
+                                                [baseUrl URLByAppendingPathExtension: extension] :
+                                                baseUrl;
     NSInteger ctr = 0;
     while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
         
@@ -33,6 +33,21 @@
     }
     return applicationFileUrlWithExtention;
     
+}
+
+- (NSURL *)uniqueUrl {
+
+    NSInteger ctr = 0;
+    
+    NSURL *uniqueUrl = self;
+    while ([[NSFileManager defaultManager] fileExistsAtPath:uniqueUrl.path]) {
+        NSString *maybe = [self.lastPathComponent.stringByDeletingPathExtension stringByAppendingFormat:@" %ld", (long)ctr];
+        [maybe stringByAppendingPathExtension:self.pathExtension];
+        NSURL *result = [self.baseURL URLByAppendingPathComponent:maybe isDirectory:NO];
+        uniqueUrl = result;
+        ctr++;
+    }
+    return uniqueUrl;
 }
 
 - (NSString *)key {

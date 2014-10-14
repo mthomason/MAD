@@ -320,9 +320,7 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
             NSError *errorWriting = nil;
             success = [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&errorWriting];
         } else {
-            NSString *fileName = [self.fileURL.lastPathComponent stringByDeletingPathExtension];
-            resultUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: fileName
-                                                                       withExtension: MTDocumentExtentionMobleApplicationDocument];
+            resultUrl = [self.fileURL uniqueUrl];
             NSData *data = [fileWrapper serializedRepresentation];
             success = [data writeToURL:resultUrl atomically:YES];
         }

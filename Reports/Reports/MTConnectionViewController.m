@@ -177,7 +177,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     NSAssert(blockSender == nil, @"%s Sender is nil.", __PRETTY_FUNCTION__);
     
     NSURL *applicationFileUrlWithExtention = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: self.textFieldReportName.text
-                                                                                            withExtension: MTDocumentExtentionMobleApplicationDocument];
+                                                                                            withExtension: MTDocumentExtentionMobleApplicationDocument
+                                                                                              inContainer: MACloudManagerSectionLocal];
     
     MTDatabaseConnection *dbDetails = [MTDatabaseConnection databaseConnectionFactoryEmpty:self.databaseType];
     dbDetails.server = blockServer;
