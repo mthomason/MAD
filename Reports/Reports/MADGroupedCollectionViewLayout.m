@@ -35,27 +35,63 @@ CGFloat const MADAlpha = 0.9000f;
     BOOL gotHeader1 = NO;
     BOOL gotHeader2 = NO;
     BOOL displayHeaders = [MACloudManager sharedManager].cloudAvailble;
-    
+    BOOL displayHeaderOne = NO, displayHeaderTwo = NO;
+
     UICollectionViewLayoutAttributes *attributesHeader1;
     UICollectionViewLayoutAttributes *attributesHeader2;
-    
+
+    CGPoint sectionTwoOrigin;
     for (UICollectionViewLayoutAttributes *attributes in results) {
-        if (attributes.representedElementCategory == UICollectionElementCategorySupplementaryView) {
-   
-            if (attributes.indexPath.section == 0) {
-                gotHeader1 = YES;
-                attributesHeader1 = attributes;
-            } else if (attributes.indexPath.section == 1) {
-                gotHeader2 = YES;
-                attributesHeader2 = attributes;
-            }
-            if (gotHeader1 && gotHeader2) {
+        
+        switch (attributes.representedElementCategory) {
+
+            case UICollectionElementCategorySupplementaryView:
+                if (attributes.indexPath.section == 0) {
+                    gotHeader1 = YES;
+                    attributesHeader1 = attributes;
+                } else if (attributes.indexPath.section == 1) {
+                    gotHeader2 = YES;
+                    attributesHeader2 = attributes;
+                    sectionTwoOrigin = CGPointMake(attributes.frame.origin.x,
+                                                   (CGFloat)MIN(sectionTwoOrigin.y, attributes.frame.origin.y));
+                }
                 break;
-            }
+                
+            case UICollectionElementCategoryCell:
+                switch (attributes.indexPath.section) {
+                    case 0:
+                        displayHeaderOne = YES;
+                        break;
+
+                    case 1:
+                        displayHeaderTwo = YES;
+                        sectionTwoOrigin = CGPointMake(attributes.frame.origin.x,
+                                                       (CGFloat)MIN(sectionTwoOrigin.y, attributes.frame.origin.y - self.headerReferenceSize.height));
+                        break;
+
+                    default:
+                        break;
+                }
+                
+                break;
+                
+            default:
+                break;
+        
         }
+        
     }
     
+    if (displayHeaderOne == NO) {
+        displayHeaderOne = [self.collectionView numberOfItemsInSection:0] == 0;
+    }
+    
+    
     if (displayHeaders) {
+        
+        
+        //[self.collectionView.delegate collectionView:self.collectionView
+        //BOOL displayHeaderTwo = !(gotHeader1 && gotHeader2 == NO);
         
         if (gotHeader1 == NO) {
             NSIndexPath *header1 = [NSIndexPath indexPathForItem: 0
@@ -69,12 +105,24 @@ CGFloat const MADAlpha = 0.9000f;
                                                        inSection: 1];
             attributesHeader2 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: UICollectionElementKindSectionHeader
                                                                                                withIndexPath: header2];
+            attributesHeader2.frame = CGRectMake(attributesHeader2.frame.origin.x,
+                                                 sectionTwoOrigin.y,
+                                                 attributesHeader2.frame.size.width,
+                                                 attributesHeader2.frame.size.height);
+        }
+        
+        if (displayHeaderOne == NO) {
+            attributesHeader1.hidden = YES;
+        }
+
+        if (displayHeaderTwo == NO) {
+            attributesHeader2.hidden = YES;
         }
 
         [self updateAttributes:&attributesHeader1];
         [self updateAttributes:&attributesHeader2];
         
-        if (CGRectIntersectsRect(attributesHeader1.frame, attributesHeader2.frame)) {
+        if (CGRectIntersectsRect(attributesHeader1.frame, attributesHeader2.frame) && displayHeaderOne && displayHeaderTwo) {
             attributesHeader1.frame = CGRectMake(attributesHeader2.frame.origin.x,
                                                  attributesHeader2.frame.origin.y - attributesHeader1.frame.size.height,
                                                  attributesHeader1.frame.size.width,

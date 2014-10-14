@@ -16,18 +16,18 @@
 
         [self removeConstraint:constraint];
         
-        id firstItem = [constraint firstItem] == self ? [self contentView] : [constraint firstItem];
-        id seccondItem = [constraint secondItem] == self ? [self contentView] : [constraint secondItem];
+        id firstItem = constraint.firstItem == self ? self.contentView : constraint.firstItem;
+        id seccondItem = constraint.secondItem == self ? self.contentView : constraint.secondItem;
         
         NSLayoutConstraint* contentViewConstraint = [NSLayoutConstraint constraintWithItem: firstItem
-                                                                                 attribute: [constraint firstAttribute]
-                                                                                 relatedBy: [constraint relation]
+                                                                                 attribute: constraint.firstAttribute
+                                                                                 relatedBy: constraint.relation
                                                                                     toItem: seccondItem
-                                                                                 attribute: [constraint secondAttribute]
-                                                                                multiplier: [constraint multiplier]
-                                                                                  constant: [constraint constant]];
+                                                                                 attribute: constraint.secondAttribute
+                                                                                multiplier: constraint.multiplier
+                                                                                  constant: constraint.constant];
         
-        [[self contentView] addConstraint:contentViewConstraint];
+        [self.contentView addConstraint:contentViewConstraint];
     }
     [super awakeFromNib];
 }
