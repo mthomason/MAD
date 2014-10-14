@@ -61,7 +61,6 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 @property (nonatomic, assign) NSUInteger    documentCacheLocalCount;
 
 @property (nonatomic, strong) NSArray       *documentCacheCloudMetaDataItems;
-
 @property (nonatomic, strong) NSArray       *documentCacheLocalUrls;
 
 @property (nonatomic, strong) NSArray       *fileNamesSortedLocal;
@@ -577,8 +576,11 @@ static MACloudManager *sharedSingleton;
         filteredDocumentCacheLocalUrls = documentCacheLocalUrls;
     }
     
-    
-    self.documentCacheLocalUrls = filteredDocumentCacheLocalUrls;
+
+    NSString *lastPathComponent = NSStringFromSelector(@selector(lastPathComponent));
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:lastPathComponent ascending:NO];
+    NSArray *sorts = @[sort];
+    self.documentCacheLocalUrls = [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts];
     self.documentCacheLocalCount = filteredDocumentCacheLocalUrls.count;
 
 }
