@@ -17,6 +17,7 @@
 - (void)email:(id)cell;
 - (void)rename:(id)sender;
 - (void)duplicate:(id)sender;
+- (void)activateEditMode:(id)sender;
 
 @end
 

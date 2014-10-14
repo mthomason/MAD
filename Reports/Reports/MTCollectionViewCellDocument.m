@@ -21,13 +21,12 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 @interface MTCollectionViewCellDocument ()
 
 @property (nonatomic, strong) UIColor *bgColor;
-//@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
 @property (nonatomic, strong) UIColor *colorTextNormal;
 @property (nonatomic, strong) UIColor *colorTextSelectedHighlighted;
 @property (nonatomic, strong) UIColor *colorTextSelected;
 
-//@property (nonatomic, strong) NSD *attributedString;
-
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGestureRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 
@@ -47,12 +46,27 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self.imagePreview.layer.shadowOpacity = 1.0000f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(offset, offset);
 
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                          action: @selector(rename:)];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    self.tapGestureRecognizer = tap;
+    
+    [self.labelTitle addGestureRecognizer:tap];
+    self.labelTitle.userInteractionEnabled = YES;
+
     self.labelTitle.textColor = self.colorTextNormal;
     self.labelTitle.clipsToBounds = NO;
     self.labelTitle.numberOfLines = 0;
     self.labelTitle.backgroundColor = [UIColor clearColor];
     [self.labelTitle setNeedsLayout];
 
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
+                                                                                                             action: @selector(activateEditMode:)];
+    [self addGestureRecognizer: longPressGestureRecognizer];
+    self.longPressGestureRecognizer = longPressGestureRecognizer;
+
+    
     self.selectedBackgroundView.backgroundColor = self.bgColor;
     self.selectedBackgroundView.clipsToBounds = YES;
     self.selectedBackgroundView.layer.cornerRadius = 5.0000f;
@@ -92,6 +106,8 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.colorTextNormal = colorTextNormal;
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+
     }
     return self;
 }
@@ -106,6 +122,13 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
                                                 UIViewAutoresizingFlexibleBottomMargin;
     activityIndicatorView.translatesAutoresizingMaskIntoConstraints = YES;
     return activityIndicatorView;
+}
+
+- (void)setDelegate:(id<MTDocumentCellProtocol, UIGestureRecognizerDelegate>)delegate {
+    if (_delegate != delegate) {
+        self.longPressGestureRecognizer.delegate = delegate;
+        _delegate = delegate;
+    }
 }
 
 - (void)layoutSubviews {
@@ -154,11 +177,14 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 }
 
 - (void)setText:(NSString *)text {
-    
+
     NSDictionary *attributes = [MTCollectionViewCellDocument attributes];
+
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: text
                                                                                          attributes: attributes];
+    self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     self.labelTitle.attributedText = attributedString;
+    self.labelTitle.text = text;
 }
 
 + (NSDictionary *)attributes {
@@ -166,11 +192,16 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
     paragraphStyle.alignment = NSTextAlignmentCenter;
-
+    
     UIFont *fonta = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    return @{NSKernAttributeName : [NSNull null],
-             NSFontAttributeName : fonta,
-             NSParagraphStyleAttributeName : paragraphStyle};
+    NSDictionary *attributes = @{NSKernAttributeName : [NSNull null],
+                                 NSFontAttributeName : fonta,
+                                 NSParagraphStyleAttributeName : paragraphStyle};
+    return attributes;
+}
+
+- (void)updateFont {
+    [self setText:self.labelTitle.text];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
@@ -200,6 +231,10 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     [self.delegate email:self];
 }
 
+- (void)activateEditMode:(id)sender {
+    [self.delegate activateEditMode:sender];
+}
+
 - (void)rename:(id)sender {
     [self.delegate rename:self];
 }
@@ -213,8 +248,10 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.labelTitle.textColor = self.colorTextSelectedHighlighted;
     } else if (self.selected) {
         self.labelTitle.textColor = self.colorTextSelected;
+        self.tapGestureRecognizer.enabled = NO;
     } else {
         self.labelTitle.textColor = self.colorTextNormal;
+        self.tapGestureRecognizer.enabled = YES;
     }
 }
 

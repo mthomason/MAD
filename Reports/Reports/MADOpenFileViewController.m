@@ -254,6 +254,11 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 }
 
 - (void)dealloc {
+
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: UIContentSizeCategoryDidChangeNotification
+                                                  object: nil];
+
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MADNotificationCloudActivityStarted
                                                   object: nil];
@@ -263,7 +268,20 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                                                   object: nil];
 }
 
-#pragma mark - UIViewController
+#pragma mark - NSNotificationCenter
+
+- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
+    NSString *contentSize = notification.userInfo[UIContentSizeCategoryNewValueKey];
+    [self updateInterfaceForPerferedContentSizeCategory:contentSize];
+    [self.view setNeedsLayout];
+}
+
+- (void)updateInterfaceForPerferedContentSizeCategory:(NSString *)preferredContentSizeCategory {
+    for (MTCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
+        [cell updateFont];
+    }
+}
+
 - (void)handleCloudActivityStarted:(NSNotification *)notification {
     self.cloudActivityRunning = YES;
     NSTimer *timer = [NSTimer timerWithTimeInterval: 0.5000f
@@ -273,6 +291,9 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                                             repeats: NO];
     [timer fire];
 }
+
+#pragma mark - UIViewController
+
 - (void)displayActivityIndictor {
     if (self.cloudActivityRunning) {
         self.cloudActivityRunningDisplay = YES;
@@ -289,6 +310,12 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 
 - (void)viewDidLoad {
+
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(handleContentSizeCategoryDidChangeNotification:)
+                                                 name: UIContentSizeCategoryDidChangeNotification
+                                               object: nil];
+
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 124.0000f, 300.0000f)];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;
@@ -330,7 +357,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     self.navigationController.toolbar.barTintColor = barTintColor;
     self.navigationController.toolbar.tintColor = tintColor;
 
-    [self initalizeBackground];
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
+    self.collectionView.backgroundView = watermarkView;
 
     UIColor *bgColor = [UIColor lightGrayColor];
     self.collectionView.backgroundColor = bgColor;
@@ -396,13 +424,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
 }
 
-- (UILongPressGestureRecognizer *)longPressGestureRecognizer {
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self
-                                                                                                             action: @selector(activateEditMode:)];
-    longPressGestureRecognizer.delegate = self;
-    return longPressGestureRecognizer;
-}
-
 - (UITapGestureRecognizer *)tapGestureRecognizer {
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
                                                                                            action: @selector(endEditMode:)];
@@ -443,11 +464,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         }];
     });
     
-    [MADOpenFileViewController initalizeMenuController];
-    
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser) {
-            [MADOpenFileViewController initalizeMenuControllerEmail];
             [weakself addActionItemToToolbar:animated];
         }
     }];
@@ -479,8 +497,12 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     }
     
     for (NSUInteger item = 0; item < [self.collectionView numberOfItemsInSection:0]; item++) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
-        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem: item
+                                                     inSection: 0];
+        [self.collectionView deselectItemAtIndexPath: indexPath
+                                            animated: YES];
+
     }
     
 }
@@ -804,24 +826,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 #pragma mark - Static functions
 
-+ (UIMenuItem *)menuItemRename {
-    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Rename", @"Rename")
-                                                      action: @selector(rename:)];
-    return menuItem;
-}
-
-+ (UIMenuItem *)menuItemEmail {
-    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Email", @"Email")
-                                                      action: @selector(email:)];
-    return menuItem;
-}
-
-+ (UIMenuItem *)menuItemDuplicate {
-    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle: NSLocalizedString(@"Duplicate", @"Duplicate")
-                                                      action: @selector(duplicate:)];
-    return menuItem;
-}
-
 #pragma mark - Custom Initalization
 
 - (void)addActionItemToToolbar:(BOOL)animated {
@@ -833,70 +837,30 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
 }
 
-+ (void)initalizeMenuController {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
-        if (menuItems == nil) {
-            menuItems = [NSMutableArray new];
-        }
-        [menuItems addObject:[MADOpenFileViewController menuItemRename]];
-        [menuItems addObject:[MADOpenFileViewController menuItemDuplicate]];
-        [menu setMenuItems:menuItems];
-    });
-}
-
-+ (void)initalizeMenuControllerEmail {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        NSMutableArray *menuItems = [[menu menuItems] mutableCopy];
-        if (menuItems == nil) {
-            menuItems = [NSMutableArray new];
-        }
-        UIMenuItem *menuItem = [MADOpenFileViewController menuItemEmail];
-        [menuItems addObject:menuItem];
-        [menu setMenuItems:menuItems];
-    });
-}
-
-- (void)initalizeBackground {
-    UICollectionView *v = (UICollectionView *)self.collectionView;
-    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: v.bounds];
-    v.backgroundView = watermarkView;
-}
-
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
     
     return [UIDevice isPad] ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
-    UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+                                UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
     
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
                    layout:(UICollectionViewLayout*)collectionViewLayout
-minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    CGFloat r = [UIDevice isPad] ? 50.0000f : 5.0000f;
-    return r;
-    
-}
+                    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout*)collectionViewLayout
-minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    
     return [UIDevice isPad] ? 50.0000f : 5.0000f;
     
 }
 
-//- (CGSize)collectionView:(UICollectionView *)collectionView
-//                  layout:(UICollectionViewLayout *)collectionViewLayout
-//  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-//    return CGSizeMake(140.0000f, 168.0000f);
-//}
+- (CGFloat)collectionView:(UICollectionView *)collectionView
+                   layout:(UICollectionViewLayout*)collectionViewLayout
+                    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    
+    return [UIDevice isPad] ? 50.0000f : 5.0000f;
+    
+}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
@@ -908,7 +872,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
 
 - (NSURL *)urlForDocumentCell:(MTCollectionViewCellDocument *)cellDocument {
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
+
     return [self documentForIndexPath:indexPath];
+
 }
 
 - (void)reloadData {
@@ -1189,21 +1155,21 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
 #pragma mark - UICollectionViewFlowLayoutDelegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout*)collectionViewLayout
+                  layout:(UICollectionViewLayout *)collectionViewLayout
   sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-        MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
-                                                                                inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
-        NSURL *url = metadata.url;
-        NSString *filename = [MADocument fileNameForMadUrl:url];
+    MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
+                                                                            inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
+    NSURL *url = metadata.url;
+    NSString *filename = [MADocument fileNameForMadUrl:url];
     
     
     
     NSDictionary *attributes = [MTCollectionViewCellDocument attributes];
 
     
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:filename attributes:attributes];
-    
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
+                                                                           attributes: attributes];
     self.testLabel.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 124.0000f, 300.0000f);
     self.testLabel.attributedText = attributedString;
     self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -1289,16 +1255,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     if (cell.delegate == nil) {
         cell.delegate =  self;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                              action: @selector(rename:)];
-        tap.numberOfTapsRequired = 1;
-        tap.numberOfTouchesRequired = 1;
-        [cell.labelTitle addGestureRecognizer:tap];
-        cell.labelTitle.userInteractionEnabled = YES;
-        
-        UILongPressGestureRecognizer *longPressGestureRecognizer = [self longPressGestureRecognizer];
-        [cell addGestureRecognizer:longPressGestureRecognizer];
-        
+                
     }
     
     NSString *filename = [MADocument fileNameForMadUrl:url];

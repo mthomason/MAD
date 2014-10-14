@@ -94,15 +94,15 @@ typedef NS_ENUM(NSUInteger, MTQuerySections) {
 };
 
 NSString * const MNSIdentifierSegueShowAddTableViewController       = @"showAddTableViewController";
-NSString * const MADImageBarButtonItemDatabase      = @"UIBarButtonItemDatabase";
-NSString * const MADImageBarButtonItemDatabase8     = @"UIBarButtonItemDatabase8";
-NSString * const MTSegueCloseDesigner               = @"MTSegueCloseDesigner";
-NSString * const NSFetchedResultsCacheName          = @"NSFetchedResultsCacheName";
-NSString * const NSFetchedResultsCacheTables        = @"NSFetchedResultsCacheTables";
-NSString * const NSFetchedResultsCacheLinks         = @"NSFetchedResultsCacheLinks";
-NSString * const NSFetchedResultsCacheGroups        = @"NSFetchedResultsCacheGroups";
-NSString * const NSFetchedResultsCachePredicates    = @"NSFetchedResultsCachePredicates";
-NSString * const MNSSegueShowSql                    = @"MNSSegueShowSql";
+NSString * const MADImageBarButtonItemDatabase                      = @"UIBarButtonItemDatabase";
+NSString * const MADImageBarButtonItemDatabase8                     = @"UIBarButtonItemDatabase8";
+NSString * const MTSegueCloseDesigner                               = @"MTSegueCloseDesigner";
+NSString * const NSFetchedResultsCacheName                          = @"NSFetchedResultsCacheName";
+NSString * const NSFetchedResultsCacheTables                        = @"NSFetchedResultsCacheTables";
+NSString * const NSFetchedResultsCacheLinks                         = @"NSFetchedResultsCacheLinks";
+NSString * const NSFetchedResultsCacheGroups                        = @"NSFetchedResultsCacheGroups";
+NSString * const NSFetchedResultsCachePredicates                    = @"NSFetchedResultsCachePredicates";
+NSString * const MNSSegueShowSql                                    = @"MNSSegueShowSql";
 NSString * const MTTableHeaderSectionKey                            = @"MTTableHeaderSectionKey";
 NSString * const MTTableSectionRowKey                               = @"MTTableSectionRowKey";
 NSString * const MTTableSectionRowHeightKey                         = @"MTTableSectionRowHeightKey";
@@ -225,40 +225,40 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)updateInterfaceForPerferedContentSizeCategory:(NSString *)preferredContentSizeCategory {
     
-    if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraSmall]) {
+    if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryExtraSmall]) {
         self.headerSectionHeight = 24.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategorySmall]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategorySmall]) {
         self.headerSectionHeight = 26.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryMedium]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryMedium]) {
         self.headerSectionHeight = 29.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryLarge]) {
         self.headerSectionHeight = 32.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryExtraLarge]) {
         self.headerSectionHeight = 34.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraExtraLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryExtraExtraLarge]) {
         self.headerSectionHeight = 36.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryExtraExtraExtraLarge]) {
         self.headerSectionHeight = 38.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityMedium]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryAccessibilityMedium]) {
         self.headerSectionHeight = 40.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryAccessibilityLarge]) {
         self.headerSectionHeight = 42.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityExtraLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryAccessibilityExtraLarge]) {
         self.headerSectionHeight = 44.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
         self.headerSectionHeight = 46.0000f;
         
-    } else if ([preferredContentSizeCategory isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
+    } else if ([preferredContentSizeCategory isEqualToString: UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
         self.headerSectionHeight = 48.0000f;
         
     } else {
@@ -1060,20 +1060,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath { }
 
-/*
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat result = MNSTableViewCellHeightDefault;
-    MTQuerySections section = [self tableSectionTypeForIndexPathSection: indexPath.section];
-    if (section == MTQuerySectionsSql) {
-        result = indexPath.row == 0 ? [UITableViewCellOverride defaultHeight] : [UITableViewCellQueryInput defaultHeight];
-    } else {
-        NSDictionary *datamodel = [self datamodel];
-        NSDictionary *tableMetaHeight = datamodel[MTTableSectionRowHeightKey];
-        if (tableMetaHeight) result = [tableMetaHeight[[NSNumber numberWithInt: section]] floatValue];
-    }
-    return result;
-}
-*/
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
     return NSLocalizedString(@"Remove", @"Remove button title.");
  }

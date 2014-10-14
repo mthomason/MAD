@@ -20,7 +20,7 @@
 @property (nonatomic, weak) IBOutlet UIImageView *imagePreview;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
-@property (nonatomic, weak) id <MTDocumentCellProtocol> delegate;
+@property (nonatomic, weak) id <MTDocumentCellProtocol, UIGestureRecognizerDelegate> delegate;
 
 - (void)configureCellForUrl:(NSURL *)url;
 - (void)loadPreviewImageForUrl:(NSURL *)url;
@@ -31,6 +31,7 @@
 - (void)setText:(NSString *)text;
 
 + (NSDictionary *)attributes;
+- (void)updateFont;
 
 @end
 
