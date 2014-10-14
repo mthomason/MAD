@@ -548,8 +548,15 @@ static MACloudManager *sharedSingleton;
         
         filteredDocumentCacheCloudMetaData = documentCacheCloudMetaData.allValues;
     }
+
+    NSString *displayName = NSStringFromSelector(@selector(displayName));
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: displayName
+                                                           ascending: YES
+                                                            selector: @selector(localizedCaseInsensitiveCompare:)];
+    NSArray *sorts = @[sort];
     
-    self.documentCacheCloudMetaDataItems = filteredDocumentCacheCloudMetaData;
+    //NSArray *debug = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
+    self.documentCacheCloudMetaDataItems = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
     self.documentCacheCloudCount = filteredDocumentCacheCloudMetaData.count;
 }
 
@@ -578,7 +585,9 @@ static MACloudManager *sharedSingleton;
     
 
     NSString *lastPathComponent = NSStringFromSelector(@selector(lastPathComponent));
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:lastPathComponent ascending:NO];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: lastPathComponent
+                                                           ascending: YES
+                                                            selector: @selector(localizedCaseInsensitiveCompare:)];
     NSArray *sorts = @[sort];
     self.documentCacheLocalUrls = [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts];
     self.documentCacheLocalCount = filteredDocumentCacheLocalUrls.count;
