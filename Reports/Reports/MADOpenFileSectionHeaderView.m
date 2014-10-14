@@ -27,6 +27,17 @@ NSString * const MADTextLocal = @"Local";
 
 @implementation MADOpenFileSectionHeaderView
 
+- (void)awakeFromNib {
+    
+    
+    
+    [super awakeFromNib];
+}
+
+- (UICollectionViewLayoutAttributes *)preferredLayoutAttributesFittingAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
+    return [super preferredLayoutAttributesFittingAttributes:layoutAttributes];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
 
@@ -64,22 +75,20 @@ NSString * const MADTextLocal = @"Local";
 
         self.activityIndicatorView = activityView;
         
-        UIColor *strokeColor = [UIColor tintColorWhite];
         UIColor *foregroundColor = [UIColor tintColorRed];
-        NSNumber *strokeWidth = @(3.0000f);
-        NSDictionary *attributes = @{NSForegroundColorAttributeName : foregroundColor};
+        NSDictionary *attributesLocal = @{NSForegroundColorAttributeName : foregroundColor};
         
         NSAttributedString *attributedStringLocal = [[NSAttributedString alloc] initWithString: localizedTextLocal
-                                                                                    attributes: attributes];
+                                                                                    attributes: attributesLocal];
         self.localizedAttrbiutedTextLocal = attributedStringLocal;
         
+        NSDictionary *attributesCloud = @{NSForegroundColorAttributeName : foregroundColor};
         NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
-                                                                                    attributes: attributes];
+                                                                                    attributes: attributesCloud];
         self.localizedAttrbiutedTextCloud = attributedStringCloud;
         
         UIColor *blueColor = [[UIColor edaBlueLightBackground] colorWithAlphaComponent:0.20000f];
         self.backgroundColor = blueColor;
-        //self.alpha = 2.0000f;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
         
@@ -111,12 +120,10 @@ NSString * const MADTextLocal = @"Local";
                 
             case MACloudManagerSectionCloud:
                 self.label.attributedText = self.localizedAttrbiutedTextCloud;
-//                self.label.text = self.localizedTextCloud;
                 break;
                 
             case MACloudManagerSectionLocal:
                 self.label.attributedText = self.localizedAttrbiutedTextLocal;
-//                self.label.text = self.localizedTextLocal;
                 break;
                 
             case MACloudManagerSectionCombined:
@@ -131,19 +138,11 @@ NSString * const MADTextLocal = @"Local";
         }
     }
     [self.label sizeToFit];
-    //self.label.center = CGPointMake(self.label.center.x, self.center.y);
     self.label.frame = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y, self.label.frame.size.width + 5.0000f, self.frame.size.height);
     self.activityIndicatorView.frame = CGRectMake(self.label.frame.origin.x + self.label.frame.size.width + 5.0000f,
                                                   self.activityIndicatorView.frame.origin.y,
                                                   self.activityIndicatorView.frame.size.width,
                                                   self.activityIndicatorView.frame.size.height);
-}
-- (void)layoutSubviews {
- /*   self.activityIndicatorView.frame = CGRectMake(self.label.frame.origin.x + self.label.frame.size.width + 5.0000f,
-                                                  self.activityIndicatorView.frame.origin.y,
-                                                  self.activityIndicatorView.frame.size.width,
-                                                  self.activityIndicatorView.frame.size.height);*/
-    [super layoutSubviews];
 }
 
 @end

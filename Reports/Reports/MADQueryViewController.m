@@ -1549,7 +1549,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                                                  forKeys: sections];
             NSNumber *height1 = @(44.0000f);
             NSNumber *height2 = @([UITableViewCellTableName defaultHeight]);
-            NSNumber *height3 = @([UITableViewCellQueryLink defaultHeight]);
+            NSNumber *height3 = @([UITableViewCellQueryLink defaultHeight]);    //50.0000f
             NSNumber *height4 = @(44.0000f);
             NSNumber *height5 = @(44.0000f);
             NSArray *heightRowsForSection = @[height1, height2, height3, height4, height5];

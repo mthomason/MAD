@@ -22,8 +22,9 @@
 #import "MACloudManager.h"
 #import "MADMetaData.h"
 
-#import "MTCollectionViewCellDocument.h"
 #import "MADOpenFileSectionHeaderView.h"
+#import "MTCollectionViewCellDocument.h"
+#import "MTTableViewCellDocument.h"
 
 #import "MADViewerController.h"
 
@@ -36,7 +37,7 @@
 #import "MTQueryBuilderContainerController.h"
 
 #import "MTViewControllerAbout.h"
-#import "MTTableViewCellDocument.h"
+
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 
@@ -76,8 +77,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         UIStateRestoring,
         MTViewControllerProtocol,
         MTDocumentCellProtocol>
-
-@property (nonatomic, weak) IBOutlet MADGroupedCollectionViewLayout *collectionViewFlowLayout;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
@@ -119,6 +118,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 @property (nonatomic, assign) BOOL cloudActivityRunning;
 @property (nonatomic, assign) BOOL cloudActivityRunningDisplay;
 
+@property (nonatomic, strong) NSStringDrawingContext *collectionViewSizeForItemAtIndexPath;
+@property (nonatomic, strong) UILabel *testLabel;
 
 @end
 
@@ -246,6 +247,9 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     self.cloudActivityRunningDisplay = NO;
     self.firstViewWillAppear = YES;
     self.rightBarButtonItemActivityIndicatorVisible = NO;
+    
+    NSStringDrawingContext *collectionViewSizeForItemAtIndexPath = [[NSStringDrawingContext alloc] init];
+    self.collectionViewSizeForItemAtIndexPath = collectionViewSizeForItemAtIndexPath;
 
 }
 
@@ -284,9 +288,14 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 }
 
 
-
 - (void)viewDidLoad {
-
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 124.0000f, 300.0000f)];
+    label.clipsToBounds = NO;
+    label.numberOfLines = 0;
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:124.0000f];
+    [label addConstraint:constraint];
+    self.testLabel = label;
+    
     self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.collectionView.contentInset.top + ([MACloudManager sharedManager].cloudAvailble ? MADSectionHeaderHeight : CGSizeZero.height),
                                                                  self.collectionView.contentInset.left,
                                                                  self.collectionView.contentInset.bottom,
@@ -448,7 +457,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     }
     
     self.firstViewWillAppear = NO;
-
 }
 
 - (void)reenableDataWithSearch {
@@ -464,13 +472,17 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     [super viewDidAppear:animated];
     
     for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
+        
         MTCollectionViewCellDocument *cell = (MTCollectionViewCellDocument *)[self.collectionView cellForItemAtIndexPath:indexPath];
         [cell performDeselectionAnimations];
+        
     }
+    
     for (NSUInteger item = 0; item < [self.collectionView numberOfItemsInSection:0]; item++) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
         [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
     }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -880,9 +892,11 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(140.0000f, 168.0000f);
-}
+//- (CGSize)collectionView:(UICollectionView *)collectionView
+//                  layout:(UICollectionViewLayout *)collectionViewLayout
+//  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return CGSizeMake(140.0000f, 168.0000f);
+//}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
@@ -1041,7 +1055,9 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view forElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath { }
+- (void)collectionView: (UICollectionView *)collectionView didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
+      forElementOfKind: (NSString *)elementKind
+           atIndexPath: (NSIndexPath *)indexPath { }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -1172,10 +1188,33 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
 
 #pragma mark - UICollectionViewFlowLayoutDelegate
 
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {}
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout*)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+        MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
+                                                                                inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
+        NSURL *url = metadata.url;
+        NSString *filename = [MADocument fileNameForMadUrl:url];
+    
+    
+    
+    NSDictionary *attributes = [MTCollectionViewCellDocument attributes];
+
+    
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:filename attributes:attributes];
+    
+    self.testLabel.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 124.0000f, 300.0000f);
+    self.testLabel.attributedText = attributedString;
+    self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.testLabel.contentScaleFactor = self.collectionView.contentScaleFactor;
+    [self.testLabel sizeToFit];
+    
+    return CGSizeMake(140.0000f, 128 + ceil(self.testLabel.frame.size.height) + 20);
+}
 
 
-
+/*
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind
                                                                      atIndexPath:(NSIndexPath *)indexPath {
     
@@ -1187,7 +1226,7 @@ minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     supplementalAttributes.alpha = 0.2000f;
     return supplementalAttributes;
 }
-
+*/
 //- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
 
 
@@ -1238,11 +1277,11 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView: (UICollectionView *)collectionView
+                  cellForItemAtIndexPath: (NSIndexPath *)indexPath {
 
-    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MTCollectionViewCellDocumentIdentifier
-                                                                                   forIndexPath:indexPath];
+    MTCollectionViewCellDocument *cell = [collectionView dequeueReusableCellWithReuseIdentifier: MTCollectionViewCellDocumentIdentifier
+                                                                                   forIndexPath: indexPath];
     
     MADMetaData *metadata = [[MACloudManager sharedManager] metadataForItemAtLocation: indexPath.item
                                                                             inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
@@ -1262,7 +1301,12 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         
     }
     
-    [cell configureCellForUrl:url];
+    NSString *filename = [MADocument fileNameForMadUrl:url];
+    cell.text = filename;
+    cell.labelTitle.text = filename;
+    [cell.labelTitle layoutIfNeeded];
+    [cell loadPreviewImageForUrl:url];
+    
     if (self.isEditing) {
         [cell startWobble];
     }
@@ -1282,6 +1326,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         }
     
     }
+
+    [cell normalizeTint];
     
     return cell;
 }

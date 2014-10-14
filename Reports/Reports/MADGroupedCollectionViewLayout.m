@@ -21,10 +21,14 @@ CGFloat const MADAlpha = 0.9000f;
 
 - (void)prepareLayout {
     [super prepareLayout];
+    self.scrollDirection = UICollectionViewScrollDirectionVertical;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSArray *elementAttributes = [super layoutAttributesForElementsInRect:rect];
+    if (elementAttributes == nil) {
+        elementAttributes = [NSArray array];
+    }
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:elementAttributes.count];
     [results addObjectsFromArray:elementAttributes];
 
@@ -52,16 +56,19 @@ CGFloat const MADAlpha = 0.9000f;
     }
     
     if (displayHeaders) {
+        
         if (gotHeader1 == NO) {
-            NSIndexPath *header1 = [NSIndexPath indexPathForItem:0 inSection:0];
-            attributesHeader1 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                               withIndexPath:header1];
+            NSIndexPath *header1 = [NSIndexPath indexPathForItem: 0
+                                                       inSection: 0];
+            attributesHeader1 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+                                                                                               withIndexPath: header1];
         }
         
         if (gotHeader2 == NO) {
-            NSIndexPath *header2 = [NSIndexPath indexPathForItem:0 inSection:1];
-            attributesHeader2 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                               withIndexPath:header2];
+            NSIndexPath *header2 = [NSIndexPath indexPathForItem: 0
+                                                       inSection: 1];
+            attributesHeader2 = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind: UICollectionElementKindSectionHeader
+                                                                                               withIndexPath: header2];
         }
 
         [self updateAttributes:&attributesHeader1];
@@ -80,11 +87,11 @@ CGFloat const MADAlpha = 0.9000f;
         if (gotHeader2 == NO) {
             [results addObject:attributesHeader2];
         }
-
     }
     
     return results;
 }
+
 
 - (void)updateAttributes:(UICollectionViewLayoutAttributes **)attributes {
     (*attributes).alpha = MADAlpha;
@@ -94,10 +101,10 @@ CGFloat const MADAlpha = 0.9000f;
     CGFloat border = self.collectionView.contentOffset.y + self.collectionView.contentInset.top;
     if (y < border)
         y = border;
-    CGSize size = [((id<UICollectionViewDelegateFlowLayout>)self.collectionView.delegate) collectionView:self.collectionView
-                                                                                                  layout:self.collectionView.collectionViewLayout
-                                                                         referenceSizeForHeaderInSection:(*attributes).indexPath.section];
+    CGSize size = [((id<UICollectionViewDelegateFlowLayout>)self.collectionView.delegate) collectionView: self.collectionView
+                                                                                                  layout: self.collectionView.collectionViewLayout
+                                                                         referenceSizeForHeaderInSection: (*attributes).indexPath.section];
     (*attributes).frame = CGRectMake(CGPointZero.x, y, size.width, size.height);
 }
 
- @end
+@end

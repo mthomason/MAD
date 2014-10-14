@@ -21,36 +21,45 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 @interface MTCollectionViewCellDocument ()
 
 @property (nonatomic, strong) UIColor *bgColor;
-@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
+//@property (nonatomic, strong) NSParagraphStyle *paragraphStyle;
 @property (nonatomic, strong) UIColor *colorTextNormal;
 @property (nonatomic, strong) UIColor *colorTextSelectedHighlighted;
 @property (nonatomic, strong) UIColor *colorTextSelected;
+
+//@property (nonatomic, strong) NSD *attributedString;
+
 
 @end
 
 @implementation MTCollectionViewCellDocument
 
 - (void)awakeFromNib {
+    
+    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
+    
     CGFloat offset = 2.0000f * [[UIScreen mainScreen] scale];
     
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    self.paragraphStyle = paragraphStyle;
+  //  self.paragraphStyle = paragraphStyle;
     
     self.imagePreview.layer.shadowColor = [UIColor darkGrayColor].CGColor;
     self.imagePreview.layer.shadowRadius = 2.0000f;
     self.imagePreview.layer.shadowOpacity = 1.0000f;
     self.imagePreview.layer.shadowOffset = CGSizeMake(offset, offset);
 
-
     self.labelTitle.textColor = self.colorTextNormal;
     self.labelTitle.clipsToBounds = NO;
-    
+    self.labelTitle.numberOfLines = 0;
+    self.labelTitle.backgroundColor = [UIColor clearColor];
+    [self.labelTitle setNeedsLayout];
+
+    self.selectedBackgroundView.backgroundColor = self.bgColor;
+    self.selectedBackgroundView.clipsToBounds = YES;
     self.selectedBackgroundView.layer.cornerRadius = 5.0000f;
-    
+
     self.imagePreview.contentMode = UIViewContentModeScaleAspectFit;
+
+    [self normalizeTint];
     
     [super awakeFromNib];
 }
@@ -59,20 +68,19 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     self = [super initWithCoder:aDecoder];
     if (self) {
         
+        
+        //NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: @""
+        //                                                                                     attributes: attributes];
+        //self.attributedString = attributedString;
+
         UIColor *colorTextNormal = [UIColor tintColorBlue];
         UIColor *bgColor = [colorTextNormal colorWithAlphaComponent:0.70000f];
+        self.bgColor = bgColor;
         
         UIView *selectedBackground = [[UIView alloc] initWithFrame:self.frame];
-        selectedBackground.clipsToBounds = YES;
-        selectedBackground.backgroundColor = bgColor;
         self.selectedBackgroundView = selectedBackground;
         
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [activityView stopAnimating];
-        activityView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
-                                        UIViewAutoresizingFlexibleRightMargin |
-                                        UIViewAutoresizingFlexibleTopMargin |
-                                        UIViewAutoresizingFlexibleBottomMargin;
+        UIActivityIndicatorView *activityView = [MTCollectionViewCellDocument activityIndicatorView];
         activityView.center = self.contentView.center;
         [self.contentView addSubview:activityView];
 
@@ -81,10 +89,27 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
         self.colorTextSelectedHighlighted = colorTextSelectedHighlighted;
         self.colorTextSelected = colorTextSelected;
         self.activityIndicator = activityView;
-        self.bgColor = bgColor;
         self.colorTextNormal = colorTextNormal;
+        
+        self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return self;
+}
+
++ (UIActivityIndicatorView *)activityIndicatorView {
+
+    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityIndicatorView stopAnimating];
+    activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                                UIViewAutoresizingFlexibleRightMargin |
+                                                UIViewAutoresizingFlexibleTopMargin |
+                                                UIViewAutoresizingFlexibleBottomMargin;
+    activityIndicatorView.translatesAutoresizingMaskIntoConstraints = YES;
+    return activityIndicatorView;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
 }
 
 - (void)performSelectionAnimations {
@@ -97,6 +122,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
 - (void)configureCellForUrl:(NSURL *)url {
     self.text = [MADocument fileNameForMadUrl:url];
+    self.labelTitle.text = [MADocument fileNameForMadUrl:url];
     [self loadPreviewImageForUrl:url];
 }
 
@@ -117,16 +143,34 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     });
 }
 
+- (void)setNeedsLayout {
+    [super setNeedsLayout];
+    [self.labelTitle setNeedsLayout];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    [super setBounds:bounds];
+    self.contentView.frame = bounds;
+}
+
 - (void)setText:(NSString *)text {
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
-    NSInteger length = [[attributedString string] length];
-    CGFloat size = [UIDevice isPad] ? 22.0000f : 12.0000f;
-    UIFont *fonta = [UIFont systemFontOfSize:size];
-    NSRange range = NSMakeRange(0, length);
-    [attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:range];
-    [attributedString addAttribute:NSFontAttributeName value:fonta range:range];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:self.paragraphStyle range:range];
-    [self.labelTitle setAttributedText:attributedString];
+    
+    NSDictionary *attributes = [MTCollectionViewCellDocument attributes];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: text
+                                                                                         attributes: attributes];
+    self.labelTitle.attributedText = attributedString;
+}
+
++ (NSDictionary *)attributes {
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+
+    UIFont *fonta = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    return @{NSKernAttributeName : [NSNull null],
+             NSFontAttributeName : fonta,
+             NSParagraphStyleAttributeName : paragraphStyle};
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {

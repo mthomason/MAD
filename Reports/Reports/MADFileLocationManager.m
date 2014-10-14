@@ -52,17 +52,19 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
     if (self = [super init]) {
         
         NSMetadataQuery *metadataQuery = [[NSMetadataQuery alloc] init];
-        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDataScope,
+        metadataQuery.searchScopes = @[NSMetadataQueryUbiquitousDataScope, NSMetadataQueryAccessibleUbiquitousExternalDocumentsScope,
                                        NSMetadataQueryUbiquitousDocumentsScope];
 
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K.pathExtension == %@ && %K == %@",
                                   NSMetadataItemURLKey, pathExtension,
                                   NSMetadataItemContentTypeKey, MADUtiType];
         metadataQuery.predicate = predicate;
+        metadataQuery.notificationBatchingInterval = 0.5000;
         
         NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
         self.results = results;
         
+
         //NSMutableArray *resultsArray = [[NSMutableArray alloc] init];
         //self.resultsArray = resultsArray;
         
@@ -88,7 +90,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                  object: metadataQuery];
 
         self.metadataQuery = metadataQuery;
-
+        //[self.metadataQuery startQuery];
     }
 
     return self;
@@ -96,7 +98,15 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 
 #pragma mark - MADFileLocationManager
 
-- (BOOL)startQuery { return YES; }
+- (BOOL)startQuery {
+    BOOL success = YES;
+    [self.metadataQuery enableUpdates];
+    if (self.metadataQuery.started == NO) {
+        success = [self.metadataQuery startQuery];
+        NSAssert(success, @"%s\n\tFailed to start query.", __PRETTY_FUNCTION__);
+    }
+    return success;
+}
 
 - (void)stopQuery { }
 
@@ -144,6 +154,8 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
                                                         updatedItems: updated];
     
     [self.metadataQuery enableUpdates];
+    NSLog(@"Query enabled %@", self.metadataQuery.isStarted ? @"YES" : @"NO");
+    //[self.metadataQuery startQuery];
 }
 
 - (NSMutableArray *)calculatedUrls {

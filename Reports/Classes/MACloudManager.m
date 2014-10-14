@@ -182,14 +182,14 @@ static MACloudManager *sharedSingleton;
         
     }  else {
 
-        __weak MACloudManager *weakself = self;
+        //__weak MACloudManager *weakself = self;
         [self updateFileStorageContainerURL:^(void) {
 
-            [weakself.fileLocationManager.metadataQuery startQuery];
             [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudStateUpdated
                                                                 object: nil];
 
         }];
+        [self.fileLocationManager.metadataQuery startQuery];
         
     }
 }
