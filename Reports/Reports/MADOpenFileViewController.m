@@ -1709,7 +1709,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                             preferredStyle: UIAlertControllerStyleAlert];
     
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-    NSInteger itemIndex = indexPath.item;
     
     [self setRightBarButtonItemActivityIndicatorVisible:YES];
 
@@ -1726,8 +1725,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                               if (text.length > 0) {
                                                                   
                                                                   NSURL *urlToRename = nil;
-                                                                  if (itemIndex < [weakself dataSourceCount]) {
-                                                                      NSIndexPath *pathToMove = [NSIndexPath indexPathForItem:itemIndex inSection:0];
+                                                                  if (indexPath.item < [weakself dataSourceCount]) {
+                                                                      NSIndexPath *pathToMove = [NSIndexPath indexPathForItem: indexPath.item
+                                                                                                                    inSection: indexPath.section];
                                                                       urlToRename = [weakself documentForIndexPath:pathToMove];
                                                                       NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: textField.text
                                                                                                                                      withExtension: MTDocumentExtentionMobleApplicationDocument
