@@ -890,8 +890,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
     self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
 
-    NSIndexSet *local = [NSIndexSet indexSetWithIndex:1];
-    [self.collectionView reloadSections:local];
+    NSIndexSet *cloud = [NSIndexSet indexSetWithIndex:1];
+    [self.collectionView reloadSections:cloud];
 }
 
 - (void)reloadData {

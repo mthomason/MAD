@@ -176,22 +176,23 @@ static MACloudManager *sharedSingleton;
 
 - (void)activate {
     
-    if (self.cloudAvailble == NO) {
-        
-        [[MACloudManager sharedManager] reloadDocumentCacheWithSearchString:nil];
-        
-    }  else {
+    [self reloadCacheLocal: @""];
 
-        //__weak MACloudManager *weakself = self;
+    if (self.cloudAvailble) {
+    
+        [self reloadCacheCloud: @""];
+
+        __weak MACloudManager *weakself = self;
         [self updateFileStorageContainerURL:^(void) {
 
-            [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationCloudStateUpdated
-                                                                object: nil];
+            [weakself.fileLocationManager.metadataQuery startQuery];
 
         }];
-        [self.fileLocationManager.metadataQuery startQuery];
         
     }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
+                                                        object: nil];
 }
 
 - (NSArray *)contentsOfDocumentsDirectoryWithPathExtension:(NSString *)extension {
@@ -356,13 +357,10 @@ static MACloudManager *sharedSingleton;
                                              removedItems:(NSIndexSet *)removedItems
                                              updatedItems:(NSIndexSet *)updatedItems {
 
-    if (removedItems.count > 0 || insertedItems.count > 0) {
-        [self reloadDocumentCacheWithSearchString:self.searchString];
-    } else {
-        //Only items updated.  Notify view to update
-        [self reloadDocumentCacheWithSearchString:self.searchString];
-    }
-    
+    [self reloadCacheCloud:self.searchString];
+    [[NSNotificationCenter defaultCenter] postNotificationName: MADNotificationFileManagerDidUpdateFileLocations
+                                                        object: nil];
+        
 }
 
 - (void)listCoordinatorDidFailRemovingListAtURL:(NSURL *)URL withError:(NSError *)error { }
