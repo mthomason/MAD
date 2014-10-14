@@ -28,9 +28,6 @@ NSString * const MADTextLocal = @"Local";
 @implementation MADOpenFileSectionHeaderView
 
 - (void)awakeFromNib {
-    
-    
-    
     [super awakeFromNib];
 }
 
@@ -82,15 +79,15 @@ NSString * const MADTextLocal = @"Local";
                                                                                     attributes: attributesLocal];
         self.localizedAttrbiutedTextLocal = attributedStringLocal;
         
-        NSDictionary *attributesCloud = @{NSForegroundColorAttributeName : foregroundColor};
+       // NSDictionary *attributesCloud = @{NSForegroundColorAttributeName : foregroundColor};
         NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
-                                                                                    attributes: attributesCloud];
+                                                                                    attributes: attributesLocal];
         self.localizedAttrbiutedTextCloud = attributedStringCloud;
         
         UIColor *blueColor = [[UIColor edaBlueLightBackground] colorWithAlphaComponent:0.20000f];
         self.backgroundColor = blueColor;
         label.backgroundColor = [UIColor clearColor];
-        label.textColor = [UIColor whiteColor];
+        label.textColor = foregroundColor;
         
         self.label = label;
         
