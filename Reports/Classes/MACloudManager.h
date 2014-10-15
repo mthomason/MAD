@@ -53,6 +53,10 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 @property (nonatomic, strong, readonly) MADFileLocationManager *fileLocationManager;
 
+@property (nonatomic, strong, readonly) NSMutableArray       *documentCacheCloudMetaDataItems;
+@property (nonatomic, strong, readonly) NSMutableArray       *documentCacheLocalUrls;
+
+
 + (MACloudManager *)sharedManager;
 
 - (void)activate;
@@ -71,6 +75,8 @@ extern NSString * const MADNotificationUbiquitousContainerFetchingDidEnd;
 
 - (void)duplicateUrl: (NSURL *)urlToDupe
           completion: (void (^)(BOOL, NSURL *, NSError *))completion;
+
+- (BOOL)deleteDocument:(NSURL *)fileUrl;
 
 - (void)deleteDocument: (NSURL *)fileUrl
             completion: (void (^)(BOOL, NSError *))completion;

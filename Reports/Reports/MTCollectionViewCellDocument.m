@@ -215,10 +215,6 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
     return YES;
 }
 
-- (void)delete:(id)sender {
-    [self.delegate deleteDocumentRepresentedByCell:self];
-}
-
 - (void)email:(id)sender {
     [self.delegate email:self];
 }

@@ -36,10 +36,6 @@
     return result;
 }
 
-- (void)delete:(id)sender {
-    [self.delegate deleteDocumentRepresentedByCell:self];
-}
-
 - (void)email:(id)sender {
     [self.delegate email:self];
 }

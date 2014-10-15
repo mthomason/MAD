@@ -60,8 +60,8 @@ NSString * const MADUbiquityIdentifier                                  = @"iClo
 @property (nonatomic, assign) NSUInteger    documentCacheCloudCount;
 @property (nonatomic, assign) NSUInteger    documentCacheLocalCount;
 
-@property (nonatomic, strong) NSArray       *documentCacheCloudMetaDataItems;
-@property (nonatomic, strong) NSArray       *documentCacheLocalUrls;
+@property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheCloudMetaDataItems;
+@property (nonatomic, strong, readwrite) NSMutableArray       *documentCacheLocalUrls;
 
 @property (nonatomic, strong) NSArray       *fileNamesSortedLocal;
 @property (nonatomic, strong) NSArray       *fileNamesSortedCloud;
@@ -82,6 +82,12 @@ static MACloudManager *sharedSingleton;
 
 - (id)init {
     if (self = [super init]) {
+        
+        NSMutableArray *documentCacheLocalUrls = [NSMutableArray new];
+        self.documentCacheLocalUrls = documentCacheLocalUrls;
+        
+        NSMutableArray *documentCacheCloudMetaDataItems = [NSMutableArray new];
+        self.documentCacheCloudMetaDataItems = documentCacheCloudMetaDataItems;
         
         //static dispatch_once_t onceToken;
         //dispatch_once(&onceToken, ^{
@@ -460,6 +466,7 @@ static MACloudManager *sharedSingleton;
 }
 
 - (void)deleteDocument:(NSURL *)fileUrl completion:(void (^)(BOOL, NSError *))completion {
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         
         NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
@@ -485,6 +492,33 @@ static MACloudManager *sharedSingleton;
         }];
     });
 }
+
+- (BOOL)deleteDocument:(NSURL *)fileUrl {
+    __block BOOL success = NO;
+    dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        
+        NSFileCoordinator* fileCoordinator = [[NSFileCoordinator alloc] initWithFilePresenter:nil];
+        [fileCoordinator coordinateWritingItemAtURL: fileUrl
+                                            options: NSFileCoordinatorWritingForDeleting
+                                              error: nil
+                                         byAccessor: ^(NSURL* writingURL) {
+                                             NSError *error = nil;
+                                             NSFileManager* fileManager = [[NSFileManager alloc] init];
+                                             if ([fileManager fileExistsAtPath:writingURL.path]) {
+                                                 [fileManager removeItemAtURL:writingURL error:&error];
+                                                 success = error ? NO : YES;
+                                                 dispatch_semaphore_signal(semaphoreDelete);
+                                             } else {
+                                                 success = NO;
+                                                 dispatch_semaphore_signal(semaphoreDelete);
+                                             }
+                                         }];
+    });
+    dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
+    return success;
+}
+
 
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
                           withExtension:(NSString *)extension
@@ -591,7 +625,7 @@ static MACloudManager *sharedSingleton;
     NSArray *sorts = @[sort];
     
     //NSArray *debug = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
-    self.documentCacheCloudMetaDataItems = [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts];
+    [self.documentCacheCloudMetaDataItems setArray: [filteredDocumentCacheCloudMetaData sortedArrayUsingDescriptors:sorts]];
     self.documentCacheCloudCount = filteredDocumentCacheCloudMetaData.count;
 }
 
@@ -624,7 +658,7 @@ static MACloudManager *sharedSingleton;
                                                            ascending: YES
                                                             selector: @selector(localizedCaseInsensitiveCompare:)];
     NSArray *sorts = @[sort];
-    self.documentCacheLocalUrls = [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts];
+    [self.documentCacheLocalUrls setArray: [filteredDocumentCacheLocalUrls sortedArrayUsingDescriptors:sorts]];
     self.documentCacheLocalCount = filteredDocumentCacheLocalUrls.count;
 
 }

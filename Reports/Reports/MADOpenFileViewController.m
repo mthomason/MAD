@@ -103,16 +103,12 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 @property (nonatomic, assign, getter = isSavingActivityIndicatorVisible, readwrite) BOOL savingActivityIndicatorVisible;
 @property (nonatomic, assign, getter = isRightBarButtonItemActivityIndicatorVisible, readwrite) BOOL rightBarButtonItemActivityIndicatorVisible;
 
-//@property (nonatomic, strong) NSArray *urls;
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UILabel *labelMadDesigner;
 
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
 
 @property (nonatomic, assign) BOOL firstViewWillAppear;
-
-@property (nonatomic, assign) NSUInteger numberOfDocumentsLocal;
-@property (nonatomic, assign) NSUInteger numberOfDocumentsCloud;
 
 @property (nonatomic, strong) MADOpenFileSectionHeaderView *headerCloud;
 
@@ -121,6 +117,11 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 @property (nonatomic, strong) NSStringDrawingContext *collectionViewSizeForItemAtIndexPath;
 @property (nonatomic, strong) UILabel *testLabel;
+
+// Local cache
+@property (atomic, assign, getter=isUpdatingEnabled) BOOL updatingEnabled;
+@property (nonatomic, strong) NSMutableArray *documentsLocal;
+@property (nonatomic, strong) NSMutableArray *documentsCloud;
 
 @end
 
@@ -244,6 +245,13 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 - (void)initialize {
 
+    NSMutableArray *documentsLocal = [[NSMutableArray alloc] init];
+    self.documentsLocal = documentsLocal;
+    
+    NSMutableArray *documentsCloud = [[NSMutableArray alloc] init];
+    self.documentsCloud = documentsCloud;
+    
+    self.updatingEnabled = YES;
     self.cloudActivityRunning = NO;
     self.cloudActivityRunningDisplay = NO;
     self.firstViewWillAppear = YES;
@@ -752,13 +760,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 #pragma mark - Delegates
 
-- (void)deleteDocumentRepresentedByCell:(MTCollectionViewCellDocument *)cell {
-    NSIndexPath *index = [self.collectionView indexPathForCell:cell];
-    NSError *error = nil;
-    [self deleteDocumentAtIndexPath:index error:&error];
-    [self.collectionView deleteItemsAtIndexPaths:@[index]];
-}
-
 - (void)viewControllerDidFinish:(id)sender {
     [self setShouldShowAddDocumentPopover:YES];
     MTApplicationInstance *app = [AppDelegate app];
@@ -890,7 +891,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 - (void)reloadSectionLocal {
     [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-    self.numberOfDocumentsLocal = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionLocal];
+    [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
     
     NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
     [self.collectionView reloadSections:local];
@@ -898,7 +899,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 - (void)reloadSectionCloud {
     [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-    self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
+    [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
 
     NSIndexSet *cloud = [NSIndexSet indexSetWithIndex:1];
     [self.collectionView reloadSections:cloud];
@@ -909,9 +910,10 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
     [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
     [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-    self.numberOfDocumentsLocal = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionLocal];
-    self.numberOfDocumentsCloud = [[MACloudManager sharedManager] numberOfDocuments:MACloudManagerSectionCloud];
-    
+
+    [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
+    [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
+   
     [self.collectionView reloadData];
 }
 
@@ -920,20 +922,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                                                                             inSection: cloudManagerSectionForDisplaySection(indexPath.section)];
     
     return metadata.url;
-}
-
-- (void)deleteDocumentAtIndexPath:(NSIndexPath *)index error:(NSError **)error {
-    NSURL *documentUrl = [self documentForIndexPath:index];
-    [self removeCachedFileForDocumentUrl:documentUrl];
-    __weak MADOpenFileViewController *weakself = self;
-    [[MACloudManager sharedManager] deleteDocument:documentUrl completion:^(BOOL success, NSError *error) {
-        if (success == NO) {
-            [error presentErrorOnViewController:weakself];
-        }
-        [weakself reloadData];
-    }];
-    if (*error != nil) {
-    }
 }
 
 - (void)removeCachedFileForDocumentUrl:(NSURL *)documentUrl {
@@ -1228,11 +1216,11 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     switch (section) {
         
         case 0:
-            return self.numberOfDocumentsLocal;
+            return self.documentsLocal.count;
             break;
 
         case 1:
-            return self.numberOfDocumentsCloud;
+            return self.documentsCloud.count;
             break;
             
         default:
@@ -1242,7 +1230,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 }
 
 - (NSUInteger)dataSourceCount {
-    return self.numberOfDocumentsLocal + self.numberOfDocumentsCloud;
+    return self.documentsLocal.count + self.documentsCloud.count;
 }
 
 static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger displaySection);
@@ -1656,15 +1644,90 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (IBAction)delete:(id)sender {
 
     if (self.collectionView != nil) {
-        for (NSIndexPath *selectedItem in [self.collectionView indexPathsForSelectedItems]) {
-            NSError *error = nil;
-            [self deleteDocumentAtIndexPath:selectedItem error:&error];
+        NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
+        
+        NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
+        NSMutableDictionary *urlsToDeleteByIndexPath = [[NSMutableDictionary alloc] init];
+        
+        for (NSIndexPath *selectedItem in selectedItems) {
+            NSURL *documentUrl = [self documentForIndexPath:selectedItem];
+            [urlsToDelete addObject:documentUrl];
+            [urlsToDeleteByIndexPath setObject:documentUrl forKey:selectedItem];
         }
+        
+        __block NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
+        
+        
+//        dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
+        [urlsToDeleteByIndexPath enumerateKeysAndObjectsUsingBlock:^(id indexPath, id url, BOOL *stop) {
+            BOOL success = [[MACloudManager sharedManager] deleteDocument:url];
+            if (success) {
+                [deletedUrlsAndKeys setObject:url forKey:indexPath];
+                
+            }
+        }];
+        
+        NSMutableIndexSet *indexSetCloud = [[NSMutableIndexSet alloc] init];
+        NSMutableIndexSet *indexSetLocal = [[NSMutableIndexSet alloc] init];
+        for (NSIndexPath *path in deletedUrlsAndKeys.allKeys) {
+            switch (path.section) {
 
-        [self reloadData];
+                case 0:
+                    [indexSetLocal addIndex:path.item];
+                    break;
+
+                case 1:
+                    [indexSetCloud addIndex:path.item];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        
+        __weak MADOpenFileViewController *weakself = self;
+        [self.collectionView performBatchUpdates:^{
+            __strong MADOpenFileViewController *strongself = weakself;
+            [strongself.documentsLocal removeObjectsAtIndexes:indexSetLocal];
+            [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
+            [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
+        } completion:^(BOOL finished) {
+            [[MACloudManager sharedManager] reloadCacheLocal:weakself.searchBar.text];
+            [[MACloudManager sharedManager] reloadCacheCloud:weakself.searchBar.text];
+        }];
+        
+        
+        
+        
     }
     [self selectionsUpdated];
     
+}
+
+- (void)deleteDocumentAtIndexPath:(NSIndexPath *)index completion:(void (^)(BOOL, NSError *))completion {
+    NSURL *documentUrl = [self documentForIndexPath:index];
+    [self removeCachedFileForDocumentUrl:documentUrl];
+    __weak MADOpenFileViewController *weakself = self;
+    [[MACloudManager sharedManager] deleteDocument:documentUrl completion:^(BOOL success, NSError *error) {
+        switch (index.section) {
+            case 0:
+                
+                break;
+            case 1:
+                
+                break;
+                
+            default:
+                break;
+        }
+        if (success == NO) {
+            [error presentErrorOnViewController:weakself];
+        }
+        
+        completion(success, error);
+        
+    }];
 }
 
 // FIXME: Not updated with file coordnation... but likely unused
