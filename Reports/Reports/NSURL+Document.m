@@ -24,7 +24,8 @@
                                                 [baseUrl URLByAppendingPathExtension: extension] :
                                                 baseUrl;
     NSInteger ctr = 0;
-    while ([defaultFileManager fileExistsAtPath:[applicationFileUrlWithExtention path]]) {
+    BOOL isDir1;
+    while ([defaultFileManager fileExistsAtPath:applicationFileUrlWithExtention.path isDirectory:&isDir1]) {
         
         NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
         NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];

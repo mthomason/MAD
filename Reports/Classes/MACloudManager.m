@@ -428,9 +428,47 @@ static MACloudManager *sharedSingleton;
     }
 }
 
-- (void)duplicateUrl: (NSURL *)urlToDupe
-          completion: (void (^)(BOOL, NSURL *, NSError *))completion {
+- (BOOL)copyUrl: (NSURL *)urlToCopy
+          toUrl: (NSURL *)uniqueUrl
+     completion: (void (^)(BOOL, NSURL *, NSError *))completion {
     
+    __block BOOL success = NO;
+    NSFileCoordinator *coordinator = self.fileCoordinator;
+    
+    //   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+    
+    NSError *error = nil;
+    [coordinator coordinateReadingItemAtURL: urlToCopy
+                                    options: NSFileCoordinatorReadingForUploading
+                           writingItemAtURL: uniqueUrl
+                                    options: NSFileCoordinatorWritingForMoving
+                                      error: &error
+                                 byAccessor: ^(NSURL *source, NSURL *destinaion) {
+                                     
+                                     NSError *errorCopy = nil;
+                                     [coordinator itemAtURL:source didMoveToURL:destinaion];
+                                     
+                                     success = [[NSFileManager defaultManager] copyItemAtURL: source
+                                                                                       toURL: destinaion
+                                                                                       error: &errorCopy];
+                                     NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                     
+                                     if (success) {
+                                         [coordinator itemAtURL:source didMoveToURL:destinaion];
+                                     } else {
+                                         NSLog(@"%@", error);
+                                     }
+                                     completion(success, uniqueUrl, error);
+                                 }];
+    // });
+    return success;
+}
+
+
+- (BOOL)duplicateUrl: (NSURL *)urlToDupe
+          completion: (void (^)(BOOL, NSURL *, NSError *))completion {
+
+    __block BOOL success = NO;
     // FIXME: Make to work for ubiquity urls
     NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
     NSString *lastPathComponent = [urlToDupe lastPathComponent];
@@ -439,8 +477,12 @@ static MACloudManager *sharedSingleton;
     NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
                                    withDesiredHandle:handle
                                         andExtension:extention];
-    NSError *error = nil;
     NSFileCoordinator *coordinator = self.fileCoordinator;
+
+//    dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
+ //   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+
+        NSError *error = nil;
     [coordinator coordinateReadingItemAtURL: urlToDupe
                                     options: NSFileCoordinatorReadingForUploading
                            writingItemAtURL: uniqueUrl
@@ -451,7 +493,7 @@ static MACloudManager *sharedSingleton;
                                      NSError *errorCopy = nil;
                                      [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
                                      
-                                     BOOL success = [[NSFileManager defaultManager] copyItemAtURL: source
+                                     success = [[NSFileManager defaultManager] copyItemAtURL: source
                                                                                             toURL: destinaion
                                                                                             error: &errorCopy];
                                      NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
@@ -462,8 +504,12 @@ static MACloudManager *sharedSingleton;
                                          NSLog(@"%@", error);
                                      }
                                      completion(success, uniqueUrl, error);
+  //                                   dispatch_semaphore_signal(semaphoreDelete);
                                  }];
-}
+   // });
+//    dispatch_semaphore_wait(semaphoreDelete, DISPATCH_TIME_FOREVER);
+    return success;
+ }
 
 - (void)deleteDocument:(NSURL *)fileUrl completion:(void (^)(BOOL, NSError *))completion {
     
@@ -492,6 +538,48 @@ static MACloudManager *sharedSingleton;
         }];
     });
 }
+
+- (BOOL)duplicateUrl:(NSURL *)urlToDupe {
+    __block BOOL success = NO;
+    
+    // FIXME: Make to work for ubiquity urls
+    NSURL *directory = [urlToDupe URLByDeletingLastPathComponent];
+    NSString *lastPathComponent = [urlToDupe lastPathComponent];
+    NSString *handle = [lastPathComponent stringByDeletingPathExtension];
+    NSString *extention = [lastPathComponent pathExtension];
+    NSURL *uniqueUrl = [NSURL uniqueUrlInDirectory:directory
+                                 withDesiredHandle:handle
+                                      andExtension:extention];
+
+    __weak MACloudManager *weakself = self;
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        
+        NSError *error = nil;
+        NSFileCoordinator *coordinator = weakself.fileCoordinator;
+        [coordinator coordinateReadingItemAtURL: urlToDupe
+                                        options: NSFileCoordinatorReadingForUploading
+                               writingItemAtURL: uniqueUrl
+                                        options: NSFileCoordinatorWritingForMoving
+                                          error: &error
+                                     byAccessor: ^(NSURL *source, NSURL *destinaion) {
+                                         
+                                         NSError *errorCopy = nil;
+                                         [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
+                                         
+                                         success = [[NSFileManager defaultManager] copyItemAtURL: source
+                                                                                           toURL: destinaion
+                                                                                           error: &errorCopy];
+                                         
+                                         NSAssert(errorCopy != nil, @"%s %@", __PRETTY_FUNCTION__, errorCopy);
+                                         
+                                         if (success) {
+                                             [coordinator itemAtURL:source didMoveToURL:uniqueUrl];
+                                         }
+                                     }];
+    //});
+    return success;
+}
+
 
 - (BOOL)deleteDocument:(NSURL *)fileUrl {
     __block BOOL success = NO;

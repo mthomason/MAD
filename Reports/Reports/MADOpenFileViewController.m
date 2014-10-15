@@ -890,31 +890,37 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 
 - (void)reloadSectionLocal {
-    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-    [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
-    
-    NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
-    [self.collectionView reloadSections:local];
+    if (self.isUpdatingEnabled) {
+        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
+        
+        NSIndexSet *local = [NSIndexSet indexSetWithIndex:0];
+        [self.collectionView reloadSections:local];
+    }
 }
 
 - (void)reloadSectionCloud {
-    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-    [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
-
-    NSIndexSet *cloud = [NSIndexSet indexSetWithIndex:1];
-    [self.collectionView reloadSections:cloud];
+    if (self.isUpdatingEnabled) {
+        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+        [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
+        
+        NSIndexSet *cloud = [NSIndexSet indexSetWithIndex:1];
+        [self.collectionView reloadSections:cloud];
+    }
 }
 
 - (void)reloadData {
-    NSLog(@"Reload Data");
-    
-    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-
-    [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
-    [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
-   
-    [self.collectionView reloadData];
+    if (self.isUpdatingEnabled) {
+        NSLog(@"Reload Data");
+        
+        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+        
+        [self.documentsLocal setArray:[MACloudManager sharedManager].documentCacheLocalUrls];
+        [self.documentsCloud setArray:[MACloudManager sharedManager].documentCacheCloudMetaDataItems];
+        
+        [self.collectionView reloadData];
+    }
 }
 
 - (NSURL *)documentForIndexPath:(NSIndexPath *)indexPath {
@@ -1642,7 +1648,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 }
 
 - (IBAction)delete:(id)sender {
-
+    
+    self.updatingEnabled = NO;
+    
     if (self.collectionView != nil) {
         NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
         
@@ -1657,8 +1665,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         
         __block NSMutableDictionary *deletedUrlsAndKeys = [[NSMutableDictionary alloc] init];
         
-        
-//        dispatch_semaphore_t semaphoreDelete = dispatch_semaphore_create(0);
         [urlsToDeleteByIndexPath enumerateKeysAndObjectsUsingBlock:^(id indexPath, id url, BOOL *stop) {
             BOOL success = [[MACloudManager sharedManager] deleteDocument:url];
             if (success) {
@@ -1693,41 +1699,20 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             [strongself.documentsCloud removeObjectsAtIndexes:indexSetCloud];
             [strongself.collectionView deleteItemsAtIndexPaths:deletedUrlsAndKeys.allKeys];
         } completion:^(BOOL finished) {
-            [[MACloudManager sharedManager] reloadCacheLocal:weakself.searchBar.text];
-            [[MACloudManager sharedManager] reloadCacheCloud:weakself.searchBar.text];
+            __strong MADOpenFileViewController *strongself = weakself;
+            [[MACloudManager sharedManager] reloadCacheLocal:strongself.searchBar.text];
+            [[MACloudManager sharedManager] reloadCacheCloud:strongself.searchBar.text];
+            strongself.updatingEnabled = YES;
         }];
         
         
         
         
+    } else {
+        self.updatingEnabled = YES;
     }
     [self selectionsUpdated];
     
-}
-
-- (void)deleteDocumentAtIndexPath:(NSIndexPath *)index completion:(void (^)(BOOL, NSError *))completion {
-    NSURL *documentUrl = [self documentForIndexPath:index];
-    [self removeCachedFileForDocumentUrl:documentUrl];
-    __weak MADOpenFileViewController *weakself = self;
-    [[MACloudManager sharedManager] deleteDocument:documentUrl completion:^(BOOL success, NSError *error) {
-        switch (index.section) {
-            case 0:
-                
-                break;
-            case 1:
-                
-                break;
-                
-            default:
-                break;
-        }
-        if (success == NO) {
-            [error presentErrorOnViewController:weakself];
-        }
-        
-        completion(success, error);
-        
-    }];
 }
 
 // FIXME: Not updated with file coordnation... but likely unused
@@ -1749,22 +1734,104 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 }
 
 - (void)duplicate:(id)sender {
+    self.updatingEnabled = NO;
+    
     NSMutableArray *urls = [NSMutableArray new];
-    if ([sender isKindOfClass:[UIBarButtonItem class]]) {
-        NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
-        for (NSIndexPath *path in selectedItems) {
-            NSURL *url = [self documentForIndexPath:path];
-            [urls addObject:url];
+    NSArray *selectedItems = [self.collectionView indexPathsForSelectedItems];
+    for (NSIndexPath *path in selectedItems) {
+        NSURL *url = [self documentForIndexPath:path];
+        [urls addObject:url];
+        
+        switch (path.section) {
+
+            case 0:
+                [[MACloudManager sharedManager] duplicateUrl: url];
+                break;
+
+            case 1: {
+                
+                NSString *maybe = url.lastPathComponent.stringByDeletingPathExtension;
+  //              BOOL good = NO;
+                NSPredicate *predicateMatchesName = [NSPredicate predicateWithFormat:@"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@", maybe];
+                NSArray *filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
+                
+                NSUInteger ctr = 0;
+                while (filteredArray.count > 0) {
+                    maybe = [maybe stringByAppendingFormat:@" %ld", (long)ctr];
+                    predicateMatchesName = [NSPredicate predicateWithFormat:@"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@", maybe];
+                    filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
+                    ctr++;
+                }
+                NSURL *toDirectory = [url URLByDeletingLastPathComponent];
+                NSURL *toUrl = [toDirectory URLByAppendingPathComponent:maybe];
+                NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:@"mad"];
+                [[MACloudManager sharedManager] copyUrl:url toUrl:toUrlWithExtention completion:^(BOOL success, NSURL *url , NSError *error) {
+                    
+                }];
+                //dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+//                [[MACloudManager sharedManager] duplicateUrl: url completion:^(BOOL success, NSURL *url, NSError *error) {
+//                    NSLog(@"error");
+                    //dispatch_semaphore_signal(semaphore);
+//                }];
+                //dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                break;
+            }
+                
+            default:
+                break;
         }
     }
     
     if (urls.count > 0) {
-        for (NSURL *url in urls) {
-            [[MACloudManager sharedManager] duplicateUrl:url completion:^(BOOL success, NSURL *duplicateUrl, NSError *error) {
-                // FIXME: Handled error yo.
-            }];
+        //for (NSURL *url in urls) {
+        //    [[MACloudManager sharedManager] duplicateUrl: url];
+        //}
+        
+        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+        
+        NSMutableArray *insertedIndexPaths = [[NSMutableArray alloc] init];
+        
+        NSArray *updatedLocalUrls = [MACloudManager sharedManager].documentCacheLocalUrls;
+        NSArray *updatedCloudUrls = [MACloudManager sharedManager].documentCacheCloudMetaDataItems;
+        
+        NSUInteger localIndex = 0;
+        for (NSURL *url in updatedLocalUrls) {
+            NSURL *urlLocal = self.documentsLocal[localIndex];
+            if ([url.lastPathComponent isEqualToString:urlLocal.lastPathComponent] == NO) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:localIndex inSection:0];
+                [insertedIndexPaths addObject:indexPath];
+            } else {
+                localIndex++;
+            }
         }
-        [self reloadData];
+        
+        localIndex = 0;
+        for (MADMetaData *data in updatedCloudUrls) {
+            MADMetaData *dataCloud = self.documentsCloud[localIndex];
+            if ([data.url.lastPathComponent isEqualToString:dataCloud.url.lastPathComponent] == NO) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:localIndex inSection:1];
+                [insertedIndexPaths addObject:indexPath];
+            } else {
+                localIndex++;
+            }
+        }
+        
+        __weak MADOpenFileViewController *weakself = self;
+        [self.collectionView performBatchUpdates:^{
+            __strong MADOpenFileViewController *strongself = weakself;
+            [strongself.documentsLocal setArray:updatedLocalUrls];
+            [strongself.documentsCloud setArray:updatedCloudUrls];
+            [strongself.collectionView insertItemsAtIndexPaths:insertedIndexPaths];
+
+        } completion:^(BOOL finished) {
+            __strong MADOpenFileViewController *strongself = weakself;
+            strongself.updatingEnabled = YES;
+        }];
+        
+        
+    } else {
+        self.updatingEnabled = YES;
     }
     [self selectionsUpdated];
 }
