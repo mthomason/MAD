@@ -435,8 +435,6 @@ static MACloudManager *sharedSingleton;
     __block BOOL success = NO;
     NSFileCoordinator *coordinator = self.fileCoordinator;
     
-    //   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-    
     NSError *error = nil;
     [coordinator coordinateReadingItemAtURL: urlToCopy
                                     options: NSFileCoordinatorReadingForUploading
@@ -460,7 +458,6 @@ static MACloudManager *sharedSingleton;
                                      }
                                      completion(success, uniqueUrl, error);
                                  }];
-    // });
     return success;
 }
 
@@ -611,10 +608,15 @@ static MACloudManager *sharedSingleton;
 - (NSURL *)uniqueUrlForDocumentWithName:(NSString *)name
                           withExtension:(NSString *)extension
                             inContainer:(MACloudManagerSection)container {
-    
-    return [NSURL uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
-                     withDesiredHandle: name
-                          andExtension: extension];
+    if (container == MACloudManagerSectionCloud) {
+        return [NSURL uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
+                         withDesiredHandle: name
+                              andExtension: extension];
+    } else {
+        return [NSURL uniqueUrlInDirectory: container == MACloudManagerSectionCloud ? self.ubiquitousDocumentsDirectory : self.localDocumentDirectory
+                         withDesiredHandle: name
+                              andExtension: extension];
+    }
     
 }
 

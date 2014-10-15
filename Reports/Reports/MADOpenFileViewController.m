@@ -1733,6 +1733,23 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     [self selectionsUpdated];
 }
 
+NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@";
+
+- (NSString *)uniquieCloudNameForHandle:(NSString *)handle {
+    NSString *maybe = handle;
+    NSPredicate *predicateMatchesName = [NSPredicate predicateWithFormat:MADPredicateFormatDuplcate, maybe];
+    NSArray *filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
+    
+    NSUInteger ctr = 0;
+    while (filteredArray.count > 0) {
+        maybe = [maybe stringByAppendingFormat:@" %ld", (long)ctr];
+        predicateMatchesName = [NSPredicate predicateWithFormat:MADPredicateFormatDuplcate, maybe];
+        filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
+        ctr++;
+    }
+    return maybe;
+}
+
 - (void)duplicate:(id)sender {
     self.updatingEnabled = NO;
     
@@ -1750,30 +1767,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
             case 1: {
                 
-                NSString *maybe = url.lastPathComponent.stringByDeletingPathExtension;
-  //              BOOL good = NO;
-                NSPredicate *predicateMatchesName = [NSPredicate predicateWithFormat:@"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@", maybe];
-                NSArray *filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
-                
-                NSUInteger ctr = 0;
-                while (filteredArray.count > 0) {
-                    maybe = [maybe stringByAppendingFormat:@" %ld", (long)ctr];
-                    predicateMatchesName = [NSPredicate predicateWithFormat:@"url.lastPathComponent.stringByDeletingPathExtension MATCHES %@", maybe];
-                    filteredArray = [self.documentsCloud filteredArrayUsingPredicate:predicateMatchesName];
-                    ctr++;
-                }
+                //Unique Cloud name
+                NSString *maybe = [self uniquieCloudNameForHandle: url.lastPathComponent.stringByDeletingPathExtension];
                 NSURL *toDirectory = [url URLByDeletingLastPathComponent];
                 NSURL *toUrl = [toDirectory URLByAppendingPathComponent:maybe];
                 NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:@"mad"];
                 [[MACloudManager sharedManager] copyUrl:url toUrl:toUrlWithExtention completion:^(BOOL success, NSURL *url , NSError *error) {
                     
                 }];
-                //dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-//                [[MACloudManager sharedManager] duplicateUrl: url completion:^(BOOL success, NSURL *url, NSError *error) {
-//                    NSLog(@"error");
-                    //dispatch_semaphore_signal(semaphore);
-//                }];
-                //dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
                 break;
             }
                 
@@ -1783,10 +1784,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
     
     if (urls.count > 0) {
-        //for (NSURL *url in urls) {
-        //    [[MACloudManager sharedManager] duplicateUrl: url];
-        //}
-        
+
         [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
         [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
         
@@ -1876,7 +1874,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                       NSIndexPath *pathToMove = [NSIndexPath indexPathForItem: indexPath.item
                                                                                                                     inSection: indexPath.section];
                                                                       urlToRename = [weakself documentForIndexPath:pathToMove];
-                                                                      NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: textField.text
+                                                                      NSString *maybe;
+                                                                      if (indexPath.section == 0) {
+                                                                          maybe = textField.text;
+                                                                      } else {
+                                                                          maybe = [strongself uniquieCloudNameForHandle: textField.text];
+                                                                      }
+                                                                      
+                                                                      NSURL *newUrl = [[MACloudManager sharedManager] uniqueUrlForDocumentWithName: maybe
                                                                                                                                      withExtension: MTDocumentExtentionMobleApplicationDocument
                                                                                                                                        inContainer: indexPath.section == 0 ? MACloudManagerSectionLocal : MACloudManagerSectionCloud];
                                                                       __weak MADOpenFileViewController *weakself2 = strongself;
@@ -1890,12 +1895,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                                                                                                     
                                                                                                                 case 0:
                                                                                                                     [[NSNotificationCenter defaultCenter] postNotificationName:MADNotificationReloadSectionLocal object:nil];
-                                                                                                                    //[weakself2 reloadSectionLocal];
                                                                                                                     break;
                                                                                                                     
                                                                                                                 case 1:
-                                                                                                                    //[weakself2 reloadSectionCloud];
-
                                                                                                                     break;
                                                                                                                     
                                                                                                                 default:
