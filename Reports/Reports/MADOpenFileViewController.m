@@ -337,7 +337,13 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 124.0000f, 300.0000f)];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;
-    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:124.0000f];
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: label
+                                                                  attribute: NSLayoutAttributeWidth
+                                                                  relatedBy: NSLayoutRelationEqual
+                                                                     toItem: nil
+                                                                  attribute: NSLayoutAttributeNotAnAttribute
+                                                                 multiplier: 1.0000f
+                                                                   constant: 124.0000f];
     [label addConstraint:constraint];
     self.testLabel = label;
     
@@ -454,7 +460,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    [[MACloudManager sharedManager] reloadDocumentCacheWithSearchString:searchText];
+    [self animateUpdates];
+//    [[MACloudManager sharedManager] reloadDocumentCacheWithSearchString:searchText];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
@@ -462,7 +469,9 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     if (self.searchBar.text.length > 0) {
         self.searchBar.text = @"";
-        [self reloadData];
+        
+        [self animateUpdates];
+//        [self reloadData];
     }
     [searchBar resignFirstResponder];
     [self search:self];     //Hides the search bar
@@ -1487,7 +1496,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     } else {
         if (self.searchBar.text.length > 0) {
             self.searchBar.text = @"";
-            [self reloadData];
+            [self animateUpdates];
+            //[self reloadData];
         }
         self.searchBar.hidden = YES;
         self.searchBar.alpha = 0.1000f;
@@ -1785,53 +1795,192 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
     
     if (urls.count > 0) {
 
-        [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
-        [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
-        
-        NSMutableArray *insertedIndexPaths = [[NSMutableArray alloc] init];
-        
-        NSArray *updatedLocalUrls = [MACloudManager sharedManager].documentCacheLocalUrls;
-        NSArray *updatedCloudUrls = [MACloudManager sharedManager].documentCacheCloudMetaDataItems;
-        
-        NSUInteger localIndex = 0;
-        for (NSURL *url in updatedLocalUrls) {
-            NSURL *urlLocal = self.documentsLocal[localIndex];
-            if ([url.lastPathComponent isEqualToString:urlLocal.lastPathComponent] == NO) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:localIndex inSection:0];
-                [insertedIndexPaths addObject:indexPath];
-            } else {
-                localIndex++;
-            }
-        }
-        
-        localIndex = 0;
-        for (MADMetaData *data in updatedCloudUrls) {
-            MADMetaData *dataCloud = self.documentsCloud[localIndex];
-            if ([data.url.lastPathComponent isEqualToString:dataCloud.url.lastPathComponent] == NO) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:localIndex inSection:1];
-                [insertedIndexPaths addObject:indexPath];
-            } else {
-                localIndex++;
-            }
-        }
-        
-        __weak MADOpenFileViewController *weakself = self;
-        [self.collectionView performBatchUpdates:^{
-            __strong MADOpenFileViewController *strongself = weakself;
-            [strongself.documentsLocal setArray:updatedLocalUrls];
-            [strongself.documentsCloud setArray:updatedCloudUrls];
-            [strongself.collectionView insertItemsAtIndexPaths:insertedIndexPaths];
-
-        } completion:^(BOOL finished) {
-            __strong MADOpenFileViewController *strongself = weakself;
-            strongself.updatingEnabled = YES;
-        }];
-        
+        [self animateUpdates];
         
     } else {
+    
         self.updatingEnabled = YES;
+
     }
+    
     [self selectionsUpdated];
+}
+
+- (void)animateUpdates {
+    
+    self.updatingEnabled = NO;
+    [[MACloudManager sharedManager] reloadCacheLocal:self.searchBar.text];
+    [[MACloudManager sharedManager] reloadCacheCloud:self.searchBar.text];
+    
+    //NSMutableArray *insertedIndexPaths = [[NSMutableArray alloc] init];
+    
+    NSArray *updatedLocalUrlsOrdered = [MACloudManager sharedManager].documentCacheLocalUrls;
+    NSArray *updatedCloudUrlsOrdered = [MACloudManager sharedManager].documentCacheCloudMetaDataItems;
+
+    NSMutableArray *insertedIndexPathsLocal = [[NSMutableArray alloc] initWithCapacity:updatedLocalUrlsOrdered.count];
+    NSMutableArray *insertedIndexPathsCloud = [[NSMutableArray alloc] initWithCapacity:updatedCloudUrlsOrdered.count];
+    NSMutableArray *deletedIndexPathsLocal = [[NSMutableArray alloc] initWithCapacity:self.documentsLocal.count];
+    NSMutableArray *deletedIndexPathsCloud = [[NSMutableArray alloc] initWithCapacity:self.documentsCloud.count];
+    
+    NSSet *updatedLocalUrls = [NSMutableSet setWithArray: updatedLocalUrlsOrdered];
+    NSSet *updatedCloudUrls = [NSMutableSet setWithArray: updatedCloudUrlsOrdered];
+    
+    NSSet *localUrls = [NSSet setWithArray:self.documentsLocal];
+    NSSet *cloudUrls = [NSSet setWithArray:self.documentsCloud];
+    
+    NSMutableSet *deletedLocalUrls = [NSMutableSet setWithSet:localUrls];
+    [deletedLocalUrls minusSet:updatedLocalUrls];
+    
+    NSMutableSet *deletedCloudUrls = [NSMutableSet setWithSet:cloudUrls];
+    [deletedCloudUrls minusSet:updatedCloudUrls];
+    
+    NSMutableSet *insertedLocalUrls = [NSMutableSet setWithSet:updatedLocalUrls];
+    [insertedLocalUrls minusSet:localUrls];
+    
+    NSMutableSet *insertedCloudUrls = [NSMutableSet setWithSet:updatedCloudUrls];
+    [insertedCloudUrls minusSet:cloudUrls];
+
+    //Pre populate deleted indexes local
+    for (NSUInteger item=0; item<self.documentsLocal.count;item++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
+        [deletedIndexPathsLocal addObject:indexPath];
+    }
+
+    //Remove indexes of items that still exist
+    for (NSURL *updatedLocalUrl in updatedLocalUrlsOrdered) {
+        NSUInteger index = NSNotFound;
+        NSUInteger ctr = 0;
+        for (NSURL *url in self.documentsLocal) {
+            if ([[url.path.lastPathComponent stringByDeletingPathExtension] isEqualToString:[updatedLocalUrl.path.lastPathComponent stringByDeletingPathExtension]]) {
+                index = ctr;
+                break;
+            }
+            ctr++;
+        }
+        if (index != NSNotFound) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:0];
+            [deletedIndexPathsLocal removeObjectIdenticalTo:path];
+        }
+    }
+
+    //Pre populate deleted indexes cloud
+    for (NSUInteger item=0; item<self.documentsCloud.count;item++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:1];
+        [deletedIndexPathsCloud addObject:indexPath];
+    }
+
+    //Remove indexes of items that still exist
+    for (MADMetaData *updatedData in updatedCloudUrlsOrdered) {
+        
+        NSUInteger index = NSNotFound;
+        NSUInteger ctr = 0;
+        for (MADMetaData *metad in self.documentsCloud) {
+            NSString *path1 = [metad.url.path.lastPathComponent stringByDeletingPathExtension];
+            NSString *path2 = [updatedData.url.path.lastPathComponent stringByDeletingPathExtension];
+            if ([path1 isEqualToString:path2]) {
+                index = ctr;
+                break;
+            }
+            ctr++;
+        }
+        if (index != NSNotFound) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:1];
+            [deletedIndexPathsCloud removeObjectIdenticalTo:path];
+        }
+    }
+
+    
+    
+    
+    //Pre populate inserted indexes local
+    for (NSUInteger item=0; item<updatedLocalUrlsOrdered.count;item++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:0];
+        [insertedIndexPathsLocal addObject:indexPath];
+    }
+    
+    //Remove indexes of items that still exist
+    for (NSURL *localUrl in self.documentsLocal) {
+        NSUInteger index = NSNotFound;
+        NSUInteger ctr = 0;
+        for (NSURL *url in updatedLocalUrlsOrdered) {
+            if ([[url.path.lastPathComponent stringByDeletingPathExtension] isEqualToString:[localUrl.path.lastPathComponent stringByDeletingPathExtension]]) {
+                index = ctr;
+                break;
+            }
+            ctr++;
+        }
+        if (index != NSNotFound) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:0];
+            [insertedIndexPathsLocal removeObjectIdenticalTo:path];
+        }
+    }
+
+    //Pre populate inserted indexes cloud
+    for (NSUInteger item=0; item<updatedCloudUrlsOrdered.count;item++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:1];
+        [insertedIndexPathsCloud addObject:indexPath];
+    }
+    
+    //Remove indexes of items that still exist
+    for (MADMetaData *data in self.documentsCloud) {
+        
+        NSUInteger index = NSNotFound;
+        NSUInteger ctr = 0;
+        for (MADMetaData *metad in updatedCloudUrlsOrdered) {
+            NSString *path1 = [metad.url.path.lastPathComponent stringByDeletingPathExtension];
+            NSString *path2 = [data.url.path.lastPathComponent stringByDeletingPathExtension];
+            if ([path1 isEqualToString:path2]) {
+                index = ctr;
+                break;
+            }
+            ctr++;
+        }
+
+        if (index != NSNotFound) {
+            NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:1];
+            [insertedIndexPathsCloud removeObjectIdenticalTo:path];
+        }
+    }
+
+    /*
+    NSUInteger localIndex = 0;
+    for (NSURL *url in updatedLocalUrlsOrdered) {
+        NSURL *urlLocal = self.documentsLocal[localIndex];
+        if ([url.lastPathComponent isEqualToString:urlLocal.lastPathComponent] == NO) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:localIndex inSection:0];
+            [insertedIndexPaths addObject:indexPath];
+        } else {
+            localIndex++;
+        }
+    }
+    
+    localIndex = 0;
+    for (MADMetaData *data in updatedCloudUrlsOrdered) {
+        MADMetaData *dataCloud = self.documentsCloud[localIndex];
+        if ([data.url.lastPathComponent isEqualToString:dataCloud.url.lastPathComponent] == NO) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:localIndex inSection:1];
+            [insertedIndexPaths addObject:indexPath];
+        } else {
+            localIndex++;
+        }
+    }*/
+    NSArray *insertedIndexPathsCumulative = [insertedIndexPathsCloud arrayByAddingObjectsFromArray:insertedIndexPathsLocal];
+    NSArray *deletedIndexPathsCumulative = [deletedIndexPathsCloud arrayByAddingObjectsFromArray:deletedIndexPathsLocal];
+    
+    __weak MADOpenFileViewController *weakself = self;
+    [self.collectionView performBatchUpdates:^{
+        __strong MADOpenFileViewController *strongself = weakself;
+        [strongself.documentsLocal setArray:updatedLocalUrlsOrdered];
+        [strongself.documentsCloud setArray:updatedCloudUrlsOrdered];
+
+        [strongself.collectionView insertItemsAtIndexPaths:insertedIndexPathsCumulative];
+        [strongself.collectionView deleteItemsAtIndexPaths:deletedIndexPathsCumulative];
+        
+    } completion:^(BOOL finished) {
+        __strong MADOpenFileViewController *strongself = weakself;
+        strongself.updatingEnabled = YES;
+    }];
+
 }
 
 - (void)rename:(id)sender {
