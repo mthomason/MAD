@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6249" systemVersion="14A386a" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6249" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nfs-mi-55Z">
     <dependencies>
         <deployment version="2048" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6243"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Generated Query-->
@@ -4494,27 +4495,27 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <collectionViewLayout key="collectionViewLayout" id="GVO-6R-WrF" customClass="MADGroupedCollectionViewLayout"/>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="HXO-EB-fZN" customClass="MTCollectionViewCellDocument">
-                                <rect key="frame" x="0.0" y="64" width="320" height="325"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" reuseIdentifier="MTCollectionViewCellDocumentIdentifier" id="anu-JF-du3" customClass="MTCollectionViewCellDocument">
+                                <rect key="frame" x="0.0" y="64" width="140" height="168"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="325"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="140" height="300"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="UIImageDocumentBlankPad.png" translatesAutoresizingMaskIntoConstraints="NO" id="IDP-Ob-Mrd">
-                                            <rect key="frame" x="32" y="20" width="256" height="256"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="UIImageDocumentBlank.png" translatesAutoresizingMaskIntoConstraints="NO" id="hwh-42-DIx">
+                                            <rect key="frame" x="6" y="9" width="128" height="128"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="256" id="bJF-LE-Nvj"/>
-                                                <constraint firstAttribute="width" constant="256" id="q5X-f3-hBr"/>
+                                                <constraint firstAttribute="height" constant="128" id="9FU-9x-vLQ"/>
+                                                <constraint firstAttribute="width" constant="128" id="guc-6t-sgq"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="770" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="12345 67890 67890 67890.mad" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="6" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="240" translatesAutoresizingMaskIntoConstraints="NO" id="W2j-8j-Cpg">
-                                            <rect key="frame" x="40" y="284" width="240" height="14"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="200" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="12345 67890 67890 67890.mad" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8i-ts-oFY">
+                                            <rect key="frame" x="8" y="140" width="124" height="27"/>
+                                            <color key="backgroundColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14" id="hjP-6c-GlZ"/>
-                                                <constraint firstAttribute="width" constant="240" id="wbJ-js-6mt"/>
+                                                <constraint firstAttribute="width" constant="124" id="qvK-pF-7Vv"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -4522,15 +4523,16 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="IDP-Ob-Mrd" firstAttribute="top" secondItem="HXO-EB-fZN" secondAttribute="top" constant="20" id="0Pn-CA-ED2"/>
-                                    <constraint firstAttribute="centerX" secondItem="IDP-Ob-Mrd" secondAttribute="centerX" id="OEJ-F9-vHi"/>
-                                    <constraint firstItem="W2j-8j-Cpg" firstAttribute="centerX" secondItem="IDP-Ob-Mrd" secondAttribute="centerX" id="hYX-ON-oit"/>
-                                    <constraint firstItem="W2j-8j-Cpg" firstAttribute="top" secondItem="IDP-Ob-Mrd" secondAttribute="bottom" constant="8" id="qc7-Ex-lSD"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="N8i-ts-oFY" secondAttribute="trailing" id="EdD-pj-SDP"/>
+                                    <constraint firstItem="hwh-42-DIx" firstAttribute="top" secondItem="anu-JF-du3" secondAttribute="top" constant="9" id="myZ-NC-BM8"/>
+                                    <constraint firstAttribute="centerX" secondItem="hwh-42-DIx" secondAttribute="centerX" id="oAJ-5U-LVR"/>
+                                    <constraint firstItem="N8i-ts-oFY" firstAttribute="leading" secondItem="anu-JF-du3" secondAttribute="leadingMargin" id="sVp-1e-dVG"/>
+                                    <constraint firstItem="N8i-ts-oFY" firstAttribute="top" secondItem="hwh-42-DIx" secondAttribute="bottom" constant="3" id="taR-kA-A0n"/>
                                 </constraints>
-                                <size key="customSize" width="320" height="325"/>
+                                <size key="customSize" width="140" height="300"/>
                                 <connections>
-                                    <outlet property="imagePreview" destination="IDP-Ob-Mrd" id="7Zz-cE-gaQ"/>
-                                    <outlet property="labelTitle" destination="W2j-8j-Cpg" id="ugV-XC-9If"/>
+                                    <outlet property="imagePreview" destination="hwh-42-DIx" id="gZd-dG-cfO"/>
+                                    <outlet property="labelTitle" destination="N8i-ts-oFY" id="WcS-xb-xWc"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -4591,7 +4593,6 @@
                         <outlet property="barButtonItemInformation" destination="RRb-ys-wtH" id="Jqm-s9-R83"/>
                         <outlet property="barButtonItemSearch" destination="2wM-rP-7Tw" id="i6k-eQ-lDw"/>
                         <outlet property="barButtonItemTrash" destination="10T-nH-IAQ" id="5OS-XD-K2c"/>
-                        <outlet property="collectionViewFlowLayout" destination="GVO-6R-WrF" id="3hU-kk-wwB"/>
                         <segue destination="NEH-Kw-MQz" kind="modal" identifier="MADSegueOpenDocument" id="Oc4-uK-0Zg"/>
                     </connections>
                 </collectionViewController>
@@ -10977,7 +10978,7 @@
         <image name="UIImageAlignRight20.png" width="20" height="20"/>
         <image name="UIImageAlignTop20.png" width="20" height="20"/>
         <image name="UIImageAlignVerticalCenter20.png" width="20" height="20"/>
-        <image name="UIImageDocumentBlankPad.png" width="128" height="128"/>
+        <image name="UIImageDocumentBlank.png" width="64" height="64"/>
         <image name="UIImageExportTypeMySQL.png" width="64" height="64"/>
         <image name="UIImageExportTypeSqlServer.png" width="64" height="64"/>
         <image name="UIImageJustified20.png" width="20" height="20"/>

@@ -225,8 +225,8 @@ typedef void(^MTBlockResultVoid)(void);
 
     UIDynamicItemBehavior *dynamicItemBehavior = [[UIDynamicItemBehavior alloc] initWithItems:emptyArray];
     dynamicItemBehavior.allowsRotation = NO;
-    dynamicItemBehavior.elasticity = 0.1000f;
-    dynamicItemBehavior.resistance = 0.8000f;
+    dynamicItemBehavior.elasticity = 0.4000f;
+    dynamicItemBehavior.resistance = 0.1000f;
     
     [animator addBehavior:dynamicItemBehavior];
     [animator addBehavior:collisionBehavior];
