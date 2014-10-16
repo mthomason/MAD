@@ -23,6 +23,8 @@ NSString * const MADTextLocal = @"Local";
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
 
+@property (nonatomic, strong) NSString *fontType;
+
 @end
 
 @implementation MADOpenFileSectionHeaderView
@@ -49,9 +51,11 @@ NSString * const MADTextLocal = @"Local";
         
         // Initalize the section type
         CGRect labelRect = CGRectMake(CGPointZero.x + 10.0000f, CGPointZero.y, frame.size.width - 10.0000f, frame.size.height);
+        
         UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
-        label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
         label.textAlignment = NSTextAlignmentLeft;
+        self.fontType = UIFontTextStyleCaption1;
+        label.font = [UIFont preferredFontForTextStyle:self.fontType];
         label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         label.text = localizedTextLocal;
@@ -113,6 +117,7 @@ NSString * const MADTextLocal = @"Local";
 - (void)setNeedsDisplay {
     [super setNeedsDisplay];
     if (self.label != nil) {
+        self.label.font = [UIFont preferredFontForTextStyle:self.fontType];
         switch (self.sectionType) {
                 
             case MACloudManagerSectionCloud:

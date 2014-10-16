@@ -854,7 +854,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         [toolbarButtons insertObject:[self barButtonItemAction] atIndex:1];
         [self setToolbarItems:toolbarButtons animated:animated];
     }
-    
+
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
