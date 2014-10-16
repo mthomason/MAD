@@ -21,7 +21,7 @@
     static dispatch_once_t onceTokenTabBarItem;
     SEL originalSelectorTabBarItem = @selector(tabBarItem);
     SEL swizzledSelectorTabBarItem = @selector(mad_tabBarItem);
-    mad_swizzle_selectors(class, originalSelectorTabBarItem, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
+    mad_swizzle_selectors(class, originalSelectorTabBarItem, class, swizzledSelectorTabBarItem, &onceTokenTabBarItem);
     
 }
 
@@ -31,9 +31,9 @@
         UIImage *tabBarImage = [self tabBarImage];
         if (tabBarImage) {
             UIImage *tabBarImageOg = [tabBarImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            [tabBarItem setImage:tabBarImageOg];
-            [tabBarItem setSelectedImage:tabBarImage];
-            [tabBarItem setTitle:[self title]];
+            tabBarItem.image = tabBarImageOg;
+            tabBarItem.selectedImage = tabBarImage;
+            tabBarItem.title = self.title;
         }
     }
     return tabBarItem;

@@ -1427,6 +1427,14 @@
 		4CF339441693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CF339451693E5B400390B3A /* MTFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF339431693E5B400390B3A /* MTFont.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; };
+		4CF3E77A19F04D2D0064DA5F /* MADSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */; };
+		4CF3E77B19F04D2D0064DA5F /* MADSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */; };
+		4CF3E79019F071320064DA5F /* MADImageClear.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78D19F071320064DA5F /* MADImageClear.png */; };
+		4CF3E79119F071320064DA5F /* MADImageClear.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78D19F071320064DA5F /* MADImageClear.png */; };
+		4CF3E79219F071320064DA5F /* MADImageClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */; };
+		4CF3E79319F071320064DA5F /* MADImageClear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */; };
+		4CF3E79419F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
+		4CF3E79519F071320064DA5F /* MADImageClear@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */; };
 		4CF8670916D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8670A16D6572A00F716A8 /* MTAutoLayoutTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */; };
 		4CF8671516D8259400F716A8 /* MTTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8671416D8259400F716A8 /* MTTitleView.m */; };
@@ -2864,6 +2872,11 @@
 		4CF339421693E5B400390B3A /* MTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFont.h; sourceTree = "<group>"; };
 		4CF339431693E5B400390B3A /* MTFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFont.m; sourceTree = "<group>"; };
 		4CF3C5BE194F80F600E5705B /* Scrimpter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Scrimpter.xcodeproj; path = Scrimpter/Scrimpter/Scrimpter.xcodeproj; sourceTree = "<group>"; };
+		4CF3E77819F04D2D0064DA5F /* MADSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSearchBar.h; sourceTree = "<group>"; };
+		4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSearchBar.m; sourceTree = "<group>"; };
+		4CF3E78D19F071320064DA5F /* MADImageClear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageClear.png; sourceTree = "<group>"; };
+		4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@2x.png"; sourceTree = "<group>"; };
+		4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageClear@3x.png"; sourceTree = "<group>"; };
 		4CF8670716D6572A00F716A8 /* MTAutoLayoutTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoLayoutTableViewCell.h; sourceTree = "<group>"; };
 		4CF8670816D6572A00F716A8 /* MTAutoLayoutTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoLayoutTableViewCell.m; sourceTree = "<group>"; };
 		4CF8670B16D72E0800F716A8 /* MTScrollViewCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTScrollViewCenter.h; sourceTree = "<group>"; };
@@ -3100,6 +3113,8 @@
 				4CAD103019C009C000983B9E /* MADBackgroundScrollView.h */,
 				4CAD103119C009C000983B9E /* MADBackgroundScrollView.m */,
 				4C70C17419E8817F00D9F6FB /* MTViewTableHeader.xib */,
+				4CF3E77819F04D2D0064DA5F /* MADSearchBar.h */,
+				4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -4088,6 +4103,9 @@
 		4C5CD3D6181ED238005FC6DD /* Misc Tool Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CF3E78D19F071320064DA5F /* MADImageClear.png */,
+				4CF3E78E19F071320064DA5F /* MADImageClear@2x.png */,
+				4CF3E78F19F071320064DA5F /* MADImageClear@3x.png */,
 				4CF000D619C0CCD500A24810 /* UIBarButtonItemDatabase8.png */,
 				4CF000D719C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png */,
 				4CF000D819C0CCD500A24810 /* UIBarButtonItemMadDesigner8.png */,
@@ -5693,6 +5711,7 @@
 				4C0E77C6163B5AEC003B951E /* UIImageItalic20.png in Resources */,
 				4C0E77C7163B5AEC003B951E /* UIImageItalic20@2x.png in Resources */,
 				4C0E77C8163B5AEC003B951E /* UIImageStrikethrough20.png in Resources */,
+				4CF3E79519F071320064DA5F /* MADImageClear@3x.png in Resources */,
 				4C0E77C9163B5AEC003B951E /* UIImageStrikethrough20@2x.png in Resources */,
 				4C0E77CA163B5AEC003B951E /* UIImageUnderline20.png in Resources */,
 				4C5CB7D2189E2A7D00BB5AF8 /* syberror.h in Resources */,
@@ -5719,6 +5738,7 @@
 				4C0E77E0163B5AEC003B951E /* UIImagePatternPebbled.png in Resources */,
 				4C5CB7CC189E2A7D00BB5AF8 /* sqldb.h in Resources */,
 				4C5CB7D6189E2A7D00BB5AF8 /* tds_sysdep_public.h in Resources */,
+				4CF3E79319F071320064DA5F /* MADImageClear@2x.png in Resources */,
 				4C0E77E1163B5AEC003B951E /* UIImagePatternPebbled@2x.png in Resources */,
 				4C0E77E2163B5AEC003B951E /* UIImagePatternStationary.png in Resources */,
 				4C0E77E3163B5AEC003B951E /* UIImagePatternStationary@2x.png in Resources */,
@@ -5825,6 +5845,7 @@
 				4C0E7831163B5AEC003B951E /* UIImagePatternPinkWithFlecks@2x.png in Resources */,
 				4C0E7832163B5AEC003B951E /* UIImagePatternRedTextured.png in Resources */,
 				4C0E7833163B5AEC003B951E /* UIImagePatternRedTextured@2x.png in Resources */,
+				4CF3E79119F071320064DA5F /* MADImageClear.png in Resources */,
 				4C0E7834163B5AEC003B951E /* UIImagePatternRedVellum.png in Resources */,
 				4C0E7835163B5AEC003B951E /* UIImagePatternRedVellum@2x.png in Resources */,
 				4C70C17619E8817F00D9F6FB /* MTViewTableHeader.xib in Resources */,
@@ -5950,6 +5971,7 @@
 				4C92956C18C4E0770010AAEF /* MTImageLaunchViewerPhone35PortraitRetina.png in Resources */,
 				4C76F0D914B53F73005DCE49 /* UIImageArrowDown@2x.png in Resources */,
 				4CB3C2301923374200F3213E /* MTSliderThumb@2x.png in Resources */,
+				4CF3E79019F071320064DA5F /* MADImageClear.png in Resources */,
 				4C00816014B6C3EA003DF437 /* UIImageAlignCenter20.png in Resources */,
 				4C00816114B6C3EA003DF437 /* UIImageAlignLeft20.png in Resources */,
 				4C6A17D019B193610098717E /* MADImageToolbarCloudDownload.png in Resources */,
@@ -6002,6 +6024,7 @@
 				4C13392017FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */,
 				4CCD8D55150385DA002B9E77 /* UIImagePatternAqua@2x.png in Resources */,
 				4CCD8D56150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks.png in Resources */,
+				4CF3E79419F071320064DA5F /* MADImageClear@3x.png in Resources */,
 				4CCD8D57150385DA002B9E77 /* UIImagePatternBeigeWithWhiteFlecks@2x.png in Resources */,
 				4C1BB6F01813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png in Resources */,
 				4CCD8D58150385DA002B9E77 /* UIImagePatternBlackWeave.png in Resources */,
@@ -6051,6 +6074,7 @@
 				4C44DC4419B6C0730050BBDD /* MADImageToolbarDuplicate.png in Resources */,
 				4CCD8D76150385DA002B9E77 /* UIImagePatternGrayGranite.png in Resources */,
 				4C1BB6EC1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png in Resources */,
+				4CF3E79219F071320064DA5F /* MADImageClear@2x.png in Resources */,
 				4CCD8D77150385DA002B9E77 /* UIImagePatternGrayGranite@2x.png in Resources */,
 				4CCD8D78150385DA002B9E77 /* UIImagePatternGreenAndBlack.png in Resources */,
 				4CCD8D79150385DA002B9E77 /* UIImagePatternGreenAndBlack@2x.png in Resources */,
@@ -6550,6 +6574,7 @@
 				4C8BF47816F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
 				4C8BF47C16F645D3002D9F9B /* RptqDocumentObjectImage+Extras.m in Sources */,
 				4C44DC6919B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */,
+				4CF3E77B19F04D2D0064DA5F /* MADSearchBar.m in Sources */,
 				4CAD103319C009C000983B9E /* MADBackgroundScrollView.m in Sources */,
 				4C9F400916F6CC5C004AA4A5 /* RptqDocumentObjectFormula+Extras.m in Sources */,
 				4C15EB90192DF50600C412A4 /* MTQuerySelectItemsForGroup.m in Sources */,
@@ -6918,6 +6943,7 @@
 				4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
 				4C3138EA184331500019ED4C /* MTViewControllerDynamicItem.m in Sources */,
 				4C23FB0218FADCE4009F234F /* MTTableViewControllerBarcodeExtraAztec.m in Sources */,
+				4CF3E77A19F04D2D0064DA5F /* MADSearchBar.m in Sources */,
 				4C44DC6819B95FFA0050BBDD /* NSLayoutConstraint+Extras.m in Sources */,
 				4CAD103219C009C000983B9E /* MADBackgroundScrollView.m in Sources */,
 				4CB0FF6D16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,

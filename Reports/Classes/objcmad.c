@@ -8,21 +8,21 @@
 
 #import "objcmad.h"
 
-void mad_swizzle_selectors(Class class, SEL originalSelector, SEL swizzledSelector, dispatch_once_t *onceToken) {
+void mad_swizzle_selectors(Class origionalClass, SEL originalSelector, Class swizzledClass, SEL swizzledSelector, dispatch_once_t *onceToken) {
     
     dispatch_once(onceToken, ^{
         
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+        Method originalMethod = class_getInstanceMethod(origionalClass, originalSelector);
+        Method swizzledMethod = class_getInstanceMethod(swizzledClass, swizzledSelector);
         
         BOOL didAddMethod =
-        class_addMethod(class,
+        class_addMethod(origionalClass,
                         originalSelector,
                         method_getImplementation(swizzledMethod),
                         method_getTypeEncoding(swizzledMethod));
         
         if (didAddMethod) {
-            class_replaceMethod(class,
+            class_replaceMethod(swizzledClass,
                                 swizzledSelector,
                                 method_getImplementation(originalMethod),
                                 method_getTypeEncoding(originalMethod));
