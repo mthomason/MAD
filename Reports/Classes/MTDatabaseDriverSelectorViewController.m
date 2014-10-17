@@ -26,7 +26,8 @@ NSString * const MTSegueShowSetUpDatasourceSalesForceIdentifier         = @"MTSe
 NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSegueShowSetUpDatasourceTdsIdentifier";
 
 @interface MTDatabaseDriverSelectorViewController ()
-    <MTViewControllerProtocol>
+    <MTViewControllerProtocol, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
 
 @end
 
@@ -41,6 +42,61 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 
     self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle, MTDatabaseDriverSelectorViewControllerDefaultTitle);
     [self.navigationItem setLeftItemsSupplementBackButton: YES];
+    
+    self.testCell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = 44.0000f;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType" forIndexPath:indexPath];
+
+    cell.textLabel.numberOfLines = 0;
+
+    switch (indexPath.row) {
+        case 0:
+            cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
+            cell.textLabel.text = @"MySQL Native Driver";
+            break;
+
+        case 1:
+            cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
+            cell.textLabel.text = @"Sql Server / TDS Driver";
+            break;
+            
+        default:
+            break;
+    }
+    [cell layoutIfNeeded];
+
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0:
+            [self performSegueWithIdentifier:MTSegueShowSetUpDatasourceMySqlIdentifier
+                                      sender:self];
+            break;
+        case 1:
+            [self performSegueWithIdentifier:MTSegueShowSetUpDatasourceSqlServerIdentifier
+                                      sender:self];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
