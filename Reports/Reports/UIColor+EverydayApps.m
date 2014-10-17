@@ -16,6 +16,8 @@
 + (instancetype)edaBlueDarkSelection              {vendColorWithAlpha(2.0000f, 108.0000f, 182.0000f, 0.5000f);}
 + (instancetype)edaBlueLightSelection             {vendColorWithAlpha(185.0000f, 224.0000f, 247.0000f, 0.5000f);}
 + (instancetype)edaBlueLightBackground            {vendColorWithAlpha(2.0000f, 108.0000f, 182.0000f, 0.8900f);}
+
++ (instancetype)headerColor                       { return [[UIColor edaBlueLightBackground] colorWithAlphaComponent:0.20000f]; }
 + (instancetype)edaBlackSeventyFivePercent        {vendColor(64.0000f, 64.0000f, 64.0000f);}
 + (instancetype)edaBlackFiftyPercent              {vendColor(147.0000f, 149.0000f, 152.0000f);}
 + (instancetype)edaBlackTwentyFivePercent         {vendColor(199.0000f, 200.0000f, 202.0000f);}

@@ -10,8 +10,9 @@
 #define Reports_MADBackgroundScrollView_h
 
 #import <UIKit/UIKit.h>
+#import "MADWatermarkView.h"
 
-@interface MADBackgroundScrollView : UIScrollView
+@interface MADBackgroundScrollView : MADWatermarkScrollView
 
 @property (nonatomic, strong) UIView *container;
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTapToZoom;

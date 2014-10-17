@@ -338,6 +338,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 124.0000f, 300.0000f)];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;
+    
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: label
                                                                   attribute: NSLayoutAttributeWidth
                                                                   relatedBy: NSLayoutRelationEqual

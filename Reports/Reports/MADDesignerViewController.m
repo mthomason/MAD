@@ -287,7 +287,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        
+
     }
     return self;
 }
@@ -306,6 +306,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [super decodeRestorableStateWithCoder:coder];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    BOOL animate = previousTraitCollection != nil;
+    [UIView setAnimationsEnabled:animate];
+    [self setPrompt: self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular ? [self.document.fileName stringByAppendingPathExtension:@"mad"] : nil];
+    [UIView setAnimationsEnabled:YES];
+}
+
 #pragma mark - UIViewController
 
 - (NSString *)title {
@@ -318,6 +325,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        [UIView setAnimationsEnabled:NO];
+        [self setPrompt:[self.document.fileName stringByAppendingPathExtension:@"mad"]];
+        [UIView setAnimationsEnabled:YES];
+    }
     
     MADPromptManager *promptManager = [[MADPromptManager alloc] init];
     self.promptManager = promptManager;
@@ -474,7 +487,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.toolboxIsVisible = NO;
     
     [self.view addConstraints:constraints];
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -638,7 +651,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [self.scroller addConstraints: constraintsScroller];
     [self.scroller.container addConstraints: constraintsContainer];
-    self.scroller.backgroundColor = [UIColor tintColorBackground];
     
 }
 
@@ -1210,11 +1222,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self removeBorderFromSectionViews];
     if ([self elementViewIsSelected:elementView]) {
         [self.promptManager removeString:elementView.displayStringAttributed.string];
-        self.navigationItem.prompt = self.promptManager.prompt;
+        [self setPrompt:self.promptManager.prompt];
         [self deselectElementView:elementView animated:YES];
     } else {
         [self.promptManager addString:elementView.displayStringAttributed.string];
-        self.navigationItem.prompt = self.promptManager.prompt;
+        [self setPrompt:self.promptManager.prompt];
         [self selectElementView:elementView];
     }
 }
@@ -2196,6 +2208,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 [weakSelf.toolbarBottom setItems:weakSelf.toolbarBottomItems animated:YES];
                 [weakSelf.scroller setZoomScale:weakSelf.zoomScaleOnShowToolbox animated:YES];
                 [weakSelf.scroller setContentOffset:weakSelf.contentOffsetOnShowToolbox animated:YES];
+                [weakSelf setPrompt:nil];
+
                 weakSelf.navigationItem.prompt = nil;
             }
         };
@@ -2824,7 +2838,19 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self removeBorderFromSectionViews];
     
     [self.promptManager removeAll];
-    self.navigationItem.prompt = self.promptManager.prompt;
+    [self setPrompt: self.promptManager.prompt];
+}
+
+- (void)setPrompt:(NSString *)prompt {
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        if (prompt.length > 0) {
+            self.navigationItem.prompt = prompt;
+        } else {
+            self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        }
+    } else {
+        self.navigationItem.prompt = nil;
+    }
 }
 
 - (void)deselectLastElementViewToShowMenu {

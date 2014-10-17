@@ -12,6 +12,8 @@
 
 #import "MADQueryViewController.h"
 #import "AppDelegate.h"
+#import "MADocument.h"
+#import "MADWatermarkView.h"
 #import "MTApplicationInstance.h"
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
@@ -278,8 +280,23 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     [self.navigationItem.titleView sizeToFit];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        BOOL animate = previousTraitCollection != nil;
+        [UIView setAnimationsEnabled:animate];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        [UIView setAnimationsEnabled:YES];
+    } else {
+        self.navigationItem.prompt = nil;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
+    self.tableView.backgroundView = watermarkView;
+
     [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -1554,16 +1571,15 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (MTViewTableHeader *)tableHeaderDatabaseInfo {
-    NSString *title = NSLocalizedString(@"Database Information", @"Database Information");
     MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = title;
+    header.labelTitle.text = [self.document.fileName stringByAppendingPathExtension:@"mad"];
     header.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     header.buttonAdd.hidden = YES;
     return header;
 }
 
 - (MTViewTableHeader *)tableHeaderTablesToSelect {
-    NSString *title = NSLocalizedString(@"Tables to Select", @"Tables to Select");
+    NSString *title = NSLocalizedString(@"Tables", @"Tables");
     MTViewTableHeader *header = [self tableHeader];
     header.labelTitle.text = title;
     [header.buttonAdd addTarget: self
@@ -1573,7 +1589,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (MTViewTableHeader *)tableHeaderTableJoins {
-    NSString *title = NSLocalizedString(@"Table Joins", @"Table Joins");
+    NSString *title = NSLocalizedString(@"Joins", @"Joins");
     MTViewTableHeader *header = [self tableHeader];
     header.labelTitle.text = title;
     [header.buttonAdd addTarget: self

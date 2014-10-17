@@ -7,6 +7,7 @@
 //
 
 #import "MADBackgroundScrollView.h"
+#import "UIColor+EverydayApps.h"
 
 static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000, 2.0000, 3.0000};
 
@@ -28,31 +29,36 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
         self.translatesAutoresizingMaskIntoConstraints = NO;
         self.scrollEnabled = YES;
         self.userInteractionEnabled = YES;
-        self.backgroundColor = [UIColor whiteColor];
         self.indicatorStyle = UIScrollViewIndicatorStyleDefault;
         
         UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
         container.userInteractionEnabled = YES;
         container.backgroundColor = [UIColor clearColor];
         container.translatesAutoresizingMaskIntoConstraints = NO;
+        container.backgroundColor = [UIColor headerColor];
+        
         [self addSubview:container];
         
         NSString *layoutHorizontal = @"H:|[container]|";
         NSString *layoutVertical = @"V:|[container]|";
         NSDictionary *metrics = @{};
         NSDictionary *views = NSDictionaryOfVariableBindings(container);
+        
         NSArray *horizontalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: layoutHorizontal
                                                                                            options: NSLayoutFormatAlignAllCenterX
                                                                                            metrics: metrics
                                                                                              views: views];
+        
         NSArray *verticalConstrains = [NSLayoutConstraint constraintsWithVisualFormat: layoutVertical
                                                                                          options: NSLayoutFormatAlignAllCenterY
                                                                                          metrics: metrics
                                                                                            views: views];
+
         NSArray *constraints = [horizontalConstrains arrayByAddingObjectsFromArray:verticalConstrains];
         
         
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapZoom:)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget: self
+                                                                              action: @selector(doubleTapZoom:)];
         tap.numberOfTapsRequired = 2;
         tap.numberOfTouchesRequired = 1;
         
@@ -81,13 +87,5 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
                                        atScale: zoomScale];
     }
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

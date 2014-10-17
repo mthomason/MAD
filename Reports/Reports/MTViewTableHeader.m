@@ -27,8 +27,9 @@
         
         [self addSubview:nibContents.firstObject];
         self.labelTitle.numberOfLines = 0;
-        self.labelTitle.textColor = [UIColor whiteColor];
+        self.labelTitle.textColor = [UIColor tintColorRed];
         self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        self.backgroundColor = [UIColor headerColor];
     }
     return self;
 }

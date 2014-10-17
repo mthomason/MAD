@@ -27,6 +27,7 @@
 + (instancetype)edaGreenDark;
 + (instancetype)edaGreenLight;
 
++ (instancetype)headerColor;
 + (instancetype)tintColorWhiteAlpha;
 + (instancetype)edaBlueLightBackground;
 + (instancetype)edaTableHeaderBackground;

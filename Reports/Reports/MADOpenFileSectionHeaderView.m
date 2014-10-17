@@ -54,7 +54,7 @@ NSString * const MADTextLocal = @"Local";
         
         UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
         label.textAlignment = NSTextAlignmentLeft;
-        self.fontType = UIFontTextStyleCaption1;
+        self.fontType = UIFontTextStyleHeadline;
         label.font = [UIFont preferredFontForTextStyle:self.fontType];
         label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
@@ -83,12 +83,11 @@ NSString * const MADTextLocal = @"Local";
                                                                                     attributes: attributesLocal];
         self.localizedAttrbiutedTextLocal = attributedStringLocal;
         
-       // NSDictionary *attributesCloud = @{NSForegroundColorAttributeName : foregroundColor};
         NSAttributedString *attributedStringCloud = [[NSAttributedString alloc] initWithString: localizedTextCloud
                                                                                     attributes: attributesLocal];
         self.localizedAttrbiutedTextCloud = attributedStringCloud;
         
-        UIColor *blueColor = [[UIColor edaBlueLightBackground] colorWithAlphaComponent:0.20000f];
+        UIColor *blueColor = [UIColor headerColor];
         self.backgroundColor = blueColor;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = foregroundColor;

@@ -315,9 +315,21 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        BOOL animate = previousTraitCollection != nil;
+        [UIView setAnimationsEnabled:animate];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        [UIView setAnimationsEnabled:YES];
+    } else {
+        self.navigationItem.prompt = nil;
+    }
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     
     [self.navigationController.toolbar setNeedsLayout];
 }
