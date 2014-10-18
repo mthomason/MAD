@@ -16,14 +16,14 @@
         MADQueryVisualizationViewController,
         MADocument;
 
-@interface MTQueryBuilderContainerController : UIViewController
+@interface MTQueryBuilderContainerController : UISplitViewController
     <MTViewControllerProtocol>
 
-@property (nonatomic, weak) id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) id <MTViewControllerProtocol> viewControllerDelegate;
 @property (nonatomic, weak) MADocument *document;
 
-- (MADQueryViewController *)queryBuilderController;
-- (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced;
+@property (nonatomic, strong) MADQueryViewController *queryBuilderController;
+@property (nonatomic, strong) MADQueryVisualizationViewController *queryBuilderControllerAdvanced;
 
 @end
 

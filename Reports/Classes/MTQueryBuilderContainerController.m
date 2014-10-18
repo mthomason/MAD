@@ -12,34 +12,34 @@
 
 #import "MTQueryBuilderContainerController.h"
 #import <CoreData/CoreData.h>
+
 #import "MADocument.h"
 
 #import "MTApplicationInstance.h"
 #import "MADDesignerViewController.h"
 #import "MADQueryViewController.h"
 #import "MADQueryVisualizationViewController.h"
+#import "MTShowSqlViewController.h"
 
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-
 #import "UIViewController+ui.h"
-#import "MTShowSqlViewController.h"
 
 @interface MTQueryBuilderContainerController ()
-    <UIPopoverControllerDelegate>
+    <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
 
-@property (nonatomic, strong) IBOutlet UIView *leftView;
-@property (nonatomic, strong) IBOutlet UIView *rightView;
-@property (nonatomic, strong) IBOutletCollection(NSLayoutConstraint) NSArray *bogusConstraints;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemRevealQuery;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
+@property (nonatomic, weak) UIBarButtonItem *barButtonItemEditDone;
+@property (nonatomic, weak) UIBarButtonItem *barButtonItemRevealQuery;
+@property (nonatomic, weak) UIBarButtonItem *barButtonItemDone;
+
+@property (nonatomic, strong) NSArray *toolbarItemsEditing;
+@property (nonatomic, strong) NSArray *toolbarItemsEditingNot;
 
 @property (nonatomic, strong) NSArray *constraintsViewWillAppear;
 
 @property (nonatomic, strong) UIPopoverController *popover;
-
-@property (nonatomic, assign) BOOL isEditing;
-
+@property (nonatomic, assign) BOOL localEditing;
 @end
 
 @implementation MTQueryBuilderContainerController
@@ -49,61 +49,102 @@
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
+
     self = [super initWithCoder:aDecoder];
+    
     if (self) {
-        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
+        
+        self.localEditing = NO;
+    
+        UIBarButtonItem *barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone
+                                                                                           target: self
+                                                                                           action: @selector(done:)];
+        self.navigationItem.leftBarButtonItem = barButtonItemDone;
+        self.barButtonItemDone = barButtonItemDone;
+
+        NSString *redraw = NSLocalizedString(@"Redraw", @"Redraw");
+        
+        UIBarButtonItem *barButtonItemRevealQuery = [[UIBarButtonItem alloc] initWithTitle: redraw
+                                                                                     style: UIBarButtonItemStylePlain
+                                                                                    target: self
+                                                                                    action: @selector(redrawQueryVisualization:)];
+
+        UIViewController *vc = self.viewControllers[0];
+        UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithHorizontalSizeClass: UIUserInterfaceSizeClassRegular];
+        [self setOverrideTraitCollection:traitCollection forChildViewController:vc];
+        
+        self.barButtonItemRevealQuery = barButtonItemRevealQuery;
+        
+        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame: CGRectZero];
         labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
         NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
-        [labelMadDesigner setAttributedText:attributedString];
-        [self.navigationItem setTitleView:labelMadDesigner];
-        [[self.navigationItem titleView] sizeToFit];
+        labelMadDesigner.attributedText = attributedString;
+        
+        self.navigationItem.titleView = labelMadDesigner;
+        [self.navigationItem.titleView sizeToFit];
+        
+        
+        self.editButtonItem.target = self;
+        self.editButtonItem.action = @selector(edit:);
+        self.navigationItem.rightBarButtonItem = self.editButtonItem;
     }
     return self;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+    [super viewWillTransitionToSize: size
+          withTransitionCoordinator: coordinator];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setIsEditing:NO];
+    self.delegate = self;
+    self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+
+    UINavigationController *navigationController = self.viewControllers[0];
+    navigationController.navigationBarHidden = YES;
     
-    [self.view removeConstraints:[self bogusConstraints]];
+    MADQueryViewController *queryViewController = (MADQueryViewController *)navigationController.topViewController;
+    queryViewController.document = self.document;
+    self.queryBuilderController = queryViewController;
     
-    UIView *leftView = [self leftView];
-    UIView *rightView = [self rightView];
-    NSString *constraintAsciiArtHorizontal = @"H:|-(==0.0000)-[leftView(==320.0000)]-(==0.0000)-[rightView]-(==0.0000)-|";
-    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(leftView, rightView);
-    NSArray *constraintsHorizontal = [NSLayoutConstraint constraintsWithVisualFormat:constraintAsciiArtHorizontal
-                                                                             options:0
-                                                                             metrics:nil
-                                                                               views:viewsDictionary];
-    [self setConstraintsViewWillAppear:constraintsHorizontal];
+    MADQueryVisualizationViewController *queryVisualizationViewController = self.viewControllers[1];
+    queryVisualizationViewController.document = self.document;
+    self.queryBuilderControllerAdvanced = queryVisualizationViewController;
+    
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [[self.navigationItem titleView] sizeToFit];
+    [self.navigationItem.titleView sizeToFit];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    
+    [self.queryBuilderController reloadDocument:self.document animated:YES];
+    [self.queryBuilderControllerAdvanced reloadDocument:self.document animated:YES];
+    
     __block MTQueryBuilderContainerController *blockSelf = self;
     [[MTStoreKitController sharedObject] licensedUser:^(BOOL isLicensedUser, NSDate *experationDate) {
         if (isLicensedUser == NO) {
             NSArray *items = [self toolbarItems];
             NSMutableArray *mutableItems = [items mutableCopy];
-            [mutableItems removeObject:[blockSelf barButtonItemRevealQuery]];
+            [mutableItems removeObject:blockSelf.barButtonItemRevealQuery];
             [blockSelf setToolbarItems:mutableItems];
             blockSelf = nil;
         }
     }];
     
-    [self.view addConstraints:[self constraintsViewWillAppear]];
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.view removeConstraints:[self constraintsViewWillAppear]];
+    [self.view removeConstraints:self.constraintsViewWillAppear];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -155,9 +196,11 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if ([self leftView]) {
-        NSMutableArray *subviews = [[NSMutableArray alloc] initWithArray:[[self leftView] subviews]];
-        [subviews addObjectsFromArray:[[self rightView] subviews]];
+    UIViewController *leftViewController = self.viewControllers[0];
+    UIViewController *rightViewController = self.viewControllers[1];
+    if (leftViewController.view) {
+        NSMutableArray *subviews = [[NSMutableArray alloc] initWithArray:[leftViewController.view subviews]];
+        [subviews addObjectsFromArray:[rightViewController.view subviews]];
         for (UIView *view in subviews) {
             if ([view isKindOfClass:[UIScrollView class]]) {
                 CGFloat top = self.topLayoutGuide.length;
@@ -170,15 +213,15 @@
 }
 
 - (id)leftViewController {
-    return [self childViewControllers][0];
+    return self.queryBuilderController;
 }
 
 - (id)rightViewController {
-    return [self childViewControllers][1];
+    return self.queryBuilderControllerAdvanced;
 }
 
 - (IBAction)showReportDocumentList:(id)sender {
-    [self.delegate viewControllerDidFinish:self animated:YES];
+    [self.viewControllerDelegate viewControllerDidFinish:self animated:YES];
 }
 
 - (IBAction)showReportDesigner:(id)sender { }
@@ -192,55 +235,16 @@
     if (error != nil) {
         [self.document.managedObjectContext save:&error];
     }
-    [self.delegate viewControllerDidFinish:self animated:YES];
+    [self.viewControllerDelegate viewControllerDidFinish:self animated:YES];
 }
 - (IBAction)redrawQueryVisualization:(id)sender {
-    [[self queryBuilderControllerAdvanced] redraw];
+    [self.queryBuilderControllerAdvanced redraw];
 }
 
-- (IBAction)toggleEditModeQueryDesigner:(id)sender {
-    
-    if ([UIDevice isPad] == NO) {
-        [[self queryBuilderController] edit:sender];
-        BOOL isEditing = [self isEditing];
-        [self setIsEditing: !isEditing];
-        NSArray *items = [[[self navigationController] toolbar] items];
-        NSMutableArray *tbItems = [items mutableCopy];
-        NSUInteger buttonIndex = [tbItems indexOfObject:[self barButtonItemEdit]];
-        if (buttonIndex != NSNotFound) {
-            UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
-            SEL toggleEditModeQueryDesigner = @selector(toggleEditModeQueryDesigner:);
-            UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                           target: self
-                                                                                           action: toggleEditModeQueryDesigner];
-            
-            
-            tbItems[buttonIndex] = barButtonItem;
-            [[[self navigationController] toolbar] setItems: tbItems animated:YES];
-            [self setBarButtonItemEdit:barButtonItem];
-        }
-    } else {
-        [[self queryBuilderController] edit:sender];
-        BOOL isEditing = [self isEditing];
-        [self setIsEditing: !isEditing];
-        UIBarButtonSystemItem buttonType = isEditing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
-        SEL toggleEditModeQueryDesigner = @selector(toggleEditModeQueryDesigner:);
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType
-                                                                                       target: self
-                                                                                       action: toggleEditModeQueryDesigner];
-        
-        [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
-        
-        [self setBarButtonItemEdit:barButtonItem];
-    }
-}
-
-- (MADQueryViewController *)queryBuilderController {
-    return [self rightViewController];
-}
-
-- (MADQueryVisualizationViewController *)queryBuilderControllerAdvanced {
-    return [self leftViewController];
+- (IBAction)edit:(id)sender {
+    self.localEditing = !self.localEditing;
+    [self.queryBuilderController edit:sender];
+    [self setEditing:self.localEditing animated:YES];
 }
 
 - (void)viewControllerDidFinish:(id)controller {
@@ -252,7 +256,7 @@
     BOOL procDelegateFunction = [sender isKindOfClass:[NSNumber class]] && [sender boolValue];
     [self dismissViewControllerAnimated:animated completion:^{
         if (procDelegateFunction) {
-            [[weakSelf delegate] viewControllerDidFinish:weakSelf animated:YES];
+            [weakSelf.viewControllerDelegate viewControllerDidFinish:weakSelf animated:YES];
         }
     }];
 }
@@ -260,12 +264,77 @@
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIDevice isModernOS] ?
-            ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemDatabase8] :
-                                [UIImage imageNamed:MADImageBarButtonItemDatabase8]) :
-            [UIImage imageNamed:MADImageBarButtonItemDatabase];
+    return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 
+#pragma mark - UISplitViewControllerDelegate
+
+// This method allows a client to update any bar button items etc.
+- (void)splitViewController:(UISplitViewController *)svc
+    willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+
+    switch (displayMode) {
+
+        case UISplitViewControllerDisplayModeAutomatic:
+            break;
+
+        case UISplitViewControllerDisplayModePrimaryHidden:
+            break;
+
+        case UISplitViewControllerDisplayModeAllVisible:
+            break;
+
+        case UISplitViewControllerDisplayModePrimaryOverlay:
+            break;
+
+        default:
+            break;
+    }
+}
+
+- (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
+
+    return UISplitViewControllerDisplayModeAllVisible;
+
+}
+
+- (BOOL)splitViewController: (UISplitViewController *)splitViewController
+         showViewController: (UIViewController *)vc
+                     sender: (id)sender {
+    [self.navigationController pushViewController:vc animated:YES];
+    return YES;
+}
+
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController
+   showDetailViewController:(UIViewController *)vc
+                     sender:(id)sender {
+
+
+    return NO;
+}
+
+- (UIViewController *)primaryViewControllerForCollapsingSplitViewController:(UISplitViewController *)splitViewController {
+    return splitViewController.viewControllers[0];
+}
+
+- (UIViewController *)primaryViewControllerForExpandingSplitViewController:(UISplitViewController *)splitViewController {
+    return splitViewController.viewControllers[0];
+}
+
+- (BOOL)splitViewController:(UISplitViewController *)splitViewController
+    collapseSecondaryViewController:(UIViewController *)secondaryViewController
+          ontoPrimaryViewController:(UIViewController *)primaryViewController {
+
+    return YES; // Query visualization is not needed.
+    
+}
+
+- (UIViewController *)splitViewController:(UISplitViewController *)splitViewController
+        separateSecondaryViewControllerFromPrimaryViewController:(UIViewController *)primaryViewController {
+
+    return nil;
+
+}
 
 #pragma mark - UIPopoverControllerDelegate
 
