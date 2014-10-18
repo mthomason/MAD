@@ -46,9 +46,9 @@
     UIFont *font = [UIFont systemFontOfSize: 5.0000f];
     UIFont *font2 = [UIFont systemFontOfSize: 4.0000f];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [paragraphStyle setLineBreakMode:NSLineBreakByClipping];
-    [paragraphStyle setBaseWritingDirection:NSWritingDirectionLeftToRight];
-    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    paragraphStyle.lineBreakMode = NSLineBreakByClipping;
+    paragraphStyle.baseWritingDirection = NSWritingDirectionLeftToRight;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
     NSDictionary *attributes = @{
                                  NSFontAttributeName : font,
                                  NSParagraphStyleAttributeName : paragraphStyle
@@ -57,10 +57,10 @@
                                  NSFontAttributeName : font2,
                                  NSParagraphStyleAttributeName : paragraphStyle
                                  };
-    [self setAttributes:attributes];
-    [self setAttributesMetric:attributes2];
+    self.attributes = attributes;
+    self.attributesMetric = attributes2;
     
-    CGFloat thinLineWidth = 1.0000f / [UIScreen mainScreen].scale;
+    CGFloat thinLineWidth = 1.0000f / self.traitCollection.displayScale;
     self.thinLineWidth = thinLineWidth;
     self.lineWidth = 1.0000f;
     

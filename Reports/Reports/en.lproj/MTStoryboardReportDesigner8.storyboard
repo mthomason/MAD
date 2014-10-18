@@ -454,37 +454,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.086274509803921567" green="0.41568627450980389" blue="0.54117647058823526" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="UITableViewCellOverride" id="WEe-Rm-SYt" customClass="UITableViewCellOverride">
-                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WEe-Rm-SYt" id="y9F-HR-uv3">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Override" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ube-0d-KPR">
-                                            <rect key="frame" x="11" y="12" width="183" height="21"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRo-Y2-VmE">
-                                            <rect key="frame" x="210" y="7" width="51" height="31"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="49" id="F1N-El-zb7"/>
-                                            </constraints>
-                                        </switch>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="fRo-Y2-VmE" firstAttribute="leading" secondItem="ube-0d-KPR" secondAttribute="trailing" constant="16" id="02o-fv-pNq"/>
-                                        <constraint firstItem="ube-0d-KPR" firstAttribute="top" secondItem="y9F-HR-uv3" secondAttribute="top" constant="12" id="0M4-bb-9pr"/>
-                                        <constraint firstItem="ube-0d-KPR" firstAttribute="centerY" secondItem="fRo-Y2-VmE" secondAttribute="centerY" id="Tsw-8q-ulf"/>
-                                        <constraint firstAttribute="bottom" secondItem="fRo-Y2-VmE" secondAttribute="bottom" constant="5" id="VyP-iK-Klu"/>
-                                        <constraint firstAttribute="trailing" secondItem="fRo-Y2-VmE" secondAttribute="trailing" constant="61" id="Yxc-rU-qBQ"/>
-                                        <constraint firstItem="ube-0d-KPR" firstAttribute="leading" secondItem="y9F-HR-uv3" secondAttribute="leading" constant="11" id="pZP-9l-oft"/>
-                                        <constraint firstItem="fRo-Y2-VmE" firstAttribute="top" secondItem="y9F-HR-uv3" secondAttribute="top" constant="7" id="xcs-eo-nlB"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="UITableViewCellQueryLink" textLabel="Prb-U9-Z7Y" style="IBUITableViewCellStyleDefault" id="ADP-s6-L4d" customClass="UITableViewCellQueryLink">
                                 <rect key="frame" x="0.0" y="163" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

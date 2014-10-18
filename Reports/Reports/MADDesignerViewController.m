@@ -445,7 +445,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
 
-    if ([UIDevice isPad] == NO) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        [self setupPopoverControllers];
+    } else {
         UIBarButtonItem *buttonDone = [MADDesignerViewController buttonDone:self];
         [self.viewControllerSectionLayoutSettings.navigationItem setRightBarButtonItem: buttonDone
                                                                               animated: NO];
@@ -474,8 +476,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.layoutConstraintsToolboxHidden = layoutConstraintsToolboxHidden;
         self.layoutConstraintToolbarHeight = layoutConstraintViewToolbarHeightHidden;
         
-    } else {
-        [self setupPopoverControllers];
     }
     
     NSMutableSet *selectedObjectIds = [NSMutableSet new];
@@ -828,7 +828,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self.viewControllerSectionLayoutSettings didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    if ([UIDevice isPad] == NO) {
+    if ((self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) == NO) {
         CGRect navigationToolbarFrame = self.navigationController.toolbar.frame;
         if (navigationToolbarFrame.size.height != [[self layoutConstraintToolbarHeight] constant]) {
             __weak MADDesignerViewController *reportDesigner = self;
@@ -903,7 +903,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             controlView.preferredMaxLayoutWidth = boundingRectWithSize.size.width / scrollView.zoomScale;
             controlView.font = font;
             controlView.scale = self.scroller.zoomScale;
-            controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.window.screen.scale;
+            controlView.contentScaleFactor =  scrollView.zoomScale * self.scroller.traitCollection.displayScale;
             [controlView setNeedsDisplay];
         }
 
@@ -922,7 +922,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
     if ([scrollView isEqual:self.scroller]) {
-        CGFloat scaleWithScreen = scale * self.scroller.window.screen.scale;
+        CGFloat scaleWithScreen = scale * self.scroller.traitCollection.displayScale;
         
         self.ruler.contentScaleFactor = scaleWithScreen;
         
@@ -1139,7 +1139,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)hideToolbox {
-    [UIDevice isPad] ? [self dismissToolboxPopoverControllers] : [self dismissToolboxView];
+    self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? [self dismissToolboxPopoverControllers] : [self dismissToolboxView];
     [self deselectAllElementsAnimated:YES];
     [self.document.managedObjectContext save:nil];
 }
@@ -1416,7 +1416,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.aggregateToEdit = object.isAggregate;
     self.editAggregate = YES;
     
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         
         NSManagedObjectID *objectId = [object objectID];
         UIView *viewToEdit = [self viewForObjectID:objectId];
@@ -1453,7 +1453,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (void)editDocumentObjectBarcode:(RptqDocumentObject *)object {
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         
         UIView *viewToEdit = [self viewForObjectID:object.objectID];
         
@@ -1505,7 +1505,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     self.editDynamicField = YES;
     self.objectIdEditDynamicLabel = object.objectID;
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         
         UIView *viewToEdit = [self viewForObjectID:object.objectID];
         
@@ -1657,7 +1657,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    CGFloat contextScale = self.scroller.zoomScale * self.scroller.window.screen.scale;
+    CGFloat contextScale = self.scroller.zoomScale * self.scroller.traitCollection.displayScale;
 
     RptqDocumentSection *documentSection = [RptqDocumentSection documentSectionForObjectID: [collectionView objectIdTag]
                                                                     inManagedObjectContext: self.document.managedObjectContext];
@@ -1844,12 +1844,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         }];
         
     } else if ([sender isKindOfClass:[MADViewerController class]]) {
-        if ([UIDevice isPad]) {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             [self dismissViewControllerAnimated:YES completion:^{}];
             [self setDisplayActive];
         }
     } else {
-        if ([UIDevice isPad]) {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             if ([self.popoverControllerObjectSelector isPopoverVisible]) {
                 [self.popoverControllerObjectSelector dismissPopoverAnimated:YES];
                 [self setDisplayActive];
@@ -2055,11 +2055,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.viewControllerToolbox.document = self.document;
         [self.viewControllerToolbox showToolboxWithObjectIds:self.selectedObjectIds];
         
-        if ([UIDevice isPad] == NO) {
-            if ([self dismissAllPopovers] == NO) {
-                [self showToolbox:MTToolboxTypeElement];
-            }
-        } else {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             
             NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:self.popoverControllerInformation.passthroughViews];
             [passThroughViews addObject:elementView];
@@ -2068,6 +2064,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
             [self repositionPopoverControllerInformationAnimated:YES];
             [self setDisplayInactive];
+        } else {
+            if ([self dismissAllPopovers] == NO) {
+                [self showToolbox:MTToolboxTypeElement];
+            }
         }
         
     } else {
@@ -2081,7 +2081,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self.selectedObjectIds removeObject:elementView.objectIdTag];
     [self removeBorderFromView: elementView];
     
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         
         NSMutableSet *passThroughViews = [[NSMutableSet alloc] initWithArray:self.popoverControllerInformation.passthroughViews];
         [passThroughViews removeObject:elementView];
@@ -2367,7 +2367,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             gestureRecognizer.view.center = newCenter;
             
             __weak MADDesignerViewController *weakself = self;
-            [self removeCollectionViewCellForElementView: [gestureRecognizer.view objectIdTag] completion: ^(BOOL finished) {
+            [self removeCollectionViewCellForElementView: gestureRecognizer.view.objectIdTag completion: ^(BOOL finished) {
                 UICollectionView *sectionView = [weakself sectionViewFor:gestureRecognizer];
                 [weakself relayoutSectionView:sectionView];
                 [weakself.view setNeedsLayout];
@@ -2398,7 +2398,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 [self relayoutSectionView:sectionView];
                 __weak NSManagedObjectContext *managedObjectContext = self.document.managedObjectContext;
                 
-                NSManagedObjectID *objectId = [gestureRecognizer.view objectIdTag];
+                NSManagedObjectID *objectId = gestureRecognizer.view.objectIdTag;
                 NSManagedObjectID *sectionId = [sectionView objectIdTag];
                 
                 CGRect frame = gestureRecognizer.view.frame;
@@ -2503,7 +2503,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height + self.tabBarController.tabBar.bounds.size.height, ei.right);
             self.viewControllerSectionLayoutSettings.tableView.contentInset = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
             
-            if ([UIDevice isPad]) {
+            if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
                 self.popoverControllerSectionSettings.popoverContentSize = [MADDesignerViewController sizePopoverSectionSettings];
                 self.popoverControllerSectionSettings.passthroughViews = @[label];
                 [self.popoverControllerSectionSettings presentPopoverFromRect: label.bounds
@@ -2726,7 +2726,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (BOOL)dismissAllPopovers {
     BOOL result = NO;
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
         if (self.popoverControllerInformation != nil) [allpopovers addObject:self.popoverControllerInformation];
         if ([self popoverControllerObjectSelector] != nil) [allpopovers addObject:[self popoverControllerObjectSelector]];
@@ -3536,10 +3536,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIDevice isModernOS] ?
-            ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemMadDesigner8] :
-                                [UIImage imageNamed:MADImageBarButtonItemMadDesigner8]) :
-            [UIImage imageNamed:MADImageBarButtonItemMadDesigner];
+    return [UIImage imageNamed:MADImageBarButtonItemMadDesigner8];
 }
 
 @end

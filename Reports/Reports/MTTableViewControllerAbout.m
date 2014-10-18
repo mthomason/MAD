@@ -56,7 +56,7 @@
 
 - (CGSize)preferredContentSize {
     CGSize preferredContentSize;
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         preferredContentSize = CGSizeMake(540.0000f, 556.0000f);
         [[self navigationController] setPreferredContentSize:preferredContentSize];
         [[[self navigationController] view] setNeedsLayout];
@@ -104,7 +104,7 @@
 }
 
 - (IBAction)composeEmail:(id)sender {
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         [self.delegate viewControllerDidRequestComposeEmail: self
                                                      animated: YES];
     } else {

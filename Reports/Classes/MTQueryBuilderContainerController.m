@@ -150,7 +150,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([segue.identifier isEqualToString:MNSSegueShowSql]) {
-        if ([UIDevice isPad]) { //iPhone version handled in MADQueryViewController
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) { //iPhone version handled in MADQueryViewController
             UIPopoverController *popoverController = [(UIStoryboardPopoverSegue *)segue popoverController];
             [popoverController setDelegate:self];
             self.popover = popoverController;
@@ -196,17 +196,17 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    UIViewController *leftViewController = self.viewControllers[0];
-    UIViewController *rightViewController = self.viewControllers[1];
-    if (leftViewController.view) {
-        NSMutableArray *subviews = [[NSMutableArray alloc] initWithArray:[leftViewController.view subviews]];
-        [subviews addObjectsFromArray:[rightViewController.view subviews]];
-        for (UIView *view in subviews) {
-            if ([view isKindOfClass:[UIScrollView class]]) {
-                CGFloat top = self.topLayoutGuide.length;
-                CGFloat bot = self.bottomLayoutGuide.length;
-                [(UIScrollView *)view setContentInset: UIEdgeInsetsMake(top, 0, bot, 0)];
-                [(UIScrollView *)view setScrollIndicatorInsets: [(UIScrollView *)view contentInset]];
+    UIViewController *primaryViewController = self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
+    UIViewController *secondaryViewController = self.viewControllers.count > 1 ? self.viewControllers[1] : nil;
+    if (primaryViewController) {
+        NSMutableArray *subviews = [[NSMutableArray alloc] initWithArray:[primaryViewController.view subviews]];
+        if (secondaryViewController) {
+            [subviews addObjectsFromArray:[secondaryViewController.view subviews]];
+            for (UIView *view in subviews) {
+                if ([view isKindOfClass:[UIScrollView class]]) {
+                    [(UIScrollView *)view setContentInset: UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)];
+                    [(UIScrollView *)view setScrollIndicatorInsets: [(UIScrollView *)view contentInset]];
+                }
             }
         }
     }

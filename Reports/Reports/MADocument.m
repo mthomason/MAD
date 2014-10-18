@@ -792,13 +792,13 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
                          andMessage: message];
 }
 
-- (void)regenThumbnail {
+- (void)regenThumbnailWithTraits:(UITraitCollection *)traits {
     [[NSFileManager defaultManager] fileExistsAtPath: self.urlThumbnail.path];
     BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned == YES || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.urlThumbnail.path] == NO) {
         MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:self.reportFormatter
                                                                                                                   dataTable:self.mainDataTable];
-        UIImage *thumbnail = [printPageRender thumbnail];
+        UIImage *thumbnail = [printPageRender thumbnailWithTraits:traits];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:self.urlThumbnail atomically:YES];
     }

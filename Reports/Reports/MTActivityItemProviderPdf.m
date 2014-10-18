@@ -52,7 +52,7 @@
 - (id)item {
     id item = nil;
     if ([[self activityType] caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {    //Printer
-        if ([UIDevice isPad]) {
+        if (self.activityViewController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             [self.delegate showPrintDialog]; //Need some help getting out of this popover!!!
         }
         item = nil;

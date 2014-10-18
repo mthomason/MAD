@@ -140,13 +140,11 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    if ([UIDevice isPad]) {
-        CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
-        UIColor *borderColor = [UIColor lightGrayColor];
-        self.backgroundContainer.layer.borderWidth = borderWidth;
-        self.backgroundContainer.layer.borderColor = [borderColor CGColor];
-    }
+
+    CGFloat borderWidth = [UIDevice isRetnaDisplay] ? 0.5000f : 1.0000f;
+    UIColor *borderColor = [UIColor lightGrayColor];
+    self.backgroundContainer.layer.borderWidth = borderWidth;
+    self.backgroundContainer.layer.borderColor = [borderColor CGColor];
 
     UIView *containerView = [[UIView alloc] initWithFrame:self.backgroundContainer.bounds];
     

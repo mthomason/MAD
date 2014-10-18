@@ -180,7 +180,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
         MTApplicationInstance *app = [AppDelegate app];
         __weak MADOpenFileViewController *weakself = self;
-        [[app openDocument] regenThumbnail];
+        [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
         [app closeReportWithCompletionHandler:^(BOOL success) {
             [weakself reenable];
         }];
@@ -188,9 +188,9 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     self.shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
     
-    if ([MTApplicationInstance isMadViewer] && [UIDevice isPad]) {
+    if ([MTApplicationInstance isMadViewer] && self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 
-    } else if ([MTApplicationInstance isMadViewer] && ![UIDevice isPad]) {
+    } else if ([MTApplicationInstance isMadViewer] && self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
     
     } else {
         [self.openDocumentPopoverController dismissPopoverAnimated:YES];
@@ -800,7 +800,11 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
             ((MTDatabaseDriverSelectorViewController *)[navControl topViewController]).delegate = self;
         }
     }
-    [segue.destinationViewController setDelegate: self];
+    if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderContainerController class]]) {
+        ((MTQueryBuilderContainerController *)segue.destinationViewController).viewControllerDelegate = self;
+    } else {
+        [segue.destinationViewController setDelegate: self];
+    }
 }
 
 - (void)prepareForSegueDetails:(UIStoryboardSegue *)segue {
@@ -817,7 +821,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         }
     }
     
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         if ([segue.identifier isEqualToString:@"MTSegueDetails"]) {
             if ([MTApplicationInstance isMadViewer]) {
                 self.aboutPopoverController.popoverContentSize = CGSizeMake(420.0000f, 376.0000f);
@@ -856,15 +860,16 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 }
 
 - (void)prepareForSegueShowOpenDocument:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] || [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
+    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]] ||
+        [segue.destinationViewController isKindOfClass: [UITabBarController class]]) {
         
-        if ([UIDevice isPad]) {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             UITabBarController *tabBarController = (UITabBarController *)segue.destinationViewController;
             tabBarController.view.tintColor = [UIColor tintColorRed];
             
             UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
             MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
-            queryBuilderContainerController.delegate = self;
+            queryBuilderContainerController.viewControllerDelegate = self;
             
             UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
             MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
@@ -953,7 +958,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
     BOOL shouldPerformSegueWithIdentifier = YES;
     if ([identifier isEqualToString:MTSegueShowAddDocument]) {
-        if ([UIDevice isPad]) {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             shouldPerformSegueWithIdentifier = [self shouldShowAddDocumentPopover];
             self.shouldShowAddDocumentPopover = NO;
             self.barButtonItemAddNewDocument.enabled = NO;
@@ -1006,7 +1011,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     [self setShouldShowAddDocumentPopover:YES];
     MTApplicationInstance *app = [AppDelegate app];
     __weak MADOpenFileViewController *weakself = self;
-    [[app openDocument] regenThumbnail];
+    [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
     [app closeReportWithCompletionHandler:^(BOOL success) {
         [weakself reenable];
     }];
@@ -1017,7 +1022,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         [self dismissViewControllerAnimated:YES completion:^{ }];
     }
     [self.barButtonItemAddNewDocument setEnabled:YES];
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         [self reloadData];
     }
 }
@@ -1036,7 +1041,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         [sender isKindOfClass: reportViewerClass]) {
         MTApplicationInstance *app = [AppDelegate app];
         __weak MADOpenFileViewController *weakself = self;
-        [[app openDocument] regenThumbnail];
+        [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
         [app closeReportWithCompletionHandler:^(BOOL success) {
             [weakself reenable];
         }];
@@ -1055,8 +1060,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 }
 
 - (void)viewControllerDidRequestComposeEmail:(id)sender animated:(BOOL)animated {
-    if ([UIDevice isPad]) {
-        [[self aboutPopoverController] dismissPopoverAnimated:animated];
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        [self.aboutPopoverController dismissPopoverAnimated:animated];
     }
     if ([MFMailComposeViewController canSendMail]) {
         
@@ -1094,8 +1099,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
     
-    return [UIDevice isPad] ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
-                                UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
+                                                        UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
     
 }
 
@@ -1103,7 +1108,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                    layout:(UICollectionViewLayout*)collectionViewLayout
                     minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 
-    return [UIDevice isPad] ? 50.0000f : 5.0000f;
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? 50.0000f : 5.0000f;
     
 }
 
@@ -1111,7 +1116,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                    layout:(UICollectionViewLayout*)collectionViewLayout
                     minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     
-    return [UIDevice isPad] ? 50.0000f : 5.0000f;
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? 50.0000f : 5.0000f;
     
 }
 
@@ -1584,7 +1589,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 - (BOOL)dismissAllPopovers {
 
     BOOL result = NO;
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 
         NSMutableArray *allpopovers = [[NSMutableArray alloc] initWithCapacity:3];
         if (self.openDocumentPopoverController != nil)
@@ -1918,7 +1923,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         }
     }];
     
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         if (self.popoverControllerActivity == nil || self.popoverControllerActivity.isPopoverVisible == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             popoverController.delegate = self;
@@ -2404,7 +2409,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
             [mailComposer addAttachmentData:data mimeType:MADMimeType fileName:name];
             mailComposer.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
             
-            if ([UIDevice isPad]) {
+            if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
                 mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
                 mailComposer.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                 mailComposer.providesPresentationContextTransitionStyle = YES;

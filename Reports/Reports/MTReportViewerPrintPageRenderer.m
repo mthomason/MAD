@@ -226,14 +226,14 @@
 
 }
 
-- (UIImage *)thumbnail {
+- (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits {
     return [self thumbnailWithRect: [MTPaper rectLetter]
-                              size: [UIDevice isPad] ? 256.0000f : 128.0000f
+                              size: 256.0000f
                         edgeEffect: YES
                         zoomEffect: YES
                       squareEffect: NO
-                        cornerSize: ([UIDevice isPad] ? 10.0000f : 5.0000f)
-                             scale: [UIScreen mainScreen].scale];
+                        cornerSize: 5.0000f
+                             scale: traits.displayScale];
 }
 
 - (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {

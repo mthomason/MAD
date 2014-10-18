@@ -16,7 +16,7 @@
 @interface MTReportViewerPrintPageRenderer : UIPrintPageRenderer
 
 - (instancetype)initWithReportFormatter:(MTReportFormatter *)reportFormatter dataTable:(MTDataTable *)dataTable;
-- (UIImage *)thumbnail;
+- (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits;
 - (UIImage *)thumbnailWithRect:(CGRect)rect
                           size:(CGFloat)size
                     edgeEffect:(BOOL)edgeEffect

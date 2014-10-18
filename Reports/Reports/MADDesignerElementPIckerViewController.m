@@ -103,20 +103,19 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if ([UIDevice isModernOS]) {
-        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        [self.view addSubview: visualEffectsView];
-        self.navigationController.view.backgroundColor = [UIColor clearColor];
-        self.navigationController.view.opaque = NO;
-        self.collectionView.backgroundColor = [UIColor clearColor];
-        self.collectionView.opaque = NO;
-        self.view.backgroundColor = [UIColor clearColor];
-        self.view.opaque = NO;
-    }
-    if ([UIDevice isPad]) {
-        self.preferredContentSize = CGSizeMake(320.0000f, 420.0000f);
-    };
+
+    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    [self.view addSubview: visualEffectsView];
+    self.navigationController.view.backgroundColor = [UIColor clearColor];
+    self.navigationController.view.opaque = NO;
+    self.collectionView.backgroundColor = [UIColor clearColor];
+    self.collectionView.opaque = NO;
+    self.view.backgroundColor = [UIColor clearColor];
+    self.view.opaque = NO;
+    
+    self.preferredContentSize = CGSizeMake(320.0000f, 420.0000f);
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

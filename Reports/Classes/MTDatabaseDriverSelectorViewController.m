@@ -36,7 +36,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if ([UIDevice isPad] == NO) {
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt, MTDatabaseDriverSelectorViewControllerDefaultPrompt);
     }
 

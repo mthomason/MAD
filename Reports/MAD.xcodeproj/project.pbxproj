@@ -543,6 +543,8 @@
 		4C384E3914B29789007B4F48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C384E3814B29789007B4F48 /* AppDelegate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C38E0D019C203B400AB9789 /* MADFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E0CF19C203B400AB9789 /* MADFileManager.m */; };
 		4C38E0D119C203B400AB9789 /* MADFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E0CF19C203B400AB9789 /* MADFileManager.m */; };
+		4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */; };
+		4C38E9C619F232FC000E0B2F /* MADQueryNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */; };
 		4C3ACA3F16715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */; };
 		4C3ACA47167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ACA46167297AB001BC16D /* RptqQueryPredicate+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1929,6 +1931,8 @@
 		4C384E4314B29789007B4F48 /* MADOpenFileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADOpenFileViewController.h; sourceTree = "<group>"; };
 		4C38E0CF19C203B400AB9789 /* MADFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileManager.m; sourceTree = "<group>"; };
 		4C38E0D219C203F600AB9789 /* MADFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADFileManager.h; sourceTree = "<group>"; };
+		4C38E9C319F232FC000E0B2F /* MADQueryNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryNavigationController.h; sourceTree = "<group>"; };
+		4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryNavigationController.m; sourceTree = "<group>"; };
 		4C3ACA3D16715679001BC16D /* RptqQuery+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQuery+Extras.h"; sourceTree = "<group>"; };
 		4C3ACA3E16715679001BC16D /* RptqQuery+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqQuery+Extras.m"; sourceTree = "<group>"; };
 		4C3ACA45167297AA001BC16D /* RptqQueryPredicate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqQueryPredicate+Extras.h"; sourceTree = "<group>"; };
@@ -5056,6 +5060,8 @@
 		4CDB624614E38B9600A5389E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4C38E9C319F232FC000E0B2F /* MADQueryNavigationController.h */,
+				4C38E9C419F232FC000E0B2F /* MADQueryNavigationController.m */,
 				4C6DF38E16D5F5D500BDC0C1 /* Open Document */,
 				4C35E2F616E4875000ECAB2E /* Database Driver Setup */,
 				4CF1329616CA1E5D00FD0F0B /* Query Builder */,
@@ -6569,6 +6575,7 @@
 				4CB0FF6E16F501ED00B88626 /* MTReportDesignerDocumentObjectFormat.m in Sources */,
 				4C8BF43016F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C8BF47016F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */,
+				4C38E9C619F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
 				4C8BF47416F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m in Sources */,
 				4C23FBFB18FAE5DF009F234F /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C8BF47816F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
@@ -6938,6 +6945,7 @@
 				4CCD2439193AB07100E44D47 /* NSParagraphStyle+CommonStyles.m in Sources */,
 				4C23FC0818FAE610009F234F /* MTDatabase.m in Sources */,
 				4CABE49F1837DF80007EDD9D /* RptqDatabaseSchemaTable.m in Sources */,
+				4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
 				4CE9BC8116EF702600B0808C /* RptqQueryTable+Extras.m in Sources */,
 				4C23FBC418FAE4F7009F234F /* MTPaperB9.m in Sources */,
 				4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */,

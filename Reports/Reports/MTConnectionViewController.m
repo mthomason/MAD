@@ -53,10 +53,10 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];
     
-    [self.navigationItem setHidesBackButton:NO];
-    [self.navigationItem setLeftItemsSupplementBackButton: YES];
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
+    self.navigationItem.hidesBackButton = NO;
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
 }
 
@@ -71,17 +71,18 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     UIViewController *viewControllerFrom = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *viewControllerTo = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    [transitionContext containerView].backgroundColor = [UIColor clearColor];
-    [[transitionContext containerView] setOpaque:NO];
-    [[viewControllerTo view] setBounds:[[viewControllerFrom view] bounds]];
-    [viewControllerTo view].backgroundColor = [UIColor clearColor];
-    [[transitionContext containerView] addSubview:[viewControllerTo view]];
-    [[viewControllerTo view] setBounds:[[transitionContext containerView] bounds]];
-    [[viewControllerTo view] setCenter:[[transitionContext containerView] center]];
-    [[viewControllerTo view] setAlpha:0.0000f];
+    transitionContext.containerView.backgroundColor = [UIColor clearColor];
+    [transitionContext.containerView setOpaque:NO];
+    viewControllerTo.view.bounds = viewControllerFrom.view.bounds;
+    viewControllerTo.view.backgroundColor = [UIColor clearColor];
+    [transitionContext.containerView addSubview:viewControllerTo.view];
+    viewControllerTo.view.bounds = transitionContext.containerView.bounds;
+    viewControllerTo.view.center = transitionContext.containerView.center;
+    viewControllerTo.view.alpha = 0.0000f;
+    
     [UIView animateWithDuration:0.4000f animations:^{
-        [[viewControllerTo view] setAlpha:1.0000f];
-        [[transitionContext containerView] addSubview:[viewControllerTo view]];
+        viewControllerTo.view.alpha = 1.0000f;
+        [transitionContext.containerView addSubview:viewControllerTo.view];
     } completion:^(BOOL finished) {
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]]; // :))
     }];
@@ -155,9 +156,9 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     
     [self disableNavigation];
     
-    MADBarButtonItem *barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem:MADBarButtonSystemItemActivity
-                                                                                     target:nil
-                                                                                     action:nil];
+    MADBarButtonItem *barButtonItem = [[MADBarButtonItem alloc] initWithBarButtonSystemItem: MADBarButtonSystemItemActivity
+                                                                                     target: nil
+                                                                                     action: nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
     //__weak MTConnectionViewController *blockSelf = self;
@@ -166,8 +167,8 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     UITextField *textFieldDatabae   = self.textFieldDatabase;
     UITextField *textFieldPort      = self.textFieldPort;
     
-    NSString *blockServer   = [[NSString alloc] initWithString:textFieldServer.text];
-    NSString *blockDatabase = [[NSString alloc] initWithString:textFieldDatabae.text];
+    NSString *blockServer   = [[NSString alloc] initWithString: textFieldServer.text];
+    NSString *blockDatabase = [[NSString alloc] initWithString: textFieldDatabae.text];
     
     NSString *textPortText  = textFieldPort.text;
     NSString *textPort      = textPortText.length > 0 ? textPortText : @"0";   // FIXME: A very poor guess.

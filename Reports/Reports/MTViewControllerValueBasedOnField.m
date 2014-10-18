@@ -90,13 +90,13 @@
 }
 
 - (void)keyboardDidHide:(id)sender {
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         [self done:sender];
     }
 }
 
 - (void)keyboardDidShow:(NSNotification *)sender {
-    if ([UIDevice isPad] == NO) {
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
 
         NSDictionary *userInfo = [sender userInfo];
         //NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];

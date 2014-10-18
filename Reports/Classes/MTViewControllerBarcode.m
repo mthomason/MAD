@@ -117,7 +117,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     UIView *bottomView = [self bottomView];
     
     NSString *barcodeViewerHeight = @"200.0000";
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         barcodeViewerHeight = @"250.0000";
     }
     NSString *asciiArtVertConstraint = @"V:|-(==0.0000)-[topView(==%@)]-(==0.0000)-[bottomView]-(==0.0000)-|";

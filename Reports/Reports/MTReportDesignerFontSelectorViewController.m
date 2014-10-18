@@ -63,7 +63,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if ([UIDevice isPad] == NO) {
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
         [self.tableView setContentInset:tableInset];
         [self.tableView setScrollIndicatorInsets:tableInset];

@@ -57,7 +57,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         [self setPreferredContentSize:CGSizeMake(380.0000f, 480.0000f)];
     }
 }

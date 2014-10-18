@@ -37,9 +37,10 @@
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
 #import "MTNavigationController.h"
+#import "MTShowSqlViewController.h"
+
 #import "UIDevice+Hack.h"
 #import "UIColor+EverydayApps.h"
-#import "MTShowSqlViewController.h"
 
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
@@ -142,14 +143,14 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerPredicates;
 
-@property (nonatomic, strong) UIFont *boldSystemFont;
-
 @property (nonatomic, assign) BOOL beganUpdates;
 @property (nonatomic, assign) BOOL toolbarIconShown;
 
 @property (atomic, assign) NSInteger lastSelectedRowNumber;
 
 @property (nonatomic, assign) CGFloat headerSectionHeight;
+
+@property (nonatomic, assign) BOOL firstTimeTablePosition;
 
 - (MTQuerySections)tableSectionTypeForIndexPathSection:(NSUInteger)sec;
 - (NSUInteger)sectionPositionForTableSectionType:(MTQuerySections)sec;
@@ -217,6 +218,25 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return self;
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+}
+
+
+- (void)viewDidLayoutSubviews {
+    if (self.firstTimeTablePosition == NO) {
+        self.firstTimeTablePosition = YES;
+        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.frame.size.width, 1.0000f);
+        [self.tableView scrollRectToVisible:r
+                                   animated:NO];
+
+    }
+    [self.navigationItem.titleView sizeToFit];
+    [super viewDidLayoutSubviews];
+}
+
 #pragma mark - NSNotificationCenter
 
 - (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
@@ -275,11 +295,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [self.navigationItem.titleView sizeToFit];
-}
-
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
@@ -293,10 +308,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    self.firstTimeTablePosition = NO;
+
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.tableView.bounds];
     self.tableView.backgroundView = watermarkView;
-
     [self updateInterfaceForPerferedContentSizeCategory:[UIApplication sharedApplication].preferredContentSizeCategory];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -304,31 +320,27 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                  name: UIContentSizeCategoryDidChangeNotification
                                                object: nil];
     
-    //self.restorationIdentifier = @"MADIdentifierRestorationQueryViewController";
-    
     [self.tableView registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
     
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    [self setBoldSystemFont:[UIFont boldSystemFontOfSize:([UIFont systemFontSize] + 3.0000f)]];
-    
-    NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
-    [toolbarButtons removeObjectsInArray:@[[self barButtonItemShowSQL], [self barButtonItemDone]]];
+    NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
+    [toolbarButtons removeObjectsInArray:@[self.barButtonItemShowSQL, self.barButtonItemDone]];
     [self setToolbarItems:toolbarButtons animated:NO];
     
     [self reloadDocument:self.document animated:YES];
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
     
     if (self.document) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(documentStateChanged)
-                                                     name:UIDocumentStateChangedNotification
-                                                   object:self.document];
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(documentStateChanged)
+                                                     name: UIDocumentStateChangedNotification
+                                                   object: self.document];
     }
 
     if ([self toolbarIconShown] == NO && [self barButtonItemShowSQL] != nil) {   //i.e. iPad version
@@ -358,23 +370,22 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
     UIColor *barTintColor = [UIColor tintColorBlue];
     UIColor *tintColor = [UIColor tintColorWhite];
-    UIToolbar *toolbar = [[self navigationController] toolbar];
-    [toolbar setBarTintColor:barTintColor];
-    [toolbar setTintColor:tintColor];
-    if ([UIDevice isPad] == NO) {
-        
+    self.navigationController.toolbar.barTintColor = barTintColor;
+    self.navigationController.toolbar.tintColor = tintColor;
 
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         
         UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
         labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
-        [labelMadDesigner setAttributedText:attributedString];
+        labelMadDesigner.attributedText = attributedString;
         self.navigationItem.titleView = labelMadDesigner;
         [self.navigationItem.titleView sizeToFit];
     }
     
     [self enableTabBarItems];
     [self.navigationItem.titleView sizeToFit];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -402,8 +413,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         
         if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
             UINavigationController *navControl = segue.destinationViewController;
-            if ([navControl topViewController]) {
-                if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
+            if (navControl.topViewController) {
+                if ([navControl.topViewController isKindOfClass:[MTQueryBuilderAddTableViewController class]]) {
                     
                     MTQueryBuilderAddTableViewController *tvc = (MTQueryBuilderAddTableViewController *)[navControl topViewController];
                     if (tvc) {
@@ -429,7 +440,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderLinkBuilderViewController class]]) {
                     
-                    MTQueryBuilderLinkBuilderViewController *tvc = (MTQueryBuilderLinkBuilderViewController *)[navControl topViewController];
+                    MTQueryBuilderLinkBuilderViewController *tvc = (MTQueryBuilderLinkBuilderViewController *)navControl.topViewController;
                     tvc.document = self.document;
                     if (tvc) {
                         tvc.delegate = self;
@@ -443,7 +454,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             //NSLog(@"Top View Controller: %@", [navControl topViewController]);
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderPredicateFormatViewController class]]) {
-                    MTQueryBuilderPredicateFormatViewController *tvc = (MTQueryBuilderPredicateFormatViewController *)[navControl topViewController];
+                    MTQueryBuilderPredicateFormatViewController *tvc = (MTQueryBuilderPredicateFormatViewController *)navControl.topViewController;
                     if (tvc) {
                         tvc.document = self.document;
                         tvc.delegate = self;
@@ -456,7 +467,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             UINavigationController *navControl = segue.destinationViewController;
             if ([navControl topViewController]) {
                 if ([[navControl topViewController] isKindOfClass:[MTQueryBuilderAddGroupViewController class]]) {
-                    MTQueryBuilderAddGroupViewController *tvc = (MTQueryBuilderAddGroupViewController *)[navControl topViewController];
+                    MTQueryBuilderAddGroupViewController *tvc = (MTQueryBuilderAddGroupViewController *)navControl.topViewController;
                     if (tvc) {
                         tvc.document = self.document;
                         tvc.delegate = self;
@@ -1251,8 +1262,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemDatabase8] :
-                                [UIImage imageNamed:MADImageBarButtonItemDatabase8]);
+    return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
 }
 
 #pragma mark - Actions
@@ -1261,7 +1271,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     
     BOOL editing = ![self.tableView isEditing];
     
-    if ([UIDevice isPad] == NO) {
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         UIBarButtonSystemItem buttonType = !editing ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemDone;
         SEL toggleEditModeQueryDesigner = @selector(edit:);
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: buttonType

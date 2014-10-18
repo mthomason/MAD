@@ -307,7 +307,9 @@ const BOOL MADStateRestorationSupportEnabled = NO;  //If there is a chance it wi
 }
 
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    return [UIDevice isPad] ? UIInterfaceOrientationMaskAll : UIInterfaceOrientationMaskAllButUpsideDown;
+    return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ?
+                                                            UIInterfaceOrientationMaskAllButUpsideDown :
+                                                            UIInterfaceOrientationMaskAll;
 }
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents

@@ -429,10 +429,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 #pragma mark - MTTabBarImageProtocol
 
 - (UIImage *)tabBarImage {
-    return [UIDevice isModernOS] ?
-            ([UIDevice isPad] ? [UIImage imageNamed:MADImageBarButtonItemMadViewer8] :
-                                [UIImage imageNamed:MADImageBarButtonItemMadViewer8]) :
-            [UIImage imageNamed:MADImageBarButtonItemMadViewer];
+    return [UIImage imageNamed:MADImageBarButtonItemMadViewer8];
 }
 
 - (void)setTintColorForToolbar:(UIToolbar *)toolbar {
@@ -659,7 +656,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return [UIDevice isPad] ? [self navigationController] : self;
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? [self navigationController] : self;
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
@@ -867,7 +864,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                         sharedController.printPageRenderer = printPageRender;
                         sharedController.delegate = self.document;
                         __weak MADViewerController *weakself = self;
-                        if ([UIDevice isPad] == NO) {
+                        if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
                             [sharedController presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error) {
                                 weakself.pageSlider.enabled = YES;
                                 weakself.activityExporting = NO;
@@ -885,7 +882,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     };
     activityViewController.completionWithItemsHandler = activityViewControllerCompletionWithItemsHandler;
 
-    if ([UIDevice isPad]) {
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         if ([self popoverControllerActivity] == nil || [self popoverControllerActivity].isPopoverVisible == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
             popoverController.delegate = self;
@@ -911,7 +908,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 - (void)prepareForInteractionController:(UIDocumentInteractionController *)controller
                   withCompletionHandler:(void (^)(BOOL))completionHandler {
     
-    if ([UIDevice isPad] == NO) {
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         [self dismissViewControllerAnimated:YES completion:^{
             completionHandler(YES);
         }];

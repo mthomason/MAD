@@ -36,6 +36,8 @@
 @property (nonatomic, copy, readwrite) NSArray *fieldKeys;
 @property (nonatomic, copy, readwrite) NSArray *fieldSizes;
 
+@property (nonatomic, assign) BOOL firstTimeTablePosition;
+
 @end
 
 @implementation MTTableController
@@ -71,6 +73,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.firstTimeTablePosition = NO;
     [self initalize];
     self.collectionView.backgroundColor = [UIColor tintColorBlue];
     self.collectionView.alwaysBounceHorizontal = YES;
@@ -132,8 +136,26 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [[self.navigationItem titleView] sizeToFit];
+
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+
+    [self.navigationItem.titleView sizeToFit];
 }
+
+
+- (void)viewDidLayoutSubviews {
+    if (self.firstTimeTablePosition == NO) {
+        self.firstTimeTablePosition = YES;
+        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.collectionView.frame.size.width, 1.0000f);
+        [self.collectionView scrollRectToVisible:r
+                                   animated:NO];
+        
+    }
+    [self.navigationItem.titleView sizeToFit];
+    [super viewDidLayoutSubviews];
+}
+
 
 #pragma mark - Helpers
 
