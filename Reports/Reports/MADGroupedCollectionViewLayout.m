@@ -25,10 +25,21 @@ CGFloat const MADAlpha = 0.9000f;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSArray *elementAttributes = [super layoutAttributesForElementsInRect:rect];
-    if (elementAttributes == nil) {
-        elementAttributes = [NSArray array];
+    NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
+
+    if (attributes == nil) {
+        attributes = [NSArray array];
     }
+    
+    NSMutableArray *elementAttributes = [NSMutableArray arrayWithCapacity:attributes.count];
+    for (UICollectionViewLayoutAttributes *attribute in attributes) {
+        if ((attribute.frame.origin.x + attribute.frame.size.width <= self.collectionViewContentSize.width) &&
+            (attribute.frame.origin.y + attribute.frame.size.height <= self.collectionViewContentSize.height)) {
+            [elementAttributes addObject:attribute];
+        }
+    }
+    
+    
     NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:elementAttributes.count];
     [results addObjectsFromArray:elementAttributes];
 

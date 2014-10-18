@@ -63,6 +63,7 @@ extern NSString * const MTDocumentInfoKeyThumbnail;
 - (NSURL *)cachedDataUrl;
 
 + (NSURL *)thumbnailUrlForMadUrl:(NSURL *)madUrl;
+- (UIImage *)fullyRenderedThumbnail;
 + (NSURL *)thumbnailWithBorderUrlForMadUrl:(NSURL *)madUrl;
 + (NSString *)fileNameForMadUrl:(NSURL *)madUrl;
 + (NSURL *)cacheFilesDirectoryForFilename:(NSString *)filename;

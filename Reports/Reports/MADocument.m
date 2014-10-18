@@ -13,6 +13,8 @@
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
 #import "MADocument.h"
+#import "CGGeometry+Extras.h"
+
 #import "MADocumentState.h"
 
 #import "MACloudManager.h"
@@ -340,23 +342,30 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     }
 }
 
-- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url
-                            forSaveOperation:(UIDocumentSaveOperation)saveOperation
-                                       error:(NSError **)outError {
-
+- (UIImage *)fullyRenderedThumbnail {
     MTReportViewerPrintPageRenderer *printPageRender =
     [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: self.reportFormatter
                                                            dataTable: self.mainDataTable];
     
     CGRect letterRect = [MTPaper rectLetter];
-    UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x, CGPointZero.y, (1024.0000f * letterRect.size.width) / 1024.0000f, 1024.0000f)
-                                                       size: 1024.0000f
+    UIImage *thumbnail = [printPageRender thumbnailWithRect: CGRectMake(CGPointZero.x,
+                                                                        CGPointZero.y,
+                                                                        (MADFloat_1024 * letterRect.size.width) / MADFloat_1024,
+                                                                        (MADFloat_1024 * letterRect.size.height) / MADFloat_1024)
+                                                       size: MADFloat_1024
                                                  edgeEffect: NO
                                                  zoomEffect: NO
                                                squareEffect: YES
                                                  cornerSize: 0.0000f
                                                       scale: 1.0000f];
-    
+    return thumbnail;
+}
+
+- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)url
+                            forSaveOperation:(UIDocumentSaveOperation)saveOperation
+                                       error:(NSError **)outError {
+
+    UIImage *thumbnail = [self fullyRenderedThumbnail];
     NSDictionary *thumbnails = @{NSThumbnail1024x1024SizeKey : thumbnail};
     
     /*  Testing the image
@@ -796,9 +805,9 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
     [[NSFileManager defaultManager] fileExistsAtPath: self.urlThumbnail.path];
     BOOL contentChanged = [self activeDocumentModel] != nil && (self.documentStatus.contextChagned == YES || [self didRefresh]) && [self.reportFormatter numberOfPages] > 0;
     if (contentChanged || [[NSFileManager defaultManager] fileExistsAtPath:self.urlThumbnail.path] == NO) {
-        MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:self.reportFormatter
-                                                                                                                  dataTable:self.mainDataTable];
-        UIImage *thumbnail = [printPageRender thumbnailWithTraits:traits];
+        //MTReportViewerPrintPageRenderer *printPageRender = [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter:self.reportFormatter
+        //                                                                                                          dataTable:self.mainDataTable];
+        UIImage *thumbnail = [self fullyRenderedThumbnail];// [printPageRender thumbnailWithTraits:traits];
         NSData *pngImage = UIImagePNGRepresentation(thumbnail);
         [pngImage writeToURL:self.urlThumbnail atomically:YES];
     }

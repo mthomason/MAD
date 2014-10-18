@@ -18,6 +18,8 @@
 #import "MTDatabaseConnection.h"
 #import "MTDatabaseField.h"
 
+#import "CGGeometry+Extras.h"
+
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 
@@ -213,7 +215,7 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIImage *croppedImage;
     
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], zoomEffect ? zoomRect : rect);
+    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, zoomEffect ? zoomRect : rect);
     croppedImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
     UIGraphicsEndImageContext();
@@ -228,11 +230,11 @@
 
 - (UIImage *)thumbnailWithTraits:(UITraitCollection *)traits {
     return [self thumbnailWithRect: [MTPaper rectLetter]
-                              size: 256.0000f
+                              size: MADFloat_1024
                         edgeEffect: YES
                         zoomEffect: YES
                       squareEffect: NO
-                        cornerSize: 5.0000f
+                        cornerSize: traits.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 10.0000f : 5.0000f
                              scale: traits.displayScale];
 }
 
@@ -247,10 +249,16 @@
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground {
 
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    [self drawWhiteCanvas:ctx pageRect:pageRect];
-    [self drawPageAtIndex:index withContext:ctx inPageRect:pageRect];
+    [self drawWhiteCanvas: ctx
+                 pageRect: pageRect];
+    
+    [self drawPageAtIndex: index
+              withContext: ctx
+               inPageRect: pageRect];
+
     if (self.showWaterMark) {
-        [self drawWatermarkWithContext:ctx inPageRect:pageRect];
+        [self drawWatermarkWithContext: ctx
+                            inPageRect: pageRect];
     }
 
 }

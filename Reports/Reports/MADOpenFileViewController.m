@@ -308,6 +308,21 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 #pragma mark - UIViewController
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    if (self.traitCollection.horizontalSizeClass != previousTraitCollection.horizontalSizeClass) {
+        [self.collectionView.collectionViewLayout invalidateLayout];
+    }
+}
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+//    [coordinator animateAlongsideTransitionInView:self.view animation:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    
+//    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+//    }];
+}
+
 - (void)displayActivityIndictor {
     if (self.cloudActivityRunning) {
         self.cloudActivityRunningDisplay = YES;
@@ -1099,8 +1114,8 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
     
-    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? UIEdgeInsetsMake(25.0000f, 25.0000f, 25.0000f, 25.0000f) :
-                                                        UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? UIEdgeInsetsMake(15.0000f, 15.0000f, 15.0000f, 15.0000f) :
+                                                                                         UIEdgeInsetsMake(5.0000f, 5.0000f, 5.0000f, 5.0000f);
     
 }
 
@@ -1108,7 +1123,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                    layout:(UICollectionViewLayout*)collectionViewLayout
                     minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 
-    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? 50.0000f : 5.0000f;
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
     
 }
 
@@ -1116,7 +1131,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                    layout:(UICollectionViewLayout*)collectionViewLayout
                     minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     
-    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad ? 50.0000f : 5.0000f;
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 30.0000f : 5.0000f;
     
 }
 
@@ -1524,6 +1539,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     cell.text = filename;
     cell.labelTitle.text = filename;
     [cell.labelTitle layoutIfNeeded];
+    //[cell sizeToFit];
     [cell loadPreviewImageForUrl:url];
     
     if (self.isEditing) {
@@ -1537,7 +1553,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     } else {
         
         MTApplicationInstance *app = [AppDelegate app];
-        NSComparisonResult comparionResult = [app.openFiles.openUrl.lastPathComponent caseInsensitiveCompare:url.lastPathComponent];
+        NSComparisonResult comparionResult = [app.openFiles.openUrl.lastPathComponent caseInsensitiveCompare: url.lastPathComponent];
         if (comparionResult == NSOrderedSame) {
             [cell.activityIndicator startAnimating];
         } else {

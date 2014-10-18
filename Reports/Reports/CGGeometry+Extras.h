@@ -19,6 +19,7 @@
 #define            DEGTORAD(deg)         (((deg) * 2.0 * PI) / 360.0)
 #define            RADTODEG(rad)         (((rad) * 360.0) / (2.0 * PI))
 
+extern const CGFloat MADFloat_1024;
 extern const CGFloat MTDefaultFingerSizeWidth;
 extern const CGFloat MTDefaultFingerSizeHeight;
 
@@ -172,19 +173,19 @@ CGPointMakeRandomOffscreen() {
 	if (rand()%2 == 0) {
 		if (rand()%2 == 0) {
 			//offscreen top
-			offScreen = CGPointMake(rand() % (int)1024.0000f, 0.0000f - offSetSize);
+			offScreen = CGPointMake(rand() % (int)MADFloat_1024, 0.0000f - offSetSize);
 		} else {
 			//offscreen left
-			offScreen = CGPointMake(0.0000f - offSetSize, rand() % (int)1024.0000f);
+			offScreen = CGPointMake(0.0000f - offSetSize, rand() % (int)MADFloat_1024);
 		}
 		
 	} else {
 		if (rand()%2 == 0) {
 			//offscreen bottom
-			offScreen = CGPointMake(rand() % (int)1024.0000f, 1024.0000f + offSetSize);
+			offScreen = CGPointMake(rand() % (int)MADFloat_1024, MADFloat_1024 + offSetSize);
 		} else {
 			//offscreen right
-			offScreen = CGPointMake(1024.0000f + offSetSize, rand() % (int)1024.0000f);
+			offScreen = CGPointMake(MADFloat_1024 + offSetSize, rand() % (int)MADFloat_1024);
 		}
 	}
 	return offScreen;
