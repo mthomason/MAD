@@ -353,7 +353,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)didSelectFunction:(MTAggregateFunctionType)functionType {
     [self displaySelectedFunction:functionType];
     
-    [[self navigationBar] popNavigationItemAnimated:YES];
+    [self.navigationBar popNavigationItemAnimated:YES];
 }
 
 - (void)displaySelectedFunction:(MTAggregateFunctionType)functionType {
@@ -388,7 +388,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
             NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
             NSString *detailtext = [NSString stringWithFormat:formatString, [field display]];
             [[[[self aggregateViewController] tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
-            [[self navigationBar] popNavigationItemAnimated:YES];
+            [self.navigationBar popNavigationItemAnimated:YES];
             
             break;
             
@@ -407,21 +407,21 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     [self setAggregateGroupByType: MTAggregateGroupByTypePage];
     self.aggregateGroupBySectionNumber = 0;
     [self displaySelectedGroupByType];
-    [[self navigationBar] popNavigationItemAnimated:YES];
+    [self.navigationBar popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupByReport {
     [self setAggregateGroupByType: MTAggregateGroupByTypeReport];
     self.aggregateGroupBySectionNumber = 0;
     [self displaySelectedGroupByType];
-    [[self navigationBar] popNavigationItemAnimated:YES];
+    [self.navigationBar popNavigationItemAnimated:YES];
 }
 
 - (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
     self.aggregateGroupByType = MTAggregateGroupByTypeSection;
     self.aggregateGroupBySectionNumber = groupNumber;
     [self displaySelectedGroupByType];
-    [[self navigationBar] popNavigationItemAnimated:YES];
+    [self.navigationBar popNavigationItemAnimated:YES];
 }
 
 - (void)displaySelectedGroupByType {
@@ -484,7 +484,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     
                     NSString *navigationItemTitle = NSLocalizedString(@"Field Selector", @"Field Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [self.navigationBar pushNavigationItem:itemToPush animated:YES];
                     break;
 
                 }
@@ -493,7 +493,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     NSString *navigationItemTitle = NSLocalizedString(@"Formula Selector", @"Formula Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
                     [self setShowFieldOrFormulaFormulaPickerViewerController:YES];
-                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [self.navigationBar pushNavigationItem:itemToPush animated:YES];
                     break;
 
                 }
@@ -512,7 +512,7 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 
                     NSString *navigationItemTitle = NSLocalizedString(@"Function Selector", @"Function Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [self.navigationBar pushNavigationItem:itemToPush animated:YES];
                     break;
                     
                 }
@@ -520,13 +520,13 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
                     
                     NSString *navigationItemTitle = NSLocalizedString(@"Data Object Selector", @"Data Object Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [self.navigationBar pushNavigationItem:itemToPush animated:YES];
                     break;
                 }
                 case 2: {   //Group By *For Each*
                     NSString *navigationItemTitle = NSLocalizedString(@"Group By Selector", @"Group By Selector");
                     UINavigationItem *itemToPush = [[UINavigationItem alloc] initWithTitle: navigationItemTitle];
-                    [[self navigationBar] pushNavigationItem:itemToPush animated:YES];
+                    [self.navigationBar pushNavigationItem:itemToPush animated:YES];
                     break;
                 }
                 default:

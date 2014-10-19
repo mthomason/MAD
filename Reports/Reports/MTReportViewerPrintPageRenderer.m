@@ -310,7 +310,7 @@
     RptqUserCredentals *userCredentals = [databaseSchemas ownedByUser];
     MTDatabaseConnection *databaseConnection = [MTDatabaseConnection databaseConnectionFactory:userCredentals];
     MTDatabase *database = [MTDatabase databaseFactory:databaseConnection];
-    RptqQuery *query = [[databaseSchemas hasQueries] anyObject];
+    RptqQuery *query = databaseSchemas.hasQueries.anyObject;
     
     
     
@@ -707,19 +707,24 @@
 }
 
 - (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect {
-    [self drawPageAtIndex:index inRect:pageRect withTransparentBackground:NO];
+    [self drawPageAtIndex: index
+                   inRect: pageRect
+withTransparentBackground: NO];
 }
 
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
-    [super drawHeaderForPageAtIndex:index inRect:headerRect];
+    [super drawHeaderForPageAtIndex: index
+                             inRect: headerRect];
 }
 
 - (void)drawContentForPageAtIndex:(NSInteger)index inRect:(CGRect)contentRect {
-    [super drawContentForPageAtIndex:index inRect:contentRect];
+    [super drawContentForPageAtIndex: index
+                              inRect: contentRect];
 }
 
 - (void)drawFooterForPageAtIndex:(NSInteger)index inRect:(CGRect)footerRect {
-    [super drawFooterForPageAtIndex:index inRect:footerRect];
+    [super drawFooterForPageAtIndex: index
+                             inRect: footerRect];
 }
 
 @end

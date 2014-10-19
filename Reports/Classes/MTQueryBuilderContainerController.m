@@ -92,20 +92,25 @@
     return self;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+- (void)viewWillTransitionToSize:(CGSize)size
+       withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
     [super viewWillTransitionToSize: size
           withTransitionCoordinator: coordinator];
+
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+
     self.delegate = self;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
 
     UINavigationController *navigationController = self.viewControllers[0];
-    navigationController.navigationBarHidden = YES;
+    navigationController.navigationBarHidden = NO;
     
     MADQueryViewController *queryViewController = (MADQueryViewController *)navigationController.topViewController;
     queryViewController.document = self.document;
@@ -125,8 +130,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    
-    [self.queryBuilderController reloadDocument:self.document animated:YES];
+//    self.navigationController.navigationBar
+    [self.queryBuilderController reloadDocument: self.document
+                                       animated: YES];
     [self.queryBuilderControllerAdvanced reloadDocument:self.document animated:YES];
     
     __block MTQueryBuilderContainerController *blockSelf = self;
@@ -195,7 +201,7 @@
 }
 
 - (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
+    [super viewWillLayoutSubviews];/*
     UIViewController *primaryViewController = self.viewControllers.count > 0 ? self.viewControllers[0] : nil;
     UIViewController *secondaryViewController = self.viewControllers.count > 1 ? self.viewControllers[1] : nil;
     if (primaryViewController) {
@@ -209,7 +215,7 @@
                 }
             }
         }
-    }
+    }*/
 }
 
 - (id)leftViewController {
@@ -265,6 +271,17 @@
 
 - (UIImage *)tabBarImage {
     return [UIImage imageNamed:MADImageBarButtonItemDatabase8];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        BOOL animate = previousTraitCollection != nil;
+        [UIView setAnimationsEnabled:animate];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        [UIView setAnimationsEnabled:YES];
+    } else {
+        self.navigationItem.prompt = nil;
+    }
 }
 
 #pragma mark - UISplitViewControllerDelegate

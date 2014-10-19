@@ -127,7 +127,7 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
     id newViewController = nil;
 
-    [[[[self navigationBar] items] lastObject] setTitle:@""];
+    [[[self.navigationBar items] lastObject] setTitle:@""];
     if ([sender selectedSegmentIndex] == 0) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
         [newViewController setDocument: self.document];
@@ -265,7 +265,7 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 #pragma mark - FontSettingsTableViewControllerDelegate
 
 - (void)fontSettingsTableViewControllerDidSelectFontList:(MTReportDesignerFontSettingsViewController *)controller {
-    [[self navigationBar] pushNavigationItem:[self navigationItemFontSelector] animated:YES];
+    [self.navigationBar pushNavigationItem:[self navigationItemFontSelector] animated:YES];
 }
 
 @end

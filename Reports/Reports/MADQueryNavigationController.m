@@ -7,6 +7,7 @@
 //
 
 #import "MADQueryNavigationController.h"
+#import "UIColor+EverydayApps.h"
 
 @interface MADQueryNavigationController ()
 
@@ -21,6 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [self setNavigationBarHidden:NO];
     UISplitViewController *splitViewController = (UISplitViewController *)self.topViewController;
     self.splitViewController = splitViewController;
     
@@ -32,6 +34,17 @@
     
     UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithVerticalSizeClass:UIUserInterfaceSizeClassRegular];
    // [self setOverrideTraitCollection:traitCollection forChildViewController:leftViewController];
+    
+}
+
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.navigationBar.frame = CGRectMake(self.navigationBar.frame.origin.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationBar.frame.size.width, self.navigationBar.frame.size.height);
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewWillLayoutSubviews];
 }
 
 @end

@@ -357,12 +357,12 @@
             </objects>
             <point key="canvasLocation" x="883" y="-2799"/>
         </scene>
-        <!--MAD Query-->
+        <!--Query View Controller-->
         <scene sceneID="jeR-GO-JXK">
             <objects>
                 <tableViewController restorationIdentifier="MADIdentifierRestorationQueryViewController" storyboardIdentifier="MADIdentifierStoryboardQueryViewController" id="joU-Nk-1nv" customClass="MADQueryViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PDy-XC-RW7">
-                        <rect key="frame" x="0.0" y="0.0" width="308" height="916"/>
+                        <rect key="frame" x="0.0" y="64" width="308" height="980"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.086274509803921567" green="0.41568627450980389" blue="0.54117647058823526" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -532,7 +532,8 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="MAD Query" id="p3l-dB-Y3B"/>
+                    <navigationItem key="navigationItem" id="p3l-dB-Y3B"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="barButtonItemDone" destination="si3-ds-dUn" id="SAe-5S-xNU"/>
                         <outlet property="barButtonItemEdit" destination="psX-vP-QZq" id="Jft-oE-re6"/>
@@ -5181,10 +5182,10 @@
             </objects>
             <point key="canvasLocation" x="6678" y="-7290"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller Split Parent View Controller-->
         <scene sceneID="CAc-4x-SdN">
             <objects>
-                <navigationController id="SDg-oh-2Va" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SDg-oh-2Va" customClass="MADNavigationControllerSplitParentViewController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Afb-XM-has">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

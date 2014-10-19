@@ -73,7 +73,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    //self.navigationController.navigationBar.bounds = CGRectMake(CGPointZero.x, CGPointZero.y + self.topLayoutGuide.length, self.navigationController.navigationBar.bounds.size.width, self.navigationController.navigationBar.bounds.size.height);
     self.firstTimeTablePosition = NO;
     [self initalize];
     self.collectionView.backgroundColor = [UIColor tintColorBlue];
@@ -124,11 +125,15 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+//    [self.navigationController setNavigationBarHidden: YES
+//                                             animated: animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
+    self.navigationController.navigationBar.backgroundColor = [UIColor tintColorBlue];
+    self.navigationItem.title = @"TEST";
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

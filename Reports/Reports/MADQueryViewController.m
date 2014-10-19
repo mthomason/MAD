@@ -220,17 +220,30 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length
+                                                            + self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1)
+                                                            ,
+                                                            CGSizeZero.width,
+                                                            self.bottomLayoutGuide.length,
+                                                            CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length
+                                                   + self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1)
+                                                   ,
+                                                   CGSizeZero.width,
+                                                   self.bottomLayoutGuide.length,
+                                                   CGSizeZero.width);
 }
 
 
 - (void)viewDidLayoutSubviews {
     if (self.firstTimeTablePosition == NO) {
         self.firstTimeTablePosition = YES;
-        CGRect r = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.frame.size.width, 1.0000f);
-        [self.tableView scrollRectToVisible:r
-                                   animated:NO];
+        CGRect r = CGRectMake(CGPointZero.x,
+                              CGPointZero.y,
+                              self.tableView.frame.size.width,
+                              1.0000f);
+        [self.tableView scrollRectToVisible: r
+                                   animated: NO];
 
     }
     [self.navigationItem.titleView sizeToFit];
@@ -298,9 +311,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
-        [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
-        [UIView setAnimationsEnabled:YES];
+
+        //[UIView setAnimationsEnabled:animate];
+
+        //self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        //[UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;
     }
@@ -308,6 +323,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //[self.navigationController setNavigationBarHidden:YES animated:NO];
+    
 
     self.firstTimeTablePosition = NO;
 
@@ -320,7 +338,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                  name: UIContentSizeCategoryDidChangeNotification
                                                object: nil];
     
-    [self.tableView registerClass:[UITableViewCellTableName class] forCellReuseIdentifier:@"UITableViewCellTableName"];
+    [self.tableView registerClass: [UITableViewCellTableName class]
+           forCellReuseIdentifier: @"UITableViewCellTableName"];
     
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -1396,7 +1415,8 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
             NSString *entityName = NSStringFromClass([RptqQueryTable class]);
             NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
             request.predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", [query objectID]];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias" ascending:YES];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey: @"alias"
+                                                                             ascending: YES];
             [request setSortDescriptors: @[sortDescriptor]];
             NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
                                                                                   managedObjectContext: managedObjectContext
@@ -1582,7 +1602,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (MTViewTableHeader *)tableHeaderDatabaseInfo {
     MTViewTableHeader *header = [self tableHeader];
-    header.labelTitle.text = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+    header.labelTitle.text = NSLocalizedString(@"Database Information", @"Database Information");
     header.labelTitle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     header.buttonAdd.hidden = YES;
     return header;
@@ -1680,9 +1700,11 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 }
 
 - (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
+    
     RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: [NSIndexPath indexPathForRow: indexPath.row inSection: 0]];
-    MTTableController *tableController = [self tableControllerForTable:table];
-    [[self navigationController] pushViewController:tableController animated:YES];
+    [self.navigationController pushViewController: [self tableControllerForTable:table]
+                                         animated: YES];
+
 }
 
 // MARK: Deleting items from table view

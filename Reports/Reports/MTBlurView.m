@@ -46,7 +46,7 @@
     // If we don't clip to bounds the toolbar draws a thin shadow on top
     [self setClipsToBounds:YES];
     
-    if (![self toolbar]) {
+    if (!self.toolbar) {
         UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:[self bounds]];
         [[self layer] insertSublayer:[toolbar layer] atIndex:0];
         [self setToolbar:toolbar];
@@ -54,12 +54,12 @@
 }
 
 - (void) setBlurTintColor:(UIColor *)blurTintColor {
-    [[self toolbar] setBarTintColor:blurTintColor];
+    [self.toolbar setBarTintColor:blurTintColor];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [[self toolbar] setFrame:[self bounds]];
+    [self.toolbar setFrame:[self bounds]];
 }
 
 @end

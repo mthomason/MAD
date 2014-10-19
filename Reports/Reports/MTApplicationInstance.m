@@ -34,9 +34,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.155";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.155";
-NSString * const MTGlobalBundleRev                                  = @"1530";
+NSString * const MTGlobalBundleVersion                              = @"7.0.156";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.156";
+NSString * const MTGlobalBundleRev                                  = @"1531";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -359,7 +359,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     
-    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], [UISplitViewController class], nil]            setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]                   setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
     [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
