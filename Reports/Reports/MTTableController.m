@@ -108,6 +108,8 @@
         }];
 
     });
+    
+    self.toolbarItems = nil;
 }
 
 + (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
@@ -125,8 +127,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    [self.navigationController setNavigationBarHidden: YES
-//                                             animated: animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -142,8 +142,15 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
-    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
-    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                                 CGSizeZero.width,
+                                                                 self.navigationController.bottomLayoutGuide.length,
+                                                                 CGSizeZero.width);
+    
+    self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                        CGSizeZero.width,
+                                                        self.navigationController.bottomLayoutGuide.length,
+                                                        CGSizeZero.width);
 
     [self.navigationItem.titleView sizeToFit];
 }
@@ -156,6 +163,16 @@
         [self.collectionView scrollRectToVisible:r
                                    animated:NO];
         
+        self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                                CGSizeZero.width,
+                                                                self.navigationController.bottomLayoutGuide.length,//self.bottomLayoutGuide.length,
+                                                                CGSizeZero.width);
+        
+        self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
+                                                       CGSizeZero.width,
+                                                       self.navigationController.bottomLayoutGuide.length,//self.bottomLayoutGuide.length,
+                                                       CGSizeZero.width);
+
     }
     [self.navigationItem.titleView sizeToFit];
     [super viewDidLayoutSubviews];

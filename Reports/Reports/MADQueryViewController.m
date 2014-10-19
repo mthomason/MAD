@@ -220,17 +220,17 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length
-                                                            + self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1)
-                                                            ,
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length +
+                                                                    self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1),
                                                             CGSizeZero.width,
                                                             self.bottomLayoutGuide.length,
                                                             CGSizeZero.width);
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length
-                                                   + self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1)
-                                                   ,
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length +
+                                                        self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1),
                                                    CGSizeZero.width,
                                                    self.bottomLayoutGuide.length,
+                                                       // + self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1),
                                                    CGSizeZero.width);
 }
 
