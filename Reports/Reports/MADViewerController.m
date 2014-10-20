@@ -626,7 +626,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         UIView *displayView = [pageViewController view];
 
         if (displayView) {
-            [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+            if ([displayView respondsToSelector:@selector(setDrawBlankPage:)]) {
+                [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+            }
         }
         [displayView setNeedsDisplay];
         
@@ -646,7 +648,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     if (index < numberOfViewControllers) {
         result = viewControllers[index];
     } else {
-        result = [viewControllers lastObject];
+        result = viewControllers.lastObject;
     }
     return result;
 }
