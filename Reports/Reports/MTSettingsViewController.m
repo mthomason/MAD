@@ -22,10 +22,6 @@
     [self setClearsSelectionOnViewWillAppear: YES];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender {

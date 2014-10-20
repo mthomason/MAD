@@ -210,7 +210,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     [progressView setTintColor:[UIColor tintColorBlue]];
     [progressView setProgress:0.0000f animated:NO];
     [self setProgressView:progressView];
-    [[self toolbarSideRight] addSubview:[self pageSlider]];
+    [[self toolbarSideRight] addSubview:self.pageSlider];
 }
 
 - (void)initializeVerticalSlider {
@@ -541,48 +541,42 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     return snapshotView;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    
     if (self.activityExporting == NO) {
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-        UIView *displayView = [pageViewController view];
+        MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
+        //UIView *displayView = [pageViewController view];
         
         [self setFrameBeforeRotation: [displayView frame]];
         
         [self setSnapshotBeforeRotation: captureSnapshotOfView(displayView)];
         [displayView insertSubview:[self snapshotBeforeRotation] aboveSubview:displayView];
-    }
-}
-
-- (MTReportViewerReportPageViewController *)currentPageviewController {
-    return [self pageViewControllerAtIndex:[self currentPageIndex]];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-
-    if (self.activityExporting == NO) {
         
-        MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
-        UIView *displayView = [pageViewController view];
+        
+        //MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         [displayView setNeedsDisplay];
         
         CGRect oldBounds = displayView.bounds;
         [self redrawWithFrame:oldBounds];
         
         pageViewController = [self currentPageviewController];
-        displayView = [pageViewController view];
+        displayView = (MTReportViewerReportPageView *)pageViewController.view;
         
         [self setFrameAfterRotation: oldBounds];
         [UIView setAnimationsEnabled:NO];
         [self setSnapshotAfterRotation: captureSnapshotOfView(displayView)];
         
         
-        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x, self.frameBeforeRotation.origin.y, self.frameBeforeRotation.size.width, self.snapshotAfterRotation.frame.size.height);
-        [self.snapshotAfterRotation setFrame:framePreservingHeight];
+        CGRect framePreservingHeight = CGRectMake(self.frameBeforeRotation.origin.x,
+                                                  self.frameBeforeRotation.origin.y,
+                                                  self.frameBeforeRotation.size.width,
+                                                  self.snapshotAfterRotation.frame.size.height);
+        self.snapshotAfterRotation.frame = framePreservingHeight;
         
-        UIImage *imageBeforeRotation = [[self snapshotBeforeRotation] image];
+        UIImage *imageBeforeRotation = self.snapshotBeforeRotation.image;
         imageBeforeRotation = [imageBeforeRotation resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
         
         UIImage *imageAfterRotation = [self.snapshotAfterRotation image];
@@ -603,31 +597,50 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         framePreservingHeight = CGRectMake(self.frameAfterRotation.origin.x, self.frameAfterRotation.origin.y, self.frameAfterRotation.size.width, self.snapshotAfterRotation.frame.size.height);
         [[self snapshotBeforeRotation] setFrame:framePreservingHeight];
         
-        [(MTReportViewerReportPageView *)displayView setDrawBlankPage:YES];
+        if ([displayView respondsToSelector:@selector(setDrawBlankPage:)])
+            ((MTReportViewerReportPageView *)displayView).drawBlankPage = YES;
         [displayView setNeedsDisplay];
+
+        __weak MADViewerController *weakself = self;
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            
+            
+            //__strong MADViewerController *strongself = weakself;
+            //[strongself localWillAnimateRotation];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            __strong MADViewerController *strongself = weakself;
+            [strongself localDidRotate];
+        }];
+
     }
+    
+    
 }
 
+- (void)localDidRotate {
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-
-    [[self.navigationItem titleView] sizeToFit];
+    [self.navigationItem.titleView sizeToFit];
     if (self.activityExporting == NO) {
         
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         UIView *displayView = [pageViewController view];
-        
-        [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+
+        if (displayView) {
+            [(MTReportViewerReportPageView *)displayView setDrawBlankPage:NO];
+        }
         [displayView setNeedsDisplay];
         
-        [[self snapshotBeforeRotation] removeFromSuperview];
-        [[self snapshotAfterRotation] removeFromSuperview];
+        [self.snapshotBeforeRotation removeFromSuperview];
+        [self.snapshotAfterRotation removeFromSuperview];
     }
 }
 
+- (MTReportViewerReportPageViewController *)currentPageviewController {
+    return [self pageViewControllerAtIndex: self.currentPageIndex];
+}
+
 - (MTReportViewerReportPageViewController *)pageViewControllerAtIndex:(NSUInteger)index {
-    NSArray *viewControllers = [self viewControllers];
+    NSArray *viewControllers = self.viewControllers;
     NSInteger numberOfViewControllers = [viewControllers count];
     MTReportViewerReportPageViewController *result = nil;
     if (index < numberOfViewControllers) {
@@ -675,8 +688,8 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [self setPageingEnabled:YES];
     
-    [[self pageSlider] setEnabled:YES];
-    [[self pageSlider] setTintColor:[UIColor tintColorRed]];
+    [self.pageSlider setEnabled:YES];
+    [self.pageSlider setTintColor:[UIColor tintColorRed]];
 
     NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
     for (UITabBarItem *item in tabBarItems) {
@@ -692,9 +705,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [self setIsRefreshing:NO];
     [self setUpdatingOfTimerIsPaused:NO];
     [self.barButtonItemRefresh setEnabled:YES];
-    [[self labelDateLastRefreshed] setHidden:NO];
-    [[self labelDateLastRefreshed] setText:@""];
-    [[self labelDateLastRefreshed] setNeedsDisplay];
+    [self.labelDateLastRefreshed setHidden:NO];
+    [self.labelDateLastRefreshed setText:@""];
+    [self.labelDateLastRefreshed setNeedsDisplay];
 
     [self.navigationItem setRightBarButtonItem:self.barButtonItemRefresh animated:YES];
 
@@ -704,32 +717,34 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     
     [self setPageingEnabled:NO];
     
-    [[self pageSlider] setEnabled:NO];
-    [[self pageSlider] setTintColor:[UIColor lightGrayColor]];
+    [self.pageSlider setEnabled:NO];
+    [self.pageSlider setTintColor:[UIColor lightGrayColor]];
     
-    NSArray *tabBarItems = [[[self tabBarController] tabBar] items];
+    NSArray *tabBarItems = self.tabBarController.tabBar.items;
     for (UITabBarItem *item in tabBarItems) {
-        [item setEnabled:NO];
+        item.enabled = NO;
     }
 
-    [self setIsRefreshing:YES];
-    [self.barButtonItemRefresh setEnabled:NO];
-    [self.barButtonItemDone setEnabled:NO];
-    [self.barButtonItemPrint setEnabled:NO];
-    [self.barButtonItemSendToPdf setEnabled:NO];
-    [self.barButtonItemActivity setEnabled:NO];
+    self.isRefreshing = YES;
+    self.barButtonItemRefresh.enabled = NO;
+    self.barButtonItemDone.enabled = NO;
+    self.barButtonItemPrint.enabled = NO;
+    self.barButtonItemSendToPdf.enabled = NO;
+    self.barButtonItemActivity.enabled = NO;
     [self setUpdatingOfTimerIsPaused:YES];
     NSString *refreshing = NSLocalizedString(@"Refreshing data.", @"Refreshing data.");
-    [[self labelDateLastRefreshed] setText:refreshing];
-    [[self labelDateLastRefreshed] setNeedsDisplay];
-    [self.barButtonItemDone setEnabled:NO];
+    self.labelDateLastRefreshed.text = refreshing;
+    [self.labelDateLastRefreshed setNeedsDisplay];
+    self.barButtonItemDone.enabled = NO;
     
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
     [activityIndicator startAnimating];
     activityIndicator.hidden = NO;
     activityIndicator.hidesWhenStopped = NO;
+    
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
+    [self.navigationItem setRightBarButtonItem: barButtonItem
+                                      animated: YES];
     
 }
 
@@ -952,13 +967,14 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         weakdoc.reportFormatter.didRefresh = startedRefresh;
         [weakdoc.reportFormatter formatForSize:viewBounds contentChanged:startedRefresh];
         
-        MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: [weakdoc reportFormatter]
-                                                                                                                   dataTable: [weakdoc mainDataTable]];
+        MTReportViewerPrintPageRenderer *printPageRender =  [[MTReportViewerPrintPageRenderer alloc] initWithReportFormatter: weakdoc.reportFormatter
+                                                                                                                   dataTable: weakdoc.mainDataTable];
         blockViewer.printPageRendererReport = printPageRender;
         [blockViewer ignoreFormatter: weakdoc.reportFormatter];
 
         __weak MADocument *doc2 = weakdoc;
         __weak MADViewerController *blockViewer2 = blockViewer;
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
             
             NSUInteger numberOfPages = [blockViewer2.document.reportFormatter numberOfPages];
@@ -969,12 +985,15 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             MTReportViewerReportPageViewController *pageOne = [[MTReportViewerReportPageViewController alloc] initWithDocument: self.document
                                                                                                                     pageNumber: (blockViewer2.currentPageIndex + 1)
                                                                                                                        ofPages: numberOfPages];
-            [[pageOne view] setFrame:[[blockViewer2 view] bounds]];
+            pageOne.view.frame = blockViewer2.view.bounds;
             pageOne.delegate = blockViewer2;
             NSArray *viewControllers = @[pageOne];
             
-            [blockViewer2 setViewControllers: viewControllers direction:UIPageViewControllerNavigationDirectionForward
-                                    animated: NO completion: nil];
+            [blockViewer2 setViewControllers: viewControllers
+                                   direction: UIPageViewControllerNavigationDirectionForward
+                                    animated: NO
+                                  completion: nil];
+
             blockViewer2.isRefreshing = NO;
             blockViewer2.startedRefresh = NO;
             blockViewer2.barButtonItemDone.enabled = YES;
@@ -1269,9 +1288,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
             [weakSelf setMaxNumberOfPages:numberOfPages];
         });
     } else {
-        if (round([[self pageSlider] maximumValue]) != round(numberOfPages)) {
+        if (round([self.pageSlider maximumValue]) != round(numberOfPages)) {
             [[self sliderPagination] setMaximumValue:numberOfPages];
-            [[self pageSlider] setMaximumValue:numberOfPages];
+            [self.pageSlider setMaximumValue:numberOfPages];
         }
     }
     [self updatePageStatus];

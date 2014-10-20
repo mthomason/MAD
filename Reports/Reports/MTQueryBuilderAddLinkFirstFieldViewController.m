@@ -16,12 +16,6 @@
 
 @implementation MTQueryBuilderAddLinkFirstFieldViewController
 
-#pragma mark - View lifecycle
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 #pragma mark - Actions
 
 - (IBAction)done:(id)sender { }

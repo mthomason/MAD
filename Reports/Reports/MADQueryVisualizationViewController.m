@@ -277,41 +277,82 @@ typedef void(^MTBlockResultVoid)(void);
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender { }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    __weak UIView *weakView = self.scrollView;
-    [UIView animateWithDuration:duration animations:^{
-        [weakView setNeedsDisplay];
-    }];
-}
+/*
+ 
+ // TEMPLATE METHOD
+ 
+ - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    if (shouldAutorotateToInterfaceOrientation) {
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    
-    for (UIViewController *subviewController in [self childViewControllers]) {
-        [self didMoveFieldRect:subviewController animated:YES];
+        [self localWillRotate];
+        __weak UIViewController *weakself = self;
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [weakself localWillAnimateRotation];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [weakself localDidRotate];
+        }];
+ 
     }
+}
+ 
+ */
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryBottom];
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryTop];
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLeft];
-    [self.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryRight];
     
-    CGPoint fromPoint = self.contentView.frame.origin;
-    CGPoint toPoint = CGPointMake(self.contentView.frame.origin.x + self.contentView.frame.size.width, self.contentView.frame.origin.y);
-    [self.collisionBehavior addBoundaryWithIdentifier:MTIdentifierCollisionBoundryTop fromPoint:fromPoint toPoint:toPoint];
     
-    fromPoint = toPoint;
-    toPoint = CGPointMake(toPoint.x, self.contentView.frame.origin.y + self.contentView.frame.size.height);
-    [self.collisionBehavior addBoundaryWithIdentifier:MTIdentifierCollisionBoundryRight fromPoint:fromPoint toPoint:toPoint];
+    __weak UIView *weakView = self.scrollView;
+    __weak MADQueryVisualizationViewController *weakself = self;
     
-    fromPoint = toPoint;
-    toPoint = CGPointMake(self.contentView.frame.origin.x, toPoint.y);
-    [self.collisionBehavior addBoundaryWithIdentifier:MTIdentifierCollisionBoundryBottom fromPoint:fromPoint toPoint:toPoint];
-    
-    fromPoint = toPoint;
-    toPoint = self.contentView.frame.origin;
-    [self.collisionBehavior addBoundaryWithIdentifier:MTIdentifierCollisionBoundryLeft fromPoint:fromPoint toPoint:toPoint];
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            
+            [weakView setNeedsDisplay];
+            
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            
+            for (UIViewController *subviewController in [weakself childViewControllers]) {
+                [weakself didMoveFieldRect: subviewController
+                                  animated: YES];
+            }
+            
+            [weakself.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryBottom];
+            [weakself.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryTop];
+            [weakself.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryLeft];
+            [weakself.collisionBehavior removeBoundaryWithIdentifier:MTIdentifierCollisionBoundryRight];
+            
+            CGPoint fromPoint = weakself.contentView.frame.origin;
+            CGPoint toPoint = CGPointMake(weakself.contentView.frame.origin.x + weakself.contentView.frame.size.width,
+                                          weakself.contentView.frame.origin.y);
+            
+            [weakself.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryTop
+                                                        fromPoint: fromPoint
+                                                          toPoint: toPoint];
+            
+            fromPoint = toPoint;
+            toPoint = CGPointMake(toPoint.x,
+                                  weakself.contentView.frame.origin.y + weakself.contentView.frame.size.height);
+            [weakself.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryRight
+                                                        fromPoint: fromPoint
+                                                          toPoint: toPoint];
+            
+            fromPoint = toPoint;
+            toPoint = CGPointMake(weakself.contentView.frame.origin.x,
+                                  toPoint.y);
+            [weakself.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryBottom
+                                                        fromPoint: fromPoint
+                                                          toPoint: toPoint];
+            
+            fromPoint = toPoint;
+            toPoint = weakself.contentView.frame.origin;
+            [weakself.collisionBehavior addBoundaryWithIdentifier: MTIdentifierCollisionBoundryLeft
+                                                        fromPoint: fromPoint
+                                                          toPoint: toPoint];
+            
+        }];
+        
 }
 
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController {
@@ -326,8 +367,13 @@ typedef void(^MTBlockResultVoid)(void);
     
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     
-    [defaultCenter removeObserver:observer name:NSManagedObjectContextWillSaveNotification object:objectContext];
-    [defaultCenter removeObserver:observer name:NSManagedObjectContextDidSaveNotification object:objectContext];
+    [defaultCenter removeObserver: observer
+                             name: NSManagedObjectContextWillSaveNotification
+                           object: objectContext];
+    
+    [defaultCenter removeObserver: observer
+                             name: NSManagedObjectContextDidSaveNotification
+                           object: objectContext];
     
 }
 
@@ -337,8 +383,15 @@ typedef void(^MTBlockResultVoid)(void);
     
     [MADQueryVisualizationViewController removeNotificationsFromObserver:observer forObjectContext:objectContext];
     
-    [defaultCenter addObserver:observer selector:@selector(managedObjectContextWillSave:) name:NSManagedObjectContextWillSaveNotification object:objectContext];
-    [defaultCenter addObserver:observer selector:@selector(managedObjectContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:objectContext];
+    [defaultCenter addObserver: observer
+                      selector: @selector(managedObjectContextWillSave:)
+                          name: NSManagedObjectContextWillSaveNotification
+                        object: objectContext];
+
+    [defaultCenter addObserver: observer
+                      selector: @selector(managedObjectContextDidSave:)
+                          name: NSManagedObjectContextDidSaveNotification
+                        object: objectContext];
     
 }
 

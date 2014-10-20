@@ -34,9 +34,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.157";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.157";
-NSString * const MTGlobalBundleRev                                  = @"1532";
+NSString * const MTGlobalBundleVersion                              = @"7.0.158";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.158";
+NSString * const MTGlobalBundleRev                                  = @"1533";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -233,24 +233,35 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     NSRange firstRange;
     NSRange secondRange;
     
-    if ([components count] == 2) {
+    if (components.count == 2) {
         firstRange = [title rangeOfString:components[0]];
         secondRange = [title rangeOfString:components[1]];
     } else {
         firstRange = range; secondRange = range;
     }
     
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fonta range:firstRange];
-    [attributedStringMadDesigner addAttribute:NSFontAttributeName value:fontb range:secondRange];
-    [attributedStringMadDesigner addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-    [attributedStringMadDesigner addAttribute:NSForegroundColorAttributeName value:foregroundColor range:range];
+    [attributedStringMadDesigner addAttribute: NSFontAttributeName
+                                        value: fonta
+                                        range: firstRange];
+    
+    [attributedStringMadDesigner addAttribute: NSFontAttributeName
+                                        value: fontb
+                                        range: secondRange];
+    
+    [attributedStringMadDesigner addAttribute: NSParagraphStyleAttributeName
+                                        value: paragraphStyle
+                                        range: range];
+    
+    [attributedStringMadDesigner addAttribute: NSForegroundColorAttributeName
+                                        value: foregroundColor
+                                        range: range];
     
     [attributedStringMadDesigner addAttribute:NSKernAttributeName value:[NSNull null] range:range];
     return attributedStringMadDesigner;
 }
 
 + (NSString *)storyboardName {
-    return [UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
+    return MTStoryboardReportDesignerPad8; //[UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
 }
 
 + (UIStoryboard *)storyboard {
@@ -359,7 +370,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     
-    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], [UISplitViewController class], nil]            setTintColor: tintColorWhite];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]                   setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
     [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
@@ -370,7 +381,6 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     
     [[UIActivityIndicatorView appearanceWhenContainedIn:[UIToolbar class], nil]                 setColor: edaGreen];
     [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil]    setColor: edaGreen];
-    //[[UIActivityIndicatorView appearanceWhenContainedIn:[UICollectionReusableView class], nil]  setColor: [UIColor whiteColor]];
       
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes                      forState: UIControlStateNormal];
 

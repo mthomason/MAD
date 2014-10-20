@@ -39,7 +39,6 @@ extern NSString * const MTGlobalBundleRev;
 - (MADocument *)currentdocappinst;
 
 - (void)initalizeAppearance;
-- (void)deleteCoreDataCache;
 - (void)registerDefaultsFromSettingsBundle;
 
 + (NSString *)applicationName;

@@ -315,12 +315,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 }
 
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    
-//    [coordinator animateAlongsideTransitionInView:self.view animation:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-    
-//    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        
-//    }];
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
 
 - (void)displayActivityIndictor {
@@ -442,39 +437,6 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     searchBar.showsScopeBar = NO;
     searchBar.showsSearchResultsButton = NO;
     searchBar.hidden = YES;
-    /*
-    for (UIView *subview in searchBar.subviews) {
-        for (id subview2 in subview.subviews) {
-            if ([subview2 isKindOfClass:[UITextField class]]) {
-                ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-
-                ((UITextField *)subview2).clearButtonMode = UITextFieldViewModeAlways;
-//                [((UITextField *)subview2) addObserver:self forKeyPath:@"subviews" options:0 context:nil];
-//                [((UITextField *)subview2) addObserver:self forKeyPath:@"leftView" options:0 context:nil];
-                
-                ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                //((UITextField *)subview2) = self;
-                for (UIView *view in ((UITextField *)subview2).subviews) {
-                    if ([view isKindOfClass:[UIButton class]]) {
-                        
-                        
-                        UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                        ((UIButton *)view).tintColor = [UIColor whiteColor];
-                        [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                    }
-                }
-                
-                //((UITextField *)subview2).clearButtonMode = UITextFieldViewModeWhileEditing;
-
-                ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-            }
-        }
-    }
-*/
     
     [searchBar sizeToFit];
     self.searchBar = searchBar;
@@ -509,96 +471,9 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
 #pragma mark - UISearchBarDelegate
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    /*
-    for (UIView *subview in self.searchBar.subviews) {
-        for (id subview2 in subview.subviews) {
-            if ([subview2 isKindOfClass:[UITextField class]]) {
-                ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-                ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                for (UIView *view in ((UITextField *)subview2).subviews) {
-                    if ([view isKindOfClass:[UIButton class]]) {
-                        
-                        
-                        UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                        ((UIButton *)view).tintColor = [UIColor whiteColor];
-                        [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                    }
-                }
-                ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-            }
-        }
-    }*/
-}
+- (void)textFieldDidBeginEditing:(UITextField *)textField { }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    /*
-    for (UIView *subview in searchBar.subviews) {
-        for (id subview2 in subview.subviews) {
-            if ([subview2 isKindOfClass:[UITextField class]]) {
-                ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-                ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                for (UIView *view in ((UITextField *)subview2).subviews) {
-                    if ([view isKindOfClass:[UIButton class]]) {
-                        
-                        
-                        UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                        ((UIButton *)view).tintColor = [UIColor whiteColor];
-                        [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                        
-                    } else if ([view isKindOfClass:[UIImageView class]]) {
-                        
-                        UIImage *image = [((UIImageView *)view).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                        ((UIImageView *)view).tintColor = [UIColor whiteColor];
-                        ((UIImageView *)view).image = image;
-
-                        
-                    }
-                }
-                id rightView = ((UITextField *)subview2).rightView;
-                ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-            }
-        }
-    }
-    */
-  //  return YES;
-}
-
-/*- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    for (UIView *subview in searchBar.subviews) {
-        for (id subview2 in subview.subviews) {
-            if ([subview2 isKindOfClass:[UITextField class]]) {
-                ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-                ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                for (UIView *view in ((UITextField *)subview2).subviews) {
-                    if ([view isKindOfClass:[UIButton class]]) {
-                        
-                        
-                        UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                        ((UIButton *)view).tintColor = [UIColor whiteColor];
-                        [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                    }
-                }
-                //id rightView = ((UITextField *)subview2).;
-                ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-            }
-        }
-    }
-    
-    return YES;
-}*/
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
@@ -617,62 +492,16 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                     [((UIButton *)view) setImage:image forState:UIControlStateNormal];
                 }
             }
-/*
-            id rv = ((UITextField *)object).rightView;
-            if ([((UITextField *)object).rightView isKindOfClass:[UIButton class]]) {
-                
-                UIImage *image = [((UIButton *)((UITextField *)object).rightView).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                [((UIButton *)((UITextField *)object).rightView) setImage:image forState:UIControlStateNormal];
-                
-            }
-*/
         }
     } else if ([keyPath isEqualToString:@"leftView"]) {
         
     }
 }
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
-
-}
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
     [self animateUpdates];
-    
-    
-    
-  /*
-    
-    for (UIView *subview in self.searchBar.subviews) {
-        for (id subview2 in subview.subviews) {
-            if ([subview2 isKindOfClass:[UITextField class]]) {
-                ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                ((UITextField *)subview2).tintColor = [UIColor tintColorRed];
-                ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-                NSLog(@"%@",                     ((UITextField *)subview2).leftView);
-                NSLog(@"%@",                     ((UITextField *)subview2).rightView);
-                id leftView = ((UITextField *)subview2).leftView;
-                //((UITextField *)subview2).leftViewMode = UITextFieldViewModeNever;
-                //((UITextField *)subview2).rightViewMode = UITextFieldViewModeNever;
-                
-                
-                ((UITextField *)subview2).backgroundColor = [UIColor lightTextColor];
-                for (id subview3 in ((UITextField *)subview2).subviews) {
-                    //dsNSLog(@"%@ %@", subview3, NSStringFromClass([subview3 class]));
-                }
-            }
-            NSLog(@"%@ %@", subview2, NSStringFromClass([subview2 class]));
-        }
-        NSLog(@"%@ %@", subview, NSStringFromClass([subview class]));
-    }
-*/
-    
-//    [[MACloudManager sharedManager] reloadDocumentCacheWithSearchString:searchText];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
@@ -682,51 +511,13 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
         self.searchBar.text = @"";
         
         [self animateUpdates];
-//        [self reloadData];
     }
     [searchBar resignFirstResponder];
-    [self search:self];     //Hides the search bar
+    [self search: self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    [[UIImageView appearanceWhenContainedIn:[UISearchBar class], nil] :<#(NSString *)#>: forState:UIControlStateNormal];
-   // [[UIButton appearanceWhenContainedIn:[UISearchBar class], nil] setImage:<#(UIImage *)#> forState:UIControlStateNormal];
-/*
-    if (self.firstViewWillAppear) {
-        for (UIView *subview in self.searchBar.subviews) {
-            for (id subview2 in subview.subviews) {
-                if ([subview2 isKindOfClass:[UITextField class]]) {
-                    ((UITextField *)subview2).textColor = [UIColor whiteColor];
-                    ((UITextField *)subview2).tintColor = [UIColor whiteColor];
-                    ((UIImageView *)((UITextField *)subview2).leftView).image = [((UIImageView *)((UITextField *)subview2).leftView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    ((UIImageView *)((UITextField *)subview2).leftView).tintColor = [UIColor whiteColor];
-                    for (UIView *view in ((UITextField *)subview2).subviews) {
-                        if ([view isKindOfClass:[UIButton class]]) {
-                            
-                            
-                            UIImage *image = [((UIButton *)view).imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                            ((UIButton *)view).tintColor = [UIColor whiteColor];
-                            [((UIButton *)view) setImage:image forState:UIControlStateNormal];
-                            
-                        } else if ([view isKindOfClass:[UIImageView class]]) {
-                            
-                            UIImage *image = [((UIImageView *)view).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                            ((UIImageView *)view).tintColor = [UIColor whiteColor];
-                            ((UIImageView *)view).image = image;
-                            
-                            
-                        }
-                    }
-                    id rightView = ((UITextField *)subview2).rightView;
-                    ((UIImageView *)((UITextField *)subview2).rightView).image = [((UIImageView *)((UITextField *)subview2).rightView).image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    ((UIImageView *)((UITextField *)subview2).rightView).tintColor = [UIColor whiteColor];
-                    ((UITextField *)subview2).rightView.tintColor = [UIColor whiteColor];
-                }
-            }
-        }
-        self.searchBar.text = @"";
-    }*/
 
     __weak MADOpenFileViewController *weakself = self;
     static dispatch_once_t onceToken;
@@ -775,6 +566,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
 
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem: item
                                                      inSection: 0];
+        
         [self.collectionView deselectItemAtIndexPath: indexPath
                                             animated: YES];
 
@@ -786,22 +578,20 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     [self.navigationItem.titleView sizeToFit];
     [self.collectionView.backgroundView setNeedsDisplay];
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    __weak UICollectionViewController *weakSelf = self;
-    [UIView animateWithDuration:duration delay:0.0000f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [weakSelf.collectionView.backgroundView setNeedsDisplay];
-    } completion:NULL];
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    __weak MADOpenFileViewController *weakself = self;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [weakself.collectionView.backgroundView setNeedsDisplay];
+    } completion:nil];
+
 }
 
 - (void)prepareForSegueAddDocument:(UIStoryboardSegue *)segue {

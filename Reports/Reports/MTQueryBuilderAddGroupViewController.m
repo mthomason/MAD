@@ -68,10 +68,6 @@
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showGroupSortOrders"]) {
         if ([segue.destinationViewController isKindOfClass: [MTQueryBuilderSortTypeViewController class]]) {

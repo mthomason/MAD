@@ -20,18 +20,12 @@
 
 @implementation UITableViewControllerCoreDataResults
 
-#pragma mark - Properties
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 #pragma mark - Fetching
 
 - (void)performFetch {
-    if ([self fetchedResultsController]) {
+    if (self.fetchedResultsController) {
         NSError *error = nil;
-        [[self fetchedResultsController] performFetch:&error];
+        [self.fetchedResultsController performFetch:&error];
     }
     [self.tableView reloadData];
 }
@@ -55,23 +49,23 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [[[self fetchedResultsController] sections] count];
+    return [self.fetchedResultsController.sections count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[[self fetchedResultsController] sections][section] numberOfObjects];
+    return [self.fetchedResultsController.sections[section] numberOfObjects];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	return [[[self fetchedResultsController] sections][section] name];
+	return [self.fetchedResultsController.sections[section] name];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-	return [[self fetchedResultsController] sectionForSectionIndexTitle:title atIndex:index];
+	return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return [[self fetchedResultsController] sectionIndexTitles];
+    return [self.fetchedResultsController sectionIndexTitles];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate

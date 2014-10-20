@@ -165,12 +165,12 @@
         
         self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                                                 CGSizeZero.width,
-                                                                self.navigationController.bottomLayoutGuide.length,//self.bottomLayoutGuide.length,
+                                                                self.navigationController.bottomLayoutGuide.length,
                                                                 CGSizeZero.width);
         
         self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                                        CGSizeZero.width,
-                                                       self.navigationController.bottomLayoutGuide.length,//self.bottomLayoutGuide.length,
+                                                       self.navigationController.bottomLayoutGuide.length,
                                                        CGSizeZero.width);
 
     }

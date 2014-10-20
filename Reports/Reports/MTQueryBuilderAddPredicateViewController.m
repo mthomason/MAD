@@ -54,10 +54,6 @@
     [self.tableViewCellRightSide setUserInteractionEnabled: (self.fieldLeft == nil) == NO];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showAddPredicateFovOperator"] ||
         [segue.identifier isEqualToString:@"showAddPredicateFofOperator"]) {
