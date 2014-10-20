@@ -65,6 +65,8 @@ NSString * const MADIdentifierOpenFileSectionHeader             = @"MADIdentifie
 NSString * const MADNotificationReloadSectionLocal              = @"MADNotificationReloadSectionLocal";
 
 CGFloat const MADSectionHeaderHeight = 32.0000f;
+CGFloat const MADConstCellDocumentLabelWidth = 124.0000f;
+CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
@@ -314,8 +316,12 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     }
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+- (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection
+              withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
+    
+    [super willTransitionToTraitCollection: newCollection
+                 withTransitionCoordinator: coordinator];
+    
 }
 
 - (void)displayActivityIndictor {
@@ -332,6 +338,12 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     [self.headerCloud stopAnimating];
 }
 
++ (CGRect)cellLabelRect {
+    return CGRectMake(CGPointZero.x,
+                      CGPointZero.y,
+                      MADConstCellDocumentLabelWidth,
+                      MADConstCellDocumentLabelMaxHeight);
+}
 
 - (void)viewDidLoad {
 
@@ -345,7 +357,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                                                  name: UIContentSizeCategoryDidChangeNotification
                                                object: nil];
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0000f, 0.0000f, 124.0000f, 300.0000f)];
+    UILabel *label = [[UILabel alloc] initWithFrame:[MADOpenFileViewController cellLabelRect]];
     label.clipsToBounds = NO;
     label.numberOfLines = 0;
     
@@ -355,7 +367,7 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
                                                                      toItem: nil
                                                                   attribute: NSLayoutAttributeNotAnAttribute
                                                                  multiplier: 1.0000f
-                                                                   constant: 124.0000f];
+                                                                   constant: MADConstCellDocumentLabelWidth];
     [label addConstraint:constraint];
     self.testLabel = label;
     
@@ -1254,13 +1266,13 @@ CGFloat const MADSectionHeaderHeight = 32.0000f;
     
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString: filename
                                                                            attributes: attributes];
-    self.testLabel.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 124.0000f, 300.0000f);
+    self.testLabel.frame = [MADOpenFileViewController cellLabelRect];
     self.testLabel.attributedText = attributedString;
     self.testLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.testLabel.contentScaleFactor = self.collectionView.contentScaleFactor;
     [self.testLabel sizeToFit];
     
-    return CGSizeMake(140.0000f, 128 + ceil(self.testLabel.frame.size.height) + 20);
+    return CGSizeMake(140.0000f, 128.0000f + ceil(self.testLabel.frame.size.height) + 20.0000f);
 }
 
 #pragma mark - UICollectionViewDataSource
