@@ -366,9 +366,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     numberFormatter.numberStyle = NSNumberFormatterPercentStyle;
     self.numberFormatterPercentage = numberFormatter;
     
-    if ([UIDevice isModernOS]) {
-        self.toolbox.backgroundColor = [UIColor clearColor];
-    }
+    self.toolbox.backgroundColor = [UIColor clearColor];
     
     MTRulerView *viewRuler = [[MTRulerView alloc] initWithFrame:CGRectZero];
     self.ruler.layer.borderWidth = [self.view borderWidthThin];
@@ -425,10 +423,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
     NSLayoutConstraint *constraintContentTop = [self layoutConstraintViewContentTop];
     [constraints addObject:constraintContentTop];
-
+    
     NSLayoutConstraint *constraintScrollerBottom = [self layoutConstraintViewScrollerBottom];
     [constraints addObject:constraintScrollerBottom];
-    
+
     if ([UIDevice isModernOS]) {
         NSLayoutConstraint *constraintWidth = [self layoutConstraintContentWidthCalculated];
         [constraints addObject:constraintWidth];
@@ -440,13 +438,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     viewControllerToolbox.document = self.document;
     viewControllerToolbox.modalPresentationStyle = UIModalPresentationPopover;
 
-    //UIPopoverPresentationController *pc = viewControllerToolbox.popoverPresentationController;
-    //pc.delegate = self;
-    //self.popoverToolbox = pc;
-
     self.viewControllerToolbox = viewControllerToolbox;
-    
-    
     
     MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings = [MADDesignerViewController toolboxSettings];
     viewControllerSectionLayoutSettings.delegate = self;
@@ -489,7 +481,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         NSArray *layoutConstraintsToolboxHidden = @[layoutConstraintToolboxHeightHidden, constraintScrollerBottom];
         self.layoutConstraintsToolboxHidden = layoutConstraintsToolboxHidden;
         self.layoutConstraintToolbarHeight = layoutConstraintViewToolbarHeightHidden;
-        
     }
     
     NSMutableSet *selectedObjectIds = [NSMutableSet new];

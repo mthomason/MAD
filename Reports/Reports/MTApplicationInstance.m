@@ -34,9 +34,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.160";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.160";
-NSString * const MTGlobalBundleRev                                  = @"1535";
+NSString * const MTGlobalBundleVersion                              = @"7.0.161";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.161";
+NSString * const MTGlobalBundleRev                                  = @"1536";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -261,7 +261,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 }
 
 + (NSString *)storyboardName {
-    return MTStoryboardReportDesignerPad8; //[UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
+    //return MTStoryboardReportDesignerPad8;
+    return [UIDevice isPad] ? MTStoryboardReportDesignerPad8 : MTStoryboardReportDesigner8;
 }
 
 + (UIStoryboard *)storyboard {
