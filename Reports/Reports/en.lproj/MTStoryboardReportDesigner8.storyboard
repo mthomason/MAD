@@ -262,143 +262,6 @@
             </objects>
             <point key="canvasLocation" x="-955" y="393"/>
         </scene>
-        <!--About-->
-        <scene sceneID="qKw-Qd-GFQ">
-            <objects>
-                <tableViewController title="About" id="BVv-gS-ZiD" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dyq-O8-r7f">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <sections>
-                            <tableViewSection id="Vfp-g7-EjQ">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="350" id="vQr-ij-YpU">
-                                        <rect key="frame" x="0.0" y="64" width="320" height="350"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vQr-ij-YpU" id="Wic-dx-dud">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="350"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="MAD Designer" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5VN-sP-yvt">
-                                                    <rect key="frame" x="20" y="25" width="280" height="21"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Version1.0.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXH-Sd-pmU">
-                                                    <rect key="frame" x="20" y="54" width="280" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Build 660" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dc7-ct-GKn">
-                                                    <rect key="frame" x="20" y="82" width="280" height="20"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Copyright © 2012-2014 Everyday Apps LLC.  All rights reserved." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="hKk-b2-54e">
-                                                    <rect key="frame" x="20" y="110" width="280" height="40"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="tbi-Mf-ap3">
-                                                    <rect key="frame" x="20" y="158" width="280" height="40"/>
-                                                    <attributedString key="attributedText">
-                                                        <fragment content="MAD">
-                                                            <attributes>
-                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content="®">
-                                                            <attributes>
-                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="10" name="Helvetica-Light"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                        <fragment content=" is a registered trademark of Everyday Apps LLC.">
-                                                            <attributes>
-                                                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <font key="NSFont" size="17" name="Helvetica-Light"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                    </attributedString>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Created by Michael Thomason for Everyday Apps." lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="dzc-dx-dqi">
-                                                    <rect key="frame" x="20" y="206" width="280" height="40"/>
-                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="XXH-Sd-pmU" secondAttribute="trailing" constant="20" id="28X-r7-0MF"/>
-                                                <constraint firstAttribute="trailing" secondItem="5VN-sP-yvt" secondAttribute="trailing" constant="20" id="3DM-ok-EyK"/>
-                                                <constraint firstItem="5VN-sP-yvt" firstAttribute="leading" secondItem="Wic-dx-dud" secondAttribute="leading" constant="20" id="3Te-A3-uQ6"/>
-                                                <constraint firstItem="XXH-Sd-pmU" firstAttribute="leading" secondItem="Wic-dx-dud" secondAttribute="leading" constant="20" id="BvN-q6-nzJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="Dc7-ct-GKn" secondAttribute="trailing" constant="20" id="LRY-f7-oVV"/>
-                                                <constraint firstItem="tbi-Mf-ap3" firstAttribute="top" secondItem="hKk-b2-54e" secondAttribute="bottom" constant="8" id="M7D-mS-5GK"/>
-                                                <constraint firstItem="tbi-Mf-ap3" firstAttribute="leading" secondItem="Wic-dx-dud" secondAttribute="leading" constant="20" id="NMQ-Mk-pbf"/>
-                                                <constraint firstItem="5VN-sP-yvt" firstAttribute="top" secondItem="Wic-dx-dud" secondAttribute="top" constant="25" id="Qaw-sg-1O5"/>
-                                                <constraint firstItem="hKk-b2-54e" firstAttribute="leading" secondItem="Wic-dx-dud" secondAttribute="leading" constant="20" id="RgR-rc-9v3"/>
-                                                <constraint firstAttribute="trailing" secondItem="hKk-b2-54e" secondAttribute="trailing" constant="20" id="Tgh-rC-eHo"/>
-                                                <constraint firstItem="XXH-Sd-pmU" firstAttribute="top" secondItem="Wic-dx-dud" secondAttribute="top" constant="54" id="ULy-TD-vnT"/>
-                                                <constraint firstItem="Dc7-ct-GKn" firstAttribute="leading" secondItem="Wic-dx-dud" secondAttribute="leading" constant="20" id="XqU-nX-v1X"/>
-                                                <constraint firstItem="dzc-dx-dqi" firstAttribute="leading" secondItem="Wic-dx-dud" secondAttribute="leading" constant="20" id="Yzt-6A-KMo"/>
-                                                <constraint firstItem="hKk-b2-54e" firstAttribute="top" secondItem="Dc7-ct-GKn" secondAttribute="bottom" constant="8" id="Zl7-Cn-hDO"/>
-                                                <constraint firstAttribute="trailing" secondItem="dzc-dx-dqi" secondAttribute="trailing" constant="20" id="c8k-HV-HVy"/>
-                                                <constraint firstItem="Dc7-ct-GKn" firstAttribute="top" secondItem="XXH-Sd-pmU" secondAttribute="bottom" constant="8" id="doE-Qh-L27"/>
-                                                <constraint firstItem="dzc-dx-dqi" firstAttribute="top" secondItem="tbi-Mf-ap3" secondAttribute="bottom" constant="8" id="pTj-vx-Pm7"/>
-                                                <constraint firstAttribute="trailing" secondItem="tbi-Mf-ap3" secondAttribute="trailing" constant="20" id="wSc-9w-yr1"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="BVv-gS-ZiD" id="sFI-08-RlH"/>
-                            <outlet property="delegate" destination="BVv-gS-ZiD" id="TBD-Ou-6id"/>
-                            <outletCollection property="gestureRecognizers" destination="eHA-ue-3V2" appends="YES" id="eBm-3v-Q5j"/>
-                        </connections>
-                    </tableView>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="hei-Fg-Gxu"/>
-                        <barButtonItem systemItem="compose" id="TBC-Cl-4Hc">
-                            <connections>
-                                <action selector="composeEmail:" destination="BVv-gS-ZiD" id="5ZG-Iv-AYX"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" title="About" id="lGO-gG-mgM">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="J7O-10-h9R">
-                            <connections>
-                                <segue destination="V3l-b3-XK2" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="xK0-5J-YGD"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="labelBuild" destination="Dc7-ct-GKn" id="kWL-Je-7zX"/>
-                        <outlet property="labelTrademark" destination="tbi-Mf-ap3" id="FIG-nH-fXR"/>
-                        <outlet property="labelVersion" destination="XXH-Sd-pmU" id="rDa-XW-hg6"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PNc-vp-gau" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="down" id="eHA-ue-3V2">
-                    <connections>
-                        <segue destination="V3l-b3-XK2" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="BdI-iB-yC1"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <exit id="V3l-b3-XK2" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="664" y="1020"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Dop-Kn-WJG">
             <objects>
@@ -5116,7 +4979,7 @@
                         </barButtonItem>
                         <barButtonItem title="About" id="doP-C7-XPO">
                             <connections>
-                                <segue destination="sk4-t5-Zw3" kind="modal" identifier="MTSegueAbout" modalTransitionStyle="flipHorizontal" id="MaT-It-Er2"/>
+                                <action selector="about:" destination="F7A-ai-FfA" id="hBr-pr-DpN"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Sc8-ba-vJs"/>
@@ -5149,34 +5012,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OgQ-be-sJG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-500" y="393"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="sCi-La-w62">
-            <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="sk4-t5-Zw3" customClass="MTNavigationController" sceneMemberID="viewController">
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="480"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="iRk-Gg-TQC">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="gMR-X9-V19">
-                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="BVv-gS-ZiD" kind="relationship" relationship="rootViewController" id="poI-ws-bWi"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="y5Z-ma-ZWK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="0.0" y="1033"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hRz-Bj-rt7">

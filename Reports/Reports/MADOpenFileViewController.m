@@ -37,6 +37,7 @@
 
 #import "MTQueryBuilderContainerController.h"
 
+#import "MTTableViewControllerAbout.h"
 #import "MTViewControllerAbout.h"
 
 #import "MADQueryViewController.h"
@@ -54,6 +55,7 @@
 #import "NSError+UserInterface.h"
 #import "NSURL+Document.h"
 #import "UIAlertController+CommonAlerts.h"
+#import "MTNavigationController.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -71,6 +73,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @interface MADOpenFileViewController()
     <NSFileManagerDelegate,
         UIPopoverControllerDelegate,
+        UIPopoverPresentationControllerDelegate,
         UICollectionViewDelegateFlowLayout,
         UIGestureRecognizerDelegate,
         MFMailComposeViewControllerDelegate,
@@ -94,8 +97,11 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemSearch;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
 
+@property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
+@property (nonatomic, strong) MTNavigationController *aboutNavigationController;
+
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
-@property (nonatomic, strong) UIPopoverController *aboutPopoverController;
+//@property (nonatomic, strong) UIPopoverController *aboutPopoverController;
 @property (nonatomic, strong) UIPopoverController *licensingPopoverController;
 @property (nonatomic, strong) UIPopoverController *popoverControllerActivity;
 
@@ -406,10 +412,14 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     self.navigationController.toolbar.tintColor = tintColor;
 
     MADWatermarkView *watermarkView = [[MADWatermarkView alloc] initWithFrame: self.collectionView.bounds];
-    self.collectionView.backgroundView = watermarkView;
+    UIImageView *testimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"testimage.jpg"]];
+    testimage.frame=self.collectionView.frame;
+    //[watermarkView addSubview:testimage];
+    self.collectionView.backgroundView = testimage;
+    self.collectionView.backgroundColor = [UIColor purpleColor];
 
     UIColor *bgColor = [UIColor lightGrayColor];
-    self.collectionView.backgroundColor = bgColor;
+    //self.collectionView.backgroundColor = bgColor;
     
     [self setSavingActivityIndicatorVisible:NO];
     UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -624,31 +634,25 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     }
 }
 
-- (void)prepareForSegueDetails:(UIStoryboardSegue *)segue {
+- (void)prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue {
+    
+    
+    //@"MADAboutNavigationController";
     UINavigationController *navigationController = segue.destinationViewController;
-    MTViewControllerAbout *aboutViewController = (MTViewControllerAbout *)[navigationController topViewController];
+    
+//    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+  //  UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    navigationController.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
+    ppc.containerView.backgroundColor = [UIColor clearColor];
+    ppc.delegate = self;
+    self.aboutPopoverPresentationController = ppc;
+    
+    MTTableViewControllerAbout *aboutViewController = (MTTableViewControllerAbout *)navigationController.topViewController;
+//    aboutViewController.tableView.backgroundView = visualEffectsView;
     aboutViewController.delegate = self;
-    
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = segue.destinationViewController;
-        if ([navControl topViewController]) {
-            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                [self setAboutPopoverController:[(UIStoryboardPopoverSegue *)segue popoverController]];
-            }
-        }
-    }
-    
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        if ([segue.identifier isEqualToString:@"MTSegueDetails"]) {
-            if ([MTApplicationInstance isMadViewer]) {
-                self.aboutPopoverController.popoverContentSize = CGSizeMake(420.0000f, 376.0000f);
-            } else {
-                self.aboutPopoverController.popoverContentSize = CGSizeMake(540.0000f, 556.0000f);
-            }
-        } else {
-            self.aboutPopoverController.popoverContentSize = CGSizeMake(320.0000f, 320.0000f);
-        }
-    }
+    aboutViewController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
+    //self.aboutPopoverController = segue.popoverController;
 }
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
@@ -746,7 +750,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
         [self prepareForSegueAddDocument:segue];
         
     } else if ([segue.identifier isEqualToString:@"MTSegueDetails"] || [segue.identifier isEqualToString:@"MTSegueAbout"]) {
-        [self prepareForSegueDetails:segue];
+        [self prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue];
         
     } else if ([segue.identifier isEqualToString:MTSegueLicensing]) {
         [self prepareForSegueLicensing:segue];
@@ -797,6 +801,40 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     [self setShouldShowAddDocumentPopover:YES];
     [self.barButtonItemAddNewDocument setEnabled:YES];
+}
+
+#pragma mark - UIAdaptivePresentationControllerDelegate
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
+    UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
+    if ([controller isEqual:self.aboutPopoverPresentationController]) {
+        style = UIModalPresentationNone;
+    }
+    return style;
+}
+
+//- (UIViewController *)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
+    
+//}
+
+#pragma mark - UIPopoverPresentationControllerDelegate
+
+- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController {
+    
+}
+
+- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    return YES;
+}
+
+- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    
+}
+
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController
+          willRepositionPopoverToRect:(inout CGRect *)rect
+                               inView:(inout UIView **)view {
+    
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -877,9 +915,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 }
 
 - (void)viewControllerDidRequestComposeEmail:(id)sender animated:(BOOL)animated {
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self.aboutPopoverController dismissPopoverAnimated:animated];
-    }
+    [self dismissViewControllerAnimated:animated completion:nil];
+
     if ([MFMailComposeViewController canSendMail]) {
         
         MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
@@ -1682,21 +1719,49 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
+/*
+ 
+ - (void)prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue {
+ 
+ @"MADAboutNavigationController";
+ UINavigationController *navigationController = segue.destinationViewController;
+ 
+ UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+ UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+ navigationController.modalPresentationStyle = UIModalPresentationPopover;
+ UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
+ ppc.containerView.backgroundColor = [UIColor clearColor];
+ ppc.delegate = self;
+ self.aboutPopoverPresentationController = ppc;
+ 
+ MTTableViewControllerAbout *aboutViewController = (MTTableViewControllerAbout *)navigationController.topViewController;
+ aboutViewController.tableView.backgroundView = visualEffectsView;
+ aboutViewController.delegate = self;
+ aboutViewController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
+ //self.aboutPopoverController = segue.popoverController;
+ }
+
+ */
 - (IBAction)about:(id)sender {
-    NSString *applicationName = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleNameKey];
-    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"About %@", @"About Mad Designer"),  applicationName];
-    NSString *message = NSLocalizedString(@"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.",
-                                          @"© Everyday Apps LLC 2014.  Software created by Michael Thomason for Everyday Apps LLC.");
-    NSString *buttonTitle = NSLocalizedString(@"Continue", @"Continue");
+ 
     
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title
-                                                                             message: message
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
-    UIAlertAction *actionKk = [UIAlertAction actionWithTitle: buttonTitle
-                                                       style: UIAlertActionStyleDefault
-                                                     handler: ^(UIAlertAction *action) {}];
-    [alertController addAction:actionKk];
-    [self presentViewController: alertController
+    
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardAboutTable" bundle:[NSBundle mainBundle]];
+    UITableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierAboutViewController"];
+    
+
+    
+    aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+
+    ppc.backgroundColor = [UIColor clearColor];
+    ppc.delegate = self;
+    ppc.barButtonItem = sender;
+    self.aboutPopoverPresentationController = ppc;
+
+
+    [self presentViewController: aboutViewController
                        animated: YES
                      completion: nil];
     
@@ -2165,9 +2230,10 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
     NSMutableCharacterSet *characterSet = [[NSMutableCharacterSet alloc] init];
     [characterSet formUnionWithCharacterSet:[NSCharacterSet alphanumericCharacterSet]];
     [characterSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSCharacterSet *invertedSet = characterSet.invertedSet;
+    NSArray *components = [text componentsSeparatedByCharactersInSet:invertedSet];
+    return [components componentsJoinedByString:@""];
     
-    return [[text componentsSeparatedByCharactersInSet:[characterSet invertedSet]] componentsJoinedByString:@""];
-
 }
 
 - (void)validationError {

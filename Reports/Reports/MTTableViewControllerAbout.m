@@ -19,10 +19,11 @@
 #import "NSError+UserInterface.h"
 #import "UIAlertController+CommonAlerts.h"
 #import "UIColor+EverydayApps.h"
+#import "MADVibrantTableViewCell.h"
 #import <CoreText/CoreText.h>
 
 @interface MTTableViewControllerAbout ()
-    <MFMailComposeViewControllerDelegate>
+    <MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 @property (nonatomic, weak) IBOutlet UILabel *labelVersion;
@@ -43,6 +44,22 @@
     return action == @selector(unwindToAbout:);
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+
+    }
+    
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.preferredContentSize = CGSizeMake(280, 200);
+}
+
 - (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
                                               withSender:(id)sender {
@@ -54,32 +71,21 @@
                                            withSender: sender];
 }
 
-- (CGSize)preferredContentSize {
-    CGSize preferredContentSize;
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        preferredContentSize = CGSizeMake(540.0000f, 556.0000f);
-        [[self navigationController] setPreferredContentSize:preferredContentSize];
-        [[[self navigationController] view] setNeedsLayout];
-    } else {
-        preferredContentSize = [super preferredContentSize];
-    }
-    return preferredContentSize;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+- (NSString *)versionText {
     NSString *versionTextKey = NSLocalizedString(@"Verison %@", @"Verison %@");
-    NSString *buildTextKey = NSLocalizedString(@"Build %@", @"Build %@");
     NSString *version = [UIApplication version];
     NSString *versionText = [NSString stringWithFormat:versionTextKey, version];
+    return versionText;
+}
+
+- (NSString *)buildText {
+    NSString *buildTextKey = NSLocalizedString(@"Build %@", @"Build %@");
     NSString *buildText = [NSString stringWithFormat:buildTextKey, MTGlobalBundleRev];
-    [[self labelVersion] setText:versionText];
-    [[self labelBuild] setText:buildText];
-    [[self labelTrademark] setNumberOfLines:0];
-    [[self labelTrademark] setLineBreakMode:NSLineBreakByWordWrapping];
-    [[self labelTrademark] setAttributedText:[self trademarkStatement]];
-    [[self labelTrademark] sizeToFit];
-    //[[[self navigationController] toolbar] setBarTintColor:[UIColor tintColorBlue]];
+    return buildText;
 }
 
 - (NSAttributedString *)trademarkStatement {
@@ -90,7 +96,8 @@
     NSAttributedString *mad = [[NSAttributedString alloc] initWithString:@"MAD" attributes:nil];
     NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString:mad];
     [tm appendAttributedString:r];
-    NSAttributedString *statement = [[NSAttributedString alloc] initWithString:@" is a registered trademark of Everyday Apps LLC." attributes:nil];
+    NSAttributedString *statement = [[NSAttributedString alloc] initWithString: @" is a registered trademark of Everyday Apps LLC."
+                                                                    attributes: nil];
     [tm appendAttributedString:statement];
     return tm;
 }
@@ -104,21 +111,8 @@
 }
 
 - (IBAction)composeEmail:(id)sender {
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self.delegate viewControllerDidRequestComposeEmail: self
-                                                     animated: YES];
-    } else {
-        if ([MFMailComposeViewController canSendMail]) {
-            MFMailComposeViewController	*mFMailComposeViewController = [[MFMailComposeViewController alloc] init];
-            [mFMailComposeViewController setMailComposeDelegate:self];
-            [mFMailComposeViewController setToRecipients:@[@"admin@everydayapps.com"]];
-            [mFMailComposeViewController setSubject:@"MAD Designer"];
-            [self presentViewController:mFMailComposeViewController animated:YES completion:nil];
-        } else {
-            UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }
+    [self.delegate viewControllerDidRequestComposeEmail: self
+                                               animated: YES];
 }
 
 
@@ -132,6 +126,63 @@
         [segue.identifier isEqualToString:@"MTSegueAboutSwipeNext"]) {
         ((MTTableViewControllerAbout *)segue.destinationViewController).delegate = self.delegate;
     }
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 5;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
+    cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
+    switch (indexPath.row) {
+
+        case 0:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.label.tintColor = [UIColor edaBlueDark];
+            cell.label.text = @"MAD Designer";
+            cell.marginStyle = MADTableViewCellMarginStyleTop;
+            break;
+
+        case 1:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.text = [self versionText];
+            cell.label.tintColor = [UIColor darkTextColor];
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+            
+        case 2:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.text = [self buildText];
+            cell.label.tintColor = [UIColor darkTextColor];
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+            
+        case 3:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.attributedText = [self trademarkStatement];
+            cell.label.tintColor = [UIColor darkTextColor];
+            cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+            break;
+
+        case 4:
+            cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.label.text = @"Created by Michael Thomason for Everyday Apps.";
+            cell.label.tintColor = [UIColor darkTextColor];
+            cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            break;
+
+        default:
+            break;
+    }
+    
+    //cell.layoutMargins = UIEdgeInsetsMake(8, 8, 8, 8);
+//    [cell layoutIfNeeded];
+    return cell;
 }
 
 @end

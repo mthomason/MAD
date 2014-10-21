@@ -174,7 +174,7 @@ NSString * const MTImageBlank = @"UIImageDocumentBlank";
 
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString: text
                                                                                          attributes: attributes];
-    //self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     self.labelTitle.attributedText = attributedString;
     self.labelTitle.text = text;
 }

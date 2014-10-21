@@ -14,7 +14,7 @@
 
 @interface MTTableViewControllerAbout : UITableViewController
 
-@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol> delegate;
+@property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol, UITableViewDelegate> delegate;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)done:(id)sender;
