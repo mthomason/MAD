@@ -302,8 +302,6 @@
 		4C138D5E197E254000BABB0C /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
 		4C1442A119B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */; };
 		4C1442A219B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */; };
-		4C15669219F5839400EE465D /* MADStoryboardAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669119F5839400EE465D /* MADStoryboardAbout.storyboard */; };
-		4C15669319F5839400EE465D /* MADStoryboardAbout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669119F5839400EE465D /* MADStoryboardAbout.storyboard */; };
 		4C15669D19F5A83A00EE465D /* testimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669C19F5A83A00EE465D /* testimage.jpg */; };
 		4C15669E19F5A83A00EE465D /* testimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669C19F5A83A00EE465D /* testimage.jpg */; };
 		4C1566A019F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669F19F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard */; };
@@ -1666,7 +1664,6 @@
 		4C138D5B197E254000BABB0C /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = "Resources/Sample Reports/London.mad"; sourceTree = "<group>"; };
 		4C138D5C197E254000BABB0C /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = Music.mad; path = "Resources/Sample Reports/Music.mad"; sourceTree = "<group>"; };
 		4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesigner8.storyboard; path = Reports/en.lproj/MTStoryboardReportDesigner8.storyboard; sourceTree = "<group>"; };
-		4C15669119F5839400EE465D /* MADStoryboardAbout.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardAbout.storyboard; sourceTree = "<group>"; };
 		4C15669C19F5A83A00EE465D /* testimage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = testimage.jpg; sourceTree = "<group>"; };
 		4C15669F19F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardAboutTable.storyboard; sourceTree = "<group>"; };
 		4C15EB8D192DF50600C412A4 /* MTQuerySelectItemsForGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySelectItemsForGroup.h; sourceTree = "<group>"; };
@@ -4262,7 +4259,6 @@
 				4CCDFD1117C27F5F00B79D34 /* MTViewControllerAbout.m */,
 				4CB46B6317C3EC26000D3F3C /* MTTableViewControllerAbout.h */,
 				4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */,
-				4C15669119F5839400EE465D /* MADStoryboardAbout.storyboard */,
 				4C15669F19F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard */,
 			);
 			name = About;
@@ -5749,7 +5745,6 @@
 				4C0E77B7163B5AEC003B951E /* UIImageLandscape.png in Resources */,
 				4C6461BF18C0E6680069EF8D /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C77333619100098005AE7C2 /* mysql_version.h.in in Resources */,
-				4C15669319F5839400EE465D /* MADStoryboardAbout.storyboard in Resources */,
 				4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */,
 				4CF000E319C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
 				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
@@ -6056,7 +6051,6 @@
 				4C00817C14B6CAAF003DF437 /* UIImageStrikethrough20@2x.png in Resources */,
 				4C80A5F8183185C400242703 /* MTBarcodeQrCodeIso18004.h in Resources */,
 				4C00817D14B6CAAF003DF437 /* UIImageUnderline20.png in Resources */,
-				4C15669219F5839400EE465D /* MADStoryboardAbout.storyboard in Resources */,
 				4C00817E14B6CAAF003DF437 /* UIImageUnderline20@2x.png in Resources */,
 				4C00819014B83E92003DF437 /* UIImageStacks20.png in Resources */,
 				4C00819114B83E92003DF437 /* UIImageStacks20@2x.png in Resources */,

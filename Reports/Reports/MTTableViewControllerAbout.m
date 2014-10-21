@@ -179,9 +179,7 @@
         default:
             break;
     }
-    
-    //cell.layoutMargins = UIEdgeInsetsMake(8, 8, 8, 8);
-//    [cell layoutIfNeeded];
+    [cell layoutIfNeeded];
     return cell;
 }
 
