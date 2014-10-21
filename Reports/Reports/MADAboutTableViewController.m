@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTTableViewControllerAbout.h"
+#import "MADAboutTableViewController.h"
 #import <MessageUI/MessageUI.h>
 #import "MTApplicationInstance.h"
 #import "UIApplication+Extras.h"
@@ -22,7 +22,7 @@
 #import "MADVibrantTableViewCell.h"
 #import <CoreText/CoreText.h>
 
-@interface MTTableViewControllerAbout ()
+@interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UILabel *labelTitle;
@@ -32,7 +32,7 @@
 
 @end
 
-@implementation MTTableViewControllerAbout
+@implementation MADAboutTableViewController
 
 #pragma mark - Exit
 
@@ -124,7 +124,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"MTSegueAboutGettingStarted"] ||
         [segue.identifier isEqualToString:@"MTSegueAboutSwipeNext"]) {
-        ((MTTableViewControllerAbout *)segue.destinationViewController).delegate = self.delegate;
+        ((MADAboutTableViewController *)segue.destinationViewController).delegate = self.delegate;
     }
 }
 

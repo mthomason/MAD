@@ -37,7 +37,7 @@
 
 #import "MTQueryBuilderContainerController.h"
 
-#import "MTTableViewControllerAbout.h"
+#import "MADAboutTableViewController.h"
 
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
@@ -647,7 +647,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     ppc.delegate = self;
     self.aboutPopoverPresentationController = ppc;
     
-    MTTableViewControllerAbout *aboutViewController = (MTTableViewControllerAbout *)navigationController.topViewController;
+    MADAboutTableViewController *aboutViewController = (MADAboutTableViewController *)navigationController.topViewController;
 //    aboutViewController.tableView.backgroundView = visualEffectsView;
     aboutViewController.delegate = self;
     aboutViewController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);

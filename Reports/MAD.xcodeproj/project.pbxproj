@@ -930,7 +930,7 @@
 		4C9294AC18C4CC0F0010AAEF /* MTViewControllerValueBasedOnField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8BA98C174533CF00B646E2 /* MTViewControllerValueBasedOnField.m */; };
 		4C9294B118C4CC0F0010AAEF /* UITableViewControllerOpperators.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1A585914DE2AB400184445 /* UITableViewControllerOpperators.m */; };
 		4C9294B218C4CC0F0010AAEF /* MTSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5F02EB14BA480400C49BE9 /* MTSettingsViewController.m */; };
-		4C9294B518C4CC0F0010AAEF /* MTTableViewControllerAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */; };
+		4C9294B518C4CC0F0010AAEF /* MADAboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */; };
 		4C9294B618C4CC150010AAEF /* UITableViewCellTableName.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7C814CD201E003DA079 /* UITableViewCellTableName.m */; };
 		4C9294B718C4CC150010AAEF /* UITableViewCellQueryInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D014CD2050003DA079 /* UITableViewCellQueryInput.m */; };
 		4C9294B818C4CC150010AAEF /* UITableViewCellInstruction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7D314CD2068003DA079 /* UITableViewCellInstruction.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -1233,8 +1233,8 @@
 		4CB4574B1705F6DB005269B7 /* RptqRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB457491705F6DB005269B7 /* RptqRelationship.m */; };
 		4CB4575E1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CB4575F1705F738005269B7 /* RptqDocumentSectionRows+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CB46B6517C3EC26000D3F3C /* MTTableViewControllerAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		4CB46B6617C3EC26000D3F3C /* MTTableViewControllerAbout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CB46B6517C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CB46B6617C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CB4A47B183C7290008D52B5 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */; };
 		4CB4A47C183C7290008D52B5 /* RptqDocumentObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */; };
 		4CB53B4B17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB53B4A17396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.m */; };
@@ -2660,8 +2660,8 @@
 		4CB457491705F6DB005269B7 /* RptqRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqRelationship.m; sourceTree = "<group>"; };
 		4CB4575C1705F735005269B7 /* RptqDocumentSectionRows+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDocumentSectionRows+Extras.h"; sourceTree = "<group>"; };
 		4CB4575D1705F737005269B7 /* RptqDocumentSectionRows+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocumentSectionRows+Extras.m"; sourceTree = "<group>"; };
-		4CB46B6317C3EC26000D3F3C /* MTTableViewControllerAbout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTTableViewControllerAbout.h; path = Reports/MTTableViewControllerAbout.h; sourceTree = "<group>"; };
-		4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTTableViewControllerAbout.m; path = Reports/MTTableViewControllerAbout.m; sourceTree = "<group>"; };
+		4CB46B6317C3EC26000D3F3C /* MADAboutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADAboutTableViewController.h; path = Reports/MADAboutTableViewController.h; sourceTree = "<group>"; };
+		4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADAboutTableViewController.m; path = Reports/MADAboutTableViewController.m; sourceTree = "<group>"; };
 		4CB4A479183C7290008D52B5 /* RptqDocumentObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RptqDocumentObject.h; sourceTree = "<group>"; };
 		4CB4A47A183C7290008D52B5 /* RptqDocumentObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentObject.m; sourceTree = "<group>"; };
 		4CB53B4917396D8400DDF542 /* MTCollectionViewLayoutLiquidAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCollectionViewLayoutLiquidAttributes.h; sourceTree = "<group>"; };
@@ -4251,8 +4251,8 @@
 		4C6268F219F5FFD200DCCC2E /* About */ = {
 			isa = PBXGroup;
 			children = (
-				4CB46B6317C3EC26000D3F3C /* MTTableViewControllerAbout.h */,
-				4CB46B6417C3EC26000D3F3C /* MTTableViewControllerAbout.m */,
+				4CB46B6317C3EC26000D3F3C /* MADAboutTableViewController.h */,
+				4CB46B6417C3EC26000D3F3C /* MADAboutTableViewController.m */,
 				4C15669F19F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard */,
 			);
 			name = About;
@@ -6707,7 +6707,7 @@
 				4CABE4981837DF7F007EDD9D /* RptqDocumentSectionRows.m in Sources */,
 				4C40EC1A1934A77400F12AAC /* MAReportDocumentState.m in Sources */,
 				4C23FBB518FAE4F7009F234F /* MTPaperB1.m in Sources */,
-				4CB46B6617C3EC26000D3F3C /* MTTableViewControllerAbout.m in Sources */,
+				4CB46B6617C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7079,7 +7079,7 @@
 				4C23FBBC18FAE4F7009F234F /* MTPaperB5.m in Sources */,
 				4C40EC191934A77400F12AAC /* MAReportDocumentState.m in Sources */,
 				4CABE45B1837DF79007EDD9D /* RptqQueryField.m in Sources */,
-				4CB46B6517C3EC26000D3F3C /* MTTableViewControllerAbout.m in Sources */,
+				4CB46B6517C3EC26000D3F3C /* MADAboutTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7195,7 +7195,7 @@
 				4C9294FF18C4CC7F0010AAEF /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4C9294BF18C4CC340010AAEF /* MTTextView.m in Sources */,
 				4C9294AC18C4CC0F0010AAEF /* MTViewControllerValueBasedOnField.m in Sources */,
-				4C9294B518C4CC0F0010AAEF /* MTTableViewControllerAbout.m in Sources */,
+				4C9294B518C4CC0F0010AAEF /* MADAboutTableViewController.m in Sources */,
 				4C9294D018C4CC340010AAEF /* MTBarButtonItemTitle.m in Sources */,
 				4C92952718C4CC890010AAEF /* NSFileManager+Common.m in Sources */,
 				4C9294D718C4CC340010AAEF /* MTBlurView.m in Sources */,

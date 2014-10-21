@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MUIViewControllerDelegate.h"
 
-@interface MTTableViewControllerAbout : UITableViewController
+@interface MADAboutTableViewController : UITableViewController
 
 @property (nonatomic, weak) IBOutlet id <MTViewControllerProtocol, UITableViewDelegate> delegate;
 

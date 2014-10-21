@@ -4420,7 +4420,7 @@
         <!--What is MAD?-->
         <scene sceneID="P8b-BK-jDJ">
             <objects>
-                <tableViewController id="mWR-jk-kaM" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
+                <tableViewController id="mWR-jk-kaM" customClass="MADAboutTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="31p-lO-Urz">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4679,7 +4679,7 @@
         <!--Getting Started-->
         <scene sceneID="h28-Jy-tWg">
             <objects>
-                <tableViewController id="Eqq-RR-9ms" customClass="MTTableViewControllerAbout" sceneMemberID="viewController">
+                <tableViewController id="Eqq-RR-9ms" customClass="MADAboutTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Q5T-TX-w8m">
                         <rect key="frame" x="0.0" y="64" width="540" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
