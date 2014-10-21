@@ -38,7 +38,6 @@
 #import "MTQueryBuilderContainerController.h"
 
 #import "MTTableViewControllerAbout.h"
-#import "MTViewControllerAbout.h"
 
 #import "MADQueryViewController.h"
 #import "MTDatabaseDriverSelectorViewController.h"
