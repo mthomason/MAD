@@ -634,13 +634,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 }
 
 - (void)prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue {
-    
-    
-    //@"MADAboutNavigationController";
     UINavigationController *navigationController = segue.destinationViewController;
-    
-//    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-  //  UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
     ppc.containerView.backgroundColor = [UIColor clearColor];
@@ -648,10 +642,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     self.aboutPopoverPresentationController = ppc;
     
     MADAboutTableViewController *aboutViewController = (MADAboutTableViewController *)navigationController.topViewController;
-//    aboutViewController.tableView.backgroundView = visualEffectsView;
     aboutViewController.delegate = self;
     aboutViewController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
-    //self.aboutPopoverController = segue.popoverController;
 }
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
@@ -1718,38 +1710,28 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
-/*
- 
- - (void)prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue {
- 
- @"MADAboutNavigationController";
- UINavigationController *navigationController = segue.destinationViewController;
- 
- UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
- UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
- navigationController.modalPresentationStyle = UIModalPresentationPopover;
- UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
- ppc.containerView.backgroundColor = [UIColor clearColor];
- ppc.delegate = self;
- self.aboutPopoverPresentationController = ppc;
- 
- MTTableViewControllerAbout *aboutViewController = (MTTableViewControllerAbout *)navigationController.topViewController;
- aboutViewController.tableView.backgroundView = visualEffectsView;
- aboutViewController.delegate = self;
- aboutViewController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
- //self.aboutPopoverController = segue.popoverController;
- }
+- (IBAction)info:(id)sender {
 
- */
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardInformationTable" bundle:[NSBundle mainBundle]];
+    UINavigationController *infoViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierInformationNavigationController"];
+    infoViewController.modalPresentationStyle = UIModalPresentationPopover;
+    UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
+    
+    ppc.backgroundColor = [UIColor clearColor];
+    ppc.delegate = self;
+    ppc.barButtonItem = sender;
+    self.aboutPopoverPresentationController = ppc;
+    
+    [self presentViewController: infoViewController
+                       animated: YES
+                     completion: nil];
+
+}
+
 - (IBAction)about:(id)sender {
- 
-    
-    
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardAboutTable" bundle:[NSBundle mainBundle]];
     UITableViewController *aboutViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierAboutViewController"];
-    
-
     
     aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
@@ -1759,12 +1741,9 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     ppc.barButtonItem = sender;
     self.aboutPopoverPresentationController = ppc;
 
-
     [self presentViewController: aboutViewController
                        animated: YES
                      completion: nil];
-    
-    
 }
 
 - (void)cut:(id)sender {

@@ -698,6 +698,12 @@
 		4C6268DF19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */; };
 		4C6268FE19F600B100DCCC2E /* MADVibrantTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268FD19F600B100DCCC2E /* MADVibrantTableView.m */; };
 		4C6268FF19F600B100DCCC2E /* MADVibrantTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6268FD19F600B100DCCC2E /* MADVibrantTableView.m */; };
+		4C62692B19F6328800DCCC2E /* MADInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C62692919F6328800DCCC2E /* MADInformationTableViewController.m */; };
+		4C62692C19F6328800DCCC2E /* MADInformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C62692919F6328800DCCC2E /* MADInformationTableViewController.m */; };
+		4C62693019F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C62692F19F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard */; };
+		4C62693119F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C62692F19F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard */; };
+		4C62693419F6379600DCCC2E /* MADGettingStartedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C62693319F6379600DCCC2E /* MADGettingStartedTableViewController.m */; };
+		4C62693519F6379600DCCC2E /* MADGettingStartedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C62693319F6379600DCCC2E /* MADGettingStartedTableViewController.m */; };
 		4C6362BE14E6278D005DBBFF /* MTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362BD14E6278D005DBBFF /* MTNavigationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C6362C114E6434E005DBBFF /* CGGeometry+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C63631614E65C16005DBBFF /* UIImageDocument20.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C63631414E65C16005DBBFF /* UIImageDocument20.png */; };
@@ -2207,6 +2213,11 @@
 		4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MADVibrantTableViewCell.xib; path = Reports/MADVibrantTableViewCell.xib; sourceTree = "<group>"; };
 		4C6268FC19F600B100DCCC2E /* MADVibrantTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableView.h; sourceTree = "<group>"; };
 		4C6268FD19F600B100DCCC2E /* MADVibrantTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableView.m; sourceTree = "<group>"; };
+		4C62692819F6328800DCCC2E /* MADInformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADInformationTableViewController.h; sourceTree = "<group>"; };
+		4C62692919F6328800DCCC2E /* MADInformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADInformationTableViewController.m; sourceTree = "<group>"; };
+		4C62692F19F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardInformationTable.storyboard; sourceTree = "<group>"; };
+		4C62693219F6379600DCCC2E /* MADGettingStartedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADGettingStartedTableViewController.h; sourceTree = "<group>"; };
+		4C62693319F6379600DCCC2E /* MADGettingStartedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADGettingStartedTableViewController.m; sourceTree = "<group>"; };
 		4C6362BC14E6278D005DBBFF /* MTNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTNavigationController.h; sourceTree = "<group>"; };
 		4C6362BD14E6278D005DBBFF /* MTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTNavigationController.m; sourceTree = "<group>"; };
 		4C6362C014E6434E005DBBFF /* CGGeometry+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CGGeometry+Extras.m"; sourceTree = "<group>"; };
@@ -4263,9 +4274,9 @@
 			children = (
 				4C6268D919F5DBF400DCCC2E /* MADVibrantTableViewCell.h */,
 				4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */,
+				4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */,
 				4C6268FC19F600B100DCCC2E /* MADVibrantTableView.h */,
 				4C6268FD19F600B100DCCC2E /* MADVibrantTableView.m */,
-				4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */,
 			);
 			name = Vibrant;
 			sourceTree = "<group>";
@@ -4273,6 +4284,11 @@
 		4C62692719F6313000DCCC2E /* Information */ = {
 			isa = PBXGroup;
 			children = (
+				4C62692819F6328800DCCC2E /* MADInformationTableViewController.h */,
+				4C62692919F6328800DCCC2E /* MADInformationTableViewController.m */,
+				4C62693219F6379600DCCC2E /* MADGettingStartedTableViewController.h */,
+				4C62693319F6379600DCCC2E /* MADGettingStartedTableViewController.m */,
+				4C62692F19F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard */,
 			);
 			name = Information;
 			sourceTree = "<group>";
@@ -5746,6 +5762,7 @@
 				4C0E77B7163B5AEC003B951E /* UIImageLandscape.png in Resources */,
 				4C6461BF18C0E6680069EF8D /* MTActivityProvidence~iPad@2x.png in Resources */,
 				4C77333619100098005AE7C2 /* mysql_version.h.in in Resources */,
+				4C62693119F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard in Resources */,
 				4C0E77B8163B5AEC003B951E /* UIImageLandscape@2x.png in Resources */,
 				4CF000E319C0CCD500A24810 /* UIBarButtonItemMadDesigner8@2x.png in Resources */,
 				4C0E77B9163B5AEC003B951E /* UIImageArrowDown.png in Resources */,
@@ -6187,6 +6204,7 @@
 				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
 				4CF000E419C0CCD500A24810 /* UIBarButtonItemMadViewer8.png in Resources */,
 				4C6461B418C0E6590069EF8D /* MTActivityProvidence@2x.png in Resources */,
+				4C62693019F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard in Resources */,
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
 				4CDA778A18275B5700E462F6 /* MTBarcodeView.h in Resources */,
@@ -6632,6 +6650,7 @@
 				4C8BF43016F60D5E002D9F9B /* MTDocumentObjectNewStaticLabelViewController.m in Sources */,
 				4C8BF47016F6458B002D9F9B /* RptqDocumentObjectAggregate+Extras.m in Sources */,
 				4C38E9C619F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
+				4C62693519F6379600DCCC2E /* MADGettingStartedTableViewController.m in Sources */,
 				4C8BF47416F645A0002D9F9B /* RptqDocumentObjectChart+Extras.m in Sources */,
 				4C23FBFB18FAE5DF009F234F /* MTDatabaseConnectionSqlite3.m in Sources */,
 				4C8BF47816F645B6002D9F9B /* RptqDocumentObjectGroupKey+Extras.m in Sources */,
@@ -6692,6 +6711,7 @@
 				4CABE4801837DF7D007EDD9D /* RptqDocument.m in Sources */,
 				4C11BD1F18E08AEA001E3D33 /* MTDataFormatter.m in Sources */,
 				4CABE4681837DF7A007EDD9D /* RptqQuerySort.m in Sources */,
+				4C62692C19F6328800DCCC2E /* MADInformationTableViewController.m in Sources */,
 				4C67B75419475A88006B4D5B /* UIPageViewController+Extras.m in Sources */,
 				4C773295190FFD6A005AE7C2 /* MysqlIndex.m in Sources */,
 				4CABE4901837DF7F007EDD9D /* RptqQueryLinks.m in Sources */,
@@ -7004,6 +7024,7 @@
 				4C23FC0818FAE610009F234F /* MTDatabase.m in Sources */,
 				4CABE49F1837DF80007EDD9D /* RptqDatabaseSchemaTable.m in Sources */,
 				4C38E9C519F232FC000E0B2F /* MADQueryNavigationController.m in Sources */,
+				4C62693419F6379600DCCC2E /* MADGettingStartedTableViewController.m in Sources */,
 				4CE9BC8116EF702600B0808C /* RptqQueryTable+Extras.m in Sources */,
 				4C23FBC418FAE4F7009F234F /* MTPaperB9.m in Sources */,
 				4CB0FF6616F4B7A800B88626 /* UIDevice+Hack.m in Sources */,
@@ -7064,6 +7085,7 @@
 				4C5CB710189B8EAD00BB5AF8 /* NSData+Base64.m in Sources */,
 				4C11BD1E18E08AEA001E3D33 /* MTDataFormatter.m in Sources */,
 				4C23FBC018FAE4F7009F234F /* MTPaperB7.m in Sources */,
+				4C62692B19F6328800DCCC2E /* MADInformationTableViewController.m in Sources */,
 				4C67B75319475A88006B4D5B /* UIPageViewController+Extras.m in Sources */,
 				4C773294190FFD6A005AE7C2 /* MysqlIndex.m in Sources */,
 				4C5626031759865A00433E88 /* NSData+AES256.m in Sources */,

@@ -14,11 +14,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.toolbar.barTintColor = [UIColor tintColorBlue];
-    self.toolbar.barStyle = UIBarStyleBlack;
+    //self.toolbar.barTintColor = [UIColor tintColorBlue];
+    self.toolbar.barStyle = UIBarStyleDefault;
     self.toolbar.translucent = YES;
-
-    self.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.view.backgroundColor = nil;//[UIColor clearColor];
+    self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
