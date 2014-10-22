@@ -21,7 +21,7 @@
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.estimatedRowHeight = 44.0000f;
     self.rowHeight = UITableViewAutomaticDimension;
-    
+    self.visualEffectsView = visualEffectsView;
     [super awakeFromNib];
 }
 

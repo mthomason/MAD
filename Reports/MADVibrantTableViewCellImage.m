@@ -8,32 +8,29 @@
 
 #import "MADVibrantTableViewCellImage.h"
 
+@interface MADVibrantTableViewCellImage ()
+
+@property (atomic, assign) BOOL initalSetupImageComplete;
+
+@end
+
 @implementation MADVibrantTableViewCellImage
+
 - (void)awakeFromNib {
     [self initalize];
     [self layoutIfNeeded];
     [super awakeFromNib];
-    
-    
 }
 
 - (void)initalize {
     self.updatingConstraints = NO;
-    [self.imageView removeConstraints:self.imageView.constraints];
-    [self.detailTextLabel removeConstraints:self.detailTextLabel.constraints];
-    [self.textLabel removeConstraints:self.textLabel.constraints];
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 64.0000f, 64.0000f)];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:imageView];
-    self.imageViewMain = imageView;
+    self.initalSetupImageComplete = NO;
     [super initalize];
 }
 
 
 - (void)invalidateConstraints {
-    if (self.updatingConstraints == NO) {
+    if (self.updatingConstraints == NO && self.initalSetupImageComplete && self.effectView != nil && self.label != nil && self.imageViewMain != nil) {
         self.updatingConstraints = YES;
         
         if (self.layoutConstraints.count > 0) {
@@ -64,10 +61,23 @@
                                                                           toItem: self.imageViewMain
                                                                        attribute: NSLayoutAttributeHeight
                                                                       multiplier: 1.0000f
-                                                                        constant: 0.0000f];
+                                                                        constant: 2 * 4.0000f];
         
-        NSLayoutConstraint *imageSizeWidth = [NSLayoutConstraint constraintWithItem:self.imageViewMain attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:self.imageViewMain.image.size.width];
-        NSLayoutConstraint *imageSizeHeight = [NSLayoutConstraint constraintWithItem:self.imageViewMain attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0000f constant:self.imageViewMain.image.size.height];
+        NSLayoutConstraint *imageSizeWidth = [NSLayoutConstraint constraintWithItem: self.imageViewMain
+                                                                          attribute: NSLayoutAttributeWidth
+                                                                          relatedBy: NSLayoutRelationEqual
+                                                                             toItem: nil
+                                                                          attribute: NSLayoutAttributeNotAnAttribute
+                                                                         multiplier: 1.0000f
+                                                                           constant: self.imageViewMain.image.size.width];
+        
+        NSLayoutConstraint *imageSizeHeight = [NSLayoutConstraint constraintWithItem: self.imageViewMain
+                                                                           attribute: NSLayoutAttributeHeight
+                                                                           relatedBy: NSLayoutRelationEqual
+                                                                              toItem: nil
+                                                                           attribute: NSLayoutAttributeNotAnAttribute
+                                                                          multiplier: 1.0000f
+                                                                            constant: self.imageViewMain.image.size.height];
         
         NSLayoutConstraint *layoutConstraintLeftItem = [NSLayoutConstraint constraintWithItem: self.contentView
                                                                                     attribute: NSLayoutAttributeLeading
@@ -75,7 +85,7 @@
                                                                                        toItem: self.imageViewMain
                                                                                     attribute: NSLayoutAttributeLeading
                                                                                    multiplier: 1.0000f
-                                                                                     constant: 0.0000f];
+                                                                                     constant: -4.0000f];
         layoutConstraintLeftItem.priority = UILayoutPriorityRequired;
         
         NSLayoutConstraint *layoutConstraintMiddleItemLeft = [NSLayoutConstraint constraintWithItem: self.imageViewMain
@@ -183,6 +193,36 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    if (self.initalSetupImageComplete == NO && self.vibrantTableViewCellDelegate != nil) {
+        self.initalSetupImageComplete = YES;
+        
+        [self.imageView removeConstraints:self.imageView.constraints];
+        [self.detailTextLabel removeConstraints:self.detailTextLabel.constraints];
+        [self.textLabel removeConstraints:self.textLabel.constraints];
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 16.0000f, 16.0000f)];
+        UIImage *image = [UIImage imageNamed:@"MADImageChevronRightTall"];
+        [button setBackgroundImage: image
+                          forState: UIControlStateNormal];
+        
+//        [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 64.0000f, 64.0000f)];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.contentView addSubview:imageView];
+        self.imageViewMain = imageView;
+        
+        UIImageView *imageViewIndicator = [[UIImageView alloc] initWithImage:image];
+        imageViewIndicator.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 16.0000f, 16.0000f);
+        UIBlurEffect *blurEffect = [[self vibrantTableViewCellDelegate] blurEffectForCell:self];
+        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+        UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+        [visualEffectView.contentView addSubview:button];
+        visualEffectView.frame = CGRectMake(CGPointZero.x, CGPointZero.y, 16.0000f, 16.0000f);
+        self.accessoryView = visualEffectView;
+
+        
+    }
 }
 
 + (UIBlurEffectStyle)blurEffectStyle {

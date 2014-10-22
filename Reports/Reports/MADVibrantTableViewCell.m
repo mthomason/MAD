@@ -17,9 +17,6 @@
 
 - (void)awakeFromNib {
     [self initalize];
-    [self invalidateConstraints];
-    [self layoutIfNeeded];
-    
     [super awakeFromNib];
 }
 
@@ -38,7 +35,7 @@
 
 
 - (void)invalidateConstraints {
-    if (self.updatingConstraints == NO) {
+    if (self.updatingConstraints == NO && self.effectView != nil && self.label != nil) {
         self.updatingConstraints = YES;
         
         if (self.layoutConstraints.count > 0) {

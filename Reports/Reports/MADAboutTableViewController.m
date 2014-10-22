@@ -20,19 +20,24 @@
 #import "UIAlertController+CommonAlerts.h"
 #import "UIColor+EverydayApps.h"
 #import "MADVibrantTableViewCell.h"
+#import "MADVibrantTableView.h"
 #import <CoreText/CoreText.h>
 
 @interface MADAboutTableViewController ()
-    <MFMailComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, weak) IBOutlet UILabel *labelTitle;
-@property (nonatomic, weak) IBOutlet UILabel *labelVersion;
-@property (nonatomic, weak) IBOutlet UILabel *labelBuild;
-@property (nonatomic, weak) IBOutlet UILabel *labelTrademark;
+    <MFMailComposeViewControllerDelegate,
+    UITableViewDelegate,
+    UITableViewDataSource,
+    MADVibrantTableViewCellDelegate>
 
 @end
 
 @implementation MADAboutTableViewController
+
+#pragma mark - MADVibrantTableViewCellDelegate
+
+- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
+    return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
+}
 
 #pragma mark - Exit
 
@@ -48,7 +53,7 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-
+        NSAssert([self.tableView isKindOfClass:[MADVibrantTableView class]], @"Expects %@ class at %s", NSStringFromClass([MADVibrantTableView class]), __PRETTY_FUNCTION__);
     }
     
     return self;
@@ -138,6 +143,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellAbout"];
+    cell.vibrantTableViewCellDelegate = self;
     cell.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.tableView.bounds.size.width, tableView.estimatedRowHeight);
     switch (indexPath.row) {
 

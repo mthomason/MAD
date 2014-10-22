@@ -7,16 +7,25 @@
 //
 
 #import "MADGettingStartedTableViewController.h"
+#import "MADVibrantTableView.h"
 #import "MADVibrantTableViewCell.h"
 
 @interface MADGettingStartedTableViewController ()
+    <MADVibrantTableViewCellDelegate>
 
 @end
 
 @implementation MADGettingStartedTableViewController
 
+#pragma mark - MADVibrantTableViewCellDelegate
+
+- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
+    return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.dataSource = self;
     self.preferredContentSize = CGSizeMake(280, 200);
 }
 
@@ -38,7 +47,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADIdentiferVibrantTableViewCellGettingStarted" forIndexPath:indexPath];
-    
+    cell.vibrantTableViewCellDelegate = self;
     switch (indexPath.row) {
             
         case 0:

@@ -8,12 +8,20 @@
 
 #import "MADInformationTableViewController.h"
 #import "MADVibrantTableViewCell.h"
+#import "MADVibrantTableView.h"
 
 @interface MADInformationTableViewController ()
+    <MADVibrantTableViewCellDelegate>
 
 @end
 
 @implementation MADInformationTableViewController
+
+#pragma mark - MADVibrantTableViewCellDelegate
+
+- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {
+    return (UIBlurEffect *)((MADVibrantTableView *)self.tableView).visualEffectsView.effect;
+}
 
 - (IBAction)unwindToInformation:(UIStoryboardSegue *)action { }
 
@@ -34,7 +42,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MADVibrantTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADIdentiferVibrantTableViewCellInformation" forIndexPath:indexPath];
-    
+    cell.vibrantTableViewCellDelegate = self;
+
     switch (indexPath.row) {
 
         case 0:

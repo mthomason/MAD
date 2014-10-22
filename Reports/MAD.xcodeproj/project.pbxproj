@@ -517,6 +517,12 @@
 		4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273828191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C273829191AE4FF00304A02 /* MTQueryCacheIndexDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4C28F37419F819370067DE3C /* MADImageChevronRightTall.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C28F37119F819370067DE3C /* MADImageChevronRightTall.png */; };
+		4C28F37519F819370067DE3C /* MADImageChevronRightTall.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C28F37119F819370067DE3C /* MADImageChevronRightTall.png */; };
+		4C28F37619F819370067DE3C /* MADImageChevronRightTall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C28F37219F819370067DE3C /* MADImageChevronRightTall@2x.png */; };
+		4C28F37719F819370067DE3C /* MADImageChevronRightTall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C28F37219F819370067DE3C /* MADImageChevronRightTall@2x.png */; };
+		4C28F37819F819370067DE3C /* MADImageChevronRightTall@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C28F37319F819370067DE3C /* MADImageChevronRightTall@3x.png */; };
+		4C28F37919F819370067DE3C /* MADImageChevronRightTall@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C28F37319F819370067DE3C /* MADImageChevronRightTall@3x.png */; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
 		4C2AC30215358DA600738091 /* UIImageExportTypeCSV.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738091 /* UIImageExportTypeCSV.png */; };
@@ -1910,6 +1916,9 @@
 		4C27381A191AE4E600304A02 /* MTQueryCacheIndexCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexCreate.m; sourceTree = "<group>"; };
 		4C273826191AE4FF00304A02 /* MTQueryCacheIndexDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQueryCacheIndexDrop.h; sourceTree = "<group>"; };
 		4C273827191AE4FF00304A02 /* MTQueryCacheIndexDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTQueryCacheIndexDrop.m; sourceTree = "<group>"; };
+		4C28F37119F819370067DE3C /* MADImageChevronRightTall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MADImageChevronRightTall.png; sourceTree = "<group>"; };
+		4C28F37219F819370067DE3C /* MADImageChevronRightTall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageChevronRightTall@2x.png"; sourceTree = "<group>"; };
+		4C28F37319F819370067DE3C /* MADImageChevronRightTall@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MADImageChevronRightTall@3x.png"; sourceTree = "<group>"; };
 		4C28FB8C16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerSectionViewLayoutLine.h; sourceTree = "<group>"; };
 		4C28FB8D16A2A1A6007D6D23 /* MTReportDesignerSectionViewLayoutLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerSectionViewLayoutLine.m; sourceTree = "<group>"; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeMySQL.png; path = Reports/UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
@@ -4284,6 +4293,9 @@
 		4C6268FB19F6008700DCCC2E /* Vibrant */ = {
 			isa = PBXGroup;
 			children = (
+				4C28F37119F819370067DE3C /* MADImageChevronRightTall.png */,
+				4C28F37219F819370067DE3C /* MADImageChevronRightTall@2x.png */,
+				4C28F37319F819370067DE3C /* MADImageChevronRightTall@3x.png */,
 				4C1EE62519F762DC00620486 /* MADVibrantTableViewCellBase.h */,
 				4C1EE62619F762DC00620486 /* MADVibrantTableViewCellBase.m */,
 				4C6268D919F5DBF400DCCC2E /* MADVibrantTableViewCell.h */,
@@ -5899,6 +5911,7 @@
 				4C0E7817163B5AEC003B951E /* UIImagePatternKraftWaffle@2x.png in Resources */,
 				4C0E7818163B5AEC003B951E /* UIImagePatternLeaf.png in Resources */,
 				4CF000DF19C0CCD500A24810 /* UIBarButtonItemDatabase8@2x.png in Resources */,
+				4C28F37919F819370067DE3C /* MADImageChevronRightTall@3x.png in Resources */,
 				4CFD364C18368935000EF14B /* MTBarcodeChannelCode.h in Resources */,
 				4C0E7819163B5AEC003B951E /* UIImagePatternLeaf@2x.png in Resources */,
 				4C0E781A163B5AEC003B951E /* UIImagePatternLined.png in Resources */,
@@ -5929,6 +5942,7 @@
 				4C67B74519474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */,
 				4C0E782C163B5AEC003B951E /* UIImagePatternPeachPebbled.png in Resources */,
 				4C0E782D163B5AEC003B951E /* UIImagePatternPeachPebbled@2x.png in Resources */,
+				4C28F37519F819370067DE3C /* MADImageChevronRightTall.png in Resources */,
 				4C0E782E163B5AEC003B951E /* UIImagePatternPinkTextured.png in Resources */,
 				4C0E782F163B5AEC003B951E /* UIImagePatternPinkTextured@2x.png in Resources */,
 				4C0E7830163B5AEC003B951E /* UIImagePatternPinkWithFlecks.png in Resources */,
@@ -6008,6 +6022,7 @@
 				4CE314221694BCEC00114431 /* UIImageAlignTop20.png in Resources */,
 				4CE314271694BCEC00114431 /* UIImageAlignTop20@2x.png in Resources */,
 				4CE3142C1694BCEC00114431 /* UIImageAlignBottom20.png in Resources */,
+				4C28F37719F819370067DE3C /* MADImageChevronRightTall@2x.png in Resources */,
 				4CE314311694BCEC00114431 /* UIImageAlignBottom20@2x.png in Resources */,
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4C5CB7CA189E2A7D00BB5AF8 /* odbcss.h in Resources */,
@@ -6222,6 +6237,7 @@
 				4CCD8D9A150385DA002B9E77 /* UIImagePatternNotebook.png in Resources */,
 				4CF000E419C0CCD500A24810 /* UIBarButtonItemMadViewer8.png in Resources */,
 				4C6461B418C0E6590069EF8D /* MTActivityProvidence@2x.png in Resources */,
+				4C28F37419F819370067DE3C /* MADImageChevronRightTall.png in Resources */,
 				4C62693019F6335C00DCCC2E /* MADStoryboardInformationTable.storyboard in Resources */,
 				4CCD8D9B150385DA002B9E77 /* UIImagePatternNotebook@2x.png in Resources */,
 				4CCD8D9C150385DA002B9E77 /* UIImagePatternPeachPebbled.png in Resources */,
@@ -6250,6 +6266,7 @@
 				4CCD8DAF150385DA002B9E77 /* UIImagePatternWhiteStationary@2x.png in Resources */,
 				4CCD8DB0150385DA002B9E77 /* UIImagePatternWhiteTextured.png in Resources */,
 				4CF000DC19C0CCD500A24810 /* UIBarButtonItemDatabase8.png in Resources */,
+				4C28F37619F819370067DE3C /* MADImageChevronRightTall@2x.png in Resources */,
 				4CCD8DB1150385DA002B9E77 /* UIImagePatternWhiteTextured@2x.png in Resources */,
 				4C6461B518C0E6590069EF8D /* MTActivityProvidence~iPad.png in Resources */,
 				4CCD8DB2150385DA002B9E77 /* UIImagePatternWhiteWithWoodFibers.png in Resources */,
@@ -6267,6 +6284,7 @@
 				4C2AC3131535919400738091 /* UIImageExportTypeAppEngine@2x.png in Resources */,
 				4CFD36571836A257000EF14B /* MTBarcodeCode39Iso16388.h in Resources */,
 				4C5CB7CD189E2A7D00BB5AF8 /* sqlfront.h in Resources */,
+				4C28F37819F819370067DE3C /* MADImageChevronRightTall@3x.png in Resources */,
 				4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4C80A5F21831859700242703 /* MTBarcodeGridMatrix.h in Resources */,
 				4C4EBFAC17EDEA8D00D10622 /* carat-open.png in Resources */,

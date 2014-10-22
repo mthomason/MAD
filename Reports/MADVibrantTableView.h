@@ -10,4 +10,6 @@
 
 @interface MADVibrantTableView : UITableView
 
+@property (nonatomic, strong) UIVisualEffectView *visualEffectsView;
+
 @end

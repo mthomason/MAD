@@ -15,7 +15,15 @@ typedef NS_ENUM(NSUInteger, MADVibrantTableViewCellMarginStyle) {
     MADTableViewCellMarginStyleFat
 };
 
+@protocol MADVibrantTableViewCellDelegate <NSObject>
+
+- (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell;
+
+@end
+
 @interface MADVibrantTableViewCellBase : UITableViewCell
+
+@property (nonatomic, weak) id <MADVibrantTableViewCellDelegate> vibrantTableViewCellDelegate;
 
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, weak) UIVisualEffectView *effectView;
