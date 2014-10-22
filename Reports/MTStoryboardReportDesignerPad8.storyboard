@@ -83,6 +83,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                        </textAttributes>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="PqF-X4-jGD">
                         <rect key="frame" x="0.0" y="980" width="768" height="44"/>
@@ -164,6 +167,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                        </textAttributes>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="o8k-Tj-qF2">
                         <rect key="frame" x="0.0" y="980" width="768" height="44"/>
@@ -230,6 +236,7 @@
                         <color key="barTintColor" red="0.050980392156862744" green="0.61960784313725492" blue="0.84313725490196079" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                         </textAttributes>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="qFt-Ir-G7D">
@@ -255,6 +262,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.87058823529411766" green="0.14117647058823529" blue="0.28235294117647058" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.050980392156862744" green="0.61960784313725492" blue="0.84313725490196079" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                        </textAttributes>
                     </navigationBar>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Qeq-p1-G7h">
                         <rect key="frame" x="0.0" y="980" width="768" height="44"/>
@@ -5085,7 +5095,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BzE-Y8-8fi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4345" y="5429"/>
+            <point key="canvasLocation" x="4028" y="5404"/>
         </scene>
         <!--Type-->
         <scene sceneID="S7M-B6-ihT">
@@ -5352,7 +5362,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kel-2F-o4P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4924" y="4619"/>
+            <point key="canvasLocation" x="4924" y="4475"/>
         </scene>
         <!--Barcode Type-->
         <scene sceneID="5PA-Ds-5ZY">

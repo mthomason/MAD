@@ -445,7 +445,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     viewControllerSectionLayoutSettings.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.viewControllerSectionLayoutSettings = viewControllerSectionLayoutSettings;
     
-    UINavigationController *navigationController = [MADDesignerViewController navigationControllerSectionLayoutSettings:self.viewControllerSectionLayoutSettings];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewControllerSectionLayoutSettings];
     self.navigationControllerSectionLayoutSettings = navigationController;
     
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
@@ -3197,14 +3197,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 + (MTReportDesignerSectionLayoutSettingsViewController *)toolboxSettings {
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
     return [storyboard instantiateViewControllerWithIdentifier:MTReportDesignerSectionLayoutSettingsViewControllerIdentifier];
-}
-
-+ (UINavigationController *)navigationControllerSectionLayoutSettings:()controller {
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    UIColor *whiteColor = [UIColor whiteColor];
-    NSDictionary *textAttribues = @{NSForegroundColorAttributeName : whiteColor};
-    [navigationController.navigationBar setTitleTextAttributes:textAttribues];
-    return navigationController;
 }
 
 + (MADDesignerSectionView *)documentSectionView:(RptqDocumentSection *)section delegate:(id)layoutDelegate {

@@ -218,19 +218,17 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return self;
 }
 
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length +
-                                                                    self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1),
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                                             CGSizeZero.width,
                                                             self.bottomLayoutGuide.length,
                                                             CGSizeZero.width);
     
-    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length +
-                                                        self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1),
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length,
                                                    CGSizeZero.width,
                                                    self.bottomLayoutGuide.length,
-                                                       // + self.navigationController.navigationBar.bounds.size.height * (self.navigationController.navigationBar.hidden ? 0 : 1),
                                                    CGSizeZero.width);
 }
 
@@ -312,10 +310,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
 
-        //[UIView setAnimationsEnabled:animate];
+        [UIView setAnimationsEnabled:animate];
 
-        //self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
-        //[UIView setAnimationsEnabled:YES];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;
     }
@@ -323,6 +321,13 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    [[UILabel appearanceWhenContainedIn:[UINavigationBar class], nil] setTextColor:[UIColor whiteColor]];
+   // self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    //self.navigationController.navigationItem.prompt = @"test";
+//    [[UILabel appearanceWhenContainedIn:[UINavigationBar class], nil]
+ //  setTitleTextAttributes:
+  //   [NSDictionary dictionaryWithObjectsAndKeys:
+//      [UIColor whiteColor], UITextAttributeTextColor, nil]];
     
     //[self.navigationController setNavigationBarHidden:YES animated:NO];
     

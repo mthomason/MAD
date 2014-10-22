@@ -54,6 +54,9 @@
     
     if (self) {
         
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        self.navigationController.navigationItem.titleView.tintColor = [UIColor whiteColor];
+        
         self.localEditing = NO;
     
         UIBarButtonItem *barButtonItemDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone

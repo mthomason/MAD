@@ -265,6 +265,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
     //self.restorationIdentifier = @"MADIdentifierRestorationViewerViewController";
     
+    
+    
+    
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -320,6 +323,9 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
         self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        for (UIView *view in self.navigationItem.titleView.subviews) {
+            NSLog(@"%@", view);
+        }
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

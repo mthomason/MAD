@@ -350,8 +350,14 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
                       MADConstCellDocumentLabelMaxHeight);
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidLoad {
 
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(reloadSectionLocal)
                                                  name: MADNotificationReloadSectionLocal
@@ -1774,7 +1780,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     MADOpenFileViewController *weakSelf = self;
     
     [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
+        //[[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
         
         for (NSIndexPath *visibleCellLocations in weakSelf.collectionView.indexPathsForVisibleItems) {
             MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[weakSelf.collectionView cellForItemAtIndexPath:visibleCellLocations];
@@ -1795,7 +1801,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         }
     } else {
         [self presentViewController:activityViewController animated:YES completion:^{
-            [[UINavigationBar appearance] setBarTintColor:[UIColor tintColorAnalogous4]];
+            //[[UINavigationBar appearance] setBarTintColor:[UIColor tintColorAnalogous4]];
         }];
     }
 }

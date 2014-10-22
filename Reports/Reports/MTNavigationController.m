@@ -15,15 +15,15 @@
     [super viewDidLoad];
     
     //self.toolbar.barTintColor = [UIColor tintColorBlue];
-    self.toolbar.barStyle = UIBarStyleDefault;
+    self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
-    self.navigationController.view.backgroundColor = nil;//[UIColor clearColor];
+    self.navigationController.view.backgroundColor = nil;
     self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    self.navigationBar.titleTextAttributes = titleTextAttributes;
+    //self.navigationBar.titleTextAttributes = titleTextAttributes;
 }
 
 - (UITabBarItem *)tabBarItem {
@@ -53,6 +53,10 @@
     }
     
     return foundViewController;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 @end

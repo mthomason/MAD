@@ -47,4 +47,8 @@
     [super viewWillLayoutSubviews];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 @end
