@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDatabaseDriverSelectorViewController.h"
+#import "MADVibrantTableViewCellImage.h"
 #import "MTConnectionViewController.h"
 #import "UIDevice+Hack.h"
 #import "MTDatabaseMySql.h"
@@ -60,27 +61,54 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType" forIndexPath:indexPath];
+    MADVibrantTableViewCellImage *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType"];
 
-    cell.textLabel.numberOfLines = 0;
+//    cell.textLabel.numberOfLines = 0;
 
     switch (indexPath.row) {
         case 0:
-            cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
-            cell.textLabel.text = @"MySQL Native Driver";
+            cell.imageViewMain.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
+            //[cell.imageViewMain invalidateIntrinsicContentSize];
+            //[cell.imageViewMain sizeToFit];
+//            [cell.imageViewMain layoutIfNeeded];
+            //cell.imageView.image = nil;
+            cell.textLabel.text = @"";
+            //cell.label.tintColor = [UIColor blackColor];
+            cell.label.text = @"MySQL Native Driver";
+            //cell.label.backgroundColor = [UIColor grayColor];
+  //          [cell.imageViewMain layoutIfNeeded];
+            cell.marginStyle = MADTableViewCellMarginStyleTop;
             break;
 
         case 1:
-            cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
-            cell.textLabel.text = @"Sql Server / TDS Driver";
+            cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            //cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            cell.imageViewMain.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
+            //[cell.imageViewMain sizeToFit];
+//            cell.image.frame = CGRectMake(cell.image.frame.origin.x, cell.image.frame.origin.y, 64.0000f, 64.0000f);
+            //[cell.imageViewMain updateConstraintsIfNeeded];
+            //cell.imageView.image = nil;
+            cell.textLabel.text = @"";
+            //cell.label.tintColor = [UIColor blackColor];
+            cell.label.text = @"Sql Server / TDS Driver";
+    //        [cell.imageViewMain layoutIfNeeded];
             break;
             
         default:
             break;
     }
-    [cell layoutIfNeeded];
 
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [cell.contentView setNeedsLayout];
+    [cell.contentView layoutIfNeeded];
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [cell.contentView setNeedsLayout];
+    [cell.contentView layoutIfNeeded];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

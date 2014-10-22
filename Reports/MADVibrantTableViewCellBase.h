@@ -1,8 +1,8 @@
 //
-//  MADVibrantTableViewCell.h
+//  MADVibrantTableViewCellBase.h
 //  MAD
 //
-//  Created by Michael Thomason on 10/20/14.
+//  Created by Michael Thomason on 10/21/14.
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
@@ -15,12 +15,18 @@ typedef NS_ENUM(NSUInteger, MADVibrantTableViewCellMarginStyle) {
     MADTableViewCellMarginStyleFat
 };
 
-@interface MADVibrantTableViewCell : UITableViewCell
+@interface MADVibrantTableViewCellBase : UITableViewCell
 
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, weak) UIVisualEffectView *effectView;
 @property (nonatomic, assign) MADVibrantTableViewCellMarginStyle marginStyle;
 
+@property (nonatomic, strong) NSArray *layoutConstraints;
+@property (atomic, assign) BOOL updatingConstraints;
+
 + (UIBlurEffectStyle)blurEffectStyle;
+
+- (void)updateConstraints;
+- (void)initalize;
 
 @end

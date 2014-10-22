@@ -38,9 +38,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.167";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.167";
-NSString * const MTGlobalBundleRev                                  = @"1542";
+NSString * const MTGlobalBundleVersion                              = @"7.0.168";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.168";
+NSString * const MTGlobalBundleRev                                  = @"1543";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -370,8 +370,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 
 - (void)initalizeAppearance {
     UIColor *tintColorWhite = [UIColor tintColorWhite];
-    UIColor *edaGreen = [UIColor tintColorAnalogous4];
-    UIColor *tintColor = [UIColor tintColorBlue];
+    //UIColor *edaGreen = [UIColor tintColorAnalogous4];
+    //UIColor *tintColor = [UIColor tintColorBlue];
     
     NSDictionary *titleTextAttributes = @{ NSForegroundColorAttributeName : tintColorWhite};
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
@@ -379,7 +379,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
     [[UIToolbar appearance] setBarTintColor:[UIColor tintColorBlue]];
 /*
- [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]                   setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
     [[UINavigationBar appearanceWhenContainedIn:[UITabBarController class], nil]            setTintColor: tintColorWhite];
@@ -404,9 +404,12 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 }
 
 - (void)registerDefaultsFromSettingsBundle {
+    
     dispatch_queue_t dipatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(dipatchQueue, ^{
+
         dispatch_sync(dispatch_get_main_queue(), ^{
+
             dispatch_queue_t dipatchQueueBg = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
             dispatch_async(dipatchQueueBg, ^{
                 
@@ -437,9 +440,11 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
                 
                 [standardUserDefaults registerDefaults:defaultsToRegister];
                 [standardUserDefaults synchronize];
+                
             });
         });
     });
+    
 }
 
 #pragma mark - Document Operations

@@ -1678,6 +1678,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
                                           animated: YES];
 
     } else {
+
         self.editModeEnabled = NO;
         self.barButtonItemLicensing.enabled = YES;
         self.barButtonItemAddNewDocument.enabled = YES;
@@ -1689,7 +1690,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
         self.barButtonItemAction.enabled = NO;
         
         self.collectionView.allowsMultipleSelection = NO;
-        
         
         [self.navigationItem setRightBarButtonItem:self.barButtonItemSearch animated:YES];
         
@@ -1780,8 +1780,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     MADOpenFileViewController *weakSelf = self;
     
     [activityViewController setCompletionWithItemsHandler: ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        //[[UINavigationBar appearance] setBarTintColor:[UIColor tintColorBlue]];
-        
         for (NSIndexPath *visibleCellLocations in weakSelf.collectionView.indexPathsForVisibleItems) {
             MTCollectionViewCellDocument *documentCell = (MTCollectionViewCellDocument *)[weakSelf.collectionView cellForItemAtIndexPath:visibleCellLocations];
             if (documentCell != nil) {
@@ -1800,9 +1798,7 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
             [self setPopoverControllerActivity:popoverController];
         }
     } else {
-        [self presentViewController:activityViewController animated:YES completion:^{
-            //[[UINavigationBar appearance] setBarTintColor:[UIColor tintColorAnalogous4]];
-        }];
+        [self presentViewController:activityViewController animated:YES completion:^{ }];
     }
 }
 

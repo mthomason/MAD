@@ -342,6 +342,12 @@
 		4C1BB6EC1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6EA1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png */; };
 		4C1BB6EF1813D5110027C508 /* UIBarButtonItemMadDesigner.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6ED1813D5110027C508 /* UIBarButtonItemMadDesigner.png */; };
 		4C1BB6F01813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1BB6EE1813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png */; };
+		4C1EE61719F750D900620486 /* MADVibrantTableViewCellBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EE61619F750D900620486 /* MADVibrantTableViewCellBasic.m */; };
+		4C1EE61819F750D900620486 /* MADVibrantTableViewCellBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EE61619F750D900620486 /* MADVibrantTableViewCellBasic.m */; };
+		4C1EE62319F7628100620486 /* MADVibrantTableViewCellImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EE62219F7628100620486 /* MADVibrantTableViewCellImage.m */; };
+		4C1EE62419F7628100620486 /* MADVibrantTableViewCellImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EE62219F7628100620486 /* MADVibrantTableViewCellImage.m */; };
+		4C1EE62719F762DC00620486 /* MADVibrantTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EE62619F762DC00620486 /* MADVibrantTableViewCellBase.m */; };
+		4C1EE62819F762DC00620486 /* MADVibrantTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EE62619F762DC00620486 /* MADVibrantTableViewCellBase.m */; };
 		4C2213AB17D7932A00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AC17D7932B00BD36F5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C2213AE17D7947800BD36F5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2213AD17D7947800BD36F5 /* Accelerate.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -1713,6 +1719,12 @@
 		4C1BB6EA1813D2610027C508 /* UIBarButtonItemMadViewer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadViewer@2x.png"; sourceTree = "<group>"; };
 		4C1BB6ED1813D5110027C508 /* UIBarButtonItemMadDesigner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBarButtonItemMadDesigner.png; sourceTree = "<group>"; };
 		4C1BB6EE1813D5110027C508 /* UIBarButtonItemMadDesigner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBarButtonItemMadDesigner@2x.png"; sourceTree = "<group>"; };
+		4C1EE61519F750D900620486 /* MADVibrantTableViewCellBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableViewCellBasic.h; sourceTree = "<group>"; };
+		4C1EE61619F750D900620486 /* MADVibrantTableViewCellBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableViewCellBasic.m; sourceTree = "<group>"; };
+		4C1EE62119F7628100620486 /* MADVibrantTableViewCellImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableViewCellImage.h; sourceTree = "<group>"; };
+		4C1EE62219F7628100620486 /* MADVibrantTableViewCellImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableViewCellImage.m; sourceTree = "<group>"; };
+		4C1EE62519F762DC00620486 /* MADVibrantTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantTableViewCellBase.h; sourceTree = "<group>"; };
+		4C1EE62619F762DC00620486 /* MADVibrantTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantTableViewCellBase.m; sourceTree = "<group>"; };
 		4C202130163DD4090058F869 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C2213A317D746C200BD36F5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		4C2213A417D746C200BD36F5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -4272,11 +4284,17 @@
 		4C6268FB19F6008700DCCC2E /* Vibrant */ = {
 			isa = PBXGroup;
 			children = (
+				4C1EE62519F762DC00620486 /* MADVibrantTableViewCellBase.h */,
+				4C1EE62619F762DC00620486 /* MADVibrantTableViewCellBase.m */,
 				4C6268D919F5DBF400DCCC2E /* MADVibrantTableViewCell.h */,
 				4C6268DA19F5DBF400DCCC2E /* MADVibrantTableViewCell.m */,
+				4C1EE62119F7628100620486 /* MADVibrantTableViewCellImage.h */,
+				4C1EE62219F7628100620486 /* MADVibrantTableViewCellImage.m */,
 				4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */,
 				4C6268FC19F600B100DCCC2E /* MADVibrantTableView.h */,
 				4C6268FD19F600B100DCCC2E /* MADVibrantTableView.m */,
+				4C1EE61519F750D900620486 /* MADVibrantTableViewCellBasic.h */,
+				4C1EE61619F750D900620486 /* MADVibrantTableViewCellBasic.m */,
 			);
 			name = Vibrant;
 			sourceTree = "<group>";
@@ -6469,6 +6487,7 @@
 				4C0E7769163B5AEC003B951E /* MTQueryBuilderSortTypeViewController.m in Sources */,
 				4C16809F1907B45200980D8D /* MTQueryCacheJournalModeOverride.m in Sources */,
 				4C23FBBF18FAE4F7009F234F /* MTPaperB6.m in Sources */,
+				4C1EE62819F762DC00620486 /* MADVibrantTableViewCellBase.m in Sources */,
 				4C23FBD318FAE4F7009F234F /* MTPaperC5.m in Sources */,
 				4C113C9219A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */,
 				4C23FBB118FAE4F7009F234F /* MTPaperA10.m in Sources */,
@@ -6551,6 +6570,7 @@
 				4C27381C191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */,
 				4CA16335167CAD6400540A14 /* RptqDocumentObjectLabel+Extras.m in Sources */,
 				4CABE4BC1837E1D0007EDD9D /* RptqDocumentObjectBarcode.m in Sources */,
+				4C1EE61819F750D900620486 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4C77329B190FFD6A005AE7C2 /* MysqlRollbackException.m in Sources */,
 				4C16808719078A2800980D8D /* MTQueryCacheVacuum.m in Sources */,
 				4CA1633B167CAD9D00540A14 /* RptqDocumentObjectLabelLink+Extras.m in Sources */,
@@ -6575,6 +6595,7 @@
 				4C773299190FFD6A005AE7C2 /* MysqlLiteral.m in Sources */,
 				4C3727B5168A38A7007DA7C3 /* UICollectionViewCell+Reuse.m in Sources */,
 				4CABE47C1837DF7D007EDD9D /* RptqQueryPredicate.m in Sources */,
+				4C1EE62419F7628100620486 /* MADVibrantTableViewCellImage.m in Sources */,
 				4C3727BC168A3FF6007DA7C3 /* MTCollectionReuseableViewDefault.m in Sources */,
 				4C23FBD118FAE4F7009F234F /* MTPaperC4.m in Sources */,
 				4C3727C3168A402A007DA7C3 /* UICollectionReusableView+Reuse.m in Sources */,
@@ -6843,6 +6864,7 @@
 				4CD9CB0C14DE0A29000E5946 /* MTQueryBuilderAddPredicateViewController.m in Sources */,
 				4C23FBA418FAE4F7009F234F /* MTPaperA4.m in Sources */,
 				4C23FBA218FAE4F7009F234F /* MTPaperA3.m in Sources */,
+				4C1EE62719F762DC00620486 /* MADVibrantTableViewCellBase.m in Sources */,
 				4C16809E1907B45200980D8D /* MTQueryCacheJournalModeOverride.m in Sources */,
 				4C113C9119A3D6BB00D1A3B0 /* UIScrollView+Extras.m in Sources */,
 				4CD9CB0F14DE0A7C000E5946 /* MTQueryBuilderAddGroupViewController.m in Sources */,
@@ -6925,6 +6947,7 @@
 				4C27381B191AE4E600304A02 /* MTQueryCacheIndexCreate.m in Sources */,
 				4C982DBC166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
 				4CFC3DE416714A270016E1E8 /* MTShowSqlViewController.m in Sources */,
+				4C1EE61719F750D900620486 /* MADVibrantTableViewCellBasic.m in Sources */,
 				4C3ACA3F16715679001BC16D /* RptqQuery+Extras.m in Sources */,
 				4C77329A190FFD6A005AE7C2 /* MysqlRollbackException.m in Sources */,
 				4C16808619078A2800980D8D /* MTQueryCacheVacuum.m in Sources */,
@@ -6949,6 +6972,7 @@
 				4C773298190FFD6A005AE7C2 /* MysqlLiteral.m in Sources */,
 				4C23FC0A18FAE610009F234F /* MTDatabaseMySql.m in Sources */,
 				4C860AB2167ED98900AC1904 /* NSString+MTProtocol.m in Sources */,
+				4C1EE62319F7628100620486 /* MADVibrantTableViewCellImage.m in Sources */,
 				4CF8D420168502D700357B1E /* MTCollectionViewCellElement.m in Sources */,
 				4C23FAF418FADCC5009F234F /* MTTableViewControllerStaticSelectRow.m in Sources */,
 				4C23FB2818FADDE7009F234F /* MTQueryBuilderContainerController.m in Sources */,
