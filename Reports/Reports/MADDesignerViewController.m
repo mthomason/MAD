@@ -494,6 +494,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     [self.view addConstraints:constraints];
 
+    self.scroller.container.backgroundColor = [UIColor greenColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -2352,9 +2353,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.popoverToolbox.delegate = self;
     self.popoverToolbox.sourceRect = self.rectForSelectedElements;
     self.popoverToolbox.sourceView = self.scroller.container;
+    self.popoverToolbox.backgroundColor = [UIColor clearColor];
     self.viewControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverStyle];
     self.popoverToolbox.permittedArrowDirections = UIPopoverArrowDirectionAny;
     self.popoverToolbox.passthroughViews = self.elementViews.allObjects;
+    
     //[self.popoverToolbox.containerView setNeedsLayout];
     
     if (self.popoverToolboxIsVisible == NO) {

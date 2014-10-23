@@ -621,12 +621,32 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 }
 
+- (IBAction)addDocument:(id)sender {
+
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardNewDocument" bundle:[NSBundle mainBundle]];
+    MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
+    navControl.modalPresentationStyle = UIModalPresentationFormSheet;
+    ((MTDatabaseDriverSelectorViewController *)navControl.topViewController).delegate = self;
+    self.definesPresentationContext = YES;
+    self.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+
+    UIPresentationController *pc = navControl.presentationController;
+    pc.containerView.backgroundColor = [UIColor clearColor];
+    navControl.topViewController.view.backgroundColor = [UIColor clearColor];
+    navControl.view.backgroundColor = [UIColor clearColor];
+    [self presentViewController: navControl
+                       animated: YES
+                     completion: nil];
+    
+}
+
 - (void)prepareForSegueAddDocument:(UIStoryboardSegue *)segue {
     if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
         UINavigationController *navControl = segue.destinationViewController;
         if ([navControl topViewController]) {
             if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                [self setOpenDocumentPopoverController: [(UIStoryboardPopoverSegue *)segue popoverController]];
+                self.openDocumentPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
                 self.openDocumentPopoverController.delegate = self;
             }
             ((MTDatabaseDriverSelectorViewController *)[navControl topViewController]).delegate = self;
@@ -638,6 +658,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
         [segue.destinationViewController setDelegate: self];
     }
 }
+
 
 - (void)prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue {
     UINavigationController *navigationController = segue.destinationViewController;
@@ -902,6 +923,11 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     [self.barButtonItemAddNewDocument setEnabled:YES];
     [self.openDocumentPopoverController dismissPopoverAnimated:YES];
     
+}
+
+- (IBAction)cancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.barButtonItemAddNewDocument setEnabled:YES];
 }
 
 - (void)viewControllerDidCancel:(id)sender {

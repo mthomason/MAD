@@ -1406,6 +1406,8 @@
 		4CDB626514E3C79B00A5389E /* UIViewTableSectionHeaderQueryBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CDF618B16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CDF618C16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		4CE07F6B19F837CD00765371 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */; };
+		4CE07F6C19F837CD00765371 /* MADStoryboardNewDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */; };
 		4CE17E2116501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE17E2216501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CE17E251650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE17E241650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2877,6 +2879,7 @@
 		4CDB626414E3C79A00A5389E /* UIViewTableSectionHeaderQueryBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTableSectionHeaderQueryBuilder.m; sourceTree = "<group>"; };
 		4CDF618916B66BA500C80E01 /* MTReportDesignerToolBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTReportDesignerToolBoxViewController.h; sourceTree = "<group>"; };
 		4CDF618A16B66BA500C80E01 /* MTReportDesignerToolBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTReportDesignerToolBoxViewController.m; sourceTree = "<group>"; };
+		4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardNewDocument.storyboard; sourceTree = "<group>"; };
 		4CE17E1F16501A800002F8EA /* RptqDatabaseSchemaField+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabaseSchemaField+Extras.h"; sourceTree = "<group>"; };
 		4CE17E2016501A800002F8EA /* RptqDatabaseSchemaField+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabaseSchemaField+Extras.m"; sourceTree = "<group>"; };
 		4CE17E231650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabaseSchemaTable+Extras.h"; sourceTree = "<group>"; };
@@ -5139,6 +5142,7 @@
 			children = (
 				4CD36A1E19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard */,
 				4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */,
+				4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */,
 			);
 			name = iOS8;
 			sourceTree = "<group>";
@@ -5998,6 +6002,7 @@
 				4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */,
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C15669E19F5A83A00EE465D /* testimage.jpg in Resources */,
+				4CE07F6C19F837CD00765371 /* MADStoryboardNewDocument.storyboard in Resources */,
 				4CB3C23D19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */,
 				4C92956518C4E0770010AAEF /* MTImageLaunchDesignerPadLandscape.png in Resources */,
 				4C5029F618185A8B00C88CD4 /* chinook.sqlite3 in Resources */,
@@ -6095,6 +6100,7 @@
 				4C00817714B6CAAF003DF437 /* UIImageBold20.png in Resources */,
 				4C00817814B6CAAF003DF437 /* UIImageBold20@2x.png in Resources */,
 				4C92956A18C4E0770010AAEF /* MTImageLaunchDesignerPadPortrait.png in Resources */,
+				4CE07F6B19F837CD00765371 /* MADStoryboardNewDocument.storyboard in Resources */,
 				4C00817914B6CAAF003DF437 /* UIImageItalic20.png in Resources */,
 				4C00817A14B6CAAF003DF437 /* UIImageItalic20@2x.png in Resources */,
 				4C5CB7D1189E2A7D00BB5AF8 /* syberror.h in Resources */,

@@ -205,8 +205,7 @@
         [button setBackgroundImage: image
                           forState: UIControlStateNormal];
         
-//        [button addTarget:self action:@selector(checkButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 64.0000f, 64.0000f)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(CGPointZero.x, CGPointZero.y, 16.0000f, 16.0000f)];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:imageView];

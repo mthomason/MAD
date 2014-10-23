@@ -20,6 +20,7 @@
     self.navigationController.view.backgroundColor = nil;
     self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
+    self.view.backgroundColor = [UIColor clearColor];
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];

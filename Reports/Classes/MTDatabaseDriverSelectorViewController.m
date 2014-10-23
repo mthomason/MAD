@@ -153,5 +153,8 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)viewControllerDidCancel:(id)sender {
     [self.delegate viewControllerDidCancel:self];
 }
+- (IBAction)cancel:(id)sender {
+    [self viewControllerDidCancel:sender];
+}
 
 @end
