@@ -18,9 +18,10 @@
 #import "MTDatabaseSqlServer.h"
 #import "MTDatabaseSqlite3.h"
 #import "MADVibrantTableView.h"
+#import "MADTransparentPresentationController.h"
 
-NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select a database type.";
-NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"Supported Databases";
+NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
+NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";
 
 NSString * const MTSegueShowSetUpDatasourceMySqlIdentifier              = @"MTSegueShowSetUpDatasourceMySqlIdentifier";
 NSString * const MTSegueShowSetUpDatasourceSqlite3Identifier            = @"MTSegueShowSetUpDatasourceSqlite3Identifier";
@@ -31,6 +32,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     <MTViewControllerProtocol,
     MADVibrantTableViewCellDelegate,
     UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITableViewCell *testCell;
 
 @end
@@ -46,10 +48,7 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt, MTDatabaseDriverSelectorViewControllerDefaultPrompt);
-    }
-
+    self.navigationItem.prompt = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultPrompt, MTDatabaseDriverSelectorViewControllerDefaultPrompt);
     self.navigationItem.title = NSLocalizedString(MTDatabaseDriverSelectorViewControllerDefaultTitle, MTDatabaseDriverSelectorViewControllerDefaultTitle);
     [self.navigationItem setLeftItemsSupplementBackButton: YES];
     

@@ -185,7 +185,7 @@
                     <navigationItem key="navigationItem" title="MySQL Setup" id="NDP-yE-RF0">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="QLj-7p-h2E">
                             <connections>
-                                <segue destination="CzX-IM-Xa4" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="oQo-ds-93M"/>
+                                <action selector="canceled:" destination="Q7F-2G-NiU" id="S8l-sW-Ytg"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="K8u-cx-qzX">
@@ -205,7 +205,6 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D5V-zv-hLI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="CzX-IM-Xa4" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="935" y="2756"/>
         </scene>
@@ -421,7 +420,7 @@
                     <navigationItem key="navigationItem" title="SQL Server" id="ko1-fh-Fz3">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="M34-Gb-qAN">
                             <connections>
-                                <segue destination="OT1-EF-eBf" kind="unwind" unwindAction="unwindToOpenDocumentViewController:" id="tGp-M2-tab"/>
+                                <action selector="canceled:" destination="Is4-hx-h6R" id="ieQ-23-YWe"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="Cra-Jt-7D6">
@@ -444,7 +443,6 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVF-3t-Xbz" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="OT1-EF-eBf" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="935" y="3471"/>
         </scene>

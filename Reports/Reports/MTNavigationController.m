@@ -7,24 +7,25 @@
 //
 
 #import "MTNavigationController.h"
+#import "MADTransparentPresentationController.h"
 #import "UIColor+EverydayApps.h"
 
 @implementation MTNavigationController
 
 - (void)viewDidLoad {
+
     [super viewDidLoad];
-    
-    //self.toolbar.barTintColor = [UIColor tintColorBlue];
+
+    self.toolbar.barTintColor = [UIColor tintColorBlue];
     self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
     self.navigationController.view.backgroundColor = nil;
     self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
-    self.view.backgroundColor = [UIColor clearColor];
     
     NSMutableDictionary *titleTextAttributes = self.navigationBar.titleTextAttributes.mutableCopy;
     titleTextAttributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    //self.navigationBar.titleTextAttributes = titleTextAttributes;
+ 
 }
 
 - (UITabBarItem *)tabBarItem {
@@ -58,6 +59,17 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented
+                                                      presentingViewController:(UIViewController *)presenting
+                                                          sourceViewController:(UIViewController *)source {
+    
+    UIPresentationController *result = nil;
+    if (presented == self || presenting == self) {
+        result = [[MADTransparentPresentationController alloc] initWithPresentedViewController:presented presentingViewController:presenting];
+    }
+    return result;
 }
 
 @end

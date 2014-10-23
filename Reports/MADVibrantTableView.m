@@ -12,9 +12,18 @@
 @implementation MADVibrantTableView
 
 - (void)awakeFromNib {
-
+  
+    /*
+    UIImage *image = [UIImage imageNamed:@"MADImageBackgroundIcon"];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+*/
+    
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:[MADVibrantTableViewCell blurEffectStyle]];
     UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    
+    //[visualEffectsView.contentView addSubview:imageView];
     self.backgroundView = visualEffectsView;
     self.backgroundColor = [UIColor clearColor];
     self.allowsSelection = NO;

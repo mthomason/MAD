@@ -55,6 +55,7 @@
 #import "NSURL+Document.h"
 #import "UIAlertController+CommonAlerts.h"
 #import "MTNavigationController.h"
+#import "MADTransparentPresentationController.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -626,51 +627,25 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardNewDocument" bundle:[NSBundle mainBundle]];
     MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
-    ((MTDatabaseDriverSelectorViewController *)navControl.topViewController).delegate = self;
+    navControl.transitioningDelegate = navControl;
+    
+    MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
+    vc.delegate = self;
     self.definesPresentationContext = YES;
     self.modalPresentationStyle = UIModalPresentationCurrentContext;
     self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 
     UIPresentationController *pc = navControl.presentationController;
-    pc.containerView.backgroundColor = [UIColor clearColor];
-    navControl.topViewController.view.backgroundColor = [UIColor clearColor];
+    pc.containerView.backgroundColor = [UIColor blueColor];
+    
     navControl.view.backgroundColor = [UIColor clearColor];
+    navControl.view.superview.backgroundColor = [UIColor purpleColor];
+    navControl.view.superview.backgroundColor = [UIColor purpleColor];
+    navControl.view.superview.superview.backgroundColor = [UIColor blueColor];
+    
     [self presentViewController: navControl
                        animated: YES
                      completion: nil];
-    
-}
-
-- (void)prepareForSegueAddDocument:(UIStoryboardSegue *)segue {
-    if ([segue.destinationViewController isKindOfClass: [UINavigationController class]]) {
-        UINavigationController *navControl = segue.destinationViewController;
-        if ([navControl topViewController]) {
-            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-                self.openDocumentPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
-                self.openDocumentPopoverController.delegate = self;
-            }
-            ((MTDatabaseDriverSelectorViewController *)[navControl topViewController]).delegate = self;
-        }
-    }
-    if ([segue.destinationViewController isKindOfClass:[MTQueryBuilderContainerController class]]) {
-        ((MTQueryBuilderContainerController *)segue.destinationViewController).viewControllerDelegate = self;
-    } else {
-        [segue.destinationViewController setDelegate: self];
-    }
-}
-
-
-- (void)prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue {
-    UINavigationController *navigationController = segue.destinationViewController;
-    navigationController.modalPresentationStyle = UIModalPresentationPopover;
-    UIPopoverPresentationController *ppc = navigationController.popoverPresentationController;
-    ppc.containerView.backgroundColor = [UIColor clearColor];
-    ppc.delegate = self;
-    self.aboutPopoverPresentationController = ppc;
-    
-    MADAboutTableViewController *aboutViewController = (MADAboutTableViewController *)navigationController.topViewController;
-    aboutViewController.delegate = self;
-    aboutViewController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
 }
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
@@ -764,13 +739,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
     [self dismissAllPopovers];
     
-    if ([segue.identifier isEqualToString:MTSegueShowAddDocument]) {
-        [self prepareForSegueAddDocument:segue];
-        
-    } else if ([segue.identifier isEqualToString:@"MTSegueDetails"] || [segue.identifier isEqualToString:@"MTSegueAbout"]) {
-        [self prepareForSegueDetails:(UIStoryboardPopoverSegue *)segue];
-        
-    } else if ([segue.identifier isEqualToString:MTSegueLicensing]) {
+    if ([segue.identifier isEqualToString:MTSegueLicensing]) {
         [self prepareForSegueLicensing:segue];
 
     } else if ([segue.identifier isEqualToString:MTSegueOpenInViewer]) {

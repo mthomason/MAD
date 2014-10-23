@@ -25,8 +25,8 @@
 #import "MACloudManager.h"
 #import "MADBarButtonItem.h"
 
-NSString * const MTConnectionViewControllerDefaultPrompt = @"Set connection settings.";
-NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
+NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
+NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
 
 @interface MTConnectionViewController()
 
@@ -47,9 +47,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setActivitySpinnerVisable:NO];
-    if ([UIDevice isPad] == NO) {
-        self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
-    }
+    self.navigationItem.prompt = NSLocalizedString(MTConnectionViewControllerDefaultPrompt, MTConnectionViewControllerDefaultPrompt);
     self.title = NSLocalizedString(MTConnectionViewControllerDefaultTitle, MTConnectionViewControllerDefaultTitle);
     [self setClearsSelectionOnViewWillAppear: YES];
     
@@ -84,7 +82,7 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
         viewControllerTo.view.alpha = 1.0000f;
         [transitionContext.containerView addSubview:viewControllerTo.view];
     } completion:^(BOOL finished) {
-        [transitionContext completeTransition:![transitionContext transitionWasCancelled]]; // :))
+        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
     
 }
@@ -103,7 +101,9 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
     return nil;
 }
 
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source {
     return self;
 }
 
@@ -377,6 +377,10 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Location";
 
 - (IBAction)portDidEndOnExit:(id)sender {
     [self.textFieldPort resignFirstResponder];
+}
+
+- (IBAction)canceled:(id)sender {
+    [self.delegate viewControllerDidCancel:self];
 }
 
 #pragma mark - Table view delegate

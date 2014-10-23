@@ -12,7 +12,8 @@
 #import <UIKit/UIKit.h>
 
 @interface MTNavigationController : UINavigationController
-    <UINavigationControllerDelegate>
+    <UINavigationControllerDelegate,
+        UIViewControllerTransitioningDelegate>
 
 @end
 
