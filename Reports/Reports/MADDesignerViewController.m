@@ -15,6 +15,7 @@
 #import <CoreData/CoreData.h>
 #import "MADocument.h"
 #import "AppDelegate.h"
+#import "MADNavigationBarTitleView.h"
 #import "MADDesignerElementView.h"
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
@@ -393,11 +394,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.insetsSetup = NO;
     self.toolboxVisible = NO;
     
-    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-    labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    labelMadDesigner.attributedText = [MTApplicationInstance localizedAttributedApplicationNameMadDesigner];
-    self.navigationItem.titleView = labelMadDesigner;
-    [self.navigationItem.titleView sizeToFit];
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance madDesigner];
+    
+    self.navigationItem.titleView = titleView;
     
     [self contentViewRemoveAllConstraints];
     [self scrollerRemoveAllConstraints];

@@ -14,6 +14,7 @@
 #import <CoreData/CoreData.h>
 
 #import "MADocument.h"
+#import "MADNavigationBarTitleView.h"
 
 #import "MTApplicationInstance.h"
 #import "MADDesignerViewController.h"
@@ -78,14 +79,10 @@
         
         self.barButtonItemRevealQuery = barButtonItemRevealQuery;
         
-        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame: CGRectZero];
-        labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
-        NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
-        labelMadDesigner.attributedText = attributedString;
         
-        self.navigationItem.titleView = labelMadDesigner;
-        [self.navigationItem.titleView sizeToFit];
+        MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+        titleView.text = [MTApplicationInstance madQuery];
+        self.navigationItem.titleView = titleView;
         
         
         self.editButtonItem.target = self;

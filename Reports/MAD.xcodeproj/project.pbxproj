@@ -1239,6 +1239,8 @@
 		4CB2934E19F8C37800C0171D /* MADImageBackgroundIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */; };
 		4CB2934F19F8C37800C0171D /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */; };
 		4CB2935019F8C37800C0171D /* MADImageBackgroundIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */; };
+		4CB2936019F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */; };
+		4CB2936119F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */; };
 		4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB3C22E1923374200F3213E /* MTSliderThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C22C1923374200F3213E /* MTSliderThumb.png */; };
@@ -2691,6 +2693,8 @@
 		4CB2934819F8C37800C0171D /* MADImageBackgroundIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@3x.png"; path = "../../MADImageBackgroundIcon@3x.png"; sourceTree = "<group>"; };
 		4CB2934919F8C37800C0171D /* MADImageBackgroundIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageBackgroundIcon@2x.png"; path = "../../MADImageBackgroundIcon@2x.png"; sourceTree = "<group>"; };
 		4CB2934A19F8C37800C0171D /* MADImageBackgroundIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageBackgroundIcon.png; path = ../../MADImageBackgroundIcon.png; sourceTree = "<group>"; };
+		4CB2935E19F9F50B00C0171D /* MADNavigationBarTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationBarTitleView.h; sourceTree = "<group>"; };
+		4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationBarTitleView.m; sourceTree = "<group>"; };
 		4CB3C2281922A43600F3213E /* MTSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSliderPageVertical.h; sourceTree = "<group>"; };
 		4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSliderPageVertical.m; sourceTree = "<group>"; };
 		4CB3C22C1923374200F3213E /* MTSliderThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTSliderThumb.png; sourceTree = "<group>"; };
@@ -3990,6 +3994,8 @@
 				4C49DA5619DCE82200CB4DB8 /* Resources */,
 				4C384E2F14B29789007B4F48 /* Supporting Files */,
 				4C94ADEC17C3514200037FCB /* MAD Launch Images */,
+				4CB2935E19F9F50B00C0171D /* MADNavigationBarTitleView.h */,
+				4CB2935F19F9F50B00C0171D /* MADNavigationBarTitleView.m */,
 			);
 			name = "MAD iOS";
 			sourceTree = "<group>";
@@ -6593,6 +6599,7 @@
 				4C77328D190FFD6A005AE7C2 /* MysqlDelete.m in Sources */,
 				4C23FBD918FAE4F7009F234F /* MTPaperC8.m in Sources */,
 				4C23FAED18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
+				4CB2936119F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */,
 				4CFF3F22164D76270070E880 /* NSURL+Document.m in Sources */,
 				4CFF3F26164DFF1F0070E880 /* MADocument.m in Sources */,
 				4CCD243E193BC03700E44D47 /* MTQueryCacheAggregateFunction.m in Sources */,
@@ -6971,6 +6978,7 @@
 				4C2AF68A150DD6BE00E3D0DA /* RptqQueryGroup+Extras.m in Sources */,
 				4C77328C190FFD6A005AE7C2 /* MysqlDelete.m in Sources */,
 				4CAB178E150F87A600BA0A9B /* RptqQueryLinks+Extras.m in Sources */,
+				4CB2936019F9F50B00C0171D /* MADNavigationBarTitleView.m in Sources */,
 				4CAB1791150FE38400BA0A9B /* MTRulerView.m in Sources */,
 				4C9A6B1B15106F5D00FDD69D /* RptqDatabase+Extras.m in Sources */,
 				4C9E446718D8AADE00F0F578 /* MTTableController.m in Sources */,

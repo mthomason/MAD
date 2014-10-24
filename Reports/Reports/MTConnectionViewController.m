@@ -24,6 +24,7 @@
 #import "MTErrorContainer.h"
 #import "MACloudManager.h"
 #import "MADBarButtonItem.h"
+#import "MADNavigationBarTitleView.h"
 
 NSString * const MTConnectionViewControllerDefaultPrompt = @"Each report requires a database connection.";
 NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
@@ -56,6 +57,11 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Database Settings", @"Database Settings");
+    self.navigationItem.titleView = titleView;
+//      self.navigationItem.title = titleView.text;
 }
 
 #pragma mark - Actions

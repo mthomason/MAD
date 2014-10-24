@@ -11,6 +11,7 @@
 #endif
 
 #import "MADViewerController.h"
+#import "MADNavigationBarTitleView.h"
 #import "MTReportViewerPrintPageRenderer.h"
 #import "MTReportViewerReportPageView.h"
 
@@ -272,13 +273,10 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
-    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-    labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
-    [labelMadDesigner setAttributedText:attributedString];
-    self.navigationItem.titleView = labelMadDesigner;
-    [self.navigationItem.titleView sizeToFit];
+
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance madViewer];
+    self.navigationItem.titleView = titleView;
     
     _timerLabelTimeSinceRefreh = nil;
     

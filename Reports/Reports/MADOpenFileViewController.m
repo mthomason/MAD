@@ -56,6 +56,7 @@
 #import "UIAlertController+CommonAlerts.h"
 #import "MTNavigationController.h"
 #import "MADTransparentPresentationController.h"
+#import "MADNavigationBarTitleView.h"
 
 NSString * const MTSegueOpenInViewer                            = @"MTSegueOpenInViewer";
 NSString * const MTSegueShowAddDocument                         = @"showAddDocument";
@@ -98,6 +99,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
 
 @property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
+@property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
 @property (nonatomic, strong) MTNavigationController *aboutNavigationController;
 
 @property (nonatomic, strong) UIPopoverController *openDocumentPopoverController;
@@ -428,19 +430,13 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     //self.collectionView.backgroundColor = bgColor;
     
     [self setSavingActivityIndicatorVisible:NO];
-    UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-    labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+    titleView.text = [MTApplicationInstance applicationName];
+    
 
-    NSAttributedString *attributedString = nil;
-    if ([MTApplicationInstance isMadDesigner]) {
-        attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadDesigner];
-    } else if ([MTApplicationInstance isMadViewer]) {
-        attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadViewer];
-    }
-    NSAssert(attributedString != nil, @"Navigation title is not set.");
-    [labelMadDesigner setAttributedText:attributedString];
-    self.navigationItem.titleView = labelMadDesigner;
-    self.labelMadDesigner = labelMadDesigner;
+    self.navigationItem.titleView = titleView;
+    self.labelMadDesigner = titleView;
     [self.navigationItem.titleView sizeToFit];
 
     self.navigationItem.hidesBackButton = YES;
@@ -492,7 +488,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (UITapGestureRecognizer *)tapGestureRecognizer {
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self
-                                                                                           action: @selector(endEditMode:)];
+                                                                                           action: @selector(handleDidTapCollectionView:)];
     tapGestureRecognizer.delegate = self;
     return tapGestureRecognizer;
 }
@@ -624,28 +620,28 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (IBAction)addDocument:(id)sender {
 
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardNewDocument" bundle:[NSBundle mainBundle]];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardNewDocument"
+                                                         bundle: [NSBundle mainBundle]];
     MTNavigationController *navControl = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierOpenDocumentStart"];
     navControl.modalPresentationStyle = UIModalPresentationFormSheet;
-    navControl.transitioningDelegate = navControl;
+    //navControl.transitioningDelegate = navControl;
     
     MTDatabaseDriverSelectorViewController *vc = (MTDatabaseDriverSelectorViewController *)navControl.topViewController;
     vc.delegate = self;
     self.definesPresentationContext = YES;
-    self.modalPresentationStyle = UIModalPresentationCurrentContext;
-    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//    self.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
     UIPresentationController *pc = navControl.presentationController;
-    pc.containerView.backgroundColor = [UIColor blueColor];
+    pc.presentedView.backgroundColor = [UIColor whiteColor];
+//    pc.containerView.backgroundColor = UIC
+ ///   pc.containerView.backgroundColor = [UIColor blueColor];
     
-    navControl.view.backgroundColor = [UIColor clearColor];
-    navControl.view.superview.backgroundColor = [UIColor purpleColor];
-    navControl.view.superview.backgroundColor = [UIColor purpleColor];
-    navControl.view.superview.superview.backgroundColor = [UIColor blueColor];
-    
-    [self presentViewController: navControl
-                       animated: YES
-                     completion: nil];
+//    navControl.view.backgroundColor = [UIColor clearColor];
+//    navControl.view.superview.backgroundColor = [UIColor purpleColor];
+//    navControl.view.superview.backgroundColor = [UIColor purpleColor];
+//    navControl.view.superview.superview.backgroundColor = [UIColor blueColor];
+    [self showViewController:navControl sender:self];
 }
 
 - (void)prepareForSegueLicensing:(UIStoryboardSegue *)segue {
@@ -794,7 +790,7 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
     UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
-    if ([controller isEqual:self.aboutPopoverPresentationController]) {
+    if ([controller isEqual:self.aboutPopoverPresentationController] || [controller isEqual:self.infoPopoverPresentationController]) {
         style = UIModalPresentationNone;
     }
     return style;
@@ -1422,14 +1418,14 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
 }
 
-- (void)endEditMode:(UITapGestureRecognizer *)sender {
+- (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
 
     [self.searchBar resignFirstResponder];
     if ([self editModeEnabled]) {
         [self edit:self];
     }
-
 }
+
 
 #pragma mark UI Helpers
 
@@ -1711,21 +1707,28 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     }
 }
 
+- (void)addStandardPassthoughViewsToController:(UIPopoverPresentationController *)controller {
+    NSMutableSet *passthrough = [NSMutableSet setWithArray: controller.passthroughViews];
+    [passthrough addObject:self.navigationController.navigationBar];
+    [passthrough addObject:self.navigationController.toolbar];
+//    [passthrough addObject:self.collectionView];
+    controller.passthroughViews = passthrough.allObjects;
+}
+
 - (IBAction)info:(id)sender {
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardInformationTable" bundle:[NSBundle mainBundle]];
     UINavigationController *infoViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierInformationNavigationController"];
     infoViewController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
+    [self addStandardPassthoughViewsToController:ppc];
     
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
-    self.aboutPopoverPresentationController = ppc;
+    self.infoPopoverPresentationController = ppc;
     
-    [self presentViewController: infoViewController
-                       animated: YES
-                     completion: nil];
+    [self showViewController:infoViewController sender:self];
 
 }
 
@@ -1736,15 +1739,30 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     
     aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
     UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+    [self addStandardPassthoughViewsToController:ppc];
 
     ppc.backgroundColor = [UIColor clearColor];
     ppc.delegate = self;
     ppc.barButtonItem = sender;
     self.aboutPopoverPresentationController = ppc;
+    
+    
+    [self showViewController:aboutViewController sender:self];
+}
 
-    [self presentViewController: aboutViewController
-                       animated: YES
-                     completion: nil];
+- (void)showViewController:(UIViewController *)vc sender:(id)sender {
+    if (self.presentedViewController != nil) {
+        __weak MADOpenFileViewController *weakself = self;
+        [self dismissViewControllerAnimated: YES completion:^{
+            [weakself presentViewController: vc
+                                   animated: YES
+                                 completion: nil];
+        }];
+    } else {
+        [self presentViewController: vc
+                           animated: YES
+                         completion: nil];
+    }
 }
 
 - (void)cut:(id)sender {
@@ -2196,7 +2214,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
     [alert addAction:actionDefault];
     [alert addAction:actionCancel];
 
-    [self presentViewController:alert animated:YES completion:nil];
+    [self showViewController:alert sender:self];
     
 }
 
@@ -2221,8 +2239,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
                                                  style: UIAlertActionStyleDefault
                                                handler: nil];
     [alert addAction:ok];
-
-    [self presentViewController:alert animated:YES completion:nil];
+    [self showViewController:alert sender:self];
 
 }
 
@@ -2231,7 +2248,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
     if ([MFMailComposeViewController canSendMail] == NO) {
         
         UIAlertController *alert = [UIAlertController alertNotConfiguredForEmail];
-        [self presentViewController:alert animated:YES completion:nil];
+        [self showViewController:alert sender:self];
         
     } else {
         
@@ -2274,8 +2291,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
                 mailComposer.providesPresentationContextTransitionStyle = YES;
                 mailComposer.modalInPopover = NO;
             }
-            
-            [weakself presentViewController:mailComposer animated:YES completion:nil];
+            [weakself showViewController:mailComposer sender:weakself];
             
         }
     }

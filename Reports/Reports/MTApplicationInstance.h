@@ -53,6 +53,10 @@ extern NSString * const MTGlobalBundleRev;
 
 + (UIStoryboard *)storyboard;
 
++ (NSString *)madDesigner;
++ (NSString *)madViewer;
++ (NSString *)madQuery;
+
 + (void)drawMadWatermarkInRect:(CGRect)rect;
 + (NSString *)bundleDisplayName;
 

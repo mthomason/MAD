@@ -13,7 +13,8 @@
 #import "MUIViewControllerDelegate.h"
 
 @interface MTConnectionViewController : UITableViewController
-    <UITableViewDelegate, UIViewControllerTransitioningDelegate,
+    <UITableViewDelegate,
+        UIViewControllerTransitioningDelegate,
         UIViewControllerAnimatedTransitioning,
         UITextFieldDelegate>
 

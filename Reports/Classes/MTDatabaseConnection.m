@@ -22,8 +22,6 @@
 
 @interface MTDatabaseConnection ()
 
-//- (instancetype)init NS_DESIGNATED_INITIALIZER;
-
 @end
 
 @implementation MTDatabaseConnection

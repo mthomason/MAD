@@ -19,6 +19,8 @@
 #import "MTDatabaseSqlite3.h"
 #import "MADVibrantTableView.h"
 #import "MADTransparentPresentationController.h"
+#import "MADNavigationBarTitleView.h"
+#import "UIColor+EverydayApps.h"
 
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultPrompt    = @"Select database type.";
 NSString * const MTDatabaseDriverSelectorViewControllerDefaultTitle     = @"New Report";
@@ -59,6 +61,13 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
     self.tableView.estimatedRowHeight = 44.0000f;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.allowsSelection = YES;
+    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = @"New Report";
+    self.navigationItem.titleView = titleView;
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -70,29 +79,31 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MADVibrantTableViewCellImage *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType"];
-    cell.vibrantTableViewCellDelegate = self;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADTableViewCellConnectionType"];
+    //cell.vibrantTableViewCellDelegate = self;
 
     switch (indexPath.row) {
         case 0:
-            cell.imageViewMain.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
-            cell.textLabel.text = @"";
-            cell.label.text = @"MySQL Native Driver";
-            cell.marginStyle = MADTableViewCellMarginStyleTop;
+            cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeMySQL"];
+            cell.textLabel.text = @"MySQL Native Driver";
             break;
 
         case 1:
-            cell.imageViewMain.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
-            cell.textLabel.text = @"";
-            cell.label.text = @"Sql Server / TDS Driver";
-            cell.marginStyle = MADTableViewCellMarginStyleBottom;
+            cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
+            cell.textLabel.text = @"Sql Server / TDS Driver";
             break;
             
         default:
             break;
     }
+    [UITableViewCell appearance].textLabel.highlightedTextColor = [UIColor tintColorBlue];
+//    cell.textLabel.highlightedTextColor = ;
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 104.000f;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -108,12 +119,12 @@ NSString * const MTSegueShowSetUpDatasourceSqlServerIdentifier          = @"MTSe
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case 0:
-            [self performSegueWithIdentifier:MTSegueShowSetUpDatasourceMySqlIdentifier
-                                      sender:self];
+            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceMySqlIdentifier
+                                      sender: self];
             break;
         case 1:
-            [self performSegueWithIdentifier:MTSegueShowSetUpDatasourceSqlServerIdentifier
-                                      sender:self];
+            [self performSegueWithIdentifier: MTSegueShowSetUpDatasourceSqlServerIdentifier
+                                      sender: self];
             break;
             
         default:

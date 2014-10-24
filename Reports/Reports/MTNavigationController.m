@@ -19,7 +19,7 @@
     self.toolbar.barTintColor = [UIColor tintColorBlue];
     self.toolbar.barStyle = UIBarStyleBlack;
     self.toolbar.translucent = YES;
-    self.navigationController.view.backgroundColor = nil;
+//    self.navigationController.view.backgroundColor = nil;
     self.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationBar.translucent = YES;
     

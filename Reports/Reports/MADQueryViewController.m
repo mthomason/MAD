@@ -11,15 +11,21 @@
 #endif
 
 #import "MADQueryViewController.h"
+
+#import "MADNavigationBarTitleView.h"
 #import "AppDelegate.h"
 #import "MADocument.h"
+
 #import "MADWatermarkView.h"
+
 #import "MTApplicationInstance.h"
+
 #import "MTQuery.h"
 #import "MTQueryBuilderAddTableViewController.h"
 #import "MTQueryBuilderAddGroupViewController.h"
 #import "MTQueryBuilderAddLinkFirstTableViewController.h"
 #import "MTQueryBuilderPredicateFormatViewController.h"
+
 #import "UITableViewCellInstruction.h"
 #import "UITableViewCellTableName.h"
 #import "UITableViewCellQueryLink.h"
@@ -29,10 +35,13 @@
 #import "MTTableViewCellQueryPredicate.h"
 #import "MTTableController.h"
 #import "MTTableLayout.h"
+
 #import "MTDataFormatter.h"
 #import "MTDatabaseDriverSelectorViewController.h"
 #import "MTQueryBuilderLinkBuilderViewController.h"
+
 #import "MADDesignerViewController.h"
+
 #import "MTViewTableHeader.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "MTReportDesignerSectionLayoutSettingsViewController.h"
@@ -399,12 +408,10 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         
-        UILabel *labelMadDesigner = [[UILabel alloc] initWithFrame:CGRectZero];
-        labelMadDesigner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        NSAttributedString *attributedString = [MTApplicationInstance localizedAttributedApplicationNameMadQuery];
-        labelMadDesigner.attributedText = attributedString;
-        self.navigationItem.titleView = labelMadDesigner;
-        [self.navigationItem.titleView sizeToFit];
+        MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
+        titleView.text = [MTApplicationInstance madQuery];
+
+        self.navigationItem.titleView = titleView;
     }
     
     [self enableTabBarItems];

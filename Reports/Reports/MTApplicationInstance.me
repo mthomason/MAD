@@ -38,9 +38,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.171";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.171";
-NSString * const MTGlobalBundleRev                                  = @"1546";
+NSString * const MTGlobalBundleVersion                              = @"7.0.174";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.174";
+NSString * const MTGlobalBundleRev                                  = @"1549";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -377,7 +377,10 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];    //Make tab bar buttons white
     [[UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UIToolbar class], nil]                         setTintColor: tintColorWhite];
-    [[UIToolbar appearance] setBarTintColor:[UIColor tintColorBlue]];
+    [UIToolbar appearance].barTintColor = [UIColor tintColorBlue];
+    [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor = [UIColor edaOrange];
+    [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor = [UIColor edaOrange];
+    
 /*
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]                   setTintColor: tintColorWhite];
