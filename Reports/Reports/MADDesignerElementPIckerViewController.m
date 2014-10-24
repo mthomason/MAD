@@ -34,6 +34,8 @@
 
 #import "MADDesignerViewController.h"
 
+#import "MADNavigationBarTitleView.h"
+
 NSString * const MTIdentiferDocumentObjectLabelCollectionViewCell = @"MTIdentiferDocumentObjectLabelCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectFormulaCollectionViewCell = @"MTIdentiferDocumentObjectFormulaCollectionViewCell";
 NSString * const MTIdentiferDocumentObjectChartCollectionViewCell = @"MTIdentiferDocumentObjectChartCollectionViewCell";
@@ -104,6 +106,10 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"MAD Objects", @"Title of the document object select");
+    self.navigationItem.titleView = titleView;
+    
     UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
     [self.view addSubview: visualEffectsView];

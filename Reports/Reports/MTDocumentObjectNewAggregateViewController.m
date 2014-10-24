@@ -21,6 +21,7 @@
 #import "RptqDocumentObjectAggregate+Extras.h"
 
 #import "MTAggregateFunctionsViewController.h"
+#import "MADNavigationBarTitleView.h"
 
 NSString * const MTSegueAggregateFunctionCount      = @"MTSegueAggregateFunctionCount";
 NSString * const MTSegueAggregateFunctionFirst      = @"MTSegueAggregateFunctionFirst";
@@ -273,8 +274,13 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     [self setAggregateFunctionType:MTAggregateFunctionTypeSum];
     [self setGroupTypeSectionNumber:0];
     [self setAggregateGroupByType:MTAggregateGroupByTypePage];
-    [self.navigationItem setLeftItemsSupplementBackButton:YES];
-    [self.navigationItem setHidesBackButton:NO];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Aggregate Function", @"Title of form to create a non changing text label document object.");
+    self.navigationItem.titleView = titleView;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

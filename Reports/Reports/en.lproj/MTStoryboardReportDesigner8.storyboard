@@ -2982,7 +2982,7 @@
                     </collectionView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="MAD Objects" id="ArO-uj-tVb">
-                        <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="x3V-tA-wkT">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="x3V-tA-wkT">
                             <connections>
                                 <segue destination="fmR-5o-cXk" kind="unwind" unwindAction="unwindToDesigner:" id="EGr-5f-n8H"/>
                             </connections>
@@ -9723,10 +9723,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="pCi-yT-77G"/>
-        <segue reference="PPx-4T-brk"/>
-        <segue reference="giJ-oQ-sLB"/>
         <segue reference="pfP-rZ-fVf"/>
+        <segue reference="giJ-oQ-sLB"/>
+        <segue reference="Twf-og-SpO"/>
+        <segue reference="oNj-Ee-MoE"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392843484879" green="0.61960786581039429" blue="0.84313726425170898" alpha="1" colorSpace="calibratedRGB"/>
 </document>

@@ -14,6 +14,7 @@
 #import "MADocument.h"
 #import "AppDelegate.h"
 #import "MTApplicationInstance.h"
+#import "MADNavigationBarTitleView.h"
 #import "RptqFieldSelectorManager.h"
 #import "RptqDocument.h"
 #import "RptqDatabase.h"
@@ -94,8 +95,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.navigationItem setLeftItemsSupplementBackButton:YES];
-    [self.navigationItem setHidesBackButton:NO];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
     
     [self.tableView setSectionHeaderHeight: HEADER_HEIGHT];
 
@@ -110,6 +111,11 @@
     [self setDataTables:queryTablesArray];
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Select Field", @"Title of form that allows you to choose the name of a database field.");
+    self.navigationItem.titleView = titleView;
+
 
 }
 

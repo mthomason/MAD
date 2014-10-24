@@ -30,6 +30,8 @@
 #import "MTDataTable.h"
 #import "MTDatabase.h"
 
+#import "MADNavigationBarTitleView.h"
+
 NSString * const MTIdentifierSegueDocumentObjectEditBarcode = @"MTIdentifierSegueDocumentObjectEditBarcode";
 NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier = @"MTDocumentObjectNewBarcodeViewControllerIdentifier";
 
@@ -87,9 +89,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
     NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
     NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
-    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:barcodeTypeString];
-    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:showErrorMessages];
-    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
+    [self.optionsViewController removeObserver:[self barcode] forKeyPath:barcodeTypeString];
+    [self.optionsViewController removeObserver:[self barcode] forKeyPath:showErrorMessages];
+    [self.optionsViewController removeObserver:[self barcode] forKeyPath:humanReadable];
     [self setEditmode:NO];
 }
 
@@ -111,7 +113,12 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[self barButtonItemSave] setEnabled:NO];
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"MAD Barcodes", @"Title of the barcode creator.");
+    self.navigationItem.titleView = titleView;
+
+    [self.barButtonItemSave setEnabled:NO];
     
     UIView *topView = [self topView];
     UIView *bottomView = [self bottomView];
@@ -133,10 +140,10 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if ([self editmode]) {
-        [[self barButtonItemSave] setEnabled:YES];
+    if (self.editmode) {
+        self.barButtonItemSave.enabled = YES;
         
-        __weak MTViewControllerBarcodeOptions *optionsViewController = [self optionsViewController];
+        __weak MTViewControllerBarcodeOptions *optionsViewController = self.optionsViewController;
         if ([self queryField1] != nil) {
             RptqDatabaseSchemaField *schemaField = [[self queryField1] databaseSchemaField];
             
@@ -216,7 +223,7 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
 
 - (void)didSetField1:(RptqQueryField *)field {
     if (field != nil) {
-        [[self barButtonItemSave] setEnabled:YES];
+        [self.barButtonItemSave setEnabled:YES];
     }
     [self setQueryField1:field];
 }
@@ -430,12 +437,12 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
     NSString *showErrorMessages = NSStringFromSelector(@selector(showErrorMessages));
     NSString *humanReadable = NSStringFromSelector(@selector(humanReadable));
-    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:barcodeTypeString];
-    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:showErrorMessages];
-    [[self optionsViewController] removeObserver:[self barcode] forKeyPath:humanReadable];
-    [[self optionsViewController] addObserver:barcode forKeyPath:barcodeTypeString options:NSKeyValueObservingOptionNew context:NULL];
-    [[self optionsViewController] addObserver:barcode forKeyPath:showErrorMessages options:NSKeyValueObservingOptionNew context:NULL];
-    [[self optionsViewController] addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
+    [self.optionsViewController removeObserver:[self barcode] forKeyPath:barcodeTypeString];
+    [self.optionsViewController removeObserver:[self barcode] forKeyPath:showErrorMessages];
+    [self.optionsViewController removeObserver:[self barcode] forKeyPath:humanReadable];
+    [self.optionsViewController addObserver:barcode forKeyPath:barcodeTypeString options:NSKeyValueObservingOptionNew context:NULL];
+    [self.optionsViewController addObserver:barcode forKeyPath:showErrorMessages options:NSKeyValueObservingOptionNew context:NULL];
+    [self.optionsViewController addObserver:barcode forKeyPath:humanReadable options:NSKeyValueObservingOptionNew context:NULL];
     [[self previewViewController] setBarcodeToPreview:barcode];
     [self setBarcode:barcode];
     

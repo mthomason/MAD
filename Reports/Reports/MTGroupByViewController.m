@@ -12,6 +12,7 @@
 
 #import "MTGroupByViewController.h"
 #import "MADocument.h"
+#import "MADNavigationBarTitleView.h"
 #import "RptqQueryGroup.h"
 #import "RptqQueryGroup+Extras.h"
 #import "NSError+UserInterface.h"
@@ -77,8 +78,13 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationItem setLeftItemsSupplementBackButton:YES];
-    [self.navigationItem setHidesBackButton:NO];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
+    self.navigationItem.titleView = titleView;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

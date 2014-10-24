@@ -11,6 +11,7 @@
 #endif
 
 #import "MTDocumentObjectNewStaticLabelViewController.h"
+#import "MADNavigationBarTitleView.h"
 
 NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDocumentObjectNewStaticLabelViewControllerIdentifier";
 
@@ -38,17 +39,22 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 }
 
 - (NSString *)userInputedText {
-    return [[self labelTextTextbox] text];
+    return [self.labelTextTextbox text];
 }
 
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationItem setLeftItemsSupplementBackButton:YES];
-    [self.navigationItem setHidesBackButton:NO];
-    [self labelTextTextbox].delegate = self;
-    [[self labelTextTextbox] becomeFirstResponder];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
+    self.labelTextTextbox.delegate = self;
+    [self.labelTextTextbox becomeFirstResponder];
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Static Label", @"Title of form to create a non changing text label document object.");
+    self.navigationItem.titleView = titleView;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

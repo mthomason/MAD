@@ -11,6 +11,7 @@
 #endif
 
 #import "MTAggregateFunctionsViewController.h"
+#import "MADNavigationBarTitleView.h"
 
 NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFunctionsViewControllerIdentifier";
 
@@ -58,8 +59,13 @@ NSString * const MTAggregateFunctionsViewControllerIdentifier = @"MTAggregateFun
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationItem setLeftItemsSupplementBackButton:YES];
-    [self.navigationItem setHidesBackButton:NO];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
+
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Aggregate Functions", @"Title of form that allows you to choose a type of aggregate function (count, first, last, max, min, avg, sum).");
+    self.navigationItem.titleView = titleView;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
