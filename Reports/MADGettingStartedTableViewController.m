@@ -17,6 +17,10 @@
 
 @implementation MADGettingStartedTableViewController
 
+- (IBAction)done:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - MADVibrantTableViewCellDelegate
 
 - (UIBlurEffect *)blurEffectForCell:(UITableViewCell *)cell {

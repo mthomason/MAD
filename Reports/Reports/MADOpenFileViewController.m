@@ -916,8 +916,8 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 #pragma mark - Custom Initalization
 
 - (void)addActionItemToToolbar:(BOOL)animated {
-    if ([[self toolbarItems] containsObject:[self barButtonItemAction]] == NO) {
-        NSMutableArray *toolbarButtons = [[self toolbarItems] mutableCopy];
+    if ([self.toolbarItems containsObject:[self barButtonItemAction]] == NO) {
+        NSMutableArray *toolbarButtons = [self.toolbarItems mutableCopy];
         [toolbarButtons insertObject:[self barButtonItemAction] atIndex:1];
         [self setToolbarItems:toolbarButtons animated:animated];
     }
@@ -1753,7 +1753,6 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
     NSMutableSet *passthrough = [NSMutableSet setWithArray: controller.passthroughViews];
     [passthrough addObject:self.navigationController.navigationBar];
     [passthrough addObject:self.navigationController.toolbar];
-//    [passthrough addObject:self.collectionView];
     controller.passthroughViews = passthrough.allObjects;
 }
 
@@ -1761,7 +1760,8 @@ static MACloudManagerSection cloudManagerSectionForDisplaySection(NSUInteger dis
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADStoryboardInformationTable" bundle:[NSBundle mainBundle]];
     UINavigationController *infoViewController = [storyboard instantiateViewControllerWithIdentifier: @"MADIdentifierInformationNavigationController"];
-    infoViewController.modalPresentationStyle = UIModalPresentationPopover;
+    infoViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+    infoViewController.preferredContentSize = CGSizeMake(320.0000f, 480.0000f);
     UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
     [self addStandardPassthoughViewsToController:ppc];
     
