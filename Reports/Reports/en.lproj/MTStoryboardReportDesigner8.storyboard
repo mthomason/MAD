@@ -491,7 +491,7 @@
                     <navigationItem key="navigationItem" title="MAD Query" id="WMh-0i-gte">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="5gf-wB-pZm">
                             <connections>
-                                <segue destination="KNE-Mb-Hy6" kind="unwind" identifier="MTSegueCloseDesigner" unwindAction="unwindToOpenDocumentViewController:" id="e7X-8c-frZ"/>
+                                <action selector="done:" destination="UDQ-hu-wqs" id="Gzn-AN-ah1"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="Xuw-E0-rNv">
@@ -511,7 +511,6 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CoX-2k-Q30" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="KNE-Mb-Hy6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1486" y="-987"/>
         </scene>

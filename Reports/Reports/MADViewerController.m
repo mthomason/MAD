@@ -264,11 +264,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //self.restorationIdentifier = @"MADIdentifierRestorationViewerViewController";
-    
-    
-    
-    
     self.backgroundTaskIdRefresh = UIBackgroundTaskInvalid;
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -873,8 +868,9 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                 ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         
         if (completed) {
-            [weakself.pageSlider setEnabled:YES];
+            weakself.pageSlider.enabled = YES;
             weakself.activityExporting = NO;
+            [weakself enableTabBarItems];
         } else {
             if ([activityType length] > 0) {
                 if ([activityType caseInsensitiveCompare:UIActivityTypePrint] == NSOrderedSame) {
@@ -902,7 +898,17 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         }
     };
     activityViewController.completionWithItemsHandler = activityViewControllerCompletionWithItemsHandler;
+    activityViewController.modalPresentationStyle = UIModalPresentationPopover;
 
+    UIPopoverPresentationController *ppc = activityViewController.popoverPresentationController;
+    ppc.barButtonItem = sender;
+    
+    __weak MADViewerController *weakSelf = self;
+    [self presentViewController:activityViewController animated:YES completion:^{
+        weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
+    }];
+    [self disableTabBarItems];
+/*
     if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         if ([self popoverControllerActivity] == nil || [self popoverControllerActivity].isPopoverVisible == NO) {
             UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
@@ -911,7 +917,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
                                       permittedArrowDirections: UIPopoverArrowDirectionAny
                                                       animated: YES];
             self.popoverControllerActivity = popoverController;
-            [self disableTabBarItems];
         }
     } else {
 
@@ -919,7 +924,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
         [self presentViewController:activityViewController animated:YES completion:^{
             weakSelf.presentedViewController.navigationController.navigationBar.barTintColor = [UIColor tintColorAnalogous4];
         }];
-    }
+    }*/
 }
 
 - (UIViewController *)previewViewControllerForInteractionController: (UIDocumentInteractionController *) controller {

@@ -330,16 +330,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [[UILabel appearanceWhenContainedIn:[UINavigationBar class], nil] setTextColor:[UIColor whiteColor]];
-   // self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    //self.navigationController.navigationItem.prompt = @"test";
-//    [[UILabel appearanceWhenContainedIn:[UINavigationBar class], nil]
- //  setTitleTextAttributes:
-  //   [NSDictionary dictionaryWithObjectsAndKeys:
-//      [UIColor whiteColor], UITextAttributeTextColor, nil]];
-    
-    //[self.navigationController setNavigationBarHidden:YES animated:NO];
-    
 
     self.firstTimeTablePosition = NO;
 
@@ -1315,6 +1305,13 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     }
     
     [self.tableView setEditing: editing];
+}
+
+- (IBAction)done:(id)sender {
+    [self.delegate viewControllerDidFinish:self];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 - (void)addConnection:(id)sender {

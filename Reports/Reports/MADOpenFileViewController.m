@@ -183,17 +183,21 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 #pragma mark - Exit
 
+- (void)closeAndSave {
+    MTApplicationInstance *app = [AppDelegate app];
+    __weak MADOpenFileViewController *weakself = self;
+    [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
+    [app closeReportWithCompletionHandler:^(BOOL success) {
+        [weakself reenable];
+    }];
+}
+
 - (IBAction)unwindToOpenDocumentViewController:(UIStoryboardSegue *)action {
     
     NSString *actionIdentifier = [action identifier];
     if ([actionIdentifier isEqualToString:@"MTSegueCloseDesigner"] ||
         [actionIdentifier isEqualToString:@"MAReportViewerCloseReportIdentifier"]) {
-        MTApplicationInstance *app = [AppDelegate app];
-        __weak MADOpenFileViewController *weakself = self;
-        [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
-        [app closeReportWithCompletionHandler:^(BOOL success) {
-            [weakself reenable];
-        }];
+        [self closeAndSave];
     }
     self.shouldShowAddDocumentPopover = YES;
     self.barButtonItemAddNewDocument.enabled = YES;
@@ -738,15 +742,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
     if ([segue.identifier isEqualToString:MTSegueLicensing]) {
         [self prepareForSegueLicensing:segue];
 
-    } else if ([segue.identifier isEqualToString:MTSegueOpenInViewer]) {
-        MTApplicationInstance *app = [AppDelegate app];
-        [[app openDocument] activeDocumentModel];
-        [self prepareForSegueOpenInViewer:segue sender:sender];
-        
-    } else if ([segue.identifier isEqualToString:MTSegueShowOpenDocument]) {
-        MTApplicationInstance *app = [AppDelegate app];
-        [[app openDocument] activeDocumentModel];
-        [self prepareForSegueShowOpenDocument:segue sender:sender];
     }
 }
 
@@ -847,26 +842,18 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (void)viewControllerDidFinish:(id)sender {
     [self setShouldShowAddDocumentPopover:YES];
-    MTApplicationInstance *app = [AppDelegate app];
-    __weak MADOpenFileViewController *weakself = self;
-    [[app openDocument] regenThumbnailWithTraits:self.traitCollection];
-    [app closeReportWithCompletionHandler:^(BOOL success) {
-        [weakself reenable];
+
+    [self closeAndSave];
+    MADOpenFileViewController *weakself = self;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakself reloadData];
     }];
     
-    if ([self.openDocumentPopoverController isPopoverVisible]) {
-        [self.openDocumentPopoverController dismissPopoverAnimated:YES];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{ }];
-    }
     [self.barButtonItemAddNewDocument setEnabled:YES];
-    if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self reloadData];
-    }
 }
 
 - (void)viewControllerDidFinish:(id)sender animated:(BOOL)animated {
-    [self dismissViewControllerAnimated:YES completion:^{ }];
+    [self dismissViewControllerAnimated:animated completion:^{ }];
     
     Class queryBuilderClass = [MADQueryViewController class];
     Class queryBuilderContainerClass = [MTQueryBuilderContainerController class];
@@ -1251,20 +1238,75 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
         
         if (success) {
             
-            
             weakapp.reportState = MTReportStateOpen;
             
-            if ([MTApplicationInstance isMadDesigner]) {
-
-                [weakself performSegueWithIdentifier: MTSegueShowOpenDocument
-                                              sender: weakself];
+            if ([MTApplicationInstance isMadViewer]) {
                 
-            } else if ([MTApplicationInstance isMadViewer]) {
-                
+                MTApplicationInstance *app = [AppDelegate app];
+                [[app openDocument] activeDocumentModel];
                 [weakself performSegueWithIdentifier: MTSegueOpenInViewer
                                               sender: weakself];
                 
+            } else if ([MTApplicationInstance isMadDesigner]) {
+                
+                MTApplicationInstance *app = [AppDelegate app];
+                [[app openDocument] activeDocumentModel];
+                UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+                UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierStoryboardMainTabBarController"];
+                
+                tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+                
+                if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+
+//                    tabBarController.view.tintColor = [UIColor tintColorRed];
+                    
+                    UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
+                    MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
+                    queryBuilderContainerController.viewControllerDelegate = self;
+                    
+                    UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
+                    MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
+                    reportDesignerViewController.delegate = self;
+                    
+                    UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
+                    MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
+                    reportViewerViewController.viewControllerDelegate = self ;
+                    
+                    MTApplicationInstance *app = [AppDelegate app];
+                    MADocument *document = [app openDocument];
+                    queryBuilderContainerController.document = document;
+                    reportDesignerViewController.document = document;
+                    reportViewerViewController.document = document;
+                    
+                } else {
+                    
+  //                  tabBarController.view.tintColor = [UIColor greenColor];
+   //                 [UITabBar appearance].tintColor = [UIColor redColor];
+                    
+                    UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
+                    MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
+                    queryBuilderViewController.delegate = self;
+                    
+                    UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
+                    MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
+                    reportDesignerViewController.delegate = self;
+                    
+                    UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
+                    MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
+                    reportViewerViewController.viewControllerDelegate = self;
+                    MTApplicationInstance *app = [AppDelegate app];
+                    MADocument *document = [app openDocument];
+                    queryBuilderViewController.document = document;
+                    reportDesignerViewController.document = document;
+                    reportViewerViewController.document = document;
+                    
+                }
+
+                [self presentViewController:tabBarController animated:YES completion:nil];
+
             }
+            
         }
         
         [weakself reenable];

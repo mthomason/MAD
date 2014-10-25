@@ -190,6 +190,7 @@
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="fixedSpace" id="fni-VY-x1j"/>
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="HDt-8o-ngI"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="uNL-pS-3JN"/>
                         <barButtonItem systemItem="action" id="Mnl-SJ-Bua">
                             <color key="tintColor" red="0.87058824300000004" green="0.1411764771" blue="0.2823529541" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -197,7 +198,6 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="5Mc-Dk-rgz"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="uNL-pS-3JN"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="L5Q-GJ-2o1">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="zUj-Uf-OIx">

@@ -33,6 +33,7 @@ extern NSString * const MNSSegueShowSql;
 - (void)reloadDocument:(MADocument *)documentReport animated:(BOOL)animated;
 
 - (IBAction)edit:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
 
