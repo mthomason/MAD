@@ -245,6 +245,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 @property (nonatomic, strong) UIFont *captionFont;
 
+@property (nonatomic, weak) UIViewController *childViewController;
+
 @end
 
 @implementation MADDesignerViewController
@@ -2167,16 +2169,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     return viewController;
 }
 
-- (void)setupToolboxWithViewController:(UIViewController *)viewController {
-    
-    viewController.view.frame = CGRectMake(CGPointZero.x, CGPointZero.y, self.toolbox.frame.size.width, self.toolbox.frame.size.height);
-    viewController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    if (viewController.view.superview == nil) {
-        [self.toolbox addSubview:viewController.view];
-    }
-
-}
-
 - (void)dismissToolboxPopoverControllers {
     if (self.popoverToolboxIsVisible) {
         __weak MADDesignerViewController *weakself = self;
@@ -2190,35 +2182,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self setDisplayActive];
     }
     [self setDisplayActive];
-}
-
-- (void)presentToolboxViewOfType:(MTToolboxType)toolboxType {
-    if (self.toolboxIsVisible == NO) {
-        self.toolboxIsVisible = YES;
-        
-        [self removeItemsFromToolbars];
-        [self.view layoutIfNeeded];
-        self.contentOffsetOnShowToolbox = self.scroller.contentOffset;
-        self.zoomScaleOnShowToolbox = self.scroller.zoomScale;
-        __weak MADDesignerViewController *weakSelf = self;
-        
-        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
-                         animations: ^{
-                             [weakSelf setConstraintsForToolboxVisible];
-                             
-                             UIEdgeInsets insets = [weakSelf desiredScrollInsets];
-                             weakSelf.contentInset = insets;
-                             insets = [weakSelf desiredScrollInsets];
-                             weakSelf.scrollIndicatorInsets = insets;
-                             [weakSelf.view layoutIfNeeded];
-                             
-                         } completion: ^(BOOL finished) {
-                             if (finished) {
-                                 [weakSelf adjustContextOffsetForToolboxWithToolboxType:toolboxType];
-                             }
-                         }];
-    }
-    
 }
 
 - (void)setContentInset:(UIEdgeInsets)insets {
@@ -2247,18 +2210,20 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         
         MTBlockCompletionSimple completion = ^(BOOL finished) {
             if (finished) {
-                if ([weakSelf.navigationControllerSectionLayoutSettings.view superview] != nil) {
-                    [weakSelf.navigationControllerSectionLayoutSettings.view removeFromSuperview];
+                __strong MADDesignerViewController *strongself = weakSelf;
+                [strongself.childViewController removeFromParentViewController];
+                if ([strongself.navigationControllerSectionLayoutSettings.view superview] != nil) {
+                    [strongself.navigationControllerSectionLayoutSettings.view removeFromSuperview];
                 }
-                if ([weakSelf.viewControllerToolbox.view superview] != nil) {
-                    [weakSelf.viewControllerToolbox.view removeFromSuperview];
+                if ([strongself.viewControllerToolbox.view superview] != nil) {
+                    [strongself.viewControllerToolbox.view removeFromSuperview];
                 }
-                [weakSelf.toolbarBottom setItems:weakSelf.toolbarBottomItems animated:YES];
-                [weakSelf.scroller setZoomScale:weakSelf.zoomScaleOnShowToolbox animated:YES];
-                [weakSelf.scroller setContentOffset:weakSelf.contentOffsetOnShowToolbox animated:YES];
-                [weakSelf setPrompt:nil];
+                [strongself.toolbarBottom setItems:weakSelf.toolbarBottomItems animated:YES];
+                [strongself.scroller setZoomScale:weakSelf.zoomScaleOnShowToolbox animated:YES];
+                [strongself.scroller setContentOffset:weakSelf.contentOffsetOnShowToolbox animated:YES];
+                [strongself setPrompt:nil];
 
-                weakSelf.navigationItem.prompt = nil;
+                strongself.navigationItem.prompt = nil;
             }
         };
         
@@ -2267,13 +2232,48 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     }
 }
 
-- (void)showToolbox:(MTToolboxType)tooboxType { //Never called on iPad
-    UIViewController *viewController = [self viewControllerForToolboxType:tooboxType];
+- (void)showToolbox:(MTToolboxType)toolboxType { //Never called on iPad
+    UIViewController *viewController = [self viewControllerForToolboxType:toolboxType];
+    self.childViewController = viewController;
+    
     if ([viewController respondsToSelector:@selector(setDocument:)]) {
         [(MTReportDesignerToolBoxViewController *)viewController setDocument:self.document];
     }
-    [self setupToolboxWithViewController:viewController];
-    [self presentToolboxViewOfType:tooboxType];
+    
+    viewController.view.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
+                                           self.toolbox.frame.size.width, self.toolbox.frame.size.height);
+    viewController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    if (viewController.view.superview == nil && self.childViewControllers.count == 0) {
+        [self addChildViewController:viewController];
+        [self.toolbox addSubview:viewController.view];
+    }
+
+    
+    if (self.toolboxIsVisible == NO) {
+        self.toolboxIsVisible = YES;
+        
+        [self removeItemsFromToolbars];
+        [self.view layoutIfNeeded];
+        self.contentOffsetOnShowToolbox = self.scroller.contentOffset;
+        self.zoomScaleOnShowToolbox = self.scroller.zoomScale;
+        __weak MADDesignerViewController *weakSelf = self;
+        
+        [UIView animateWithDuration: MNSAnimationDurationShowFromBottomHalf
+                         animations: ^{
+                             [weakSelf setConstraintsForToolboxVisible];
+                             
+                             UIEdgeInsets insets = [weakSelf desiredScrollInsets];
+                             weakSelf.contentInset = insets;
+                             insets = [weakSelf desiredScrollInsets];
+                             weakSelf.scrollIndicatorInsets = insets;
+                             [weakSelf.view layoutIfNeeded];
+                             
+                         } completion: ^(BOOL finished) {
+                             if (finished) {
+                                 [weakSelf adjustContextOffsetForToolboxWithToolboxType:toolboxType];
+                             }
+                         }];
+    }
 }
 
 - (void)adjustContextOffsetForToolboxWithToolboxType:(MTToolboxType)toolboxType {
