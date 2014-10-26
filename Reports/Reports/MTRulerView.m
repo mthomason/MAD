@@ -67,7 +67,7 @@
     self.eigthInchInPoints = 72.0000f / 8.0000f;
     self.cmInPoints = (72.0000f / 1.0000f) / 2.5400f;
 
-    self.layer.borderWidth = [self borderWidthThin];
+    self.layer.borderWidth = [UIView borderWidthThin];
     self.layer.borderColor = [UIColor borderColor].CGColor;
     self.translatesAutoresizingMaskIntoConstraints = NO;
 

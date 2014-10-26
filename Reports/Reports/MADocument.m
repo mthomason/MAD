@@ -119,6 +119,9 @@ NSString * const MTDocumentTypeUtiMad                   = @"com.everydayapps.pro
 NSString * const MNSInterfaceMessageErrorFailedToCreateReport       = @"Failed to create report document.";
 NSString * const MNSInterfaceTitleProblem                           = @"Problem";
 
+NSString * const MADManagedObjectModelName = @"MAD";
+NSString * const MADManagedObjectModelExtention = @"momd";
+
 #if MAD_DESIGNER == 1 || MAD_TEST == 1
 NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
 #elif MAD_VIEWER == 1
@@ -404,7 +407,8 @@ NSString * const MADUbiquitousPeerToken = "MADVIEWER";
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
-    NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"MAD" ofType:@"momd"];
+    NSString *modelPath = [[NSBundle mainBundle] pathForResource: MADManagedObjectModelName
+                                                          ofType: MADManagedObjectModelExtention];
     NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
     NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return mom;

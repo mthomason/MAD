@@ -25,6 +25,7 @@
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
 #import "UIViewController+ui.h"
+#import "MACloudManager.h"
 
 @interface MTQueryBuilderContainerController ()
     <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
@@ -104,7 +105,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+    self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
 
     self.delegate = self;
     self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
@@ -281,7 +282,7 @@
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

@@ -43,6 +43,8 @@
 #import "MTNotificationDidReadRows.h"
 #import "UIColor+EverydayApps.h"
 
+#import "MACloudManager.h"
+
 NSString * const MADImageBarButtonItemMadViewer = @"UIBarButtonItemMadViewer";
 NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 
@@ -315,7 +317,7 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
         BOOL animate = previousTraitCollection != nil;
         [UIView setAnimationsEnabled:animate];
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
         for (UIView *view in self.navigationItem.titleView.subviews) {
             NSLog(@"%@", view);
         }

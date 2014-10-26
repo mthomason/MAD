@@ -94,6 +94,7 @@
 #import "NSParagraphStyle+CommonStyles.h"
 
 #import "UIViewController+ui.h"
+#import "MACloudManager.h"
 
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
@@ -319,7 +320,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 
         [UIView setAnimationsEnabled:animate];
 
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:@"mad"];
+        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
         [UIView setAnimationsEnabled:YES];
     } else {
         self.navigationItem.prompt = nil;

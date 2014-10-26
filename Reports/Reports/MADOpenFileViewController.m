@@ -1967,7 +1967,7 @@ NSString * const MADPredicateFormatDuplcate = @"url.lastPathComponent.stringByDe
                 NSString *maybe = [self uniquieCloudNameForHandle: url.lastPathComponent.stringByDeletingPathExtension];
                 NSURL *toDirectory = [url URLByDeletingLastPathComponent];
                 NSURL *toUrl = [toDirectory URLByAppendingPathComponent:maybe];
-                NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:@"mad"];
+                NSURL *toUrlWithExtention = [toUrl URLByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
                 [[MACloudManager sharedManager] copyUrl:url toUrl:toUrlWithExtention completion:^(BOOL success, NSURL *url , NSError *error) {
                     
                 }];

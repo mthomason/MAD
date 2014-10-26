@@ -31,6 +31,7 @@
 #import "MTNavigationController.h"
 #import "MTNavigationControllerHideBottomBarUnlicensed.h"
 #import "MADNavigationControllerSplitParentViewController.h"
+#import "MACloudManager.h"
 
 NSString * const MTApplicationIdMadDesigner                          = @"666001433";
 NSString * const MTApplicationIdMadViewer                            = @"666003759";
@@ -38,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.179";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.179";
-NSString * const MTGlobalBundleRev                                  = @"1554";
+NSString * const MTGlobalBundleVersion                              = @"7.0.180";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.180";
+NSString * const MTGlobalBundleRev                                  = @"1555";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -116,7 +117,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
 #pragma mark - App settings
 
 + (NSString *)applicationNamePrefixPart {
-    return @"MAD";
+    return MTDocumentExtentionMobleApplicationDocument;
 }
 
 + (NSString *)applicationNamePrefixPartFormat {

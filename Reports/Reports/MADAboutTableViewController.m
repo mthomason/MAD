@@ -22,6 +22,7 @@
 #import "MADVibrantTableViewCell.h"
 #import "MADVibrantTableView.h"
 #import <CoreText/CoreText.h>
+#import "MACloudManager.h"
 
 @interface MADAboutTableViewController ()
     <MFMailComposeViewControllerDelegate,
@@ -98,7 +99,8 @@
     UIFont *font = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
     NSDictionary *attributes = @{(__bridge NSString *)kCTSuperscriptAttributeName : superscript, NSFontAttributeName : font};
     NSAttributedString *r = [[NSAttributedString alloc] initWithString:@"®" attributes:attributes];
-    NSAttributedString *mad = [[NSAttributedString alloc] initWithString:@"MAD" attributes:nil];
+    NSAttributedString *mad = [[NSAttributedString alloc] initWithString:MTDocumentExtentionMobleApplicationDocument
+                                                              attributes:nil];
     NSMutableAttributedString *tm = [[NSMutableAttributedString alloc] initWithAttributedString:mad];
     [tm appendAttributedString:r];
     NSAttributedString *statement = [[NSAttributedString alloc] initWithString: @" is a registered trademark of Everyday Apps LLC."

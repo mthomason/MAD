@@ -37,6 +37,9 @@ static const float MADBackgroundScrollViewZoomScales[] = {0.5000, 0.7500, 1.0000
         container.translatesAutoresizingMaskIntoConstraints = NO;
         container.backgroundColor = [UIColor headerColor];
         
+        self.maximumZoomScale = 4.0000f;
+        self.minimumZoomScale = 0.3000f;
+
         [self addSubview:container];
         
         NSString *layoutHorizontal = @"H:|[container]|";
