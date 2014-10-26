@@ -1470,7 +1470,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XYL-Lp-DPD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2518" y="5002"/>
+            <point key="canvasLocation" x="1486" y="2922"/>
         </scene>
         <!--Select Join Type-->
         <scene sceneID="tQn-xe-W8i">
@@ -2994,7 +2994,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4FE-hR-Scw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="fmR-5o-cXk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2904" y="5002"/>
+            <point key="canvasLocation" x="1872" y="2922"/>
         </scene>
         <!--Report Designer Document Object Format-->
         <scene sceneID="kMN-fL-Oq2">
@@ -3562,7 +3562,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="teM-rA-Clp" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="zVe-Se-p5x" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4356" y="3559"/>
+            <point key="canvasLocation" x="4176" y="3559"/>
         </scene>
         <!--New Aggregate Function-->
         <scene sceneID="PaV-8X-hq2">
@@ -4682,7 +4682,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0fS-LS-ZdE" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="INE-ub-iJU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4356" y="2910"/>
+            <point key="canvasLocation" x="4176" y="2910"/>
         </scene>
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="Y2t-Fx-1Zc">
@@ -8949,7 +8949,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NFu-Kc-oxF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="0FV-qc-Jlo" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1728" y="1467"/>
+            <point key="canvasLocation" x="1072" y="1133"/>
         </scene>
         <!--PDF417-->
         <scene sceneID="loe-ao-sWH">
