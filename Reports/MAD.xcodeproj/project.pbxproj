@@ -1245,6 +1245,8 @@
 		4CB2936D19FB52EB00C0171D /* MADTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936B19FB52EB00C0171D /* MADTabBar.m */; };
 		4CB2937019FC9DF700C0171D /* AAPLOverlayPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */; };
 		4CB2937119FC9DF700C0171D /* AAPLOverlayPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */; };
+		4CB2937419FCB3F700C0171D /* MADTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2937319FCB3F700C0171D /* MADTabBarController.m */; };
+		4CB2937519FCB3F700C0171D /* MADTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB2937319FCB3F700C0171D /* MADTabBarController.m */; };
 		4CB3C22A1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB3C22B1922A43600F3213E /* MTSliderPageVertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */; };
 		4CB3C22E1923374200F3213E /* MTSliderThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3C22C1923374200F3213E /* MTSliderThumb.png */; };
@@ -2703,6 +2705,8 @@
 		4CB2936B19FB52EB00C0171D /* MADTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTabBar.m; sourceTree = "<group>"; };
 		4CB2936E19FC9DF700C0171D /* AAPLOverlayPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAPLOverlayPresentationController.h; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/AAPLOverlayPresentationController.h; sourceTree = "<group>"; };
 		4CB2936F19FC9DF700C0171D /* AAPLOverlayPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAPLOverlayPresentationController.m; path = ../../../../Downloads/LookInsidePresentationControllersAdaptivityandCustomAnimatorObjects/LookInside/AAPLOverlayPresentationController.m; sourceTree = "<group>"; };
+		4CB2937219FCB3F700C0171D /* MADTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTabBarController.h; sourceTree = "<group>"; };
+		4CB2937319FCB3F700C0171D /* MADTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTabBarController.m; sourceTree = "<group>"; };
 		4CB3C2281922A43600F3213E /* MTSliderPageVertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSliderPageVertical.h; sourceTree = "<group>"; };
 		4CB3C2291922A43600F3213E /* MTSliderPageVertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTSliderPageVertical.m; sourceTree = "<group>"; };
 		4CB3C22C1923374200F3213E /* MTSliderThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MTSliderThumb.png; sourceTree = "<group>"; };
@@ -3197,6 +3201,8 @@
 				4CF3E77919F04D2D0064DA5F /* MADSearchBar.m */,
 				4CB2936A19FB52EB00C0171D /* MADTabBar.h */,
 				4CB2936B19FB52EB00C0171D /* MADTabBar.m */,
+				4CB2937219FCB3F700C0171D /* MADTabBarController.h */,
+				4CB2937319FCB3F700C0171D /* MADTabBarController.m */,
 			);
 			name = Views;
 			path = Reports;
@@ -6780,6 +6786,7 @@
 				4C6FDB6518A5685600374417 /* CGAffineTransform+Common.m in Sources */,
 				4C23FBDD18FAE4F7009F234F /* MTPaperC10.m in Sources */,
 				4C84EEB6178B43F20028BF49 /* UIImage+Border.m in Sources */,
+				4CB2937519FCB3F700C0171D /* MADTabBarController.m in Sources */,
 				4C23FBBD18FAE4F7009F234F /* MTPaperB5.m in Sources */,
 				4CABE4781837DF7C007EDD9D /* RptqDocumentObjectLabelLink.m in Sources */,
 				4C31C73319A03DE4007A8D3F /* MTErrorContainer.m in Sources */,
@@ -7161,6 +7168,7 @@
 				4C23FB0A18FADCE4009F234F /* MTTableViewControllerBarcodeExtraMicroQrCode.m in Sources */,
 				4C23FBAA18FAE4F7009F234F /* MTPaperA7.m in Sources */,
 				4C23FADE18FADA40009F234F /* MTDataColumn.m in Sources */,
+				4CB2937419FCB3F700C0171D /* MADTabBarController.m in Sources */,
 				4C6C9B1D17305FCF000E1161 /* MTReportDesignerSectionDecorationView.m in Sources */,
 				4C31C73219A03DE4007A8D3F /* MTErrorContainer.m in Sources */,
 				4C5BED7418EB356A00BDDDB8 /* MTQueryMaxFieldLength.m in Sources */,
