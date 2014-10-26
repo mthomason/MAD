@@ -532,13 +532,14 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 }
 
 static UIImageView *captureSnapshotOfView (UIView *targetView) {
-    UIGraphicsBeginImageContextWithOptions([targetView bounds].size, YES, 0);
-    [[targetView layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, YES, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [targetView.layer renderInContext:context];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     UIImageView *snapshotView = [[UIImageView alloc] initWithImage:image];
-    [snapshotView setFrame:[targetView frame]];
+    snapshotView.frame = targetView.frame;
     return snapshotView;
 }
 
@@ -546,7 +547,7 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     
-    if (self.activityExporting == NO) {
+    if (self.tabBarController.selectedViewController == self && self.activityExporting == NO) {
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
         MTReportViewerReportPageView *displayView = (MTReportViewerReportPageView *)pageViewController.view;
         //UIView *displayView = [pageViewController view];
