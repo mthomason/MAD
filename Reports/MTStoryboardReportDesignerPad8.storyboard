@@ -461,7 +461,7 @@
                         <outlet property="barButtonItemShowSQL" destination="2BA-o0-AgC" id="7Nv-9B-57p"/>
                         <outlet property="navigationItem" destination="p3l-dB-Y3B" id="dZC-x8-vN8"/>
                         <segue destination="2dC-f6-Bo7" kind="modal" identifier="showAddLinkViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="lYd-HE-Uoz"/>
-                        <segue destination="Lsp-Qu-tcg" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="n84-Cc-Wr0"/>
+                        <segue destination="Lsp-Qu-tcg" kind="modal" identifier="showAddGroupViewController" modalPresentationStyle="formSheet" id="n84-Cc-Wr0"/>
                         <segue destination="1S4-ip-3dw" kind="modal" identifier="showAddPredicateViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="MH3-rF-td0"/>
                         <segue destination="vFe-wK-P1j" kind="modal" identifier="showAddTableViewController" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="fL8-Tz-HBd"/>
                     </connections>
@@ -1049,7 +1049,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSI-k2-yBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4496" y="-5752"/>
+            <point key="canvasLocation" x="5220" y="-7619"/>
         </scene>
         <!--Add Table-->
         <scene sceneID="FiN-8R-Kst">
@@ -1479,7 +1479,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fbo-Im-5yU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5443" y="-5752"/>
+            <point key="canvasLocation" x="5912" y="-7619"/>
         </scene>
         <!--Predicate Format-->
         <scene sceneID="Kjj-zr-QtN">

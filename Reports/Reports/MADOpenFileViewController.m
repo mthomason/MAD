@@ -1257,51 +1257,37 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
                 tabBarController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
                 tabBarController.modalPresentationStyle = UIModalPresentationOverFullScreen;
                 
+                UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
+                UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
+                UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
+
+                id queryBuilderViewController;
                 if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 
-//                    tabBarController.view.tintColor = [UIColor tintColorRed];
+                    queryBuilderViewController = (MTQueryBuilderContainerController *)[navController topViewController];
+                    ((MTQueryBuilderContainerController * )queryBuilderViewController).viewControllerDelegate = self;
+                    ((MTQueryBuilderContainerController * )queryBuilderViewController).document = document;
                     
-                    UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-                    MTQueryBuilderContainerController *queryBuilderContainerController = (MTQueryBuilderContainerController *)[navController topViewController];
-                    queryBuilderContainerController.viewControllerDelegate = self;
-                    
-                    UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-                    MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
-                    reportDesignerViewController.delegate = self;
-                    
-                    UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-                    MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
-                    reportViewerViewController.viewControllerDelegate = self ;
-                    
-                    MTApplicationInstance *app = [AppDelegate app];
-                    MADocument *document = [app openDocument];
-                    queryBuilderContainerController.document = document;
-                    reportDesignerViewController.document = document;
-                    reportViewerViewController.document = document;
                     
                 } else {
                     
-  //                  tabBarController.view.tintColor = [UIColor greenColor];
-   //                 [UITabBar appearance].tintColor = [UIColor redColor];
+                    queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
+                    ((MADQueryViewController *)queryBuilderViewController).delegate = self;
+                    ((MADQueryViewController * )queryBuilderViewController).document = document;
                     
-                    UINavigationController *navController = (UINavigationController *)[tabBarController viewControllers][0];
-                    MADQueryViewController *queryBuilderViewController = (MADQueryViewController *)[navController topViewController];
-                    queryBuilderViewController.delegate = self;
-                    
-                    UINavigationController *navController2 = (UINavigationController *)[tabBarController viewControllers][1];
-                    MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
-                    reportDesignerViewController.delegate = self;
-                    
-                    UINavigationController *navController3 = (UINavigationController *)[tabBarController viewControllers][2];
-                    MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
-                    reportViewerViewController.viewControllerDelegate = self;
-                    MTApplicationInstance *app = [AppDelegate app];
-                    MADocument *document = [app openDocument];
-                    queryBuilderViewController.document = document;
-                    reportDesignerViewController.document = document;
-                    reportViewerViewController.document = document;
                     
                 }
+
+                MADDesignerViewController *reportDesignerViewController = (MADDesignerViewController *)[navController2 topViewController];
+                reportDesignerViewController.delegate = self;
+                
+                MADViewerController *reportViewerViewController = (MADViewerController *)[navController3 topViewController];
+                reportViewerViewController.viewControllerDelegate = self ;
+                
+//                MTApplicationInstance *app = [AppDelegate app];
+                MADocument *document = [app openDocument];
+                reportDesignerViewController.document = document;
+                reportViewerViewController.document = document;
 
                 [self presentViewController:tabBarController animated:YES completion:nil];
 

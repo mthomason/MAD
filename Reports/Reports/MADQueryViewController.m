@@ -227,7 +227,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return self;
 }
 
-
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(self.topLayoutGuide.length,
@@ -240,7 +239,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                                    self.bottomLayoutGuide.length,
                                                    CGSizeZero.width);
 }
-
 
 - (void)viewDidLayoutSubviews {
     if (self.firstTimeTablePosition == NO) {
@@ -580,7 +578,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
         [weakself enableTabBarItems];
     }];
 }
-
 
 - (void)viewControllerDidCancel:(id)sender {
     UIViewController *weakself = self;

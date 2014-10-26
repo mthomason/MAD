@@ -452,7 +452,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
 
     if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        [self setupPopoverControllers];
+        
+        self.viewControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
+        
+        UIPopoverController *popoverControllerInformation = [MADDesignerViewController popoverWithContoller:self.viewControllerToolbox];
+        popoverControllerInformation.delegate = self;
+
+        self.navigationControllerSectionLayoutSettings.preferredContentSize = [MADDesignerViewController sizePopoverSectionSettings];
+        
+        UIPopoverController *popoverControllerSectionSettings = [MADDesignerViewController popoverWithContoller:self.navigationControllerSectionLayoutSettings];
+        popoverControllerSectionSettings.delegate = self;
+        self.popoverControllerSectionSettings = popoverControllerSectionSettings;
+
     } else {
         UIBarButtonItem *buttonDone = [MADDesignerViewController buttonDone:self];
         [self.viewControllerSectionLayoutSettings.navigationItem setRightBarButtonItem: buttonDone
@@ -3053,25 +3064,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if (constraints.count > 0) {
         [self.scroller removeConstraints:constraints];
     }
-}
-
-#pragma mark UIPopoverController Helpers
-
-- (void)setupPopoverControllers {
-
-    self.viewControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
-    
-    UIPopoverController *popoverControllerInformation = [MADDesignerViewController popoverWithContoller:self.viewControllerToolbox];
-    popoverControllerInformation.delegate = self;
-    //self.viewControllerToolbox.popoverPresentationController.delegate = self;
-//    self.popoverControllerInformation = popoverControllerInformation;
-    
-    self.navigationControllerSectionLayoutSettings.preferredContentSize = [MADDesignerViewController sizePopoverSectionSettings];
-    
-    UIPopoverController *popoverControllerSectionSettings = [MADDesignerViewController popoverWithContoller:self.navigationControllerSectionLayoutSettings];
-    popoverControllerSectionSettings.delegate = self;
-    self.popoverControllerSectionSettings = popoverControllerSectionSettings;
-    
 }
 
 #pragma mark NSNotificationCenter Helpers

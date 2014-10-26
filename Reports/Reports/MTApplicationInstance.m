@@ -38,9 +38,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.178";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.178";
-NSString * const MTGlobalBundleRev                                  = @"1553";
+NSString * const MTGlobalBundleVersion                              = @"7.0.179";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.179";
+NSString * const MTGlobalBundleRev                                  = @"1554";
 
 NSString * const MTStoryboardReportDesigner8                        = @"MTStoryboardReportDesigner8";
 NSString * const MTStoryboardReportDesignerPad8                     = @"MTStoryboardReportDesignerPad8";
@@ -402,8 +402,8 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     [[UIActivityIndicatorView appearanceWhenContainedIn:[UINavigationController class], nil]    setColor: edaGreen];
       
     [[UINavigationBar appearance] setTitleTextAttributes: titleTextAttributes             ];*/
-    [[UITabBarItem appearance]  setTitleTextAttributes: titleTextAttributes                      forState: UIControlStateNormal];
-    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes                      forState: UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes: titleTextAttributes forState: UIControlStateNormal];
 
 }
 

@@ -242,6 +242,10 @@
         [self.document.managedObjectContext save:&error];
     }
     [self.viewControllerDelegate viewControllerDidFinish:self animated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+
 }
 - (IBAction)redrawQueryVisualization:(id)sender {
     [self.queryBuilderControllerAdvanced redraw];
