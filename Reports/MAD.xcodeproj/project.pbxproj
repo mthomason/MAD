@@ -592,6 +592,8 @@
 		4C45742814E795CE00FF326C /* RptqDocument+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45742714E795CE00FF326C /* RptqDocument+Extras.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4C472A70174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
+		4C47408419FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */; };
+		4C47408519FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */; };
 		4C49D9D219DCE31400CB4DB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D119DCE31400CB4DB8 /* AppDelegate.m */; };
 		4C49D9D419DCE31400CB4DB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D319DCE31400CB4DB8 /* main.m */; };
 		4C49D9D719DCE31400CB4DB8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D619DCE31400CB4DB8 /* ViewController.m */; };
@@ -2096,6 +2098,8 @@
 		4C45742714E795CE00FF326C /* RptqDocument+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDocument+Extras.m"; sourceTree = "<group>"; };
 		4C472A6E174A150900A7A5E6 /* NSManagedObject+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Extras.h"; sourceTree = "<group>"; };
 		4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Extras.m"; sourceTree = "<group>"; };
+		4C47408219FECDEC00B11434 /* MADVibrantCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantCollectionView.h; sourceTree = "<group>"; };
+		4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantCollectionView.m; sourceTree = "<group>"; };
 		4C47571E17B4096600530CAF /* Icon-29-Designer-Lagacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy.png"; sourceTree = "<group>"; };
 		4C47571F17B4096600530CAF /* Icon-29-Designer-Lagacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy@2x.png"; sourceTree = "<group>"; };
 		4C47572017B4096600530CAF /* Icon-29-Designer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Modern.png"; sourceTree = "<group>"; };
@@ -4343,6 +4347,8 @@
 				4C6268DB19F5DBF400DCCC2E /* MADVibrantTableViewCell.xib */,
 				4C6268FC19F600B100DCCC2E /* MADVibrantTableView.h */,
 				4C6268FD19F600B100DCCC2E /* MADVibrantTableView.m */,
+				4C47408219FECDEC00B11434 /* MADVibrantCollectionView.h */,
+				4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */,
 				4C1EE61519F750D900620486 /* MADVibrantTableViewCellBasic.h */,
 				4C1EE61619F750D900620486 /* MADVibrantTableViewCellBasic.m */,
 			);
@@ -6639,6 +6645,7 @@
 				4C982DBD166E4819003E9AA0 /* NSError+UserInterface.m in Sources */,
 				4C77329F190FFD6A005AE7C2 /* MysqlTruncate.m in Sources */,
 				4CFC3DE516714A270016E1E8 /* MTShowSqlViewController.m in Sources */,
+				4C47408519FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */,
 				4C1680971907B3EE00980D8D /* MTQueryCacheSyncOff.m in Sources */,
 				4C3ACA4016715679001BC16D /* RptqQuery+Extras.m in Sources */,
 				4C3ACA48167297AC001BC16D /* RptqQueryPredicate+Extras.m in Sources */,
@@ -7021,6 +7028,7 @@
 				4CE17E2116501A800002F8EA /* RptqDatabaseSchemaField+Extras.m in Sources */,
 				4CE17E251650B7F20002F8EA /* RptqDatabaseSchemaTable+Extras.m in Sources */,
 				4C23FAEC18FADC68009F234F /* MTViewControllerBarcodePreview.m in Sources */,
+				4C47408419FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */,
 				4C77329E190FFD6A005AE7C2 /* MysqlTruncate.m in Sources */,
 				4CE17E291650C6B50002F8EA /* RptqUserCredentals+Extras.m in Sources */,
 				4C1680961907B3EE00980D8D /* MTQueryCacheSyncOff.m in Sources */,

@@ -1690,7 +1690,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r3O-EL-wuN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6684" y="-5624"/>
+            <point key="canvasLocation" x="6678" y="-5456"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="L9u-MK-Qo7">
@@ -2869,7 +2869,7 @@
         <scene sceneID="4ZZ-eN-ZLM">
             <objects>
                 <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="jN2-xg-Ric" customClass="MADDesignerElementPIckerViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="UAb-vc-7eR">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="UAb-vc-7eR" customClass="MADVibrantCollectionView">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -3207,6 +3207,7 @@
                         </cells>
                         <connections>
                             <outlet property="dataSource" destination="jN2-xg-Ric" id="U3U-pT-oho"/>
+                            <outlet property="delegate" destination="jN2-xg-Ric" id="OEL-3A-DwO"/>
                         </connections>
                     </collectionView>
                     <extendedEdge key="edgesForExtendedLayout"/>
@@ -3408,7 +3409,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REi-jA-lJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="JKq-sU-kX9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5853" y="-882"/>
+            <point key="canvasLocation" x="6410" y="-1050"/>
         </scene>
         <!--Aggregate Functions-->
         <scene sceneID="eU5-mo-pmJ">
@@ -4449,7 +4450,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nhm-xk-wA7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="mgB-kl-SOM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5853" y="-1259"/>
+            <point key="canvasLocation" x="6410" y="-1426"/>
         </scene>
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
@@ -10250,8 +10251,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="204-Pu-Gdz"/>
         <segue reference="rbO-qj-gE4"/>
-        <segue reference="zUp-ku-ep4"/>
-        <segue reference="glj-Nb-BHS"/>
+        <segue reference="T0e-pi-cpg"/>
+        <segue reference="aFd-qe-sMU"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="calibratedRGB"/>
 </document>

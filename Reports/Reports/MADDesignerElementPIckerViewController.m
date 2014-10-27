@@ -117,6 +117,24 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     self.navigationController.view.opaque = NO;
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.opaque = NO;
+    
+/*
+    if (!UIAccessibilityIsReduceTransparencyEnabled()) {
+        //tableView.backgroundColor = UIColor.clearColor()
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        let blurEffect = UIBlurEffect(style: .Light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        tableView.backgroundView = blurEffectView
+        
+        //if inside a popover
+        if let popover = navigationController?.popoverPresentationController? {
+            popover.backgroundColor = UIColor.clearColor()
+        }
+        
+        //if you want translucent vibrant table view separator lines
+        tableView.separatorEffect = UIVibrancyEffect(forBlurEffect: blurEffect)
+    }
+  */  
     self.view.backgroundColor = [UIColor clearColor];
     self.view.opaque = NO;
     
