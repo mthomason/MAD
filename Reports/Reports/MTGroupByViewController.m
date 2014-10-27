@@ -31,28 +31,41 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
     self = [super initWithCoder:aDecoder];
     if (self) {
         
-        NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-        NSString *weight = NSStringFromSelector(@selector(weight));
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
-        [request setSortDescriptors: @[sortDescriptor]];
-        
-        NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-                                                                              managedObjectContext: self.document.managedObjectContext
-                                                                                sectionNameKeyPath: nil
-                                                                                         cacheName: nil];
-        frc.delegate = self;
-        [self setFetchedResultsControllerGroups: frc];
-
-        NSError *error = nil;
-        [[self fetchedResultsControllerGroups] performFetch:&error];
-        if (error != nil) {
-            [error presentErrorOnViewController:self];
-        }
-        frc = nil;
         
     }
     return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.hidesBackButton = NO;
+    
+    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+    titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
+    self.navigationItem.titleView = titleView;
+
+    NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
+    NSString *weight = NSStringFromSelector(@selector(weight));
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:weight ascending:YES];
+    [request setSortDescriptors: @[sortDescriptor]];
+    
+    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
+                                                                          managedObjectContext: self.document.managedObjectContext
+                                                                            sectionNameKeyPath: nil
+                                                                                     cacheName: nil];
+    frc.delegate = self;
+    self.fetchedResultsControllerGroups = frc;
+    
+    NSError *error = nil;
+    [self.fetchedResultsControllerGroups performFetch:&error];
+    if (error != nil) {
+        [error presentErrorOnViewController:self];
+    }
+    frc = nil;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -76,16 +89,6 @@ NSString * const MTGroupByViewControllerIdentifier = @"MTGroupByViewControllerId
 #pragma mark - View lifecycle
 
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.navigationItem.leftItemsSupplementBackButton = YES;
-    self.navigationItem.hidesBackButton = NO;
-    
-    MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
-    titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
-    self.navigationItem.titleView = titleView;
-
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

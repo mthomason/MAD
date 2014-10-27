@@ -38,6 +38,9 @@ NSString * const MTDocumentObjectNewAggregateViewControllerIdentifier = @"MTDocu
 NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"MTDocumentObjectNewAggregateNavigationControllerIdentifier";
 
 @interface MTDocumentObjectNewAggregateViewController ()
+    <MTAggregateFunctionsViewControllerDelegate,
+        MTGroupByViewControllerDelegate,
+        MTQueryBuilderChooseFieldDelegate>
 
 @property(nonatomic, strong) RptqDocumentObjectAggregate *aggregateDocumentObject;
 
@@ -46,6 +49,67 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 @implementation MTDocumentObjectNewAggregateViewController
 
 @synthesize unwindViewController;
+
+#pragma mark - MTQueryBuilderChooseFieldDelegate
+
+- (void)tableViewControllerChooseFieldDidFinish: (MTQueryBuilderChooseFieldViewController *)controller
+                                      withField: (RptqQueryField *)field {
+    [self setFieldObject:field];
+    [self setFieldObjectId: [field objectID]];
+    
+    NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
+    NSString *detail = [NSString stringWithFormat:formatString, [field display]];
+    self.tableViewCellAggregateInput.detailTextLabel.text = detail;
+    [self updateDisplay];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - MTGroupByViewControllerDelegate
+
+- (void)didSelectGroupByPage {
+    NSString *detail = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage];
+    self.groupTypeSectionNumber = 0;
+    self.aggregateGroupByType = MTAggregateGroupByTypePage;
+    self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
+
+    [self updateDisplay];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)didSelectGroupByReport {
+    NSString *detail = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport];
+    self.groupTypeSectionNumber = 0;
+    self.aggregateGroupByType = MTAggregateGroupByTypeReport;
+    self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
+
+    [self updateDisplay];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)didSelectGroupBySectionNumber:(NSUInteger)groupNumber {
+    NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
+    NSString *detail = [NSString stringWithFormat:format, groupNumber];
+    self.groupTypeSectionNumber = groupNumber;
+    self.aggregateGroupByType = MTAggregateGroupByTypeSection;
+    self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
+
+    [self updateDisplay];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - MTAggregateFunctionsViewControllerDelegate
+
+- (void)didSelectFunction:(MTAggregateFunctionType)aggregateFunctionType {
+    if (aggregateFunctionType != MTAggregateFunctionTypeNotSet) {
+        self.aggregateFunctionType = aggregateFunctionType;
+        NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:aggregateFunctionType];
+        NSString *detailText = [NSString stringWithFormat:@"%@()", functionName];
+        self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
+    }
+    
+    [self updateDisplay];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark - Exit
 
@@ -84,8 +148,8 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     } else if ([[action identifier] isEqualToString:MTSegueAggregateGroupTypeSave]) {
         
         MTGroupByViewController *groupByViewController = [action sourceViewController];
-        [self setAggregateGroupByType:[groupByViewController aggregateGroupType]];
-        [self setGroupTypeSectionNumber:[groupByViewController aggregateGroupNumber]];
+        self.aggregateGroupByType = groupByViewController.aggregateGroupType;
+        self.groupTypeSectionNumber = groupByViewController.aggregateGroupNumber;
         
         switch ([self aggregateGroupByType]) {
             case MTAggregateGroupByTypeSection: {
@@ -139,14 +203,14 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
     
     [self updateDisplay];
 }
-
+/*
 - (BOOL)canPerformUnwindSegueAction:(SEL)action
                  fromViewController:(UIViewController *)fromViewController
                          withSender:(id)sender {
-    return NO;
+    return self.delegate == nil;
 }
-
-- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
+*/
+/*- (UIViewController *)viewControllerForUnwindSegueAction:(SEL)action
                                       fromViewController:(UIViewController *)fromViewController
                                               withSender:(id)sender {
     
@@ -155,7 +219,7 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
             [super viewControllerForUnwindSegueAction: action
                            fromViewController: fromViewController
                                    withSender: sender];
-}
+}*/
 
 - (void)updateDisplay {
     
@@ -172,20 +236,19 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
                                                  groupType:[self aggregateGroupByType]
                                                groupNumber:groupNumber];
     }
-    BOOL enabled = [self fieldObject] != nil;
-    [[self.navigationItem rightBarButtonItem] setEnabled:enabled];
+    self.navigationItem.rightBarButtonItem.enabled = [self fieldObject] != nil;
 }
 
 - (void)updateField {
     NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
     NSString *detailtext = [NSString stringWithFormat:formatString, [[self fieldObject] display]];
-    [[[self tableViewCellAggregateInput] detailTextLabel] setText:detailtext];
+    self.tableViewCellAggregateInput.detailTextLabel.text = detailtext;
 }
 
 - (void)updateFunctionType {
     NSString *functionName = [RptqDocumentObjectAggregate displayStringForType:[self aggregateFunctionType]];
     NSString *detailText = [NSString stringWithFormat:@"%@(x)", functionName];
-    [[[self tableViewCellAggrageFunction] detailTextLabel] setText:detailText];
+    self.tableViewCellAggrageFunction.detailTextLabel.text = detailText;
 }
 
 - (void)updateGroupType {
@@ -195,49 +258,49 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
             NSUInteger group = [self groupTypeSectionNumber];
             NSString *format = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeSection];
             NSString *detail = [NSString stringWithFormat:format, group];
-            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detail];
+            self.tableViewCellAggregateGroupBy.detailTextLabel.text = detail;
             break;
             
         }
         case MTAggregateGroupByTypeReport: {
             
             NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypeReport];
-            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+            self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
             break;
             
         }
         case MTAggregateGroupByTypePage: {
             
             NSString *detailText = [RptqDocumentObjectAggregate displayStringForGroupByType: MTAggregateGroupByTypePage];
-            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:detailText];
+            self.tableViewCellAggregateGroupBy.detailTextLabel.text = detailText;
             break;
             
         }
         default:
-            [[[self tableViewCellAggregateGroupBy] detailTextLabel] setText:@""];
+            self.tableViewCellAggregateGroupBy.detailTextLabel.text = @"";
             break;
     }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    //FIXME... set document for all needed view controllers
     
     if ([segue.identifier isEqualToString:@"MTSegueNewDocumentObjectAggregateLabelSaveIdentifer"]) {
 
     } else if ([segue.identifier isEqualToString:@"MTSegueAggregateFunctionChooser"]) {
     
-        MTAggregateFunctionsViewController *functionChooser = segue.destinationViewController;
-        [functionChooser setSelectedFunctionType: self.aggregateFunctionType];
+        ((MTAggregateFunctionsViewController *)segue.destinationViewController).delegate = self;
+        ((MTAggregateFunctionsViewController *)segue.destinationViewController).selectedFunctionType = self.aggregateFunctionType;
 
     } else if ([segue.identifier isEqualToString:@"MTSegueGroupByPush"]) {
 
-        MTGroupByViewController *groupChooser = segue.destinationViewController;
-        groupChooser.document = self.document;
-        [groupChooser selectGroupType: self.aggregateGroupByType
-                    withSectionNumber: self.groupTypeSectionNumber];
+        ((MTGroupByViewController *)segue.destinationViewController).delegate = self;
+        ((MTGroupByViewController *)segue.destinationViewController).document = self.document;
+        [((MTGroupByViewController *)segue.destinationViewController) selectGroupType: self.aggregateGroupByType
+                                                                    withSectionNumber: self.groupTypeSectionNumber];
         
     } else if ([segue.identifier isEqualToString:@"MADSegueAggregateFunctionField"]) {
-        [segue.destinationViewController setDocument:self.document];
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).document = self.document;
+        ((MTQueryBuilderChooseFieldViewController *)segue.destinationViewController).delegate = self;
     }
 
 }
@@ -270,9 +333,6 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.aggregateFunctionType = MTAggregateFunctionTypeSum;
-    self.groupTypeSectionNumber = 0;
-    self.aggregateGroupByType = MTAggregateGroupByTypePage;
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
     

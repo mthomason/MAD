@@ -1354,12 +1354,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         navigationController.view.backgroundColor = [UIColor clearColor];
         result = navigationController;
     } else if ([controller.presentedViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *navigationController = (UINavigationController *)controller.presentedViewController;
-        if (navigationController.navigationItem.leftBarButtonItem == nil) {
-            UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-            [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
+        if ([((UINavigationController *)controller.presentedViewController).topViewController isKindOfClass:[MADDesignerElementPIckerViewController class]]) {
+            UINavigationController *navigationController = (UINavigationController *)controller.presentedViewController;
+            if (navigationController.navigationItem.leftBarButtonItem == nil) {
+                UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+                [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
+            }
+            result = navigationController;
+        } else {
+            result = controller.presentedViewController;
         }
-        result = navigationController;
+    } else {
+        result = controller.presentedViewController;
     }
     return result;
     
@@ -1507,11 +1513,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier];
-    
+
     MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
-    aggregateViewController.delegate = self;
     aggregateViewController.document = self.document;
+    aggregateViewController.delegate = self;
     [aggregateViewController setAggregateObjectToEdit:self.aggregateToEdit];
+    
+    UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(cancel:)];
+    [aggregateViewController.navigationItem setRightBarButtonItem:dismiss animated:NO];
+    [aggregateViewController.navigationItem setLeftBarButtonItem:nil animated:NO];
     
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
     navigationController.preferredContentSize = [MADDesignerViewController sizePopoverFonts];

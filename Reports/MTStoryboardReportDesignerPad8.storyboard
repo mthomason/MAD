@@ -2870,7 +2870,7 @@
             <objects>
                 <collectionViewController storyboardIdentifier="MTDocumentObjectSelectorViewControllerIdentifier" autoresizesArchivedViewToFullSize="NO" id="jN2-xg-Ric" customClass="MADDesignerElementPIckerViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="UAb-vc-7eR">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GXs-M5-Khb">
@@ -3211,6 +3211,8 @@
                     </collectionView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Document Objects" id="N2h-C9-X5q"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="480"/>
                     <connections>
                         <outlet property="view" destination="UAb-vc-7eR" id="fhY-es-RwG"/>
                     </connections>
@@ -3218,7 +3220,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NmB-6a-okv" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gi7-5z-ruU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4462" y="-901"/>
+            <point key="canvasLocation" x="4958" y="-1075"/>
         </scene>
         <!--Report Designer Document Object Format-->
         <scene sceneID="UzV-Rf-ZB3">
@@ -3336,6 +3338,8 @@
         <scene sceneID="zjV-CC-5UJ">
             <objects>
                 <navigationController storyboardIdentifier="MTDocumentObjectNewAggregateNavigationControllerIdentifier" definesPresentationContext="YES" id="kI9-NN-3QQ" customClass="MTNavigationController" sceneMemberID="viewController">
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="480"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="JS2-0u-CNr">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -3345,7 +3349,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HYD-Sm-jTx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5164" y="809"/>
+            <point key="canvasLocation" x="5172" y="137"/>
         </scene>
         <!--New Static Label-->
         <scene sceneID="olE-tX-aFS">
@@ -3404,7 +3408,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REi-jA-lJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="JKq-sU-kX9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5449" y="-876"/>
+            <point key="canvasLocation" x="5853" y="-882"/>
         </scene>
         <!--Aggregate Functions-->
         <scene sceneID="eU5-mo-pmJ">
@@ -3464,9 +3468,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionCount" unwindAction="unwindToNewAggregateFunction:" id="CWa-61-Yhr"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell tag="5" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellFirst" textLabel="Zzf-b5-RaC" style="IBUITableViewCellStyleDefault" id="3Np-w0-aes">
                                         <rect key="frame" x="0.0" y="79" width="320" height="44"/>
@@ -3515,9 +3516,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionFirst" unwindAction="unwindToNewAggregateFunction:" id="c7h-Nf-IPu"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell tag="7" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellLast" textLabel="qS5-Ct-lxo" style="IBUITableViewCellStyleDefault" id="V1B-hk-UhL">
                                         <rect key="frame" x="0.0" y="123" width="320" height="44"/>
@@ -3566,9 +3564,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionLast" unwindAction="unwindToNewAggregateFunction:" id="gqO-4k-nmR"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell tag="17" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellMax" textLabel="X6n-He-oBM" style="IBUITableViewCellStyleDefault" id="YVg-2Z-GUO">
                                         <rect key="frame" x="0.0" y="167" width="320" height="44"/>
@@ -3617,9 +3612,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionMaximum" unwindAction="unwindToNewAggregateFunction:" id="lDL-eJ-YOU"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellMean" textLabel="uXv-hc-5Fi" style="IBUITableViewCellStyleDefault" id="D0p-CQ-5Ul">
                                         <rect key="frame" x="0.0" y="211" width="320" height="44"/>
@@ -3669,9 +3661,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionMean" unwindAction="unwindToNewAggregateFunction:" id="5UZ-oW-VDH"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell tag="13" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellMin" textLabel="e01-Ac-Uq9" style="IBUITableViewCellStyleDefault" id="fiX-0E-WCC">
                                         <rect key="frame" x="0.0" y="255" width="320" height="44"/>
@@ -3741,9 +3730,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionMinimum" unwindAction="unwindToNewAggregateFunction:" id="EsE-Bb-RqH"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell tag="2" contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTTableViewCellSum" textLabel="Wqn-qD-fm7" style="IBUITableViewCellStyleDefault" id="V2V-ML-idS">
                                         <rect key="frame" x="0.0" y="299" width="320" height="44"/>
@@ -3792,9 +3778,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="meJ-vl-8fu" kind="unwind" identifier="MTSegueAggregateFunctionSum" unwindAction="unwindToNewAggregateFunction:" id="fOr-wD-W4w"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -3826,7 +3809,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJg-HL-DUK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="meJ-vl-8fu" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6166" y="426"/>
+            <point key="canvasLocation" x="6410" y="-238"/>
         </scene>
         <!--New Aggregate Function-->
         <scene sceneID="swE-Dw-Ge0">
@@ -3996,7 +3979,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYQ-m9-KBd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Otc-ZF-Iy5" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5449" y="-476"/>
+            <point key="canvasLocation" x="5853" y="-346"/>
         </scene>
         <!--Group By-->
         <scene sceneID="S0o-o3-0nb">
@@ -4030,9 +4013,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="Qoz-jO-Zgp" kind="unwind" identifier="MTSegueAggregateGroupTypeSave" unwindAction="unwindToNewAggregateFunction:" id="8Af-Z7-7dt"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -4053,7 +4033,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z4D-IC-2YP" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Qoz-jO-Zgp" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6166" y="860"/>
+            <point key="canvasLocation" x="6410" y="196"/>
         </scene>
         <!--View Controller Value Based On Field-->
         <scene sceneID="4vJ-Rd-b6y">
@@ -4469,7 +4449,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nhm-xk-wA7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="mgB-kl-SOM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="5449" y="-1253"/>
+            <point key="canvasLocation" x="5853" y="-1259"/>
         </scene>
         <!--Query Visualization Schema View Controller-->
         <scene sceneID="gNg-at-GkL">
@@ -4728,9 +4708,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="3g8-ia-cMh" kind="unwind" identifier="MTSegueAggregateFieldSave" unwindAction="unwindToNewAggregateFunction:" id="IRv-q5-AtL"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -4750,14 +4727,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xfp-zU-5YG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="3g8-ia-cMh" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6166" y="-6"/>
+            <point key="canvasLocation" x="6410" y="-670"/>
         </scene>
         <!--Barcode Designer-->
         <scene sceneID="TAy-rr-Zqg">
             <objects>
                 <tableViewController id="Y7f-Nc-Ib7" customClass="MTViewControllerBarcodeOptions" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ffc-Ap-j4h">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -5117,7 +5094,7 @@
             <objects>
                 <tableViewController id="2EX-kM-g28" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="836-2o-Vya">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -5251,11 +5228,11 @@
                         <viewControllerLayoutGuide type="bottom" id="i6V-SM-ko6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nP9-s7-gw1">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tiv-yB-fhj">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="200"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" placeholder="YES" id="Vux-mk-Sj2"/>
@@ -5265,7 +5242,7 @@
                                 </connections>
                             </containerView>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vRo-Io-0Xe">
-                                <rect key="frame" x="0.0" y="200" width="768" height="760"/>
+                                <rect key="frame" x="0.0" y="200" width="320" height="216"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
                                     <segue destination="dTF-M4-0rC" kind="embed" identifier="MTIdentifierSegueBarcodeTable" id="Irg-lh-nab"/>
@@ -5315,7 +5292,7 @@
                         <viewControllerLayoutGuide type="bottom" id="h8E-Rd-foa"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="lZc-JU-qX6" customClass="MTBarcodeView">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -5333,7 +5310,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseField2dComponent" id="uiE-2t-AeT" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="DIn-2X-j1Z">
-                        <rect key="frame" x="0.0" y="44" width="768" height="716"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="172"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -5388,11 +5365,11 @@
                         <viewControllerLayoutGuide type="bottom" id="UIk-Es-9x7"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bZ0-Vo-nNC">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wPr-wD-Tz0">
-                                <rect key="frame" x="0.0" y="272" width="768" height="216"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                                 <connections>
                                     <outlet property="dataSource" destination="nYU-TX-lFm" id="Qgu-f5-1vO"/>
                                     <outlet property="delegate" destination="nYU-TX-lFm" id="5my-mX-Wi7"/>
@@ -5429,7 +5406,7 @@
             <objects>
                 <tableViewController id="wEq-mn-wZJ" customClass="MTTableViewControllerBarcodeExtraAztec" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="0TL-aR-Jcw">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -5526,7 +5503,7 @@
             <objects>
                 <tableViewController id="FVu-jD-ot0" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ghL-yQ-OKV">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -5740,7 +5717,7 @@
             <objects>
                 <tableViewController id="XAj-ty-nXE" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Z27-7x-Ahd">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6378,7 +6355,7 @@
             <objects>
                 <tableViewController id="KLU-b3-8yJ" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PgZ-J9-Zis">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6473,7 +6450,7 @@
             <objects>
                 <tableViewController id="yTe-B3-pB4" customClass="MTTableViewControllerBarcodeExtraGridMatrix" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="zJF-ON-TXd">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6571,7 +6548,7 @@
             <objects>
                 <tableViewController id="DDF-nA-Vch" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="hFc-dU-PZs">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6819,7 +6796,7 @@
             <objects>
                 <tableViewController id="0b4-zb-ao6" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Wtz-xf-jc8">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -6931,7 +6908,7 @@
             <objects>
                 <tableViewController id="StD-M2-3LL" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Tpi-FE-eC7">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
@@ -7077,7 +7054,7 @@
             <objects>
                 <tableViewController id="Cis-CG-Ko0" customClass="MTTableViewControllerBarcodeExtraQrCode" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="vK4-i7-ZmT">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -7175,7 +7152,7 @@
             <objects>
                 <tableViewController id="ZEp-lV-V2Y" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="EPY-6A-Lra">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -7882,7 +7859,7 @@
             <objects>
                 <tableViewController id="gbo-M0-r0L" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Df6-2T-i0q">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -7977,7 +7954,7 @@
             <objects>
                 <tableViewController id="xfw-2m-eZT" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="bRu-hq-oih">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8089,7 +8066,7 @@
             <objects>
                 <tableViewController id="xgt-xu-GBH" customClass="MTTableViewControllerBarcodeExtraMicroQrCode" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="lWj-ZA-GPD">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8187,7 +8164,7 @@
             <objects>
                 <tableViewController id="pZR-Yw-EP4" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="nkN-xg-ssd">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8282,7 +8259,7 @@
             <objects>
                 <tableViewController id="Slf-PZ-vLf" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Tny-c3-ly8">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8360,7 +8337,7 @@
             <objects>
                 <tableViewController id="loI-3G-XEE" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ICL-WQ-vx5">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8472,7 +8449,7 @@
             <objects>
                 <tableViewController id="ftv-gF-hif" customClass="MTTableViewControllerBarcodeExtraMaxicode" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="UKW-15-xO1">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -8598,7 +8575,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldMaxicode" id="eGY-uT-xNK" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2Ce-7u-BnQ">
-                        <rect key="frame" x="0.0" y="44" width="768" height="716"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="172"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -8646,7 +8623,7 @@
             <objects>
                 <tableViewController id="Rde-PM-7aF" customClass="MTTableViewControllerBarcodeExtraDataMatrix" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Sfz-Sn-vCd">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9204,7 +9181,7 @@
             <objects>
                 <tableViewController id="hva-oT-lDo" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="FQs-4p-j0P">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9401,7 +9378,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UITableViewControllerChooseFieldBarcode" id="LA2-X4-Vc3" customClass="MTQueryBuilderChooseFieldViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dyg-U6-Tv8">
-                        <rect key="frame" x="0.0" y="44" width="768" height="716"/>
+                        <rect key="frame" x="0.0" y="44" width="320" height="172"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -9505,7 +9482,7 @@
             <objects>
                 <tableViewController id="aui-Cs-AtC" customClass="MTTableViewControllerBarcodeExtraPdf417Iso24728" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="syV-dJ-7ym">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9613,7 +9590,7 @@
             <objects>
                 <tableViewController id="qxm-t6-ckH" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="94z-gB-DF9">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -9997,7 +9974,7 @@
             <objects>
                 <tableViewController id="1Up-jy-Vjh" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9SE-la-6mR">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -10177,7 +10154,7 @@
             <objects>
                 <tableViewController id="QSf-4n-ZCy" customClass="MTTableViewControllerStaticSelectRow" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="1nP-le-Ncg">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="760"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
