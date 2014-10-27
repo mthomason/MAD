@@ -114,13 +114,13 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOG-3q-Pa5" customClass="MADBackgroundScrollView">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                             </scrollView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wxc-IA-YFE" userLabel="Toolbox View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wxc-IA-YFE" userLabel="Toolbox View">
                                 <color key="backgroundColor" red="1" green="0.43529412150000002" blue="0.81176471709999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" id="JQg-mp-jfZ"/>
+                                    <constraint firstAttribute="height" placeholder="YES" id="JQg-mp-jfZ"/>
                                 </constraints>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E8X-yI-3Ol" userLabel="Toolbox Toolbar">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E8X-yI-3Ol" userLabel="Toolbox Toolbar">
                                 <constraints>
                                     <constraint firstAttribute="height" id="7Ac-QW-BkM"/>
                                 </constraints>
