@@ -11,18 +11,23 @@
 @interface MADPromptManager ()
 
 @property (nonatomic, strong, readwrite) NSMutableArray *promptItems;
+@property (nonatomic, strong, readwrite) NSString *defaultPrompt;
 
 @end
 
 @implementation MADPromptManager
 
-- (instancetype)init {
+- (instancetype)initWithDefaultPrompt:(NSString *)defaultPrompt {
     self = [super init];
     if (self) {
         
         NSMutableArray *promptItems = [[NSMutableArray alloc] init];
         self.promptItems = promptItems;
         
+        NSString *dp = defaultPrompt == nil ? nil : [NSString stringWithString:defaultPrompt];
+        self.defaultPrompt = dp;
+        
+        [self updatePrompt];
     }
     return self;
 }
@@ -56,7 +61,7 @@
         }
         self.prompt = prompt;
     } else {
-        self.prompt = nil;
+        self.prompt = self.defaultPrompt;
     }
 }
 
