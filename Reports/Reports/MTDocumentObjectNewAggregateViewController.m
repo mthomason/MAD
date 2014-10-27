@@ -255,13 +255,12 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 }
 
 - (void)setAggregateObjectToEdit:(RptqDocumentObjectAggregate *)aggregateDocumentObject {
-    
-    [self setAggregateFunctionType:[[aggregateDocumentObject function] integerValue]];
-    [self setAggregateGroupByType:[[aggregateDocumentObject groupType] integerValue]];
-    [self setGroupTypeSectionNumber:[[aggregateDocumentObject groupNumber] integerValue]];
-    [self setFieldObjectId:[[aggregateDocumentObject aggregateField] objectID]];
-    [self setFieldObject:[aggregateDocumentObject aggregateField]];
-    [self setEditmode:YES];
+    self.aggregateFunctionType = aggregateDocumentObject.function.integerValue;
+    self.aggregateGroupByType = aggregateDocumentObject.groupType.integerValue;
+    self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber.integerValue;
+    self.fieldObjectId = aggregateDocumentObject.aggregateField.objectID;
+    self.fieldObject = aggregateDocumentObject.aggregateField;
+    self.editmode = YES;
 
     [self setAggregateDocumentObject:aggregateDocumentObject];
 
@@ -271,9 +270,9 @@ NSString * const MTDocumentObjectNewAggregateNavigationControllerIdentifier = @"
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setAggregateFunctionType:MTAggregateFunctionTypeSum];
-    [self setGroupTypeSectionNumber:0];
-    [self setAggregateGroupByType:MTAggregateGroupByTypePage];
+    self.aggregateFunctionType = MTAggregateFunctionTypeSum;
+    self.groupTypeSectionNumber = 0;
+    self.aggregateGroupByType = MTAggregateGroupByTypePage;
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.hidesBackButton = NO;
     

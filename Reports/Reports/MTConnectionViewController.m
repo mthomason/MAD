@@ -167,8 +167,6 @@ NSString * const MTConnectionViewControllerDefaultTitle = @"Database Settings";
                                                                                      action: nil];
     [self.navigationItem setRightBarButtonItem:barButtonItem animated:YES];
     
-    //__weak MTConnectionViewController *blockSelf = self;
-    
     UITextField *textFieldServer    = self.textFieldHost;
     UITextField *textFieldDatabae   = self.textFieldDatabase;
     UITextField *textFieldPort      = self.textFieldPort;
