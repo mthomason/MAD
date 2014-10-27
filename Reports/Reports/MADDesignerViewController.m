@@ -1312,15 +1312,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 }
 
 - (IBAction)add:(id)sender {
-//    [self setDisplayActive];
-//    if (![self dismissAllPopovers]) {
-//        [self performSegueWithIdentifier:@"showObjects" sender:sender];
-//    } else {
-//        [self deselectAllElementsAnimated:YES];
-//    }
-    
+
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierNavigationControllerDocumentObjectSelector"];
+    MADDesignerElementPIckerViewController *pickerController = (MADDesignerElementPIckerViewController *)navigationController.topViewController;
+    pickerController.objectSelectorDelegate = self;
+    pickerController.document = self.document;
     
     navigationController.modalPresentationStyle = UIModalPresentationPopover;
     navigationController.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
@@ -1348,7 +1345,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if (style != UIModalPresentationPopover &&
         [controller.presentedViewController isKindOfClass:[UINavigationController class]] == NO) {
         UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-        [controller.presentedViewController.navigationItem setRightBarButtonItem:cancelButton animated:NO];
+        [controller.presentedViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
         controller.presentedViewController.view.backgroundColor = [UIColor clearColor];
         
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller.presentedViewController];
@@ -1360,7 +1357,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         UINavigationController *navigationController = (UINavigationController *)controller.presentedViewController;
         if (navigationController.navigationItem.leftBarButtonItem == nil) {
             UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-            [navigationController.topViewController.navigationItem setRightBarButtonItem:cancelButton animated:NO];
+            [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
         }
         result = navigationController;
     }
@@ -1904,6 +1901,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [self insertDocumentObjectWithDefination:
      @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
        MTDocumentObjectDefinationObject : [field objectID]}];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
@@ -1930,6 +1928,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                };
 
     [self insertDocumentObjectWithDefination: documentObjectDefination];
+
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -1939,6 +1939,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSDictionary *defination = @{MTDocumentObjectDefinationType: type,
                                  MTDocumentObjectDefinationObject : labelText};
     [self insertDocumentObjectWithDefination:defination];
+    [self dismissViewControllerAnimated:YES completion:nil];
 
 }
 
