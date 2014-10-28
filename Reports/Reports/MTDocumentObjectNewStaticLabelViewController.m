@@ -59,6 +59,8 @@ NSString * const MTDocumentObjectNewStaticLabelViewControllerIdentifier = @"MTDo
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.preferredContentSize = CGSizeMake(320.0000f, 120.0000f);
+    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 120.0000f);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
