@@ -96,6 +96,8 @@
 #import "UIViewController+ui.h"
 #import "MACloudManager.h"
 
+#import "MADNavigationBarTitleView.h"
+
 typedef NS_ENUM(NSUInteger, MTQuerySections) {
     MTQuerySectionsDocumentGroups = 0,
     MTQuerySectionsDatasource = 1,
@@ -313,19 +315,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     return NSLocalizedString(@"MAD Query", "MAD Query");
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
-        BOOL animate = previousTraitCollection != nil;
-
-        [UIView setAnimationsEnabled:animate];
-
-        self.navigationItem.prompt = [self.document.fileName stringByAppendingPathExtension:MTDocumentExtentionMobleApplicationDocument];
-        [UIView setAnimationsEnabled:YES];
-    } else {
-        self.navigationItem.prompt = nil;
-    }
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -352,6 +341,7 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     
     [self reloadDocument:self.document animated:YES];
     
+    self.navigationItem.prompt = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -394,15 +384,18 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     self.navigationController.toolbar.barTintColor = barTintColor;
     self.navigationController.toolbar.tintColor = tintColor;
 
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+    
+    //if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
         
         MADNavigationBarTitleView *titleView = [[MADNavigationBarTitleView alloc] initWithFrame: CGRectZero];
         titleView.text = [MTApplicationInstance madQuery];
 
         self.navigationItem.titleView = titleView;
-    }
+    //}
     
     [self enableTabBarItems];
+    //[self.navigationItem.titleView sizeToFit];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -1665,14 +1658,13 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     RptqDatabaseSchemaTable *schemaTable = [table databaseSchemaTable];
     MTQuery *rquery = [[MTQuery alloc] initWithQueryType:MTQueryTypeSampleDataTable object:schemaTable];
     MTTableController *tableController = [[MTTableController alloc] initWithQuery:rquery];
-    UILabel *sampleDataTitleView = [[UILabel alloc] initWithFrame:CGRectZero];
-    sampleDataTitleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    NSAttributedString *titleViewText = [self saveDataViewTitleWithTableName: schemaTable.name];
-    [sampleDataTitleView setAttributedText:titleViewText];
+    MADNavigationBarTitleView *sampleDataTitleView = [[MADNavigationBarTitleView alloc] initWithFrame:CGRectZero];
+
+    sampleDataTitleView.text = schemaTable.name;
     
-    [[tableController navigationItem] setTitle:[schemaTable name]];
-    [[tableController navigationItem] setTitleView:sampleDataTitleView];
+    tableController.navigationItem.title = schemaTable.name;
+    tableController.navigationItem.titleView = sampleDataTitleView;
     return tableController;
 }
 
@@ -1706,7 +1698,9 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
 - (void)displayTableSampleDataForIndexPath:(NSIndexPath *)indexPath {
     
     RptqQueryTable *table = [self.fetchedResultsControllerTables objectAtIndexPath: [NSIndexPath indexPathForRow: indexPath.row inSection: 0]];
-    [self.navigationController pushViewController: [self tableControllerForTable:table]
+    MTTableController *tableController = [self tableControllerForTable:table];
+//    [tableController.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController pushViewController: tableController
                                          animated: YES];
 
 }

@@ -110,6 +110,7 @@
     });
     
     self.toolbarItems = nil;
+    self.navigationController.toolbarHidden = YES;
 }
 
 + (MTDataTable *)dataTableWithObjectId:(NSManagedObjectID *)objectID {
@@ -133,8 +134,8 @@
     [super viewDidAppear:animated];
     [self.collectionView flashScrollIndicators];
     self.navigationController.navigationBar.backgroundColor = [UIColor tintColorBlue];
-    self.navigationItem.title = @"TEST";
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

@@ -267,10 +267,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     } else if ([action.identifier isEqualToString:@"MTSegueNewDocumentObjectBarcodeSaveIdentifer"]) {
         [self saveBarcodeLabel: action.sourceViewController];
         
-    } else if ([action.identifier isEqualToString:MTSegueChooseImageSaveIdentifer]) {
-
-        
     }
+    
     [self setDisplayActive];
 }
 
@@ -1961,8 +1959,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     NSDictionary *defination = @{MTDocumentObjectDefinationType: type,
                                  MTDocumentObjectDefinationObject : labelText};
     [self insertDocumentObjectWithDefination:defination];
-    [self dismissViewControllerAnimated:YES completion:nil];
-
+//    if (self.presentationController != nil || self.navigationController.isMovingFromParentViewController == NO) {
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//   }
 }
 
 #pragma mark - Gesture Recognizer Delegate
@@ -3490,16 +3489,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)saveDynamicLabel:(MTQueryBuilderChooseFieldViewController *)viewController {
     
-    __weak MADDesignerViewController *reportDesigner = self;
-    block_insertObject insert = ^(UIViewController *sourceViewController) {
-        MTQueryBuilderChooseFieldViewController *dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)sourceViewController;
-        RptqQueryField *queryField = [dynamicFieldController queryField];
-        [reportDesigner insertDocumentObjectWithDefination:
-         @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
-           MTDocumentObjectDefinationObject : [queryField objectID]}];
-    };
+    MTQueryBuilderChooseFieldViewController *dynamicFieldController = (MTQueryBuilderChooseFieldViewController *)viewController;
+    RptqQueryField *queryField = [dynamicFieldController queryField];
+    [self insertDocumentObjectWithDefination:
+     @{MTDocumentObjectDefinationType: @(MTDocumentObjectTypeLabelDynamic),
+       MTDocumentObjectDefinationObject : [queryField objectID]}];
     
-    insert(viewController);
+    [self scrollToDetailSectionView];
 }
 
 - (void)saveAggregateLabel:(MTDocumentObjectNewAggregateViewController *)viewController {
@@ -3521,6 +3517,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                                                        groupNumber: groupNumber];
         }
     }
+    [self scrollToDetailSectionView];
 }
 
 - (void)saveBarcodeLabel:(MTViewControllerBarcode *)viewController {
@@ -3556,6 +3553,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self insertDocumentObjectWithDefination:defination];
         
     }
+    [self scrollToDetailSectionView];
 }
 
 #pragma mark - Delegates
