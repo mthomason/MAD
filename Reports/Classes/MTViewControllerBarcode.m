@@ -175,6 +175,9 @@ NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier = 
         }
 
     }
+    
+    self.preferredContentSize = CGSizeMake(320.0000f, 1024.0000f);
+    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 1024.0000f);
 }
 
 - (MTDataTable *)dataTableForQuery:(MTQuery *)query {
