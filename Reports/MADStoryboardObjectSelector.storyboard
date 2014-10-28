@@ -72,7 +72,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="ekQ-Da-HfL" kind="push" identifier="MTIdentifierSeguePushSelectField" id="kGW-bn-0WS"/>
+                                    <segue destination="ekQ-Da-HfL" kind="show" identifier="MTIdentifierSeguePushSelectField" id="kGW-bn-0WS"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="8" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectWhitespaceCollectionViewCell" id="FZy-D1-1e6">
@@ -146,7 +146,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="3Vw-MZ-KsV" kind="push" identifier="MTIdentifierSeguePushStaticLabelNew" id="1lr-el-ohk"/>
+                                    <segue destination="3Vw-MZ-KsV" kind="show" identifier="MTIdentifierSeguePushStaticLabelNew" id="1lr-el-ohk"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectFormulaCollectionViewCell" id="tnb-ml-hNf">
@@ -251,7 +251,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="q5w-fK-a49" kind="push" identifier="MTIdentifierSeguePushAggregateLabelNew" id="rnE-S6-GTx"/>
+                                    <segue destination="q5w-fK-a49" kind="show" identifier="MTIdentifierSeguePushAggregateLabelNew" id="rnE-S6-GTx"/>
                                 </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" reuseIdentifier="MTIdentiferDocumentObjectImageCollectionViewCell" id="hjP-MI-qdl">
@@ -359,7 +359,7 @@
                                 </constraints>
                                 <size key="customSize" width="150" height="80"/>
                                 <connections>
-                                    <segue destination="roU-bp-FkO" kind="push" identifier="MTIdentifierSeguePushBarcodeLabelNew" id="p66-Qt-51q"/>
+                                    <segue destination="roU-bp-FkO" kind="show" identifier="MTIdentifierSeguePushBarcodeLabelNew" id="p66-Qt-51q"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -405,7 +405,7 @@
                     <tableView key="view" clipsSubviews="YES" tag="2027" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="CZ5-8U-9W0">
                         <rect key="frame" x="0.0" y="64" width="320" height="256"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="SQ5-Ti-l7T">
                                 <cells>
@@ -461,10 +461,10 @@
         <scene sceneID="zj2-Nb-zGo">
             <objects>
                 <tableViewController storyboardIdentifier="MTAggregateFunctionsViewControllerIdentifier" id="q6h-ZD-aAc" customClass="MTAggregateFunctionsViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" tag="2003" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="xTY-z2-9d9">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" tag="2003" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="xTY-z2-9d9">
                         <rect key="frame" x="0.0" y="44" width="320" height="276"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="THb-Bb-4Pb">
                                 <cells>
@@ -907,7 +907,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="q6h-ZD-aAc" kind="push" identifier="MTSegueAggregateFunctionChooser" id="r2V-5d-b40"/>
+                                            <segue destination="q6h-ZD-aAc" kind="show" identifier="MTSegueAggregateFunctionChooser" id="r2V-5d-b40"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="M3j-I1-KT1" detailTextLabel="4eJ-yw-hzS" style="IBUITableViewCellStyleValue1" id="fdZ-0A-pqp">
@@ -948,7 +948,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="hYq-dH-ziS" kind="push" identifier="MADSegueAggregateFunctionField" id="vS5-1E-stR"/>
+                                            <segue destination="hYq-dH-ziS" kind="show" identifier="MADSegueAggregateFunctionField" id="vS5-1E-stR"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" textLabel="rC7-nQ-hlO" detailTextLabel="oGn-Rk-1gb" style="IBUITableViewCellStyleValue1" id="oCc-9f-xeS">
@@ -994,7 +994,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="0ue-9f-E1R" kind="push" identifier="MTSegueGroupByPush" id="JLz-hW-Bwt"/>
+                                            <segue destination="0ue-9f-E1R" kind="show" identifier="MTSegueGroupByPush" id="JLz-hW-Bwt"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1032,10 +1032,10 @@
         <scene sceneID="UDG-5d-S4q">
             <objects>
                 <tableViewController storyboardIdentifier="MTGroupByViewControllerIdentifier" id="0ue-9f-E1R" customClass="MTGroupByViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" tag="2011" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="4HD-1V-yEm">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" tag="2011" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="4HD-1V-yEm">
                         <rect key="frame" x="0.0" y="44" width="320" height="276"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="MTGroupByTableViewCell" textLabel="OXT-FY-8Jx" style="IBUITableViewCellStyleDefault" id="hKf-d9-nt8">
                                 <rect key="frame" x="0.0" y="55" width="320" height="44"/>
@@ -1089,7 +1089,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4Wa-ea-f4M">
                         <rect key="frame" x="0.0" y="64" width="320" height="256"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="AgM-eC-MQQ" detailTextLabel="fXa-ys-kf4" style="IBUITableViewCellStyleValue1" id="djH-BB-ajb">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
@@ -1141,7 +1141,7 @@
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="CcB-0J-WLw">
                         <rect key="frame" x="0.0" y="44" width="320" height="276"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UITableViewCellFieldWithType" textLabel="AKN-cP-1Rw" detailTextLabel="oUU-5L-l9o" style="IBUITableViewCellStyleValue1" id="bt4-oo-Qqo">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
@@ -1237,7 +1237,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="H5b-gY-Wrt" kind="push" identifier="MTIdentifierSegueBarcode2dComponentType" id="MfN-Qn-YwG"/>
+                                    <segue destination="H5b-gY-Wrt" kind="show" identifier="MTIdentifierSegueBarcode2dComponentType" id="MfN-Qn-YwG"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcode2dComponentDatasource" textLabel="jbY-w9-u2t" detailTextLabel="EsI-ju-Gvy" style="IBUITableViewCellStyleValue1" id="KRT-8m-Bz1">
@@ -1264,7 +1264,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="kkc-Ib-j1h" kind="push" identifier="MTIdentifierSegueBarcodeField2" id="of7-LL-GO4"/>
+                                    <segue destination="kkc-Ib-j1h" kind="show" identifier="MTIdentifierSegueBarcodeField2" id="of7-LL-GO4"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeData" textLabel="7rE-yY-lgW" detailTextLabel="yP2-cc-M0h" style="IBUITableViewCellStyleValue1" id="Fei-S8-8Os">
@@ -1291,7 +1291,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="XN9-Pr-5wF" kind="push" identifier="MTIdentifierSegueBarcodeField" id="WAn-5q-tY8"/>
+                                    <segue destination="XN9-Pr-5wF" kind="show" identifier="MTIdentifierSegueBarcodeField" id="WAn-5q-tY8"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeType" textLabel="AXo-Me-kcW" detailTextLabel="yyU-bl-MFi" style="IBUITableViewCellStyleValue1" id="5Xd-gX-TaR">
@@ -1318,7 +1318,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="A9s-zH-rdy" kind="push" identifier="MTIdentifierSegueBarcodeType" id="9t6-S9-pAO"/>
+                                    <segue destination="A9s-zH-rdy" kind="show" identifier="MTIdentifierSegueBarcodeType" id="9t6-S9-pAO"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBorderNone" textLabel="H0s-85-FR1" style="IBUITableViewCellStyleDefault" id="9FI-Sf-A8Z">
@@ -1423,7 +1423,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="u6y-af-dAU" kind="push" identifier="MTIdentiferSegueBarcodeExtrasChannelCode" id="MAx-o9-OI9"/>
+                                    <segue destination="u6y-af-dAU" kind="show" identifier="MTIdentiferSegueBarcodeExtrasChannelCode" id="MAx-o9-OI9"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MTIdentifierTvcBarcodeAppearanceBackgroundColor" textLabel="rS8-Ko-vlP" style="IBUITableViewCellStyleDefault" id="cax-7h-PXX">
@@ -1530,17 +1530,17 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="view" destination="ZcU-aC-8qg" id="V0u-H8-cL2"/>
-                        <segue destination="zt2-1p-jE5" kind="push" identifier="MTIdentiferSegueBarcodeExtrasAztec" id="aFy-Lt-lHD"/>
-                        <segue destination="JzA-VF-gry" kind="push" identifier="MTIdentiferSegueBarcodeExtrasCodeOne" id="DIw-OT-r5Y"/>
-                        <segue destination="s3K-8H-n7f" kind="push" identifier="MTIdentiferSegueBarcodeExtrasGridMatrix" id="sE7-Dw-zUq"/>
-                        <segue destination="y9N-S3-FAJ" kind="push" identifier="MTIdentiferSegueBarcodeExtrasQrCode" id="eRt-tU-4GE"/>
-                        <segue destination="Kry-ev-v2M" kind="push" identifier="MTIdentiferSegueBarcodeExtrasMsiPlessey" id="RmU-Uo-SCV"/>
-                        <segue destination="xDx-Xa-yY6" kind="push" identifier="MTIdentiferSegueBarcodeExtrasMicroQrCode" id="Mou-pf-b2y"/>
-                        <segue destination="6OI-Lj-HSb" kind="push" identifier="MTIdentiferSegueBarcodeExtrasMicroPdf417" id="8uc-X6-RMD"/>
-                        <segue destination="hoC-kw-RIY" kind="push" identifier="MTIdentiferSegueBarcodeExtrasMaxicode" id="KkF-IV-MBc"/>
-                        <segue destination="WsN-l1-r0M" kind="push" identifier="MTIdentiferSegueBarcodeExtrasDataMatrix" id="icg-Mz-a30"/>
-                        <segue destination="M00-r6-a7B" kind="push" identifier="MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked" id="Se1-RC-ZUg"/>
-                        <segue destination="Y6Y-Kb-xID" kind="push" identifier="MTIdentiferSegueBarcodeExtrasPdf417" id="5Sb-R6-njf"/>
+                        <segue destination="zt2-1p-jE5" kind="show" identifier="MTIdentiferSegueBarcodeExtrasAztec" id="aFy-Lt-lHD"/>
+                        <segue destination="JzA-VF-gry" kind="show" identifier="MTIdentiferSegueBarcodeExtrasCodeOne" id="DIw-OT-r5Y"/>
+                        <segue destination="s3K-8H-n7f" kind="show" identifier="MTIdentiferSegueBarcodeExtrasGridMatrix" id="sE7-Dw-zUq"/>
+                        <segue destination="y9N-S3-FAJ" kind="show" identifier="MTIdentiferSegueBarcodeExtrasQrCode" id="eRt-tU-4GE"/>
+                        <segue destination="Kry-ev-v2M" kind="show" identifier="MTIdentiferSegueBarcodeExtrasMsiPlessey" id="RmU-Uo-SCV"/>
+                        <segue destination="xDx-Xa-yY6" kind="show" identifier="MTIdentiferSegueBarcodeExtrasMicroQrCode" id="Mou-pf-b2y"/>
+                        <segue destination="6OI-Lj-HSb" kind="show" identifier="MTIdentiferSegueBarcodeExtrasMicroPdf417" id="8uc-X6-RMD"/>
+                        <segue destination="hoC-kw-RIY" kind="show" identifier="MTIdentiferSegueBarcodeExtrasMaxicode" id="KkF-IV-MBc"/>
+                        <segue destination="WsN-l1-r0M" kind="show" identifier="MTIdentiferSegueBarcodeExtrasDataMatrix" id="icg-Mz-a30"/>
+                        <segue destination="M00-r6-a7B" kind="show" identifier="MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked" id="Se1-RC-ZUg"/>
+                        <segue destination="Y6Y-Kb-xID" kind="show" identifier="MTIdentiferSegueBarcodeExtrasPdf417" id="5Sb-R6-njf"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dV8-AS-fAp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1687,13 +1687,13 @@
                         <viewControllerLayoutGuide type="top" id="ynv-ly-ALe"/>
                         <viewControllerLayoutGuide type="bottom" id="1Dp-1G-uUd"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jqX-KV-xg1">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="jqX-KV-xg1">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="osj-IZ-EUh">
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="osj-IZ-EUh">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" placeholder="YES" id="5AC-Hz-WwH"/>
                                 </constraints>
@@ -1709,7 +1709,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="wZ8-Ae-pp2" firstAttribute="leading" secondItem="jqX-KV-xg1" secondAttribute="leading" id="5y8-7a-XJK"/>
                             <constraint firstItem="ynv-ly-ALe" firstAttribute="top" secondItem="osj-IZ-EUh" secondAttribute="bottom" constant="-200" placeholder="YES" id="I6B-ak-FE6"/>
@@ -1753,10 +1753,10 @@
                         <viewControllerLayoutGuide type="top" id="Hjt-oz-7Tc"/>
                         <viewControllerLayoutGuide type="bottom" id="JqV-7T-9jv"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="iBP-ny-9Oc" customClass="MTBarcodeView">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="iBP-ny-9Oc" customClass="MTBarcodeView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="barcodeView" destination="iBP-ny-9Oc" id="NBo-3v-5K7"/>
@@ -1915,7 +1915,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="mCW-Pg-lGm" kind="push" identifier="MTIdentiferSegueBarcodeExtrasAztecSize" id="Gil-sp-zUN"/>
+                                            <segue destination="mCW-Pg-lGm" kind="show" identifier="MTIdentiferSegueBarcodeExtrasAztecSize" id="Gil-sp-zUN"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="w0g-rt-R7V" detailTextLabel="wSt-oC-EjA" style="IBUITableViewCellStyleValue1" id="cNf-2h-t0M">
@@ -1942,7 +1942,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="O6G-lS-FcI" kind="push" identifier="MTIdentiferSegueBarcodeExtrasAztecError" id="iF7-fN-hrC"/>
+                                            <segue destination="O6G-lS-FcI" kind="show" identifier="MTIdentiferSegueBarcodeExtrasAztecError" id="iF7-fN-hrC"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -2959,7 +2959,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="VRE-zG-5Uz" kind="push" identifier="MTIdentiferSegueBarcodeExtrasGridMatrixSize" id="3hv-c8-eBi"/>
+                                            <segue destination="VRE-zG-5Uz" kind="show" identifier="MTIdentiferSegueBarcodeExtrasGridMatrixSize" id="3hv-c8-eBi"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="nrf-Jb-91q" detailTextLabel="jb3-ls-1Be" style="IBUITableViewCellStyleValue1" id="Xmk-zr-4pT">
@@ -2986,7 +2986,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="fX3-rw-duQ" kind="push" identifier="MTIdentiferSegueBarcodeExtrasGridMatrixError" id="eIV-Sy-30p"/>
+                                            <segue destination="fX3-rw-duQ" kind="show" identifier="MTIdentiferSegueBarcodeExtrasGridMatrixError" id="eIV-Sy-30p"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -3563,7 +3563,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="M8y-f3-jJY" kind="push" identifier="MTIdentiferSegueBarcodeExtrasQrCodeSize" id="miK-SX-ddP"/>
+                                            <segue destination="M8y-f3-jJY" kind="show" identifier="MTIdentiferSegueBarcodeExtrasQrCodeSize" id="miK-SX-ddP"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="J9Q-Al-Jye" detailTextLabel="Mhw-Lx-KKq" style="IBUITableViewCellStyleValue1" id="fj4-vQ-mac">
@@ -3590,7 +3590,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="hXH-rF-tAD" kind="push" identifier="MTIdentiferSegueBarcodeExtrasQrCodeError" id="Euf-cC-UvE"/>
+                                            <segue destination="hXH-rF-tAD" kind="show" identifier="MTIdentiferSegueBarcodeExtrasQrCodeError" id="Euf-cC-UvE"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -5918,7 +5918,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="aVn-mD-qTe" kind="push" identifier="MTIdentiferSegueBarcodeExtrasPdf417Columns" id="h5g-Bj-ccl"/>
+                                            <segue destination="aVn-mD-qTe" kind="show" identifier="MTIdentiferSegueBarcodeExtrasPdf417Columns" id="h5g-Bj-ccl"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="AAE-z2-MfF" detailTextLabel="XHu-Fa-s8o" style="IBUITableViewCellStyleValue1" id="lfE-eV-0I5">
@@ -5945,7 +5945,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="1aP-Fi-fFE" kind="push" identifier="MTIdentiferSegueBarcodeExtrasPdf417ErrorCorrectionCapacity" id="1iP-1b-9eK"/>
+                                            <segue destination="1aP-Fi-fFE" kind="show" identifier="MTIdentiferSegueBarcodeExtrasPdf417ErrorCorrectionCapacity" id="1iP-1b-9eK"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="DMs-uM-bfQ" detailTextLabel="0vg-PG-xCC" style="IBUITableViewCellStyleValue1" id="SWp-ml-fDp">
@@ -5972,7 +5972,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="zin-Eo-fjc" kind="push" identifier="MTIdentiferSegueBarcodeExtrasPdf417Format" id="iY2-cM-tgs"/>
+                                            <segue destination="zin-Eo-fjc" kind="show" identifier="MTIdentiferSegueBarcodeExtrasPdf417Format" id="iY2-cM-tgs"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>

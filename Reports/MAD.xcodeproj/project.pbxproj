@@ -300,8 +300,6 @@
 		4C13392117FE9018004F61CA /* UIImageDocumentBlankPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */; };
 		4C138D5D197E254000BABB0C /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5B197E254000BABB0C /* London.mad */; };
 		4C138D5E197E254000BABB0C /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4C138D5C197E254000BABB0C /* Music.mad */; };
-		4C1442A119B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */; };
-		4C1442A219B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */; };
 		4C15669D19F5A83A00EE465D /* testimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669C19F5A83A00EE465D /* testimage.jpg */; };
 		4C15669E19F5A83A00EE465D /* testimage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669C19F5A83A00EE465D /* testimage.jpg */; };
 		4C1566A019F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C15669F19F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard */; };
@@ -735,7 +733,6 @@
 		4C6461C118C0E6680069EF8D /* MTActivityProvidence~iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6461B118C0E6590069EF8D /* MTActivityProvidence~iPad.png */; };
 		4C6461C218C0E6680069EF8D /* MTActivityProvidence.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6461B218C0E6590069EF8D /* MTActivityProvidence.png */; };
 		4C66355817D5C73B004AC646 /* MTStoryboardReportViewer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */; };
-		4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */; };
 		4C67B74419474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */; };
 		4C67B74519474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74219474E52006B4D5B /* MTSliderThumbRotateDisabled@2x.png */; };
 		4C67B74619474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C67B74319474E52006B4D5B /* MTSliderThumbRotateDisabled.png */; };
@@ -1410,7 +1407,7 @@
 		4CD0F7DB14CD2964003DA079 /* UITableViewCellQueryLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD0F7DA14CD2963003DA079 /* UITableViewCellQueryLink.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CD2FA9F17F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
 		4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2FA9E17F351A20015458B /* AppleIncRootCertificate.cer */; };
-		4CD36A1F19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CD36A1E19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard */; };
+		4CD36A1F19B5622F000B462E /* MADDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CD36A1E19B5622F000B462E /* MADDesigner.storyboard */; };
 		4CD52A4A178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */; };
 		4CD88D0B1689175200683C01 /* UIView+NSObjectIdTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */; };
@@ -1702,7 +1699,6 @@
 		4C13391D17FE9018004F61CA /* UIImageDocumentBlankPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UIImageDocumentBlankPad@2x.png"; path = "Reports/UIImageDocumentBlankPad@2x.png"; sourceTree = "<group>"; };
 		4C138D5B197E254000BABB0C /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = "Resources/Sample Reports/London.mad"; sourceTree = "<group>"; };
 		4C138D5C197E254000BABB0C /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = Music.mad; path = "Resources/Sample Reports/Music.mad"; sourceTree = "<group>"; };
-		4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MTStoryboardReportDesigner8.storyboard; path = Reports/en.lproj/MTStoryboardReportDesigner8.storyboard; sourceTree = "<group>"; };
 		4C15669C19F5A83A00EE465D /* testimage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = testimage.jpg; sourceTree = "<group>"; };
 		4C15669F19F5AB0A00EE465D /* MADStoryboardAboutTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardAboutTable.storyboard; sourceTree = "<group>"; };
 		4C15EB8D192DF50600C412A4 /* MTQuerySelectItemsForGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTQuerySelectItemsForGroup.h; sourceTree = "<group>"; };
@@ -2091,7 +2087,6 @@
 		4C434B2318B5F3E800750B6B /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		4C434B2418B5F3E800750B6B /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		4C43F218178C8E430069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewer.storyboard; sourceTree = "<group>"; };
-		4C43F21A178C8E430069FD5B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = Reports/en.lproj/MTStoryboardReportViewerPad.storyboard; sourceTree = "<group>"; };
 		4C44DC4219B6C0730050BBDD /* MADImageToolbarDuplicate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MADImageToolbarDuplicate.png; path = Resources/Images/MADImageToolbarDuplicate.png; sourceTree = "<group>"; };
 		4C44DC4319B6C0730050BBDD /* MADImageToolbarDuplicate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MADImageToolbarDuplicate@2x.png"; path = "Resources/Images/MADImageToolbarDuplicate@2x.png"; sourceTree = "<group>"; };
 		4C44DC5719B93E500050BBDD /* MADDesignerStatusLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerStatusLabel.h; sourceTree = "<group>"; };
@@ -2900,7 +2895,7 @@
 		4CD2FAA817F378CA0015458B /* ReceiptModule.ans1 */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReceiptModule.ans1; sourceTree = "<group>"; };
 		4CD2FD9317F409240015458B /* ReceiptAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReceiptAttribute.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/ReceiptAttribute.h; sourceTree = "<group>"; };
 		4CD2FD9A17F40F740015458B /* asn_application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asn_application.h; path = ReceiptModuleAsn1c/ReceiptModuleAsn1c/asn_application.h; sourceTree = "<group>"; };
-		4CD36A1E19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MTStoryboardReportDesignerPad8.storyboard; sourceTree = "<group>"; };
+		4CD36A1E19B5622F000B462E /* MADDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADDesigner.storyboard; sourceTree = "<group>"; };
 		4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UIImageExportTypeSqlServer.png; path = Reports/UIImageExportTypeSqlServer.png; sourceTree = "<group>"; };
 		4CD88D091689175200683C01 /* UIView+NSObjectIdTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+NSObjectIdTag.h"; sourceTree = "<group>"; };
 		4CD88D0A1689175200683C01 /* UIView+NSObjectIdTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+NSObjectIdTag.m"; sourceTree = "<group>"; };
@@ -3340,8 +3335,12 @@
 		4C0EF6C5178A9681007BF2AE /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				4CD36A1D19B557B1000B462E /* iOS8 */,
-				4C0EF6CB178A9690007BF2AE /* iOS7 */,
+				4CD36A1E19B5622F000B462E /* MADDesigner.storyboard */,
+				4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */,
+				4C47409219FF40D000B11434 /* MADStoryboardObjectSelector.storyboard */,
+				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
+				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
+				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
 				4C0EF6CA178A9688007BF2AE /* iOS6 */,
 				4C24BD0F19C9585E000AD8D6 /* Licensing.storyboard */,
 			);
@@ -3353,17 +3352,6 @@
 			children = (
 			);
 			name = iOS6;
-			sourceTree = "<group>";
-		};
-		4C0EF6CB178A9690007BF2AE /* iOS7 */ = {
-			isa = PBXGroup;
-			children = (
-				4C43F217178C8E430069FD5B /* MTStoryboardReportViewer.storyboard */,
-				4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */,
-				4C94AA3917DCBB01000F6FCF /* MTStoryboardLaunchImagesPadOS7.storyboard */,
-				4C94AA3B17DCBB01000F6FCF /* MTStoryboardLaunchImagesOS7.storyboard */,
-			);
-			name = iOS7;
 			sourceTree = "<group>";
 		};
 		4C11BCF418DD4DB7001E3D33 /* Formatters */ = {
@@ -5185,17 +5173,6 @@
 			name = ReceiptModuleAsn1c;
 			sourceTree = "<group>";
 		};
-		4CD36A1D19B557B1000B462E /* iOS8 */ = {
-			isa = PBXGroup;
-			children = (
-				4CD36A1E19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard */,
-				4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */,
-				4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */,
-				4C47409219FF40D000B11434 /* MADStoryboardObjectSelector.storyboard */,
-			);
-			name = iOS8;
-			sourceTree = "<group>";
-		};
 		4CDA76F61825E8D400E462F6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -5882,7 +5859,6 @@
 				4C0E77CC163B5AEC003B951E /* UIImageStacks20.png in Resources */,
 				4CFD36581836A257000EF14B /* MTBarcodeCode39Iso16388.h in Resources */,
 				4C0E77CD163B5AEC003B951E /* UIImageStacks20@2x.png in Resources */,
-				4C1442A219B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard in Resources */,
 				4C92956718C4E0770010AAEF /* MTImageLaunchViewerPadLandscape.png in Resources */,
 				4C0E77CE163B5AEC003B951E /* UIImageWrench20.png in Resources */,
 				4C0E77CF163B5AEC003B951E /* UIImageWrench20@2x.png in Resources */,
@@ -6059,7 +6035,6 @@
 				4C5CB7C8189E2A7D00BB5AF8 /* ctpublic.h in Resources */,
 				4C80A60E183203C500242703 /* MTBarcodeMaxicodeIso16023.h in Resources */,
 				4C67B74719474E52006B4D5B /* MTSliderThumbRotateDisabled.png in Resources */,
-				4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */,
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
 				4C47409419FF40D000B11434 /* MADStoryboardObjectSelector.storyboard in Resources */,
@@ -6216,7 +6191,6 @@
 				4CCD8D5D150385DA002B9E77 /* UIImagePatternBlueSpecks@2x.png in Resources */,
 				4CCD8D5E150385DA002B9E77 /* UIImagePatternBlueTextured.png in Resources */,
 				4CCD8D5F150385DA002B9E77 /* UIImagePatternBlueTextured@2x.png in Resources */,
-				4C1442A119B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard in Resources */,
 				4CCD8D60150385DA002B9E77 /* UIImagePatternBlueVellum.png in Resources */,
 				4CCD8D61150385DA002B9E77 /* UIImagePatternBlueVellum@2x.png in Resources */,
 				4C5CB7C5189E2A7D00BB5AF8 /* cstypes.h in Resources */,
@@ -6381,7 +6355,7 @@
 				4C8EC0A2167A487600F37DA7 /* MTStack.h in Resources */,
 				4C8EC0A7167A489200F37DA7 /* libMTDataStrutures.h in Resources */,
 				4C5CB7C7189E2A7D00BB5AF8 /* ctpublic.h in Resources */,
-				4CD36A1F19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard in Resources */,
+				4CD36A1F19B5622F000B462E /* MADDesigner.storyboard in Resources */,
 				4CA162BE167B8F2000540A14 /* MTProtocolCompare.h in Resources */,
 				4CF8D4191685027200357B1E /* MTCollectionViewCellElement.xib in Resources */,
 				4CE314171694BCEC00114431 /* UIImageAlignVerticalCenter20.png in Resources */,
@@ -7491,14 +7465,6 @@
 				4C43F218178C8E430069FD5B /* en */,
 			);
 			name = MTStoryboardReportViewer.storyboard;
-			sourceTree = "<group>";
-		};
-		4C43F219178C8E430069FD5B /* MTStoryboardReportViewerPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C43F21A178C8E430069FD5B /* en */,
-			);
-			name = MTStoryboardReportViewerPad.storyboard;
 			sourceTree = "<group>";
 		};
 		4C49D9DA19DCE31400CB4DB8 /* Main.storyboard */ = {
