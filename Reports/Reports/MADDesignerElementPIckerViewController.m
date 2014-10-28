@@ -148,10 +148,6 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
 #pragma mark - View lifecycle
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
