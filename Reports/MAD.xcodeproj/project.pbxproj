@@ -594,6 +594,8 @@
 		4C472A71174A150900A7A5E6 /* NSManagedObject+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */; };
 		4C47408419FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */; };
 		4C47408519FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */; };
+		4C47409019FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */; };
+		4C47409119FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */; };
 		4C49D9D219DCE31400CB4DB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D119DCE31400CB4DB8 /* AppDelegate.m */; };
 		4C49D9D419DCE31400CB4DB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D319DCE31400CB4DB8 /* main.m */; };
 		4C49D9D719DCE31400CB4DB8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D619DCE31400CB4DB8 /* ViewController.m */; };
@@ -2100,6 +2102,8 @@
 		4C472A6F174A150900A7A5E6 /* NSManagedObject+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Extras.m"; sourceTree = "<group>"; };
 		4C47408219FECDEC00B11434 /* MADVibrantCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADVibrantCollectionView.h; sourceTree = "<group>"; };
 		4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantCollectionView.m; sourceTree = "<group>"; };
+		4C47408E19FEDA7200B11434 /* MADPopoverBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPopoverBackgroundView.h; sourceTree = "<group>"; };
+		4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPopoverBackgroundView.m; sourceTree = "<group>"; };
 		4C47571E17B4096600530CAF /* Icon-29-Designer-Lagacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy.png"; sourceTree = "<group>"; };
 		4C47571F17B4096600530CAF /* Icon-29-Designer-Lagacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy@2x.png"; sourceTree = "<group>"; };
 		4C47572017B4096600530CAF /* Icon-29-Designer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Modern.png"; sourceTree = "<group>"; };
@@ -5404,6 +5408,8 @@
 				4C75C9FD18E272F6006E8526 /* MTTableCellHeader.m */,
 				4C90D47C19E7892D005136B2 /* MADGroupedCollectionViewLayout.h */,
 				4C90D47D19E7892D005136B2 /* MADGroupedCollectionViewLayout.m */,
+				4C47408E19FEDA7200B11434 /* MADPopoverBackgroundView.h */,
+				4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */,
 			);
 			name = "Report Desinger";
 			sourceTree = "<group>";
@@ -6703,6 +6709,7 @@
 				4C23FB1118FADD17009F234F /* objcmad.c in Sources */,
 				4C02F74F18D5DC8800061A83 /* MTReportDesigner.m in Sources */,
 				4CABE4601837DF7A007EDD9D /* RptqDatabase.m in Sources */,
+				4C47409119FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */,
 				4C77328B190FFD6A005AE7C2 /* MysqlConnection.m in Sources */,
 				4C23FBAD18FAE4F7009F234F /* MTPaperA8.m in Sources */,
 				4C50DF9016B8E91000CD8BC0 /* MTReportViewerReportPageViewController.m in Sources */,
@@ -7086,6 +7093,7 @@
 				4CE3143716952E3B00114431 /* MTTextView.m in Sources */,
 				4CAE370F1937634D0096F206 /* MTReportFormatterCache.m in Sources */,
 				4C40EC0819349A7A00F12AAC /* MADocumentState.m in Sources */,
+				4C47409019FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */,
 				4C23FBFC18FAE5DF009F234F /* MTDatabaseConnectionSqlServer.m in Sources */,
 				4C4C78C016960C23000ADD1D /* UIColor+Gradients.m in Sources */,
 				4C75C9FE18E272F6006E8526 /* MTTableCellHeader.m in Sources */,

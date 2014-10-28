@@ -38,6 +38,7 @@
 #import "MTCollectionViewLayoutLiquidAttributes.h"
 #import "SectionEnumerator.h"
 #import "MTFont.h"
+#import "MADPopoverBackgroundView.h"
 
 #import "AAPLOverlayPresentationController.h"
 
@@ -851,12 +852,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     if ([segue.identifier isEqualToString:@"showObjects"]) {
         [self performSegueShowObjects:segue];
         
-    } else if ([segue.identifier isEqualToString:@"MTIdentifierSegueDocumentObjectEditBarcode"]) {
-        [self performSegueEditBarcode:segue];
-
-    } else if ([segue.identifier isEqualToString:MTIdentifierSegueDocumentObjectEditAggregate]) {
-        [self performSegueEditAggregate:segue.destinationViewController];
-
     }
 
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
@@ -1381,7 +1376,12 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - UIPopoverPresentationControllerDelegate
 
 - (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController {
-    
+  //  popoverPresentationController.presentedView.backgroundColor = [UIColor clearColor];
+  //  popoverPresentationController.presentedViewController.view.backgroundColor = [UIColor clearColor];
+//    popoverPresentationController.popoverBackgroundViewClass
+    //popoverPresentationController.presentedView.backgroundColor = [UIColor redColor];
+    popoverPresentationController.backgroundColor = nil;
+    //popoverPresentationController.popoverBackgroundViewClass = [MADPopoverBackgroundView class];
 }
 
 - (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
@@ -3016,15 +3016,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     [barcodeViewController setBarcodeToEdit: barcodeObject];
 }
 
-- (void)performSegueEditAggregate:(UIStoryboardSegue *)segue {
-    MTDocumentObjectNewAggregateViewController *aggregateViewController = segue.destinationViewController;
-    aggregateViewController.document = self.document;
-    NSManagedObjectID *objectId = [self objectIdEditAggregateFunction];
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[self.document.managedObjectContext objectWithID:objectId];
-    RptqDocumentObjectAggregate *aggregateObject = [documentObject isAggregate];
-    [aggregateViewController setAggregateObjectToEdit:aggregateObject];
-}
-
 #pragma mark Constraints Helpers
 
 - (void)contentViewRemoveAllConstraints {
@@ -3459,16 +3450,30 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)saveStaticLabel:(MTDocumentObjectNewStaticLabelViewController *)viewController {
     NSString *labelText = [viewController userInputedText];
     [self insertDocumentObjectNewLabel: labelText];
+    [self scrollToDetailSectionView];
 }
 
 - (void)saveWhiteSpace {
-    __weak MADDesignerViewController *reportDesigner = self;
-    block_insertObject insert = ^(UIViewController *action) {
-        NSNumber *type = @(MTDocumentObjectTypeWhtiespace);
-        NSDictionary *options = @{MTDocumentObjectDefinationType: type};
-        [reportDesigner insertDocumentObjectWithDefination: options];
-    };
-    insert(nil);
+    NSNumber *type = @(MTDocumentObjectTypeWhtiespace);
+    NSDictionary *options = @{MTDocumentObjectDefinationType: type};
+    [self insertDocumentObjectWithDefination: options];
+    [self scrollToDetailSectionView];
+}
+
+- (void)scrollToDetailSectionView {
+    if (self.presentedViewController != nil) {
+        UIView *sectionView = [self detailSectionView];
+        CGRect rect = sectionView.frame;
+        __weak MADDesignerViewController *weakself = self;
+        [self dismissViewControllerAnimated:YES completion:^{
+            [weakself.scroller scrollRectToVisible:rect animated:YES];
+        }];
+    }
+}
+
+- (UIView *)detailSectionView {
+    NSString *key = self.document.document.hasDetailSection.objectID.key;
+    return (UIView *)[self.sectionControlViews objectForKey:key];
 }
 
 - (void)saveDynamicLabel:(MTQueryBuilderChooseFieldViewController *)viewController {

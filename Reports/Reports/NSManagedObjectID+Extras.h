@@ -14,7 +14,7 @@
 
 @interface NSManagedObjectID (Extras)
 
-- (NSString *)key;
+@property (readonly) NSString *key;
 
 @end
 

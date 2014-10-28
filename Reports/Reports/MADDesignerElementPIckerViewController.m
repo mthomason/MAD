@@ -110,11 +110,12 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
     titleView.text = NSLocalizedString(@"MAD Objects", @"Title of the document object select");
     self.navigationItem.titleView = titleView;
     
-    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    [self.view addSubview: visualEffectsView];
+//    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+//    [self.view addSubview: visualEffectsView];
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     self.navigationController.view.opaque = NO;
+
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.opaque = NO;
     

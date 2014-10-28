@@ -14,7 +14,6 @@
 #import "MTViewControllerBarcodeOptions.h"
 #import "MTUnwindProtocol.h"
 
-extern NSString * const MTIdentifierSegueDocumentObjectEditBarcode;
 extern NSString * const MTDocumentObjectNewBarcodeViewControllerIdentifier;
 extern NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdentifier;
 

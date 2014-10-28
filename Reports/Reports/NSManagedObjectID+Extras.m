@@ -10,6 +10,8 @@
 
 @implementation NSManagedObjectID (Extras)
 
+@dynamic key;
+
 #pragma mark - MTProtocolLog
 
 - (NSString *)key {
