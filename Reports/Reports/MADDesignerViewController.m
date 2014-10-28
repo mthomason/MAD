@@ -846,11 +846,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    if ([segue.identifier isEqualToString:@"showObjects"]) {
-        [self performSegueShowObjects:segue];
-        
-    }
-
     if ([segue.destinationViewController respondsToSelector:@selector(setDocument:)]) {
         [segue.destinationViewController setDocument:self.document];
     }
@@ -2216,15 +2211,15 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UIViewController *viewController = [self viewControllerForToolboxType:toolboxType];
     self.childViewController = viewController;
     
-    if ([viewController respondsToSelector:@selector(setDocument:)]) {
-        [(MTReportDesignerToolBoxViewController *)viewController setDocument:self.document];
-    }
+    ((MTReportDesignerToolBoxViewController *)viewController).document = self.document;
+    ((MTReportDesignerToolBoxViewController *)viewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
     
     viewController.view.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                            self.toolbox.frame.size.width, self.toolbox.frame.size.height);
     viewController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     if (viewController.view.superview == nil && self.childViewControllers.count == 0) {
         [self addChildViewController:viewController];
+        
         [self.toolbox addSubview:viewController.view];
     }
 
@@ -2986,45 +2981,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                               inManagedObjectContext: (NSManagedObjectContext *)managedObjectContext {
     NSManagedObjectID *objectID = [elementView objectIdTag];
     return (RptqDocumentObject *)[managedObjectContext objectWithID:objectID];
-}
-
-#pragma mark Segue Helpers
-
-- (void)performSegueShowObjects:(UIStoryboardSegue *)segue {
-    if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
-        [self setDisplayInactive];
-        UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
-        UIPopoverController *popoverController = [popoverSegue popoverController];
-        popoverController.delegate = self;
-        CGSize popoverSize = CGSizeMake(320.0000f, 480.0000f + 44.0000f);
-        [popoverController setPopoverContentSize:popoverSize animated:YES];
-        
-        [self setPopoverControllerObjectSelector:popoverController];
-    }
-    
-    MADDesignerElementPIckerViewController *viewControllerObjectSelector = nil;
-    if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *d = segue.destinationViewController;
-        d.delegate = self;
-        viewControllerObjectSelector = (MADDesignerElementPIckerViewController *)d.topViewController;
-        viewControllerObjectSelector.objectSelectorDelegate = self;
-        viewControllerObjectSelector.document = self.document;
-    } else {
-        viewControllerObjectSelector = segue.destinationViewController;
-        viewControllerObjectSelector.objectSelectorDelegate = self;
-        viewControllerObjectSelector.document = self.document;
-    }
-}
-
-- (void)performSegueEditBarcode:(UIStoryboardSegue *)segue {
-    MTViewControllerBarcode *barcodeViewController = segue.destinationViewController;
-    barcodeViewController.document = self.document;
-    
-    NSManagedObjectContext *managedObjectContext = [self.document managedObjectContext];
-    NSManagedObjectID *objectId = [self objectIdEditBarcode];
-    RptqDocumentObject *documentObject = (RptqDocumentObject *)[managedObjectContext objectWithID:objectId];
-    RptqDocumentObjectBarcode *barcodeObject = [documentObject isBarcode];
-    [barcodeViewController setBarcodeToEdit: barcodeObject];
 }
 
 #pragma mark Constraints Helpers

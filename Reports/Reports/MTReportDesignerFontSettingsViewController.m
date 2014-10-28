@@ -131,15 +131,14 @@
     [super viewWillAppear:animated];
     [self updateDisplay];
     
-    if ([UIDevice isModernOS]) {
-        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
-        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        self.tableView.backgroundView = visualEffectsView;
+        //UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+        //UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        //self.tableView.backgroundView = visualEffectsView;
         self.tableView.backgroundColor = [UIColor clearColor];
         self.view.backgroundColor = [UIColor clearColor];
         self.view.opaque = NO;
-    }
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
 }
 
