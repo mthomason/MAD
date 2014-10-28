@@ -123,15 +123,9 @@
     
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [self.navigationItem.titleView sizeToFit];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-//    self.navigationController.navigationBar
     [self.queryBuilderController reloadDocument: self.document
                                        animated: YES];
     [self.queryBuilderControllerAdvanced reloadDocument:self.document animated:YES];

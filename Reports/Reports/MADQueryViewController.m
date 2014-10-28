@@ -252,7 +252,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
                                    animated: NO];
 
     }
-    [self.navigationItem.titleView sizeToFit];
     [super viewDidLayoutSubviews];
 }
 
@@ -404,8 +403,6 @@ NSString * const MNSIdentifierSegueShowAddDatabaseDrivers           = @"MNSIdent
     }
     
     [self enableTabBarItems];
-    [self.navigationItem.titleView sizeToFit];
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

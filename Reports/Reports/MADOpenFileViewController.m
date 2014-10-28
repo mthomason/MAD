@@ -441,7 +441,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
     self.navigationItem.titleView = titleView;
     self.labelMadDesigner = titleView;
-    [self.navigationItem.titleView sizeToFit];
 
     self.navigationItem.hidesBackButton = YES;
     self.editModeEnabled = NO;
@@ -608,7 +607,6 @@ CGFloat const MADConstCellDocumentLabelMaxHeight = 300.0000f;
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [self.navigationItem.titleView sizeToFit];
     [self.collectionView.backgroundView setNeedsDisplay];
 }
 

@@ -151,8 +151,6 @@
                                                         CGSizeZero.width,
                                                         self.navigationController.bottomLayoutGuide.length,
                                                         CGSizeZero.width);
-
-    [self.navigationItem.titleView sizeToFit];
 }
 
 
@@ -174,7 +172,6 @@
                                                        CGSizeZero.width);
 
     }
-    [self.navigationItem.titleView sizeToFit];
     [super viewDidLayoutSubviews];
 }
 

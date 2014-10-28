@@ -516,11 +516,6 @@ NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
     self.labelStatus.bounds = CGRectMake(CGPointZero.x, CGPointZero.y, 230.0000f, 44.0000f);
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    [self.navigationItem.titleView sizeToFit];
-}
-
 - (IBAction)done:(id)sender {
     NSError *error = nil;
     
@@ -621,7 +616,6 @@ static UIImageView *captureSnapshotOfView (UIView *targetView) {
 
 - (void)localDidRotate {
 
-    [self.navigationItem.titleView sizeToFit];
     if (self.activityExporting == NO) {
         
         MTReportViewerReportPageViewController *pageViewController = [self currentPageviewController];
