@@ -29,6 +29,16 @@
     [self setContentCompressionResistancePriority:900 forAxis:UILayoutConstraintAxisHorizontal];
 }
 
+- (void)layoutIfNeeded {
+    [super layoutIfNeeded];
+    [self sizeToFit];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self sizeToFit];
+}
+
 - (void)setText:(NSString *)text {
     
     NSAttributedString *attributedText = [self logoForTitle:text];
