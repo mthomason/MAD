@@ -777,7 +777,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    [self.navigationItem.titleView sizeToFit];
     [self.ruler setNeedsDisplay];
 }
 
@@ -862,7 +861,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 #pragma mark - UINavigationControllerDelegate
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+- (void)navigationController:(UINavigationController *)navigationController
+      willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     viewController.view.frame = navigationController.view.frame;
 }
 
@@ -1356,6 +1356,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
                 [navigationController.topViewController.navigationItem setLeftBarButtonItem:cancelButton animated:NO];
             }
+
+            UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+            UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+            visualEffectsView.frame = navigationController.view.bounds;
+            visualEffectsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [navigationController.view insertSubview:visualEffectsView atIndex:0];
+            
             result = navigationController;
         } else {
             result = controller.presentedViewController;
