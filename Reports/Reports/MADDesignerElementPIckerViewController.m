@@ -138,13 +138,14 @@ NSInteger const MTViewTagFieldOrFormulaSelector = 2029;
   */  
     self.view.backgroundColor = [UIColor clearColor];
     self.view.opaque = NO;
-    
-    self.preferredContentSize = CGSizeMake(320.0000f, 420.0000f);
 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    self.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
+    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, 320.0000f);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
