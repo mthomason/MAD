@@ -596,6 +596,8 @@
 		4C47408519FECDEC00B11434 /* MADVibrantCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */; };
 		4C47409019FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */; };
 		4C47409119FEDA7200B11434 /* MADPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */; };
+		4C47409319FF40D000B11434 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C47409219FF40D000B11434 /* MADStoryboardObjectSelector.storyboard */; };
+		4C47409419FF40D000B11434 /* MADStoryboardObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C47409219FF40D000B11434 /* MADStoryboardObjectSelector.storyboard */; };
 		4C49D9D219DCE31400CB4DB8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D119DCE31400CB4DB8 /* AppDelegate.m */; };
 		4C49D9D419DCE31400CB4DB8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D319DCE31400CB4DB8 /* main.m */; };
 		4C49D9D719DCE31400CB4DB8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49D9D619DCE31400CB4DB8 /* ViewController.m */; };
@@ -2104,6 +2106,7 @@
 		4C47408319FECDEC00B11434 /* MADVibrantCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADVibrantCollectionView.m; sourceTree = "<group>"; };
 		4C47408E19FEDA7200B11434 /* MADPopoverBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPopoverBackgroundView.h; sourceTree = "<group>"; };
 		4C47408F19FEDA7200B11434 /* MADPopoverBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPopoverBackgroundView.m; sourceTree = "<group>"; };
+		4C47409219FF40D000B11434 /* MADStoryboardObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADStoryboardObjectSelector.storyboard; sourceTree = "<group>"; };
 		4C47571E17B4096600530CAF /* Icon-29-Designer-Lagacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy.png"; sourceTree = "<group>"; };
 		4C47571F17B4096600530CAF /* Icon-29-Designer-Lagacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy@2x.png"; sourceTree = "<group>"; };
 		4C47572017B4096600530CAF /* Icon-29-Designer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Modern.png"; sourceTree = "<group>"; };
@@ -5188,6 +5191,7 @@
 				4CD36A1E19B5622F000B462E /* MTStoryboardReportDesignerPad8.storyboard */,
 				4C1442A019B5C33700FD97DF /* MTStoryboardReportDesigner8.storyboard */,
 				4CE07F6A19F837CD00765371 /* MADStoryboardNewDocument.storyboard */,
+				4C47409219FF40D000B11434 /* MADStoryboardObjectSelector.storyboard */,
 			);
 			name = iOS8;
 			sourceTree = "<group>";
@@ -6058,6 +6062,7 @@
 				4C66355917D5C743004AC646 /* MTStoryboardReportViewerPad.storyboard in Resources */,
 				4C11C71B1836ABC800DA8DB7 /* MTBarcodeDataMatrixIso16022.h in Resources */,
 				4C4C6F22167642D9004A3B04 /* MTEdge.h in Resources */,
+				4C47409419FF40D000B11434 /* MADStoryboardObjectSelector.storyboard in Resources */,
 				4C15669E19F5A83A00EE465D /* testimage.jpg in Resources */,
 				4CE07F6C19F837CD00765371 /* MADStoryboardNewDocument.storyboard in Resources */,
 				4CB3C23D19235C7D00F3213E /* MTSliderThumbRotate@2x.png in Resources */,
@@ -6319,6 +6324,7 @@
 				4CCD8DA4150385DA002B9E77 /* UIImagePatternRedVellum.png in Resources */,
 				4CCD8DA5150385DA002B9E77 /* UIImagePatternRedVellum@2x.png in Resources */,
 				4CCD8DA6150385DA002B9E77 /* UIImagePatternSketchPaper.png in Resources */,
+				4C47409319FF40D000B11434 /* MADStoryboardObjectSelector.storyboard in Resources */,
 				4CCD8DA7150385DA002B9E77 /* UIImagePatternSketchPaper@2x.png in Resources */,
 				4CCD8DA8150385DA002B9E77 /* UIImagePatternTextured.png in Resources */,
 				4CCD8DA9150385DA002B9E77 /* UIImagePatternTextured@2x.png in Resources */,

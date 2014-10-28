@@ -1308,7 +1308,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 
 - (IBAction)add:(id)sender {
 
-    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+                                                         bundle: [NSBundle mainBundle]];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierNavigationControllerDocumentObjectSelector"];
     MADDesignerElementPIckerViewController *pickerController = (MADDesignerElementPIckerViewController *)navigationController.topViewController;
     pickerController.objectSelectorDelegate = self;
@@ -1511,7 +1512,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID: object.objectID];
     
-    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+                                                         bundle: [NSBundle mainBundle]];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:MTDocumentObjectNewAggregateNavigationControllerIdentifier];
 
     MTDocumentObjectNewAggregateViewController *aggregateViewController = navigationController.viewControllers.firstObject;
@@ -1542,7 +1544,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+                                                         bundle: [NSBundle mainBundle]];
+
     MTViewControllerBarcode *barcodeViewController = [storyboard instantiateViewControllerWithIdentifier: MTDocumentObjectNewBarcodeViewControllerIdentifier];
     barcodeViewController.document = self.document;
     barcodeViewController.delegate = self;
@@ -1573,9 +1577,10 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.editDynamicField = YES;
     self.objectIdEditDynamicLabel = object.objectID;
     
-        UIView *viewToEdit = [self viewForObjectID:object.objectID];
+    UIView *viewToEdit = [self viewForObjectID:object.objectID];
     
-    UIStoryboard *storyboard = [MTApplicationInstance storyboard];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADStoryboardObjectSelector"
+                                                         bundle: [NSBundle mainBundle]];
     MTQueryBuilderChooseFieldViewController *chooseFieldViewController = [storyboard instantiateViewControllerWithIdentifier: @"UITableViewControllerChooseFieldDataObject"];
     chooseFieldViewController.document = self.document;
     chooseFieldViewController.delegate = self;
