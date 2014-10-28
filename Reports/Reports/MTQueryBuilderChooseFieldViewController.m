@@ -88,10 +88,6 @@
     }
 }
 
-- (CGSize)preferredContentSize {
-    return CGSizeMake(320, 480);
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -100,7 +96,7 @@
     
     [self.tableView setSectionHeaderHeight: HEADER_HEIGHT];
 
-    _openSectionIndex = NSNotFound;
+    self.openSectionIndex = NSNotFound;
     RptqDocument *document = [self.document activeDocumentModel];
     RptqDatabase *database = [document.hasDatabaseSchemas anyObject];
     RptqQuery *query = [database.hasQueries anyObject];
@@ -141,6 +137,9 @@
 		
 		[self setSectionInfoArray: infoArray];
 	}
+    
+   
+    [self updateSize];
 	
 }
 
@@ -153,10 +152,9 @@
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
     
-	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = [self sectionInfoArray][section];
-	NSInteger numStoriesInSection = [[[sectionInfo table] hasQueryFields] count];
+	RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.sectionInfoArray[section];
 	
-    return [sectionInfo open] ? numStoriesInSection : 0;
+    return sectionInfo.open ? sectionInfo.table.hasQueryFields.count : 0;
 }
 
 
@@ -287,7 +285,7 @@
     [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
     [self.tableView endUpdates];
     [self setOpenSectionIndex: sectionOpened];
-    
+    [self updateSize];
 }
 
 
@@ -310,6 +308,14 @@
         [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
     }
     [self setOpenSectionIndex: NSNotFound];
+    [self updateSize];
+}
+
+- (void)updateSize {
+    RptqDatabaseSchemaFieldSelectorManager *sectionInfo = self.openSectionIndex == NSNotFound ? nil : self.sectionInfoArray[self.openSectionIndex];
+    CGFloat height = (self.sectionInfoArray.count * HEADER_HEIGHT) + (sectionInfo == nil ? 0 : sectionInfo.table.hasQueryFields.count * DEFAULT_ROW_HEIGHT);
+    self.preferredContentSize = CGSizeMake(320.0000f, height);
+    self.navigationController.preferredContentSize = CGSizeMake(320.0000f, height);
 }
 
 @end
