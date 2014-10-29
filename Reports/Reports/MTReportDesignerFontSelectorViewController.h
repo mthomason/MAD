@@ -20,7 +20,7 @@
 @interface MTReportDesignerFontSelectorViewController : UITableViewController
     <UITableViewDelegate>
 
-@property (nonatomic, weak) id <MTReportDesignerFontSelectorDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontAmericanTypewriter;

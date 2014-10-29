@@ -11,11 +11,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class MADocument;
+
 @protocol MTToolboxViewControllerProtocol <NSObject>
 
 @required
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds;
+- (void)setDocument:(MADocument *)document;
 
 @end
 

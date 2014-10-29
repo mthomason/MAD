@@ -95,6 +95,7 @@
 #import "MTQueryBuilderChooseFieldViewController.h"
 
 #import "MACloudManager.h"
+#import "MADToolboxViewController.h"
 
 NSString * const MADImageBarButtonItemMadDesigner8                  = @"UIBarButtonItemMadDesigner8";
 NSString * const MADImageBarButtonItemMadDesigner                   = @"UIBarButtonItemMadDesigner";
@@ -178,7 +179,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 @property (nonatomic, strong) NSMutableArray *layoutConstraintsSectionsVerticalBuffer;
 @property (nonatomic, strong) NSMutableDictionary *layoutConstraintsReportSectionHeight;
 
-@property (nonatomic, strong) MTReportDesignerToolBoxViewController *viewControllerToolbox;
+@property (nonatomic, strong) MADToolboxViewController *viewControllerToolbox;
+@property (nonatomic, strong) UINavigationController *navigationControllerToolbox;
 
 @property (nonatomic, strong) UINavigationController *navigationControllerSectionLayoutSettings;
 @property (nonatomic, strong) MTReportDesignerSectionLayoutSettingsViewController *viewControllerSectionLayoutSettings;
@@ -307,11 +309,18 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
         self.borderAppliedToView = d;
 
-        MTReportDesignerToolBoxViewController *viewControllerToolbox = [MADDesignerViewController toolbox];
-        viewControllerToolbox.delegate = self;
+        UIStoryboard *storyboardToolbox = [UIStoryboard storyboardWithName:@"MADToolbox" bundle:[NSBundle mainBundle]];
+        UINavigationController *navigationControllerToolbox = [storyboardToolbox instantiateInitialViewController];
+        navigationControllerToolbox.modalPresentationStyle = UIModalPresentationPopover;
+        navigationControllerToolbox.transitioningDelegate = self;
+        
+        MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
+
         viewControllerToolbox.document = self.document;
-        viewControllerToolbox.modalPresentationStyle = UIModalPresentationPopover;
+        //viewControllerToolbox.modalPresentationStyle = UIModalPresentationPopover;
+        //viewControllerToolbox.transitioningDelegate = self;
         self.viewControllerToolbox = viewControllerToolbox;
+        self.navigationControllerToolbox = navigationControllerToolbox;
 
         UIFont *captionFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
         self.captionFont = captionFont;
@@ -439,7 +448,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor tintColorWhite];
 
-    self.viewControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
+    self.navigationControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverDefault];
     self.navigationControllerSectionLayoutSettings.preferredContentSize = [MADDesignerViewController sizePopoverSectionSettings];
     
     UIBarButtonItem *buttonDone = [MADDesignerViewController buttonDone:self];
@@ -1119,7 +1128,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 #pragma mark - MTReportDesignerToolBoxDelegate
 
 - (void)toolboxHeightChanged:(CGFloat)newHeight {
-    self.viewControllerToolbox.preferredContentSize = CGSizeMake(320.0000f, newHeight);
+    self.navigationControllerToolbox.preferredContentSize = CGSizeMake(320.0000f, newHeight);
 }
 
 - (void)hideToolbox {
@@ -2094,7 +2103,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self applyBorderToView:elementView];
         
         self.viewControllerToolbox.document = self.document;
-        [self.viewControllerToolbox showToolboxWithObjectIds:self.selectedObjectIds];
+        [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
         
         if (self.popoverToolbox.passthroughViews != nil) {
             
@@ -2103,7 +2112,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             self.popoverToolbox.passthroughViews = passThroughViews.allObjects;
             
         }
-        if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+        if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {   // FIXME: 
             if ([self dismissAllPopovers] == NO) {
                 [self showToolbox:MTToolboxTypeElement];
             }
@@ -2119,6 +2128,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
 - (void)deselectElementView:(MADDesignerElementView *)elementView animated:(BOOL)animated {
     
     [self.selectedObjectIds removeObject:elementView.objectIdTag];
+    [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
+
     [self removeBorderFromView: elementView];
 
     if (self.popoverToolbox.passthroughViews != nil) {
@@ -2134,9 +2145,9 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             
         case MTToolboxTypeElement:
             self.popoverToolbox.passthroughViews = self.elementViews.allObjects;
-            [self.viewControllerToolbox showToolboxWithObjectIds:self.selectedObjectIds];
+            [self.viewControllerToolbox setSelectedObjectIds:self.selectedObjectIds];
             self.viewControllerToolbox.document = self.document;
-            viewController = self.viewControllerToolbox;
+            viewController = self.navigationControllerToolbox;
             break;
             
         case MTToolboxTypeSection: {
@@ -2192,8 +2203,8 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
                 if ([strongself.navigationControllerSectionLayoutSettings.view superview] != nil) {
                     [strongself.navigationControllerSectionLayoutSettings.view removeFromSuperview];
                 }
-                if ([strongself.viewControllerToolbox.view superview] != nil) {
-                    [strongself.viewControllerToolbox.view removeFromSuperview];
+                if ([strongself.navigationControllerToolbox.view superview] != nil) {
+                    [strongself.navigationControllerToolbox.view removeFromSuperview];
                 }
                 [strongself.toolbarBottom setItems:weakSelf.toolbarBottomItems animated:YES];
                 [strongself.scroller setZoomScale:weakSelf.zoomScaleOnShowToolbox animated:YES];
@@ -2211,8 +2222,13 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     UIViewController *viewController = [self viewControllerForToolboxType:toolboxType];
     self.childViewController = viewController;
     
-    ((MTReportDesignerToolBoxViewController *)viewController).document = self.document;
-    ((MTReportDesignerToolBoxViewController *)viewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        ((MTReportDesignerToolBoxViewController *)((UINavigationController *)viewController).topViewController).document = self.document;
+        ((MTReportDesignerToolBoxViewController *)((UINavigationController *)viewController).topViewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
+    } else {
+        ((MTReportDesignerToolBoxViewController *)viewController).document = self.document;
+        ((MTReportDesignerToolBoxViewController *)viewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
+    }
     
     viewController.view.frame = CGRectMake(CGPointZero.x, CGPointZero.y,
                                            self.toolbox.frame.size.width, self.toolbox.frame.size.height);
@@ -2223,7 +2239,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self.toolbox addSubview:viewController.view];
     }
 
-    
     if (self.toolboxIsVisible == NO) {
         self.toolboxIsVisible = YES;
         
@@ -2335,16 +2350,16 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     
     if (self.presentedViewController == nil) {
 
-        self.popoverToolbox = self.viewControllerToolbox.popoverPresentationController;
+        self.popoverToolbox = self.navigationControllerToolbox.popoverPresentationController;
         self.popoverToolbox.delegate = self;
         self.popoverToolbox.sourceRect = self.rectForSelectedElements;
         self.popoverToolbox.sourceView = self.scroller.container;
         self.popoverToolbox.backgroundColor = [UIColor clearColor];
-        self.viewControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverStyle];
+        self.navigationControllerToolbox.preferredContentSize = [MADDesignerViewController sizePopoverStyle];
         self.popoverToolbox.permittedArrowDirections = UIPopoverArrowDirectionAny;
         self.popoverToolbox.passthroughViews = self.elementViews.allObjects;
-
-        [self presentViewController: self.viewControllerToolbox
+        self.popoverToolbox.delegate = self;
+        [self presentViewController: self.navigationControllerToolbox
                            animated: YES
                          completion: nil];
     }

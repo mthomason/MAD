@@ -39,9 +39,9 @@ NSString * const MTApplicationIdMadViewer                            = @"6660037
 NSString * const MTBundleIdMadDesigner                              = @"com.everydayapps.mad.designer";
 NSString * const MTBundleIdMadViewer                                = @"com.everydayapps.mad.viewer";
 
-NSString * const MTGlobalBundleVersion                              = @"7.0.204";
-NSString * const MTGlobalBundleShortVersion                         = @"7.0.204";
-NSString * const MTGlobalBundleRev                                  = @"1579";
+NSString * const MTGlobalBundleVersion                              = @"7.0.205";
+NSString * const MTGlobalBundleShortVersion                         = @"7.0.205";
+NSString * const MTGlobalBundleRev                                  = @"1580";
 
 NSString * const MADHandleStoryboardDesigner                        = @"MADDesigner";
 NSString * const MADHandleStoryboardViewer                          = @"MADViewer";
@@ -379,6 +379,7 @@ NSString * const MTBundleDisplayName                                = @"CFBundle
     [UILabel appearanceWhenContainedIn:[UITableViewCell class], nil].highlightedTextColor = [UIColor edaOrange];
     [UILabel appearanceWhenContainedIn:[UICollectionViewCell class], nil].highlightedTextColor = [UIColor edaOrange];
     
+    [UISegmentedControl appearanceWhenContainedIn:[UINavigationBar class], nil].tintColor = tintColorWhite;
 /*
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil]            setTintColor: tintColorWhite];
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]                   setTintColor: tintColorWhite];

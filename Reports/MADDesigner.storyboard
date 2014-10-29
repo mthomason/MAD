@@ -134,8 +134,8 @@
                             <constraint firstItem="IOG-3q-Pa5" firstAttribute="leading" secondItem="VIm-k8-3OZ" secondAttribute="leading" id="DGD-vo-3bY" userLabel="Scroller Leading to Superview Leading"/>
                             <constraint firstAttribute="trailing" secondItem="IOG-3q-Pa5" secondAttribute="trailing" id="Iv3-pP-79C" userLabel="Scroller Trailing to Superview Trailing"/>
                             <constraint firstAttribute="trailing" secondItem="E8X-yI-3Ol" secondAttribute="trailing" id="Vhr-8f-axs" userLabel="Toolbar Trailing to Superview Trailing"/>
-                            <constraint firstItem="wxc-IA-YFE" firstAttribute="leading" secondItem="VIm-k8-3OZ" secondAttribute="leading" constant="20" symbolic="YES" id="eMU-OR-W25" userLabel="Toolbar Leading to Superview Leading"/>
-                            <constraint firstAttribute="trailing" secondItem="wxc-IA-YFE" secondAttribute="trailing" constant="20" symbolic="YES" id="inM-Am-y5G" userLabel="Toolbox Trailing to Superview Trailing"/>
+                            <constraint firstItem="wxc-IA-YFE" firstAttribute="leading" secondItem="VIm-k8-3OZ" secondAttribute="leading" id="eMU-OR-W25" userLabel="Toolbar Leading to Superview Leading"/>
+                            <constraint firstAttribute="trailing" secondItem="wxc-IA-YFE" secondAttribute="trailing" id="inM-Am-y5G" userLabel="Toolbox Trailing to Superview Trailing"/>
                             <constraint firstItem="E8X-yI-3Ol" firstAttribute="bottom" secondItem="wxc-IA-YFE" secondAttribute="top" id="r9o-Yw-VTg" userLabel="Toolbar Bottom to Toolbox Top"/>
                             <constraint firstItem="E8X-yI-3Ol" firstAttribute="leading" secondItem="VIm-k8-3OZ" secondAttribute="leading" id="xRF-Z8-jTn" userLabel="Toolbox Leading to Superview Leading"/>
                             <constraint firstAttribute="bottom" secondItem="IOG-3q-Pa5" secondAttribute="bottom" id="yQ5-zc-tUR" userLabel="Scroller Bottom to Superview Bottom"/>
