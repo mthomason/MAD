@@ -10,18 +10,18 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADFontSelector.h"
+#import "MADFontSelectorViewController.h"
 #import "UIDevice+Hack.h"
 #import "MTFont.h"
 #import "MTLog.h"
 
-@interface MADFontSelector()
+@interface MADFontSelectorViewController()
 
 @property (nonatomic, strong) MTFont *initalSelectedFont;
 
 @end
 
-@implementation MADFontSelector
+@implementation MADFontSelectorViewController
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
