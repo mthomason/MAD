@@ -16,9 +16,9 @@
 
 #import "MTApplicationInstance.h"
 #import "UIColor+EverydayApps.h"
-#import "MTReportDesignerFontSettingsViewController.h"
-#import "MTReportDesignerFontSelectorViewController.h"
-#import "MTReportDesignerDocumentObjectFormat.h"
+#import "MADToolboxStyleViewController.h"
+#import "MADFontSelectorViewController.h"
+#import "MADToolboxFormatViewController.h"
 #import "RptqDocumentObject.h"
 #import "RptqDocumentObject+Extras.h"
 #import "MTFont.h"
@@ -39,9 +39,9 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
 
-@property (nonatomic, strong) MTReportDesignerFontSettingsViewController *tableViewControllerTextLayoutSettings;
-@property (nonatomic, strong) MTReportDesignerFontSelectorViewController *tableViewControllerFontSelector;
-@property (nonatomic, strong) MTReportDesignerDocumentObjectFormat       *tableViewControllerDocumentObjectFormat;
+@property (nonatomic, strong) MADToolboxStyleViewController *tableViewControllerTextLayoutSettings;
+@property (nonatomic, strong) MADFontSelectorViewController *tableViewControllerFontSelector;
+@property (nonatomic, strong) MADToolboxFormatViewController       *tableViewControllerDocumentObjectFormat;
 
 @end
 
@@ -55,7 +55,7 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
 - (void)initalizeFontSettingsTableViewController {
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
-    MTReportDesignerFontSettingsViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
+    MADToolboxStyleViewController *reportDesignerFontSettingsViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
     [reportDesignerFontSettingsViewController setDelegate:self];
     [[reportDesignerFontSettingsViewController tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     reportDesignerFontSettingsViewController.document = self.document;
@@ -65,7 +65,7 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
 - (void)initalizeFontListSettingsTableViewController {
     UIStoryboard *storyboard = [MTApplicationInstance storyboard];
-    MTReportDesignerFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
+    MADFontSelectorViewController *reportDesignerFontSelectorViewController = [storyboard instantiateViewControllerWithIdentifier:@"FontListSettingsTableViewController"];
     [reportDesignerFontSelectorViewController setDelegate:self];
     reportDesignerFontSelectorViewController.document = self.document;
     [self setTableViewControllerFontSelector:reportDesignerFontSelectorViewController];
@@ -131,16 +131,16 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
     if ([sender selectedSegmentIndex] == 0) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerStyle"];
         [newViewController setDocument: self.document];
-        [(MTReportDesignerFontSettingsViewController *)newViewController setDelegate:self];
+        [(MADToolboxStyleViewController *)newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 1) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerLayout"];
         [newViewController setDocument: self.document];
-        [(MTReportDesignerFontSettingsViewController *)newViewController setDelegate:self];
+        [(MADToolboxStyleViewController *)newViewController setDelegate:self];
 
     } else if ([sender selectedSegmentIndex] == 2) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"MTReportDesignerDocumentObjectFormatIdentifier"];
-        [(MTReportDesignerDocumentObjectFormat *)newViewController setDocument: self.document];
+        [(MADToolboxFormatViewController *)newViewController setDocument: self.document];
 
     } else if ([sender selectedSegmentIndex] == 3) {
         newViewController = [sbFontTableView instantiateViewControllerWithIdentifier:@"FontSettingsTableViewControllerGrouping"];
@@ -264,7 +264,7 @@ const CGFloat MADDefaultsPopooverHeight             = 480.0000f;
 
 #pragma mark - FontSettingsTableViewControllerDelegate
 
-- (void)fontSettingsTableViewControllerDidSelectFontList:(MTReportDesignerFontSettingsViewController *)controller {
+- (void)fontSettingsTableViewControllerDidSelectFontList:(MADToolboxStyleViewController *)controller {
     [self.navigationBar pushNavigationItem:[self navigationItemFontSelector] animated:YES];
 }
 

@@ -898,8 +898,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"MADIdentifierStoryboardSeguePushFontPicker"]) {
-        ((MTReportDesignerFontSelectorViewController *)segue.destinationViewController).delegate = self;
-        ((MTReportDesignerFontSelectorViewController *)segue.destinationViewController).document = self.document;
+        ((MADFontSelectorViewController *)segue.destinationViewController).delegate = self;
+        ((MADFontSelectorViewController *)segue.destinationViewController).document = self.document;
 
         NSString *fontname = nil;
         for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
@@ -911,7 +911,7 @@
 
         MTFont *font = [MTFont fontWithFamilyName:fontname];
         
-        [((MTReportDesignerFontSelectorViewController *)segue.destinationViewController) setSelectedFont:font];
+        [((MADFontSelectorViewController *)segue.destinationViewController) setSelectedFont:font];
         
     }
 }

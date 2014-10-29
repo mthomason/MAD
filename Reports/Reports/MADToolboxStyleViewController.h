@@ -11,7 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MTToolboxViewControllerProtocol.h"
-#import "MTReportDesignerFontSelectorViewController.h"
+#import "MADFontSelectorViewController.h"
 
 @class MADocument, MADToolboxStyleViewController, MTFont;
 

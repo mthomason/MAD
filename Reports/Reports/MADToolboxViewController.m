@@ -19,7 +19,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
 @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol> *layout;
 @property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol> *format;
-@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol> *style;
+@property (nonatomic, strong) UINavigationController *styleNavigationController;
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
 
@@ -51,8 +51,16 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-     UIViewController <MTToolboxViewControllerProtocol> *style = self.childViewControllers.firstObject;
-    self.style = style;
+    UINavigationController *styleNavigationController = self.childViewControllers.firstObject;
+    self.styleNavigationController = styleNavigationController;
+    
+    //self.view.backgroundColor = [UIColor purpleColor];
+    //self.view.opaque = NO;
+
+//    self.style.tableView.backgroundColor = [UIColor redColor];
+    
+    //self.navigationController.view.backgroundColor = [UIColor clearColor];
+    //self.navigationController.view.opaque = NO;
 
     self.modalPresentationStyle = UIModalPresentationPopover;
     self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -77,8 +85,17 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.keyPathSelectedObjectIds = selectedObjectIds;
     self.keyPathDocument = document;
     
+        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        visualEffectsView.frame = self.view.bounds;
+        [self.view insertSubview:visualEffectsView atIndex:0];
+//        self.view.backgroundColor = [UIColor clearColor];
+//        self.view.backgroundColor = [UIColor clearColor];
+//        self.view.opaque = NO;
+
     
 }
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
@@ -87,21 +104,41 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     
     if ([keyPath isEqualToString:self.keyPathDocument]) {
     
-        id <MTToolboxViewControllerProtocol> delegate = (id <MTToolboxViewControllerProtocol>)self.childViewControllers.firstObject;
+        id <MTToolboxViewControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
         [delegate setDocument:self.document];
 
     } else if ([keyPath isEqualToString:self.keyPathSelectedObjectIds]) {
         
-        id <MTToolboxViewControllerProtocol> delegate = (id <MTToolboxViewControllerProtocol>)self.childViewControllers.firstObject;
+        id <MTToolboxViewControllerProtocol> delegate = [self delegateForController:self.childViewControllers.firstObject];
         [delegate setSelectedDocumentObjects:self.selectedObjectIds];
     
     }
 }
 
+- (UIViewController <MTToolboxViewControllerProtocol> *)delegateForController:(UIViewController *)controller {
+    UIViewController <MTToolboxViewControllerProtocol> *delegate;
+    if ([controller isKindOfClass:[UINavigationController class]]) {
+        delegate = (UIViewController <MTToolboxViewControllerProtocol> *)((UINavigationController *)controller).viewControllers.firstObject;
+    } else {
+        delegate = (UIViewController <MTToolboxViewControllerProtocol> *)controller;
+    }
+    return delegate;
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.style setDocument:self.document];
-    [self.style setSelectedDocumentObjects:self.selectedObjectIds];
+    UITableViewController <MTToolboxViewControllerProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    [style setDocument:self.document];
+    [style setSelectedDocumentObjects:self.selectedObjectIds];
+    
+    //UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    //UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    //BOOL isl = style.isViewLoaded;
+    //visualEffectsView.frame = self.style.tableView.bounds;
+    //self.style.tableView.backgroundView = visualEffectsView;
+//    self.style.tableView.backgroundColor = [UIColor clearColor];
+//    self.style.tableView.opaque = YES;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -110,26 +147,31 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
 - (IBAction)valueChanged:(id)sender {
     
-    UIViewController <MTToolboxViewControllerProtocol> *viewControllerToShow = nil;
+    UIViewController *viewControllerToShow = nil;
+    UIViewController <MTToolboxViewControllerProtocol> *viewControllerToUpdate = nil;
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
         case 0:
-            viewControllerToShow = self.style;
+            viewControllerToShow = self.styleNavigationController;
+            viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol> *)self.styleNavigationController.viewControllers.firstObject;
             break;
             
         case 1:
             viewControllerToShow = self.layout;
+            viewControllerToUpdate = self.layout;
             break;
             
         case 2:
             viewControllerToShow = self.format;
+            viewControllerToUpdate = self.format;
             break;
             
         default:
             break;
     }
-    [viewControllerToShow setSelectedDocumentObjects: self.selectedObjectIds];
-    viewControllerToShow.document = self.document;
+    [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
+    viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    //viewControllerToShow.modalPresentationStyle = UIModalPresentationCurrentContext;
     viewControllerToShow.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
   
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
@@ -152,6 +194,11 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
                             completion:^(BOOL finished) {
                                 
                             }];
+}
+
+- (void)setOptionsForViewController:(UIViewController <MTToolboxViewControllerProtocol> *)viewController {
+    [viewController setSelectedDocumentObjects: self.selectedObjectIds];
+    viewController.document = self.document;
 }
 
 - (IBAction)done:(id)sender {
