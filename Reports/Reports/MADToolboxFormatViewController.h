@@ -13,7 +13,7 @@
 
 @class MADocument;
 
-@interface MTReportDesignerDocumentObjectFormat : UITableViewController
+@interface MADToolboxFormatViewController : UITableViewController
 
 @property (nonatomic, weak) MADocument *document;
 

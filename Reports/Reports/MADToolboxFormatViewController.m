@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Everyday Apps LLC. All rights reserved.
 //
 
-#import "MTReportDesignerDocumentObjectFormat.h"
+#import "MADToolboxFormatViewController.h"
 #import <CoreData/CoreData.h>
 #import "MADocument.h"
 
@@ -21,7 +21,7 @@
 
 #import "UIDevice+Hack.h"
 
-@interface MTReportDesignerDocumentObjectFormat ()
+@interface MADToolboxFormatViewController ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
 
 @property (nonatomic, strong) NSSet *userSelectedObjectIds;
@@ -39,7 +39,7 @@
 
 @end
 
-@implementation MTReportDesignerDocumentObjectFormat
+@implementation MADToolboxFormatViewController
 
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
