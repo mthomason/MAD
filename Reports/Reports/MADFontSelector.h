@@ -11,13 +11,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class MADocument, MTReportDesignerFontSelectorViewController, MTFont;
+@class MADocument, MADFontSelector, MTFont;
 
 @protocol MTReportDesignerFontSelectorDelegate
 - (void)uITableViewControllerDidUpdateFontToFontWithName:(NSString *)fontName;
 @end
 
-@interface MTReportDesignerFontSelectorViewController : UITableViewController
+@interface MADFontSelector : UITableViewController
     <UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;

@@ -10,18 +10,18 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportDesignerFontSelectorViewController.h"
+#import "MADFontSelector.h"
 #import "UIDevice+Hack.h"
 #import "MTFont.h"
 #import "MTLog.h"
 
-@interface MTReportDesignerFontSelectorViewController()
+@interface MADFontSelector()
 
 @property (nonatomic, strong) MTFont *initalSelectedFont;
 
 @end
 
-@implementation MTReportDesignerFontSelectorViewController
+@implementation MADFontSelector
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -32,20 +32,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.delegate = self;
-    
-    if ([UIDevice isModernOS]) {
-        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        self.tableView.backgroundView = visualEffectsView;
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.view.opaque = NO;
-    }
-
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.opaque = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    
     [self checkSelectedFont:[self initalSelectedFont]];
 }
 
@@ -74,10 +69,8 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([UIDevice isModernOS]) {
-        cell.backgroundColor = [UIColor clearColor];
-        cell.contentView.backgroundColor = [UIColor clearColor];
-    }
+    cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
