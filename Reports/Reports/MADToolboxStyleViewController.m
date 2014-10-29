@@ -10,7 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MTReportDesignerFontSettingsViewController.h"
+#import "MADToolboxStyleViewController.h"
 #import "MADocument.h"
 #import "RptqDocumentObject+Extras.h"
 #import "AppDelegate.h"
@@ -21,7 +21,7 @@
 #import "MADControlState.h"
 #import "MTAlignment.h"
 
-@interface MTReportDesignerFontSettingsViewController()
+@interface MADToolboxStyleViewController()
     <UITableViewDelegate>
 
 @property (assign) MTControlState controlStateBold;
@@ -77,7 +77,7 @@
 
 @end
 
-@implementation MTReportDesignerFontSettingsViewController
+@implementation MADToolboxStyleViewController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
 
@@ -99,7 +99,8 @@
     [super viewDidLoad];
     
     self.tableView.delegate = self;
-
+    
+    
     UIColor *tintColor = [self.view tintColor];
     self.buttonBold.layer.borderColor = tintColor.CGColor;
     self.buttonBold.layer.cornerRadius = 6.6666f;
@@ -116,6 +117,7 @@
     self.buttonUnderline.layer.borderColor = tintColor.CGColor;
     self.buttonUnderline.layer.cornerRadius = 6.6666f;
     self.buttonUnderline.layer.borderWidth = 1.0000f;
+
 }
 
 - (void)viewWillLayoutSubviews {
@@ -129,21 +131,31 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    //[self.navigationController setNavigationBarHidden:YES animated:animated];
+
     [self updateDisplay];
     
-        //UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
-        //UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        //self.tableView.backgroundView = visualEffectsView;
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.view.opaque = NO;
+//        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+//        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
+//        self.tableView.backgroundView = visualEffectsView;
+//        self.view.backgroundColor = [UIColor clearColor];
+//        self.view.opaque = NO;
 
+    
+    self.view.backgroundColor = [UIColor clearColor];
+    self.view.opaque = NO;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.opaque = NO;
+    
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -908,10 +920,8 @@
 #pragma mark Table View Delegate Protocol
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([UIDevice isModernOS]) {
         cell.backgroundColor = [UIColor clearColor];
         cell.contentView.backgroundColor = [UIColor clearColor];
-    }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {

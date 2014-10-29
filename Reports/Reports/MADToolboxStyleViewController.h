@@ -13,13 +13,13 @@
 #import "MTToolboxViewControllerProtocol.h"
 #import "MTReportDesignerFontSelectorViewController.h"
 
-@class MADocument, MTReportDesignerFontSettingsViewController, MTFont;
+@class MADocument, MADToolboxStyleViewController, MTFont;
 
 @protocol MTReportDesignerFontSettingsDelegate
-- (void)fontSettingsTableViewControllerDidSelectFontList:(MTReportDesignerFontSettingsViewController *)controller;
+- (void)fontSettingsTableViewControllerDidSelectFontList:(MADToolboxStyleViewController *)controller;
 @end
 
-@interface MTReportDesignerFontSettingsViewController : UITableViewController
+@interface MADToolboxStyleViewController : UITableViewController
     <MTToolboxViewControllerProtocol,
         MTReportDesignerFontSelectorDelegate>
 
