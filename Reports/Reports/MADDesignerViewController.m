@@ -2223,8 +2223,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
     self.childViewController = viewController;
     
     if ([viewController isKindOfClass:[UINavigationController class]]) {
-        ((MTReportDesignerToolBoxViewController *)((UINavigationController *)viewController).topViewController).document = self.document;
-        ((MTReportDesignerToolBoxViewController *)((UINavigationController *)viewController).topViewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
+        id top = ((UINavigationController *)viewController).topViewController;
+        if ([top respondsToSelector:@selector(setDocument:)]) {
+            [top setDocument: self.document];
+        }
+//        ((MTReportDesignerToolBoxViewController *)((UINavigationController *)viewController).topViewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
     } else {
         ((MTReportDesignerToolBoxViewController *)viewController).document = self.document;
         ((MTReportDesignerToolBoxViewController *)viewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
