@@ -62,7 +62,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.tableView.allowsSelection = NO;
     self.preferredContentSize = CGSizeMake(280, 200);
 }
 

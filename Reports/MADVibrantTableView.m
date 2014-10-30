@@ -17,7 +17,6 @@
     UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
     self.backgroundView = visualEffectsView;
     self.backgroundColor = [UIColor clearColor];
-    self.allowsSelection = NO;
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.estimatedRowHeight = 44.0000f;
     self.rowHeight = UITableViewAutomaticDimension;

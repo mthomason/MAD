@@ -35,7 +35,7 @@
 #import "MTSliderPageVertical.h"
 
 #import "UIPageViewController+Extras.h"
-#import "UIViewController+ui.h"
+#import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "MTDataTable.h"
 

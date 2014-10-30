@@ -78,7 +78,7 @@
 #import "RptqDocumentObjectAggregate.h"
 #import "RptqDocumentObjectAggregate+Extras.h"
 
-#import "UIViewController+ui.h"
+#import "UIViewController+UI.h"
 #import "UIViewController+tabBarItem.h"
 #import "UIScrollView+Extras.h"
 
@@ -2227,7 +2227,6 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         if ([top respondsToSelector:@selector(setDocument:)]) {
             [top setDocument: self.document];
         }
-//        ((MTReportDesignerToolBoxViewController *)((UINavigationController *)viewController).topViewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.
     } else {
         ((MTReportDesignerToolBoxViewController *)viewController).document = self.document;
         ((MTReportDesignerToolBoxViewController *)viewController).view.backgroundColor = [UIColor groupTableViewBackgroundColor];   // FIXME: Make this blur color.

@@ -26,6 +26,9 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 @property (nonatomic, strong) NSString *keyPathDocument;
 @property (nonatomic, strong) NSString *keyPathSelectedObjectIds;
 
+
+@property (nonatomic, assign) UIModalTransitionStyle segmentedControlActionStyle;
+
 @end
 
 @implementation MADToolboxViewController
@@ -43,6 +46,7 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
         UIViewController <MTToolboxViewControllerProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
         self.format = format;
 
+        self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
     }
     
     return self;
@@ -54,16 +58,8 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     UINavigationController *styleNavigationController = self.childViewControllers.firstObject;
     self.styleNavigationController = styleNavigationController;
     
-    //self.view.backgroundColor = [UIColor purpleColor];
-    //self.view.opaque = NO;
-
-//    self.style.tableView.backgroundColor = [UIColor redColor];
-    
-    //self.navigationController.view.backgroundColor = [UIColor clearColor];
-    //self.navigationController.view.opaque = NO;
-
     self.modalPresentationStyle = UIModalPresentationPopover;
-    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    self.modalTransitionStyle = self.segmentedControlActionStyle;
     
     self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -84,16 +80,11 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
     self.keyPathSelectedObjectIds = selectedObjectIds;
     self.keyPathDocument = document;
-    
-        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-        visualEffectsView.frame = self.view.bounds;
-        [self.view insertSubview:visualEffectsView atIndex:0];
-//        self.view.backgroundColor = [UIColor clearColor];
-//        self.view.backgroundColor = [UIColor clearColor];
-//        self.view.opaque = NO;
 
-    
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
 }
 
 
@@ -131,14 +122,6 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
     
-    //UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    //UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    //BOOL isl = style.isViewLoaded;
-    //visualEffectsView.frame = self.style.tableView.bounds;
-    //self.style.tableView.backgroundView = visualEffectsView;
-//    self.style.tableView.backgroundColor = [UIColor clearColor];
-//    self.style.tableView.opaque = YES;
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -149,18 +132,22 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     
     UIViewController *viewControllerToShow = nil;
     UIViewController <MTToolboxViewControllerProtocol> *viewControllerToUpdate = nil;
+    UIViewAnimationOptions options;
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
         case 0:
             viewControllerToShow = self.styleNavigationController;
             viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+            options = UIViewAnimationOptionTransitionFlipFromRight;
             break;
             
         case 1:
+            options = UIViewAnimationOptionTransitionFlipFromBottom;
             viewControllerToShow = self.layout;
             viewControllerToUpdate = self.layout;
             break;
             
         case 2:
+            options = UIViewAnimationOptionTransitionFlipFromLeft;
             viewControllerToShow = self.format;
             viewControllerToUpdate = self.format;
             break;
@@ -168,11 +155,11 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
         default:
             break;
     }
+    options = UIViewAnimationOptionTransitionCrossDissolve;
     [viewControllerToUpdate setSelectedDocumentObjects: self.selectedObjectIds];
     viewControllerToUpdate.document = self.document;
     viewControllerToShow.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    //viewControllerToShow.modalPresentationStyle = UIModalPresentationCurrentContext;
-    viewControllerToShow.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    viewControllerToShow.modalTransitionStyle = self.segmentedControlActionStyle;
   
     UIViewController *viewControllerToHide = self.childViewControllers.firstObject;
 
@@ -183,17 +170,58 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     [viewControllerToHide willMoveToParentViewController:nil];
     
     __weak MADToolboxViewController *weakself = self;
+
+    //UIImage *snapshotToHide = [self snapshot2: self.view.window];
+    
+    //CGRect cropSpot = [self.view convertRect:self.view.bounds toView:self.view.window];
+
+    //UIImage *img3 = [self cropImage:snapshotToHide toRect:cropSpot];
+    
+    //UIImageView *maskingView = [[UIImageView alloc] initWithImage:img3];
+    //maskingView.frame = viewControllerToHide.view.bounds;
+    //[viewControllerToHide.view addSubview:maskingView];
+    
+    [viewControllerToShow beginAppearanceTransition:YES animated:YES];
     [self transitionFromViewController: viewControllerToHide
                       toViewController: viewControllerToShow
                               duration: 0.23232323f
-                               options:UIViewAnimationOptionTransitionCrossDissolve
+                               options: options
                             animations:^{
                                 [viewControllerToHide removeFromParentViewController];
                                 [viewControllerToShow didMoveToParentViewController:weakself];
+                                [viewControllerToShow endAppearanceTransition];
                             }
                             completion:^(BOOL finished) {
                                 
+                                if (finished) {
+      //                              [maskingView removeFromSuperview];
+                                }
+                                
                             }];
+}
+
+- (UIImage *)cropImage:(UIImage *)image toRect:(CGRect)rect {
+    if (self.traitCollection.displayScale > 1.0f) {
+        rect = CGRectMake(rect.origin.x * self.traitCollection.displayScale,
+                          rect.origin.y * self.traitCollection.displayScale,
+                          rect.size.width * self.traitCollection.displayScale,
+                          rect.size.height * self.traitCollection.displayScale);
+    }
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, rect);
+    UIImage *result = [UIImage imageWithCGImage: imageRef
+                                          scale: self.traitCollection.displayScale
+                                    orientation: image.imageOrientation];
+    CGImageRelease(imageRef);
+    return result;
+}
+
+- (UIImage *)snapshot2:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, view.traitCollection.displayScale);
+    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];   // FIXME:  .. should be able to say YES, but it distorts the screen.. radar 17851775
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 - (void)setOptionsForViewController:(UIViewController <MTToolboxViewControllerProtocol> *)viewController {

@@ -24,7 +24,7 @@
 
 #import "UIDevice+Hack.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "UIViewController+ui.h"
+#import "UIViewController+UI.h"
 #import "MACloudManager.h"
 
 @interface MTQueryBuilderContainerController ()

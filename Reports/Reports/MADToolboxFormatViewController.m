@@ -19,7 +19,8 @@
 
 #import "RptqDocumentObject+Extras.h"
 
-#import "UIDevice+Hack.h"
+//#import "UIDevice+Hack.h"
+#import "UIViewController+UI.h"
 
 @interface MADToolboxFormatViewController ()
     <UITableViewDelegate, MTToolboxViewControllerProtocol>
@@ -64,19 +65,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    self.tableView.backgroundView = visualEffectsView;
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = [UIColor clearColor];
-    self.view.opaque = NO;
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateDisplay];
+    
+    if ([self isInPopover]) {
+        self.tableView.backgroundView = nil;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -93,12 +90,6 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        //CGFloat insetOffset = [[[self tabBarController] tabBar] frame].size.height;
-        UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
-        [self.tableView setContentInset:tableInset];
-        [self.tableView setScrollIndicatorInsets:tableInset];
-    }
 }
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {

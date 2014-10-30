@@ -93,7 +93,7 @@
 #import "NSManagedObject+Extras.h"
 #import "NSParagraphStyle+CommonStyles.h"
 
-#import "UIViewController+ui.h"
+#import "UIViewController+UI.h"
 #import "MACloudManager.h"
 
 #import "MADNavigationBarTitleView.h"

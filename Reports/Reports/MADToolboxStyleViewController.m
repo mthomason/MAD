@@ -20,6 +20,7 @@
 #import "NSManagedObject+Extras.h"
 #import "MADControlState.h"
 #import "MTAlignment.h"
+#import "UIViewController+UI.h"
 
 @interface MADToolboxStyleViewController()
     <UITableViewDelegate>
@@ -122,33 +123,24 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
-        [self.tableView setContentInset:tableInset];
-        [self.tableView setScrollIndicatorInsets:tableInset];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    //[self.navigationController setNavigationBarHidden:YES animated:animated];
-
     [self updateDisplay];
-    
-//        UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
-//        UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-//        self.tableView.backgroundView = visualEffectsView;
-//        self.view.backgroundColor = [UIColor clearColor];
-//        self.view.opaque = NO;
 
-    
     self.view.backgroundColor = [UIColor clearColor];
     self.view.opaque = NO;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.opaque = NO;
     
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+
+    if ([self isInPopover]) {
+        self.tableView.backgroundView = nil;
+    }
 
 }
 

@@ -18,6 +18,12 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden: YES
                                              animated: animated];
+
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.frame = self.navigationController.view.bounds;
 }
 
 @end

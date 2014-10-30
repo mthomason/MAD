@@ -11,9 +11,10 @@
 #endif
 
 #import "MADFontSelectorViewController.h"
-#import "UIDevice+Hack.h"
+#import "UIColor+EverydayApps.h"
 #import "MTFont.h"
 #import "MTLog.h"
+#import "UIViewController+UI.h"
 
 @interface MADFontSelectorViewController()
 
@@ -34,35 +35,26 @@
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.opaque = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
-    
-    [self checkSelectedFont:[self initalSelectedFont]];
-}
+    [self checkSelectedFont:self.initalSelectedFont];
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
+    if ([self isInPopover]) {
+        self.tableView.backgroundView = nil;
+    }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        UIEdgeInsets tableInset = UIEdgeInsetsMake(0.0000f, 0.0000f, 50.0000f, 0.0000f);
-        [self.tableView setContentInset:tableInset];
-        [self.tableView setScrollIndicatorInsets:tableInset];
-    }
+    self.tableView.frame = self.navigationController.view.bounds;
 }
 
 #pragma mark -
@@ -101,7 +93,7 @@
         [self.delegate uITableViewControllerDidUpdateFontToFontWithName:MTFontFamilyZapfino];
     }
     
-    if ([cell accessoryType] != UITableViewCellAccessoryCheckmark) {
+    if (cell.accessoryType != UITableViewCellAccessoryCheckmark) {
         [self uncheckAllCells];
         
         //Check this box, or not (could test)

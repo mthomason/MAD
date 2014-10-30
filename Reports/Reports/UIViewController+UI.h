@@ -12,5 +12,6 @@
 
 - (void)disableTabBarItems;
 - (void)enableTabBarItems;
+- (BOOL)isInPopover;
 
 @end
