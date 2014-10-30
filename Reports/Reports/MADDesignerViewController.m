@@ -2361,7 +2361,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         self.popoverToolbox.permittedArrowDirections = UIPopoverArrowDirectionAny;
         self.popoverToolbox.passthroughViews = self.elementViews.allObjects;
         self.popoverToolbox.delegate = self;
-        [self presentViewController: self.navigationControllerToolbox
+        [self presentViewController: self.navigationControllerToolbox       //Notify navigation controller it will be displayed in popover....
                            animated: YES
                          completion: nil];
     }

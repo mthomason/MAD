@@ -61,8 +61,14 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.modalPresentationStyle = UIModalPresentationPopover;
     self.modalTransitionStyle = self.segmentedControlActionStyle;
     
-    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
+//    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+//    [self.navigationController.navigationBar.backIndicatorImage
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
     
     NSString *selectedObjectIds = NSStringFromSelector(@selector(selectedObjectIds));

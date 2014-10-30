@@ -26,7 +26,7 @@
     return [UIViewController isInPopover:self];
 }
 
-+ (BOOL)isInPopover:(UIViewController *)viewController {
++ (BOOL)isInPopover:(UIViewController *)viewController {    // This is broken... find another way...
     BOOL inPopover = NO;
     if (viewController.parentViewController.popoverPresentationController != nil) {
         inPopover = YES;
