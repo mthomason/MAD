@@ -94,39 +94,45 @@
 
 
 - (void)updateDisplay {
-    if ([[self userSelectedObjectIds] count] == 0) {
-        [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[self tableViewCellCurrency] setAccessoryType:UITableViewCellAccessoryNone];
+    
+    if (self.userSelectedObjectIds.count == 0) {
+
+        [self.tableViewCellCurrency setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [self.tableViewCellCurrency setAccessoryType:UITableViewCellAccessoryNone];
         [self.labelNumberOfDecimals setText:NSLocalizedString(@"Decimals", "Decimals")];
+
     } else {
-        [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
-        
+    
+        [self.tableViewCellCurrency setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
         UITableViewCellAccessoryType accessoryType = UITableViewCellAccessoryNone;
-        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
-            BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];
-            if (isCurrency) {
+            
+            if (documentObject.formatNumericCurrency.boolValue) {
                 accessoryType = UITableViewCellAccessoryCheckmark;
             }
         }
 
-        [[self tableViewCellCurrency] setAccessoryType:accessoryType];
+        [self.tableViewCellCurrency setAccessoryType:accessoryType];
         
-        if ([[self userSelectedObjectIds] count] == 1) {
-            NSManagedObjectID *objectId = [[self userSelectedObjectIds] anyObject];
+        if ([self.userSelectedObjectIds count] == 1) {
+
+            NSManagedObjectID *objectId = [self.userSelectedObjectIds anyObject];
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
             NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
             [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
-            [[self stepperNumberOfDecimals] setValue:numberOfDec];
+            [self.stepperNumberOfDecimals setValue:numberOfDec];
+
         } else {
             
             BOOL allTheSame = NO;
             NSInteger lastInteger = 0;
             NSUInteger counter = 0;
-            for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+            for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
                 RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                               managedObjectContext: self.document.managedObjectContext];
                 NSInteger currentInteger = [[documentObject formatNumericDecimals] integerValue];
@@ -147,7 +153,7 @@
                 NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@""];
                 [self.labelNumberOfDecimals setAttributedText:attributedString];
             }
-            [[self stepperNumberOfDecimals] setValue:lastInteger];
+            [self.stepperNumberOfDecimals setValue:lastInteger];
         }
 
     }
@@ -162,12 +168,12 @@
     SEL valueChangedAction = @selector(emptySelector:);
     id valueThatChanged = nil;
     
-    if ([sender isEqual:[self stepperNumberOfDecimals]]) {
+    if ([sender isEqual:self.stepperNumberOfDecimals]) {
         valueChangedAction = @selector(setFormatNumericDecimals:);
-        valueThatChanged = @([[self stepperNumberOfDecimals] value]);
+        valueThatChanged = @([self.stepperNumberOfDecimals value]);
         [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
         
-        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
             [documentObject setFormatNumericDecimals:valueThatChanged];
@@ -215,14 +221,14 @@
     
     if (indexPath.row == 1 && indexPath.section == 0) {
         
-        for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
+        for (NSManagedObjectID *objectId in self.userSelectedObjectIds) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID:objectId
                                                                           managedObjectContext:self.document.managedObjectContext];
-            BOOL isCurrency = [[documentObject formatNumericCurrency] boolValue];
+            BOOL isCurrency = [documentObject.formatNumericCurrency boolValue];
             BOOL isCurrencyNow = !isCurrency;
             [documentObject setFormatNumericCurrency:@(isCurrencyNow)];
             UITableViewCellAccessoryType newAccessory = isCurrencyNow ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            [[self tableViewCellCurrency] setAccessoryType:newAccessory];
+            [self.tableViewCellCurrency setAccessoryType:newAccessory];
             [documentObject.managedObjectContext save:nil];
         }
     }

@@ -60,13 +60,6 @@
 
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-//    self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y - self.topLayoutGuide.length);
-    
-
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden: YES
                                              animated: NO];
@@ -74,10 +67,6 @@
                       duration:UINavigationControllerHideShowBarDuration / 2
                        options:UIViewAnimationOptionCurveLinear
                     animations:^ {
-                        //self.navigationController.navigationBar.frame = CGRectMake(CGPointZero.x,
-                        //                                                            CGPointZero.y - (self.navigationController.navigationBar.bounds.size.height * 5),
-                        //                                                            self.navigationController.navigationBar.bounds.size.width,
-                        //                                                            self.navigationController.navigationBar.bounds.size.height);
                         self.tableView.contentOffset = CGPointMake(CGPointZero.x, CGPointZero.y);
                         self.navigationController.navigationBar.alpha = 0.0000f;
                     }
