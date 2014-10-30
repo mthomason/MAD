@@ -14,11 +14,4 @@
 
 @implementation MADToolboxStyleLayoutViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    //UIVisualEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-    //UIVisualEffectView *visualEffectsView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    //self.tableView.backgroundView = visualEffectsView;
-}
-
 @end

@@ -37,35 +37,15 @@
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *viewsToDisableNumeric;
 @property (nonatomic, strong) IBOutletCollection(UIControl) NSArray *controlsToDisableNumeric;
 
-
 @end
 
 @implementation MADToolboxFormatViewController
-
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-    }
-    return self;
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
 
 #pragma mark -
 #pragma mark Table View Delegate Protocol
 
 
 #pragma mark - View lifecycle
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -74,22 +54,6 @@
     if ([self isInPopover]) {
         self.tableView.backgroundView = nil;
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
 }
 
 - (void)setSelectedDocumentObjects:(NSSet *)objectIds {
@@ -125,7 +89,7 @@
     if ([[self userSelectedObjectIds] count] == 0) {
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[self tableViewCellCurrency] setAccessoryType:UITableViewCellAccessoryNone];
-        [[self labelNumberOfDecimals] setText:NSLocalizedString(@"Decimals", "Decimals")];
+        [self.labelNumberOfDecimals setText:NSLocalizedString(@"Decimals", "Decimals")];
     } else {
         [[self tableViewCellCurrency] setSelectionStyle:UITableViewCellSelectionStyleBlue];
         
@@ -147,7 +111,7 @@
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
             NSInteger numberOfDec = [[documentObject formatNumericDecimals] integerValue];
-            [[self labelNumberOfDecimals] setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
+            [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:numberOfDec]];
             [[self stepperNumberOfDecimals] setValue:numberOfDec];
         } else {
             
@@ -170,10 +134,10 @@
                 counter++;
             }
             if (allTheSame) {
-                [[self labelNumberOfDecimals] setAttributedText:[self decimalsStringForNumberOfDecimals:lastInteger]];
+                [self.labelNumberOfDecimals setAttributedText:[self decimalsStringForNumberOfDecimals:lastInteger]];
             } else {
                 NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@""];
-                [[self labelNumberOfDecimals] setAttributedText:attributedString];
+                [self.labelNumberOfDecimals setAttributedText:attributedString];
             }
             [[self stepperNumberOfDecimals] setValue:lastInteger];
         }
@@ -193,22 +157,22 @@
     if ([sender isEqual:[self stepperNumberOfDecimals]]) {
         valueChangedAction = @selector(setFormatNumericDecimals:);
         valueThatChanged = @([[self stepperNumberOfDecimals] value]);
-        [[self labelNumberOfDecimals] setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
+        [self.labelNumberOfDecimals setAttributedText: [self decimalsStringForNumberOfDecimals:[valueThatChanged floatValue]]];
         
         for (NSManagedObjectID *objectId in [self userSelectedObjectIds]) {
             RptqDocumentObject *documentObject = [RptqDocumentObject documentObjectForObjectID: objectId
                                                                           managedObjectContext: self.document.managedObjectContext];
             [documentObject setFormatNumericDecimals:valueThatChanged];
-            [[documentObject managedObjectContext] save:nil];
+            [documentObject.managedObjectContext save:nil];
         }
     }
     
 }
 
 - (NSAttributedString *)decimalsStringForNumberOfDecimals:(NSInteger)numberOfDecimals {
-    CGFloat pointSize = [[[self labelNumberOfDecimals] font] pointSize];
+    CGFloat pointSize = [[self.labelNumberOfDecimals font] pointSize];
     UIFont *boldFont = [UIFont boldSystemFontOfSize:pointSize];
-    UIFont *systemFont = [UIFont systemFontOfSize:[[[self labelNumberOfDecimals] font] pointSize]];
+    UIFont *systemFont = [UIFont systemFontOfSize:[[self.labelNumberOfDecimals font] pointSize]];
     NSDictionary *boldAttributes = @{NSFontAttributeName : boldFont};
     NSDictionary *normalAttributes = @{NSFontAttributeName : systemFont};
     
@@ -222,7 +186,7 @@
     }
     NSAttributedString *messageSuffix = [[NSAttributedString alloc] initWithString:pointsString attributes:normalAttributes];
     [localizedAttributedMessage appendAttributedString:messageSuffix];
-    [[self labelNumberOfDecimals] setAttributedText:localizedAttributedMessage];
+    [self.labelNumberOfDecimals setAttributedText:localizedAttributedMessage];
     return localizedAttributedMessage;
 }
 
@@ -234,15 +198,7 @@
     cell.contentView.backgroundColor = [UIColor clearColor];
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 }
 
@@ -259,7 +215,7 @@
             [documentObject setFormatNumericCurrency:@(isCurrencyNow)];
             UITableViewCellAccessoryType newAccessory = isCurrencyNow ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             [[self tableViewCellCurrency] setAccessoryType:newAccessory];
-            [[documentObject managedObjectContext] save:nil];
+            [documentObject.managedObjectContext save:nil];
         }
     }
 }

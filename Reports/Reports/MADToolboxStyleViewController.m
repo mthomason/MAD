@@ -80,27 +80,12 @@
 
 @implementation MADToolboxStyleViewController
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        
-    }
-    return self;
-
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.tableView.delegate = self;
-    
     
     UIColor *tintColor = [self.view tintColor];
     self.buttonBold.layer.borderColor = tintColor.CGColor;
@@ -148,14 +133,6 @@
     [super viewDidAppear:animated];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
 }
 
 #pragma mark -
