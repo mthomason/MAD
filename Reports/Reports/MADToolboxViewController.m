@@ -17,8 +17,8 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 
 @interface MADToolboxViewController ()
 
-@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol> *layout;
-@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol> *format;
+@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout;
+@property (nonatomic, strong) UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format;
 @property (nonatomic, strong) UINavigationController *styleNavigationController;
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *sceneSelector;
@@ -40,10 +40,11 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADToolbox"
                                                              bundle: [NSBundle mainBundle]];
 
-        UIViewController <MTToolboxViewControllerProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
+        UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *layout = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardLayout];
         self.layout = layout;
         
-        UIViewController <MTToolboxViewControllerProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
+        UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *format = [storyboard instantiateViewControllerWithIdentifier:MADIdentifierStoryboardFormat];
+        
         self.format = format;
 
         self.segmentedControlActionStyle = UIModalTransitionStyleCoverVertical;
@@ -61,12 +62,9 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     self.modalPresentationStyle = UIModalPresentationPopover;
     self.modalTransitionStyle = self.segmentedControlActionStyle;
     
-//    self.navigationController.navigationBar.barTintColor = [UIColor tintColorBlue];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
-//    [self.navigationController.navigationBar.backIndicatorImage
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.opaque = NO;
     self.sceneSelector.tintColor = [UIColor whiteColor];
@@ -93,6 +91,13 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     [super viewWillLayoutSubviews];
 }
 
+- (void)setClearsBackground:(BOOL)clearsBackground {
+    self.layout.clearsBackground = clearsBackground;
+    self.format.clearsBackground = clearsBackground;
+    for (UIViewController <MADToolboxDisplayProtocol> *viewController in self.styleNavigationController.viewControllers) {
+        viewController.clearsBackground = clearsBackground;
+    }
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
@@ -112,19 +117,19 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     }
 }
 
-- (UIViewController <MTToolboxViewControllerProtocol> *)delegateForController:(UIViewController *)controller {
-    UIViewController <MTToolboxViewControllerProtocol> *delegate;
+- (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)delegateForController:(UIViewController *)controller {
+    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *delegate;
     if ([controller isKindOfClass:[UINavigationController class]]) {
-        delegate = (UIViewController <MTToolboxViewControllerProtocol> *)((UINavigationController *)controller).viewControllers.firstObject;
+        delegate = (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)((UINavigationController *)controller).viewControllers.firstObject;
     } else {
-        delegate = (UIViewController <MTToolboxViewControllerProtocol> *)controller;
+        delegate = (UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)controller;
     }
     return delegate;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    UITableViewController <MTToolboxViewControllerProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+    UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *style = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
     [style setDocument:self.document];
     [style setSelectedDocumentObjects:self.selectedObjectIds];
     
@@ -137,12 +142,12 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
 - (IBAction)valueChanged:(id)sender {
     
     UIViewController *viewControllerToShow = nil;
-    UIViewController <MTToolboxViewControllerProtocol> *viewControllerToUpdate = nil;
+    UIViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *viewControllerToUpdate = nil;
     UIViewAnimationOptions options;
     switch (((UISegmentedControl *)sender).selectedSegmentIndex) {
         case 0:
             viewControllerToShow = self.styleNavigationController;
-            viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol> *)self.styleNavigationController.viewControllers.firstObject;
+            viewControllerToUpdate = (UITableViewController <MTToolboxViewControllerProtocol, MADToolboxDisplayProtocol> *)self.styleNavigationController.viewControllers.firstObject;
             options = UIViewAnimationOptionTransitionFlipFromRight;
             break;
             
@@ -176,17 +181,6 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
     [viewControllerToHide willMoveToParentViewController:nil];
     
     __weak MADToolboxViewController *weakself = self;
-
-    //UIImage *snapshotToHide = [self snapshot2: self.view.window];
-    
-    //CGRect cropSpot = [self.view convertRect:self.view.bounds toView:self.view.window];
-
-    //UIImage *img3 = [self cropImage:snapshotToHide toRect:cropSpot];
-    
-    //UIImageView *maskingView = [[UIImageView alloc] initWithImage:img3];
-    //maskingView.frame = viewControllerToHide.view.bounds;
-    //[viewControllerToHide.view addSubview:maskingView];
-    
     [viewControllerToShow beginAppearanceTransition:YES animated:YES];
     [self transitionFromViewController: viewControllerToHide
                       toViewController: viewControllerToShow
@@ -198,10 +192,6 @@ NSString * const MADIdentifierStoryboardStyle   = @"MADIdentifierStoryboardStyle
                                 [viewControllerToShow endAppearanceTransition];
                             }
                             completion:^(BOOL finished) {
-                                
-                                if (finished) {
-      //                              [maskingView removeFromSuperview];
-                                }
                                 
                             }];
 }

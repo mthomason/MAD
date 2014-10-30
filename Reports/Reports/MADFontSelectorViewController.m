@@ -46,7 +46,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self checkSelectedFont:self.initalSelectedFont];
 
-    if ([self isInPopover]) {
+    if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }
 
@@ -54,7 +54,14 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.frame = self.navigationController.view.bounds;
+//    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    //self.tableView.frame = self.navigationController.view.bounds;
+    UIEdgeInsets ed = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, CGSizeZero.width, self.bottomLayoutGuide.length, CGSizeZero.width);
 }
 
 #pragma mark -

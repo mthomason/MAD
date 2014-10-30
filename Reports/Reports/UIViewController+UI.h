@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (ui)
+@interface UIViewController (UI)
 
 - (void)disableTabBarItems;
 - (void)enableTabBarItems;
-- (BOOL)isInPopover;
 
 @end

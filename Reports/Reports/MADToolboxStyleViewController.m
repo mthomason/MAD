@@ -123,7 +123,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
 
-    if ([self isInPopover]) {
+    if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }
 

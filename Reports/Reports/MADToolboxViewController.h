@@ -7,12 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MADToolboxDisplayProtocol.h"
 
 @class MADocument;
 
 @interface MADToolboxViewController : UIViewController
+    <MADToolboxDisplayProtocol>
 
 @property (nonatomic, strong) MADocument *document;
 @property (nonatomic, copy) NSSet *selectedObjectIds;
+
+@property (nonatomic, assign) BOOL clearsBackground;
 
 @end

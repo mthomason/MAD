@@ -10,6 +10,7 @@
 #define Reports_MTReportDesignerFontSelectorViewController_h
 
 #import <UIKit/UIKit.h>
+#import "MADToolboxDisplayProtocol.h"
 
 @class MADocument, MADFontSelectorViewController, MTFont;
 
@@ -18,7 +19,7 @@
 @end
 
 @interface MADFontSelectorViewController : UITableViewController
-    <UITableViewDelegate>
+    <UITableViewDelegate, MADToolboxDisplayProtocol>
 
 @property (nonatomic, weak) IBOutlet id <MTReportDesignerFontSelectorDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;
@@ -36,6 +37,8 @@
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCellFontZapfino;
 
 - (void)setSelectedFont:(MTFont *)font;
+
+@property (nonatomic, assign) BOOL clearsBackground;
 
 @end
 

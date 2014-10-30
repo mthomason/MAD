@@ -19,7 +19,6 @@
 
 #import "RptqDocumentObject+Extras.h"
 
-//#import "UIDevice+Hack.h"
 #import "UIViewController+UI.h"
 
 @interface MADToolboxFormatViewController ()
@@ -51,7 +50,7 @@
     [super viewWillAppear:animated];
     [self updateDisplay];
     
-    if ([self isInPopover]) {
+    if (self.clearsBackground) {
         self.tableView.backgroundView = nil;
     }
 }

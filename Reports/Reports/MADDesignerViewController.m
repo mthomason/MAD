@@ -315,7 +315,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         navigationControllerToolbox.transitioningDelegate = self;
         
         MADToolboxViewController *viewControllerToolbox = (MADToolboxViewController *)navigationControllerToolbox.topViewController;
-
+        viewControllerToolbox.clearsBackground = [self padLike];
         viewControllerToolbox.document = self.document;
         //viewControllerToolbox.modalPresentationStyle = UIModalPresentationPopover;
         //viewControllerToolbox.transitioningDelegate = self;
@@ -1234,8 +1234,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
         [self updatePrompt];
         [self selectElementView:elementView];
         
-        if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular &&
-            self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+        if ([self padLike]) {
             
             if (addToolbox) {
                 [self presentPopoverControllerInformationAnimated:YES];
@@ -1249,6 +1248,11 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             }
         }
     }
+}
+
+- (BOOL)padLike {
+    return self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular &&
+            self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -2572,8 +2576,7 @@ const CGFloat MTReportDesignerToolboxHeight         = 250.0000f;
             self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(ei.top, ei.left, CGSizeZero.height + self.tabBarController.tabBar.bounds.size.height, ei.right);
             self.viewControllerSectionLayoutSettings.tableView.contentInset = self.viewControllerSectionLayoutSettings.tableView.scrollIndicatorInsets;
             
-            if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular &&
-                self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular &&
+            if ([self padLike] &&
                 self.presentedViewController == nil) {
 
                 self.navigationControllerSectionLayoutSettings.modalPresentationStyle = UIModalPresentationPopover;

@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "MTToolboxViewControllerProtocol.h"
 #import "MADFontSelectorViewController.h"
+#import "MADToolboxDisplayProtocol.h"
 
 @class MADocument, MADToolboxStyleViewController, MTFont;
 
@@ -20,13 +21,14 @@
 @end
 
 @interface MADToolboxStyleViewController : UITableViewController
-    <MTToolboxViewControllerProtocol,
+    <MADToolboxDisplayProtocol, MTToolboxViewControllerProtocol,
         MTReportDesignerFontSelectorDelegate>
 
 @property (nonatomic, weak) id <MTReportDesignerFontSettingsDelegate> delegate;
 @property (nonatomic, strong) MADocument *document;
 
 @property (nonatomic, weak) IBOutlet UILabel *labelFontName;
+@property (nonatomic, assign) BOOL clearsBackground;
 
 - (void)chooseFont:(MTFont *)font;
 

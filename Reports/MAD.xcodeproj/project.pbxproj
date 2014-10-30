@@ -2117,6 +2117,7 @@
 		4C4740CE1A01709C00B11434 /* MADToolboxStyleStyleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxStyleStyleViewController.m; sourceTree = "<group>"; };
 		4C4740D11A0170B100B11434 /* MADToolboxStyleLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxStyleLayoutViewController.h; sourceTree = "<group>"; };
 		4C4740D21A0170B100B11434 /* MADToolboxStyleLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADToolboxStyleLayoutViewController.m; sourceTree = "<group>"; };
+		4C4740D61A0288DB00B11434 /* MADToolboxDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADToolboxDisplayProtocol.h; sourceTree = "<group>"; };
 		4C47571E17B4096600530CAF /* Icon-29-Designer-Lagacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy.png"; sourceTree = "<group>"; };
 		4C47571F17B4096600530CAF /* Icon-29-Designer-Lagacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Lagacy@2x.png"; sourceTree = "<group>"; };
 		4C47572017B4096600530CAF /* Icon-29-Designer-Modern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-29-Designer-Modern.png"; sourceTree = "<group>"; };
@@ -3864,6 +3865,7 @@
 				4C47409F1A00154D00B11434 /* MADToolbox.storyboard */,
 				4C4740AB1A0026EF00B11434 /* MADToolboxViewController.h */,
 				4C4740AC1A0026EF00B11434 /* MADToolboxViewController.m */,
+				4C4740D61A0288DB00B11434 /* MADToolboxDisplayProtocol.h */,
 				4C4740CB1A01705200B11434 /* Style */,
 				4C4740D51A0170BB00B11434 /* Layout */,
 				4C4740CC1A01706400B11434 /* Format */,
